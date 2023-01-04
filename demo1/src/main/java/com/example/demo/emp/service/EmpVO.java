@@ -17,6 +17,7 @@ public class EmpVO {
 	String jobId;
 	String departmentId;
 	String managerId;
+	String BSB;
 	String kgm;
 	String sje;
 }
