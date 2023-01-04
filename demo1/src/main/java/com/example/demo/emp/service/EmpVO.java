@@ -18,4 +18,6 @@ public class EmpVO {
 	String departmentId;
 	String managerId;
 	String BSB;
+	String kgm;
+	String sje;
 }
