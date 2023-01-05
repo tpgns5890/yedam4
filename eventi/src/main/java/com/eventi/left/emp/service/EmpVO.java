@@ -13,7 +13,7 @@ public class EmpVO {
 	String lastName;
 	String email;
 	Date hireDate;
-	int salary;
+	Integer salary;
 	String jobId;
 	String departmentId;
 	String managerId;
