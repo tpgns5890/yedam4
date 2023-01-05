@@ -20,4 +20,13 @@ public class EmpController {
 		model.addAttribute("empList", empMapper.getEmpList(null));
 		return "empList";
 	}
+	
+	@RequestMapping(value = "/home")
+	public String index() {
+		return "content/home";
+	}
+	@RequestMapping(value = "/about")
+	public String about() {
+		return "content/product-single";
+	}
 }
