@@ -2,10 +2,10 @@ package com.eventi.left.emp.mapper;
 
 import java.util.List;
 
-import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.emp.service.EmpVO;
 
 public interface EmpMapper { 
-	public LikesVO getEmp(LikesVO empVO); 
-	public List<LikesVO> getEmpList(LikesVO empVO); 
-	public void empInsert(LikesVO empVO);
+	public EmpVO getEmp(EmpVO empVO); 
+	public List<EmpVO> getEmpList(EmpVO empVO); 
+	public void empInsert(EmpVO empVO);
 }
