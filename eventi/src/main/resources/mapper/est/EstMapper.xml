@@ -3,8 +3,15 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.estimate.mapper.EstMapper">
+	<!-- 견적요청서 전체조회 -->
 	<select id="getEstList" resultType="EstVO">
+		SELECT eno, event_type, writing_dt
+		FROM estimate
+	</select>
+
+	<select id="getEst" resultType="EstVO">
 		SELECT *
 		FROM estimate
+		WHERE ENO = #{eno}
 	</select>
 </mapper>
