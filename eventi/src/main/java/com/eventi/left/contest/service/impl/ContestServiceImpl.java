@@ -3,11 +3,13 @@ package com.eventi.left.contest.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.eventi.left.contest.mapper.ContestMapper;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 
+@Service
 public class ContestServiceImpl implements ContestService{
 
 	@Autowired ContestMapper mapper;

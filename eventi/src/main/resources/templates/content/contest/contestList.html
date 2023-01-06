@@ -2,9 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/default_layout}">
-<body>
-	<th:block layout:fragment="header" th:include="@{/fragments/header}"></th:block>
+	layout:decorate="~{layouts/default_layout}">
+
 	<div layout:fragment="content" class="content">
 		<table border="1">
 			<thead>
@@ -44,40 +43,42 @@
 		</table>
 
 		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center mb-5">
-					<div class="col-md-7 heading-section text-center ftco-animate">
-						<span class="subheading">Blog</span>
-						<h2>Recent Blog</h2>
-					</div>
-				</div>
-				<div class="row d-flex">
-					<div class="col-lg-6 d-flex align-items-stretch ftco-animate">
-						<div class="blog-entry d-flex">
-							<a href="blog-single.html" class="block-20 img"
-								style="background-image: url('images/image_1.jpg');"> </a>
-							<div class="text p-4 bg-light">
-								<div class="meta">
-									<p>
-										<span class="fa fa-calendar"></span> 23 April 2020
-									</p>
-								</div>
-								<h3 class="heading mb-3">
-									<a href="#">The Recipe from a Winemaker’s Restaurent</a>
-								</h3>
-								<p>A small river named Duden flows by their place and
-									supplies it with the necessary regelialia.</p>
-								<a href="#" class="btn-custom">Continue <span
-									class="fa fa-long-arrow-right"></span></a>
+      <div class="container">
+        <div class="row d-flex">
+          <div class="col-lg-6 d-flex align-items-stretch ftco-animate fadeInUp ftco-animated">
+          	<div class="blog-entry d-md-flex">
+          		<a href="blog-single.html" class="block-20 img" style="background-image: url('/images/image_2.jpg');">
+              </a>
+              <div class="text p-4 bg-light">
+              	<div class="meta">
+              		<p><span class="fa fa-calendar"></span> 23 April 2020</p>
+              	</div>
+                <h3 class="heading mb-3"><a href="#">The Recipe from a Winemaker’s Restaurent</a></h3>
+                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <a href="#" class="btn-custom">Continue <span class="fa fa-long-arrow-right"></span></a>
 
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        <div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+              <ul>
+                <li><a href="#">&lt;</a></li>
+                <li class="active"><span>1</span></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">&gt;</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 	</div>
-	<!-- 푸터적용시 무한로딩.. -->
-	<th:block layout:fragment="footer" th:include="@{/fragments/footer}"></th:block>
-</body>
+
 </html>
