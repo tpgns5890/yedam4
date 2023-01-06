@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class PropVO {
 	private String pno;
 	private String eno;
+	private String userId;
 	private String companyInt;
 	private Integer eventExps;
 	private Integer totalPrc;
