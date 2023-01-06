@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+   <section class="hero-wrap hero-wrap-2"
+      style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">사회자 포트폴리오</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+   
+    <table>
+      <thead>
+         <tr>
+            <th>사용자ID</th>   
+            <th>한줄소개</th>   
+            <th>경력</th>   
+         </tr>
+      </thead>
+      <tbody>
+         <tr th:each="mc : ${mcList}">
+            <td th:text=${mc.userId}></td>
+            <td th:text=${mc.oneIntro}></td>
+            <td th:text=${mc.carrYear}></td>
+         </tr>
+      </tbody>
+   </table>
+</div>
+
+</html>
