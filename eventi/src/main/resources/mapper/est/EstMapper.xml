@@ -5,13 +5,13 @@
 <mapper namespace="com.eventi.left.estimate.mapper.EstMapper">
 	<!-- 견적요청서 전체조회 -->
 	<select id="getEstList" resultType="EstVO">
-		SELECT eno, event_type, writing_dt
+		SELECT E_NO, EVENT_TYPE, WRITING_DT, ADOPTION_YN
 		FROM estimate
 	</select>
 
 	<select id="getEst" resultType="EstVO">
 		SELECT *
-		FROM estimate
+		FROM ESTIMATE
 		WHERE ENO = #{eno}
 	</select>
 </mapper>

@@ -19,4 +19,9 @@ public class EstController {
 		model.addAttribute("estList", estMapper.getEstList(null));
 		return "content/estimate/estList";
 	}
+	
+	@RequestMapping(value = "/estFormType")
+	public String estFormType(Model model) {
+		return "content/estimate/estFormType";
+	}
 }
