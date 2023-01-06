@@ -7,8 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
 
 	@RequestMapping(value = "/qualification")
-	public String index() {
+	public String qualification() {
 		return "content/member/qualification";
+	}
+	
+	@RequestMapping(value = "/normalSignIn")
+	public String normalSignInPage() {
+		return "content/member/normalSignIn";
+	}
+	
+	@RequestMapping(value = "/busiSignIn")
+	public String busiSignInPage() {
+		return "content/member/busiSignIn";
 	}
 
 }
