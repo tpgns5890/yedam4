@@ -19,31 +19,29 @@
          </div>
       </div>
    </section>
-   
+
 	<table>
 		<thead>
 			<tr>
-				<th>자주묻는질문번호</th>
-				<th>제목</th>
-				<th>답변</th>
+				<th>구직신청게시글번호</th>
+				<th>구직자ID</th>
+				<th>게시글내용</th>
+				<th>구인게시글번호</th>
+				<th>자기소개서</th>
+				<th>첨부파일</th>
 			</tr>		
 		</thead>
 		<tbody>
-			<tr th:each="faq : ${faqList}">
-				<td th:text=${faq.faqNo}></td>
-				<td th:text=${faq.faqTtl}></td>
-				<td th:text=${faq.faqAns}></td>
+			<tr th:each="res : ${resumeList}">
+				<td th:text=${res.resumeNo}></td>
+				<td th:text=${res.seekerId}></td>
+				<td th:text=${res.seekerCntn}></td>
+				<td th:text=${res.jobNo}></td>
+				<td th:text=${res.resumeCntn}></td>
+				<td th:text=${res.files}></td>
 			</tr>
 		</tbody>
-
-		
-
-		
 	</table>
-	<details th:each="faq : ${faqList}">
-  <summary   th:text=${faq.faqNo}${faq.faqTtl}></summary>
-	  <div th:text=${faq.faqAns}>
-	  </div>
-</details>
 </div>
+
 </html>
