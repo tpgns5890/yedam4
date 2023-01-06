@@ -8,7 +8,6 @@
 	</select>
 
 	<select id="getContest" resultType="ContestVO">
-	SELECT * FROM CONTEST
 	</select>
 
 	<insert id="insertContest">

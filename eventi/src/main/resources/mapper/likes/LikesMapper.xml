@@ -4,4 +4,11 @@
 
 <mapper namespace="com.eventi.left.likes.mapper.LikesMapper">
 
+	<select id="likeList" resultType="LikesVO">
+		SELECT * FROM likes
+	</select>
+
+	<select id="getLike" resultType="LikesVO">
+	</select>
+
 </mapper>

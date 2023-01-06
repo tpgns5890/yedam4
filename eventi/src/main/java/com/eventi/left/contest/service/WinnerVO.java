@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-
-
 public class WinnerVO {
 	String wNo;	 	  //수상번호
 	String cNo;		  //공모전번호

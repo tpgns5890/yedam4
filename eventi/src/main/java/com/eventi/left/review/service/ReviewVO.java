@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor 
 public class ReviewVO { 
 	String reviewNo;	//후기번호
-	String uesrId;		//작성자Id
+	String userId;		//작성자Id
 	String reviewTgt;	//후기대상(id or 게시글번호)
 	Integer star;		//별점
 	String reviewCntn;	//후기내용

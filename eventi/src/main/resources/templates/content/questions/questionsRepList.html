@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content" class="content">
+<section class="hero-wrap hero-wrap-2" style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+          <div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+          </div>
+        </div>
+      </div>
+    </section>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>답변번호</th>
+				<th>문의번호</th>
+				<th>작성자</th>
+				<th>작성일자</th>
+				<th>답변내용</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="q : ${qrepList}">
+				<td th:text=${q.rNo}>
+				<td th:text=${q.qNo}>
+				<td th:text=${q.userId}>
+				<td th:text="${#dates.format(q.writingDt, 'yyyy/MM/dd')}">
+				<td th:text=${q.rCntn}>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</html>

@@ -4,4 +4,11 @@
 
 <mapper namespace="com.eventi.left.review.mapper.ReviewMapper">
 
+	<select id="reviewList" resultType="ReviewVO">
+		SELECT * FROM Review
+	</select>
+
+	<select id="getReview" resultType="ReviewVO">
+	</select>
+
 </mapper>
