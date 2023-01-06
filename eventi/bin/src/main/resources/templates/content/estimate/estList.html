@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"> 
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+   <table>
+      <thead>
+         <tr>
+            <th>견적서번호</th>   
+            <th>행사유형</th>   
+            <th>작성일시</th>   
+         </tr>
+      </thead>
+      <tbody>
+         <tr th:each="est : ${estList}">
+            <td th:text=${est.eno}></td>
+            <td th:text=${est.eventType}></td>
+            <td th:text=${est.writingDate}></td>
+         </tr>
+      </tbody>
+   </table>
+
+</body>
+</html>

@@ -14,9 +14,9 @@ public class EstController {
 	@Autowired
 	EstMapper estMapper;
 	
-	@RequestMapping(value = "/estList", method=RequestMethod.GET)
+	@RequestMapping(value = "/estList")
 	public String estList(Model model) {
 		model.addAttribute("estList", estMapper.getEstList(null));
-		return "estList";
+		return "content/estimate/estList";
 	}
 }

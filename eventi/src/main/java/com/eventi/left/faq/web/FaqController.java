@@ -17,7 +17,7 @@ public class FaqController {
 	@RequestMapping(value = "/faqList", method=RequestMethod.GET)
 	public String faqList(Model model) {
 		model.addAttribute("faqList", faqMapper.getFaqList(null));
-		return "faqList";
+		return "content/faq/faqList";
 	}
 	
 }
