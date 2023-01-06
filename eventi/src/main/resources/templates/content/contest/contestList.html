@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+<body>
+	<th:block layout:fragment="header" th:include="@{/fragments/header}"></th:block>
+	<div layout:fragment="content" class="content">
+		<table border="1">
+			<thead>
+				<tr>
+					<th>공모전번호</th>
+					<th>작성일자</th>
+					<th>제목</th>
+					<th>내용</th>
+					<th>카테고리</th>
+					<th>등록일</th>
+					<th>마감일</th>
+					<th>마감연장일</th>
+					<th>결제금액</th>
+					<th>임시저장여부</th>
+					<th>조회수</th>
+					<th>신고수</th>
+					<th>선호하는태그</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="contest : ${contestList}">
+					<td th:text=${contest.cNo}>
+					<td th:text=${contest.writer}>
+					<td th:text=${contest.ttl}>
+					<td th:text=${contest.cntn}>
+					<td th:text=${contest.category}>
+					<td th:text="${#dates.format(contest.dtReg, 'yyyy/MM/dd')}">
+					<td th:text="${#dates.format(contest.dtCls, 'yyyy/MM/dd')}">
+					<td th:text=${contest.dtExtns}>
+					<td th:text=${contest.pay}>
+					<td th:text=${contest.save}>
+					<td th:text=${contest.inq}>
+					<td th:text=${contest.rprt}>
+					<td th:text=${contest.style}>
+				</tr>
+			</tbody>
+		</table>
+
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center mb-5">
+					<div class="col-md-7 heading-section text-center ftco-animate">
+						<span class="subheading">Blog</span>
+						<h2>Recent Blog</h2>
+					</div>
+				</div>
+				<div class="row d-flex">
+					<div class="col-lg-6 d-flex align-items-stretch ftco-animate">
+						<div class="blog-entry d-flex">
+							<a href="blog-single.html" class="block-20 img"
+								style="background-image: url('images/image_1.jpg');"> </a>
+							<div class="text p-4 bg-light">
+								<div class="meta">
+									<p>
+										<span class="fa fa-calendar"></span> 23 April 2020
+									</p>
+								</div>
+								<h3 class="heading mb-3">
+									<a href="#">The Recipe from a Winemaker’s Restaurent</a>
+								</h3>
+								<p>A small river named Duden flows by their place and
+									supplies it with the necessary regelialia.</p>
+								<a href="#" class="btn-custom">Continue <span
+									class="fa fa-long-arrow-right"></span></a>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- 푸터적용시 무한로딩.. -->
+</body>
+</html>
