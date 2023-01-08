@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor 
 public class QuestionsRepVO { 
-	String rNo;		//답변번호
-	String qNo;		//문의번호
-	String userId;	//작성자Id
+	private String rNo;		//답변번호
+	private String qNo;		//문의번호
+	private String userId;	//작성자Id
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
-	Date writingDt;	//작성일자
-	String rCntn;	//답변내용
+	private Date writingDt;	//작성일자
+	private String rCntn;	//답변내용
 	
 }
