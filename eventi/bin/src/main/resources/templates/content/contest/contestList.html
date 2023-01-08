@@ -2,81 +2,194 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/default_layout}">
+	layout:decorate="~{layouts/default_layout}">
+
+<head>
+<style>
+/* 화면배치  aside,section => float적용 사이즈조정
+		  		  footer => clear: both; */
+.contest_Container {
+	padding: 20px;
+	margin: 0 auto;
+}
+
+.action-filter {
+	width: 1540px;
+	margin: 10px;
+	text-align: right;
+}
+
+aside {
+	width: 200px;
+	text-align: left;
+	padding: 20px;
+	float: left;
+}
+
+section {
+	width: 1500px;
+	padding: 10px;
+	text-align: left;
+	float: left;
+	margin: 0 auto;
+}
+
+.size {
+	width: 300px;
+	height: 340px;
+	float: left;
+	margin: 20px;
+	border-radius: 20px;
+}
+
+.page {
+	clear: both;
+}
+</style>
+</head>
+
 <body>
-	<th:block layout:fragment="header" th:include="@{/fragments/header}"></th:block>
 	<div layout:fragment="content" class="content">
-		<table border="1">
-			<thead>
-				<tr>
-					<th>공모전번호</th>
-					<th>작성일자</th>
-					<th>제목</th>
-					<th>내용</th>
-					<th>카테고리</th>
-					<th>등록일</th>
-					<th>마감일</th>
-					<th>마감연장일</th>
-					<th>결제금액</th>
-					<th>임시저장여부</th>
-					<th>조회수</th>
-					<th>신고수</th>
-					<th>선호하는태그</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="contest : ${contestList}">
-					<td th:text=${contest.cNo}>
-					<td th:text=${contest.writer}>
-					<td th:text=${contest.ttl}>
-					<td th:text=${contest.cntn}>
-					<td th:text=${contest.category}>
-					<td th:text="${#dates.format(contest.dtReg, 'yyyy/MM/dd')}">
-					<td th:text="${#dates.format(contest.dtCls, 'yyyy/MM/dd')}">
-					<td th:text=${contest.dtExtns}>
-					<td th:text=${contest.pay}>
-					<td th:text=${contest.save}>
-					<td th:text=${contest.inq}>
-					<td th:text=${contest.rprt}>
-					<td th:text=${contest.style}>
-				</tr>
-			</tbody>
-		</table>
-
-		<section class="ftco-section">
+		<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
 			<div class="container">
-				<div class="row justify-content-center mb-5">
-					<div class="col-md-7 heading-section text-center ftco-animate">
-						<span class="subheading">Blog</span>
-						<h2>Recent Blog</h2>
-					</div>
-				</div>
-				<div class="row d-flex">
-					<div class="col-lg-6 d-flex align-items-stretch ftco-animate">
-						<div class="blog-entry d-flex">
-							<a href="blog-single.html" class="block-20 img"
-								style="background-image: url('images/image_1.jpg');"> </a>
-							<div class="text p-4 bg-light">
-								<div class="meta">
-									<p>
-										<span class="fa fa-calendar"></span> 23 April 2020
-									</p>
-								</div>
-								<h3 class="heading mb-3">
-									<a href="#">The Recipe from a Winemaker’s Restaurent</a>
-								</h3>
-								<p>A small river named Duden flows by their place and
-									supplies it with the necessary regelialia.</p>
-								<a href="#" class="btn-custom">Continue <span
-									class="fa fa-long-arrow-right"></span></a>
-
-							</div>
-						</div>
+				<div
+					class="row no-gutters slider-text align-items-end justify-content-center">
+					<div
+						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">공모전</h2>
 					</div>
 				</div>
 			</div>
 		</section>
+
+
+		<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
+		<div class="contest_Container">
+
+			<div class="action-filter">
+				<button id="likeListBtn">관심 공모전</button>
+				<a href="./insert"><button>공모전 작성</button></a>
+
+				<!-- 공모전 정렬기준 -->
+				<select id="order" name="order">
+					<option value="select">조회수</option>
+					<option value="price">금액순</option>
+					<option value="dtCls" selected="selected">마감일순</option>
+				</select>
+			</div>
+
+			<!-- 분류별 체크박스 -->
+			<aside>
+				<h3>분류별</h3>
+				<ul style="list-style: none; padding-left: 0px;">
+					<li><input type="checkbox" name="D1" value="D1">현수막</li>
+					<li><input type="checkbox" name="D2" value="D2">배너</li>
+					<li><input type="checkbox" name="D3" value="D3">로고</li>
+					<li><input type="checkbox" name="D4" value="D4">포스터</li>
+					<li><input type="checkbox" name="D5" value="D5">기타</li>
+				</ul>
+			</aside>
+
+			<section class="ftco-section">
+				<div th:each="contest : ${contestList}">
+
+					<!-- 공모전 리스트 -->
+					<div class="text p-4 bg-light size">
+
+						<!-- 좋아요버튼 -->
+						<button style="float: right; margin: 0px;" type="button"
+							class="btn_like">
+							<span class="img_emoti" id="likeBtn">좋아요</span>
+						</button>
+
+						<p th:text=${contest.writer}></p>
+						<!-- 공모전 분류별 출력 -->
+						<th:block th:switch="${contest.category}">
+							<span th:case="D1">현수막</span>
+							<span th:case="D2">배너</span>
+							<span th:case="D3">로고</span>
+							<span th:case="D4">포스터</span>
+							<span th:case="D5">기타</span>
+						</th:block>
+						<h3>
+							<!-- 공모전 번호 상세보기이동 -->
+							<a th:href="@{/contest/select(cNo=${contest.cNo})}"><span th:text=${contest.ttl}></span> </a>
+						</h3>
+						<div class="meta">
+							<p>
+								마감일 :<span th:text="${#dates.format(contest.dtCls, 'yyyy/MM/dd')}"></span>
+							</p>
+							<p>
+								총 상금 :<span th:text="${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}"></span>
+							</p>
+							<p>
+								신고<span th:text=${contest.rprt}></span>
+								조회 <span th:text=${contest.inq}></span>
+							</p>
+							<div>선호하는 스타일</div>
+						</div>
+					</div>
+				</div>
+				<!-- 각각의 공모전 end -->
+
+				<!-- 페이징 -->
+				<th:block th:replace="fragments/paging :: PagingFragment"></th:block>
+				마지막페이지<span th:text="${paging.lastPage}"></span>
+
+
+				<script th:inline="javascript">
+	        	//수정해야됌!!!
+					
+					/* var order = document.querySelectorAll('#order > option');
+					order.forEach(data => console.log(data.value))
+					order.forEach(data => console.log(data.selected))
+					order.forEach(data => data.addEventListener("change", orderSelect));
+					
+					function orderSelect(){
+						arlet('ㅎ')
+					} */
+		        
+					// 분류별 checkbox 상태변경시 이벤트 발생
+					var inputs = document.querySelectorAll('aside>ul>li>input');
+					inputs.forEach(input => input.addEventListener('change', categorySelect));
+					
+					// checked가 true이면 실행
+					function categorySelect(input){
+						if(this.checked == true){
+							var category = this.value;
+							console.log(category);
+							
+						}
+							fetch('/contest/List', {
+								  method: 'get',
+								  body: category,
+								})
+								  .then((res) => res.text())
+								  .then((result) => {
+								    console.log('Success:', result);
+								  })
+								  .catch((error) => {
+								    console.error('Error:', error);
+								  });
+							
+							
+					}
+					
+
+					function gopage(i) {
+						alert(i)
+
+					}
+					
+					
+					
+				</script>
+
+			</section>
+		</div>
 	</div>
-	<!-- 푸터적용시 무한로딩.. -->
 </body>
 </html>

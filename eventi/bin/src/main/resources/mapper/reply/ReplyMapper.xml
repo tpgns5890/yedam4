@@ -4,4 +4,11 @@
 
 <mapper namespace="com.eventi.left.reply.mapper.ReplyMapper">
 
+	<select id="replyList" resultType="ReplyVO">
+		SELECT * FROM REPLY
+	</select>
+
+	<select id="getReply" resultType="ReplyVO">
+	</select>
+
 </mapper>
