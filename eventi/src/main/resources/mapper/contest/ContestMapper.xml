@@ -3,21 +3,94 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.contest.mapper.ContestMapper">
-	<select id="contestList" resultType="ContestVO">
-	SELECT * FROM CONTEST
-	</select>
-
-	<select id="getContest" resultType="ContestVO">
-	</select>
-
-	<insert id="insertContest">
 	
+	<!-- 분류별 카테고리/정렬순서 -->
+	<sql id="condition">
+		<where>
+			<if test="category != null and category != ''">
+				and category = #{category}
+			</if>
+			<if test="dtExtns != null and category != ''">
+				order by category = #{dtExtns}
+			</if>
+			<if test="inq != null and category != ''">
+				order by dt_Reg = #{inq}
+			</if>
+			<if test="pay != null and category != ''">
+				order by pay = #{pay}
+			</if>
+		</where>
+	</sql>
+
+
+	<!-- 공모전 전체조회(임시저장 제외,페이징) -->
+	<select id="contestList" resultType="ContestVO">
+		SELECT * FROM ( select ROWNUM RN, A.*FROM(
+		SELECT *
+		FROM CONTEST
+		WHERE SAVE = 'N'
+		<include refid="condition"/>
+	<![CDATA[
+	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+	]]>
+	</select>
+
+	<!-- 공모전 등록처리된 개수(임시저장 제외) -->
+	<select id="contestCount" resultType="int">
+		SELECT COUNT(*)
+		FROM CONTEST
+		WHERE SAVE = 'N'
+	</select>
+
+	<!-- 공모전 1건 상세조회 -->
+	<select id="getContest" resultType="ContestVO">
+		SELECT *
+		FROM CONTEST
+		WHERE C_NO = #{cNo}
+	</select>
+	
+	<!-- 상세조회 조회수 업데이트 -->	
+	<update id="selectUpdate">
+		update contest
+		set INQ = INQ+1
+		where c_no = #{cNo}
+	</update>
+	
+	<!-- 상세조회 좋아요 개수 확인 -->
+	<select id="selectLikes" resultType="int">
+		SELECT count(*)
+		from CONTEST a  join LIKES b
+		                on a.c_no = b.target_no
+		and a.C_NO = #{cNo}
+		and b.category = #{category}
+	</select>
+
+	
+	<!-- 공모전 등록(cno 시퀀스 최대값+1 (문자열->숫자+1->문자열 변경) -->
+	<insert id="insertContest">
+		<selectKey keyProperty="cNo" resultType="String" order="BEFORE">
+			SELECT 'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
+			FROM CONTEST
+		</selectKey>
+		insert into CONTEST(C_NO,WRITER,TTL,CNTN,CATEGORY,DT_REG,DT_CLS,PAY,SAVE,STYLE)
+		values( #{cNo},
+				#{writer},
+				#{ttl},
+				#{cntn},
+				#{category},
+				#{dtReg},
+				#{dtCls},
+				#{pay},
+				#{save},
+				#{style} )
 	</insert>
 
+	<!-- 공모전 정보수정 -->
 	<update id="updateContest">
 
 	</update>
 
+	<!-- 공모전 삭제 -->
 	<delete id="deleteContest">
 
 	</delete>

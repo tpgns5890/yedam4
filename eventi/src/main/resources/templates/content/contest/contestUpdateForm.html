@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<style>
+.contestContainer {
+	padding: 20px;
+	margin: auto;
+	float: center;
+}
+</style>
 </head>
 <body>
-	<h3>공모전 수정</h3>
+	<div layout:fragment="content" class="content">
+		<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div
+					class="row no-gutters slider-text align-items-end justify-content-center">
+					<div
+						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">공모전 수정</h2>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="contestContainer">
+			<form action="#" th:action="@{contest/update}" method="post">
+				<ul>
+					<li><label>분류</label> 
+						<input type="radio" name="category" id="D1" checked>현수막 
+						<input type="radio" name="category" id="D2">배너 
+						<input type="radio" name="category" id="D3">로고
+						<input type="radio" name="category" id="D4">포스터 
+						<input type="radio" name="category" id="D5">기타</li>
+						
+					<li>
+						<label>공모번호</label><input type="text" name="cNo" id="cNo" th:value="${contest.cNo}" readonly><br />
+					</li>
+					<li>
+						<label>작성자</label><input type="text" name="userId" id="userId" th:value="${contest.writer}" readonly="readonly"><br /></li>
+					<li>
+						<label>제목</label><input type="text" name="title" id="title" th:value="${contest.ttl}"><br /></li>
+					<li>
+						<label>내용</label> <textarea rows="10" cols="50" th:text="${contest.cntn}"></textarea></li>
+					<li>
+						<label>첨부파일</label><input type="file" name="file" id="file" multiple><br /></li>
+					<li>
+						<label>등록일</label><input type="date" readonly="readonly" name="" id="" th:value="${#dates.format(contest.dtReg, 'yyyy-MM-dd')}"><br />
+					</li>
+					<li>
+						<label>마감일</label><input type="date" name="" id="" th:value="${#dates.format(contest.dtCls, 'yyyy-MM-dd')}" readonly="readonly"><br />
+					</li>
+					<li>
+						<label>1등상금</label><input type="number" name="w_pay" id="w_pay"  readonly="readonly"><br />
+					</li>
+					<li>
+						<label>2등상금</label><input type="number" name="w_pay" id="w_pay"  readonly="readonly"><br />
+					</li>
+					<li>
+						<label>3등상금</label><input type="number" name="w_pay" id="w_pay"  readonly="readonly"><br />
+					</li>
+					<li>
+						<label>선호스타일</label>
+					</li>
+				</ul>
+				<button type="submit" name="insert">수정</button>
+				<button type="reset" name="cancle">취소</button>
+			</form>
+		</div>
+	</div>
 </body>
 </html>

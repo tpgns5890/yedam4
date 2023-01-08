@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor 
 public class LikesVO { 
-	String likeNo;		//좋아요번호
-	String userId;		//작성자Id
-	String targetNo;	//대상번호
-	String category;	//대상구분
+	private String likeNo;		//좋아요번호
+	private String userId;		//작성자Id
+	private String targetNo;	//대상번호
+	private String category;	//대상구분
 }

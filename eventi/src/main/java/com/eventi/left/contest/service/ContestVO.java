@@ -27,4 +27,12 @@ public class ContestVO {
 	private String inq; 	 //조회수
 	private String rprt; 	 //신고수
 	private String style; 	 //선호하는태그(최대 3개)
+	
+	
+	//페이징 처리관련 
+	private int first;
+	private int last;
+	
+	private Integer likes; //조회 확인해볼것
+	
 }
