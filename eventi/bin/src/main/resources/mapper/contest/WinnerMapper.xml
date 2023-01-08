@@ -3,5 +3,10 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.contest.mapper.WinnerMapper">
-
+	<select id="winnerList" resultType="WinnerVO">
+	SELECT * FROM Winner
+	</select>
+	
+	<select id="getWinner" resultType="WinnerVO">
+	</select>
 </mapper>

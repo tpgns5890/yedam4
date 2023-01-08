@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content" class="content">
+	<section class="hero-wrap hero-wrap-2"
+		style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+		data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div
+				class="row no-gutters slider-text align-items-end justify-content-center">
+				<div
+					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+					<h2 class="mb-0 bread">문의사항 테스트</h2>
+				</div>
+			</div>
+		</div>
+	</section>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>문의번호</th>
+				<th>작성자</th>
+				<th>대상Id</th>
+				<th>제목</th>
+				<th>내용</th>
+				<th>작성일자</th>
+				<th>답변유무</th>
+				<th>비밀글유무</th>
+				<th>대상구분</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="q : ${qList}">
+				<td th:text=${q.qNo}>
+				<td th:text=${q.userId}>
+				<td th:text=${q.targetId}>
+				<td th:text=${q.qTtl}>
+				<td th:text=${q.qCntn}>
+				<td th:text="${#dates.format(q.writingDt, 'yyyy/MM/dd')}">
+				<td th:text=${q.replyYn}>
+				<td th:text=${q.secretYn}>
+				<td th:text=${q.category}>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</html>

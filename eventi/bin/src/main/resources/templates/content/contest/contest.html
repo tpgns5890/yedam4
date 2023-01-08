@@ -1,23 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+</style>
 </head>
 <body>
-	<h3>공모전 상세조회</h3>
+	<div layout:fragment="content" class="content">
+	<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div
+					class="row no-gutters slider-text align-items-end justify-content-center">
+					<div
+						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">공모전 상세조회</h2>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
+					<a href="/images/prod-1.jpg" class="image-popup prod-img-bg"><img
+						src="/images/prod-1.jpg" class="img-fluid" alt="Colorlib Template"></a>
+				</div>
+				<div
+					class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+					<h3><span th:text=${contest.ttl}></span></h3>
+					
+					<div class="rating d-flex">
+						<p class="text-left mr-4">
+							&#128680;<span th:text=${contest.rprt}></span>
+							<span style='font-size:30px;'>&#128065;</span><span th:text=${contest.inq}></span>
+						
+						<!-- 좋아요버튼 -->
+							<span class="img_emoti">좋아요</span><span th:text=${contest.likes}></span>
+						</p>
+					</div>
+					
+					<p class="price">
+						상금 <span th:text="${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}"></span>
+					</p>
+					<p>선호하는 스타일</p>
+					<div class="row mt-4">
+						<div class="input-group col-md-6 d-flex mb-3">
+						</div>
+						<div class="w-100"></div>
+						<div class="col-md-12">
+						</div>
+					</div>
+					
+					<!-- 전체회원 -->
+					<p>
+						<a href="cart.html" class="btn btn-primary py-3 px-5 mr-2">링크복사</a>
+						<a href="cart.html" class="btn btn-primary py-3 px-5 mr-2">응모하기</a>
+					</p>
+					
+					<!-- 공모전 등록한 회원만 -->
+					<p>
+						<a th:href="@{/contest/update(cNo=${contest.cNo})}" class="btn btn-primary py-3 px-5 mr-2">수정</a>
+						<button id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
+						 <!-- <form id="contestDelete" th:action="@{'/contest/delete/' + ${contest.cNo}}" method="post">
+							<button class="btn btn-primary py-3 px-5">삭제</button>
+						</form> -->
+					</p>
+					<p>
+						<a href="cart.html" class="btn btn-primary py-3 px-5">마감연장</a>
+						<a href="cart.html" class="btn btn-primary py-3 px-5">결과등록</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="row mt-5">
+				<div class="col-md-12 nav-link-wrap">
+					<div class="nav nav-pills d-flex text-center" id="v-pills-tab"
+						role="tablist" aria-orientation="vertical">
+						<a
+							class="nav-link ftco-animate active mr-lg-1 fadeInUp ftco-animated"
+							id="v-pills-1-tab" data-toggle="pill" role="tab" aria-controls="v-pills-1" aria-selected="true">요청사항</a>
+
+						<a class="nav-link ftco-animate mr-lg-1 fadeInUp ftco-animated"
+							id="v-pills-2-tab" data-toggle="pill" role="tab" aria-controls="v-pills-2" aria-selected="false">문의사항</a>
+
+						<a class="nav-link ftco-animate fadeInUp ftco-animated"
+							id="v-pills-3-tab" data-toggle="pill"  role="tab" aria-controls="v-pills-3" aria-selected="false">참여작</a>
+
+					</div>
+				</div>
+				<div class="col-md-12 tab-wrap">
+
+					<div class="tab-content bg-light" id="v-pills-tabContent">
+
+						<div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+							<div class="p-4">
+								<p><span th:text=${contest.cntn}></span></p>
+						</div>
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script type="text/javascript">
+		/* delBtn = document.querySelector("#delBtn")
+		console.log(delBtn);
+		delBtn.addEventListener("onclick", contestDelete);
+		
+		function contestDelete(cNo){
+			fetch('contest/delete' + cNo, {
+				  method: 'DELETE',
+				})
+				.then(res =>  res.json())
+				.then(res => console.log(res))
+		}
+		 */
+			
+	</script>
+	</div>
 	
-	<!-- ajax로 처리. -->
-	<h3>요청사항</h3>
-	<h3>문의사항</h3>
-	<h3>참여작</h3>
-	
-	
-	<button>링크복사</button>
-	<button>응모하기</button>
-	<button>수정</button>
-	<button>삭제</button>
-	<button>마감연장</button> <!-- 모달 -->
-	<button>결과등록</button>
 </body>
 </html>

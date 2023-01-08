@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+<section class="hero-wrap hero-wrap-2"
+      style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">페이지 제목</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+
+	<table>
+		<thead>
+			<tr>
+				<th>공지사항번호</th>
+				<th>공지사항제목</th>
+				<th>공지사항내용</th>
+				<th>작성일자</th>
+				<th>이미지</th>
+				<th>회원ID</th>
+					
+			</tr>		
+		</thead>
+		<tbody>
+			<tr th:each="noc : ${noticeList}">
+				<td th:text=${noc.noticeNo}></td>
+				<td th:text=${noc.ttl}></td>
+				<td th:text=${noc.noticeCntn}></td>
+				<td th:text=${noc.dt}></td>
+				<td th:text=${noc.img}></td>
+				<td th:text=${noc.userId}></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</html>
