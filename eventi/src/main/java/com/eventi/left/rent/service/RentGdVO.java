@@ -10,9 +10,9 @@ public class RentGdVO {
 	private String userId;
 	private String goodsNm;
 	private String stock;
-	private Integer TotalStock;
-	private Integer RentalPrc;
-	private String RpstImg;
-	private String slaeYn;
+	private Integer totalStock;
+	private Integer rentalPrc;
+	private String rpstImg;
+	private String saleYn;
 	private String goodsSize;
 }

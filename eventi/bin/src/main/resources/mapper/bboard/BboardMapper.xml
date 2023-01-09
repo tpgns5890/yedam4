@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.eventi.left.bboard.mapper.BboardMapper">
-	<select id="bboardList" resultType="com.eventi.left.bboard.service.BboardVO">
-		SELECT *
-		FROM B_BOARD
-		WHERE TYPE = #{type}
-	</select>
-</mapper>
