@@ -25,14 +25,26 @@
          <tr>
             <th>사용자ID</th>   
             <th>한줄소개</th>   
-            <th>경력</th>   
+            <th>경력</th> 
+            <th>작업가격</th>
+            <th>작업기간</th> 
+            <th>작업스타일</th>
+            <th>경력사항</th>
+            <th>조회수</th>
+            <th>이미지</th> 
          </tr>
       </thead>
       <tbody>
-         <tr th:each="mc : ${mcList}">
-            <td th:text=${mc.userId}></td>
-            <td th:text=${mc.oneIntro}></td>
-            <td th:text=${mc.carrYear}></td>
+         <tr th:each="dgn : ${dgnerList}">
+            <td th:text=${dgn.userId}></td>
+            <td th:text=${dgn.oneIntro}></td>
+            <td th:text=${dgn.carrYear}></td>
+            <td th:text=${dgn.workPrice}></td>
+            <td th:text=${dgn.workDt}></td>
+            <td th:text=${dgn.style}></td>
+            <td th:text=${dgn.career}></td>
+            <td th:text=${dgn.inq}></td>
+            <td><img th:src="@{/images/}+${dgn.img}" height="250"></td>
          </tr>
       </tbody>
    </table>
