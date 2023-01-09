@@ -2,8 +2,6 @@ package com.eventi.left.questions.service;
 
 import java.util.List;
 
-import com.eventi.left.contest.service.WinnerVO;
-
 public interface QuestionsRepService {
 	
 	//문의답변

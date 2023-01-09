@@ -2,7 +2,6 @@ package com.eventi.left.questions.mapper;
 
 import java.util.List;
 
-import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.questions.service.QuestionsRepVO;
 
 public interface QuestionsRepMapper {
