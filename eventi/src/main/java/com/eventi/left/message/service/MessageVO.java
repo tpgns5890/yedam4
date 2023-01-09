@@ -2,8 +2,6 @@ package com.eventi.left.message.service;
 
 import java.util.Date;
 
-import com.eventi.left.bboard.service.BboardVO;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,69 +1,201 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content">
-	<section class="hero-wrap hero-wrap-2"
-		style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-		data-stellar-background-ratio="0.5">
-		<div class="overlay"></div>
-		<div class="container">
-			<div
-				class="row no-gutters slider-text align-items-end justify-content-center">
-				<div
-					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<h2 class="mb-0 bread">일반회원 회원가입</h2>
+<head>
+	<style>
+		#container {
+			width: 80%;
+			margin: 0 auto;
+		}
+
+		#signIn {
+			padding: 20px;
+			min-height: 550px;
+			display: flex;
+			line-height: 3em;
+		}
+
+		#signIn-left {
+			padding: 20px;
+			width: 50%;
+			display: inline-block;
+			border-right: 1px solid black;
+
+		}
+
+		#signIn-right {
+			padding: 20px;
+			width: 49%;
+			display: inline-block;
+
+		}
+
+		#submitArea {
+			margin-top: 20px;
+			position: relative;
+			text-align: right;
+			margin-bottom: 20px;
+		}
+
+		label {
+			width: 130px;
+			margin-top: 40px;
+		}
+
+		input {
+			width: 300px;
+			margin-right: 15px;
+		}
+
+		.inputRadio {
+			width: 20px;
+		}
+
+		.labelRadio {
+			width: 80px;
+		}
+
+		#inputEmailChk {
+			width: 150px;
+			margin-left: 280px;
+		}
+	</style>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row no-gutters slider-text align-items-end justify-content-center">
+					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">일반회원 회원가입</h2>
+					</div>
 				</div>
+			</div>
+		</section>
+		<div id="container">
+			<form id="signIn" action="#">
+				<div id="signIn-left">
+					<h3 class="mb-4 billing-heading">기본정보</h3>
+					<label for="id">아이디</label><input type="text" name="id" id="inputId">
+					<div>
+						<font id="id_feedback" size="2"></font>
+					</div>
+					<label for="password">비밀번호</label><input type="password" name="password" id="pw1"><br>
+					<label for="passwordchk">비밀번호확인</label><input type="password" name="passwordchk" id="pw2">
+					<div>
+						<font id="pw_feedback" size="2"></font>
+					</div>
+					<label for="name">성명</label><input type="text" name="name"><br>
+					<label for="email">이메일주소</label><input type="text" name="email" id="inputEmail"><button
+						type='button' id="sendEmail">인증번호전송</button><br>
+					<input id="inputEmailChk" type="text">
+					<div>
+						<font id="email_feedback" size="2"></font>
+					</div>
+					<label for="mailGet">메일 알림수신</label>
+					<input type="radio" class="inputRadio" name="mailGet" value="s1"><label
+						class="labelRadio">수신동의</label>
+					<input type="radio" class="inputRadio" name="mailGet" value="s0"><label
+						class="labelRadio">수신거부</label>
+				</div>
+				<div id="signIn-right">
+					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?</h3>
+					<label for="qualification">자격증 종류</label>
+					<select name="qualification">
+						<option value="수첩">수첩형 자격증</option>
+						<option value="상장">상장형 자격증</option>
+					</select>
+					<br>
+					<label for="name">생년월일</label><input type="text" placeholder=""><br>
+					<label for="name">자격증번호</label><input type="text" placeholder=""><br>
+					<label for="name">발급(등록)년월일</label><input type="text" placeholder=""><br>
+					<label for="name">자격증내지번호</label><input type="text" placeholder=""><button type='button'
+						id="normalSignIn">추가</button>
+				</div>
+			</form>
+			<div id="submitArea">
+				<button type='button' class="btn btn-primary py-3 px-5" id="normalSignIn">초기화</button>
+				<button type='button' class="btn btn-primary py-3 px-5" id="normalSignIn">회원가입</button>
 			</div>
 		</div>
-	</section>
-	<div>
-		<form action="#">
-			<div>
-				<h3 class="mb-4 billing-heading">기본정보</h3>
-				<label for="id">아이디</label><input type="text" placeholder="">
-				<button>인증번호확인</button>
-				<br> <label for="password">비밀번호</label><input type="text"
-					placeholder=""><br> <label for="passwordchk">비밀번호확인</label><input
-					type="text" placeholder=""><br> <label for="name">성명</label><input
-					type="text" placeholder=""><br> <label for="name">이메일주소</label><input
-					type="text" placeholder="">
-				<button>인증번호전송</button>
-				<br> <input type="text" placeholder="">
-				<button>인증번호확인</button>
-				<br>
-				<label for="password">메일 알림수신</label>
-				<div class="radio">
-					<label class="mr-3"><input type="radio" name="optradio">
-						수신동의</label> <label><input type="radio" name="optradio">수신거부</label>
-				</div>
-			</div>
-			<div>
-				<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?</h3>
-			</div>
-			<label for="country">자격증 종류</label>
-			<div class="select-wrap">
-				<div class="icon">
-					<span class="ion-ios-arrow-down"></span>
-				</div>
-				<select name="" id="" class="form-control">
-					<option value="">수첩형 자격증</option>
-					<option value="">상장형 자격증</option>
-				</select>
-			</div>
-			<label for="name">생년월일</label><input type="text" placeholder=""><br>
-			<label for="name">자격증번호</label><input type="text" placeholder=""><br>
-			<label for="name">발급(등록)년월일</label><input type="text" placeholder=""><br>
-			<label for="name">자격증내지번호</label><input type="text" placeholder=""><br>
-			<button class="btn btn-primary py-3 px-5" id="normalSignIn">추가</button>
-			<br>
-			<br>
-			<button class="btn btn-primary py-3 px-5" id="normalSignIn">초기화</button>
-			<button class="btn btn-primary py-3 px-5" id="normalSignIn">회원가입</button>
-		</form>
+		<script>
+			/* 아이디 중복 확인 */
+			$('#inputId').keyup(function () {
+				var inputId = $('#inputId').val(); //입력한 ID
+				$.ajax({
+					url: "/memIdCheck",
+					type: "post",
+					data: {
+						inputId: inputId
+					},
+					datatype: 'json',
+					success: function (result) {
+						if (result == 1) {
+							$("#id_feedback").html('이미 사용중인 아이디입니다.');
+							$("#id_feedback").attr('color', '#dc3545');
+							$("#id_feedback").attr('value', '1');
+						} else {
+							$("#id_feedback").html('사용할 수 있는 아이디입니다.');
+							$("#id_feedback").attr('color', '#2fb380');
+							$("#id_feedback").attr('value', '0');
+						}
+					},
+					error: function () {
+						alert("서버 요청 실패");
+					}
+				})
+			})
 
+			/* 비밀번호 확인 */
+			$('#pw2').keyup(function () {
+				var p1 = $('#pw1').val(); //비밀번호 값
+				var p2 = $('#pw2').val(); //비밀번호 확인
+				if (p1 == p2) {
+					$("#pw_feedback").html('비밀번호가 일치합니다.');
+					$("#pw_feedback").attr('color', '#2fb380');
+					$("#pw_feedback").attr('value', '0');
+				} else {
+					$("#pw_feedback").html('비밀번호가 다릅니다.');
+					$("#pw_feedback").attr('color', '#dc3545');
+					$("#pw_feedback").attr('value', '1');
+				}
+			})
+
+
+			/* 이메일 인증번호 전송 */
+			var code = ""; //이메일전송 인증번호 저장위한 코드
+			$("#sendEmail").click(function () {
+				var email = $("#inputEmail").val(); // 입력한 이메일
+				$.ajax({
+					type: "GET",
+					url: "mailCheck?email=" + email,
+					success: function (data) {
+						code = data;
+					}
+				});
+			});
+
+			/* 인증번호 비교 */
+			$("#inputEmailChk").keyup(function () {
+				var inputCode = $("#inputEmailChk").val();
+				var checkResult = $("#email_feedback")
+				if (inputCode == code) { // 일치할 경우
+					checkResult.html("인증번호가 일치합니다.");
+					checkResult.attr('color', '#2fb380');
+					checkResult.attr('value', '0');
+				} else { // 일치하지 않을 경우
+					checkResult.html("인증번호를 다시 확인해주세요.");
+					checkResult.attr('color', '#dc3545');
+					checkResult.attr('value', '1');
+				}
+			});
+		</script>
 	</div>
-</div>
+</body>
+
 </html>

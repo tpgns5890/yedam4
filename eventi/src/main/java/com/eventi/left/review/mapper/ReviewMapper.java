@@ -2,7 +2,6 @@ package com.eventi.left.review.mapper;
 
 import java.util.List;
 
-import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.review.service.ReviewVO;
 
 public interface ReviewMapper {

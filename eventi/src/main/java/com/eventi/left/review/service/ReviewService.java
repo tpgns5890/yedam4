@@ -2,8 +2,6 @@ package com.eventi.left.review.service;
 
 import java.util.List;
 
-import com.eventi.left.contest.service.WinnerVO;
-
 public interface ReviewService {
 	
 	//후기정보
