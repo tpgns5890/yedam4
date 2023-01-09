@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+<head>
+<style>
+	.product .img {
+		height: 250px;
+	}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+
+</head>   
+
+<div layout:fragment="content">
+<section class="hero-wrap hero-wrap-2"
+      style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">디자인</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+   
+  <section class="ftco-section">
+			<div class="container">
+
+				<div class="row">
+					<div class="col-md-3 d-flex" th:each="des : ${designList}">
+						<div class="product ftco-animate fadeInUp ftco-animated">
+							<div class="img d-flex align-items-center justify-content-center" th:style="'background-image:url('+ @{/images/}+${des.centerImg} +');'">
+								
+							</div>
+							<div class="text text-center">
+								<span class="category" th:text=${des.caregory}></span>
+								<h2 th:text=${des.name}></h2>
+								<p class="mb-0"><span class="price" th:text=${des.dgnNo}></span></p>
+								<p class="mb-0"><span class="price" th:text=${des.userId}></span></p>
+							</div>
+						</div>
+					</div>
+			</div>
+		</section>
+
+<h2>Modal Example</h2>
+
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Open Modal</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Some text in the Modal..</p>
+    
+    <button type="button" id="move">디자이너 이동</button>
+  </div>
+
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+var move = document.getElementById("move");
+move.onclick = function() {
+	location.href="/prtfl/dgnerList?userId=user1";
+}
+</script>
+
+</div>
+</html>

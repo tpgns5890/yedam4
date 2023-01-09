@@ -3,16 +3,17 @@ package com.eventi.left.contest.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.Paging;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 
 import groovy.util.logging.Log4j;
 
@@ -41,13 +42,14 @@ public class ContestController {
 
 	// 등록화면이동
 	@GetMapping("/insert")
-	public String contestInsert() {
+	public String contestInsert(Model model) {
+		model.addAttribute("cNo", service.getSequence()); //입력할 공모전번호 
 		return "content/contest/contestInsertForm";
 	}
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(ContestVO vo, RedirectAttributes rttr) {
+	public String contestInsertForm(@RequestBody ContestVO vo, RedirectAttributes rttr) {
 		rttr.addFlashAttribute("result", "등록처리완료");
 		service.insertContest(vo);
 		return "content/contest/contestList";
@@ -68,12 +70,12 @@ public class ContestController {
 		return "content/contest/contestList";
 	}
 
-	// 삭제처리
-	@DeleteMapping("/delete")
-	public String contestDelete(String cNo, RedirectAttributes rttr) {
+	// 삭제처리(링크처리는 get/ deleteMappging form)
+	@GetMapping("/delete/{cNo}")
+	public String contestDelete(@PathVariable("cNo") String cNo, RedirectAttributes rttr) {
 		rttr.addFlashAttribute("result", "삭제처리완료");
 		service.deleteContest(cNo);
-		return "content/contest/contestList";
+		return "redirect:/contest/List"; //페이징처리를 위해 전체리스트 메소드 실행후 페이지이동
 	}
 
 }

@@ -6,10 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <style>
+#bodyContents {
+	margin: 0 auto;
+}
 #customers {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: 50%;
+  margin: 0 auto;
 }
 
 #customers td, #customers th {
@@ -93,6 +97,7 @@
 }
 </style>
 </head>
+<body>
 <div layout:fragment="content">
    <section class="hero-wrap hero-wrap-2"
       style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
@@ -114,63 +119,45 @@
 <table id="customers">
   <tr>
     <td><label class="container">기념식
-  <input type="radio" checked="checked" name="radio">
+  <input type="radio" name="radio">
   <span class="checkmark"></span>
 </label></td>
 
   </tr>
   <tr>
    <td><label class="container">축제/가요제/플리마켓
-  <input type="radio" checked="checked" name="radio">
+  <input type="radio" name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">체육대회/단합행사
-  <input type="radio" checked="checked" name="radio">
+  <input type="radio" name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">세미나/포럼/워크샵
-  <input type="radio" checked="checked" name="radio">
+  <input type="radio" name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">전시회/박람회
-  <input type="radio" checked="checked" name="radio">
+  <input type="radio" name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
     <tr>
    <td><label class="container">신년회/송년회
-  <input type="radio" checked="checked" name="radio">
+  <input type="radio" name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
 </table>
-   <input type="button" value="다음" onclick="acyncMovePage()">
+   <input type="button" value="다음" onclick="location.replace('/estFormPats');">
 </div>
 </form>
 </div>
-<script>
-function acyncMovePage(url){
-	
-	var url = "/content/estimate/estFormPats";
-   
-    $.ajax({
-        type:"GET",
-        url:url,
-        dataType : "html",
-        success: function(data){
-            $("#bodyContents").html(data);
-              
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }  
-    });
-}
-</script>
+</body>
 </html>
