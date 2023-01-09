@@ -110,40 +110,50 @@
       </div>
    </section>
 <div id="bodyContents">
-<h1>행사 시작 시간은 언제인가요?</h1>
-<form>
+<h1>행사 예상 소요시간을 선택해주세요</h1>
 <table id="customers">
   <tr>
-    <td><label class="container">오전
+    <td><label class="container">1시간
   <input type="radio"  name="radio">
   <span class="checkmark"></span>
 </label></td>
 
   </tr>
   <tr>
-   <td><label class="container">오후
+   <td><label class="container">2시간
   <input type="radio"  name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">시간
+   <td><label class="container">3시간
   <input type="radio"  name="radio">
    <input name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">200명 미만
+   <td><label class="container">4시간
+  <input type="radio"  name="radio">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+   <tr>
+   <td><label class="container">하루 이상
+  <input type="radio"  name="radio">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+   <tr>
+   <td><label class="container">기타
   <input type="radio"  name="radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
 </table>
- <input type="button" value="이전" onclick="location.replace('/estFormType');">
-   <input type="button" value="다음" onclick="location.replace('/estFormDate');">
+ <input type="button" value="이전" onclick="location.replace('/estFormTime');">
+   <input type="button" value="다음" onclick="location.replace('/estFormLocal');">
 </div>
-</form>
 </div>
 </body>
 </html>
