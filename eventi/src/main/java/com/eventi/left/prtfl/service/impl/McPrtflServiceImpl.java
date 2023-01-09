@@ -14,8 +14,8 @@ public class McPrtflServiceImpl implements McPrtflService{
 	@Autowired McPrtfMapper mcPrtfMapper;
 		
 	@Override
-	public List<McPrtflVO> mcList(McPrtflVO McPrtfVO) {
-		return mcPrtfMapper.mcList(McPrtfVO);
+	public List<McPrtflVO> mcAll(McPrtflVO McPrtfVO) {
+		return mcPrtfMapper.mcAll(McPrtfVO);
 	}
 
 }

@@ -15,7 +15,7 @@ public class McPrtlController {
 	
 	@RequestMapping("/mcList")
 	public String mcList(Model model, McPrtflVO mcPrtflVO) {
-		model.addAttribute("mcList", mcPrtflService.mcList(mcPrtflVO));
+		model.addAttribute("mcList", mcPrtflService.mcAll(mcPrtflVO));
 		return "content/prtl/mcList";
 	
 	}
