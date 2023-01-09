@@ -8,10 +8,13 @@
 		SELECT E_NO, EVENT_TYPE, WRITING_DT, ADOPTION_YN
 		FROM estimate
 	</select>
-
+	<!-- 견적서 단건조회 -->
 	<select id="getEst" resultType="EstVO">
 		SELECT *
 		FROM ESTIMATE
-		WHERE ENO = #{eno}
+		WHERE E_NO = #{eno}
+	</select>
+	<!-- 견적서별 제안서 전체조회 -->
+	<select id="getPropList" resultType="PropVO">
 	</select>
 </mapper>
