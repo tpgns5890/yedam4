@@ -4,9 +4,29 @@
 
 <mapper namespace="com.eventi.left.contest.mapper.WinnerMapper">
 	<select id="winnerList" resultType="WinnerVO">
-	SELECT * FROM Winner
+		SELECT * FROM Winner
 	</select>
 	
 	<select id="getWinner" resultType="WinnerVO">
+	
 	</select>
+	
+	<insert id="insertWinner">
+		<selectKey keyProperty="wNo" resultType="String" order="BEFORE">
+			SELECT 'WT'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) W_NO
+			FROM WINNER
+		</selectKey>
+		insert into WINNER(W_NO,CO_NO,GRADE,W_PAY)
+		values(#{wNo},
+			   #{coNo},
+			   #{grade},
+			   #{wPay})
+	</insert>
+	<update id="updateWinner">
+	
+	</update>
+	
+	<delete id="deleteWinner">
+	
+	</delete>
 </mapper>

@@ -40,36 +40,27 @@ ul{
  저작권법에 따라 입상자와 별도로 합의하여야 한다. 공모전 주최자가 입상작 발표 후 입상작의 저작재산권 전부 또는 일부를 양도받고자 하는 경우 정당한 대가 지급을 전제로 별도의 합의를 통해 다른 사람들보다 우선하여 해당 저작재산권을 양도받을 수 있다. 공모전 주최자가 입상작을 이용할 때에는 입상자의 저작인격권을존중하여야 한다. 공모전 주최자는 원칙적으로 저작자인 입상자의 성명을 표시하고, 입상작의 내용·형식 및 제호의 동일성을 유지하여야한다. 공모전 주최자가 입상작의 저작재산권 전부 또는 일부를 양도받는경우라 하더라도 동일하다 
 </textarea><br>
 <input type="checkbox" id="chekc">확인하였습니다.<br>
-			<form action="#" th:action="@{/contest/insert}" method="post">
+			
+			<form id="form" method="post">
 				<ul>
-					<li><label>분류</label> 현수막 <input type="radio" name="category"
-						id="D1" checked> 배너<input type="radio" name="category"
-						id="D2"> 로고<input type="radio" name="category" id="D3">
-						포스터<input type="radio" name="category" id="D4"> 기타 <input
-						type="radio" name="category" id="D5"></li>
+					<li><label>분류</label> 
+						현수막 <input type="radio" name="category" id="D1" checked> 
+						배너<input type="radio" name="category" id="D2"> 
+						로고<input type="radio" name="category" id="D3">
+						포스터<input type="radio" name="category" id="D4"> 
+						기타 <input type="radio" name="category" id="D5"></li>
 
-					<li><label>공모번호</label><input type="text" name="cNo" id="cNo"
-						value="" readonly><br /></li>
-					<li><label>작성자</label><input type="text" name="userId"
-						id="userId" value=""><br /></li>
-					<li><label>제목</label><input type="text" name="title"
-						id="title" required="required"><br /></li>
-					<li><label>내용</label> <textarea rows="10" cols="50"
-							required="required"></textarea></li>
-					<li><label>첨부파일</label><input type="file" name="file"
-						id="file" multiple><br /></li>
-					<li><label>등록일</label><input type="date" name="dtReg"
-						id="dtReg"
-						th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}"
-						readonly><br /></li>
-					<li><label>마감일</label><input type="date" name="dtCls"
-						id="dtCls" required="required"><br /></li>
-					<li><label>1등상금</label><input type="number" name="" id=""
-						required="required"><br /></li>
-					<li><label>2등상금</label><input type="number" name="" id=""><br />
-					</li>
-					<li><label>3등상금</label><input type="number" name="" id=""><br />
-					</li>
+					<li><label>공모번호</label><input type="text" name="cNo" id="cNo" th:value="${cNo}" ><br /></li>
+					<li><label>작성자</label><input type="text" name="writer" id="writer" value=""><br /></li>
+					<li><label>제목</label><input type="text" name="ttl" id="ttl" required="required"><br /></li>
+					<li><label>내용</label> <textarea rows="10" name="cntn" id="cntn"cols="50" required="required"></textarea></li>
+					<li><label>첨부파일</label><input type="file" name="file" id="file" multiple><br /></li>
+					<li><label>등록일</label><input type="date" name="dtReg" id="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
+					<li><label>마감일</label><input type="date" name="dtCls" id="dtCls" required="required"><br /></li>
+		<!-- 			<li><label>1등상금</label><input type="number" name="wPay" id="wPay" required="required"><br /></li>
+					<li><label>2등상금</label><input type="number" name="wPay" id="wPay"><br/></li>
+					<li><label>3등상금</label><input type="number" name="wPay" id="wPay"><br/></li> -->
+					<li><label>총상금</label><input type="number" name="pay" id="pay"><br/></li>
 					<li><label>선호스타일</label> <select>
 							<option value="none">=== 선호스타일 ===</option>
 							<option id="style" value="DS1">고전적인</option>
@@ -85,17 +76,38 @@ ul{
 					</select>
 						<button>추가</button></li>
 				</ul>
-				<button name="reset">초기화</button>
-				<button name="save">임시저장</button>
-				<button name="insert">등록</button>
-				<button name="cancle">취소</button>
 			</form>
+				<button type="button" id="resetBtn">초기화</button>
+				<button type="button" id="saveBtn">임시저장</button>
+				<button type="button" id="insertBtn">등록</button>
+				<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 		</div>
-		<script type="text/javascript">
+		
+		<script>
+			//등록일 이전날짜 선택불가
 			var now_utc = Date.now()
 			var timeOff = new Date().getTimezoneOffset()*60000;
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가			
+			
+			console.log($('#insertBtn'));
+			$('#insertBtn').on('click', function insert(){
+				$.ajax({
+		            type:'POST',
+		            data: $("#form").serialize(),
+		            url:"/contest/insert",
+		            dataType: "json",
+		            contentType: "application/json; charset=UTF-8",
+		            success : function() {    
+		                alert("공모전 등록완료");
+		                location.href='/contest/List';
+		            },
+		            error: function() {
+		                alert("ERROR");
+		            }        
+		        })
+			})
+			
 			
 		</script>
 	</div>

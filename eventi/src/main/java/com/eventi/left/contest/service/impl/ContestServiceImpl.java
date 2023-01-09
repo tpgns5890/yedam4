@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 
 import com.eventi.left.common.Paging;
 import com.eventi.left.contest.mapper.ContestMapper;
+import com.eventi.left.contest.mapper.WinnerMapper;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 
 @Service
 public class ContestServiceImpl implements ContestService{
 
 	@Autowired ContestMapper mapper;
+	@Autowired WinnerMapper wMapper;
 	
 	@Override
 	public List<ContestVO> contestList(ContestVO vo, Paging paging) {
@@ -27,9 +30,7 @@ public class ContestServiceImpl implements ContestService{
 	@Override
 	public ContestVO getContest(ContestVO vo) {
 		mapper.selectUpdate(vo);
-		vo = mapper.getContest(vo);
-		vo.setLikes(mapper.selectLikes(vo));
-		return vo;
+		return mapper.getContest(vo);
 	}
 
 	@Override
@@ -46,6 +47,11 @@ public class ContestServiceImpl implements ContestService{
 	@Override
 	public int deleteContest(String cNo) {
 		return mapper.deleteContest(cNo);
+	}
+
+	@Override
+	public String getSequence() {
+		return mapper.getSequence();
 	}
 
 }
