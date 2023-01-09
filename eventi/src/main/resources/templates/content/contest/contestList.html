@@ -141,18 +141,23 @@ section {
 
 
 				<script th:inline="javascript">
-	        	//수정해야됌!!!
-					
-					/* var order = document.querySelectorAll('#order > option');
-					order.forEach(data => console.log(data.value))
-					order.forEach(data => console.log(data.selected))
-					order.forEach(data => data.addEventListener("change", orderSelect));
-					
-					function orderSelect(){
-						arlet('ㅎ')
-					} */
-		        
-					// 분류별 checkbox 상태변경시 이벤트 발생
+
+				//정렬기준 변경
+				
+				var input = $('aside>ul>li>input')
+				console.log(input);
+				
+				$('#order').change(function orderSelect(){
+	        		console.log($(this).val());
+	        		
+	        		$.ajax({
+	        			
+	        		})
+	        		
+	        	})
+	        	
+	        	
+					/* // 분류별 checkbox 상태변경시 이벤트 발생
 					var inputs = document.querySelectorAll('aside>ul>li>input');
 					inputs.forEach(input => input.addEventListener('change', categorySelect));
 					
@@ -181,8 +186,7 @@ section {
 
 					function gopage(i) {
 						alert(i)
-
-					}
+					} */
 					
 					
 					

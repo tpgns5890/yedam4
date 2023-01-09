@@ -35,6 +35,7 @@
 				</div>
 				<div
 					class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+					<span th:text=${contest.cNo}  id="cNo"></span>
 					<h3><span th:text=${contest.ttl}></span></h3>
 					
 					<div class="rating d-flex">
@@ -68,7 +69,7 @@
 					<!-- 공모전 등록한 회원만 -->
 					<p>
 						<a th:href="@{/contest/update(cNo=${contest.cNo})}" class="btn btn-primary py-3 px-5 mr-2">수정</a>
-						<button id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
+						<button type="button" id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
 						 <!-- <form id="contestDelete" th:action="@{'/contest/delete/' + ${contest.cNo}}" method="post">
 							<button class="btn btn-primary py-3 px-5">삭제</button>
 						</form> -->
@@ -110,23 +111,54 @@
 				</div>
 			</div>
 		</div>
+		</div>
 	</section>
-	<script type="text/javascript">
-		/* delBtn = document.querySelector("#delBtn")
-		console.log(delBtn);
-		delBtn.addEventListener("onclick", contestDelete);
-		
-		function contestDelete(cNo){
-			fetch('contest/delete' + cNo, {
-				  method: 'DELETE',
-				})
-				.then(res =>  res.json())
-				.then(res => console.log(res))
+	<script>
+	
+	//공모전 삭제
+		$('#delBtn').on('click', delContest);
+
+		function delContest(){
+			var cNo = $('#cNo').text();
+			console.log(cNo);
+			location.href='/contest/delete/' +cNo;
 		}
-		 */
+		
+		$('#v-pills-1-tab').on('click', contentSelect);
+		$('#v-pills-2-tab').on('click', questions);
+		$('#v-pills-3-tab').on('click', questions);
+		
+		//요청사항 출력
+		function contentSelect(){
+			console.log($(this));
+			
+		}
+		//문의내용 출력
+		function questions(){
+			console.log($(this));
+			
+			
+			$.ajax({
+	            type:'POST',
+	            data: $("#form").serialize(),
+	            url:"/contest/insert",
+	            dataType: "json",
+	            contentType: "application/json; charset=UTF-8",
+	            success : function() {    
+	            },
+	            error: function() {
+	                alert("ERROR");
+	            }        
+	        })
+		}
+		
+		//참여작 출력
+		function questions(){
+			console.log($(this));
+		}
+		
 			
 	</script>
 	</div>
-	
 </body>
 </html>

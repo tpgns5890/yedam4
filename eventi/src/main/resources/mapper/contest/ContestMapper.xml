@@ -8,16 +8,7 @@
 	<sql id="condition">
 		<where>
 			<if test="category != null and category != ''">
-				and category = #{category}
-			</if>
-			<if test="dtExtns != null and category != ''">
-				order by category = #{dtExtns}
-			</if>
-			<if test="inq != null and category != ''">
-				order by dt_Reg = #{inq}
-			</if>
-			<if test="pay != null and category != ''">
-				order by pay = #{pay}
+				order by #{category}
 			</if>
 		</where>
 	</sql>
@@ -64,14 +55,16 @@
 		and a.C_NO = #{cNo}
 		and b.category = #{category}
 	</select>
+	
+	<!-- 공모전 시퀀스번호 찾기 -->
+	<select id="getSequence" resultType="String">
+		SELECT 'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
+		FROM CONTEST
+	</select>
 
 	
 	<!-- 공모전 등록(cno 시퀀스 최대값+1 (문자열->숫자+1->문자열 변경) -->
 	<insert id="insertContest">
-		<selectKey keyProperty="cNo" resultType="String" order="BEFORE">
-			SELECT 'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
-			FROM CONTEST
-		</selectKey>
 		insert into CONTEST(C_NO,WRITER,TTL,CNTN,CATEGORY,DT_REG,DT_CLS,PAY,SAVE,STYLE)
 		values( #{cNo},
 				#{writer},
@@ -92,7 +85,8 @@
 
 	<!-- 공모전 삭제 -->
 	<delete id="deleteContest">
-
+		delete contest
+		where c_no = #{cNo}
 	</delete>
 
 

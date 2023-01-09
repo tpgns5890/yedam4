@@ -12,4 +12,5 @@ public interface ContestService {
 	public int insertContest(ContestVO contestVO); //추가
 	public int updateContest(ContestVO contestVO); //수정
 	public int deleteContest(String cNo); //삭제
+	public String getSequence(); //시퀀스 맥시멈번호 찾기.
 }

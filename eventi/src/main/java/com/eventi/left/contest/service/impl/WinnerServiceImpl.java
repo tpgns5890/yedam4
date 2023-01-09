@@ -24,4 +24,19 @@ public class WinnerServiceImpl implements WinnerService{
 		return mapper.getWinner(WinnerVO);
 	}
 
+	@Override
+	public int insertWinner(WinnerVO WinnerVO) {
+		return mapper.insertWinner(WinnerVO);
+	}
+
+	@Override
+	public int updateWinner(WinnerVO WinnerVO) {
+		return mapper.updateWinner(WinnerVO);
+	}
+
+	@Override
+	public int deleteWinner(String wNo) {
+		return mapper.deleteWinner(wNo);
+	}
+
 }
