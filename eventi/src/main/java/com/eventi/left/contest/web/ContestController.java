@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -61,7 +62,7 @@ public class ContestController {
 	}
 
 	// 수정처리
-	@PostMapping("/update")
+	@PutMapping("/update")
 	public String contestupdateForm(ContestVO vo, RedirectAttributes rttr) {
 		rttr.addFlashAttribute("result", "수정처리완료");
 		service.updateContest(vo);
