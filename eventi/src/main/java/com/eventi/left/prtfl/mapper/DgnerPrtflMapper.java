@@ -1,5 +1,7 @@
 package com.eventi.left.prtfl.mapper;
 
-public interface DgnerPrtflMapper {
+import com.eventi.left.prtfl.service.DgnerPrtflVO;
 
+public interface DgnerPrtflMapper {
+	public DgnerPrtflVO dgnerSelect(DgnerPrtflVO vo);
 }

@@ -5,4 +5,17 @@
 		SELECT *
 		FROM MC_PRTFL
 	</select>
+	
+	<select id="mcSelect" resultType="com.eventi.left.prtfl.service.McPrtflVO">
+		SELECT *
+		FROM MC_PRTFL
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="mcReply" resultType="com.eventi.left.reply.service.ReplyVO">
+		SELECT *
+		FROM REPLY
+		WHERE BOARD_CAT = 'T06'
+		AND REPLY_TGT = #{replyTgt}
+	</select>
 </mapper>

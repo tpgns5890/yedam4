@@ -1,5 +1,9 @@
 package com.eventi.left.prtfl.mapper;
 
-public interface BusiPrtflMapper {
+import java.util.List;
 
+import com.eventi.left.prtfl.service.BusiPrtflVO;
+
+public interface BusiPrtflMapper {
+	public List<BusiPrtflVO> busiList(BusiPrtflVO vo);
 }

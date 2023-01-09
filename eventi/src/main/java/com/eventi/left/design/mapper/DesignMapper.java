@@ -3,6 +3,7 @@ package com.eventi.left.design.mapper;
 import java.util.List;
 
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.design.service.DesignVO;
 
 public interface DesignMapper {
 
@@ -16,5 +17,9 @@ public interface DesignMapper {
 	public int updateContest(ContestVO contestVO); // 수정
 
 	public int deleteContest(ContestVO contestVO); // 삭제
+	
+	
+	//디자인 전체 조회
+	public List<DesignVO> designList(DesignVO vo);
 
 }
