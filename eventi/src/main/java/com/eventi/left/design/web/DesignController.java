@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.eventi.left.common.Paging;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 
@@ -14,8 +15,8 @@ public class DesignController {
 @Autowired DesignService service;
 	
 	@RequestMapping("/designList")
-	public String bfList(Model model, DesignVO vo) {
-		model.addAttribute("designList", service.designList(vo));
+	public String bfList(Model model, DesignVO vo, Paging paging) {
+		model.addAttribute("designList", service.designList(vo, paging));
 		return "content/design/designList";
 	}
 }
