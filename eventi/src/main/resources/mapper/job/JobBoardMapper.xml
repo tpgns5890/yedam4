@@ -7,4 +7,9 @@
 		FROM JOB_BOARD
 	</select>
 
+	<select id="getJob" resultType="com.eventi.left.job.service.JobBoardVO">
+		SELECT *
+		FROM JOB_BOARD
+		WHERE JOB_NO  = #{jobNo}
+	</select>
 </mapper>
