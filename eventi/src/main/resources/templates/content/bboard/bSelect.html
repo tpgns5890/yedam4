@@ -14,15 +14,12 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">자유 게시판</h2>
+               <h2 class="mb-0 bread">게시글</h2>
             </div>
          </div>
       </div>
    </section>
    
-   	
-   	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글 등록하기</button>
-   	
     <table class="table mb-3">
       <thead class="thead-dark">
          <tr>
@@ -35,13 +32,13 @@
          </tr>
       </thead>
       <tbody>
-         <tr th:each="b : ${bList}" th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|">
-            <td th:text=${b.bBoardNo}></td>
-            <td th:text=${b.writer}></td>
-            <td th:text=${b.ttl}></td>
-            <td th:text=${b.inq}></td>
-            <td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
-            <td th:text=${b.type}></td>
+         <tr>
+            <td th:text=${bSelect.bBoardNo}></td>
+            <td th:text=${bSelect.writer}></td>
+            <td th:text=${bSelect.ttl}></td>
+            <td th:text=${bSelect.inq}></td>
+            <td th:text="${#dates.format(bSelect.dt, 'yyyy/MM/dd')}"></td>
+            <td th:text=${bSelect.type}></td>
          </tr>
       </tbody>
    </table>

@@ -13,10 +13,17 @@ import com.eventi.left.bboard.service.BboardVO;
 public class BboardServiceImpl implements BboardService{
 	
 	@Autowired BboardMapper bboardMapper;
-
+	
+	//전체 조회
 	@Override
 	public List<BboardVO> bboardList(BboardVO bboardVO) {
 		return bboardMapper.bboardList(bboardVO);
+	}
+	
+	//단건 조회
+	@Override
+	public BboardVO bboardSelect(BboardVO bboardVO) {
+		return bboardMapper.bboardSelect(bboardVO);
 	}
 
 

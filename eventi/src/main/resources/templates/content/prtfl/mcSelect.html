@@ -31,14 +31,14 @@
       </thead>
       <tbody>
          <tr th:each="mc : ${mcSelect}">
-            <td th:text=${mc.userId}></td>
+            <td id="userId" th:text=${mc.userId}></td>
             <td th:text=${mc.oneIntro}></td>
             <td th:text=${mc.carrYear}></td>
          </tr>
       </tbody>
    </table>
    
-   <table>
+   <!-- <table>
       <thead>
          <tr>
             <th>작성자ID</th>   
@@ -54,8 +54,65 @@
          </tr>
       </tbody>
    </table>
+    -->
+    
+    <div>
+    	<div class="pt-5 mt-5" >
+          <h3 class="mb-5">6 Comments</h3>
+            	<ul class="comment-list" id=reply>
+           		</ul>
+        </div>
+    </div>
    
-  
+   <script>
+   		let replyTag = $('#userId').text();
+   		let p = $("<p>").text('test합니다.');
+   		
+   		$.ajax({
+   			url : '/prtfl/mcReply',
+   			method : 'post',
+   			data : JSON.stringify({replyTgt:replyTag}),
+   			contentType : "application/json"
+   		}).then(res => {
+   			for(reply of res){
+   				if(reply.rerepTgt == null){
+   				$("#reply").append(make(reply));
+   				} else {
+   					$("#" + reply.rerepTgt).append(makeRe(reply));
+   				}
+   			}
+   		})
+   		
+   		function make(reply){
+   			let p = `
+                  <li class="comment">
+                    <div class="comment-body"  id="${reply.replyNo}">
+                      <h3>${reply.userId}</h3>
+                      <div class="meta">${reply.writingDt}</div>
+                      <p>${reply.replyCntn}</p>
+                      <p><a href="#" class="reply">Reply</a></p>
+                    </div>
+                   </li>
+                `
+   			return p;
+   		}
+   		
+   		function makeRe(reply){
+   			let p = `<ul class="children">
+                <li class="comment">
+                <div class="comment-body">
+                  <h3>${reply.userId}</h3>
+                  <div class="meta">${reply.writingDt}</div>
+                  <p>${reply.replyCntn}</p>
+                  <p><a href="#" class="reply">Reply</a></p>
+                </div>
+              </li>
+            </ul>`
+            
+            return p;
+   		}
+   </script>
+
 </div>
 
 </html>
