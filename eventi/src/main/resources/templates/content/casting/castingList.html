@@ -5,7 +5,6 @@
    layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-
    <section class="hero-wrap hero-wrap-2"
       style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
       data-stellar-background-ratio="0.5">
@@ -15,47 +14,35 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">사회자 포트폴리오</h2>
+               <h2 class="mb-0 bread">섭외리스트</h2>
             </div>
          </div>
       </div>
    </section>
    
-    <table>
+    <table border="1">
       <thead>
          <tr>
-            <th>사용자ID</th>   
-            <th>한줄소개</th>   
-            <th>경력</th>   
+            <th>사회자ID</th>   
+            <th>의뢰자ID</th>   
+            <th>행사분야</th>
+            <td>행사기간</td>
+            <td>행사소개</td>
+            <td>섭외비</td>   
          </tr>
       </thead>
       <tbody>
-         <tr th:each="mc : ${mcSelect}">
-            <td th:text=${mc.userId}></td>
-            <td th:text=${mc.oneIntro}></td>
-            <td th:text=${mc.carrYear}></td>
+         <tr th:each="cast : ${casting}">
+            <td th:text=${cast.userId}></td>
+            <td th:text=${cast.clientId}></td>
+            <td th:text=${cast.eType}></td>
+            <td th:text="${#dates.format(cast.eSdt, 'yyyy/MM/dd')}"></td>
+            <td th:text=${cast.eIntro}></td>
+            <td th:text=${cast.castingPrice}></td>
          </tr>
       </tbody>
-   </table>
-   
-   <table>
-      <thead>
-         <tr>
-            <th>작성자ID</th>   
-            <th>내용</th>   
-            <th>작성일자</th>   
-         </tr>
-      </thead>
-      <tbody>
-         <tr th:each="mcRey : ${mcReply}">
-            <td th:text=${mcRey.userId}></td>
-            <td th:text=${mcRey.replyCntn}></td>
-            <td th:text=${mcRey.writingDt}></td>
-         </tr>
-      </tbody>
-   </table>
-   
-  
+   </table>  
+
 </div>
 
 </html>

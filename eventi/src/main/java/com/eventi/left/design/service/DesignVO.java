@@ -18,4 +18,7 @@ public class DesignVO {
 	private Date dt; //등록시간
 	private String centerImg; //대표이미지
 	private String pubcYn; //공개여부
+	
+	Integer first = 1; //첫페이지
+	Integer last = 5; //마지막페이지
 }
