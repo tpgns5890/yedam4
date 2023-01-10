@@ -14,12 +14,26 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">구인게시글 등록</h2>
+               <h2 class="mb-0 bread">구직신청폼</h2>
             </div>
          </div>
       </div>
    </section>
-
-
-</div>
-</html>   
+   <table class="table mb-3" >
+	<thead class="thead-dark">
+		<tr>
+			<h5>인적사항</h5>
+				<th>이름</th>
+				<th>이메일</th>
+				<th>전화번호</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr th:each="app : ${Apply}">
+				<td th:text=${app.userName}></td>
+				<td th:text=${app.userEmail}></td>
+				<td th:text=${app.userPhone}></td>
+			</tr>
+      </tbody>
+	</table>
+ </div>

@@ -2,9 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.resume.mapper.ResumeBoardMapper">
+	
+	<!-- 전체간단조회(메인구인게시판) -->
 	<select id="getResumeList" resultType="com.eventi.left.resume.service.ResumeBoardVO">
-		SELECT *
-		FROM RESUME_BOARD
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.SEEKER_CNTN, R.JOB_NO, J.USER_ID 
+		FROM RESUME_BOARD R, JOB_BOARD J
+		WHERE R.JOB_NO = J.JOB_NO 
+		AND J.JOB_NO IN (SELECT JOB_NO 
+						FROM JOB_BOARD
+						WHERE USER_ID = 'HONG')
 	</select>
-
+	
+	<!-- 전체간단조회(상세구인게시판) -->
+	<select id="getResumeJob" resultType="com.eventi.left.resume.service.ResumeBoardVO">
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.SEEKER_CNTN, R.JOB_NO, J.USER_ID 
+		FROM RESUME_BOARD R, JOB_BOARD J
+		WHERE R.JOB_NO = J.JOB_NO 
+		AND J.JOB_NO = #{jobNo}
+	
+	</select>
+	
+	<!-- 상세조회 -->
+	<select id="getResumeDetail" resultType="com.eventi.left.resume.service.ResumeBoardVO"> 
+		SELECT * 
+		FROM RESUME_BOARD
+		WHERE SEEKER_ID = #{seekerId}
+	</select>
+	
+	
+	<!-- 구직신청폼 이동 시 -->
+	<select id="getApplyForm" resultType="com.eventi.left.resume.service.ResumeBoardVO"> 
+		SELECT USER_NAME, USER_EMAIL, USER_PHONE 
+		FROM MEMBERS
+		WHERE USER_ID = #{userId}
+	</select>
 </mapper>

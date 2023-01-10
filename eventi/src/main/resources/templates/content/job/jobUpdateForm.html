@@ -3,7 +3,7 @@
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
-
+   
 <div layout:fragment="content">
 <section class="hero-wrap hero-wrap-2 mb-4 "
       style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
@@ -14,35 +14,44 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">구직자조회</h2>
+               <h2 class="mb-0 bread">구인게시글 등록</h2>
             </div>
          </div>
       </div>
    </section>
-
 	<table class="table mb-3" >
 	<thead class="thead-dark">
-			<tr>
-				<th>구직신청게시글번호</th>
-				<th>구직자ID</th>
-				<th>구직자정보</th>
-				<th>구인게시글번호</th>
-				
-			</tr>		
-		</thead>
-		<tbody>
-			<tr th:each="res : ${resumeList}">
-				<td th:text=${res.resumeNo}></td>
-				<td th:text=${res.seekerId}></td>
-				<td th:text=${res.seekerCntn}></td>
-				<td th:text=${res.jobNo}></td>
+         <tr>
+				<th>내용</th>
+				<th>수당</th>
+				<th>위치</th>
+				<th>행사유형</th>
+				<th>근무시작일</th>
+				<th>근무종료일</th>
+				<th>근무시간</th>
+				<th>자격</th>
+				<th>우대사항</th>
+				<th>이미지</th>
+				<th>회원ID</th>
+				<th>관심수</th> 
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+				<td th:text=${job.jobCntn}></td>
+				<td th:text=${job.pay}></td>
+				<td th:text=${job.loc}></td>
+				<td th:text=${job.eType}></td>
+				<td th:text=${job.wSday}></td>
+				<td th:text=${job.wEday}></td>
+				<td th:text=${job.wHour}></td>
+				<td th:text=${job.qualification}></td>
+				<td th:text=${job.preference}></td>
+				<td th:text=${job.img}></td>
 			</tr>
-		</tbody>
-	</table>
+      </tbody>
+   </table>
 
 
-<script>
-
-</script>
 </div>
 </html>

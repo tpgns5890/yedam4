@@ -5,7 +5,7 @@
    layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-<section class="hero-wrap hero-wrap-2"
+<section class="hero-wrap hero-wrap-2 mb-4 "
       style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
       data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -14,21 +14,20 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">페이지 제목</h2>
+               <h2 class="mb-0 bread">구직자조회</h2>
             </div>
          </div>
       </div>
    </section>
 
-	<table>
-		<thead>
+	<table class="table mb-3" >
+	<thead class="thead-dark">
 			<tr>
 				<th>구직신청게시글번호</th>
 				<th>구직자ID</th>
-				<th>게시글내용</th>
+				<th>구직자정보</th>
 				<th>구인게시글번호</th>
-				<th>자기소개서</th>
-				<th>첨부파일</th>
+				
 			</tr>		
 		</thead>
 		<tbody>
@@ -37,11 +36,13 @@
 				<td th:text=${res.seekerId}></td>
 				<td th:text=${res.seekerCntn}></td>
 				<td th:text=${res.jobNo}></td>
-				<td th:text=${res.resumeCntn}></td>
-				<td th:text=${res.files}></td>
 			</tr>
 		</tbody>
 	</table>
-</div>
 
+
+<script>
+
+</script>
+</div>
 </html>

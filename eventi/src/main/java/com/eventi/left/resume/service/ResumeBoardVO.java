@@ -12,4 +12,10 @@ public class ResumeBoardVO {
 	private String jobNo; //구인게시글번호(FK)
 	private String resumeCntn; //자기소개서
 	private String files; //첨부파일
+	
+	private String userName;
+	private String userEmail;
+	private String userPhone;
+	
+	
 }

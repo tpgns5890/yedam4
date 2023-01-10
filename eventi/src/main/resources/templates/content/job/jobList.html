@@ -36,7 +36,7 @@
   </div>
 </div>
 <button type="button" class="btn btn-outline-primary" onclick="jobUpload()" >구인등록</button>
-<button type="button" class="btn btn-outline-primary" onclick="jobViewAll()">신청자조회</button>
+<button type="button" class="btn btn-outline-primary" onclick="resumeList()">신청자조회</button>
 	<table class="table mb-3" >
 	<thead class="thead-dark">
 			<tr>
@@ -47,8 +47,7 @@
 			</tr>		
 		</thead>
 		<tbody>
-			<tr th:each="job : ${jobList}" th:myName = "${job.jobNo}"
-			th:onclick="jobDetail(this.getAttribute('myName'))">
+			<tr th:each="job : ${jobList}" th:onclick="|location.href='@{jobDetail(jobNo=${job.jobNo})}'|">
 				<td th:text=${job.jobNo}></td>
 				<td th:text=${job.jobCntn}></td>
 				<td th:text=${job.eType}></td>
@@ -63,9 +62,9 @@ function jobUpload(){
 	location.href = link1;
 }
 
-link2 = 'jobViewAll?userId='; //신청자전체조회
-function jobViewAll(userId){
-	location.href = link2+userId;
+link1 = 'resumeList'; //구직신청자 조회
+function resumeList(){
+	location.href = link1;
 }
 link3 = 'jobDetail?jobNo='; //게시글 상세조회
 function jobDetail(jobNo){

@@ -14,17 +14,36 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">구직자 전체조회</h2>
+               <h2 class="mb-0 bread">구직자조회(같은게시물)</h2>
             </div>
          </div>
       </div>
    </section>
 
+	<table class="table mb-3" >
+	<thead class="thead-dark">
+			<tr>
+				<th>구직신청게시글번호</th>
+				<th>구직자ID</th>
+				<th>구직자정보</th>
+				<th>구인게시글번호</th>
+				
+			</tr>		
+		</thead>
+		<tbody>
+			<tr th:each="res : ${resumeJob}" 
+				th:onclick="|location.href='@{resumeDetail(seekerId=${res.seekerId})}'|">
+				<td th:text=${res.resumeNo}></td>
+				<td th:text=${res.seekerId}></td>
+				<td th:text=${res.seekerCntn}></td>
+				<td th:text=${res.jobNo}></td>
+			</tr>
+		</tbody>
+	</table>
 
 
+<script>
 
-
-
-
+</script>
 </div>
 </html>

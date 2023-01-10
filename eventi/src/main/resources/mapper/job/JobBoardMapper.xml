@@ -12,4 +12,20 @@
 		FROM JOB_BOARD
 		WHERE JOB_NO  = #{jobNo}
 	</select>
+	
+	<update id="getJobUpdate" parameterType="com.eventi.left.job.service.JobBoardVO">
+		UPDATE JOB_BOARD
+		SET JOB_CNTN = #{jobCntn},
+		PAY = #{pay},
+		LOC = #{loc},
+		E_TYPE = #{eType},
+		W_SDAY = #{wSday},
+		W_EDAY = #{wEday},
+		W_HOUR = #{wHour},
+		QUALIFICATION = #{qualification},
+		PREFERENCE = #{preference},
+		IMG = #{img}	
+		WHERE JOB_NO=#{jobNo}
+	</update>
+	
 </mapper>

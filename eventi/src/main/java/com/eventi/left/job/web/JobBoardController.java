@@ -16,26 +16,36 @@ public class JobBoardController {
 	@Autowired 
 	JobService jobService;
 	
-	@RequestMapping(value = "/jobList", method=RequestMethod.GET) //전체조회
+	//전체조회
+	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
 	public String jobList(Model model) {
 		model.addAttribute("jobList", jobService.getJobList(null));
 		return "content/job/jobList";
 	}
 	
-	@RequestMapping(value = "/jobUpload", method=RequestMethod.GET) //구인등록폼이동
+	//구인등록폼이동
+	@RequestMapping(value = "/jobUpload", method=RequestMethod.GET) 
 	public String jobUpload() {
 		return "content/job/jobUploadForm";
 	}
 	
-	@RequestMapping(value = "/jobViewAll", method=RequestMethod.GET) //신청자조회페이지이동
+	//신청자조회페이지이동
+	@RequestMapping(value = "/jobViewAll", method=RequestMethod.GET) 
 	public String jobViewAll() {
 		return "content/job/jobViewAll";
 	}
-
-	@RequestMapping(value = "/jobDetail", method=RequestMethod.GET) //게시글상세조회로이동
+	
+	//게시글상세조회로이동
+	@RequestMapping(value = "/jobDetail", method=RequestMethod.GET) 
 	public String jobDetail(Model model, JobBoardVO jobBoardVO) {
-		System.out.println(jobBoardVO.getJobNo());
-		model.addAttribute("jobDetail", jobService.getJob(jobBoardVO));
+		model.addAttribute("job", jobService.getJob(jobBoardVO));
 		return "content/job/jobDetailBoard";
+	}
+	
+	//게시글수정페이지로이동
+	@RequestMapping(value = "/jobUpdate", method=RequestMethod.GET) 
+	public String jobUpdate(Model model, JobBoardVO jobBoardVO) {
+		model.addAttribute("update", jobService.getJobUpdate(jobBoardVO));
+		return "content/job/jobUpdateForm";
 	}
 }

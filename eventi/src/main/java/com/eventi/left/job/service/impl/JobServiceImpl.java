@@ -27,4 +27,10 @@ public class JobServiceImpl implements JobService{
 		return jobmapper.getJob(jobBoardVO);
 	}
 
+	@Override
+	public int getJobUpdate(JobBoardVO jobBoardVO) {
+		// TODO Auto-generated method stub
+		return jobmapper.getJobUpdate(jobBoardVO);
+	}
+
 }

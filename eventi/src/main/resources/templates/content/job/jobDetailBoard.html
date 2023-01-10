@@ -19,9 +19,10 @@
          </div>
       </div>
    </section>
-<button type="button" class="btn btn-outline-primary" th:myName = "${job.jobNo}" 
-	th:onclick="jobViewOne(this.getAttribute('myName'))">신청자조회</button>
-	 <table class="table mb-3" >
+<button type="button" class="btn btn-outline-primary" th:onclick="resumeJob()">신청자조회</button>
+<button type="button" class="btn btn-outline-primary" th:onclick="jobUpdate()">게시글수정</button>
+<button type="button" class="btn btn-outline-primary" th:onclick="ApplyJob()">구직신청</button>	
+	<table class="table mb-3" >
 	<thead class="thead-dark">
          <tr>
             <th>구인게시글번호</th>
@@ -40,7 +41,7 @@
          </tr>
       </thead>
       <tbody>
-         <tr th:each="job : ${jobDetail}" >
+         <tr>
 				<td th:text=${job.jobNo}></td>
 				<td th:text=${job.jobCntn}></td>
 				<td th:text=${job.pay}></td>
@@ -58,9 +59,13 @@
       </tbody>
    </table>
 <script>
-link1 = 'jobViewOne?jobNo='; //구직신청자 조회(한 게시물에 신청)
-function jobViewOne(jobNo){
-	location.href = link1+jobNo;
+link1 = 'ApplyForm?userId=[[admin]]'; 
+function ApplyJob(){
+	location.href = link1;
+}
+link2 = 'jobUpdate?jobNo=[[jobNo]]'; 
+function jobUpdate(){
+	location.href = link2;
 }
 </script>
 </div>
