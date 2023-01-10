@@ -15,8 +15,8 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Autowired QuestionsMapper mapper;
 	
 	@Override
-	public List<QuestionsVO> questionsList(QuestionsVO QuestionsVO) {
-		return mapper.questionsList(QuestionsVO);
+	public List<QuestionsVO> questionsList(QuestionsVO vo) {
+		return mapper.questionsList(vo);
 	}
 
 	@Override

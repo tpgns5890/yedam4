@@ -14,7 +14,7 @@ public class LikesWeb {
 	@Autowired
 	LikesService service;
 
-	// 우승자 전체리스트	
+	// 좋아요 전체리스트	
 	@RequestMapping(value = "/List")
 	public String likeList(Model model) {
 		model.addAttribute("likeList", service.likeList(null));

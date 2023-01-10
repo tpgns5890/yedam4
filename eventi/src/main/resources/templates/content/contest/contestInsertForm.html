@@ -124,13 +124,11 @@ ul{
 			</form>
 			
 			<!-- 상금입력폼 -->
-			<form name="winnerFrm" method="post">
-				<ul>
-					<li><label>1등금액</label><input type="number" name="wPay"  required="required"><br/></li>
-					<li><label>2등금액</label><input type="number" name="wPay" ><br/></li>
-					<li><label>3등금액</label><input type="number" name="wPay" ><br/></li>
+				<ul id="winner">
+					<li><label>1등금액</label><input id="wPay01" type="number" name="wPay"  required="required" value="3000"><br/></li>
+					<li><label>2등금액</label><input id="wPay02" type="number" name="wPay" ><br/></li>
+					<li><label>3등금액</label><input id="wPay03" type="number" name="wPay" ><br/></li>
 				</ul>
-			</form>
 			
 			
 			<button type="button" id="resetBtn">초기화</button>
@@ -169,14 +167,31 @@ ul{
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
 			
+			//상금 테스트
+			var winner = {
+				cNo : $('input[name="cNo"]').val(),
+				wPay01 : $('#wPay01').val(),
+				wPay02 : $('#wPay02').val(),
+				wPay03 : $('#wPay03').val(),
+			}
+			console.log(winner);
+			
+			var winners = $('#winner input').val()
+			console.log(winners)
+			/* winners.forEach(data => console.log(data)); */
+			
+			
 			//1.공모전 등록
 			$('#insertBtn').on('click', function insert(){
+				
+				
+			
 				
 			//유의사항 체크
 			var check = $("input[type=checkbox]")[0].checked;
 			if(check == true){
 				
-				//form정보에 저장정보 추가
+				
 				var data = $('form[name="contestfrm"]').serializeArray();
 				data.push({name:'save',value : 'N'});
 				
@@ -186,8 +201,9 @@ ul{
 			           method: 'post',
 			           contentType: 'application/x-www-form-urlencoded',
 			           data: data,
-			           success: function (result) {
-			                 console.log(result);
+			           success: function (data) {
+			        	   alert('등록완료!');
+			        	   location.href='/contest/List';
 			           },
 			           fail: function (result) {
 			                 	alert('필수항목을 입력해주세요')
@@ -218,6 +234,7 @@ ul{
 			           contentType: 'application/x-www-form-urlencoded',
 			           data: data,
 			           success: function (result) {
+			        	   location.href='/contest/List';
 			                 console.log(result);
 			           },
 			           fail: function (result) {

@@ -6,7 +6,10 @@
 	namespace="com.eventi.left.questions.mapper.QuestionsMapper">
 
 	<select id="questionsList" resultType="QuestionsVO">
-		select * from Questions
+		select * 
+		from Questions
+		where category = 'T01'
+		and target_id = #{targetId}
 	</select>
 
 	<select id="getQuestions" resultType="QuestionsVO">

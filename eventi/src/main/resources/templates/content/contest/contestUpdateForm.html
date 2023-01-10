@@ -33,7 +33,7 @@ ul{
 			</div>
 		</section>
 		<div class="contestContainer">
-			<form name= "contestfrm">
+			<form id="contestfrm" name= "contestfrm">
 				<ul>
 					<li>
 						<th:block th:switch="${contest.category}">
@@ -45,7 +45,7 @@ ul{
 						</th:block>
 					</li>
 					<li>
-						<label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly><br />
+						<label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly="readonly"><br />
 					</li>
 					<li>
 						<label>작성자</label><input type="text"  th:value="${contest.writer}" readonly="readonly"><br /></li>
@@ -85,22 +85,28 @@ ul{
 					</li>
 				</ul>
 				
-				<button type="submit" id="updateBtn">수정</button>
+				<button type="button" id="updateBtn">수정</button>
 				<button type="reset">취소</button>
 			</form>
 		</div>
 	<script>
 	
-	//공모전 수정처리
-	$('#updateBtn').on('click', function insert(){
+	//공모전 수정처리(1/10완료)
+	$('#updateBtn').on('click', function (){
+		var cNo = $("input[name='cNo']").val();
+		console.log(cNo)
+	 	var ttl = $("input[name='ttl']").val();
+	 	var cntn =  $("textarea[name='cntn']").val();
 		
 		$.ajax({
 	           url:"/contest/update",
 	           method: 'put',
-	           data: JSON.stringify( $('#contestfrm').serializeObject()),
+	           dataType: "json",
+	           data: JSON.stringify({cNo,ttl,cntn}),
+	           contentType : "application/json",
 	           success: function (result) {
-	                 	alert('수정처리 성공')
-	                 console.log(result);
+	                 alert('수정처리 성공');
+	                  location.href='/contest/select?cNo='+cNo; 
 	           },
 	           fail: function () {
 	                 	alert('수정처리 실패')
