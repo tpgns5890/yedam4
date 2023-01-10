@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+   <section class="hero-wrap hero-wrap-2"
+      style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">자유 게시판 등록</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+   
+   	<div class="row no-gutters">
+								<div class="col-md-7">
+									<div class="contact-wrap w-100 p-md-5 p-4">
+										<h3 class="mb-4">자유게시판 글쓰기</h3>
+										<form method="POST" id="contactForm" name="contactForm" class="contactForm">
+											<div class="row">
+											
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="label" for="name">제목</label>
+														<input type="text" class="form-control" name="ttl" id="ttl" placeholder="제목">
+													</div>
+												</div>
+												
+												<div class="col-md-12"> 
+													<div class="form-group">
+														<label class="label" for="email">작성자</label> <input type="checkbox" name="secri" value="secri">익명
+														<input type="email" class="form-control" name="writer" id="writer" placeholder="작성자">
+													</div>
+												</div>
+												
+												<div class="col-md-12"> 
+													<div class="form-group">
+														<label class="label" for="lclsf">분류</label>
+														<input type="radio" name="genrl" value="genrl" checked="checked">일반
+														<input type="radio" name="reply" value="reply">후기
+													</div>
+												</div>
+												
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="label" for="#">내용</label>
+														<textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요."></textarea>
+													</div>
+												</div>
+												
+												<div class="col-md-12">
+													<div class="form-group">
+														<input type="file" name="img">
+													</div>
+												</div>
+												
+												<div class="col-md-12">
+													<div class="form-group">
+														<input type="submit" value="등록" class="btn btn-primary">
+														<div class="submitting"></div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+</div>
+</html>
