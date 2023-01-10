@@ -10,4 +10,13 @@ public interface BboardMapper {
 	
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
+	
+	//등록
+	public int bboardInsert(BboardVO bboardVO);
+	
+	//수정
+	public int bboardUpdate(BboardVO bboardVO);
+	
+	//삭제
+	public int bboardDelete(BboardVO bboardVO);
 }

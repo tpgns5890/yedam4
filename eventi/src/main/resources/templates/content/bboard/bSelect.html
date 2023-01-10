@@ -19,13 +19,15 @@
          </div>
       </div>
    </section>
-   
+   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
+   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo})}'|">글 삭제하기</button>
     <table class="table mb-3">
       <thead class="thead-dark">
          <tr>
             <th>게시판번호</th>   
             <th>작성자</th>   
             <th>제목</th>
+            <th>내용</th>
             <th>조회수</th>
             <th>작성일자</th>
             <th>타입</th>   
@@ -36,6 +38,7 @@
             <td th:text=${bSelect.bBoardNo}></td>
             <td th:text=${bSelect.writer}></td>
             <td th:text=${bSelect.ttl}></td>
+            <td th:utext=${bSelect.cntn}></td>
             <td th:text=${bSelect.inq}></td>
             <td th:text="${#dates.format(bSelect.dt, 'yyyy/MM/dd')}"></td>
             <td th:text=${bSelect.type}></td>

@@ -15,4 +15,23 @@
 		FROM B_BOARD
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="bboardInsert">
+		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, IMG, TYPE)
+		VALUES('BB'||BBOARD_SEQ.NEXTVAL, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{img}, #{type}) 
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="bboardUpdate">
+		UPDATE B_BOARD
+		SET TTL=#{ttl}, CNTN=#{cntn}, IMG=#{img}
+		WHERE B_BOARD_NO = #{bBoardNo}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="bboardDelete">
+		DELETE FROM B_BOARD
+		WHERE B_BOARD_NO = #{bBoardNo}
+	</delete>
 </mapper>
