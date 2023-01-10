@@ -148,25 +148,25 @@ section {
 					console.log($('input[type="checkbox"]').is(":checked"));
 					*/
 				
-				let check_val = [];
+				/* let check_val = [];
 				$("input[type='checkbox']:checked").change(function category(){
 					console.log('gg')
 					check_val.push($(this.val()));
 					console.log(check_val);
-				});
+				}); */
 
 				
 				//정렬기준 변경
-				var input = $('aside>ul>li>input')
-				
 				$('#order').change(function orderSelect(){
 	        		console.log($(this).val());
 	        		
-	        		$.ajax({
-	        			
-	        		})
 	        		
 	        	}) 
+	        	
+	        	//리스트가져오기
+	        	$.ajax({
+	        		
+	        	})
 	        	
 	        	
 					/* // 분류별 checkbox 상태변경시 이벤트 발생

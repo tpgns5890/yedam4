@@ -11,6 +11,9 @@
 				category = #{category}
 			</if>
 		</where>
+			<if test="order != null and category != ''">
+				order by #{order} DESC
+			</if>
 	</sql>
 
 
@@ -82,7 +85,7 @@
 	<update id="updateContest">
 		update CONTEST
     	set TTL = #{ttl},
-	        CNTN = #{cntn},
+	        CNTN = #{cntn}
 		where c_no =  #{cNo}
 	</update>
 

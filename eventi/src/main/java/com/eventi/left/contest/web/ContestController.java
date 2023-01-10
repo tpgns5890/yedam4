@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.Paging;
@@ -64,12 +65,12 @@ public class ContestController {
 		return "content/contest/contestUpdateForm";
 	}
 
-	// 수정처리
+	// 수정처리(완료)
 	@PutMapping("/update")
-	public String contestupdateForm(@RequestBody ContestVO vo, RedirectAttributes rttr) {
-		rttr.addFlashAttribute("result", "수정처리완료");
+	@ResponseBody
+	public ContestVO contestupdateForm(@RequestBody ContestVO vo) {
 		service.updateContest(vo);
-		return "redirect:/contest/select";
+		return vo;
 	}
 
 	// 삭제처리(링크처리는 get/ deleteMappging form)
