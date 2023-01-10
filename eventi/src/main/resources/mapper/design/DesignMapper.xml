@@ -2,7 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.design.mapper.DesignMapper">
 	<select id="designList" resultType="com.eventi.left.design.service.DesignVO">
-		SELECT *
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+			SELECT *
+			FROM design
+	  	<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
 		FROM DESIGN
 	</select>
 	

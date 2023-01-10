@@ -85,15 +85,11 @@
 				<div class="col-md-12 nav-link-wrap">
 					<div class="nav nav-pills d-flex text-center" id="v-pills-tab"
 						role="tablist" aria-orientation="vertical">
-						<a
-							class="nav-link ftco-animate active mr-lg-1 fadeInUp ftco-animated"
-							id="v-pills-1-tab" data-toggle="pill" role="tab" aria-controls="v-pills-1" aria-selected="true">요청사항</a>
+						<a class="nav-link ftco-animate active mr-lg-1 fadeInUp ftco-animated" id="v-pills-1-tab" data-toggle="pill" role="tab" aria-controls="v-pills-1" aria-selected="true">요청사항</a>
 
-						<a class="nav-link ftco-animate mr-lg-1 fadeInUp ftco-animated"
-							id="v-pills-2-tab" data-toggle="pill" role="tab" aria-controls="v-pills-2" aria-selected="false">문의사항</a>
+						<a class="nav-link ftco-animate mr-lg-1 fadeInUp ftco-animated" id="v-pills-2-tab" data-toggle="pill" role="tab" aria-controls="v-pills-2" aria-selected="false">문의사항</a>
 
-						<a class="nav-link ftco-animate fadeInUp ftco-animated"
-							id="v-pills-3-tab" data-toggle="pill"  role="tab" aria-controls="v-pills-3" aria-selected="false">참여작</a>
+						<a class="nav-link ftco-animate fadeInUp ftco-animated" id="v-pills-3-tab" data-toggle="pill"  role="tab" aria-controls="v-pills-3" aria-selected="false">참여작</a>
 
 					</div>
 				</div>
@@ -114,23 +110,33 @@
 		</div>
 	</section>
 	<script>
+		var cNo = $('#cNo').text();
 	
-	//공모전 삭제
+		//공모전 삭제
 		$('#delBtn').on('click', delContest);
-
 		function delContest(){
-			var cNo = $('#cNo').text();
-			console.log(cNo);
 			location.href='/contest/delete/' +cNo;
 		}
 		
+		
+		//요청사항/문의내용/참여작 버튼이벤트
 		$('#v-pills-1-tab').on('click', contentSelect);
 		$('#v-pills-2-tab').on('click', questions);
 		$('#v-pills-3-tab').on('click', questions);
 		
+		
 		//요청사항 출력
 		function contentSelect(){
-			console.log($(this));
+			
+			/* $.ajax({
+	            url:"/contest/select?cNo="+cNo,
+	            success : function(result) { 
+	            	console.log(result)
+	            },
+	            fail: function(result) {
+	                alert(result);
+	            }        
+	        }) */
 			
 		}
 		//문의내용 출력
@@ -138,18 +144,6 @@
 			console.log($(this));
 			
 			
-			$.ajax({
-	            type:'POST',
-	            data: $("#form").serialize(),
-	            url:"/contest/insert",
-	            dataType: "json",
-	            contentType: "application/json; charset=UTF-8",
-	            success : function() {    
-	            },
-	            error: function() {
-	                alert("ERROR");
-	            }        
-	        })
 		}
 		
 		//참여작 출력

@@ -1,5 +1,9 @@
 package com.eventi.left.casting.mapper;
 
-public interface CastingMapper {
+import java.util.List;
 
+import com.eventi.left.casting.service.CastingVO;
+
+public interface CastingMapper {
+	List<CastingVO> castingList(CastingVO castingVO);
 }

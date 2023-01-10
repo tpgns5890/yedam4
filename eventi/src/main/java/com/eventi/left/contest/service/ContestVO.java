@@ -35,4 +35,5 @@ public class ContestVO {
 	
 	private Integer likes; //조회 확인해볼것
 	
+	
 }

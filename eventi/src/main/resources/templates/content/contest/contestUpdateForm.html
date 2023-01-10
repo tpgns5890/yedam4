@@ -10,6 +10,10 @@
 	margin: auto;
 	float: center;
 }
+ul{
+	list-style: none;
+}
+</style>
 </style>
 </head>
 <body>
@@ -29,49 +33,82 @@
 			</div>
 		</section>
 		<div class="contestContainer">
-			<form id= "" method="post">
+			<form name= "contestfrm">
 				<ul>
-					<li><label>분류</label> 
-						<input type="radio" name="category" id="D1" checked>현수막 
-						<input type="radio" name="category" id="D2">배너 
-						<input type="radio" name="category" id="D3">로고
-						<input type="radio" name="category" id="D4">포스터 
-						<input type="radio" name="category" id="D5">기타</li>
-						
 					<li>
-						<label>공모번호</label><input type="text" name="cNo" id="cNo" th:value="${contest.cNo}" readonly><br />
+						<th:block th:switch="${contest.category}">
+							<span th:case="D1"><label>분류별</label><input type="text"  readonly value="현수막"><br/></span>
+							<span th:case="D2"><label>분류별</label><input type="text"  readonly value="배너"><br/></span>
+							<span th:case="D3"><label>분류별</label><input type="text"  readonly value="로고"><br/></span>
+							<span th:case="D4"><label>분류별</label><input type="text"  readonly value="포스터"><br/></span>
+							<span th:case="D5"><label>분류별</label><input type="text"  readonly value="기타"><br/></span>
+						</th:block>
 					</li>
 					<li>
-						<label>작성자</label><input type="text" name="userId" id="userId" th:value="${contest.writer}" readonly="readonly"><br /></li>
-					<li>
-						<label>제목</label><input type="text" name="title" id="title" th:value="${contest.ttl}"><br /></li>
-					<li>
-						<label>내용</label> <textarea rows="10" cols="50" th:text="${contest.cntn}"></textarea></li>
-					<li>
-						<label>첨부파일</label><input type="file" name="file" id="file" multiple><br /></li>
-					<li>
-						<label>등록일</label><input type="date" readonly="readonly" name="" id="" th:value="${#dates.format(contest.dtReg, 'yyyy-MM-dd')}"><br />
+						<label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly><br />
 					</li>
 					<li>
-						<label>마감일</label><input type="date" name="" id="" th:value="${#dates.format(contest.dtCls, 'yyyy-MM-dd')}" readonly="readonly"><br />
+						<label>작성자</label><input type="text"  th:value="${contest.writer}" readonly="readonly"><br /></li>
+					<li>
+						<label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li>
+					<li>
+						<label>내용</label> <textarea rows="10" cols="50" name="cntn" th:text="${contest.cntn}"></textarea></li>
+					<li>
+						<label>첨부파일</label><input type="file"  multiple><br /></li>
+					<li>
+						<label>등록일</label><input type="date" readonly="readonly" th:value="${#dates.format(contest.dtReg, 'yyyy-MM-dd')}"><br />
 					</li>
 					<li>
-						<label>1등상금</label><input type="number" name="w_pay" id="w_pay"  readonly="readonly"><br />
+						<label>마감일</label><input type="date"  th:value="${#dates.format(contest.dtCls, 'yyyy-MM-dd')}" readonly="readonly"><br />
 					</li>
 					<li>
-						<label>2등상금</label><input type="number" name="w_pay" id="w_pay"  readonly="readonly"><br />
+						<label>1등상금</label><input type="number"  readonly="readonly" value=""><br />
 					</li>
 					<li>
-						<label>3등상금</label><input type="number" name="w_pay" id="w_pay"  readonly="readonly"><br />
+						<label>2등상금</label><input type="number" readonly="readonly" value=""><br />
 					</li>
 					<li>
-						<label>선호스타일</label>
+						<label>3등상금</label><input type="number" readonly="readonly" value=""><br />
+					</li>
+					<li>
+						<th:block th:switch="${contest.style}">
+						<span th:case="DS1"><label>선호스타일</label><span th:text="고전적인"></span></span>
+						<span th:case="DS2"><label>선호스타일</label><span th:text="화사한"></span></span>
+						<span th:case="DS3"><label>선호스타일</label><span th:text="분위기있는"></span></span>
+						<span th:case="DS4"><label>선호스타일</label><span th:text="차분한"></span></span>
+						<span th:case="DS5"><label>선호스타일</label><span th:text="발랄한"></span></span>
+						<span th:case="DS6"><label>선호스타일</label><span th:text="재미있는"></span></span>
+						<span th:case="DS7"><label>선호스타일</label><span th:text="진중한"></span></span>
+						<span th:case="DS8"><label>선호스타일</label><span th:text="귀여운"></span></span>
+						<span th:case="DS9"><label>선호스타일</label><span th:text="단순한"></span></span>
+						<span th:case="DS0"><label>선호스타일</label><span th:text="기타"></span></span>
 					</li>
 				</ul>
-				<button type="submit" name="insert">수정</button>
-				<button type="reset" name="cancle">취소</button>
+				
+				<button type="submit" id="updateBtn">수정</button>
+				<button type="reset">취소</button>
 			</form>
 		</div>
+	<script>
+	
+	//공모전 수정처리
+	$('#updateBtn').on('click', function insert(){
+		
+		$.ajax({
+	           url:"/contest/update",
+	           method: 'put',
+	           data: JSON.stringify( $('#contestfrm').serializeObject()),
+	           success: function (result) {
+	                 	alert('수정처리 성공')
+	                 console.log(result);
+	           },
+	           fail: function () {
+	                 	alert('수정처리 실패')
+	           }
+			})
+		})
+		
+	</script>
 	</div>
 </body>
 </html>

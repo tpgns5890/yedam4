@@ -5,6 +5,10 @@
 	layout:decorate="~{layouts/default_layout}">
 <head>
 <style>
+h3{
+	font-weight: bold;
+	text-align: center;
+}
 .contestContainer {
 	padding: 20px;
 	margin: auto;
@@ -12,6 +16,47 @@
 }
 ul{
 	list-style: none;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+  height: 60%;
+  text-align: left;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -39,77 +84,183 @@ ul{
   다만, 공모전 주최자는 공모전의 목적에 합당하도록 이용허락의 조건(독점 또는 비독점 이용·이용방법·기간·횟수·장소·이용매체·이용허락의 대가 등)을 결정하여 공모전요강에 명시하여야 하고, 이용허락에 따른 정당한 대가를 지급하여야한다. 이때 정당한 대가는 일정한 조건 하에서 상금·상품 등으로 대체될 수있다. 공모전 주최자가 공모전 요강에서 공고한 이용허락 범위를 초과하여 입상작을 이용하거나, 2차적저작물작성권의 이용허락이 필요한 경우에는
  저작권법에 따라 입상자와 별도로 합의하여야 한다. 공모전 주최자가 입상작 발표 후 입상작의 저작재산권 전부 또는 일부를 양도받고자 하는 경우 정당한 대가 지급을 전제로 별도의 합의를 통해 다른 사람들보다 우선하여 해당 저작재산권을 양도받을 수 있다. 공모전 주최자가 입상작을 이용할 때에는 입상자의 저작인격권을존중하여야 한다. 공모전 주최자는 원칙적으로 저작자인 입상자의 성명을 표시하고, 입상작의 내용·형식 및 제호의 동일성을 유지하여야한다. 공모전 주최자가 입상작의 저작재산권 전부 또는 일부를 양도받는경우라 하더라도 동일하다 
 </textarea><br>
-<input type="checkbox" id="chekc">확인하였습니다.<br>
+<input type="checkbox" id="contestCheck">확인하였습니다.<br>
 			
-			<form id="form" method="post">
+			<!-- 공모전등록 입력폼 -->
+			<form name="contestfrm" method="post">
 				<ul>
-					<li><label>분류</label> 
-						현수막 <input type="radio" name="category" id="D1" checked> 
-						배너<input type="radio" name="category" id="D2"> 
-						로고<input type="radio" name="category" id="D3">
-						포스터<input type="radio" name="category" id="D4"> 
-						기타 <input type="radio" name="category" id="D5"></li>
+					<li><label>분류</label>
+						현수막 <input type="radio" name="category"  value="D1" checked> 
+						배너<input type="radio" name="category" value="D2"> 
+						로고<input type="radio" name="category"  value="D3">
+						포스터<input type="radio" name="category"  value="D4"> 
+						기타 <input type="radio" name="category"  value="D5">
+					</li>
 
-					<li><label>공모번호</label><input type="text" name="cNo" id="cNo" th:value="${cNo}" ><br /></li>
-					<li><label>작성자</label><input type="text" name="writer" id="writer" value=""><br /></li>
-					<li><label>제목</label><input type="text" name="ttl" id="ttl" required="required"><br /></li>
-					<li><label>내용</label> <textarea rows="10" name="cntn" id="cntn"cols="50" required="required"></textarea></li>
-					<li><label>첨부파일</label><input type="file" name="file" id="file" multiple><br /></li>
-					<li><label>등록일</label><input type="date" name="dtReg" id="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
-					<li><label>마감일</label><input type="date" name="dtCls" id="dtCls" required="required"><br /></li>
-		<!-- 			<li><label>1등상금</label><input type="number" name="wPay" id="wPay" required="required"><br /></li>
-					<li><label>2등상금</label><input type="number" name="wPay" id="wPay"><br/></li>
-					<li><label>3등상금</label><input type="number" name="wPay" id="wPay"><br/></li> -->
-					<li><label>총상금</label><input type="number" name="pay" id="pay"><br/></li>
-					<li><label>선호스타일</label> <select>
+					<li><label>공모번호</label><input type="text" name="cNo"  th:value="${cNo}" readonly="readonly" ><br /></li>
+					<li><label>작성자</label><input type="text" name="writer"  value=""><br /></li>
+					<li><label>제목</label><input type="text" name="ttl"  required="required"><br /></li>
+					<li><label>내용</label> <textarea rows="10" name="cntn" cols="50" required="required"></textarea></li>
+					<li><label>첨부파일</label><input type="file" name="file"  multiple><br /></li>
+					<li><label>등록일</label><input type="date" name="dtReg"  th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
+					<li><label>마감일</label><input type="date" id="dtCls" name="dtCls"  required="required"><br /></li>
+					<li><label>전체상금</label><input type="number" name="pay" ><br/></li>
+					<li><label>선호스타일</label> 
+					<select name="style">
 							<option value="none">=== 선호스타일 ===</option>
-							<option id="style" value="DS1">고전적인</option>
-							<option id="style" value="DS2">화사한</option>
-							<option id="style" value="DS3">분위기있는</option>
-							<option id="style" value="DS4">차분한</option>
-							<option id="style" value="DS5">발랄한</option>
-							<option id="style" value="DS6">재미있는</option>
-							<option id="style" value="DS7">진중한</option>
-							<option id="style" value="DS8">귀여운</option>
-							<option id="style" value="DS9">단순한</option>
-							<option id="style" value="DS0">기타</option>
+							<option value="DS1">고전적인</option>
+							<option value="DS2">화사한</option>
+							<option value="DS3">분위기있는</option>
+							<option value="DS4">차분한</option>
+							<option value="DS5">발랄한</option>
+							<option value="DS6">재미있는</option>
+							<option value="DS7">진중한</option>
+							<option value="DS8">귀여운</option>
+							<option value="DS9">단순한</option>
+							<option value="DS0">기타</option>
 					</select>
 						<button>추가</button></li>
 				</ul>
 			</form>
-				<button type="button" id="resetBtn">초기화</button>
-				<button type="button" id="saveBtn">임시저장</button>
-				<button type="button" id="insertBtn">등록</button>
-				<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
-		</div>
+			
+			<!-- 상금입력폼 -->
+			<form name="winnerFrm" method="post">
+				<ul>
+					<li><label>1등금액</label><input type="number" name="wPay"  required="required"><br/></li>
+					<li><label>2등금액</label><input type="number" name="wPay" ><br/></li>
+					<li><label>3등금액</label><input type="number" name="wPay" ><br/></li>
+				</ul>
+			</form>
+			
+			
+			<button type="button" id="resetBtn">초기화</button>
+			<button type="button" id="saveBtn">임시저장</button>
+			<button type="button" id="insertBtn">등록</button>
+			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 		
+		
+			<!-- Trigger/Open The Modal -->
+			<button id="myBtn">등록(->결제)</button>
+			
+			<!-- The Modal -->
+			<div id="myModal" class="modal">
+			
+			  <!-- Modal content -->
+			  <div class="modal-content">
+			    <span class="close">&times;</span>
+			    <h3>공모전 결제정보</h3>
+			    <ul>
+			    	<li>공모번호 : <span th:text="${cNo}"></span></li>
+			    	<li>제목 : </li>
+			    	<li>등록일 : </li>
+			    	<li>상금액 : </li>
+			    	<li>등록비 : </li>
+			    	<hr>
+			    	<li>합계 : </li>
+			    </ul>
+			  </div>
+			
+			</div>
+			
 		<script>
 			//등록일 이전날짜 선택불가
 			var now_utc = Date.now()
 			var timeOff = new Date().getTimezoneOffset()*60000;
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가			
+			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
 			
-			console.log($('#insertBtn'));
+			//1.공모전 등록
 			$('#insertBtn').on('click', function insert(){
+				
+			//유의사항 체크
+			var check = $("input[type=checkbox]")[0].checked;
+			if(check == true){
+				
+				//form정보에 저장정보 추가
+				var data = $('form[name="contestfrm"]').serializeArray();
+				data.push({name:'save',value : 'N'});
+				
+				//공모전테이블 등록처리
 				$.ajax({
-		            type:'POST',
-		            data: $("#form").serialize(),
-		            url:"/contest/insert",
-		            dataType: "json",
-		            contentType: "application/json; charset=UTF-8",
-		            success : function() {    
-		                alert("공모전 등록완료");
-		                location.href='/contest/List';
-		            },
-		            error: function() {
-		                alert("ERROR");
-		            }        
-		        })
+			           url:"/contest/insert",
+			           method: 'post',
+			           contentType: 'application/x-www-form-urlencoded',
+			           data: data,
+			           success: function (result) {
+			                 console.log(result);
+			           },
+			           fail: function (result) {
+			                 	alert('필수항목을 입력해주세요')
+			           }
+					})
+				}
+			else{
+				alert('유의사항을 확인하세요.')
+			}
+				
 			})
+			
+			//2.공모전 임시저장
+			$('#saveBtn').on('click', function insertSave(){
+				
+			//유의사항 체크
+			var check = $("input[type=checkbox]")[0].checked;
+			if(check == true){
+				
+				//form정보에 임시저장값 추가
+				var data = $('form[name="contestfrm"]').serializeArray();
+				data.push({name:'save',value : 'Y'});
+				
+				//공모전테이블 임시저장
+				$.ajax({
+			           url:"/contest/insert",
+			           method: 'post',
+			           contentType: 'application/x-www-form-urlencoded',
+			           data: data,
+			           success: function (result) {
+			                 console.log(result);
+			           },
+			           fail: function (result) {
+			                 	alert('필수항목을 입력해주세요')
+			           }
+					})
+				}
+			else{
+				alert('유의사항을 확인하세요.')
+			}
+				
+				
+			})
+		
+			// Get the modal
+			var modal = document.getElementById("myModal");
+			
+			// Get the button that opens the modal
+			var btn = document.getElementById("myBtn");
+			
+			// Get the <span> element that closes the modal
+			var span = document.getElementsByClassName("close")[0];
+			
+			// When the user clicks the button, open the modal 
+			btn.onclick = function() {
+			  modal.style.display = "block";
+			}
+			
+			// When the user clicks on <span> (x), close the modal
+			span.onclick = function() {
+			  modal.style.display = "none";
+			}
+			
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+			  if (event.target == modal) {
+			    modal.style.display = "none";
+			  }
+			}
 			
 			
 		</script>
+	</div>
 	</div>
 </body>
 </html>
