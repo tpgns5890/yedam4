@@ -9,11 +9,14 @@
 			margin: 0 auto;
 		}
 
-		#signIn {
+		#signInBox {
 			padding: 20px;
-			min-height: 550px;
-			display: flex;
-			line-height: 3em;
+    		min-height: 550px;
+    		display: flex;
+    		line-height: 3em;
+    		flex-direction: row;
+    		flex-wrap: wrap;
+    		justify-content: flex-end;
 		}
 
 		#signIn-left {
@@ -24,15 +27,13 @@
 		}
 
 		#signIn-right {
-			padding: 20px;
-			width: 49%;
+				padding: 20px;
+			width: 50%;
 			display: inline-block;
 		}
 
 		#submitArea {
 			margin-top: 20px;
-			position: relative;
-			text-align: right;
 			margin-bottom: 20px;
 		}
 
@@ -76,43 +77,49 @@
 			</div>
 		</section>
 		<div id="container">
-			<form id="signIn" action="#">
-				<div id="signIn-left">
-					<h3 class="mb-4 billing-heading">기본정보</h3>
-					<label for="id">아이디</label><input type="text" name="id" id="inputId">
+		<div id="signInBox">
+			<div id="signIn-left">
+				<form id="signIn">
+					<h3 class="mb-4 billing-heading">기본정보(필수)</h3>
+					<label for="id">아이디</label><input type="text" name="userId" id="inputId">
 					<div>
-						<font id="id_feedback" size="2"></font>
+						<font id="id_feedback" size="2" value="1"></font>
 					</div>
-					<label for="password">비밀번호</label><input type="password" name="password" id="pw1"><br>
+					<label for="password">비밀번호</label><input type="password" name="userPassword" id="pw1" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
+					<div>
+						<font id="pwc_feedback" size="2" value="1"></font>
+					</div>
 					<label for="passwordchk">비밀번호확인</label><input type="password" name="passwordchk" id="pw2">
 					<div>
-						<font id="pw_feedback" size="2"></font>
+						<font id="pw_feedback" size="2" value="1"></font>
 					</div>
-					<label for="name">성명</label><input type="text" name="name" id="inputId"><br>
-					<label for="email">이메일주소</label><input type="text" name="email" id="inputEmail"><button
+					<label for="name">성명</label><input type="text" name="userName" id="inputName"><br>
+					<label for="email">이메일주소</label><input type="text" name="userEmail" id="inputEmail"><button
 						type='button' id="sendEmail">인증번호전송</button><br>
+					<span class="mail_input_box_warn"></span>
 					<input id="inputEmailChk" type="text">
 					<div>
-						<font id="email_feedback" size="2"></font>
+						<font id="email_feedback" size="2" value="1"></font>
 					</div>
+					</form>
 					<label for="mailGet">메일 알림수신</label>
-					<input type="radio" class="inputRadio" name="mailGet" value="s1"><label
+					<input type="radio" class="inputRadio" name="mailGet" value="s1" checked><label
 						class="labelRadio">수신동의</label>
 					<input type="radio" class="inputRadio" name="mailGet" value="s0"><label
 						class="labelRadio">수신거부</label>
 				</div>
 				<div id="signIn-right">
-					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?</h3>
-					<label for="name">자격증번호</label><input type="text" id="inputQno">
+					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?(선택)</h3>
+					<label for="name">자격증 발급번호</label><input type="text" id="inputQno">
 					<button type='button' id="qPlus">추가</button>
 				<ul id="qList">
-					<li>리스트</li>
+				
 				</ul>
 				</div>
-			</form>
 			<div id="submitArea">
-				<button type='button' class="btn btn-primary py-3 px-5" id="normalSignIn">초기화</button>
-				<button type='button' class="btn btn-primary py-3 px-5" id="normalSignIn">회원가입</button>
+				<button type='reset'>초기화</button>
+				<button type='button' id="normalSignIn">회원가입</button>
+			</div>
 			</div>
 		</div>
 		<script>
@@ -143,6 +150,26 @@
 				})
 			})
 
+			//비밀번호 유효성 검사
+			$('#pw1').keyup(function(){
+				var p1 = $('#pw1').val();
+				if(pwFormCheck(p1)){
+					$("#pwc_feedback").html('사용할 수 있는 비밀번호 입니다.');
+					$("#pwc_feedback").attr('color', '#2fb380');
+					$("#pwc_feedback").attr('value', '0');
+				}else{
+					$("#pwc_feedback").html('사용할 수 없는 비밀번호 입니다.');
+					$("#pwc_feedback").attr('color', '#dc3545');
+					$("#pwc_feedback").attr('value', '1');
+				}
+			})
+			
+			//비밀번호 형식 검사 메소드
+ 			function pwFormCheck(p1){
+				var form = /^[A-Za-z0-9]{6,12}$/;;
+ 				return form.test(p1);
+ 			}
+			
 			/* 비밀번호 확인 */
 			$('#pw2').keyup(function () {
 				var p1 = $('#pw1').val(); //비밀번호 값
@@ -152,7 +179,7 @@
 					$("#pw_feedback").attr('color', '#2fb380');
 					$("#pw_feedback").attr('value', '0');
 				} else {
-					$("#pw_feedback").html('비밀번호가 다릅니다.');
+					$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
 					$("#pw_feedback").attr('color', '#dc3545');
 					$("#pw_feedback").attr('value', '1');
 				}
@@ -161,13 +188,22 @@
 			/* 이메일 인증번호 전송 */
 			var code = ""; //이메일전송 인증번호 저장위한 코드
 			$("#sendEmail").click(function () {
+				var warnMsg = $(".mail_input_box_warn");
 				var email = $("#inputEmail").val(); // 입력한 이메일
+				
+				if(mailFormCheck(email)){
+			        warnMsg.html("이메일이 전송 되었습니다. 이메일을 확인해주세요.");
+			        warnMsg.css("display", "inline-block");
+			    } else {
+			        warnMsg.html("올바르지 못한 이메일 형식입니다.");
+			        warnMsg.css("display", "inline-block");
+			        return false;
+			    }    
 				$.ajax({
 					type: "GET",
 					url: "mailCheck?email=" + email,
 					success: function (data) {
 						code = data;
-						alert('인증메일이 전송되었습니다.');
 						$("#sendEmail").attr('disabled', 'disabled');
 					},
 					error: function () {
@@ -176,6 +212,12 @@
 				});
 			});
 
+			//이메일 형식 검사 메소드
+ 			function mailFormCheck(email){
+ 				var form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+ 				return form.test(email);
+ 			}
+			
 			/* 인증번호 비교 */
 			$("#inputEmailChk").keyup(function () {
 				var inputCode = $("#inputEmailChk").val();
@@ -192,35 +234,20 @@
 			});
 			
 			/* 자격증추가 */
+			/* 자격증 진위확인 api사용 */
 			$("#qPlus").click(function(){
-				var apiKey= "c2cbf7ef39edd94fd8d3ee127e1d8d4950f60a67446eed201154ec83a7689dcf";
-				var name = $("#inputId").val();
+				var name = $("#inputName").val();
 				var qNo = $("#inputQno").val();
 				var qName = "";
-				/* 자격증 진위확인 api사용 */
 				$.ajax({
-					url:"http://data.kca.kr/api/v1/cq/certificate/check",
-					type:"post",
-					data:{
-						apiKey: apiKey,
-						name: name, //이름
-						no : qNo	//자격증발급번호
-					},
+					url:`qualCheck?no=${qNo}&name=${name}`,
 					dataType:"json",
-					contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
-					xhrFields: { 
-				    	withCredentials: true // 클라이언트와 서버가 통신할때 쿠키와 같은 인증 정보 값을 공유하겠다는 설정
-				    },
 					success:function(result){
-						result.setHeader('Access-Control-Allow-origin','http://localhost');
-						result.setHeader('Access-Control-Allow-credentials','true');
-						result.setHeader('Access-Control-Allow-Methods','POST');
-						result.setHeader('Access-Control-Max-Age',3600);
 						if(result.result == true){
 							qName = result.certificateName;
 							/* li 만들고 append */
-							$("#qList").append($("<li/>").append(
-								$("<span/>").text("자격증명: "+qName+", 자격증발급번호: "+qNo),
+							$("#qList").append($("<li/>").attr('value',qName+","+qNo).append(
+								$("<span/>").text("자격증 명: "+qName+", 자격증발급번호: "+qNo),
 								$("<button/>").attr({type:"button", class:"qDel"}).text("x").on('click',function(){
 									$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
 								})
@@ -234,6 +261,52 @@
 					}					
 				})
 			});
+
+			//유효성 최종 검사 후 회원가입 처리
+ 			$("#normalSignIn").click(function(){
+ 				var idCheck = $("#id_feedback").attr('value');
+ 				var pwCheck = $("#pw_feedback").attr('value');
+ 				var pwcCheck = $("#pwc_feedback").attr('value');
+ 				var emailCheck = $("#email_feedback").attr('value');
+ 				var name = $("#inputName").val();
+ 				
+ 				if(idCheck == 1){
+ 					alert("아이디 중복체크 검사는 필수입니다.");
+ 				}else if(pwCheck == 1){
+ 					alert("비밀번호와 비밀번호확인 값이 다릅니다.");
+ 				}else if(pwcCheck == 1){
+ 					alert("비밀번호를 확인해주세요.");
+ 				}else if(emailCheck == 1){
+ 					alert("이메일 인증 절차를 진행해 주세요.");
+ 				}else if(name== ""){
+ 					alert("이름을 입력해 주세요.");
+ 				}else{
+ 					signIn(); //회원가입 함수 실행
+ 				}
+ 			});
+			
+ 			//회원가입 함수
+ 			function signIn(){
+ 				var data = $('form[name="signIn"]').serializeArray();
+ 				var qualArray = [];
+ 				var messaging = $('input:radio[name=mailGet]:checked').val();
+				date.push({name:'userGrade',value : messaging});
+				date.push({name:'userGrade',value : messaging});
+ 				$.ajax({
+                    url:"/contest/insert",
+                    method: 'post',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: data,
+                    success: function (data) {
+                       alert('등록완료!');
+                       location.href='/contest/List';
+                    },
+                    fail: function (result) {
+                             alert('필수항목을 입력해주세요')
+                    }
+               })
+ 			}
+ 			
 		</script>
 	</div>
 </body>
