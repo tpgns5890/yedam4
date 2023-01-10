@@ -22,4 +22,6 @@ public interface DesignMapper {
 	//디자인 전체 조회
 	public List<DesignVO> designList(DesignVO vo);
 
+	public int count(DesignVO vo);
+
 }

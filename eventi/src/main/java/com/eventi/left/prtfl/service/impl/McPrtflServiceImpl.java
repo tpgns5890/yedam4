@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.eventi.left.prtfl.mapper.McPrtflMapper;
 import com.eventi.left.prtfl.service.McPrtflService;
 import com.eventi.left.prtfl.service.McPrtflVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Service
 public class McPrtflServiceImpl implements McPrtflService{
@@ -24,7 +25,13 @@ public class McPrtflServiceImpl implements McPrtflService{
 	public McPrtflVO mcSelect(McPrtflVO mcPrtflVO) {
 		return mapper.mcSelect(mcPrtflVO);
 	}
-	
+
 	//댓글 전체조회
+	@Override
+	public List<ReplyVO> mcReply(ReplyVO replyVO) {
+		return mapper.mcReply(replyVO);
+	}
+	
+	
 
 }
