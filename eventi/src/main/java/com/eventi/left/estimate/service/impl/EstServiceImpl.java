@@ -1,6 +1,7 @@
 package com.eventi.left.estimate.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,12 +28,20 @@ public class EstServiceImpl implements EstService {
 	}
 	//제안서 견적서별 전체조회
 	@Override
-	public PropVO getPropList(String eno) {
+	public List<PropVO> getPropList(String eno) {
 		return estMapper.getPropList(eno);
 	}
+	//업체 제안서 채택/후기수 조회 
+	@Override
+	public Map<String, String> getCount(String eno, String userId) {
+		
+		return estMapper.getCount(eno, userId);
+	}
+	
 	// 제안서 등록
 	@Override
 	public PropVO insertProp(PropVO propVO) {
 		return estMapper.insertProp(propVO);
 	}
+	
 }

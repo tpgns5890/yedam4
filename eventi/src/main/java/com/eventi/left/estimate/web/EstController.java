@@ -70,9 +70,16 @@ public class EstController {
 	}
 	//견적서 상세페이지
 	@RequestMapping(value = "/estDetail")
-	public String estDetail(Model model, @RequestParam String eno) {
-		model.addAttribute("est",estMapper.getEst(eno));
-		model.addAttribute("prop", estMapper.getPropList(null));
+	public String estDetail(Model model, @RequestParam String eno, @RequestParam String userId) {
+		model.addAttribute("est", estMapper.getEst(eno));
+		model.addAttribute("propList", estMapper.getPropList(eno));
+		model.addAttribute("count", estMapper.getCount(eno, userId));
 		return "content/estimate/estDetail";
 	}
+//	//업체 제안서 채택/후기 회수 조회
+//	@RequestMapping(value = "/getCount")
+//	public String getCount(Model model, @RequestParam String eno, @RequestParam String userId) {
+//		model.addAttribute("count", estMapper.getCount(eno, userId));
+//		return "content/estimate/estDetail";
+//	}
 }

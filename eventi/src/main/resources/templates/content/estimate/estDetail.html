@@ -28,6 +28,11 @@ button {
  float: right;
  margin-right: 50px;
 }
+#propList {
+  border: 1px solid black;
+  width: 70%;
+  margin: 15px auto;
+}
 </style>
 </head>
 <body>
@@ -49,6 +54,7 @@ button {
 <div id=estfrm>
 <h3>견적요청서</h3>
 <hr>
+<!-- 선택폼 -->
   <form>
     <label for="title" id="title">어떤 행사를 계획중이신가요?</label>
     <input type="text" id="eventType" name="eventType" th:value="${est.eventType}" readonly>
@@ -68,17 +74,44 @@ button {
     <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
   </form>
 </div>
- <button type="button">제안서 작성</button>
+<!-- Button trigger modal -->
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">제안서 작성</button>
+ <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">제안서 작성</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <label for="companyInt" class="col-form-label">업체소개</label>
+       <input type="text" class="form-control" id="recipient-name">
+       <label for="companyInt" class="col-form-label">물품목록</label>
+		
+       <label for="companyInt" class="col-form-label">기타목록</label>
+       <input type="text" class="form-control" id="recipient-name">
+       총금액 : 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">등록</button>
+      </div>
+    </div>
+  </div>
+</div><!--  end of Modal -->
   <button type="button">견적서 삭제</button><br>
   <hr>
- <div id="propList">
+ <div id="propList" th:each="prop : ${propList}">
+	<p th:text="|업체소개 : ${prop.companyInt}|"></p>
+	<p th:text="|총금액 : ${prop.totalPrc}원|"></p>
+	<input type="hidden" name="userId" value="${prop.userId}">
+  <input type="hidden" name="eno" value="${prop.eno}">
+    <p th:text="|고용회수 : ${count.adoption}|"></p>	
+    <p th:text="|후기수 : ${count.review}|"></p>	
  </div>
 </div><!-- End of layout:fragment -->
-<script>
-	$.ajax({
-		type: 'post',
-		url: '/'
-	})
-</script> 
 </body>
 </html>

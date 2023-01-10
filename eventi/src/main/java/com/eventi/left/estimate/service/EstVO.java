@@ -20,4 +20,6 @@ public class EstVO {
 	private String wishes; //행사희망사항
 	private Date writingDate; //작성일시
 	private String adoptionYn; //제안서 채택유무
+	
+	private PropVO propVO;  //PropVO Join 컬럼
 }

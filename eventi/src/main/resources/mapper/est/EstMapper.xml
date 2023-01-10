@@ -3,18 +3,47 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.estimate.mapper.EstMapper">
+	<!-- Join에 자주쓰이는 컬럼설정 -->
+	<resultMap type="PropVO" id="PropVO">
+    	<result column="user_id" property="userId"/>
+	</resultMap>
+	<resultMap type="EstVO" id="EstVO">
+    	<result column="e_no" property="eno"/>
+    	<result column="event_type" property="eventType"/>
+    	<result column="writing_dt" property="writingDate"/>
+    	<result column="adoption_yn" property="adoptionYn"/>
+    	<collection property="propVO" resultMap="PropVO"/> <!-- vo에 추가한 join용 변수 -->
+	</resultMap>
+	
 	<!-- 견적요청서 전체조회 -->
-	<select id="getEstList" resultType="EstVO">
-		SELECT E_NO, EVENT_TYPE, WRITING_DT, ADOPTION_YN
-		FROM estimate
+	<select id="getEstList" parameterType="EstVO" resultMap="EstVO">
+		SELECT e.E_NO, e.EVENT_TYPE, e.WRITING_DT, e.ADOPTION_YN, p.USER_ID
+		FROM
+		ESTIMATE e
+		LEFT JOIN
+		proposal p
+		ON e.e_no = p.e_no
 	</select>
+	
 	<!-- 견적서 단건조회 -->
 	<select id="getEst" resultType="EstVO">
 		SELECT *
 		FROM ESTIMATE
 		WHERE E_NO = #{eno}
 	</select>
+	
 	<!-- 견적서별 제안서 전체조회 -->
 	<select id="getPropList" resultType="PropVO">
+	SELECT *
+	FROM PROPOSAL
+	WHERE E_NO = #{eno}
+	</select>
+	
+	<!-- 업체 제안서 채택/후기수 조회 -->
+	<select id="getCount" resultType="Map">
+	SELECT 
+	(select count(*) from proposal where e_no = #{eno} and adoption_yn = 'Y') "adoption",
+	(select count(*) from review where review_tgt= #{userId}) "review"
+	from dual
 	</select>
 </mapper>
