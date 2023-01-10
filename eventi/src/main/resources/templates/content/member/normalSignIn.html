@@ -21,14 +21,12 @@
 			width: 50%;
 			display: inline-block;
 			border-right: 1px solid black;
-
 		}
 
 		#signIn-right {
 			padding: 20px;
 			width: 49%;
 			display: inline-block;
-
 		}
 
 		#submitArea {
@@ -90,7 +88,7 @@
 					<div>
 						<font id="pw_feedback" size="2"></font>
 					</div>
-					<label for="name">성명</label><input type="text" name="name"><br>
+					<label for="name">성명</label><input type="text" name="name" id="inputId"><br>
 					<label for="email">이메일주소</label><input type="text" name="email" id="inputEmail"><button
 						type='button' id="sendEmail">인증번호전송</button><br>
 					<input id="inputEmailChk" type="text">
@@ -105,17 +103,11 @@
 				</div>
 				<div id="signIn-right">
 					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?</h3>
-					<label for="qualification">자격증 종류</label>
-					<select name="qualification">
-						<option value="수첩">수첩형 자격증</option>
-						<option value="상장">상장형 자격증</option>
-					</select>
-					<br>
-					<label for="name">생년월일</label><input type="text" placeholder=""><br>
-					<label for="name">자격증번호</label><input type="text" placeholder=""><br>
-					<label for="name">발급(등록)년월일</label><input type="text" placeholder=""><br>
-					<label for="name">자격증내지번호</label><input type="text" placeholder=""><button type='button'
-						id="normalSignIn">추가</button>
+					<label for="name">자격증번호</label><input type="text" id="inputQno">
+					<button type='button' id="qPlus">추가</button>
+				<ul id="qList">
+					<li>리스트</li>
+				</ul>
 				</div>
 			</form>
 			<div id="submitArea">
@@ -166,7 +158,6 @@
 				}
 			})
 
-
 			/* 이메일 인증번호 전송 */
 			var code = ""; //이메일전송 인증번호 저장위한 코드
 			$("#sendEmail").click(function () {
@@ -176,6 +167,11 @@
 					url: "mailCheck?email=" + email,
 					success: function (data) {
 						code = data;
+						alert('인증메일이 전송되었습니다.');
+						$("#sendEmail").attr('disabled', 'disabled');
+					},
+					error: function () {
+						alert("서버 요청 실패");
 					}
 				});
 			});
@@ -183,7 +179,7 @@
 			/* 인증번호 비교 */
 			$("#inputEmailChk").keyup(function () {
 				var inputCode = $("#inputEmailChk").val();
-				var checkResult = $("#email_feedback")
+				var checkResult = $("#email_feedback");
 				if (inputCode == code) { // 일치할 경우
 					checkResult.html("인증번호가 일치합니다.");
 					checkResult.attr('color', '#2fb380');
@@ -194,8 +190,51 @@
 					checkResult.attr('value', '1');
 				}
 			});
+			
+			/* 자격증추가 */
+			$("#qPlus").click(function(){
+				var apiKey= "c2cbf7ef39edd94fd8d3ee127e1d8d4950f60a67446eed201154ec83a7689dcf";
+				var name = $("#inputId").val();
+				var qNo = $("#inputQno").val();
+				var qName = "";
+				/* 자격증 진위확인 api사용 */
+				$.ajax({
+					url:"http://data.kca.kr/api/v1/cq/certificate/check",
+					type:"post",
+					data:{
+						apiKey: apiKey,
+						name: name, //이름
+						no : qNo	//자격증발급번호
+					},
+					dataType:"json",
+					contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+					xhrFields: { 
+				    	withCredentials: true // 클라이언트와 서버가 통신할때 쿠키와 같은 인증 정보 값을 공유하겠다는 설정
+				    },
+					success:function(result){
+						result.setHeader('Access-Control-Allow-origin','http://localhost');
+						result.setHeader('Access-Control-Allow-credentials','true');
+						result.setHeader('Access-Control-Allow-Methods','POST');
+						result.setHeader('Access-Control-Max-Age',3600);
+						if(result.result == true){
+							qName = result.certificateName;
+							/* li 만들고 append */
+							$("#qList").append($("<li/>").append(
+								$("<span/>").text("자격증명: "+qName+", 자격증발급번호: "+qNo),
+								$("<button/>").attr({type:"button", class:"qDel"}).text("x").on('click',function(){
+									$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
+								})
+							))
+						}else{
+							alert('확인되지 않는 자격증입니다.')
+						}
+					},
+					error: function () {
+						alert("서버 요청 실패");
+					}					
+				})
+			});
 		</script>
 	</div>
 </body>
-
 </html>
