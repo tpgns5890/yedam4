@@ -28,11 +28,10 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="est : ${estList}" th:onclick="|location.href='@{estDetail(eno=${est.eno})}'|">
+			<tr th:each="est : ${estList}" th:onclick="|location.href='@{estDetail(eno=${est.eno}, userId=${est.userId})}'|">
 				<td th:text=${est.eno}></td> 
 				<td th:text=${est.eventType}></td>
 				<td th:text=${est.writingDate}></td>
-				<td th:text=${est.adoptionYn}></td>
 			</tr>
 		</tbody>
 	</table>
