@@ -5,14 +5,22 @@ import java.util.Random;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.eventi.left.member.service.MemberService;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Controller
 public class MemberController {
@@ -51,7 +59,7 @@ public class MemberController {
 	/* 이메일 인증 */
 	@RequestMapping(value = "/mailCheck", method = RequestMethod.GET)
 	@ResponseBody
-	public String mailCheckGET(String email) throws Exception{
+	public String mailCheckGET(String email) throws Exception {
 
 		/* 인증번호(난수) 생성 */
 		Random random = new Random();
@@ -74,8 +82,37 @@ public class MemberController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		String num = Integer.toString(checkNum);
-		return num;	//임의의 변수 6자리 리턴
+		return num; // 임의의 변수 6자리 리턴
 	}
+
+	
+	/*자격증 진위확인 외부 api */
+	/*ajax 함수내에서 cors 우회가 불가능하여 서버쪽에서 request 요청을 만들어 CORS 해결*/
+	/* RestTemplate 사용*/
+	@GetMapping("/qualCheck")
+	public ResponseEntity<JsonNode> testList(String name, String qNo) {
+		String url = "http://data.kca.kr/api/v1/cq/certificate/check"; // api url
+		String apiKey = "c2cbf7ef39edd94fd8d3ee127e1d8d4950f60a67446eed201154ec83a7689dcf"; //api 인증키
+
+		// get parameter 담아주기
+		UriComponentsBuilder builder = UriComponentsBuilder
+				.fromHttpUrl(url) //url
+				.queryParam("apiKey", apiKey) //인증키
+				.queryParam("name", name) //이름
+				.queryParam("no", qNo); //자격증발급번호
+		RestTemplate restTpl = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders(); // 담아줄 header
+		HttpEntity<Object> entity = new HttpEntity<>(headers); // http entity에 header 담아줌
+
+		System.out.println(builder);
+		ResponseEntity<JsonNode> responseEntity = restTpl.exchange(builder.toUriString(), HttpMethod.GET, entity,
+				JsonNode.class);
+		JsonNode result = (JsonNode) responseEntity.getBody();
+
+		return ResponseEntity.ok(result);
+	}
+	
+	//회원가입 처리
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_FORMAT">%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_FORMAT}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+    	<!-- Log everything in custom package -->
+	    <Logger name="com.eventi.left" level="error" additivity="false">
+	      <AppenderRef ref="Console" />
+	    </Logger>
+	
+	    <!-- Log everything in Spring Boot -->
+	    <Logger name="org.springframework.boot" level="error" additivity="false">
+	      <AppenderRef ref="Console" />
+	    </Logger>
+	    	
+	    <!-- Log everything in Spring Core -->
+	    <Logger name="org.springframework.core" level="error" additivity="false">
+	      <AppenderRef ref="Console" />
+	    </Logger>
+	    
+	    <Logger name="jdbc" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+		<Logger name="jdbc.sqlonly" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+		<Logger name="jdbc.sqltiming" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+		<Logger name="jdbc.audit" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+		<Logger name="jdbc.resultset" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+		<Logger name="jdbc.resultsettable" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+		<Logger name="jdbc.connection" level="error" additivity="false">
+			<AppenderRef ref="Console" />
+	    </Logger>
+	    
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
