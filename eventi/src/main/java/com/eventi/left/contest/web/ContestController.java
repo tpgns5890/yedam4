@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.eventi.left.common.Paging;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
-import com.eventi.left.contest.service.WinnerVO;
 
 import groovy.util.logging.Log4j;
 
@@ -50,10 +51,10 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(@RequestBody ContestVO vo, RedirectAttributes rttr) {
+	public String contestInsertForm(ContestVO vo, RedirectAttributes rttr) {
 		rttr.addFlashAttribute("result", "등록처리완료");
 		service.insertContest(vo);
-		return "content/contest/contestList";
+		return "redirect:/contest/List";
 	}
 
 	// 수정화면이동
@@ -65,10 +66,10 @@ public class ContestController {
 
 	// 수정처리
 	@PutMapping("/update")
-	public String contestupdateForm(ContestVO vo, RedirectAttributes rttr) {
+	public String contestupdateForm(@RequestBody ContestVO vo, RedirectAttributes rttr) {
 		rttr.addFlashAttribute("result", "수정처리완료");
 		service.updateContest(vo);
-		return "content/contest/contestList";
+		return "redirect:/contest/select";
 	}
 
 	// 삭제처리(링크처리는 get/ deleteMappging form)
