@@ -70,13 +70,13 @@ section {
 		<div class="contest_Container">
 
 			<div class="action-filter">
-				<a href="/likes/List"><button id="likeListBtn">관심 공모전</button></a>
-				<a href="./insert"><button>공모전 작성</button></a>
+				<a href="/likes/List"><button id="likeListBtn">관심 공모전</button></a> <a
+					href="./insert"><button>공모전 작성</button></a>
 
 				<!-- 공모전 정렬기준 -->
 				<select id="order" name="order">
-					<option value="select">조회수</option>
-					<option value="price">금액순</option>
+					<option value="inq">조회수</option>
+					<option value="pay">금액순</option>
 					<option value="dtCls" selected="selected">마감일순</option>
 				</select>
 			</div>
@@ -94,113 +94,142 @@ section {
 			</aside>
 
 			<section class="ftco-section">
-				<div th:each="contest : ${contestList}">
+				<div id="show"></div>
+				<!-- 공모전 리스트 -->
+				<div hidden="hidden" id="contestBox" class="text p-4 bg-light size">
 
-					<!-- 공모전 리스트 -->
-					<div class="text p-4 bg-light size">
+					<!-- 좋아요버튼 -->
+					<button style="float: right; margin: 0px;" type="button"
+						class="btn_like">
+						<span class="img_emoti" id="likeBtn">좋아요</span>
+					</button>
 
-						<!-- 좋아요버튼 -->
-						<button style="float: right; margin: 0px;" type="button"
-							class="btn_like">
-							<span class="img_emoti" id="likeBtn">좋아요</span>
-						</button>
-			
-						<span th:text=${contest.cNo}></span>
-						<p th:text=${contest.writer}></p>
-						<!-- 공모전 분류별 출력 -->
-						<th:block th:switch="${contest.category}">
-							<span th:case="D1">현수막</span>
-							<span th:case="D2">배너</span>
-							<span th:case="D3">로고</span>
-							<span th:case="D4">포스터</span>
-							<span th:case="D5">기타</span>
-						</th:block>
-						<h3>
-							<!-- 공모전 번호 상세보기이동 -->
-							<a th:href="@{/contest/select(cNo=${contest.cNo})}"><span th:text=${contest.ttl}></span> </a>
-						</h3>
-						<div class="meta">
-							<p>
-								마감일 :<span th:text="${#dates.format(contest.dtCls, 'yyyy/MM/dd')}"></span>
-							</p>
-							<p>
-								총 상금 :<span th:text="${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}"></span>
-							</p>
-							<p>
-								신고<span th:text=${contest.rprt}></span>
-								조회 <span th:text=${contest.inq}></span>
-							</p>
-							<div>선호하는 스타일</div>
-						</div>
+					<span id="cNo">공모전번호</span>
+					<p id="writer">작성자</p>
+					<span id="category">분류별</span>
+					<h3>
+						<a href="#" id="ttl">제목</a>
+					</h3>
+					<div class="meta">
+						<p>
+							마감일 :<span id="dtCls"></span>
+						</p>
+						<p>
+							총 상금 :<span id="pay"> </span>
+						</p>
+						<p>
+							신고수<span id="rprt"></span> 조회수<span id="inq"></span>
+						</p>
+						<div id="style">선호하는 스타일</div>
 					</div>
 				</div>
-				<!-- 각각의 공모전 end -->
+				<!-- end -->
 
 				<!-- 페이징 -->
 				<th:block th:replace="fragments/paging :: PagingFragment"></th:block>
 				마지막페이지<span th:text="${paging.lastPage}"></span>
 
+
+
+				<!-- 자바스크립트 -->
 				<script>
-				
-				//분류별 조회 
-				/* 	var category = $('input[type="checkbox"]');
-					console.log(category); 
-					console.log($('input[type="checkbox"]').is(":checked"));
-					*/
-				
-				/* let check_val = [];
-				$("input[type='checkbox']:checked").change(function category(){
-					console.log('gg')
-					check_val.push($(this.val()));
-					console.log(check_val);
-				}); */
+				 contestList(); // 첫 화면 리스트출력
 
-				
-				//정렬기준 변경
+				 //분류체크..(push만.. 체크안된것 컨틀로 값도null뜸.)
+				 let category;
+				 $("input:checkbox[name=category]").on("click", function(){
+					 let check = $("input:checkbox[name=category]")
+					 for(var i=1; check.length>i; i++){
+						 if(check[i].checked == true){
+							 category = ($(this).val());
+							 
+							 console.log(category);
+						 }
+					 }
+					 
+					 $.ajax({
+		                    url : '../contest/List',
+		                    method : 'post',
+		                    data : JSON.stringify({category:category}),
+		                    contentType : "application/json"
+		                }).then(res=>{
+		                      for(contest of res){
+		                		  $('#contestBox').replaceWith(makeBox(contest)); //분류별출력.
+		                		}
+		                }).catch(error =>console.log(error));
+					 
+					 
+				})
+						 
+				 
+				//정렬기준 변경(값 확인할것.)
 				$('#order').change(function orderSelect(){
-	        		console.log($(this).val());
+	        		let order = $(this).val()
+	        		console.log(order);
 	        		
-	        		
-	        	}) 
-	        	
-	        	//리스트가져오기
-	        	$.ajax({
-	        		
-	        	})
-	        	
-	        	
-					/* // 분류별 checkbox 상태변경시 이벤트 발생
-					var inputs = document.querySelectorAll('aside>ul>li>input');
-					inputs.forEach(input => input.addEventListener('change', categorySelect));
-					
-					// checked가 true이면 실행
-					function categorySelect(input){
-						if(this.checked == true){
-							var category = this.value;
-							console.log(category);
+	        		$.ajax({
+	                    url : '../contest/List',
+	                    method : 'post',
+	                    data : JSON.stringify({order}),
+	                    contentType : "application/json"
+	                }).then(res=>{
+	                      for(contest of res){
+	                    	   if(order == 'inq'){
+	                    	  console.log("조회수" + contest.inq);
+	                    	  }else if(order == 'dtCls'){
+	                    	  console.log("마감일" + contest.dtCls);
+	                    	  }else if(order == 'pay'){
+	                    	  console.log("금액순" + contest.pay);
+	                    	  } 
+	                		  $('#show .box').replaceWith(makeBox(contest)); //정렬순 변경.
+	                		}
+	                }).catch(error =>console.log(error));
+	          	});
+				
+				function contestList(){
+					$.ajax({
+	                    url : '../contest/List',
+	                    method : 'post',
+	                    data : JSON.stringify({order}),
+	                    contentType : "application/json"
+	                }).then(res => {
+	                		for(contest of res){
+	                			$('#show').append(makeBox(contest));
+	                		}
+	                })
+				};
+				
+				function makeBox(contest = {}){
+					let p=`
+							<div id="contestBox" class="text p-4 bg-light size box" onClick="location.href='../contest/select?cNo=${contest.cNo}'">
 							
-						}
-							fetch('/contest/List', {
-								  method: 'get',
-								  body: category,
-								})
-								  .then((res) => res.text())
-								  .then((result) => {
-								    console.log('Success:', result);
-								  })
-								  .catch((error) => {
-								    console.error('Error:', error);
-								  });
-							
-							
-					}
-					
-
-					function gopage(i) {
-						alert(i)
-					} */
-					
-					
+							<button style="float: right; margin: 0px;" type="button" class="btn_like">
+								<span class="img_emoti" id="likeBtn">좋아요</span>
+							</button>
+		
+							<span id="cNo">${contest.cNo}</span>
+							<p id="writer">${contest.writer}</p>
+							<span id="category">${contest.category}</span>
+							<h3>
+								<a href="#" id="ttl">${contest.ttl}</a>
+							</h3>
+							<div class="meta">
+								<p>
+									마감일 :<span id="dtCls">${contest.dtCls}</span>
+								</p>
+								<p>
+									총 상금 :<span id="pay">${contest.pay}</span>
+								</p>
+								<p>
+									신고수<span id="rprt">${contest.rprt}</span>
+									조회수<span id="inq">${contest.inq}</span>
+								</p>
+								<div id="style">${contest.style}</div>
+							</div>
+						</div>
+						`;
+				return p;
+				}
 					
 				</script>
 

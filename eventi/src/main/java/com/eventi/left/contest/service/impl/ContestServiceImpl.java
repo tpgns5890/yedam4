@@ -25,6 +25,7 @@ public class ContestServiceImpl implements ContestService{
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 		return mapper.contestList(vo);
+		
 	}
 
 	@Override

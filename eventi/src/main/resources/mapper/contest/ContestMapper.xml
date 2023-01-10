@@ -8,10 +8,10 @@
 	<sql id="condition">
 		<where>
 			<if test="category != null and category != ''">
-				category = #{category}
+			and	category = #{category}
 			</if>
 		</where>
-			<if test="order != null and category != ''">
+			<if test="order != null and order != ''">
 				order by #{order} DESC
 			</if>
 	</sql>
