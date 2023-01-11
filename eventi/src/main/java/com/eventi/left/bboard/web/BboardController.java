@@ -1,6 +1,5 @@
 package com.eventi.left.bboard.web;
 
-import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
@@ -27,6 +25,16 @@ public class BboardController {
 		model.addAttribute("bList", bboardService.bboardList(bboardVO));
 		model.addAttribute("type", bboardVO.getType());
 		return "content/bboard/bList";
+	}
+	
+	//정렬 전체 조회
+	@PostMapping("/bList")
+	@ResponseBody
+	public List<BboardVO> bSelectList(Model model, BboardVO bboardVO) {
+		model.addAttribute("type", bboardVO.getType());
+		
+		List<BboardVO> list = bboardService.bboardList(bboardVO);
+		return list;
 	}
 	
 	//단건조회
@@ -46,23 +54,7 @@ public class BboardController {
 	//게시글 등록
 	@PostMapping("/bInsert")
 	public String bFreeInsertForm(BboardVO bboardVO, MultipartFile uploadFile) {
-		
-		System.out.println(bboardVO.getCntn());
-		
-		// 사진 등록
-		String realFolder = "/files/bboard";
-		File dir = new File(realFolder);
-		if(!dir.isDirectory()) {
-			dir.mkdirs();
-		}
-		
-		String img = uploadFile.getOriginalFilename();
-		System.out.println(img);
-		
-		bboardVO.setImg(img);
-		
-		bboardService.bboardInsert(bboardVO);
-		
+		bboardService.bboardInsert(bboardVO, uploadFile);
 		return "redirect:/bboard/bList?type=" + bboardVO.getType();
 	}
 	
@@ -84,7 +76,6 @@ public class BboardController {
 	@GetMapping("/bDelete")
 	public String bDeleteForm(Model model, BboardVO bboardVO) {
 		String type = bboardVO.getType();
-		System.out.println(type);
 		bboardService.bboardDelete(bboardVO);
 		
 		return "redirect:/bboard/bList?type=" + type;
