@@ -9,5 +9,13 @@
  		 SELECT COUNT(*) FROM MEMBERS WHERE USER_ID = #{inputId}
  	</select>
  	
+ 	<insert id="insertMember">
+ 		INSERT INTO MEMBERS (USER_ID, USER_PASSWORD, USER_EMAIL, USER_NAME, USER_MESSAGING, USER_GRADE, USER_REGDATE)
+ 		VALUES(#{userId}, #{userPassword}, #{userEmail}, #{userName}, #{userMessaging}, 'G1', SYSDATE)
+ 	</insert>
  	
+ 	<insert id="insertCrtf">
+ 		INSERT INTO CERTIFICATE
+ 		VALUES('CE'||CERTIFICATE_ID.NEXTVAL, #{userId}, #{certName}, #{certNum},'N')
+ 	</insert>
  </mapper>

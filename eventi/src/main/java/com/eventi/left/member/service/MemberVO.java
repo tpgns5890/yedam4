@@ -1,5 +1,10 @@
 package com.eventi.left.member.service;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,9 +13,8 @@ import lombok.NoArgsConstructor;
 public class MemberVO {
 	private String userId;
 	private String userPassword;
-	private String userAddress;
+	private String userEmail;
 	private String userName;
-	private String userSsn;
 	private int userPhone;
 	private String userMessaging;
 	private String userGrade;
@@ -18,4 +22,7 @@ public class MemberVO {
 	private String depotr;
 	private String bank;
 	private int accnt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date userRegDate;
+	List<CrtfVO> crtfs;
 }
