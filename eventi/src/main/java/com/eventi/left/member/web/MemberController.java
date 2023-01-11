@@ -14,15 +14,15 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.MemberService;
+import com.eventi.left.member.service.MemberVO;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Controller
@@ -116,9 +116,11 @@ public class MemberController {
 	}
 	
 	//회원가입 처리
-	@PostMapping("/memInsert")
-	public int memInsert(ContestVO vo) {
-		//int i = service.insertMember(vo);
-		return 1;
+	@PostMapping("/insertMember")
+	@ResponseBody
+	public String insertMember(@RequestBody MemberVO memberVO) {
+		System.out.println(memberVO);
+		service.insertMember(memberVO);
+		return "완료";
 	}
 }

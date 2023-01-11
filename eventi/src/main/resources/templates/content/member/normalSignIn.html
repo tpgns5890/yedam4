@@ -79,7 +79,7 @@
 		<div id="container">
 		<div id="signInBox">
 			<div id="signIn-left">
-				<form id="signIn">
+				<form id="signIn" name="signIn">
 					<h3 class="mb-4 billing-heading">기본정보(필수)</h3>
 					<label for="id">아이디</label><input type="text" name="userId" id="inputId">
 					<div>
@@ -101,19 +101,28 @@
 					<div>
 						<font id="email_feedback" size="2" value="1"></font>
 					</div>
-					</form>
 					<label for="mailGet">메일 알림수신</label>
-					<input type="radio" class="inputRadio" name="mailGet" value="s1" checked><label
+					<input type="radio" class="inputRadio" name="userMessaging" value="s1" checked><label
 						class="labelRadio">수신동의</label>
-					<input type="radio" class="inputRadio" name="mailGet" value="s0"><label
+					<input type="radio" class="inputRadio" name="userMessaging" value="s0"><label
 						class="labelRadio">수신거부</label>
+					</form>
 				</div>
 				<div id="signIn-right">
 					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?(선택)</h3>
 					<label for="name">자격증 발급번호</label><input type="text" id="inputQno">
 					<button type='button' id="qPlus">추가</button>
 				<ul id="qList">
-				
+					<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A"}'>자격증 명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
+					<button type="button" class="quDelBtn">x</button></li>
+					<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A"}'>자격증 명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
+					<button type="button" class="quDelBtn">x</button></li>
+					<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A"}'>자격증 명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
+					<button type="button" class="quDelBtn">x</button></li>
+					<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A"}'>자격증 명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
+					<button type="button" class="quDelBtn">x</button></li>
+					<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A"}'>자격증 명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
+					<button type="button" class="quDelBtn">x</button></li>
 				</ul>
 				</div>
 			<div id="submitArea">
@@ -246,8 +255,8 @@
 						if(result.result == true){
 							qName = result.certificateName;
 							/* li 만들고 append */
-							$("#qList").append($("<li/>").attr('class',qualLi).append(
-								$("<span/>").attr('value','{qName:'+qName+',qNo:'+qNo+'}').text("자격증 명: "+qName+", 자격증발급번호: "+qNo),
+							$("#qList").append($("<li/>").attr('class','qualLi').append(
+								$("<span/>").attr('data-value','{certName:'+qName+',certName:'+qNo+'}').text("자격증 명: "+qName+", 자격증발급번호: "+qNo),
 								$("<button/>").attr({type:"button", class:"qDel"}).text("x").on('click',function(){
 									$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
 								})
@@ -261,7 +270,11 @@
 					}					
 				})
 			});
-
+			
+			$('.quDelBtn').click(function(){
+				$(this).parentsUntil('#qList').remove();
+				console.log($(".qualLi").eq(0).children().eq(0).data('value'));
+			});
 			//유효성 최종 검사 후 회원가입 처리
  			$("#normalSignIn").click(function(){
  				var idCheck = $("#id_feedback").attr('value');
@@ -287,23 +300,21 @@
 			
  			//회원가입 함수
  			function signIn(){
- 				var data = $('form[name="signIn"]').serializeArray();
  				var qualLi = $(".qualLi");
  				var qualArray = [];
- 				var messaging = $('input:radio[name=mailGet]:checked').val();
- 				
  				for(var i=0;i<qualLi.length;i++){
- 					qualArray.push(qualLi[i].eq(0).val());
+ 					qualArray.push(qualLi.eq(i).children().eq(0).data('value'));
  				}
-				date.push({name:'userGrade',value : messaging});
-				date.push({name:'quals',value : qualArray});
+				console.log(qualArray);
+ 				var data = $('form[name="signIn"]').serializeObject();
+				data.crtfs =qualArray;
  				$.ajax({
                     url:"/insertMember",
-                    method: 'post',
-                    contentType: 'application/x-www-form-urlencoded',
-                    data: data,
+                    method: "post",
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
                     success: function (result) {
-                       location.href='/';
+                       //location.href='/';
                        alert('등록완료!');
                     },
                     error: function () {
@@ -312,6 +323,31 @@
                })
  			}
  			
+ 			//serializeObject
+ 			var ajaxRequest;
+ 			(function( $, window ){
+ 			    $.fn.serializeObject = function() {
+ 			        var obj = null;
+ 			        
+ 			        try {
+ 			            // this[0].tagName이 form tag일 경우
+ 			            if(this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) {
+ 			                var arr = this.serializeArray();
+ 			                if(arr){
+ 			                    obj = {};
+ 			                    jQuery.each(arr, function() {
+ 			                        // obj의 key값은 arr의 name, obj의 value는 value값
+ 			                        obj[this.name] = this.value;
+ 			                    });
+ 			                }
+ 			            }
+ 			        } catch(e) {
+ 			            alert(e.message);
+ 			        } finally {}
+ 			        
+ 			        return obj;
+ 			    };
+ 			})( jQuery, window );
 		</script>
 	</div>
 </body>
