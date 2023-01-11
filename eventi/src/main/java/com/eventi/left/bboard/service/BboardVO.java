@@ -17,7 +17,7 @@ public class BboardVO {
 	private String mclsf; //중분류
 	private String cntn; //게시글 내용
 	private Integer inq; //조회수
-	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dt; //작성일자
 	private String img; //이미지
 	private Integer rprt; //신고건수

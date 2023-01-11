@@ -19,7 +19,13 @@
 				class="row no-gutters slider-text align-items-end justify-content-center">
 				<div
 					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<h2 class="mb-0 bread">자유 게시판 등록</h2>
+					<th:block th:if="${type =='T04'}">
+						<h2 class="mb-0 bread">자유게시글 등록</h2>
+					</th:block>
+					<th:block th:if="${type =='T05'}">
+						<h2 class="mb-0 bread">멘토링게시글 등록</h2>
+					</th:block>
+					
 				</div>
 			</div>
 		</div>
@@ -28,53 +34,78 @@
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">자유게시판 글쓰기</h3>
-				<form method="POST" id="bBoardForm" name="bBoardForm"
-					class="contactForm">
+				<th:block th:if="${type =='T04'}">
+					<h3 class="mb-4">자유게시판 글쓰기</h3>
+				</th:block>
+				<th:block th:if="${type =='T05'}">
+					<h3 class="mb-4">멘토링게시판 글쓰기</h3>
+				</th:block>
+				<form action="/bboard/bInsert" method="POST" id="bBoardForm" name="bBoardForm" class="contactForm" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="hidden" name="type" th:value="${type}"> <label
-									class="label" for="name">제목</label> <input type="text"
-									class="form-control" name="ttl" id="ttl" placeholder="제목">
+								<input type="hidden" name="type" id ="type" th:value="${type}">
+								<label class="label" for="name">제목</label>
+								<input type="text" class="form-control" name="ttl" id="ttl" placeholder="제목">
 							</div>
 						</div>
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="email">작성자</label> <input
-									type="checkbox" name="secri" value="secri">익명 <input
-									type="email" class="form-control" name="writer" id="writer"
-									placeholder="작성자">
+								<label class="label" for="email">작성자</label> 
+								<input type="checkbox" name="secri" value="secri">익명 
+								<input type="text" class="form-control" name="writer" id="writer" placeholder="작성자">
 							</div>
 						</div>
-
+						
+						<th:block th:if="${type =='T04'}">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="label" for="lclsf">분류</label> 
+									<input type="radio" name="lclsf"  value="genrl" checked>일반 
+									<input type="radio" name="lclsf" value="reply">후기
+								</div>
+							</div>
+						</th:block>
+			`			
+						<th:block th:if="${type == 'T05'}">
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="lclsf">분류</label> <input type="radio"
-									name="lclsf" value="genrl" checked="checked">일반 <input
-									type="radio" name="lclsf" value="reply">후기
+								<label class="label" for="lclsf">직업</label> 
+								<input type="radio" name="lclsf" value="mc" checked="checked">사회자 
+								<input type="radio" name="lclsf" value="dgner">디자이너
 							</div>
 						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="mclsf">질문</label> 
+								<select id="mclsf" name="mclsf">
+									<option value="">질문내용을 선택해 주세요.</option>
+									<option value="계약">계약</option>
+									<option value="진행">진행</option>
+									<option value="기타">기타</option>
+								</select>
+							</div>
+						</div>
+						</th:block>
 
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">내용</label>
-								<textarea name="cntn" class="form-control" id="cntn" cols="30"
-									rows="4" placeholder="내용을 입력해주세요."></textarea>
+								<textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요."></textarea>
 							</div>
 						</div>
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="file" name="img">
+								<input type="file" name="uploadFile">
 							</div>
 						</div>
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="button" id="insert" value="등록"
-									class="btn btn-primary">
+								<input type="submit" id="insert" value="등록" class="btn btn-primary">
 								<div class="submitting"></div>
 							</div>
 						</div>
@@ -104,7 +135,8 @@
 		$('#insert').on('click', function insert() {
 			oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 			let cntn = document.getElementById("cntn").value
-
+			/*let type = document.getElementById("type").value;
+			
 			var data = $('form[name="bBoardForm"]').serializeArray();
 			//공모전테이블 등록처리
 			$.ajax({
@@ -114,12 +146,12 @@
 				data : data,
 				success : function(data) {
 					alert('등록완료!');
-					location.href = '/bboard/bList?type=T04';
+					location.href = '/bboard/bList?type=' + type;
 				},
 				fail : function(result) {
 					alert('필수항목을 입력해주세요')
 				}
-			})
+			})*/
 		})
 	</script>
 </div>
