@@ -25,6 +25,24 @@ public class BboardServiceImpl implements BboardService{
 	public BboardVO bboardSelect(BboardVO bboardVO) {
 		return bboardMapper.bboardSelect(bboardVO);
 	}
+	
+	//등록
+	@Override
+	public int bboardInsert(BboardVO bboardVO) {
+		return bboardMapper.bboardInsert(bboardVO);
+	}
+	
+	//수정
+	@Override
+	public int bboardUpdate(BboardVO bboardVO) {
+		return bboardMapper.bboardUpdate(bboardVO);
+	}
+	
+	//삭제
+	@Override
+	public int bboardDelete(BboardVO bboardVO) {
+		return bboardMapper.bboardDelete(bboardVO);
+	}
 
 
 }

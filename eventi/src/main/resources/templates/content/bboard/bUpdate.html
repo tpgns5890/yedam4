@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<head>
+<script type="text/javascript" src="/smarteditor2/js/HuskyEZCreator.js"
+	charset="utf-8"></script>
+</head>
+
+<div layout:fragment="content">
+	<section class="hero-wrap hero-wrap-2"
+		style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+		data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div
+				class="row no-gutters slider-text align-items-end justify-content-center">
+				<div
+					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+					<h2 class="mb-0 bread">자유 게시판 수정</h2>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="row no-gutters">
+		<div class="col-md-7">
+			<div class="contact-wrap w-100 p-md-5 p-4">
+				<h3 class="mb-4">자유게시판 글쓰기</h3>
+				<form method="POST" id="bBoardForm" name="bBoardForm"
+					class="contactForm">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="hidden" name="bBoardNo" id="bBoardNo" th:value="${bSelect.bBoardNo}"> <label
+									class="label" for="ttl">제목</label> 
+									<input type="text" class="form-control" name="ttl" id="ttl" th:value="${bSelect.ttl}">
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="email">작성자</label> 
+								<input type="email" class="form-control" name="writer" id="writer" th:value="${bSelect.writer}" readonly="readonly">
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="lclsf">분류</label> 
+								<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'genrl' ? 'true' : 'false'}" onclick="return(false);">일반 
+								<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'reply' ? 'true' : 'false'}" onclick="return(false);">후기
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">내용</label>
+								<textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" th:utext="${bSelect.cntn}"></textarea>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="file" name="img">
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="button" id="update" value="수정"
+									class="btn btn-primary">
+								<div class="submitting"></div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+		<script>
+		let oEditors = []
+
+		smartEditor = function() {
+			console.log("Naver SmartEditor")
+			nhn.husky.EZCreator.createInIFrame({
+				oAppRef : oEditors,
+				elPlaceHolder : "cntn",
+				sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+				fCreator : "createSEditor2"
+			})
+		}
+
+		$(document).ready(function() {
+			smartEditor()
+		})
+
+		$('#update').on('click', function insert() {
+			oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+			let cntn = document.getElementById("cntn").value;
+			let bBoardNo = document.getElementById("bBoardNo").value;
+
+			var data = $('form[name="bBoardForm"]').serializeArray();
+			//공모전테이블 등록처리
+			$.ajax({
+				url : "/bboard/bUpdate",
+				method : 'post',
+				contentType : 'application/x-www-form-urlencoded',
+				data : data,
+				success : function(data) {
+					alert('수정완료!');
+					location.href = '/bboard/bSelect?bBoardNo=' + bBoardNo;
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+		})
+	</script>
+</div>
+</html>
