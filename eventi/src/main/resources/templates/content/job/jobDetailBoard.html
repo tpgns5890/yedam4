@@ -27,7 +27,8 @@
 <button type="button" class="btn btn-outline-primary" 
 		th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
 		
-<button type="button" class="btn btn-outline-primary" th:onclick="ApplyJob()">구직신청</button>
+<button type="button" class="btn btn-outline-primary" 
+		th:onclick="|location.href='@{ApplyForm(userId='admin')}'|">구직신청</button>
 	
 	<table class="table mb-3" >
 	<thead class="thead-dark">
@@ -68,14 +69,10 @@
       </tbody>
    </table>
 <script>
-link1 = 'ApplyForm?userId=[[admin]]'; 
+/* link1 = 'ApplyForm?userId=[[admin]]'; 
 function ApplyJob(){
 	location.href = link1;
-}
-link2 = 'jobUpdate?jobNo=[[jobNo]]'; 
-function jobUpdate(){
-	location.href = link2;
-}
+} */
 </script>
 </div>
 </html>

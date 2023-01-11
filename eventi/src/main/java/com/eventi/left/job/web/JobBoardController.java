@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
@@ -34,10 +34,12 @@ public class JobBoardController {
 	
 	//게시글 등록
 		@PostMapping("/jobInsert")
-		@ResponseBody //ajax응답
-		public int JobInsertForm(JobBoardVO jobBoardVO, RedirectAttributes rttr) {
-			return jobService.jobInsert(jobBoardVO);
+		 //ajax응답
+		public String JobInsertForm(JobBoardVO jobBoardVO, MultipartFile uploadFile) {
+			jobService.jobInsert(jobBoardVO, uploadFile ); //값이 vo자동으로 저장
+			return "redirect:/jobList";
 			//rttr.addFlashAttribute("result", "게시글 등록 완료!"); //데이터전달
+			
 	}
 	
 	//게시글상세조회로이동
@@ -57,17 +59,16 @@ public class JobBoardController {
 	//게시글 수정
 		@PostMapping("/jobUpdate")
 		@ResponseBody
-		public int jobUpdate(JobBoardVO jobBoardVO, RedirectAttributes rttr) {
+		public int jobUpdate(JobBoardVO jobBoardVO) {
 			return jobService.getJobUpdate(jobBoardVO);
 			//rttr.addFlashAttribute("result", "게시글 수정 완료!");
 		}
 	
 	//게시글 삭제
-		@ResponseBody
 		@GetMapping("/jobDelete") //th:onclick = location
-		public int jobDelete(JobBoardVO jobBoardVO, RedirectAttributes rttr) {
-			return jobService.jobDelete(jobBoardVO);
-			//rttr.addFlashAttribute("result", "게시글 삭제 완료!");
+		public String  jobDelete(JobBoardVO jobBoardVO) {
+			jobService.jobDelete(jobBoardVO);
+			return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
 			
 		}
 }

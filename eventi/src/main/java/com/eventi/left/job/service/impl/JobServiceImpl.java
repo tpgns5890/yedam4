@@ -1,9 +1,11 @@
 package com.eventi.left.job.service.impl;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.job.mapper.JobBoardMapper;
 import com.eventi.left.job.service.JobBoardVO;
@@ -36,8 +38,21 @@ public class JobServiceImpl implements JobService{
 	}
 	//게시글등록
 	@Override
-	public int jobInsert(JobBoardVO jobBoardVO) {
+	public int jobInsert(JobBoardVO jobBoardVO, MultipartFile uploadFile) {
 		// TODO Auto-generated method stub
+		//사진등록
+		String realFolder = "/files/job";
+		File dir = new File(realFolder);
+		if(!dir.isDirectory()) {
+			dir.mkdirs();
+		}
+		
+		//파일 이름 저장
+		String img = uploadFile.getOriginalFilename();
+		
+		//VO에 IMG 부분에 파일 이름 저장
+		jobBoardVO.setImg(img);
+		
 		return jobmapper.jobInsert(jobBoardVO);
 	}
 	//게시글삭제

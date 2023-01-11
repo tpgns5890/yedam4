@@ -19,21 +19,110 @@
          </div>
       </div>
    </section>
-   <table class="table mb-3" >
-	<thead class="thead-dark">
-		<tr>
-			<h5>인적사항</h5>
-				<th>이름</th>
-				<th>이메일</th>
-				<th>전화번호</th>
-         </tr>
-      </thead>
-      <tbody>
-         <tr th:each="app : ${Apply}">
-				<td th:text=${app.userName}></td>
-				<td th:text=${app.userEmail}></td>
-				<td th:text=${app.userPhone}></td>
-			</tr>
-      </tbody>
-	</table>
+
+<div class="row no-gutters">
+	<div class="col-md-7">
+		<div class="contact-wrap w-100 p-md-5 p-4">
+			<h3 class="mb-4">구직신청폼</h3>
+		<form action="/ApplyJob" method="POST" id="ApplyJob" name="ApplyJob"
+		class="contactForm" enctype="multipart/form-data"> 
+			
+
+		
+  <div class="col-md-12">
+	<div class="form-group">
+	<input type="hidden" name="seekerId" id ="seekerId" th:value="admin">
+		<label class="label" for="#">이름</label>
+	<input type="text" name="userName" id="userName" th:value=${apply.userName}> <!--vo와같 -->
+		</div>
+	</div>
+	
+<div class="col-md-12">
+	<div class="form-group">
+		<label class="label" for="#">이메일</label>
+	<input type="text" name="userEmail" id="userEmail" th:value=${apply.userEmail}>
+		</div>
+	</div>
+
+	
+<div class="col-md-12">
+	<div class="form-group">
+		<label class="label" for="#">전화번호</label>
+	<input type="text" name="userPhone" id="userPhone" th:value=${apply.userPhone}>
+		</div>
+</div>
+
+
+<div class="col-md-12">
+	<div class="form-group">
+		<label class="label" for="#">구직자정보</label>
+	<input type="text" name="seekerCntn" id="seekerCntn">
+		</div>
+</div>
+
+<div class="col-md-12">
+	<div class="form-group">
+		<label class="label" for="#">게시글번호</label>
+	<input type="text" name="jobNo" id="jobNo">
+		</div>
+</div>
+
+<div class="col-md-12">
+	<div class="form-group">
+		<label class="label" for="#">자기소개서</label>
+	<textarea name="resumeCntn" class="form-control" id="resumeCntn" cols="30" rows="4" ></textarea>
+	</div>
+</div>	
+
+<div class="col-md-12">
+	<div class="form-group">
+		<input type="file" name="uploadFile">
+	</div>
+</div>
+
+	
+<textarea id="info" name="info" cols="30" rows="4">
+	[구직 시 유의사항]
+  입사 시 이력서나 증명서에 학력 또는 경력을 허위기재한 경우 채용이 취소될 수 있습니다.
+</textarea>
+			<br> <input type="checkbox" id="contestCheck">확인하였습니다.<br>
+
+<div class="col-md-12">
+		<div class="form-group">
+			<input type="submit" id="insert" value="등록"
+				class="btn btn-primary">
+		<div class="submitting"></div>
+	</div>
+</div>
+	
+
+</form>
+		</div>
+	</div>
+</div>
+ 
+<script>
+$(function(){
+    let result = '${result}';
+    let result2 = '${param.result2}';
+    if(result){
+       //alert(result);
+       $(".modal-body").html(result);
+       /*//모달 생성
+       const myModal = new bootstrap.Modal('#exampleModal', {
+           keyboard: false
+       })
+       //모달 show
+       exampleModal = document.querySelector("#exampleModal");
+       mymodal.show(exampleModal);*/
+       $('#exampleModal').modal();
+       $("#exampleModal").modal('show');
+    }
+ })
+
+</script>
+
  </div>
+</html>
+ 
+ 
