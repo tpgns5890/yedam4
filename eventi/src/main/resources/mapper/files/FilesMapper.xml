@@ -4,4 +4,14 @@
 
 <mapper namespace="com.eventi.left.files.mapper.FilesMapper">
 
+	<insert id="insertFile">
+		insert into FILES(F_NO,TARGET_ID,F_NM,SEV_NM,SAVE_ADDR,CATEGORY)
+		values(fno_seq.nextval,#{targetId},#{fNm},#{sevNm},#{saveAddr},#{category})
+	</insert>
+	
+	<select id="NameCheck" resultType="int">
+		select count(*) from files
+		where F_NM = #{fNm}
+		and cateGory = #{category}
+	</select>
 </mapper>

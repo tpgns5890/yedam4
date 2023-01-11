@@ -88,33 +88,26 @@ ul {
 			<br> <input type="checkbox" id="contestCheck">확인하였습니다.<br>
 
 			<!-- 공모전등록 입력폼 -->
-			<form name="contestfrm" method="post">
+			<form action="/contest/insert" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
 				<ul>
-					<li><label>분류</label> 현수막 <input type="radio" name="category"
-						value="D1" checked> 배너<input type="radio" name="category"
-						value="D2"> 로고<input type="radio" name="category"
-						value="D3"> 포스터<input type="radio" name="category"
-						value="D4"> 기타 <input type="radio" name="category"
-						value="D5"></li>
+					<li><label>분류</label> 
+						현수막 <input type="radio" name="category" value="D1" checked>
+						배너<input type="radio" name="category" value="D2"> 
+						로고<input type="radio" name="category" value="D3">
+						포스터<input type="radio" name="category" value="D4"> 
+						기타 <input type="radio" name="category" value="D5"></li>
 
 					<!-- 임시저장값 hidden -->
-					<li><input type="text" name="save" value="" hidden="hidden"></li>
-					<li><label>공모번호</label><input type="text" name="cNo"
-						th:value="${cNo}" readonly="readonly"><br /></li>
-					<li><label>작성자</label><input type="text" name="writer"
-						value=""><br /></li>
-					<li><label>제목</label><input type="text" name="ttl"
-						required="required"><br /></li>
-					<li><label>내용</label> <textarea rows="10" name="cntn"
-							cols="50" required="required"></textarea></li>
-					<li><label>첨부파일</label><input type="file" name="file" multiple><br /></li>
-					<li><label>등록일</label><input type="date" name="dtReg"
-						th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}"
-						readonly><br /></li>
-					<li><label>마감일</label><input type="date" id="dtCls"
-						name="dtCls" required="required"><br /></li>
-					<li><label>전체상금</label><input type="number" name="pay"><br /></li>
-					<li><label>선호스타일</label> <select name="style">
+					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
+					<li><label>작성자</label><input type="text" name="writer" value=""><br /></li>
+					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
+					<li><label>내용</label> <textarea rows="10" name="cntn" cols="50" required="required"></textarea></li>
+					<li><label>첨부파일1</label><input type="file" name="uploadFile"><br /></li>
+					<li><label>첨부파일2</label><input type="file" name="uploadFile"><br /></li>
+					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
+					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
+					<li><label>전체상금</label><input type="number" name="pay" required="required"><br /></li>
+					<li><label>선호스타일</label> <select name="style" >
 							<option value="none">=== 선호스타일 ===</option>
 							<option value="DS1">고전적인</option>
 							<option value="DS2">화사한</option>
@@ -128,28 +121,19 @@ ul {
 							<option value="DS0">기타</option>
 					</select>
 						<button>추가</button></li>
+
+				<li><label>1등금액</label><input class="wPay" type="number" name="winnerPay" required="required" value="3000"><br /></li>
+				<li><label>2등금액</label><input class="wPay" type="number" name="winnerPay"><br /></li>
+				<li><label>3등금액</label><input class="wPay" type="number" name="winnerPay"><br /></li>
+				<li><lable>임시저장</lable>
+					 <input type="radio" name="save" value="Y">
+				</li>
 				</ul>
+			<button type="reset" id="resetBtn">초기화</button>
+			<button type="submit" id="insertBtn">등록</button>
 			</form>
-
-			<!-- 상금입력폼 -->
-			<ul id="winner">
-				<li><label>1등금액</label><input class="wPay" type="number"
-					name="wPay" required="required" value="3000"><br /></li>
-				<li><label>2등금액</label><input class="wPay" type="number"
-					name="wPay"><br /></li>
-				<li><label>3등금액</label><input class="wPay" type="number"
-					name="wPay"><br /></li>
-			</ul>
-
-
-			<button type="button" id="resetBtn">초기화</button>
-			<button type="button" id="saveBtn">임시저장</button>
-			<button type="button" id="insertBtn">등록</button>
-			<button type="button" id="cancleBtn"
-				onclick="location.href='/contest/List'">취소</button>
-
-
-			<!-- Trigger/Open The Modal -->
+			
+			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 			<button id="myBtn">등록(->결제)</button>
 
 			<!-- The Modal -->
@@ -180,63 +164,6 @@ ul {
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
 			
-			//상금금액
-				let cNo = $('input[name="cNo"]').val();
-				let wPay01 = $('#wPay01').val();
-				let wPay02 = $('#wPay02').val();
-				let wPay03 = $('#wPay03').val();
-			
-			
-			//우승상금 입력시 총금액 자동입력(수정중)
-			// 1,2,3등 입력했을때 ajax어떻게 돌릴지? 
-				$(".wPay").each(data => console.log(data))
-						/* console.log($(this).val());
-						let price = $(this).val();
-						
-						console.log(price);
-						$('input[name="pay"]').val(price); */
-				
-				
-				
-				
-			//1-1.공모전 등록data
-			$('#insertBtn').on('click',insert);
-			
-			//1-2.공모전 임시저장data
-			$('#saveBtn').on('click', function(){
-				$('input[name="save"]').val('Y'),
-				insert();
-			});
-			
-			//등록처리 함수
-			function insert(){
-
-				var cNo = $('input[name="cNo"]').val(); //공모번호
-				
-				//유의사항 체크
-				var check = $("input[type=checkbox]")[0].checked;
-				if(check == true){
-				
-					
-					$.ajax({
-				           url:"/contest/insert",
-				           method: 'post',
-				           contentType: 'application/x-www-form-urlencoded',
-				           data: JSON.stringify($('form[name="contestfrm"]').serializeObject()),
-				           contentType : "application/json"
-					 }).then(res => {
-						console.log(res)
-						alert('등록완료!');
-						 location.href='/contest/select?cNo='+cNo;  
-					 }).catch(error =>console.log(error));
-				
-				}
-				else{
-					alert('유의사항을 확인하세요.')
-				}
-			}
-			
-			
 		
 			// Get the modal
 			var modal = document.getElementById("myModal");
@@ -264,6 +191,22 @@ ul {
 			  }
 			}
 			
+			// 상금입력시 전체상금 값 변경
+			//!!값이 나오는데 변경할 경우 계산값이 다름.
+			let hap = 0;
+			$("input[name='wPay']").each(function(index){
+				$(this).on("change", function(){
+					hap += parseInt($(this).val());
+				    $("input[name='pay']").val(hap);
+				})
+				
+			})
+			
+			
+			
+			
+			
+
 			
 		</script>
 		</div>

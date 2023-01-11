@@ -13,10 +13,10 @@
 	
 	<insert id="insertWinner">
 		<selectKey keyProperty="wNo" resultType="String" order="BEFORE">
-			SELECT 'WT'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) W_NO
+			SELECT 'WT'||(MAX(TO_NUMBER(SUBSTR(W_NO,3)))+1) W_NO
 			FROM WINNER
 		</selectKey>
-		insert into WINNER(W_NO,CO_NO,GRADE,W_PAY)
+		INSERT INTO WINNER(W_NO,CO_NO,GRADE,W_PAY)
 		values(#{wNo},
 			   #{coNo},
 			   #{grade},

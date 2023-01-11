@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.questions.service.QuestionsRepService;
+import com.eventi.left.questions.service.QuestionsRepVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 
@@ -31,10 +32,11 @@ public class questionsWeb {
 	}
 
 	// 문의사항답변리스트
-	@RequestMapping("/qrepList")
-	public String QuestionsRepList(Model model) {
-		model.addAttribute("qrepList", qrepService.questionsRepList(null));
-		return "content/questions/questionsRepList";
+	@PostMapping("/qrepList")
+	@ResponseBody
+	public List<QuestionsRepVO> QuestionsRepList(Model model, QuestionsRepVO vo) {
+		System.out.println(vo.getqNo());
+		return qrepService.questionsRepList(vo);
 	}
 
 

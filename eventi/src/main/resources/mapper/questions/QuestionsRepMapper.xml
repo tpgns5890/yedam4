@@ -11,6 +11,9 @@
 	</select>
 
 	<select id="getQuestionsRep" resultType="QuestionsRepVO">
+		select * 
+		from Questions_Rep
+		where Q_no = #{qNo}
 	</select>
 
 </mapper>

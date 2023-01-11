@@ -15,6 +15,11 @@ public class QuestionsVO {
 	private String targetId;	//대상자ID or 게시글유형
 	private String qTtl;		//문의제목
 	private String qCntn;		//문의내용
+	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	private Date writingDt;		//작성일자
+	private String replyYn;		//답변 유무
+	private String secretYn;	//비밀글 유무
+	private String category;	//대상구분
 	
 	public String getqNo() {
 		return qNo;
@@ -34,10 +39,6 @@ public class QuestionsVO {
 	public void setqCntn(String qCntn) {
 		this.qCntn = qCntn;
 	}
-	@DateTimeFormat(pattern = "yyyy-MM-dd") 
-	private Date writingDt;		//작성일자
-	private String replyYn;		//답변 유무
-	private String secretYn;	//비밀글 유무
-	private String category;	//대상구분
+	
 	
 }

@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+	ul{
+		list-style: none;
+		}
 </style>
 </head>
 <body>
@@ -110,12 +113,10 @@
 							<div class="tab-pane fade show active" id="v-pills-1"
 								role="tabpanel" aria-labelledby="day-1-tab">
 								<div class="p-4">
-									<p>
-										<span id="contestCntn" th:text=${contest.cntn}></span>
-									</p>
+										<div id="contestCntn">
+											<p id="question" th:text=${contest.cntn}></p>
+										</div>
 								</div>
-
-
 							</div>
 						</div>
 					</div>
@@ -136,26 +137,70 @@
 		$('#v-pills-2-tab').on('click', questions);
 		$('#v-pills-3-tab').on('click', contest);
 		
+		function contentSelect(){};
 		
-		//요청사항 출력
-		function contentSelect(){
-			
-		}
-		
-		//문의내용 출력
 		function questions(){
-			console.log(cNo);
-			
+			//문의내용 출력
 			$.ajax({
 	            url:"../questions/qList",
 	            method:"post",
-	            data : JSON.stringify({targetId:cNo}),
-	            contentType : "application/json"
+	            data : {targetId:cNo},
 			}).then(res => {
-					console.log(res);
-	                /* $("#contestCntn").replaceWith(res);  */
-	             })
+				$("#question").remove();
+				$('#contestCntn').append($('<p>').attr("id","question"));
+
+				//리턴값이 없으면 출력
+				if(res == 0){
+					$("#question").append($('<p>').append("문의사항이 없습니다."))
+				}
+				
+				for(data of res){
+					$("#question").append($('<div>')
+							      .append(make(data)));
+				}
+	        })
+	        
+	        //답변내용 출력
+	        let qNo = 'QU25';
+	        $.ajax({
+	            url:"../questions/qrepList",
+	            method:"post",
+	            data : {qNo:qNo},
+			}).then(res => {
+				console.log(res)
+			})
+	        
+		
+		//문의사항 제목생성
+		function make(question){
+   			let p = `<ul>
+	                  <li class="comment">
+	                    <div class="comment-body" id="${question.qNo}">
+	                      <h3>${question.qTtl}</h3>
+	                      <div class="meta">${question.writingDt}</div>
+	                      </div>
+	                   </li>
+                    </ul>
+                	`
+   			return p;
+   		}
+		
+		//문의사항 답변생성
+		function makeRe(questionRep){
+   			let p = `<ul class="children">
+                <li class="comment">
+                <div class="comment-body">
+                  <p>>${questionRep.rCntn}</p>
+                  <div class="meta">${questionRep.writingDt}</div>
+                </div>
+              </li>
+            </ul>`
+            
+            return p;
+   		}
+		
 		}
+		
 			
 		//참여작 출력
 		function contest(){

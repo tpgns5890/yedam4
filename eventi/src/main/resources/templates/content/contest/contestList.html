@@ -94,45 +94,21 @@ section {
 			</aside>
 
 			<section class="ftco-section">
-				<div id="show"></div>
-				<!-- 공모전 리스트 -->
-				<div hidden="hidden" id="contestBox" class="text p-4 bg-light size">
-
-					<!-- 좋아요버튼 -->
-					<button style="float: right; margin: 0px;" type="button"
-						class="btn_like">
-						<span class="img_emoti" id="likeBtn">좋아요</span>
-					</button>
-
-					<span id="cNo">공모전번호</span>
-					<p id="writer">작성자</p>
-					<span id="category">분류별</span>
-					<h3>
-						<a href="#" id="ttl">제목</a>
-					</h3>
-					<div class="meta">
-						<p>
-							마감일 :<span id="dtCls"></span>
-						</p>
-						<p>
-							총 상금 :<span id="pay"> </span>
-						</p>
-						<p>
-							신고수<span id="rprt"></span> 조회수<span id="inq"></span>
-						</p>
-						<div id="style">선호하는 스타일</div>
-					</div>
+				<div class="show">
+					<div id="boxList"></div>
 				</div>
-				<!-- end -->
+				<!-- 공모전 리스트 -->
+			</section>
+			<!-- end -->
 
-				<!-- 페이징 -->
-				<th:block th:replace="fragments/paging :: PagingFragment"></th:block>
-				마지막페이지<span th:text="${paging.lastPage}"></span>
+			<!-- 페이징 -->
+			<th:block th:replace="fragments/paging :: PagingFragment"></th:block>
+			마지막페이지<span th:text="${paging.lastPage}"></span>
 
 
 
-				<!-- 자바스크립트 -->
-				<script>
+			<!-- 자바스크립트 -->
+			<script>
 				 contestList(); // 첫 화면 리스트출력
 
 				 //분류체크..(push만.. 체크안된것 컨틀로 값도null뜸.)
@@ -142,8 +118,6 @@ section {
 					 for(var i=1; check.length>i; i++){
 						 if(check[i].checked == true){
 							 category = ($(this).val());
-							 
-							 console.log(category);
 						 }
 					 }
 					 
@@ -154,6 +128,7 @@ section {
 		                    contentType : "application/json"
 		                }).then(res=>{
 		                      for(contest of res){
+		                    	  console.log(contest);
 		                		  $('#contestBox').replaceWith(makeBox(contest)); //분류별출력.
 		                		}
 		                }).catch(error =>console.log(error));
@@ -170,22 +145,27 @@ section {
 	        		$.ajax({
 	                    url : '../contest/List',
 	                    method : 'post',
-	                    data : JSON.stringify({order}),
-	                    contentType : "application/json"
+	                    data : {order},
+	                   // contentType : "application/json" //제이슨 여러개보낼때만.
 	                }).then(res=>{
+	                	$('#boxList').remove();
+	                	let box = $('<div>').attr("id","boxList");
+	                	$('.show').append(box);
 	                      for(contest of res){
-	                    	   if(order == 'inq'){
-	                    	  console.log("조회수" + contest.inq);
+	                    	  console.log(contest);
+	                    	    if(order == 'inq'){
+	                    	  console.log("조회수" + contest.inq + contest.cNo);
 	                    	  }else if(order == 'dtCls'){
-	                    	  console.log("마감일" + contest.dtCls);
+	                    	  console.log("마감일" + contest.dtCls + contest.cNo);
 	                    	  }else if(order == 'pay'){
-	                    	  console.log("금액순" + contest.pay);
-	                    	  } 
-	                		  $('#show .box').replaceWith(makeBox(contest)); //정렬순 변경.
-	                		}
+	                    	  console.log("금액순" + contest.pay + contest.cNo);
+	                    	  }  
+	                    	  $('#boxList').append(makeBox(contest));
+	                      }
 	                }).catch(error =>console.log(error));
 	          	});
 				
+				 //공모전 기본 전체리스트
 				function contestList(){
 					$.ajax({
 	                    url : '../contest/List',
@@ -194,12 +174,12 @@ section {
 	                    contentType : "application/json"
 	                }).then(res => {
 	                		for(contest of res){
-	                			$('#show').append(makeBox(contest));
+	                			$('#boxList').append(makeBox(contest));
 	                		}
 	                })
 				};
 				
-				function makeBox(contest = {}){
+				function makeBox(contest){
 					let p=`
 							<div id="contestBox" class="text p-4 bg-light size box" onClick="location.href='../contest/select?cNo=${contest.cNo}'">
 							
@@ -232,8 +212,6 @@ section {
 				}
 					
 				</script>
-
-			</section>
 		</div>
 	</div>
 </body>
