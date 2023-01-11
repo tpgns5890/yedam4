@@ -23,26 +23,40 @@ public class ContestVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date dtExtns; 	 //마감연장일
 	private Integer pay; 	 //결제금액(등록비+총상금)
-	private String save = "N";	 //임시저장여부
-	private String inq; 	 //조회수
-	private String rprt; 	 //신고수
+	private String save = "N";	 //임시저장여부(Y:임시저장)
+	private int inq; 	 //조회수
+	private int rprt; 	 //신고수
 	private String style; 	 //선호하는태그(최대 3개)
 	
 	//정렬기준
-	private String order = "c_no"; //정렬기준
+	private String order = "dtReg"; //정렬기준
 	
 	//페이징 처리관련 
 	private int first;
 	private int last;
 	
-	private Integer likes; //조회 확인해볼것
-
+	//좋아요
+	private Integer likes; 
+	
+	//남은날짜
+	private int dDay;
+	
+	
+	
 	public String getcNo() {
 		return cNo;
 	}
 
 	public void setcNo(String cNo) {
 		this.cNo = cNo;
+	}
+
+	public int getdDay() {
+		return dDay;
+	}
+
+	public void setdDay(int dDay) {
+		this.dDay = dDay;
 	}
 	
 	

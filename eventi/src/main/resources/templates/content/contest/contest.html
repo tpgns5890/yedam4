@@ -123,7 +123,7 @@
 			</div>
 		</section>
 		<script>
-		var cNo = $('#cNo').text();
+		let cNo = $('#cNo').text();
 	
 		//공모전 삭제
 		$('#delBtn').on('click', delContest);
@@ -144,17 +144,16 @@
 		
 		//문의내용 출력
 		function questions(){
-			console.log($('#contestCntn').text());
 			console.log(cNo);
 			
 			$.ajax({
-	            url:"/questions/qList",
+	            url:"../questions/qList",
 	            method:"post",
 	            data : JSON.stringify({targetId:cNo}),
 	            contentType : "application/json"
 			}).then(res => {
 					console.log(res);
-	               /*  $("#contestCntn").replace(res); */
+	                /* $("#contestCntn").replaceWith(res);  */
 	             })
 		}
 			
