@@ -3,9 +3,12 @@ package com.eventi.left.job.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
@@ -24,16 +27,17 @@ public class JobBoardController {
 	}
 	
 	//구인등록폼이동
-	@RequestMapping(value = "/jobUpload", method=RequestMethod.GET) 
+	@RequestMapping(value = "/jobInsert", method=RequestMethod.GET) 
 	public String jobUpload() {
-		return "content/job/jobUploadForm";
+		return "content/job/jobInsertForm";
 	}
 	
-	//신청자조회페이지이동(메인)
-	@RequestMapping(value = "/getSeekerAll", method=RequestMethod.GET) 
-	public String getSeekerAll(Model model, JobBoardVO jobBoardVO) {
-		model.addAttribute("seekerAll", jobService.getSeekerAll(jobBoardVO));
-		return "content/job/jobSeekerAll";
+	//게시글 등록
+		@PostMapping("/jobInsert")
+		@ResponseBody //ajax응답
+		public int JobInsertForm(JobBoardVO jobBoardVO, RedirectAttributes rttr) {
+			return jobService.jobInsert(jobBoardVO);
+			//rttr.addFlashAttribute("result", "게시글 등록 완료!"); //데이터전달
 	}
 	
 	//게시글상세조회로이동
@@ -46,7 +50,24 @@ public class JobBoardController {
 	//게시글수정페이지로이동
 	@RequestMapping(value = "/jobUpdate", method=RequestMethod.GET) 
 	public String jobUpdate(Model model, JobBoardVO jobBoardVO) {
-		model.addAttribute("update", jobService.getJobUpdate(jobBoardVO));
+		model.addAttribute("update", jobService.getJob(jobBoardVO));
 		return "content/job/jobUpdateForm";
 	}
+	
+	//게시글 수정
+		@PostMapping("/jobUpdate")
+		@ResponseBody
+		public int jobUpdate(JobBoardVO jobBoardVO, RedirectAttributes rttr) {
+			return jobService.getJobUpdate(jobBoardVO);
+			//rttr.addFlashAttribute("result", "게시글 수정 완료!");
+		}
+	
+	//게시글 삭제
+		@ResponseBody
+		@GetMapping("/jobDelete") //th:onclick = location
+		public int jobDelete(JobBoardVO jobBoardVO, RedirectAttributes rttr) {
+			return jobService.jobDelete(jobBoardVO);
+			//rttr.addFlashAttribute("result", "게시글 삭제 완료!");
+			
+		}
 }

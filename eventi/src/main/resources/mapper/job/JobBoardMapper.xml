@@ -2,20 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.job.mapper.JobBoardMapper">
+	<!-- 구인게시글 전체조회 -->
 	<select id="getJobList" resultType="com.eventi.left.job.service.JobBoardVO">
 		SELECT *
 		FROM JOB_BOARD
 	</select>
-
+	
+	<!-- 구인게시글 단건조회 -->
 	<select id="getJob" resultType="com.eventi.left.job.service.JobBoardVO">
 		SELECT *
 		FROM JOB_BOARD
 		WHERE JOB_NO  = #{jobNo}
 	</select>
 	
+	<!-- 게시글 수정 jobno, userid, interest 제외-->
 	<update id="getJobUpdate" parameterType="com.eventi.left.job.service.JobBoardVO">
 		UPDATE JOB_BOARD
-		SET JOB_CNTN = #{jobCntn},
+		SET 
+		TITLE = #{title},
+		JOB_CNTN = #{jobCntn},
 		PAY = #{pay},
 		LOC = #{loc},
 		E_TYPE = #{eType},
@@ -28,4 +33,17 @@
 		WHERE JOB_NO=#{jobNo}
 	</update>
 	
+	<!-- 게시글 등록 -->
+	<insert id="jobInsert">
+		INSERT INTO JOB_BOARD
+		(JOB_NO, TITLE, JOB_CNTN, PAY, LOC, E_TYPE, W_SDAY, W_EDAY, W_HOUR, QUALIFICATION, PREFERENCE, IMG, USER_ID) <!-- DB -->
+		VALUES('JB'|| JOB_BOARD_SEQ.NEXTVAL, #{title}, #{jobCntn}, 
+				#{pay}, #{loc}, #{eType}, #{wSday}, #{wEday}, #{wHour}, #{qualification}, #{preference}, #{img}, #{userId}) <!-- VO -->
+	</insert>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="jobDelete">
+		DELETE FROM JOB_BOARD
+		WHERE JOB_NO=#{jobNo}
+	</delete>
 </mapper>
