@@ -15,8 +15,8 @@ public class WinnerServiceImpl implements WinnerService{
 	@Autowired WinnerMapper mapper;	
 	
 	@Override
-	public List<WinnerVO> winnerList(WinnerVO WinnerVO) {
-		return mapper.winnerList(WinnerVO);
+	public List<WinnerVO> winnerList(String cNo) {
+		return mapper.winnerList(cNo);
 	}
 
 	@Override

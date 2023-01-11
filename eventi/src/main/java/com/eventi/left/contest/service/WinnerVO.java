@@ -15,6 +15,6 @@ public class WinnerVO {
 	private String dNo;		  //디자인번호
 	private String userId;	  //우승자ID(회원ID)
 	
-	private int[] winnerPay;
+	private String[] winnerPay;
 
 }

@@ -101,12 +101,11 @@ ul {
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" value=""><br /></li>
 					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
-					<li><label>내용</label> <textarea rows="10" name="cntn" cols="50" required="required"></textarea></li>
+					<li><label>내용</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 					<li><label>첨부파일1</label><input type="file" name="uploadFile"><br /></li>
 					<li><label>첨부파일2</label><input type="file" name="uploadFile"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
-					<li><label>전체상금</label><input type="number" name="pay" required="required"><br /></li>
 					<li><label>선호스타일</label> <select name="style" >
 							<option value="none">=== 선호스타일 ===</option>
 							<option value="DS1">고전적인</option>
@@ -122,11 +121,10 @@ ul {
 					</select>
 						<button>추가</button></li>
 
-				<li><label>1등금액</label><input class="wPay" type="number" name="winnerPay" required="required" value="3000"><br /></li>
-				<li><label>2등금액</label><input class="wPay" type="number" name="winnerPay"><br /></li>
-				<li><label>3등금액</label><input class="wPay" type="number" name="winnerPay"><br /></li>
-				<li><lable>임시저장</lable>
-					 <input type="radio" name="save" value="Y">
+				<li><label>1등금액</label><input class="wPay" type="number" name="winnerPay[]" required="required" value="3000"><br /></li>
+				<li><label>2등금액</label><input class="wPay" type="number" name="winnerPay[]"><br /></li>
+				<li><label>3등금액</label><input class="wPay" type="number" name="winnerPay[]"><br /></li>
+				<li><lable>임시저장</lable> <input type="radio" name="save" value="Y">
 				</li>
 				</ul>
 			<button type="reset" id="resetBtn">초기화</button>
@@ -134,7 +132,7 @@ ul {
 			</form>
 			
 			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
-			<button id="myBtn">등록(->결제)</button>
+			<button id="Btn">등록(->결제)</button>
 
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
@@ -144,14 +142,16 @@ ul {
 					<span class="close">&times;</span>
 					<h3>공모전 결제정보</h3>
 					<ul>
-						<li>공모번호 : <span th:text="${cNo}"></span></li>
-						<li>제목 :</li>
-						<li>등록일 :</li>
-						<li>상금액 :</li>
-						<li>등록비 :</li>
+						<li> <span th:text="|공모번호 : ${cNo}|"></span></li>
+						<li> <span th:text="|제목 : |"></span></li>
+						<li> <span th:text="|등록일 : |"></span></li>
+						<li> <span th:text="|상금액 : |"></span></li>
+						<li> <span th:text="|등록비 : |"></span></li>
 						<hr>
-						<li>합계 :</li>
+						<li> <span th:text="|합계 : |"></span></li>
 					</ul>
+					<button style="width: 50px" type="button">결제</button>
+					<button style="width: 50px" type="button">취소</button>
 				</div>
 
 			</div>
@@ -169,7 +169,7 @@ ul {
 			var modal = document.getElementById("myModal");
 			
 			// Get the button that opens the modal
-			var btn = document.getElementById("myBtn");
+			var btn = document.getElementById("Btn");
 			
 			// Get the <span> element that closes the modal
 			var span = document.getElementsByClassName("close")[0];
@@ -191,22 +191,26 @@ ul {
 			  }
 			}
 			
-			// 상금입력시 전체상금 값 변경
-			//!!값이 나오는데 변경할 경우 계산값이 다름.
-			let hap = 0;
-			$("input[name='wPay']").each(function(index){
-				$(this).on("change", function(){
-					hap += parseInt($(this).val());
-				    $("input[name='pay']").val(hap);
-				})
-				
-			})
 			
-			
-			
-			
-			
+			//등록버튼 누를시 이벤트
+			$('#insertBtn').on('click', function insert() {
+					let check = $('input[type="checkbox"]').is(":checked");
+					if (check == false) {
+						alert('유의사항을 확인하세요.');
+						return false;
+					}
+					if (!confirm('공모전을 등록하시겠습니까?')) {
+						return false;
 
+					}
+					/* if ($('input[name="save"]').is(":checked") == true) {
+						console.log($(this));
+						if (!confirm('임시저장 하시겠습니까?')) {
+							return false;
+						}
+					} */
+				})
+		
 			
 		</script>
 		</div>
