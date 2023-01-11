@@ -95,6 +95,9 @@ h1 {
 	border-radius: 50%;
 	background: white;
 }
+.hidden {
+	display: none;
+}
 </style>
 </head>
 <body>
@@ -115,12 +118,27 @@ h1 {
    </section>
 <div id="bodyContents">
 <h1>행사 날짜를 선택해주세요.</h1>
+<div>
+<h4>첫번째</h4>
+</div>
+<div class="hidden">
+<h4>두번째</h4>
+</div>
+<div class="hidden">
+<h4>세번째</h4>
+</div>
 <form>
 <h3>캘린더 구현예정</h3>
  <input type="button" value="이전" onclick="location.replace('/estFormPlace');">
- <input type="button" value="다음" onclick="location.replace('/estFormDuration');">
-   </div>
+ <input type="button" value="다음" id="next">
+ <!-- <input type="button" value="다음" onclick="location.replace('/estFormDuration');"> -->
 </form>
+   </div>
 </div>
+<script>
+document.getElementById("next").addEventListener('click', addClass);
+  function addClass() {
+  }
+</script>
 </body>
 </html>
