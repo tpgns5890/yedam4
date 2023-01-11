@@ -4,12 +4,13 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-
+@AllArgsConstructor
 public class ContestVO {
 	private String cNo; 	 //공모전번호
 	private String writer;   //작성자
@@ -22,14 +23,14 @@ public class ContestVO {
 	private Date dtCls;		 //마감일
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date dtExtns; 	 //마감연장일
-	private Integer pay; 	 //결제금액(등록비+총상금)
+	private int pay; 	 //결제금액(등록비+총상금)
 	private String save = "N";	 //임시저장여부(Y:임시저장)
 	private int inq; 	 //조회수
 	private int rprt; 	 //신고수
 	private String style; 	 //선호하는태그(최대 3개)
 	
 	//정렬기준
-	private String order = "dtReg"; //정렬기준
+	private String order = "dt_Reg"; //정렬기준
 	
 	//페이징 처리관련 
 	private int first;

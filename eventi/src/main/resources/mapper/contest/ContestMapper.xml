@@ -11,9 +11,6 @@
 			and	category = #{category}
 			</if>
 		</where>
-			<if test="order != null and order != ''">
-				order by #{order} DESC
-			</if>
 	</sql>
 
 
@@ -24,6 +21,7 @@
 		FROM CONTEST
 		WHERE SAVE = 'N'
 		<include refid="condition"/>
+		order by ${order} DESC
 	<![CDATA[
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 	]]>

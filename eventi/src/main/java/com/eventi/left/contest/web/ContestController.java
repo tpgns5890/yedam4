@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.Paging;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
+import com.eventi.left.files.service.FilesVO;
 
 import groovy.util.logging.Log4j;
 
@@ -60,11 +63,12 @@ public class ContestController {
 		return "content/contest/contestInsertForm";
 	}
 
-	// 등록처리(완료)
+	// 등록처리(상금등록 추가중..)
 	@PostMapping("/insert")
 	@ResponseBody
-	public ContestVO contestInsertForm(@RequestBody ContestVO vo) {
-		service.insertContest(vo);
+	public ContestVO contestInsertForm(ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo) {
+		System.out.println(wvo.getWinnerPay());
+		service.insertContest(vo,files,uploadFile, wvo);
 		return vo;
 	}
 
