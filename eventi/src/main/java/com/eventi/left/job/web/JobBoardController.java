@@ -29,10 +29,11 @@ public class JobBoardController {
 		return "content/job/jobUploadForm";
 	}
 	
-	//신청자조회페이지이동
-	@RequestMapping(value = "/jobViewAll", method=RequestMethod.GET) 
-	public String jobViewAll() {
-		return "content/job/jobViewAll";
+	//신청자조회페이지이동(메인)
+	@RequestMapping(value = "/getSeekerAll", method=RequestMethod.GET) 
+	public String getSeekerAll(Model model, JobBoardVO jobBoardVO) {
+		model.addAttribute("seekerAll", jobService.getSeekerAll(jobBoardVO));
+		return "content/job/jobSeekerAll";
 	}
 	
 	//게시글상세조회로이동
