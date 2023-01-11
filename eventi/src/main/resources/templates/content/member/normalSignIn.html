@@ -246,8 +246,8 @@
 						if(result.result == true){
 							qName = result.certificateName;
 							/* li 만들고 append */
-							$("#qList").append($("<li/>").attr('value',qName+","+qNo).append(
-								$("<span/>").text("자격증 명: "+qName+", 자격증발급번호: "+qNo),
+							$("#qList").append($("<li/>").attr('class',qualLi).append(
+								$("<span/>").attr('value','{qName:'+qName+',qNo:'+qNo+'}').text("자격증 명: "+qName+", 자격증발급번호: "+qNo),
 								$("<button/>").attr({type:"button", class:"qDel"}).text("x").on('click',function(){
 									$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
 								})
@@ -288,22 +288,27 @@
  			//회원가입 함수
  			function signIn(){
  				var data = $('form[name="signIn"]').serializeArray();
+ 				var qualLi = $(".qualLi");
  				var qualArray = [];
  				var messaging = $('input:radio[name=mailGet]:checked').val();
+ 				
+ 				for(var i=0;i<qualLi.length;i++){
+ 					qualArray.push(qualLi[i].eq(0).val());
+ 				}
 				date.push({name:'userGrade',value : messaging});
-				date.push({name:'userGrade',value : messaging});
+				date.push({name:'quals',value : qualArray});
  				$.ajax({
-                    url:"/contest/insert",
+                    url:"/insertMember",
                     method: 'post',
                     contentType: 'application/x-www-form-urlencoded',
                     data: data,
-                    success: function (data) {
+                    success: function (result) {
+                       location.href='/';
                        alert('등록완료!');
-                       location.href='/contest/List';
                     },
-                    fail: function (result) {
-                             alert('필수항목을 입력해주세요')
-                    }
+                    error: function () {
+						alert("서버 요청 실패");
+					}
                })
  			}
  			

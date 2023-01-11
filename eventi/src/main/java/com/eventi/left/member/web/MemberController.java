@@ -13,12 +13,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.MemberService;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -105,8 +108,6 @@ public class MemberController {
 		RestTemplate restTpl = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders(); // 담아줄 header
 		HttpEntity<Object> entity = new HttpEntity<>(headers); // http entity에 header 담아줌
-
-		System.out.println(builder);
 		ResponseEntity<JsonNode> responseEntity = restTpl.exchange(builder.toUriString(), HttpMethod.GET, entity,
 				JsonNode.class);
 		JsonNode result = (JsonNode) responseEntity.getBody();
@@ -115,4 +116,9 @@ public class MemberController {
 	}
 	
 	//회원가입 처리
+	@PostMapping("/memInsert")
+	public int memInsert(ContestVO vo) {
+		//int i = service.insertMember(vo);
+		return 1;
+	}
 }
