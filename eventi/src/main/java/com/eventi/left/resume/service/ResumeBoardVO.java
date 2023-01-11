@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ResumeBoardVO {
+	
 	private String resumeNo; //구직신청게시글번호
 	private String seekerId; //구직자ID
 	private	String seekerCntn; //구직게시글내용

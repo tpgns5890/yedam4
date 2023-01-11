@@ -15,28 +15,37 @@ public class JobServiceImpl implements JobService{
 	@Autowired 
 	JobBoardMapper jobmapper;
 	
+	//게시글 전체조회
 	@Override
 	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO) {
 		// TODO Auto-generated method stub
 		return jobmapper.getJobList(jobBoardVO);
 	}
-
+	//단건조회
 	@Override
 	public JobBoardVO getJob(JobBoardVO jobBoardVO) {
 		// TODO Auto-generated method stub
 		return jobmapper.getJob(jobBoardVO);
 	}
-
+	
+	//게시글수정
 	@Override
 	public int getJobUpdate(JobBoardVO jobBoardVO) {
 		// TODO Auto-generated method stub
 		return jobmapper.getJobUpdate(jobBoardVO);
 	}
-
+	//게시글등록
 	@Override
-	public List<JobBoardVO> getSeekerAll(JobBoardVO jobBoardVO) {
+	public int jobInsert(JobBoardVO jobBoardVO) {
 		// TODO Auto-generated method stub
-		return jobmapper.getSeekerAll(jobBoardVO);
+		return jobmapper.jobInsert(jobBoardVO);
 	}
+	//게시글삭제
+	@Override
+	public int jobDelete(JobBoardVO jobBoardVO) {
+		// TODO Auto-generated method stub
+		return jobmapper.jobDelete(jobBoardVO);
+	}
+	
 
 }

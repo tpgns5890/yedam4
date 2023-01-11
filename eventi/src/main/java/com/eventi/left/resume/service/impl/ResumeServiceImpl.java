@@ -36,11 +36,19 @@ public class ResumeServiceImpl implements ResumeService{
 		// TODO Auto-generated method stub
 		return resumeMapper.getResumeJob(resumeBoardVO);
 	}
-
+	
+	//구직신청폼 이동
 	@Override
 	public ResumeBoardVO getApplyForm(MemberVO memberVO) {
 		// TODO Auto-generated method stub
 		return resumeMapper.getApplyForm(memberVO);
+	}
+	
+	//구직신청폼 등록
+	@Override
+	public int ApplyInsert(ResumeBoardVO resumeBoardVO) {
+		// TODO Auto-generated method stub
+		return resumeMapper.ApplyInsert(resumeBoardVO);
 	}
 
 
