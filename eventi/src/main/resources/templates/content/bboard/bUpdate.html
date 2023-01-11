@@ -19,7 +19,12 @@
 				class="row no-gutters slider-text align-items-end justify-content-center">
 				<div
 					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<h2 class="mb-0 bread">자유 게시판 수정</h2>
+					<th:block th:if="${bSelect.type =='T04'}">
+						<h2 class="mb-0 bread">자유게시글 수정</h2>
+					</th:block>
+					<th:block th:if="${bSelect.type =='T05'}">
+						<h2 class="mb-0 bread">멘토링게시글 수정</h2>
+					</th:block>
 				</div>
 			</div>
 		</div>
@@ -28,15 +33,21 @@
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">자유게시판 글쓰기</h3>
+				<th:block th:if="${bSelect.type =='T04'}">
+					<h3 class="mb-4">자유게시판 수정</h3>
+				</th:block>
+				<th:block th:if="${bSelect.type =='T05'}">
+					<h3 class="mb-4">멘토링게시판 수정</h3>
+				</th:block>
 				<form method="POST" id="bBoardForm" name="bBoardForm"
 					class="contactForm">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="hidden" name="bBoardNo" id="bBoardNo" th:value="${bSelect.bBoardNo}"> <label
-									class="label" for="ttl">제목</label> 
-									<input type="text" class="form-control" name="ttl" id="ttl" th:value="${bSelect.ttl}">
+								<input type="hidden" name="bBoardNo" id="bBoardNo" th:value="${bSelect.bBoardNo}">
+								
+								<label class="label" for="ttl">제목</label> 
+								<input type="text" class="form-control" name="ttl" id="ttl" th:value="${bSelect.ttl}">
 							</div>
 						</div>
 
@@ -46,15 +57,39 @@
 								<input type="email" class="form-control" name="writer" id="writer" th:value="${bSelect.writer}" readonly="readonly">
 							</div>
 						</div>
-
+						
+						<th:block th:if="${bSelect.type =='T04'}">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="label" for="lclsf">분류</label> 
+									<input type="radio" name="lclsf"  th:attr="checked=${bSelect.lclsf == 'genrl' ? 'true' : 'false'}" onclick="return(false);">일반 
+									<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'reply' ? 'true' : 'false'}" onclick="return(false);">후기
+								</div>
+							</div>
+						</th:block>
+			`			
+						<th:block th:if="${bSelect.type == 'T05'}">
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="lclsf">분류</label> 
-								<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'genrl' ? 'true' : 'false'}" onclick="return(false);">일반 
-								<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'reply' ? 'true' : 'false'}" onclick="return(false);">후기
+								<label class="label" for="lclsf">직업</label> 
+								<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'mc' ? 'true' : 'false'}" onclick="return(false);">사회자 
+								<input type="radio" name="lclsf" th:attr="checked=${bSelect.lclsf == 'dgner' ? 'true' : 'false'}" onclick="return(false);">디자이너
 							</div>
 						</div>
-
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="mclsf">질문</label> 
+								<select id="mclsf" name="mclsf" disabled>
+									<option value="" disabled>질문내용을 선택해 주세요.</option>
+									<option value="계약" th:attr="selected=${bSelect.mclsf == '계약' ? 'true' : 'false'}">계약</option>
+									<option value="진행" th:attr="selected=${bSelect.mclsf == '진행' ? 'true' : 'false'}">진행</option>
+									<option value="기타" th:attr="selected=${bSelect.mclsf == '기타' ? 'true' : 'false'}">기타</option>
+								</select>
+							</div>
+						</div>
+						</th:block>
+,
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">내용</label>
@@ -70,8 +105,7 @@
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="button" id="update" value="수정"
-									class="btn btn-primary">
+								<input type="button" id="update" value="수정" class="btn btn-primary">
 								<div class="submitting"></div>
 							</div>
 						</div>

@@ -1,21 +1,20 @@
 package com.eventi.left.bboard.web;
 
+import java.io.File;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
-
-import groovy.lang.Delegate;
 
 @Controller
 @RequestMapping("/bboard")
@@ -40,22 +39,31 @@ public class BboardController {
 	//게시글 등록폼 이동
 	@GetMapping("/bInsert")
 	public String bInsert(Model model, BboardVO bboardVO) {
-		if(bboardVO.getType().equals("T04")) {
-			model.addAttribute("type", bboardVO.getType());
-			return "content/bboard/bFreeInsert";
-		} else {
-			model.addAttribute("type", bboardVO.getType());
-			return "content/bboard/bMemInsert";
-		}
+		model.addAttribute("type", bboardVO.getType());
+		return "content/bboard/bInsert";
 	}
 	
 	//게시글 등록
 	@PostMapping("/bInsert")
-	public String bFreeInsertForm(BboardVO bboardVO, RedirectAttributes rttr) {
-		bboardService.bboardInsert(bboardVO);
-		rttr.addFlashAttribute("result", "게시글 등록 완료!");
+	public String bFreeInsertForm(BboardVO bboardVO, MultipartFile uploadFile) {
 		
-		return "redirect:/bboard/bList?type=T04";
+		System.out.println(bboardVO.getCntn());
+		
+		// 사진 등록
+		String realFolder = "/files/bboard";
+		File dir = new File(realFolder);
+		if(!dir.isDirectory()) {
+			dir.mkdirs();
+		}
+		
+		String img = uploadFile.getOriginalFilename();
+		System.out.println(img);
+		
+		bboardVO.setImg(img);
+		
+		bboardService.bboardInsert(bboardVO);
+		
+		return "redirect:/bboard/bList?type=" + bboardVO.getType();
 	}
 	
 	//게시글 수정폼 이동
@@ -67,20 +75,19 @@ public class BboardController {
 	
 	//게시글 수정
 	@PostMapping("/bUpdate")
-	public String bFreeUpdateForm(BboardVO bboardVO, RedirectAttributes rttr) {
-		bboardService.bboardUpdate(bboardVO);
-		rttr.addFlashAttribute("result", "게시글 수정 완료!");
-		
-		return "redirect:/bboard/bList?type=T04";
+	@ResponseBody
+	public int bFreeUpdateForm(BboardVO bboardVO) {
+		return bboardService.bboardUpdate(bboardVO);
 	}
 	
 	//게시글 삭제
 	@GetMapping("/bDelete")
-	public String bDeleteForm(BboardVO bboardVO, RedirectAttributes rttr) {
+	public String bDeleteForm(Model model, BboardVO bboardVO) {
+		String type = bboardVO.getType();
+		System.out.println(type);
 		bboardService.bboardDelete(bboardVO);
-		rttr.addFlashAttribute("result", "게시글 삭제 완료!");
 		
-		return "redirect:/bboard/bList?type=T04";
+		return "redirect:/bboard/bList?type=" + type;
 	}
 	
 }

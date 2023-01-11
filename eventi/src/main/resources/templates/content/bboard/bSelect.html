@@ -20,7 +20,7 @@
       </div>
    </section>
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
-   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo})}'|">글 삭제하기</button>
+   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo}, type=${bSelect.type})}'|">글 삭제하기</button>
     <table class="table mb-3">
       <thead class="thead-dark">
          <tr>
