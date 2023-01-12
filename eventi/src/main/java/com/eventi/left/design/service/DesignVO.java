@@ -1,6 +1,7 @@
 package com.eventi.left.design.service;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,5 @@ public class DesignVO {
 	
 	Integer first = 1; //첫페이지
 	Integer last = 5; //마지막페이지
+	
 }

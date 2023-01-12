@@ -102,8 +102,7 @@ ul {
 					<li><label>작성자</label><input type="text" name="writer" value=""><br /></li>
 					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
 					<li><label>내용</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
-					<li><label>첨부파일1</label><input type="file" name="uploadFile"><br /></li>
-					<li><label>첨부파일2</label><input type="file" name="uploadFile"><br /></li>
+					<li><label>첨부파일1</label><input type="file" name="uploadFile" multiple="multiple"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
 					<li><label>선호스타일</label> <select name="style" >

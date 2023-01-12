@@ -34,9 +34,9 @@ public class ContestServiceImpl implements ContestService {
    }
 
    @Override
-   public ContestVO getContest(ContestVO vo) {
-      mapper.selectUpdate(vo);
-      return mapper.getContest(vo);
+   public ContestVO getContest(ContestVO ContestVO) {
+      mapper.selectUpdate(ContestVO);
+      return mapper.getContest(ContestVO);
    }
 
    @Override

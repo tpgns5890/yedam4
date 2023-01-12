@@ -5,5 +5,7 @@ import java.util.List;
 import com.eventi.left.common.Paging;
 
 public interface DesignService {
-	List<DesignVO> designList(DesignVO vo, Paging paging);
+	public List<DesignVO> designList(DesignVO vo, Paging paging);
+	
+	public List<DesignVO> contestDesignList(String cNo); //공모전 1건에 대한 리스트.
 }	

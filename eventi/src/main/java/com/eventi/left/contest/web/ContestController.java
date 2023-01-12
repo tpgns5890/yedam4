@@ -19,6 +19,9 @@ import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
+import com.eventi.left.design.service.DesignService;
+import com.eventi.left.design.service.DesignVO;
+import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 
 import groovy.util.logging.Log4j;
@@ -30,6 +33,8 @@ public class ContestController {
 
 	@Autowired ContestService service;
 	@Autowired WinnerService wService;
+	@Autowired FilesService fService;
+	@Autowired DesignService dService;
 
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
@@ -50,9 +55,11 @@ public class ContestController {
 
 	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
-	public String contestSelect(Model model, ContestVO vo) {
-		model.addAttribute("contest", service.getContest(vo));
-		/* model.addAttribute("winner", wService.winnerList(vo.getcNo())); */
+	public String contestSelect(Model model, ContestVO cVo) {
+		model.addAttribute("contest", service.getContest(cVo));
+		model.addAttribute("designList",dService.contestDesignList(cVo.getcNo()));
+		model.addAttribute("fileList",fService.fileList(cVo.getcNo()));
+		model.addAttribute("winnerList",wService.winnerList(cVo.getcNo()));
 		return "content/contest/contest";
 	}
 

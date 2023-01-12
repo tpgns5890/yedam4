@@ -1,6 +1,5 @@
 package com.eventi.left.files.service;
 
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +12,6 @@ public class FilesVO {
 	private String sevNm;		//서버내파일명(중복일경우 rename)
 	private String saveAddr;	//저장경로
 	private String category;	//대상구분
+	
 	
 }

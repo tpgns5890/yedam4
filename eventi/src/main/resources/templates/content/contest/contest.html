@@ -7,9 +7,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	ul{
-		list-style: none;
-		}
+ul {
+	list-style: none;
+}
 </style>
 </head>
 <body>
@@ -24,6 +24,7 @@
 					<div
 						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
 						<h2 class="mb-0 bread">공모전 상세조회</h2>
+
 					</div>
 				</div>
 			</div>
@@ -33,9 +34,15 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
-						<a href="/images/prod-1.jpg" class="image-popup prod-img-bg"><img
-							src="/images/prod-1.jpg" class="img-fluid"
-							alt="Colorlib Template"></a>
+						<!-- 파일이미지 출력 -->
+						<div th:each="f : ${fileList}">
+							<!-- +${f.fNm} -->
+							<a th:href="|@{/files/contest/}${f.fNm}|"
+								class="image-popup prod-img-bg"> <img
+								th:src="|@{/files/contest/}${f.fNm}|"
+								style="width: 540px; height: 785px" class="img-fluid"
+								alt="Colorlib Template"></a>
+						</div>
 					</div>
 					<div
 						class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
@@ -48,39 +55,43 @@
 							<p class="text-left mr-4">
 								&#128680;<span th:text=${contest.rprt}></span> <span
 									style='font-size: 30px;'>&#128065;</span><span
-									th:text=${contest.inq}></span>
-
-								<!-- 좋아요버튼 -->
-								<span class="img_emoti">좋아요</span><span th:text=${contest.likes}></span>
+									th:text=${contest.inq}></span> <span class="img_emoti">좋아요</span><span
+									th:text=${contest.likes}></span>
+							</p>
+						</div>
+						<div th:each="w : ${winnerList}">
+							<p class="price">
+								<span
+									th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
 							</p>
 						</div>
 
-						<p class="price"> <span th:text="|1등 ${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}|"></span></p>
-						<p class="price"><span th:text="|2등 ${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}|"></span>	</p>
-						<p class="price"><span th:text="|4등 ${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}|"></span>	</p>
 
-						<p>선호하는 스타일</p>
+						<p>
+							<span th:text="|선호하는태그 : ${contest.style}|"></span>
+						</p>
 						<div class="row mt-4">
 							<div class="input-group col-md-6 d-flex mb-3"></div>
 							<div class="w-100"></div>
 							<div class="col-md-12"></div>
 						</div>
 
-						<!-- 전체회원 -->
+						전체회원
 						<p>
 							<a href="cart.html" class="btn btn-primary py-3 px-5 mr-2">링크복사</a>
 							<a href="cart.html" class="btn btn-primary py-3 px-5 mr-2">응모하기</a>
 						</p>
 
-						<!-- 공모전 등록한 회원만 -->
+						공모전 등록한 회원만
 						<p>
 							<a th:href="@{/contest/update(cNo=${contest.cNo})}"
 								class="btn btn-primary py-3 px-5 mr-2">수정</a>
 							<button type="button" id="delBtn"
 								class="btn btn-primary py-3 px-5">삭제</button>
-							<!-- <form id="contestDelete" th:action="@{'/contest/delete/' + ${contest.cNo}}" method="post">
+						<form id="contestDelete"
+							th:action="@{'/contest/delete/' + ${contest.cNo}}" method="post">
 							<button class="btn btn-primary py-3 px-5">삭제</button>
-						</form> -->
+						</form>
 						</p>
 						<p>
 							<a href="cart.html" class="btn btn-primary py-3 px-5">마감연장</a> <a
@@ -106,6 +117,7 @@
 
 						</div>
 					</div>
+
 					<div class="col-md-12 tab-wrap">
 
 						<div class="tab-content bg-light" id="v-pills-tabContent">
@@ -113,9 +125,9 @@
 							<div class="tab-pane fade show active" id="v-pills-1"
 								role="tabpanel" aria-labelledby="day-1-tab">
 								<div class="p-4">
-										<div id="contestCntn">
-											<p id="question" th:text=${contest.cntn}></p>
-										</div>
+									<div id="contestCntn">
+										<p id="question" th:text=${contest.cntn}></p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -143,11 +155,11 @@
 		};
 		
 		function questions(){
-			//문의내용 출력
+			//문의제목 출력
 			$.ajax({
 	            url:"../questions/qList",
 	            method:"post",
-	            data : {targetId:cNo},
+	            data : {targetId:cNo, category:'T01'},
 			}).then(res => {
 				$("#question").remove();
 				$('#contestCntn').append($('<p>').attr("id","question"));
@@ -158,43 +170,43 @@
 				}
 				
 				for(data of res){
-					$("#question").append($('<div>')
-							      .append(make(data)));
+					if(data.rerepTgt == null){
+						$("#question").append(make(data));
+					}  else {
+						$("#" + data.rerepTgt).append(makeRe(data));
+						
+					} 
+					
 				}
 	        })
 	        
-	        //답변내용 출력
-	        let qNo = 'QU25';
-	        $.ajax({
-	            url:"../questions/qrepList",
-	            method:"post",
-	            data : {qNo:qNo},
-			}).then(res => {
-				console.log(res)
-			})
-	        
+		}
 		
-		//문의사항 제목생성
+		//문의사항 생성
 		function make(question){
    			let p = `<ul>
 	                  <li class="comment">
 	                    <div class="comment-body" id="${question.qNo}">
-	                      <h3>${question.qTtl}</h3>
+	                      <h3>${question.ttl}</h3>
 	                      <div class="meta">${question.writingDt}</div>
+	                      <div class="meta">${question.userId}</div>
+	                      <div class="meta">${question.cntn}</div>
+	                      <button type="button" id="a${question.qNo}">답변등록</button>
 	                      </div>
 	                   </li>
                     </ul>
                 	`
    			return p;
    		}
-		
-		//문의사항 답변생성
-		function makeRe(questionRep){
+		//답변생성
+		 function makeRe(questionRep){
+			//답변이 있으면 id확인하고 있으면 답변등록 없애기..
    			let p = `<ul class="children">
                 <li class="comment">
                 <div class="comment-body">
-                  <p>>${questionRep.rCntn}</p>
+                  <h3>${questionRep.userId}</h3>
                   <div class="meta">${questionRep.writingDt}</div>
+                  <p>${questionRep.cntn}</p>
                 </div>
               </li>
             </ul>`
@@ -202,13 +214,15 @@
             return p;
    		}
 		
-		}
+		
 		
 			
 		//참여작 출력
 		function contest(){
 			console.log($(this));
-		}
+		} 
+		
+		
 		
 			
 	</script>

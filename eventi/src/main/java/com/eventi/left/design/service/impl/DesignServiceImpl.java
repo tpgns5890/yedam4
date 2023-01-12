@@ -21,4 +21,9 @@ public class DesignServiceImpl implements DesignService{
 		vo.setLast(paging.getLast());
 		return mapper.designList(vo);
 	}
+
+	@Override
+	public List<DesignVO> contestDesignList(String cNo) {
+		return mapper.contestDesignList(cNo);
+	}
 }
