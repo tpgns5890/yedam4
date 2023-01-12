@@ -2,9 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.promotion.mapper.PromotionBoardMapper">
-	<select id="getPromotionList" resultType="com.eventi.left.promotion.service.PromotionVO">
-		SELECT *
+
+	<!-- 홍보게시판 메인 -->
+	<select id="proList" resultType="com.eventi.left.promotion.service.PromotionVO">
+		SELECT PRO_NO, USER_ID, E_NAME, E_TYPE, IMG, SEE
 		FROM PROMOTION_BOARD
 	</select>
-
+	
+	<!-- 게시글 상세조회 -->
+	<select id="proDetail" resultType="com.eventi.left.promotion.service.PromotionVO">
+		SELECT *
+		FROM PROMOTION_BOARD
+		WHERE PRO_NO  = #{proNo}
+	</select>
+	
+	<!-- 게시판 조회수 -->
+	<update id="proUp" parameterType="int">
+		UPDATE PROMOTION_BOARD SET
+		SEE = SEE+1
+		WHERE PRO_NO = #{proNo}
+	</update>
+	
+	<!-- 게시글 등록 -->
+	<insert id="proInsert">
+		INSERT INTO PROMOTION_BOARD
+		(PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO, E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE) <!-- DB -->
+		VALUES('PB'|| PROMOTION_BOARD_SEQ.NEXTVAL, #{userId}, #{eName}, 
+				#{eSday}, #{eEday}, #{loc}, #{intro}, #{eType}, #{entrance}, #{accommodate}, #{img}, #{see}) <!-- VO -->
+	</insert>
+	
 </mapper>

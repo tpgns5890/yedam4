@@ -18,4 +18,6 @@ public class PromotionVO {
 	private String eType; //행사유형
 	private String entrance; //입장료유무
 	private String accommodate; //수용인원
+	private String img;
+	private Integer see;
 }

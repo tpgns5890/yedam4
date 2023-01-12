@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<head>
+<script type="text/javascript" src="/smarteditor2/js/HuskyEZCreator.js"
+	charset="utf-8"></script>
+</head>
+
+<div layout:fragment="content">
+	<section class="hero-wrap hero-wrap-2"
+		style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+		data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div
+				class="row no-gutters slider-text align-items-end justify-content-center">
+				<div
+					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+					<h2 class="mb-0 bread">홍보게시글 등록</h2>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="row no-gutters">
+		<div class="col-md-7">
+			<div class="contact-wrap w-100 p-md-5 p-4">
+				<h3 class="mb-4">홍보게시글 작성</h3>
+				<form action="/proInsert" method="POST" id="proInsert" name="proInsert"
+					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="ttl">행사명</label> 
+									<input type="text" class="form-control" name="eName" id="eName" >
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">행사시작일</label>
+								<input type="date" class="form-control" name="eSday" id="eSday" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">행사종료일</label>
+								<input type="date" class="form-control" name="eEday" id="eEday" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">위치</label>
+								<input type="text" class="form-control" name="loc" id="loc" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">소개글</label>
+								<textarea name="intro" class="form-control" id="intro" cols="30" rows="4" ></textarea>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">행사유형</label>
+								<input type="text" class="form-control" name="loc" id="loc" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">입장료</label>
+								<input type="text" class="form-control" name="loc" id="loc" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">행사유형</label>
+								<input type="text" class="form-control" name="entrance" id="entrance" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">수용인원</label>
+								<input type="text" class="form-control" name="accommodate" id="accommodate" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="file" name="uploadFile">
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">관심수</label>
+								<input type="number" class="form-control" name="see" id="see" >
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">회원ID</label>
+								<input type="text" name="userId" id="userId">
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="submit" id="insert" value="등록"
+									class="btn btn-primary">
+								<div class="submitting"></div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<script>
+let oEditors = []
+
+smartEditor = function() {
+	console.log("Naver SmartEditor")
+	nhn.husky.EZCreator.createInIFrame({
+		oAppRef : oEditors,
+		elPlaceHolder : "intro,
+		sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+		fCreator : "createSEditor2"
+	})
+}
+
+$(document).ready(function() {
+	smartEditor()
+})
+		
+$('#insert').on('click', function insert() {
+			 oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
+			let jobCntn = document.getElementById("jobCntn").value //태그 생성 
+			//alert(jobCntn);
+			 <!--var data = $('form[name="jobInsert"]').serializeArray();
+			//구직테이블 입력처리
+			$.ajax({
+				url : "/jobInsert", //controller 링크
+				method : 'post',
+				contentType : 'application/x-www-form-urlencoded',
+				data : data,
+				success : function(data) {
+					if (data == 1){
+					alert('등록완료!');
+					location.href = '/jobList';
+					}else 
+						alert('등록실패')
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			}) -->
+			
+		})	
+	</script>
+</div>
+</html>

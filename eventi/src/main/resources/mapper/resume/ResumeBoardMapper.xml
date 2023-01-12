@@ -26,7 +26,7 @@
 	<select id="getResumeDetail" resultType="com.eventi.left.resume.service.ResumeBoardVO"> 
 		SELECT * 
 		FROM RESUME_BOARD
-		WHERE SEEKER_ID = #{seekerId}
+		WHERE RESUME_NO = #{resumeNo}
 	</select>
 	
 	
