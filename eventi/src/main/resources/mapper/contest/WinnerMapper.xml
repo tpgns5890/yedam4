@@ -4,13 +4,22 @@
 
 <mapper namespace="com.eventi.left.contest.mapper.WinnerMapper">
 	<select id="winnerList" resultType="WinnerVO">
-		SELECT * FROM Winner
+		SELECT
+		a.*,b.w_no,b.grade,b.w_pay,b.d_no,b.user_id
+		FROM CONTEST a join winner b
+		on a.c_no = b.co_no
+		WHERE a.C_NO = #{coNo}
 	</select>
-	
+
 	<select id="getWinner" resultType="WinnerVO">
-	
+		SELECT
+		a.*,b.w_no,b.grade,b.w_pay,b.d_no,b.user_id
+		FROM CONTEST a join winner b
+		on a.c_no = b.co_no
+		WHERE a.C_NO = #{coNo}
+		and b.grade = {grade}
 	</select>
-	
+
 	<insert id="insertWinner">
 		<selectKey keyProperty="wNo" resultType="String" order="BEFORE">
 			SELECT 'WT'||(MAX(TO_NUMBER(SUBSTR(W_NO,3)))+1) W_NO
@@ -18,15 +27,15 @@
 		</selectKey>
 		INSERT INTO WINNER(W_NO,CO_NO,GRADE,W_PAY)
 		values(#{wNo},
-			   #{coNo},
-			   #{grade},
-			   #{wPay})
+		#{coNo},
+		#{grade},
+		#{wPay})
 	</insert>
 	<update id="updateWinner">
-	
+
 	</update>
-	
+
 	<delete id="deleteWinner">
-	
+
 	</delete>
 </mapper>

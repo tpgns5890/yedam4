@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.Paging;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.files.service.FilesVO;
 
@@ -28,8 +28,8 @@ import groovy.util.logging.Log4j;
 @Log4j
 public class ContestController {
 
-	@Autowired
-	ContestService service;
+	@Autowired ContestService service;
+	@Autowired WinnerService wService;
 
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
@@ -43,17 +43,24 @@ public class ContestController {
 	@ResponseBody
 	public List<ContestVO> orderList(Model model, ContestVO vo, Paging paging) {
 		System.out.println("정렬기준 :" + vo.getOrder());
-		System.out.println("분류별 :" + vo.getCategory()); //값이 null..
+		System.out.println("분류별 :" + vo.getCategory()); // 값이 null..
 		List<ContestVO> list = service.contestList(vo, paging);
 		return list;
 	}
 
-	// 공모전 상세리스트
+	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
 	public String contestSelect(Model model, ContestVO vo) {
 		model.addAttribute("contest", service.getContest(vo));
-		vo = service.getContest(vo);
+		/* model.addAttribute("winner", wService.winnerList(vo.getcNo())); */
 		return "content/contest/contest";
+	}
+
+	// 2.공모전 상세리스트(post ajax)
+	@PostMapping("/select")
+	public ContestVO contestSelect( ContestVO vo) {
+		vo = service.getContest(vo);
+		return vo;
 	}
 
 	// 등록화면이동
@@ -65,17 +72,16 @@ public class ContestController {
 
 	// 등록처리(상금등록 추가중..)
 	@PostMapping("/insert")
-	@ResponseBody
-	public ContestVO contestInsertForm(ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo) {
-		System.out.println(wvo.getWinnerPay());
-		service.insertContest(vo,files,uploadFile, wvo);
-		return vo;
+	public String contestInsertForm(ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo) {
+		service.insertContest(vo, files, uploadFile, wvo);
+		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
 	// 수정화면이동
 	@GetMapping("/update")
 	public String contestupdate(Model model, ContestVO vo) {
 		model.addAttribute("contest", service.getContest(vo));
+		model.addAttribute("winner", wService.winnerList(vo.getcNo()));
 		return "content/contest/contestUpdateForm";
 	}
 
@@ -89,8 +95,7 @@ public class ContestController {
 
 	// 삭제처리(링크처리는 get/ deleteMappging form)
 	@GetMapping("/delete/{cNo}")
-	public String contestDelete(@PathVariable("cNo") String cNo, RedirectAttributes rttr) {
-		rttr.addFlashAttribute("result", "삭제처리완료");
+	public String contestDelete(@PathVariable("cNo") String cNo) {
 		service.deleteContest(cNo);
 		return "redirect:/contest/List"; // 페이징처리를 위해 전체리스트 메소드 실행후 페이지이동
 	}

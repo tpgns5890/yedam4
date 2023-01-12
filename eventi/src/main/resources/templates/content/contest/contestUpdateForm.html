@@ -14,7 +14,6 @@ ul{
 	list-style: none;
 }
 </style>
-</style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
@@ -33,7 +32,7 @@ ul{
 			</div>
 		</section>
 		<div class="contestContainer">
-			<form id="contestfrm" name= "contestfrm">
+			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
 				<ul>
 					<li>
 						<th:block th:switch="${contest.category}">
@@ -62,15 +61,8 @@ ul{
 						<label>마감일</label><input type="date"  th:value="${#dates.format(contest.dtCls, 'yyyy-MM-dd')}" readonly="readonly"><br />
 					</li>
 					<li>
-						<label>1등상금</label><input type="number"  readonly="readonly" value=""><br />
-					</li>
-					<li>
-						<label>2등상금</label><input type="number" readonly="readonly" value=""><br />
-					</li>
-					<li>
-						<label>3등상금</label><input type="number" readonly="readonly" value=""><br />
-					</li>
-					<li>
+						
+						
 						<th:block th:switch="${contest.style}">
 						<span th:case="DS1"><label>선호스타일</label><span th:text="고전적인"></span></span>
 						<span th:case="DS2"><label>선호스타일</label><span th:text="화사한"></span></span>

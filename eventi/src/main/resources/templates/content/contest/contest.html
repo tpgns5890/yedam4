@@ -55,10 +55,10 @@
 							</p>
 						</div>
 
-						<p class="price">
-							상금 <span
-								th:text="${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}"></span>
-						</p>
+						<p class="price"> <span th:text="|1등 ${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}|"></span></p>
+						<p class="price"><span th:text="|2등 ${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}|"></span>	</p>
+						<p class="price"><span th:text="|4등 ${#numbers.formatInteger(contest.pay, 0, 'COMMA') + '원'}|"></span>	</p>
+
 						<p>선호하는 스타일</p>
 						<div class="row mt-4">
 							<div class="input-group col-md-6 d-flex mb-3"></div>
@@ -137,7 +137,10 @@
 		$('#v-pills-2-tab').on('click', questions);
 		$('#v-pills-3-tab').on('click', contest);
 		
-		function contentSelect(){};
+		function contentSelect(){
+			
+			
+		};
 		
 		function questions(){
 			//문의내용 출력
