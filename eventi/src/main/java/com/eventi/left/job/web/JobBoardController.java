@@ -39,7 +39,6 @@ public class JobBoardController {
 			jobService.jobInsert(jobBoardVO, uploadFile ); //값이 vo자동으로 저장
 			return "redirect:/jobList";
 			//rttr.addFlashAttribute("result", "게시글 등록 완료!"); //데이터전달
-			
 	}
 	
 	//게시글상세조회로이동

@@ -14,4 +14,17 @@
 		where F_NM = #{fNm}
 		and cateGory = #{category}
 	</select>
+	
+	<select id="fileList" resultType="FilesVO">
+		select * 
+        from files
+        where target_id = #{targetId}
+	</select>
+	
+	<select id="getfile" resultType="FilesVO">
+		select * 
+        from files
+        where target_id = #{targetId}
+        and f_no = #{fNo}
+	</select>
 </mapper>

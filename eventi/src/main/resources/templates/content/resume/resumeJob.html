@@ -32,7 +32,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="res : ${resumeJob}" 
-				th:onclick="|location.href='@{resumeDetail(seekerId=${res.seekerId})}'|">
+				th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">
 				<td th:text=${res.resumeNo}></td>
 				<td th:text=${res.seekerId}></td>
 				<td th:text=${res.seekerCntn}></td>

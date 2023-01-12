@@ -15,4 +15,11 @@
 		FROM DESIGN
 	</select>
 	
+	<select id="contestDesignList" resultType="DesignVO">
+		select c.c_no, d.dgn_no, d.user_id d_user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn
+		from contest c join design d
+		                on c.c_no = d.c_no    
+		and c.c_no = #{cNo}
+	</select>
+	
 </mapper>

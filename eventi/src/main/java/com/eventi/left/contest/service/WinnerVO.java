@@ -1,5 +1,9 @@
 package com.eventi.left.contest.service;
 
+import java.util.List;
+
+import com.eventi.left.files.service.FilesVO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +19,9 @@ public class WinnerVO {
 	private String dNo;		  //디자인번호
 	private String userId;	  //우승자ID(회원ID)
 	
-	private String[] winnerPay;
+	
+	//정보처리를 위한 필드선언.
+	private String[] winnerPay; //form 입력 배열.
+	
 
 }

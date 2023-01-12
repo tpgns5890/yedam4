@@ -8,11 +8,30 @@
 	<select id="questionsList" resultType="QuestionsVO">
 		select * 
 		from Questions
-		where category = 'T01'
+		where category = #{category}
 		and target_id = #{targetId}
 	</select>
-
-	<select id="getQuestions" resultType="QuestionsVO">
-	</select>
+	
+	<insert id="questionsInsert">
+		insert into QUESTIONS(Q_NO,USER_ID,TARGET_ID,TTL,CNTN,WRITING_DT,SECRET_YN,CATEGORY,REREP_TGT)
+		values('QU'||qno_seq.NEXTVAL,
+				#{userId},
+				#{targetId},
+				#{Ttl},
+				#{Cntn},
+				#{writingDt},
+				#{secretYn},
+				#{category},
+				#{rerepTgt}
+				)
+	</insert>
+	
+	<update id="questionsUpdate">
+	
+	</update>
+	
+	<delete id="questionsDelete">
+	
+	</delete>
 
 </mapper>

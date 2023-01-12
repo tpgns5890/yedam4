@@ -20,8 +20,19 @@ public class QuestionsServiceImpl implements QuestionsService{
 	}
 
 	@Override
-	public QuestionsVO getQuestions(QuestionsVO QuestionsVO) {
-		return mapper.getQuestions(QuestionsVO);
+	public int questionsInsert(QuestionsVO vo) {
+		return mapper.questionsInsert(vo);
 	}
+
+	@Override
+	public int questionsUpdate(QuestionsVO vo) {
+		return mapper.questionsUpdate(vo);
+	}
+
+	@Override
+	public int questionsDelete(String qNo) {
+		return mapper.questionsDelete(qNo);
+	}
+
 
 }
