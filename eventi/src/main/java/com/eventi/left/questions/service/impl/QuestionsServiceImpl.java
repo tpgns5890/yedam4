@@ -1,5 +1,6 @@
 package com.eventi.left.questions.service.impl;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,11 @@ import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 
 @Service
-public class QuestionsServiceImpl implements QuestionsService{
+public class QuestionsServiceImpl implements QuestionsService {
 
-	@Autowired QuestionsMapper mapper;
-	
+	@Autowired
+	QuestionsMapper mapper;
+
 	@Override
 	public List<QuestionsVO> questionsList(QuestionsVO vo) {
 		return mapper.questionsList(vo);
@@ -33,6 +35,5 @@ public class QuestionsServiceImpl implements QuestionsService{
 	public int questionsDelete(String qNo) {
 		return mapper.questionsDelete(qNo);
 	}
-
 
 }

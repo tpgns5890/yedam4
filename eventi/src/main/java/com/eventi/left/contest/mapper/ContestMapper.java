@@ -23,4 +23,5 @@ public interface ContestMapper {
 		public int deleteContest(String cNo); // 삭제
 		
 		public String getSequence(); //시퀀스 맥시멈번호 찾기.
-	}
+		
+}

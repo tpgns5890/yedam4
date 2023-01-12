@@ -85,11 +85,11 @@ section {
 			<aside>
 				<h3>분류별</h3>
 				<ul style="list-style: none; padding-left: 0px;">
-					<li><input type="checkbox" name="category" value="D1">현수막</li>
-					<li><input type="checkbox" name="category" value="D2">배너</li>
-					<li><input type="checkbox" name="category" value="D3">로고</li>
-					<li><input type="checkbox" name="category" value="D4">포스터</li>
-					<li><input type="checkbox" name="category" value="D5">기타</li>
+					<li><input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막</li>
+					<li><input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너</li>
+					<li><input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고</li>
+					<li><input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);">포스터</li>
+					<li><input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);">기타</li>
 				</ul>
 			</aside>
 
@@ -110,61 +110,11 @@ section {
 			<!-- 자바스크립트 -->
 			<script th:inline="javascript">
 		    /*<![CDATA[*/
-				 contestList(); // 첫 화면 리스트출력
-
-				 //분류체크..(push만.. 체크안된것 컨틀로 값도null뜸.)
-				 let category;
-				 $("input:checkbox[name=category]").on("click", function(){
-					 let check = $("input:checkbox[name=category]")
-					 for(var i=1; check.length>i; i++){
-						 if(check[i].checked == true){
-							 category = ($(this).val());
-						 }
-					 }
-					 
-					 $.ajax({
-		                    url : '../contest/List',
-		                    method : 'post',
-		                    data : JSON.stringify({category:category}),
-		                    contentType : "application/json"
-		                }).then(res=>{
-		                      for(contest of res){
-		                    	  console.log(contest);
-		                		  $('#contestBox').replaceWith(makeBox(contest)); //분류별출력.
-		                		}
-		                }).catch(error =>console.log(error));
-					 
-					 
-				})
-						 
+		    	
+			contestList(); // 첫 화면 리스트출력
+			let category;
 				 
-				//정렬기준 변경(값 확인할것.)
-				$('#order').change(function orderSelect(){
-	        		let order = $(this).val()
-	        		console.log(order);
-	        		
-	        		$.ajax({
-	                    url : '../contest/List',
-	                    method : 'post',
-	                    data : {order},
-	                   // contentType : "application/json" //제이슨 여러개보낼때만.
-	                }).then(res=>{
-	                	$('#boxList').remove();
-	                	let box = $('<div>').attr("id","boxList");
-	                	$('.show').append(box);
-	                      for(contest of res){
-	                    	  console.log(contest);
-	                    	    if(order == 'inq'){
-	                    	  console.log("조회수" + contest.inq + contest.cNo);
-	                    	  }else if(order == 'dtCls'){
-	                    	  console.log("마감일" + contest.dtCls + contest.cNo);
-	                    	  }else if(order == 'pay'){
-	                    	  console.log("금액순" + contest.pay + contest.cNo);
-	                    	  }  
-	                    	  $('#boxList').append(makeBox(contest));
-	                      }
-	                }).catch(error =>console.log(error));
-	          	});
+				
 				
 				 //공모전 기본 전체리스트
 				function contestList(){
@@ -178,8 +128,75 @@ section {
 	                			$('#boxList').append(makeBox(contest));
 	                		}
 	                })
+	                
+	                
+	              //정렬기준 변경
+					$('#order').on("change",orderSelect);
+					
+					function orderSelect(){
+		        		let order = $(this).val()
+		        		console.log(order);
+		        		
+		        		$.ajax({
+		                    url : '../contest/List',
+		                    method : 'post',
+		                    data : {order},
+		                   // contentType : "application/json" //제이슨 여러개보낼때만.
+		                }).then(res=>{
+		                	$('#boxList').remove();
+		                	let box = $('<div>').attr("id","boxList");
+		                	$('.show').append(box);
+		                      for(contest of res){
+		                    	  $('#boxList').append(makeBox(contest));
+		                      }
+		                }).catch(error =>console.log(error));
+		          	};
+					
+					
+				
+					//체크박스 선택시 해당하는 분류에 대한 공고문리스트 출력 ex) 로고
+				    $('input[type=checkbox][name=category]').each(function(index){
+				    	$(this).change(function() {
+					        if (this.checked) {
+					            category = $(this).val();
+					        }
+					        $.ajax({
+			                    url : '../contest/List',
+			                    method : 'post',
+			                    data : {category},
+			                }).then(res=>{
+
+			                	//등록된 공모전이 없을경우 기존페이지로 이동.
+			                	if(res==''){
+			                		location.href='../contest/List';
+			                		alert('등록된 공모전이 없습니다');
+			                	}
+			                	
+			                	//기존 리스트 삭제 -> div생성 붙여넣기
+			                	$('#boxList').remove();
+			                	let box = $('<div>').attr("id","boxList");
+			                	$('.show').append(box);
+			                   	 for(contest of res){
+			                    	  $('#boxList').append(makeBox(contest));
+			                	}
+			                }).catch(error =>console.log(error));
+					        
+					    });
+				    });
+	                
 				};
 				
+				
+				//체크박스 1건만 선택가능하도록 설정.
+				function doOpenCheck(check){
+				    var obj = document.getElementsByName("category");
+				    for(var i=0; i<obj.length; i++){
+				        if(obj[i] != check){
+				            obj[i].checked = false;
+				        }
+				    }
+				}
+				//공모전 1건의 대한 박스 생성
 				function makeBox(contest){
 					let p=`
 							<div id="contestBox" class="text p-4 bg-light size box" onClick="location.href='../contest/select?cNo=${contest.cNo}'">
@@ -196,7 +213,7 @@ section {
 							</h3>
 							<div class="meta">
 								<p>
-									마감일 :<span id="dtCls">${contest.dtCls}</span>
+									<span id="dtCls">D-${contest.dDay}</span>
 								</p>
 								<p>
 									총 상금 :<span id="pay">${contest.pay}</span>
@@ -205,7 +222,7 @@ section {
 									신고수<span id="rprt">${contest.rprt}</span>
 									조회수<span id="inq">${contest.inq}</span>
 								</p>
-								<div id="style">${contest.style}</div>
+								<div id="style">#${contest.style}</div>
 							</div>
 						</div>
 						`;

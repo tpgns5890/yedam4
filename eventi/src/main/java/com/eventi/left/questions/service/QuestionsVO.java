@@ -4,11 +4,13 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor 
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuestionsVO { 
 	private String qNo;			//문의번호
 	private String userId;		//작성자Id
@@ -20,6 +22,9 @@ public class QuestionsVO {
 	private String secretYn;	//비밀글 유무
 	private String category;	//대상구분
 	private String rerepTgt;	//문의:null 답변:문의번호입력
+	
+	//날짜 String 변경
+	private String dtStr;	
 	
 	public String getqNo() {
 		return qNo;

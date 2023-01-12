@@ -6,11 +6,9 @@
 	
 	<!-- 분류별 카테고리/정렬순서 -->
 	<sql id="condition">
-		<where>
 			<if test="category != null and category != ''">
-			and	category = #{category}
+				and	category = #{category}
 			</if>
-		</where>
 	</sql>
 
 
