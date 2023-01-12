@@ -23,28 +23,68 @@
    	
    	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글 등록하기</button>
    	
+   	<!-- 게시글 정렬 -->
+   	<input type="radio" name="lclsf" value="all" checked>전체
+   	<input type="radio" name="lclsf" value="genrl">일반
+   	<input type="radio" name="lclsf" value="reply">후기
+   	
     <table class="table mb-3">
-      <thead class="thead-dark">
-         <tr>
-            <th>게시판번호</th>   
-            <th>작성자</th>   
-            <th>제목</th>
-            <th>조회수</th>
-            <th>작성일자</th>
-            <th>타입</th>   
-         </tr>
-      </thead>
-      <tbody>
-         <tr th:each="b : ${bList}" th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|">
-            <td th:text=${b.bBoardNo}></td>
-            <td th:text=${b.writer}></td>
-            <td th:text=${b.ttl}></td>
-            <td th:text=${b.inq}></td>
-            <td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
-            <td th:text=${b.type}></td>
-         </tr>
-      </tbody>
-   </table>
+	      <thead class="thead-dark">
+	         <tr>
+	            <th>게시판번호</th>   
+	            <th>작성자</th>   
+	            <th>제목</th>
+	            <th>조회수</th>
+	            <th>작성일자</th>
+	            <th>타입</th>   
+	         </tr>
+	      </thead>
+	      <tbody id = "check">
+	         <tr th:each="b : ${bList}" th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|">
+	            <td th:text=${b.bBoardNo}></td>
+	            <td th:text=${b.writer}></td>
+	            <td th:text=${b.ttl}></td>
+	            <td th:text=${b.inq}></td>
+	            <td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
+	            <td id = type th:text=${b.type}></td>
+	         </tr>
+	      </tbody>
+	   </table>
+   
+   <script>
+   		$("input:radio[name=lclsf]").click(function(){
+   			if($("input[name=lclsf]:checked").val() == "all"){
+   				let lclsf = $("input[name=lclsf]:checked").val();
+   				alert(lclsf);
+   				$.ajax({
+   					url : '/bboard/bList',
+   					data : {lclsf:lclsf}
+   				}).then(res => {
+   					console.log(res);
+   				})
+   			} else if($("input[name=lclsf]:checked").val() == "genrl"){
+   				alert("genrl");
+   			} else if($("input[name=lclsf]:checked").val() == "reply"){
+   				let lclsf = $("input[name=lclsf]:checked").val();
+   				alert(lclsf);
+   				
+   				let type = $("#type").text();
+   				alert(type);
+   				
+   				$.ajax({
+   					url : '/bboard/bList',
+   					method : 'post',
+   					data : {lclsf:lclsf, type:type},
+   				}).then(res => {
+   					$('#check').appendChild().remove();
+   					
+   					for(r of res){
+   						alert(r.type);
+   					}
+   				})
+   			} 
+   		})
+   </script>
 </div>
 
 </html>
