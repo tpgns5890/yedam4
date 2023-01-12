@@ -11,4 +11,6 @@ public interface MemberMapper {
 
 	public void insertCrtf(CrtfVO crVO);
 
+	public MemberVO getMember(String userId);
+
 }

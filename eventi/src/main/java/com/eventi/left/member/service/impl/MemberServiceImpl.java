@@ -12,6 +12,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,13 +26,18 @@ import com.eventi.left.member.service.MemberVO;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	@Autowired
 	MemberMapper mapper;
 	@Autowired
 	private JavaMailSender mailSender;
-
+	//회원단건조회
+	@Override
+	public MemberVO getMember(String userId) {
+		return mapper.getMember(userId);
+	}
+	
 	// 아이디 중복확인
 	@Override
 	public int IdCheck(String inputId) {
@@ -99,5 +107,12 @@ public class MemberServiceImpl implements MemberService {
 
 		return ResponseEntity.ok(result);
 	}
-
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// username을 mapper단건조회
+		// throws
+		MemberVO vo = mapper.getMember(username);
+		return vo;
+	}
 }

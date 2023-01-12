@@ -27,15 +27,15 @@ public class MemberController {
 	}
 
 	// 일반회원 가입페이지 이동
-	@RequestMapping(value = "/memNormalSignIn")
-	public String normalSignInPage() {
-		return "content/member/normalSignIn";
+	@RequestMapping(value = "/memNormalSignUp")
+	public String normalSignUpPage() {
+		return "content/member/normalSignUp";
 	}
 
 	// 업체회원 가입페이지 이동
-	@RequestMapping(value = "/memBusiSignIn")
-	public String busiSignInPage() {
-		return "content/member/busiSignIn";
+	@RequestMapping(value = "/memBusiSignUp")
+	public String busiSignUpPage() {
+		return "content/member/busiSignUp";
 	}
 
 	// 아이디 중복 확인

@@ -250,29 +250,29 @@
 </textarea>
 		<br> <input type="checkbox" id="qual2">개인정보 수집 및 이용에
 		동의합니다. <br> <br>
-		<button class="btn btn-primary py-3 px-5" id="normalSignIn">일반회원
+		<button class="btn btn-primary py-3 px-5" id="normalSignUp">일반회원
 			회원가입</button>
-		<button class="btn btn-primary py-3 px-5" id="busiSignIn">업체회원
+		<button class="btn btn-primary py-3 px-5" id="busiSignUp">업체회원
 			회원가입</button>
 		<br> <br> <br>
 	</div>
 	<script>
 		/* 일반회원 회원가입 폼으로 이동 */
-		$('#normalSignIn').on('click', function() {
+		$('#normalSignUp').on('click', function() {
 			var q1 = $('#qual1').is(':checked');
 			var q2 = $('#qual2').is(':checked');
 			if (q1 == true && q2 == true) { //약관동의 체크 확인
-				$(location).attr('href', 'memNormalSignIn')
+				$(location).attr('href', 'memNormalSignUp')
 			} else {
 				alert('사이트 이용약관에 동의하셔야 합니다.')
 			}
 		})
 		/* 업체회원 회원가입 폼으로 이동 */
-		$('#busiSignIn').on('click', function() {
+		$('#busiSignUp').on('click', function() {
 			var q1 = $('#qual1').is(':checked');
 			var q2 = $('#qual2').is(':checked');
 			if (q1 == true && q2 == true) {
-				$(location).attr('href', 'memBusiSignIn')
+				$(location).attr('href', 'memBusiSignUp')
 			} else {
 				alert('사이트 이용약관에 동의하셔야 합니다.')
 			}

@@ -18,4 +18,19 @@
  		INSERT INTO CERTIFICATE
  		VALUES('CE'||CERTIFICATE_ID.NEXTVAL, #{userId}, #{certName}, #{certNum},'N')
  	</insert>
+ 	
+ 	<select id="getMember" resultType="MemberVO">
+ 		SELECT USER_ID,
+'{noop}'||USER_PASSWORD  USER_PASSWORD,
+USER_EMAIL,
+USER_NAME,
+USER_PHONE,
+USER_MESSAGING,
+USER_GRADE auth,
+RPRT,
+DEPOTR,
+BANK,
+ACCNT,
+USER_REGDATE FROM MEMBERS WHERE USER_ID = #{userId}
+ 	</select>
  </mapper>
