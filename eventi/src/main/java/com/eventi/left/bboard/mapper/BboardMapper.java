@@ -11,6 +11,9 @@ public interface BboardMapper {
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
 	
+	//조회수 +1
+	public int inqUpdate(BboardVO bboardVO);
+	
 	//등록
 	public int bboardInsert(BboardVO bboardVO);
 	

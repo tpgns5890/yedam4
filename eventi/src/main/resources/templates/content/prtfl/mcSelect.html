@@ -76,7 +76,7 @@
    		}).then(res => {
    			for(reply of res){
    				if(reply.rerepTgt == null){
-   				$("#reply").append(make(reply));
+   					$("#reply").append(make(reply));
    				} else {
    					$("#" + reply.rerepTgt).append(makeRe(reply));
    				}

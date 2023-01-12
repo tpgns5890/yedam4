@@ -32,7 +32,6 @@ public class BboardController {
 	@ResponseBody
 	public List<BboardVO> bSelectList(Model model, BboardVO bboardVO) {
 		model.addAttribute("type", bboardVO.getType());
-		
 		List<BboardVO> list = bboardService.bboardList(bboardVO);
 		return list;
 	}

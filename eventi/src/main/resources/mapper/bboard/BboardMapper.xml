@@ -4,11 +4,15 @@
 	
 	<!-- 조건 -->
 	<sql id="bSelect">
+		<if test="lclsf !=null and lclsf != '' and lclsf == 'all'"></if>
 		
-			<if test="lclsf != null and lclsf != '' and lclsf == 'reply'">
-				AND LCLSF = #{lclsf}
-			</if>
+		<if test="lclsf !=null and lclsf != '' and lclsf == 'genrl'">
+			AND LCLSF = #{lclsf}
+		</if>
 		
+		<if test="lclsf != null and lclsf != '' and lclsf == 'reply'">
+			AND LCLSF = #{lclsf}
+		</if>
 	</sql>
 	
 	<!-- type별 전체 게시글 조회 -->
@@ -25,6 +29,13 @@
 		FROM B_BOARD
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</select>
+	
+	<!-- 조회수 +1 -->
+	<update id="inqUpdate">
+		UPDATE B_BOARD
+		SET INQ = INQ+1
+		WHERE B_BOARD_NO = #{bBoardNo}
+	</update>
 	
 	<!-- 게시글 등록 -->
 	<insert id="bboardInsert">
