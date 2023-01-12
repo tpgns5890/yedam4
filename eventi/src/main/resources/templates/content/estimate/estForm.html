@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+<head>
+<meta charset="UTF-8">
+<style>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+  margin: 0 auto;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+.container input:checked + label:after{
+  color: 2196F3;
+}
+
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+h1 {
+  text-align: center;
+}
+.hidden {
+  display: none;
+}
+.etcVal {
+	margin-left: 20px;
+}
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+   <section class="hero-wrap hero-wrap-2"
+      style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">견적서 작성요청</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+ <!-- 행사유형 선택 -->
+<div id="bodyContents">
+<h1>어떤 행사를 기획중이신가요?</h1>
+<table id="customers">
+  <tr>
+    <td><label class="container">기념식
+  <input type="radio" name="type" value="기념식">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">축제/가요제/플리마켓
+  <input type="radio" name="type" value="축제/가요제/플리마켓">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">체육대회/단합행사
+  <input type="radio" name="type" value="체육대회/단합행사">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">세미나/포럼/워크샵
+  <input type="radio" name="type" value="세미나/포럼/워크샵">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">전시회/박람회
+  <input type="radio" name="type" value="전시회/박람회">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+    <tr>
+   <td><label class="container">신년회/송년회
+  <input type="radio" name="type" value="신년회/송년회">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+</table>
+   <input type="button" value="다음" class="next">
+</div><!-- end of bodyContents -->
+
+ <!-- 행사장소 선택 -->
+<div id="bodyContents" class="hidden">
+<h1>행사 예정 장소는 어디인가요?</h1>
+<table id="customers">
+  <tr>
+    <td><label class="container">호텔
+  <input type="radio"  name="place" value="호텔">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">이벤트/컨벤션홀
+  <input type="radio"  name="place" value="이벤트/컨벤션홀">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">주거 공간(주택,빌라 등)
+  <input type="radio"  name="place" value="주거 공간">
+   <input name="radio">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">사내 공간(강당, 사무실, 로비 등)
+  <input type="radio"  name="place" value="사내 공간">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">기타 실내(극장, 공연장, 클럽 등)
+  <input type="radio"  name="place" value="기타 실내">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">기타 야외(체육관, 공원, 캠핌장 등)
+  <input type="radio"  name="place" value="기타 야외">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">미정
+   <input type="radio" name="place" value="미정">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr class="etc">
+   <td><label class="container" >기타
+  <input type="radio" name="placeEtc" class="etc" >
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+</table>
+ <input type="button" value="이전" onclick="location.replace('/estFormType');">
+ <input type="button" value="다음" class="next">
+</div><!-- end of bodyContents -->
+
+ <!-- 행사규모 선택 -->
+<div id="bodyContents" class="hidden">
+<h1>행사 규모는 어느정도인가요?</h1>
+<table id="customers">
+  <tr>
+    <td><label class="container">30명 미만
+  <input type="radio" name="pats" value="30">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">50명 미만
+  <input type="radio" name="pats" value="50">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">100명 미만
+  <input type="radio" name="pats" value="100">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">200명 미만
+  <input type="radio" name="pats" value="200">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">300명 미만
+  <input type="radio" name="pats" value="300">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+    <tr>
+   <td><label class="container">기타
+  <input type="radio" name="patsEtc" class="etc">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+</table>
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="다음" class="next">
+</div><!-- end of bodyContents -->
+
+ <!-- 행사날짜 선택 -->
+<div id="bodyContents" class="hidden">
+<h1>행사 날짜를 선택해주세요.</h1>
+<h3>캘린더 구현예정</h3>
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="다음" class="next">
+</div><!-- end of bodyContents -->
+
+ <!-- 행사시작시간 선택 -->
+<div id="bodyContents" class="hidden">
+<h1>행사 시작 시간은 언제인가요?</h1>
+<table id="customers">
+  <tr>
+    <td><label class="container">오전
+  <input type="radio"  name="time" value="오전">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">오후
+  <input type="radio"  name="time" value="오후">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">시간</label>
+  <input name="time"></td>
+  </tr>
+</table>
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="다음" class="next">
+</div><!-- end of bodyContents -->
+
+ <!-- 행사소요시간 선택 -->
+<div id="bodyContents" class="hidden">
+<h1>행사 예상 소요시간을 선택해주세요</h1>
+<table id="customers">
+  <tr>
+    <td><label class="container">1시간
+  <input type="radio"  name="duration" value="1">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">2시간
+  <input type="radio"  name="duration" value="2">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">3시간
+  <input type="radio"  name="duration" value="3">
+   <input name="radio">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+  <tr>
+   <td><label class="container">4시간
+  <input type="radio"  name="duration" value="4">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+   <tr>
+   <td><label class="container">하루 이상
+  <input type="radio"  name="duration" value="24">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+   <tr>
+   <td><label class="container">기타
+  <input type="radio"  name="durationEtc" class="etc">
+  <span class="checkmark"></span>
+</label></td>
+  </tr>
+</table>
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="다음" class="next">
+ </div><!-- end of bodyContents -->
+ 
+  <!-- 행사지역 선택 -->
+ <div id="bodyContents" class="hidden">
+<h1>행사 예상 지역을 선택해주세요.</h1>
+<select name="sido">
+</select>
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="다음" class="next">
+</div><!-- end of bodyContents -->
+
+ <!-- 행사 희망사항 입력 -->
+<div id="bodyContents" class="hidden">
+<h1>행사 관련 희망사항을 알려주세요.</h1>
+<input placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="견적서 보내기" class="submit">
+ 
+</div>
+<script>
+//다음 버튼 클릭 시
+$('.next').click(function() {
+  $(this).parent().attr('class','hidden')
+  $(this).parent().next().removeClass('hidden');
+});
+
+//이전 버튼 클릭 시 
+$('.prev').click(function() {
+	  $(this).parent().attr('class','hidden')
+	  $(this).parent().prev().removeClass('hidden');
+	});
+
+//기타 체크시
+if($('input[name=etc]').is(':checked')) { //행사유형
+	var input = document.getElementById('input');
+	input.attr('class', 'etcVal');	
+	}
+//견적서 보내기 버튼 클릭 시
+$('.submit').click(function() {
+	if($('input[name=type]').is(':checked')) { //행사유형
+		var type = $('input[name=type]:checked').val();
+	}
+	if($('input:radio[name=place]').is(':checked')) { //행사장소
+		var place = $('input[name=place]:checked').val();
+	}
+	if($('input:radio[name=pats]').is(':checked')) { //행사규모
+		var pats = $('input[name=pats]:checked').val();
+	}
+	if($('input:radio[name=time]').is(':checked')) { //행사시작시간
+		var time = $('input[name=time]:checked').val();
+	}
+	if($('input:radio[name=duration]').is(':checked')) { //행사소요시간
+		var duration = $('input[name=duration]:checked').val();
+	}
+	
+	//작성완료 페이지 이동
+	location.href="/estFormDone"; 
+})
+</script>
+</div>
+</body>
+</html>
