@@ -96,7 +96,8 @@ ul {
 						로고<input type="radio" name="category" value="D3">
 						포스터<input type="radio" name="category" value="D4"> 
 						기타 <input type="radio" name="category" value="D5"></li>
-
+						
+						
 					<!-- 임시저장값 hidden -->
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" value=""><br /></li>
@@ -156,7 +157,28 @@ ul {
 			</div>
 
 			<script>
+			let oEditors = []
 
+			smartEditor = function() {
+				console.log("Naver SmartEditor")
+				nhn.husky.EZCreator.createInIFrame({
+					oAppRef : oEditors,
+					elPlaceHolder : "cntn",
+					sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+					fCreator : "createSEditor2"
+				})
+			}
+
+			$(document).ready(function() {
+				smartEditor()
+			})
+
+			$('#insertBtn').on('click', function insert() {
+				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+				let cntn = document.getElementById("cntn").value
+			
+			})
+		
 			//등록일 이전날짜 선택불가
 			var now_utc = Date.now()
 			var timeOff = new Date().getTimezoneOffset()*60000;
