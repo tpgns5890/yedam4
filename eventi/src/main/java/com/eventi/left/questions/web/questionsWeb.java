@@ -4,13 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.eventi.left.questions.service.QuestionsRepService;
-import com.eventi.left.questions.service.QuestionsRepVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 
@@ -18,27 +14,14 @@ import com.eventi.left.questions.service.QuestionsVO;
 @RequestMapping("/questions")
 public class questionsWeb {
 
-	@Autowired
-	QuestionsRepService qrepService;
-	@Autowired
-	QuestionsService qService;
-	
+	@Autowired QuestionsService qService;
+
 	// 공모전글에 대한 문의사항리스트
 	@PostMapping("/qList")
-	@ResponseBody	
-	public List<QuestionsVO> QuestionsList(Model model, QuestionsVO vo) {
-		System.out.println(vo.getTargetId());
+	@ResponseBody
+	public List<QuestionsVO> QuestionsList(QuestionsVO vo) {
 		return qService.questionsList(vo);
 	}
-
-	// 문의사항답변리스트
-	@PostMapping("/qrepList")
-	@ResponseBody
-	public List<QuestionsRepVO> QuestionsRepList(Model model, QuestionsRepVO vo) {
-		System.out.println(vo.getqNo());
-		return qrepService.questionsRepList(vo);
-	}
-
 
 
 }

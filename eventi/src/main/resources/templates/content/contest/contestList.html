@@ -108,7 +108,8 @@ section {
 
 
 			<!-- 자바스크립트 -->
-			<script>
+			<script th:inline="javascript">
+		    /*<![CDATA[*/
 				 contestList(); // 첫 화면 리스트출력
 
 				 //분류체크..(push만.. 체크안된것 컨틀로 값도null뜸.)
@@ -210,7 +211,8 @@ section {
 						`;
 				return p;
 				}
-					
+				
+				 /*]]>*/
 				</script>
 		</div>
 	</div>
