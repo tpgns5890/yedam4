@@ -24,9 +24,9 @@ public class EstController {
 		return "content/estimate/estList";
 	}
 	//견적요청서 행사유형 선택페이지
-	@RequestMapping(value = "/estFormType")
+	@RequestMapping(value = "/estForm")
 	public String estFormType(Model model) {
-		return "content/estimate/estFormType";
+		return "content/estimate/estForm";
 	}
 	//견적요청서 행사규모 선택페이지
 	@RequestMapping(value = "/estFormPats")
