@@ -9,6 +9,22 @@
 	</select>
 
 	<select id="getLike" resultType="LikesVO">
+		SELECT *
+		FROM LIKES
+		WHERE USER_ID = #{userId}
+		AND TARGET_NO = #{targetNo}
 	</select>
-
+	
+	<!-- 좋아요 등록 -->
+	<insert id="likeInsert">
+		INSERT INTO LIKES
+		VALUES('LI'||LIKENO_SEQ.NEXTVAL, #{userId}, #{targetNo}, #{category})
+	</insert>
+	
+	<!-- 좋아요 취소 -->
+	<delete id="likeDelete">
+		DELETE FROM LIKES
+		WHERE USER_ID = #{userId}
+		AND TARGET_NO = #{targetNo}
+	</delete>
 </mapper>

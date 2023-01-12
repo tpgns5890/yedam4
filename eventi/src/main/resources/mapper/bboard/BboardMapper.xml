@@ -21,6 +21,17 @@
 		FROM B_BOARD
 		WHERE TYPE = #{type}
 		<include refid="bSelect" />
+		ORDER BY ${order} DESC
+	</select>
+	
+	<!-- type별 좋아요 조회 -->
+	<select id="bboardLike" resultType="com.eventi.left.bboard.service.BboardVO">
+		SELECT b.*, l.like_no
+		FROM B_BOARD b JOIN LIKES l
+		ON b.b_board_no = l.target_no
+		WHERE l.user_id = #{writer}
+		AND b.type = #{type}
+		ORDER BY ${order} DESC
 	</select>
 	
 	<!-- 게시글 단건 조회 -->
