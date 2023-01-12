@@ -95,16 +95,26 @@
 h1 {
   text-align: center;
 }
+p {
+	color: red;
+}
 .hidden {
   display: none;
 }
 .etcVal {
 	margin-left: 20px;
 }
+#bodyContents {
+  background-color: white;
+  height: auto;
+  width: 800px;
+  margin: 10px auto;
+  border: 1px solid #ccc
+}
 </style>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" id="layout">
    <section class="hero-wrap hero-wrap-2"
       style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
       data-stellar-background-ratio="0.5">
@@ -160,7 +170,8 @@ h1 {
 </label></td>
   </tr>
 </table>
-   <input type="button" value="다음" class="next">
+   <input type="button" value="다음" class="next" id="type">
+  
 </div><!-- end of bodyContents -->
 
  <!-- 행사장소 선택 -->
@@ -210,15 +221,15 @@ h1 {
   <span class="checkmark"></span>
 </label></td>
   </tr>
-  <tr class="etc">
-   <td><label class="container" >기타
-  <input type="radio" name="placeEtc" class="etc" >
+  <tr>
+   <td class="etc"><label class="container" >기타
+  <input type="radio" name="etc">
   <span class="checkmark"></span>
-</label></td>
+</label><input name="etcVal" class="hidden"></td>
   </tr>
 </table>
- <input type="button" value="이전" onclick="location.replace('/estFormType');">
- <input type="button" value="다음" class="next">
+ <input type="button" value="이전" class="prev">
+ <input type="button" value="다음" class="next" id="place">
 </div><!-- end of bodyContents -->
 
  <!-- 행사규모 선택 -->
@@ -255,23 +266,24 @@ h1 {
   <span class="checkmark"></span>
 </label></td>
   </tr>
-    <tr>
+    <tr class="etc">
    <td><label class="container">기타
-  <input type="radio" name="patsEtc" class="etc">
+  <input type="radio" name="patsEtc">
   <span class="checkmark"></span>
 </label></td>
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next">
+ <input type="button" value="다음" class="next" id="pats">
 </div><!-- end of bodyContents -->
 
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
 <h1>행사 날짜를 선택해주세요.</h1>
+<input type="date" name="date" required>
 <h3>캘린더 구현예정</h3>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next">
+ <input type="button" value="다음" class="next" id="date">
 </div><!-- end of bodyContents -->
 
  <!-- 행사시작시간 선택 -->
@@ -296,7 +308,7 @@ h1 {
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next">
+ <input type="button" value="다음" class="next" id="time">
 </div><!-- end of bodyContents -->
 
  <!-- 행사소요시간 선택 -->
@@ -342,14 +354,13 @@ h1 {
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next">
+ <input type="button" value="다음" class="next" id="duration">
  </div><!-- end of bodyContents -->
  
   <!-- 행사지역 선택 -->
  <div id="bodyContents" class="hidden">
 <h1>행사 예상 지역을 선택해주세요.</h1>
-<select name="sido">
-</select>
+<input type="date" name="sido">
  <input type="button" value="이전" class="prev">
  <input type="button" value="다음" class="next">
 </div><!-- end of bodyContents -->
@@ -365,8 +376,16 @@ h1 {
 <script>
 //다음 버튼 클릭 시
 $('.next').click(function() {
-  $(this).parent().attr('class','hidden')
-  $(this).parent().next().removeClass('hidden');
+	var name = $(this).attr('id');
+	var span = document.createElement('span')
+	var checked = $('input[name='+name+']:checked');
+	// 하나라도 선택안하면 메세지 표시
+	if(!checked.length) {
+       alert('옵션을 선택해주세요.(얼럿제거예정)')
+       return false;
+	}
+	$(this).parent().attr('class','hidden')
+	$(this).parent().next().removeClass('hidden');
 });
 
 //이전 버튼 클릭 시 
@@ -376,27 +395,17 @@ $('.prev').click(function() {
 	});
 
 //기타 체크시
-if($('input[name=etc]').is(':checked')) { //행사유형
-	var input = document.getElementById('input');
-	input.attr('class', 'etcVal');	
-	}
+$('input:radio[name=etc]').click(function() { //행사유형
+	$('input[name=etcVal]').removeClass('hidden')
+	});
+	
 //견적서 보내기 버튼 클릭 시
 $('.submit').click(function() {
-	if($('input[name=type]').is(':checked')) { //행사유형
-		var type = $('input[name=type]:checked').val();
-	}
-	if($('input:radio[name=place]').is(':checked')) { //행사장소
-		var place = $('input[name=place]:checked').val();
-	}
-	if($('input:radio[name=pats]').is(':checked')) { //행사규모
-		var pats = $('input[name=pats]:checked').val();
-	}
-	if($('input:radio[name=time]').is(':checked')) { //행사시작시간
-		var time = $('input[name=time]:checked').val();
-	}
-	if($('input:radio[name=duration]').is(':checked')) { //행사소요시간
-		var duration = $('input[name=duration]:checked').val();
-	}
+	var type = $('input:radio[name=type]:checked').val(); //행사유형
+	var place = $('input[name=place]:checked').val(); //행사장소	
+	var pats = $('input[name=pats]:checked').val();	 //행사규모	
+	var time = $('input[name=time]:checked').val(); //행사시작시간	
+	var duration = $('input[name=duration]:checked').val();//행사소요시간
 	
 	//작성완료 페이지 이동
 	location.href="/estFormDone"; 
