@@ -19,29 +19,60 @@
          </div>
       </div>
    </section>
+<div class="row no-gutters">
+		<div class="col-md-7">
+			<div class="contact-wrap w-100 p-md-5 p-4">
+				<h3 class="mb-4">구직자 상세조회</h3>
+				<form action="/resumeDetail" method="POST" id="resumeDetail" name="resumeDetail"
+					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="ttl">구직신청게시글번호</label> 
+									<input type="text" class="form-control" name="resumeNo" id="resumeNo" th:value=${detail.resumeNo}>
+							</div>
+						</div>
 
-	<table>
-		<thead>
-			<tr>
-				<th>구직신청게시글번호</th>
-				<th>구직자ID</th>
-				<th>게시글내용</th>
-				<th>구인게시글번호</th>
-				<th>자기소개서</th>
-				<th>첨부파일</th>
-			</tr>		
-		</thead>
-		<tbody>
-			<tr th:each="res : ${detail}">
-				<td th:text=${res.resumeNo}></td>
-				<td th:text=${res.seekerId}></td>
-				<td th:text=${res.seekerCntn}></td>
-				<td th:text=${res.jobNo}></td>
-				<td th:text=${res.resumeCntn}></td>
-				<td th:text=${res.files}></td>
-			</tr>
-		</tbody>
-	</table>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">구직자ID</label>
+								<input type="text" class="form-control" name="seekerId" id="seekerId" th:value=${detail.seekerId}>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">구직자정보</label>
+								<textarea name="seekerCntn" class="form-control" id="seekerCntn" cols="30" rows="4" th:utext=${detail.seekerCntn}></textarea>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">구인게시글번호</label>
+								<input type="number" class="form-control" name="jobNo" id="jobNo" th:value=${detail.jobNo}>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">자기소개서</label>
+								<textarea name="resumeCntn" class="form-control" id="resumeCntn" cols="30" rows="4" th:utext=${detail.resumeCntn}></textarea>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="file" name="uploadFile" > <!-- th:text=${res.files} -->
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
 </div>
 
 </html>

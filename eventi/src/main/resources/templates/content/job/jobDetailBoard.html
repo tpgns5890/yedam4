@@ -24,6 +24,7 @@
 		
 <button type="button" class="btn btn-outline-primary" 
 		th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
+		 
 <button type="button" class="btn btn-outline-primary" 
 		th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
 		
@@ -69,10 +70,7 @@
       </tbody>
    </table>
 <script>
-/* link1 = 'ApplyForm?userId=[[admin]]'; 
-function ApplyJob(){
-	location.href = link1;
-} */
+
 </script>
 </div>
 </html>

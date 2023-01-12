@@ -47,16 +47,17 @@ public class ResumeController {
 		@RequestMapping(value = "/ApplyForm", method=RequestMethod.GET) 
 		public String getJob(Model model, MemberVO memberVO) {
 			model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨 
-			return "content/resume/ApplyForm";
+			return "content/resume/ApplyForm"; //content -html링크
 	}
 		
 	//구직신청
 	@PostMapping("/ApplyJob")
-	@ResponseBody //ajax응답
+	//@ResponseBody //ajax응답
 	public String applyJob(ResumeBoardVO resumeBoardVO, RedirectAttributes rttr) {
 		resumeService.ApplyInsert(resumeBoardVO);
-		rttr.addFlashAttribute("result", "신청완료!");
-		return "redirect:/jobDetailBoard";
+		
+		rttr.addFlashAttribute("result", "신청완료!"); //모달창
+		return "redirect:/jobDetail?jobNo=" + resumeBoardVO.getJobNo(); //redirect -mapping 링크
 		}
 
 }
