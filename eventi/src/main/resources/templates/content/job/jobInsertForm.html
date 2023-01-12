@@ -29,8 +29,9 @@
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
 				<h3 class="mb-4">구인게시글 작성</h3>
-				<form method="POST" id="jobInsert" name="jobInsert"
-					class="contactForm">
+				<form action="/jobInsert" method="POST" id="jobInsert" name="jobInsert"
+					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
+					
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -104,7 +105,7 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="file" name="img">
+								<input type="file" name="uploadFile">
 							</div>
 						</div>
 						
@@ -117,7 +118,7 @@
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="button" id="insert" value="등록"
+								<input type="submit" id="insert" value="등록"
 									class="btn btn-primary">
 								<div class="submitting"></div>
 							</div>
@@ -147,9 +148,9 @@ $(document).ready(function() {
 		
 $('#insert').on('click', function insert() {
 			 oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
-			let jobCntn = document.getElementById("jobCntn").value
-			alert(jobCntn);
-			var data = $('form[name="jobInsert"]').serializeArray();
+			let jobCntn = document.getElementById("jobCntn").value //태그 생성 
+			//alert(jobCntn);
+			 <!--var data = $('form[name="jobInsert"]').serializeArray();
 			//구직테이블 입력처리
 			$.ajax({
 				url : "/jobInsert", //controller 링크
@@ -166,7 +167,7 @@ $('#insert').on('click', function insert() {
 				fail : function(result) {
 					alert('필수항목을 입력해주세요')
 				}
-			}) 
+			}) -->
 			
 		})	
 	</script>

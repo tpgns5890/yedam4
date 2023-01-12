@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 import com.eventi.left.resume.service.ResumeService;
@@ -47,14 +46,17 @@ public class ResumeController {
 	//구직신청폼 이동
 		@RequestMapping(value = "/ApplyForm", method=RequestMethod.GET) 
 		public String getJob(Model model, MemberVO memberVO) {
-			model.addAttribute("Apply", resumeService.getApplyForm(memberVO));
+			model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨 
 			return "content/resume/ApplyForm";
-		}
+	}
 		
 	//구직신청
 	@PostMapping("/ApplyJob")
 	@ResponseBody //ajax응답
-	public int ApplyJob(ResumeBoardVO resumeBoardVO, RedirectAttributes rttr) {
-		return resumeService.ApplyInsert(resumeBoardVO);
-			}
+	public String applyJob(ResumeBoardVO resumeBoardVO, RedirectAttributes rttr) {
+		resumeService.ApplyInsert(resumeBoardVO);
+		rttr.addFlashAttribute("result", "신청완료!");
+		return "redirect:/jobDetailBoard";
+		}
+
 }

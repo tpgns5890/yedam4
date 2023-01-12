@@ -37,11 +37,11 @@
 		WHERE USER_ID = #{userId}
 	</select>
 	
-	<!-- 구직신청폼 등록 -->
-	<insert id="jobInsert">
+	<!-- 구직신청 -->
+	<insert id="ApplyInsert">
 		INSERT INTO RESUME_BOARD
-		(RESUME_NO, TITLE, JOB_CNTN, PAY, LOC, E_TYPE, W_SDAY, W_EDAY, W_HOUR, QUALIFICATION, PREFERENCE, IMG, USER_ID) <!-- DB -->
-		VALUES('RB'|| JRESUME_BOARD_SEQ.NEXTVAL, #{title}, #{jobCntn}, 
-				#{pay}, #{loc}, #{eType}, #{wSday}, #{wEday}, #{wHour}, #{qualification}, #{preference}, #{img}, #{userId}) <!-- VO -->
+		(RESUME_NO, SEEKER_ID, SEEKER_CNTN, JOB_NO, RESUME_CNTN, FILES, USER_NAME, USER_EMAIL, USER_PHONE) <!-- DB -->
+		VALUES('RB'|| RESUME_BOARD_SEQ.NEXTVAL, #{seekerId}, #{seekerCntn}, 
+				#{jobNo}, #{resumeCntn}, #{files}, #{userName}, #{userEmail}, #{userPhone}) <!-- VO -->
 	</insert>
 </mapper>
