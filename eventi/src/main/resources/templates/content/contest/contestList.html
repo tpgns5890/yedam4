@@ -101,20 +101,31 @@ section {
 			</section>
 			<!-- end -->
 
-			<!-- 페이징 -->
-			<th:block th:replace="fragments/paging :: PagingFragment"></th:block>
-			마지막페이지<span th:text="${paging.lastPage}"></span>
+			<!-- //페이징 경로 :: 문자 -->
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block th:replace="fragments/eventPaging :: component(${paging},'gopage')">
+					</div>
+				</div>
+			</div>
 
 
+			<input type="hidden" name="orderSelect" value="dt_Reg">
+			<input type="hidden" name="categorySelect" value="">
+			<input type="hidden" name="page" value="1">
+			
 
 			<!-- 자바스크립트 -->
-			<script th:inline="javascript">
-		    /*<![CDATA[*/
-		    	
+			<script>
 			contestList(); // 첫 화면 리스트출력
-			let category;
+			
+				function gopage(i) {
+					let page = $('input[name="page"]').val(i);
+					checkSelect();
+				}
+		    	
 				 
-				
 				
 				 //공모전 기본 전체리스트
 				function contestList(){
@@ -130,62 +141,56 @@ section {
 	                })
 	                
 	                
-	              //정렬기준 변경
-					$('#order').on("change",orderSelect);
-					
-					function orderSelect(){
-		        		let order = $(this).val()
-		        		console.log(order);
+	              //정렬기준 변경 ex)조회순
+					$('#order').on("change",function (){
+		        		let order = $(this).val();
+		        		$('input[name=orderSelect]').val(order);
+		        		checkSelect();
 		        		
-		        		$.ajax({
-		                    url : '../contest/List',
-		                    method : 'post',
-		                    data : {order},
-		                   // contentType : "application/json" //제이슨 여러개보낼때만.
-		                }).then(res=>{
-		                	$('#boxList').remove();
-		                	let box = $('<div>').attr("id","boxList");
-		                	$('.show').append(box);
-		                      for(contest of res){
-		                    	  $('#boxList').append(makeBox(contest));
-		                      }
-		                }).catch(error =>console.log(error));
-		          	};
+		          	});
 					
 					
 				
-					//체크박스 선택시 해당하는 분류에 대한 공고문리스트 출력 ex) 로고
+					//분류별 조회 선택 ex)현수막
 				    $('input[type=checkbox][name=category]').each(function(index){
 				    	$(this).change(function() {
 					        if (this.checked) {
-					            category = $(this).val();
+					            $('input[name=categorySelect]').val($(this).val());
 					        }
-					        $.ajax({
-			                    url : '../contest/List',
-			                    method : 'post',
-			                    data : {category},
-			                }).then(res=>{
-
-			                	//등록된 공모전이 없을경우 기존페이지로 이동.
-			                	if(res==''){
-			                		location.href='../contest/List';
-			                		alert('등록된 공모전이 없습니다');
-			                	}
-			                	
-			                	//기존 리스트 삭제 -> div생성 붙여넣기
-			                	$('#boxList').remove();
-			                	let box = $('<div>').attr("id","boxList");
-			                	$('.show').append(box);
-			                   	 for(contest of res){
-			                    	  $('#boxList').append(makeBox(contest));
-			                	}
-			                }).catch(error =>console.log(error));
-					        
+				    		checkSelect();
 					    });
 				    });
 	                
 				};
+				//전체리스트 끝
 				
+				//분류,정렬기준 전체확인 => 리스트 출력.
+				function checkSelect(){
+					let category = $('input[name=categorySelect]').val();
+					let order = $('input[name=orderSelect]').val();
+					let page = $('input[name=page]').val();
+					
+			        $.ajax({
+	                    url : '../contest/List',
+	                    method : 'post',
+	                    data : {category,order,page},
+	                }).then(res=>{
+						console.log(res);
+	                	//등록된 공모전이 없을경우 기존페이지로 이동.
+	                	if(res==''){
+	                		location.href='../contest/List';
+	                		alert('등록된 공모전이 없습니다');
+	                	}
+	                	
+	                	//기존 리스트 삭제 -> div생성 붙여넣기
+	                	$('#boxList').remove();
+	                	let box = $('<div>').attr("id","boxList");
+	                	$('.show').append(box);
+	                   	 for(contest of res){
+	                    	  $('#boxList').append(makeBox(contest));
+	                	}
+	                }).catch(error =>console.log(error));
+				}
 				
 				//체크박스 1건만 선택가능하도록 설정.
 				function doOpenCheck(check){
@@ -229,7 +234,6 @@ section {
 				return p;
 				}
 				
-				 /*]]>*/
 				</script>
 		</div>
 	</div>

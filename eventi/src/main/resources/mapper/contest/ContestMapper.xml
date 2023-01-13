@@ -3,14 +3,12 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.contest.mapper.ContestMapper">
-	
+
 	<!-- 분류별 카테고리/정렬순서 -->
 	<sql id="condition">
-		<where>
-			<if test="category != null and category != ''">
-			and	category = #{category}
-			</if>
-		</where>
+		<if test="category != null and category != ''">
+			and category = #{category}
+		</if>
 	</sql>
 
 
@@ -19,8 +17,9 @@
 		SELECT * FROM ( select ROWNUM RN, A.*FROM(
 		SELECT *
 		FROM CONTEST
-		WHERE SAVE = 'N'
-		<include refid="condition"/>
+		WHERE
+		SAVE = 'N'
+		<include refid="condition" />
 		order by ${order} DESC
 	<![CDATA[
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
@@ -38,53 +37,57 @@
 	<select id="getContest" resultType="ContestVO">
 		SELECT *
 		FROM CONTEST
-		WHERE C_NO = #{cNo}
+		WHERE
+		C_NO = #{cNo}
 	</select>
-	
-	<!-- 상세조회 조회수 업데이트 -->	
+
+	<!-- 상세조회 조회수 업데이트 -->
 	<update id="selectUpdate">
 		update contest
 		set INQ = INQ+1
 		where c_no = #{cNo}
 	</update>
-	
+
 	<!-- 상세조회 좋아요 개수 확인 -->
 	<select id="selectLikes" resultType="int">
 		SELECT count(*)
-		from CONTEST a  join LIKES b
-		                on a.c_no = b.target_no
+		from CONTEST
+		a join LIKES b
+		on a.c_no = b.target_no
 		and a.C_NO = #{cNo}
 		and b.category = #{category}
 	</select>
-	
+
 	<!-- 공모전 시퀀스번호 찾기 -->
 	<select id="getSequence" resultType="String">
-		SELECT 'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
+		SELECT
+		'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
 		FROM CONTEST
 	</select>
 
-	
+
 	<!-- 공모전 등록(cno 시퀀스 최대값+1 (문자열->숫자+1->문자열 변경) -->
 	<insert id="insertContest">
-		insert into CONTEST(C_NO,WRITER,TTL,CNTN,CATEGORY,DT_REG,DT_CLS,PAY,SAVE,STYLE)
+		insert into
+		CONTEST(C_NO,WRITER,TTL,CNTN,CATEGORY,DT_REG,DT_CLS,PAY,SAVE,STYLE)
 		values( #{cNo},
-				#{writer},
-				#{ttl},
-				#{cntn},
-				#{category},
-				#{dtReg},
-				#{dtCls},
-				#{pay},
-				#{save},
-				#{style} )
+		#{writer},
+		#{ttl},
+		#{cntn},
+		#{category},
+		current_date,
+		#{dtCls},
+		#{pay},
+		#{save},
+		#{style} )
 	</insert>
 
 	<!-- 공모전 정보수정 -->
 	<update id="updateContest">
 		update CONTEST
-    	set TTL = #{ttl},
-	        CNTN = #{cntn}
-		where c_no =  #{cNo}
+		set TTL = #{ttl},
+		CNTN = #{cntn}
+		where c_no = #{cNo}
 	</update>
 
 	<!-- 공모전 삭제 -->

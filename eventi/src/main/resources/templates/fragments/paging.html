@@ -4,44 +4,43 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-<!-- PagingFragment 선언 -->
-<div th:fragment="PagingFragment">
-	<th:if test="${empty jsFunc}">
-		<th:set var="jsFunc" value="go_page"></th:set>
-	</th:if>
+<!--================ 페이지 Area  =================-->
+<div th:fragment="component(paging,gopage)" class="blog-pagination justify-content-center d-flex">
 
 	<div class="row mt-5 page">
 		<div class="col text-center">
 			<div class="block-27">
-				<ul>
-					<!-- 이전버튼 -->
-					<th:if test="${paging.startPage>1}">
-						<li class="page-item"><a class="page-link"
-							href="javascript:${jsFunc}(${paging.startPage-1})">&lt;</a>
-					</th:if>
+				<!--================ 이전  =================-->
+				<ul class="pagination">
+					<li class="page-item" th:if="${paging.startPage>1}">
+						<a class="page-link" aria-label="Previous" th:href="|javascript:${gopage}(${paging.startPage-1})|">
+							<span aria-hidden="true"> 
+									<span class="lnr lnr-chevron-left"></span>
+							</span>
+						</a>
+					</li>
 
-					<!-- 현재페이지 표시 -->
-					<!-- 호출,if조건문 해결하기.. -->
-					<th:block th:each="i, pageStat:${#numbers.sequence(1,paging.lastPage)}">
-						
-						<th:if test="${i != paging.page}">
-							<li class="page-item">
-								<a href="javascript:gopage(this)"><span th:text="${pageStat.count}"></span></a>
-							</li>
-						</th:if>
-						
-						<th:if test="${i == paging.page}">
-							<li class="active">
-								<span th:text="${pageStat.count}"></span>
-							</li>
-						</th:if>
-						
+					<!--================ 페이지 이동 1_2_3_4_5  =================-->
+					<th:block  th:each="pag:${#numbers.sequence(paging.startPage,paging.endPage)}">
+						<li  th:if="${pag != paging.page}">
+							<a class="page-link" th:href="|javascript:${gopage}(${pag})|" th:text="${#numbers.formatInteger(pag,2)}"></a>
+						</li>
+						<li class="active" th:if="${pag==paging.page}">
+							<a class="page-link" th:text="${#numbers.formatInteger(pag,2)}"></a>
+						</li>
 					</th:block>
-
-					<!-- 다음버튼 -->
-					<th:if test="${paging.endPage<paging.lastPage}">
-						<li class="page-item"><a class="page-link" href="javascript:${jsFunc}(${paging.endPage+1})">&gt;</a>
-					</th:if>
+					
+					<!--================ 페이지 이동 1_2_3_4_5 끝 =================-->
+					
+					
+					<!--================ 이후  =================-->
+					<li class="page-item" th:if="${paging.endPage<paging.lastPage}">
+						<a class="page-link" aria-label="Next" th:href="|javascript:${gopage}(${paging.endPage+1})|">
+							<span aria-hidden="true"> 
+								<span class="lnr lnr-chevron-right"></span>
+							</span>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>

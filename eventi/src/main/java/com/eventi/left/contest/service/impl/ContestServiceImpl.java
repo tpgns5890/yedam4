@@ -38,10 +38,12 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public List<ContestVO> contestList(ContestVO vo, Paging paging) {
 		// 페이징
+		System.out.println(paging.getPage());
 		paging.setTotalRecord(mapper.contestCount(vo));
 		paging.setPageUnit(12); // 12개 출력 (default 10)
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
+		vo.setPage(paging.getStartPage());
 
 		return mapper.contestList(vo);
 
