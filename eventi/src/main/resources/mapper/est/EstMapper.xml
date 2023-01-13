@@ -25,20 +25,27 @@
 		ON e.e_no = p.e_no
 	</select>
 	
-	<!-- 견적서 단건조회 -->
+	<!-- 견적요청서 단건조회 -->
 	<select id="getEst" resultType="EstVO">
 		SELECT *
 		FROM ESTIMATE
 		WHERE E_NO = #{eno}
 	</select>
 	
-	<!-- 견적서별 제안서 전체조회 -->
+	<!-- 견적요청서별 제안서 전체조회 -->
 	<select id="getPropList" resultType="PropVO">
 	SELECT *
 	FROM PROPOSAL
 	WHERE E_NO = #{eno}
 	</select>
 	
+	<!-- 견적요청서 등록 -->
+	<insert id="insertEst">
+	INSERT INTO ESTIMATE
+	VALUES('ES'||eno_seq.nextval, #{userId}, #{eventType}, #{pats},
+	 #{expectedPl}, #{eventDate}, #{eventTime}, #{eventDuration},
+	 #{expectedLocal}, #{wishes}, sysdate, 'N')
+	</insert>
 	<!-- 업체 제안서 채택/후기수 조회 -->
 	<select id="getCount" resultType="Map">
 	SELECT 
