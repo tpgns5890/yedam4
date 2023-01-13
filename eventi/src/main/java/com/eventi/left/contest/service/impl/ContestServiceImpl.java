@@ -43,7 +43,6 @@ public class ContestServiceImpl implements ContestService {
 		paging.setPageUnit(12); // 12개 출력 (default 10)
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
-		vo.setPage(paging.getStartPage());
 
 		return mapper.contestList(vo);
 
@@ -62,7 +61,7 @@ public class ContestServiceImpl implements ContestService {
 	public int insertContest(ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo) {
 
 		// 사진 등록
-		String realFolder = "/files/contest";
+		String realFolder = "/images/";
 		File dir = new File(realFolder);
 		if (!dir.isDirectory()) {
 			dir.mkdirs();

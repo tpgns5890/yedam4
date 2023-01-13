@@ -75,7 +75,7 @@
 		#{ttl},
 		#{cntn},
 		#{category},
-		current_date,
+		#{dtReg},
 		#{dtCls},
 		#{pay},
 		#{save},
