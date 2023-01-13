@@ -1,6 +1,9 @@
 package com.eventi.left.contest.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.Paging;
+import com.eventi.left.common.service.CodeService;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.service.DesignService;
-import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 
@@ -31,10 +34,16 @@ import groovy.util.logging.Log4j;
 @Log4j
 public class ContestController {
 
-	@Autowired ContestService service;
-	@Autowired WinnerService wService;
-	@Autowired FilesService fService;
-	@Autowired DesignService dService;
+	@Autowired
+	ContestService service;
+	@Autowired
+	WinnerService wService;
+	@Autowired
+	FilesService fService;
+	@Autowired
+	DesignService dService;
+	@Autowired
+	CodeService codeService;
 
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
@@ -43,29 +52,62 @@ public class ContestController {
 		return "content/contest/contestList";
 	}
 
-	// 공모전 전체리스트
+	// 공모전 전체리스트(
 	@PostMapping("/List")
 	@ResponseBody
 	public List<ContestVO> orderList(Model model, ContestVO vo, Paging paging) {
-		System.out.println("정렬기준 :" + vo.getOrder());
-		System.out.println("분류별 :" + vo.getCategory()); // 값이 null..
+
+		// 전체리스트 조회
 		List<ContestVO> list = service.contestList(vo, paging);
-		return list;
+		// 값 세팅후 리턴할 리스트 생성
+		List<ContestVO> setList = new ArrayList<>();
+		ContestVO setVo = new ContestVO();
+
+		// 전체리스트 반복문
+		for (ContestVO cVo : list) {
+			
+			// 공모전 마감일수 키,값 
+			Map<ContestVO, Integer> getDdayList = service.getDday(vo);
+			for (Map.Entry<ContestVO, Integer> entry : getDdayList.entrySet()) {
+				System.out.println("key :" + entry.getKey().getcNo() + " / value : " + entry.getKey().getdDay());
+				
+				//공고번호가 같은값의 D-day 세팅
+				if(cVo.getcNo().equals(entry.getKey().getcNo())) {
+					setVo.setdDay(entry.getKey().getdDay());
+				}
+			}
+			// 코드별 문자열 변환후 세팅
+			setVo = cVo;
+			setVo.setCategory(codeService.codeSelect(cVo.getCategory()));
+			setVo.setStyle(codeService.codeSelect(cVo.getStyle()));
+			setList.add(setVo);
+		}
+
+//		System.out.println("정렬기준 :" + vo.getOrder());
+//		System.out.println("분류별 :" + vo.getCategory()); 
+		return setList;
 	}
 
 	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
 	public String contestSelect(Model model, ContestVO cVo) {
-		model.addAttribute("contest", service.getContest(cVo));
-		model.addAttribute("designList",dService.contestDesignList(cVo.getcNo()));
-		model.addAttribute("fileList",fService.fileList(cVo.getcNo()));
-		model.addAttribute("winnerList",wService.winnerList(cVo.getcNo()));
+
+		// 객체생성 및 코드별 문자열 변환후 세팅
+		ContestVO contest = service.getContest(cVo);
+		contest.setCategory(codeService.codeSelect(contest.getCategory())); // 카테고리
+		contest.setStyle(codeService.codeSelect(contest.getStyle())); // 스타일
+
+		model.addAttribute("contest", contest); // 모델 넘겨주기.
+		model.addAttribute("designList", dService.contestDesignList(cVo.getcNo()));
+		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
+		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
+
 		return "content/contest/contest";
 	}
 
-	// 2.공모전 상세리스트(post ajax)
+	// 2.공모전 상세리스트(ajax)
 	@PostMapping("/select")
-	public ContestVO contestSelect( ContestVO vo) {
+	public ContestVO contestSelect(ContestVO vo) {
 		vo = service.getContest(vo);
 		return vo;
 	}
