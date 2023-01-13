@@ -34,7 +34,7 @@
 				<th:block th:if="${bSelect.type =='T05'}">
 					<h3 class="mb-4">멘토링게시판 수정</h3>
 				</th:block>
-				<form method="POST" id="bBoardForm" name="bBoardForm"
+				<form action="/bboard/bUpdate" method="POST" id="bBoardForm" name="bBoardForm"
 					class="contactForm">
 					<div class="row">
 						<div class="col-md-12">
@@ -100,7 +100,7 @@
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="button" id="update" value="수정" class="btn btn-primary">
+								<input type="submit" id="update" value="수정" class="btn btn-primary">
 								<div class="submitting"></div>
 							</div>
 						</div>
@@ -128,9 +128,11 @@
 		})
 
 		$('#update').on('click', function insert() {
+			alert('클릭');
+			
 			oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 			let cntn = document.getElementById("cntn").value;
-			let bBoardNo = document.getElementById("bBoardNo").value;
+			/*let bBoardNo = document.getElementById("bBoardNo").value;
 
 			var data = $('form[name="bBoardForm"]').serializeArray();
 			//공모전테이블 등록처리
@@ -146,7 +148,7 @@
 				fail : function(result) {
 					alert('필수항목을 입력해주세요')
 				}
-			})
+			})*/
 		})
 	</script>
 </div>

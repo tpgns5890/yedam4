@@ -67,6 +67,8 @@ public class SecurityConfig {
 		
         http.rememberMe()	//자동로그인
                 .rememberMeParameter("remember");
+        
+        http.csrf().disable(); 
 
 		return http.build();
 	}

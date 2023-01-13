@@ -6,39 +6,21 @@
 
 <head>
 <style>
-	.menu-item,
-	.menu-open-button {
-	   background: #EEEEEE;
-	   border-radius: 100%;
-	   width: 30px;
-	   height: 30px;
-	   position: absolute;
-	   color: #FFFFFF;
-	   text-align: center;
-	   line-height: 35px;
-	   -webkit-transform: translate3d(0, 0, 0);
-	   transform: translate3d(0, 0, 0);
-	   -webkit-transition: -webkit-transform ease-out 200ms;
-	   transition: -webkit-transform ease-out 200ms;
-	   transition: transform ease-out 200ms;
-	   transition: transform ease-out 200ms, -webkit-transform ease-out 200ms;
-	}
-	
-	.menu-item:hover {
-	   background: #EEEEEE;
-	   color: #3290B1;
-	}
-	
-	.red {
-	   background-color: #FE4365;
-	   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.14);
-	   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.12);
-	}
-	
-	.red:hover {
-	   color: #FE4365;
-	   text-shadow: none;
-	}
+.heart {
+  width: 100px;
+  height: 100px;
+  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  transition: background-position 1s steps(28);
+  transition-duration: 0s;
+  }
+  
+  .active {
+    transition-duration: 1s;
+    background-position: -2800px 0;
+  }
+
 </style>
 </head>
 
@@ -66,7 +48,15 @@
    	<input type="radio" name="lclsf" value="reply">후기
    	
    	
-   	<a href="#" class="menu-item red"> <i class="fa fa-heart">3</i></a>
+   	<!-- 공모전 정렬기준 -->
+	<select id="order" name="order">
+		<option value="dt" selected>작성일순</option>
+		<option value="inq">조회수</option>
+	</select>
+   	
+   	<div class="stage">
+  		<div id="love" class="stage heart"></div>
+   	</div>
    	
    	
     <table class="table mb-3">
@@ -93,27 +83,40 @@
 	   </table>
    
    <script>
+   		//라디오 버튼 정렬 클릭시
    		$("input:radio[name=lclsf]").click(function(){
-   			if($("input[name=lclsf]:checked").val() == "all"){
-   				range();
-   			} else if($("input[name=lclsf]:checked").val() == "genrl"){
-   			 	range();
-   			} else if($("input[name=lclsf]:checked").val() == "reply"){
+   			//좋아요 눌려져 있을 경우 active 클래스 삭제
+   			$("#love").removeClass('active');
+   			//정렬 리스트 불러오는 함수 실행
+   			range();
+   		})
+   		
+   		//옵션 정렬 클릭시
+   		$('#order').change(function() {
+   			if($("#love").hasClass("active")) { //하트가 눌려졌을 때
+   				heart();
+   			} else if(!$("#love").hasClass("active")){ //하트가 눌리지 않았을 때
    				range();
    			}
-   		})
-
+   		});
+   		
+   		//정렬 리스트 불러오는 함수
    		function range() {
+   				//정렬 기준
 				let lclsf = $("input[name=lclsf]:checked").val();
 				let type = $("#type").text();
+				let order = $("#order option:selected").val();
 				
+				//post방식으로 리스트 불러오기
 				$.ajax({
 					url : '/bboard/bList',
 					method : 'post',
-					data : {lclsf:lclsf, type:type},
+					data : {lclsf:lclsf, type:type, order:order},
 				}).then(res => {
+					//tbody밑에 있는 데이터 지우기
 					$("#check").empty();
 					
+					//tbody에 들어갈 tr 생성
 					for(r of res){
 						console.log(r);
 						$("#check").append(makeTr(r));
@@ -121,6 +124,7 @@
 				})
    		}
    		
+   		//tr 생성 함수
    		function makeTr(r){
 	   		let tr = ` <tr onclick="location.href='/bboard/bSelect?bBoardNo=${r.bboardNo}'">
 				   			<td>${r.bboardNo}</td>
@@ -133,6 +137,45 @@
 		         
 		    return tr;
 	   	}
+   		
+   	   //하트를 클릭했을 경우 발생하는 이벤트
+  	   $(".heart").on("click", function() {
+  		 //active 클래스가 없을 경우 생성, 있을 경우 삭제
+  	     $(this).toggleClass("active");
+  		 //하트 기준으로 리스트 정렬 함수
+  	     heart();
+  	 	});
+  	   
+   	   //하트 기준으로 리스트 정렬
+  	   function heart(){
+   		 //정렬 기준
+   		 //로그인 된 아이디 집어넣을 예정
+  		 let userId = '사용자1'; 
+	     let type = $("#type").text();
+	     let order = $("#order option:selected").val();
+	     
+	     if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
+	    	 $("input:radio[name='lclsf']:radio[value='all']").prop('checked', true); // 전체 라디오 버튼선택하기
+	    	 $.ajax({
+					url : '/bboard/bLikeList',
+					method : 'post',
+					data : {writer:userId, type:type, order:order},
+				}).then(res => {
+					//tbody밑에 있는 데이터 지우기
+					$("#check").empty();
+					
+					//tbody에 들어갈 tr 생성
+					for(r of res){
+						console.log(r);
+						$("#check").append(makeTr(r));
+					}
+				})
+	     } else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
+	    	 $("input:radio[name='lclsf']:radio[value='all']").prop('checked', true); // 전체 라디오 버튼선택하기
+	    	 //정렬 리스트 불러오는 함수
+	    	 range();
+	     }
+  	   }
    </script>
 </div>
 </html>

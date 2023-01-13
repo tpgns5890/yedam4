@@ -11,6 +11,9 @@ public interface BboardService {
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
 	
+	//좋아요 조회
+	public List<BboardVO> bboardLike(BboardVO bboardVO);
+	
 	//등록
 	public int bboardInsert(BboardVO bboardVO, MultipartFile uploadFile);
 	

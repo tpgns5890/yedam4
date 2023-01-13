@@ -11,6 +11,9 @@ public interface BboardMapper {
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
 	
+	//좋아요 조회
+	public List<BboardVO> bboardLike(BboardVO bboardVO);
+	
 	//조회수 +1
 	public int inqUpdate(BboardVO bboardVO);
 	

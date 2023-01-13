@@ -13,11 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.likes.service.LikesService;
+import com.eventi.left.likes.service.LikesVO;
 
 @Controller
 @RequestMapping("/bboard")
 public class BboardController {
 	@Autowired BboardService bboardService;
+	@Autowired LikesService likeService;
 	
 	//전체조회
 	@GetMapping("/bList")
@@ -36,9 +39,21 @@ public class BboardController {
 		return list;
 	}
 	
+	//좋아요 전체 조회
+	@PostMapping("/bLikeList")
+	@ResponseBody
+	public List<BboardVO> bLikeList(BboardVO bboardVO){
+		System.out.println(bboardVO.getWriter());
+		List<BboardVO> list = bboardService.bboardLike(bboardVO);
+		return list;
+	}
+	
 	//단건조회
 	@GetMapping("/bSelect")
-	public String bSelect(Model model, BboardVO bboardVO) {
+	public String bSelect(Model model, BboardVO bboardVO, LikesVO likesVO) {
+		likesVO.setUserId("사용자1");
+		likesVO.setTargetNo(bboardVO.getBBoardNo());
+		model.addAttribute("like", likeService.getLike(likesVO));
 		model.addAttribute("bSelect", bboardService.bboardSelect(bboardVO));
 		return "content/bboard/bSelect";
 	}
@@ -66,9 +81,9 @@ public class BboardController {
 	
 	//게시글 수정
 	@PostMapping("/bUpdate")
-	@ResponseBody
-	public int bFreeUpdateForm(BboardVO bboardVO) {
-		return bboardService.bboardUpdate(bboardVO);
+	public String bFreeUpdateForm(BboardVO bboardVO) {
+		bboardService.bboardUpdate(bboardVO);
+		return "redirect:/bboard/bSelect?bBoardNo=" + bboardVO.getBBoardNo();
 	}
 	
 	//게시글 삭제

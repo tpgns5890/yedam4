@@ -29,6 +29,12 @@ public class BboardServiceImpl implements BboardService{
 		return bboardMapper.bboardSelect(bboardVO);
 	}
 	
+	//좋아요 조회
+	@Override
+	public List<BboardVO> bboardLike(BboardVO bboardVO) {
+		return bboardMapper.bboardLike(bboardVO);
+	}
+
 	//등록
 	@Override
 	public int bboardInsert(BboardVO bboardVO, MultipartFile uploadFile) {
@@ -59,6 +65,4 @@ public class BboardServiceImpl implements BboardService{
 	public int bboardDelete(BboardVO bboardVO) {
 		return bboardMapper.bboardDelete(bboardVO);
 	}
-
-
 }
