@@ -22,8 +22,6 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #04AA6D;
-  color: white;
 }
 /* The container */
 .container {
@@ -66,10 +64,6 @@
 .container input:checked ~ .checkmark {
   background-color: #2196F3;
 }
-.container input:checked + label:after{
-  color: 2196F3;
-}
-
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
 .checkmark:after {
@@ -171,7 +165,6 @@ p {
   </tr>
 </table>
    <input type="button" value="다음" class="next" id="type">
-  
 </div><!-- end of bodyContents -->
 
  <!-- 행사장소 선택 -->
@@ -225,7 +218,7 @@ p {
    <td class="etc"><label class="container" >기타
   <input type="radio" name="etc">
   <span class="checkmark"></span>
-</label><input name="etcVal" class="hidden"></td>
+</label></td>
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
@@ -280,10 +273,9 @@ p {
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
 <h1>행사 날짜를 선택해주세요.</h1>
-<input type="date" name="date" required>
-<h3>캘린더 구현예정</h3>
+<input type="date" name="date" id="date" value=""><br>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="date">
+ <input type="button" value="다음" id="dateCheck" class="next">
 </div><!-- end of bodyContents -->
 
  <!-- 행사시작시간 선택 -->
@@ -292,13 +284,13 @@ p {
 <table id="customers">
   <tr>
     <td><label class="container">오전
-  <input type="radio"  name="time" value="오전">
+  <input type="radio"  name="time" value="am">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">오후
-  <input type="radio"  name="time" value="오후">
+  <input type="radio"  name="time" value="pm">
   <span class="checkmark"></span>
 </label></td>
   </tr>
@@ -360,15 +352,30 @@ p {
   <!-- 행사지역 선택 -->
  <div id="bodyContents" class="hidden">
 <h1>행사 예상 지역을 선택해주세요.</h1>
-<input type="date" name="sido">
+<select name="locals" >
+	<option value="A00">==지역선택==</option>
+	<option value="A01">서울</option>
+	<option value="A02">인천</option>
+	<option value="A03">대구</option>
+	<option value="A04">광주</option>
+	<option value="A05">대전</option>
+	<option value="A06">울산</option>
+	<option value="A07">부산</option>
+	<option value="A08">경기도</option>
+	<option value="A09">강원도</option>
+	<option value="A10">충청도</option>
+	<option value="A11">전라도</option>
+	<option value="A12">경상도</option>
+	<option value="A13">제주도</option>
+</select>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next">
+ <input type="button" value="다음" class="next" id="local">
 </div><!-- end of bodyContents -->
 
  <!-- 행사 희망사항 입력 -->
 <div id="bodyContents" class="hidden">
 <h1>행사 관련 희망사항을 알려주세요.</h1>
-<input placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
+<input name="wish" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
  <input type="button" value="이전" class="prev">
  <input type="button" value="견적서 보내기" class="submit">
  
@@ -377,38 +384,95 @@ p {
 //다음 버튼 클릭 시
 $('.next').click(function() {
 	var name = $(this).attr('id');
-	var span = document.createElement('span')
-	var checked = $('input[name='+name+']:checked');
-	// 하나라도 선택안하면 메세지 표시
-	if(!checked.length) {
-       alert('옵션을 선택해주세요.(얼럿제거예정)')
-       return false;
+	//선택항목 별 선택여부 체크
+	switch(name){
+	case "type" :
+	case "place" :
+	case "pats" : 
+	case "time" :
+	case "duration" :
+		var checked = $('input[name='+name+']:checked');
+		if(!checked.length) {
+		$('p').remove()
+		 var p = document.createElement('p')
+		 p.setAttribute('id', 'p')
+		 p.textContent = '옵션을 선택해주세요.';
+		 $(this).parent().append(p)
+		 return false;
+		}
+			$(this).parent().attr('class','hidden')
+			$(this).parent().next().removeClass('hidden');
+		break;
+		
+	case "local" :
+		if($("[name=locals] > option:selected").val() == 'A00'){
+			$('p').remove()
+			 var p = document.createElement('p')
+			 p.setAttribute('id', 'p')
+			 p.textContent = '옵션을 선택해주세요.';
+			 $(this).parent().append(p)
+		      return false;
+			}
+			$(this).parent().attr('class','hidden')
+			$(this).parent().next().removeClass('hidden');
+		break;
+		
+	case "dateCheck" :
+		var date = $('input[name=date]').val();
+		if(date == "") {
+			$('p').remove()
+			 var p = document.createElement('p')
+			 p.setAttribute('id', 'p')
+			 p.textContent = '옵션을 선택해주세요.';
+			 $(this).parent().append(p)
+		      return false;
+		}
+		$(this).parent().attr('class','hidden')
+		$(this).parent().next().removeClass('hidden');
+		break;
 	}
-	$(this).parent().attr('class','hidden')
-	$(this).parent().next().removeClass('hidden');
 });
 
 //이전 버튼 클릭 시 
 $('.prev').click(function() {
+	  $('p').remove()
 	  $(this).parent().attr('class','hidden')
 	  $(this).parent().prev().removeClass('hidden');
 	});
+	
+//오늘 이전날짜 선택불가
+var now_utc = Date.now()
+var timeOff = new Date().getTimezoneOffset()*60000;
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+document.getElementById('date').setAttribute("min", today);
 
 //기타 체크시
-$('input:radio[name=etc]').click(function() { //행사유형
-	$('input[name=etcVal]').removeClass('hidden')
+$('input:radio[name=etc]').click(function() { 
+	var text = document.createElement('<input name="etcVal" placeholder="직접 입력"/>')
+	$(this).parent().parent().append(text)
 	});
 	
 //견적서 보내기 버튼 클릭 시
 $('.submit').click(function() {
 	var type = $('input:radio[name=type]:checked').val(); //행사유형
+	console.log(type)
 	var place = $('input[name=place]:checked').val(); //행사장소	
-	var pats = $('input[name=pats]:checked').val();	 //행사규모	
-	var time = $('input[name=time]:checked').val(); //행사시작시간	
+	console.log(place)
+	var pats = $('input[name=pats]:checked').val();	 //행사규모
+	console.log(pats)
+	var date = $('input[name=date]').val();	 //행사날짜
+	console.log(date)
+	var time = $('input[name=time]:checked').val(); //행사시작시간
+	console.log(time)
 	var duration = $('input[name=duration]:checked').val();//행사소요시간
-	
+	console.log(duration)
+	var local = $("[name=locals] > option:selected").val(); //행사지역
+	console.log(local)
+	var wish = $('input[name=wish]').val(); //행사관련 희망사항
+	var userId = 
+	console.log(wish)
 	//작성완료 페이지 이동
-	location.href="/estFormDone"; 
+	//location.href="/estFormDone"; 
 })
 </script>
 </div>

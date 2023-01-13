@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+<div layout:fragment="content">
+
+<section class="hero-wrap hero-wrap-2 mb-4 "
+      style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">공지사항 상세조회</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+	
+   <section class="ftco-section ftco-degree-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 ftco-animate">
+          
+            <img src="images/image_1.jpg" alt="" class="img-fluid">  
+            
+          
+            <h2 class="mb-3 mt-5" th:text=${nocDetail.noticeNo}></h2>
+            <h2 class="mb-3" th:text=${nocDetail.ttl}></h2>
+				<p th:text=${nocDetail.noticeCntn}></p>
+				<p th:text=${nocDetail.dt}></p>
+				<p th:text=${nocDetail.img}></p>
+				<p th:text=${nocDetail.userId}></p>
+				<p th:text=${nocDetail.see}></p>
+			
+			
+             <div class="tag-widget post-tag-container mb-5 mt-5">
+              <div class="tagcloud">
+                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocUpdate(noticeNo=${nocDetail.noticeNo})}'|">수정</a>
+                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|">삭제</a>
+              </div>
+            </div> 
+            
+        </div>
+      </div>
+     </div>
+    </section> <!-- .section -->
+<script>
+
+</script>
+</div>
+</html>

@@ -38,6 +38,7 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public List<ContestVO> contestList(ContestVO vo, Paging paging) {
 		// 페이징
+		System.out.println(paging.getPage());
 		paging.setTotalRecord(mapper.contestCount(vo));
 		paging.setPageUnit(12); // 12개 출력 (default 10)
 		vo.setFirst(paging.getFirst());
@@ -60,7 +61,7 @@ public class ContestServiceImpl implements ContestService {
 	public int insertContest(ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo) {
 
 		// 사진 등록
-		String realFolder = "/files/contest";
+		String realFolder = "/images/";
 		File dir = new File(realFolder);
 		if (!dir.isDirectory()) {
 			dir.mkdirs();

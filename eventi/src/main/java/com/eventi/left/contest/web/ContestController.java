@@ -55,7 +55,7 @@ public class ContestController {
 	// 공모전 전체리스트(
 	@PostMapping("/List")
 	@ResponseBody
-	public List<ContestVO> orderList(Model model, ContestVO vo, Paging paging) {
+	public List<ContestVO> orderList(ContestVO vo, Paging paging) {
 
 		// 전체리스트 조회
 		List<ContestVO> list = service.contestList(vo, paging);
@@ -65,11 +65,10 @@ public class ContestController {
 
 		// 전체리스트 반복문
 		for (ContestVO cVo : list) {
-			
 			// 공모전 마감일수 키,값 
 			Map<ContestVO, Integer> getDdayList = service.getDday(vo);
 			for (Map.Entry<ContestVO, Integer> entry : getDdayList.entrySet()) {
-				System.out.println("key :" + entry.getKey().getcNo() + " / value : " + entry.getKey().getdDay());
+//				System.out.println("key :" + entry.getKey().getcNo() + " / value : " + entry.getKey().getdDay());
 				
 				//공고번호가 같은값의 D-day 세팅
 				if(cVo.getcNo().equals(entry.getKey().getcNo())) {
@@ -82,6 +81,8 @@ public class ContestController {
 			setVo.setStyle(codeService.codeSelect(cVo.getStyle()));
 			setList.add(setVo);
 		}
+		
+		System.out.println("현재페이지:"+ paging.getPage());
 
 //		System.out.println("정렬기준 :" + vo.getOrder());
 //		System.out.println("분류별 :" + vo.getCategory()); 

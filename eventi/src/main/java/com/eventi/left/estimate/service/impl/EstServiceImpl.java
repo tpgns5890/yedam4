@@ -16,15 +16,20 @@ public class EstServiceImpl implements EstService {
 
 	@Autowired
 	EstMapper estMapper;
-	//견적서 단건조회
+	//견적요청서 단건조회
 	@Override
 	public EstVO getEst(String eno) {
 		return estMapper.getEst(eno);
 	}
-	//견적서 전체조회
+	//견적요청서 전체조회
 	@Override
 	public List<EstVO> getEstList(EstVO estVO) {
 		return estMapper.getEstList(estVO);
+	}
+	//견적요청서 등록
+	@Override
+	public EstVO insertEst(EstVO estVO) {
+		return estMapper.insertEst(estVO);
 	}
 	//제안서 견적서별 전체조회
 	@Override
@@ -43,5 +48,4 @@ public class EstServiceImpl implements EstService {
 	public PropVO insertProp(PropVO propVO) {
 		return estMapper.insertProp(propVO);
 	}
-	
 }
