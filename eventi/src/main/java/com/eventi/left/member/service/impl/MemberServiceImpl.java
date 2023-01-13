@@ -32,6 +32,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	MemberMapper mapper;
 	@Autowired
 	private JavaMailSender mailSender;
+	
 	//회원단건조회
 	@Override
 	public MemberVO getMember(String userId) {
@@ -110,8 +111,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// username을 mapper단건조회
-		// throws
 		MemberVO vo = mapper.getMember(username);
 		return vo;
 	}

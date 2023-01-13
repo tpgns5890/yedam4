@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,8 +24,7 @@ public class MemberVO implements UserDetails {
 	private String userId;
 	private String userPassword;
 	private String userEmail;
-	@SuppressWarnings("unused")
-	private String userName;
+	private String name;
 	private int userPhone;
 	private String userMessaging;
 	private String auth;
@@ -46,6 +46,7 @@ public class MemberVO implements UserDetails {
 	public String getPassword() {
 		return userPassword;
 	}
+
 
 	@Override public Collection<? extends GrantedAuthority> getAuthorities() {
 	  ArrayList<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
