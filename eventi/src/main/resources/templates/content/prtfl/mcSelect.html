@@ -68,6 +68,7 @@
    		let replyTag = $('#userId').text();
    		let p = $("<p>").text('test합니다.');
    		
+   		//댓글, 대댓글 불러오는 ajax
    		$.ajax({
    			url : '/prtfl/mcReply',
    			method : 'post',
@@ -75,14 +76,16 @@
    			contentType : "application/json"
    		}).then(res => {
    			for(reply of res){
+   				//댓글일 경우
    				if(reply.rerepTgt == null){
    					$("#reply").append(make(reply));
-   				} else {
+   				} else { //대댓글일 경우
    					$("#" + reply.rerepTgt).append(makeRe(reply));
    				}
    			}
    		})
    		
+   		//댓글 tr생성
    		function make(reply){
    			let p = `
                   <li class="comment">
@@ -97,6 +100,7 @@
    			return p;
    		}
    		
+   		//대댓글 tr생성
    		function makeRe(reply){
    			let p = `<ul class="children">
                 <li class="comment">

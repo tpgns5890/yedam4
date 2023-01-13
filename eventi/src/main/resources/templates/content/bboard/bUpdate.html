@@ -34,8 +34,7 @@
 				<th:block th:if="${bSelect.type =='T05'}">
 					<h3 class="mb-4">멘토링게시판 수정</h3>
 				</th:block>
-				<form action="/bboard/bUpdate" method="POST" id="bBoardForm" name="bBoardForm"
-					class="contactForm">
+				<form action="/bboard/bUpdate" method="POST" id="bBoardForm" name="bBoardForm" class="contactForm" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -94,7 +93,7 @@
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="file" name="img">
+								<input type="file" name="uploadFile">
 							</div>
 						</div>
 

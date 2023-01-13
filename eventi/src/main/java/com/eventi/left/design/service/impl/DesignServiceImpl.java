@@ -17,6 +17,7 @@ public class DesignServiceImpl implements DesignService{
 	@Override
 	public List<DesignVO> designList(DesignVO vo, Paging paging) {
 		paging.setTotalRecord(mapper.count(vo));
+		paging.setPageUnit(4);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 		return mapper.designList(vo);

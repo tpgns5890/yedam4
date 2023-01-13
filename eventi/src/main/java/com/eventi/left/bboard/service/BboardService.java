@@ -18,7 +18,7 @@ public interface BboardService {
 	public int bboardInsert(BboardVO bboardVO, MultipartFile uploadFile);
 	
 	//수정
-	public int bboardUpdate(BboardVO bboardVO);
+	public int bboardUpdate(BboardVO bboardVO, MultipartFile uploadFile);
 	
 	//삭제
 	public int bboardDelete(BboardVO bboardVO);

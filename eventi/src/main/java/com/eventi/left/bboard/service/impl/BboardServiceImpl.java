@@ -56,7 +56,20 @@ public class BboardServiceImpl implements BboardService{
 	
 	//수정
 	@Override
-	public int bboardUpdate(BboardVO bboardVO) {
+	public int bboardUpdate(BboardVO bboardVO, MultipartFile uploadFile) {
+		// 사진 등록
+		String realFolder = "/files/bboard";
+		File dir = new File(realFolder);
+		if(!dir.isDirectory()) {
+			dir.mkdirs();
+		}
+					
+		//파일 이름 저장
+		String img = uploadFile.getOriginalFilename();
+					
+		//VO에 IMG 부분에 파일 이름 저장
+		bboardVO.setImg(img);
+		
 		return bboardMapper.bboardUpdate(bboardVO);
 	}
 	
