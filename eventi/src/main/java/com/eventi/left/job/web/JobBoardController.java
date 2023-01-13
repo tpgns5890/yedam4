@@ -34,7 +34,7 @@ public class JobBoardController {
 	
 	//게시글 등록
 		@PostMapping("/jobInsert")
-		 //ajax응답
+		 //form으로 보냄
 		public String JobInsertForm(JobBoardVO jobBoardVO, MultipartFile uploadFile) {
 			jobService.jobInsert(jobBoardVO, uploadFile ); //값이 vo자동으로 저장
 			return "redirect:/jobList";
@@ -57,7 +57,7 @@ public class JobBoardController {
 	
 	//게시글 수정
 		@PostMapping("/jobUpdate")
-		@ResponseBody
+		@ResponseBody //ajax방식
 		public int jobUpdate(JobBoardVO jobBoardVO) {
 			return jobService.getJobUpdate(jobBoardVO);
 			//rttr.addFlashAttribute("result", "게시글 수정 완료!");

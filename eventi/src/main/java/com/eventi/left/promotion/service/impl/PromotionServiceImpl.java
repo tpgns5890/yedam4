@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.promotion.mapper.PromotionBoardMapper;
@@ -29,10 +27,9 @@ public class PromotionServiceImpl implements PromotionService{
 	//게시글 상세조회
 	@Override
 	public PromotionVO proDetail(PromotionVO promotionVO) {
-		// TODO Auto-generated method stub
+		proMapper.seeUp(promotionVO);
 		return proMapper.proDetail(promotionVO);
-	}
-	
+	}	
 
 	//게시글 등록
 	@Override
@@ -52,6 +49,20 @@ public class PromotionServiceImpl implements PromotionService{
 		promotionVO.setImg(img);
 				
 		return proMapper.proInsert(promotionVO);
+	}
+
+	//게시글 수정
+	@Override
+	public int proUpdate(PromotionVO promotionVO) {
+		// TODO Auto-generated method stub
+		return proMapper.proUpdate(promotionVO);
+	}
+	
+	//게시글 삭제
+	@Override
+	public int proDelete(PromotionVO promotionVO) {
+		// TODO Auto-generated method stub
+		return proMapper.proDelete(promotionVO);
 	}
 
 }

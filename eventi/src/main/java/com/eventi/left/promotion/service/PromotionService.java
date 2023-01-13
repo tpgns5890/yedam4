@@ -9,13 +9,15 @@ public interface PromotionService {
 	//홍보게시물 전체조회
 	public List<PromotionVO> proList(PromotionVO promotionVO);
 	
-	/*
-	 * //게시물 조회수 public int seeUp(PromotionVO promotionVO);
-	 */
-	
 	//게시물 상세조회
 	public PromotionVO proDetail(PromotionVO promotionVO);
 	
 	//게시글 등록
 	public int proInsert(PromotionVO promotionVO, MultipartFile uploadFile);
+	
+	//게시글 수정
+	public int proUpdate(PromotionVO promotionVO);
+	
+	//게시글 삭제
+	public int proDelete(PromotionVO promotionVO);
 }

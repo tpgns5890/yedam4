@@ -15,7 +15,7 @@
 				class="row no-gutters slider-text align-items-end justify-content-center">
 				<div
 					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<h2 class="mb-0 bread">홍보게시글 등록</h2>
+					<h2 class="mb-0 bread">홍보게시글 수정</h2>
 				</div>
 			</div>
 		</div>
@@ -24,15 +24,16 @@
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">홍보게시글 작성</h3>
-				<form action="/proInsert" method="POST" id="proInsert" name="proInsert"
+				<h3 class="mb-4">홍보게시글 수정</h3>
+				<form action="/proUpdate" method="POST" id="proUpdate" name="proUpdate"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
-					
 					<div class="row">
 					 	<div class="col-md-12">
 							<div class="form-group">
+							<input type="hidden" name="proNo" id="proNo" th:value="${proUpdate.proNo}">
+							
 								<label class="label" for="#">회원ID</label>
-								<input type="text" name="userId" id="userId">
+								<input type="text" name="userId" id="userId" >
 							</div>
 						</div>
 						 
@@ -40,49 +41,49 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="ttl">행사명</label> 
-									<input type="text" class="form-control" name="eName" id="eName" >
+									<input type="text" class="form-control" name="eName" id="eName" th:value=${proUpdate.eName} >
 							</div>
 						</div>
 
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">행사시작일</label>
-								<input type="date" class="form-control" name="eSday" id="eSday" >
+								<input type="date" class="form-control" name="eSday" id="eSday" th:value=${proUpdate.eSday}>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">행사종료일</label>
-								<input type="date" class="form-control" name="eEday" id="eEday" >
+								<input type="date" class="form-control" name="eEday" id="eEday" th:value=${proUpdate.eEday}>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">위치</label>
-								<input type="text" class="form-control" name="loc" id="loc" >
+								<input type="text" class="form-control" name="loc" id="loc" th:value=${proUpdate.loc}>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">소개글</label>
-								<textarea name="intro" class="form-control" id="intro" cols="30" rows="4" ></textarea>
+								<textarea name="intro" class="form-control" id="intro" cols="30" rows="4" th:utext=${proUpdate.intro}></textarea>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">행사유형</label>
-								<input type="text" class="form-control" name="eType" id="eType" >
+								<input type="text" class="form-control" name="eType" id="eType" th:value=${proUpdate.eType}>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">입장료</label>
-								<input type="text" class="form-control" name="entrance" id="entrance" >
+								<input type="text" class="form-control" name="entrance" id="entrance" th:value=${proUpdate.entrance}>
 							</div>
 						</div>
 						
@@ -90,7 +91,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">수용인원</label>
-								<input type="text" class="form-control" name="accommodate" id="accommodate" >
+								<input type="text" class="form-control" name="accommodate" id="accommodate" th:value=${proUpdate.accommodate}>
 							</div>
 						</div>
 						
@@ -102,7 +103,7 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="submit" id="insert" value="등록"
+								<input type="submit" id="update" value="수정"
 									class="btn btn-primary">
 								<div class="submitting"></div>
 							</div>
@@ -130,30 +131,34 @@ $(document).ready(function() {
 	smartEditor()
 })
 		
-$('#insert').on('click', function insert() {
-			 oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
-			let intro = document.getElementById("intro").value //태그 생성 
-			//alert(jobCntn);
-			 <!--var data = $('form[name="jobInsert"]').serializeArray();
-			//구직테이블 입력처리
-			$.ajax({
-				url : "/jobInsert", //controller 링크
-				method : 'post',
-				contentType : 'application/x-www-form-urlencoded',
-				data : data,
-				success : function(data) {
-					if (data == 1){
-					alert('등록완료!');
-					location.href = '/jobList';
-					}else 
-						alert('등록실패')
-				},
-				fail : function(result) {
-					alert('필수항목을 입력해주세요')
-				}
-			}) -->
-			
-		})	
+$('#update').on('click', function update() {
+	alert("클릭")
+	oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", [])
+	let intro = document.getElementById("intro").value;
+	alert(intro)
+	
+	let proNo = document.getElementById("proNo").value;
+
+	var data = $('form[name="proUpdate"]').serializeArray();
+
+	//홍보테이블 수정처리
+	$.ajax({
+		url : "/proUpdate",
+		method : 'post',
+		contentType : 'application/x-www-form-urlencoded',
+		data : data,
+		success : function(data) {
+			if(data == 1){
+			alert('수정완료!');
+			location.href = '/proList';
+			}else
+				alert('수정실패')
+		},
+		fail : function(result) {
+			alert('필수항목을 입력해주세요')
+		}
+	})
+})
 	</script>
 </div>
 </html>
