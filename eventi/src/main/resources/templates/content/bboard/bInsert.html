@@ -94,7 +94,12 @@
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="file" name="uploadFile">
+								<input type="file" id="imgInp" name="uploadFile"/ >
+								<img id="blah" src="#" alt = "your image" width="250px" />
+								<button type="button" id="cancel" class="btn btn-warning cancel">
+					              <span>Cancel</span>
+					          </button>
+								
 							</div>
 						</div>
 
@@ -126,7 +131,33 @@
 		$(document).ready(function() {
 			smartEditor()
 		})
-
+	     
+	    //파일 업로드 이미지 미리보기
+	    //파일 INPUT창에 변화가 있을 경우 실행
+	    $("#imgInp").on('change', function() {
+			readURL(this);
+		});
+		
+	    //이미지 미리보기 처리
+		function readURL(input){
+			if(input.files && input.files[0]){
+				var reader = new FileReader();
+				
+				reader.onload = function(e) {
+					$("#blah").attr('src', e.target.result);
+				}
+				
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+	    
+	    //파일 삭제
+	    $("#cancel").on('click', function() {
+	    	$("#imgInp").val('');
+	    })
+	    
+	    
+		//네이버 에디터 글씨 스타일 적용
 		$('#insert').on('click', function insert() {
 			oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 			let cntn = document.getElementById("cntn").value

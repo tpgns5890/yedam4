@@ -81,8 +81,8 @@ public class BboardController {
 	
 	//게시글 수정
 	@PostMapping("/bUpdate")
-	public String bFreeUpdateForm(BboardVO bboardVO) {
-		bboardService.bboardUpdate(bboardVO);
+	public String bFreeUpdateForm(BboardVO bboardVO, MultipartFile uploadFile) {
+		bboardService.bboardUpdate(bboardVO, uploadFile);
 		return "redirect:/bboard/bSelect?bBoardNo=" + bboardVO.getBBoardNo();
 	}
 	

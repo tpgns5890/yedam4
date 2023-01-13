@@ -48,16 +48,19 @@
    	<input type="radio" name="lclsf" value="reply">후기
    	
    	
-   	<!-- 공모전 정렬기준 -->
+   	<!-- 게시글 조회수, 작성일순 정렬기준 -->
 	<select id="order" name="order">
 		<option value="dt" selected>작성일순</option>
 		<option value="inq">조회수</option>
 	</select>
+	
+	<!-- 게시글 검색 -->
+	<input type="text" name="search">
+	<input type="button" id="find" value="찾기"><span></span></input>
    	
    	<div class="stage">
   		<div id="love" class="stage heart"></div>
    	</div>
-   	
    	
     <table class="table mb-3">
 	      <thead class="thead-dark">
@@ -100,6 +103,30 @@
    			}
    		});
    		
+   		$('#find').click(function() {
+   			let search = $("input[name=search]").val();
+   			let type = $("#type").text();
+   			
+   			//post방식으로 리스트 불러오기
+			$.ajax({
+				url : '/bboard/bList',
+				method : 'post',
+				data : {type:type},
+			}).then(res => {
+				//tbody밑에 있는 데이터 지우기
+				$("#check").empty();
+				
+				//tbody에 들어갈 tr 생성
+				for(r of res){
+					if(r.ttl.includes(search) || r.cntn.includes(search)){
+						$("#check").append(makeTr(r));
+		   			}
+				}
+			})
+   			
+			$("input[name=search]").val('');
+   		})
+   		
    		//정렬 리스트 불러오는 함수
    		function range() {
    				//정렬 기준
@@ -118,7 +145,6 @@
 					
 					//tbody에 들어갈 tr 생성
 					for(r of res){
-						console.log(r);
 						$("#check").append(makeTr(r));
 					}
 				})
@@ -166,7 +192,6 @@
 					
 					//tbody에 들어갈 tr 생성
 					for(r of res){
-						console.log(r);
 						$("#check").append(makeTr(r));
 					}
 				})
