@@ -18,6 +18,6 @@ public interface MemberService{
 
 	public ResponseEntity<JsonNode> crtfCheck(String name, String qNo); //자격증 진위확인
 
-	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
 }

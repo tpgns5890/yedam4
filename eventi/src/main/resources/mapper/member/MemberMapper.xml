@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
- <mapper namespace="com.eventi.left.member.mapper.MemberMapper">
- 
- 	<!-- 아이디 중복체크 -->
- 	<select id="IdCheck" resultType="int">
- 		 SELECT COUNT(*) FROM MEMBERS WHERE USER_ID = #{inputId}
- 	</select>
- 	
- 	<insert id="insertMember">
- 		INSERT INTO MEMBERS (USER_ID, USER_PASSWORD, USER_EMAIL, USER_NAME, USER_MESSAGING, USER_GRADE, USER_REGDATE)
- 		VALUES(#{userId}, #{userPassword}, #{userEmail}, #{userName}, #{userMessaging}, 'G1', SYSDATE)
- 	</insert>
- 	
- 	<insert id="insertCrtf">
- 		INSERT INTO CERTIFICATE
- 		VALUES('CE'||CERTIFICATE_ID.NEXTVAL, #{userId}, #{certName}, #{certNum},'N')
- 	</insert>
- 	
- 	<select id="getMember" resultType="MemberVO">
- 		SELECT USER_ID,
-'{noop}'||USER_PASSWORD  USER_PASSWORD,
-USER_EMAIL,
-USER_NAME,
-USER_PHONE,
-USER_MESSAGING,
-USER_GRADE auth,
-RPRT,
-DEPOTR,
-BANK,
-ACCNT,
-USER_REGDATE FROM MEMBERS WHERE USER_ID = #{userId}
- 	</select>
- </mapper>
+
+<mapper namespace="com.eventi.left.member.mapper.MemberMapper">
+
+	<!-- 아이디 중복체크 -->
+	<select id="IdCheck" resultType="int">
+		SELECT COUNT(*) FROM MEMBERS WHERE USER_ID = #{inputId}
+	</select>
+
+	<insert id="insertMember">
+		INSERT INTO MEMBERS (USER_ID, USER_PASSWORD, USER_EMAIL, USER_NAME,
+		USER_MESSAGING, USER_GRADE, USER_REGDATE)
+		VALUES(#{userId}, #{userPassword}, #{userEmail}, #{name}, #{userMessaging},
+		'ROLE_MEMBER', SYSDATE)
+	</insert>
+
+	<insert id="insertCrtf">
+		INSERT INTO CERTIFICATE
+		VALUES('CE'||CERTIFICATE_ID.NEXTVAL, #{userId}, #{certName}, #{certNum},'N')
+	</insert>
+
+	<select id="getMember" resultType="MemberVO">
+		SELECT 	USER_ID,
+				USER_PASSWORD,
+				USER_EMAIL,
+				USER_NAME name,
+				USER_PHONE,
+				USER_MESSAGING,
+				USER_GRADE auth,
+				RPRT,
+				DEPOTR,
+				BANK,
+				ACCNT,
+				USER_REGDATE 
+		FROM MEMBERS 
+		WHERE USER_ID = #{userId}
+	</select>
+</mapper>
