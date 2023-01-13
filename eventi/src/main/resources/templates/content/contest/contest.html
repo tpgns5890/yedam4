@@ -171,6 +171,9 @@ button {
 	            method:"post",
 	            data : {targetId:cNo, category:'T01'},
 			}).then(res => {
+				
+				console.log(res);
+				
 				$("#question").remove();
 				$('#contestCntn').append($('<p>').attr("id","question"));
 
@@ -184,6 +187,7 @@ button {
 						$("#question").append(make(data));
 					}  else {
 						$("#" + data.rerepTgt).append(makeRe(data));
+						
 						
 					} 
 					

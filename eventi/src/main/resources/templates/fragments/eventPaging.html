@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+
+<!--================ 페이지 Area  =================-->
+<div th:fragment="component(paging,gopage)" class="blog-pagination justify-content-center d-flex">
+
+	<div class="row mt-5 page">
+		<div class="col text-center">
+			<div class="block-27">
+				<!--================ 이전  =================-->
+				<ul class="pagination">
+					<li class="page-item" th:if="${paging.startPage>1}">
+						<a class="page-link" aria-label="Previous" th:onclick="|gopage(${paging.startPage-1})|">
+							<span aria-hidden="true"> 
+									<span class="lnr lnr-chevron-left"></span>
+							</span>
+						</a>
+					</li>
+
+					<!--================ 페이지 이동 1_2_3_4_5  =================-->
+					<th:block  th:each="pag:${#numbers.sequence(paging.startPage,paging.endPage)}">
+						<li  th:if="${pag != paging.page}">
+							<a class="page-link" th:onclick="|gopage(${pag})|" th:text="${#numbers.formatInteger(pag,2)}"></a>
+						</li>
+						<li class="active" th:if="${pag==paging.page}">
+							<a class="page-link" th:text="${#numbers.formatInteger(pag,2)}"></a>
+						</li>
+					</th:block>
+					
+					<!--================ 페이지 이동 1_2_3_4_5 끝 =================-->
+					
+					
+					<!--================ 이후  =================-->
+					<li class="page-item" th:if="${paging.endPage<paging.lastPage}">
+						<a class="page-link" aria-label="Next" th:href="|javascript:${gopage}(${paging.endPage+1})|">
+							<span aria-hidden="true"> 
+								<span class="lnr lnr-chevron-right"></span>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

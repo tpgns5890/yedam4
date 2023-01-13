@@ -1,8 +1,8 @@
 package com.eventi.left.contest.service;
 
 import java.util.Date;
-
 import org.springframework.format.annotation.DateTimeFormat;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,11 +17,15 @@ public class ContestVO {
 	private String ttl; 	 //제목
 	private String cntn; 	 //내용
 	private String category; //카테고리
-	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date dtReg; 	 //등록일
-	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dtCls;		 //마감일
-	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dtExtns; 	 //마감연장일
 	private int pay; 	 //결제금액(등록비+총상금)
 	private String save = "N";	 //임시저장여부(Y:임시저장)
@@ -37,11 +41,10 @@ public class ContestVO {
 	private int last;
 	
 	//좋아요
-	private Integer likes; 
+	private int likes; 
 	
-	//남은날짜
+	//D-day
 	private int dDay;
-	
 	
 	
 	public String getcNo() {
