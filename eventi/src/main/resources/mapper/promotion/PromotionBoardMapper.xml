@@ -9,6 +9,13 @@
 		FROM PROMOTION_BOARD
 	</select>
 	
+	<!-- 게시판 조회수 -->
+	<update id="seeUp" parameterType="com.eventi.left.promotion.service.PromotionVO">
+		UPDATE PROMOTION_BOARD SET
+		SEE = SEE+1
+		WHERE PRO_NO = #{proNo}
+	</update>
+	
 	<!-- 게시글 상세조회 -->
 	<select id="proDetail" resultType="com.eventi.left.promotion.service.PromotionVO">
 		SELECT *
@@ -16,12 +23,6 @@
 		WHERE PRO_NO  = #{proNo}
 	</select>
 	
-	<!-- 게시판 조회수 -->
-	<update id="proUp" parameterType="int">
-		UPDATE PROMOTION_BOARD SET
-		SEE = SEE+1
-		WHERE PRO_NO = #{proNo}
-	</update>
 	
 	<!-- 게시글 등록 -->
 	<insert id="proInsert">
@@ -31,4 +32,25 @@
 				#{eSday}, #{eEday}, #{loc}, #{intro}, #{eType}, #{entrance}, #{accommodate}, #{img}, #{see}) <!-- VO -->
 	</insert>
 	
+	<!-- 게시글 수정 proNo, userid, see (부분수정)-->
+	<update id="proUpdate" parameterType="com.eventi.left.promotion.service.PromotionVO">
+		UPDATE PROMOTION_BOARD
+		SET 
+		E_NAME = #{eName},
+		E_SDAY = #{eSday},
+		E_EDAY = #{eEday},
+		LOC = #{loc},
+		INTRO = #{intro},
+		E_TYPE = #{eType},
+		ENTRANCE = #{entrance},
+		ACCOMMODATE = #{accommodate},
+		IMG = #{img}	
+		WHERE PRO_NO=#{proNo}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="proDelete">
+		DELETE FROM PROMOTION_BOARD
+		WHERE PRO_NO=#{proNo}
+	</delete>
 </mapper>

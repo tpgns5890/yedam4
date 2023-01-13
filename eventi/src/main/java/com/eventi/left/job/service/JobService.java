@@ -6,13 +6,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface JobService {
 	
-	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO); //전체조회
+	//전체조회
+	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO); 
 	
-	public JobBoardVO getJob(JobBoardVO jobBoardVO); //게시물 상세조회
+	//게시물 상세조회
+	public JobBoardVO getJob(JobBoardVO jobBoardVO); 
 	
-	public int getJobUpdate(JobBoardVO jobBoardVO); //게시글수정
+	//게시글수정
+	public int getJobUpdate(JobBoardVO jobBoardVO); 
 	
-	public int jobInsert(JobBoardVO jobBoardVO, MultipartFile uploadFile); //게시글 등록
+	//게시글 등록
+	public int jobInsert(JobBoardVO jobBoardVO, MultipartFile uploadFile); 
 	
-	public int jobDelete(JobBoardVO jobBoardVO); //게시글 삭제
+	//게시글 삭제
+	public int jobDelete(JobBoardVO jobBoardVO); 
 }
