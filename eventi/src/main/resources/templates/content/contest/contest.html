@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style>
-ul {
-	list-style: none;
-}
-button {
-	width: 150px;
-	height : 70px;
-	margin: 5px;
-	padding: 0;
-	text-align: center;
-}
-.question{
-	width: 100px;
-	height : 40px;
-	margin: 5px;
-	padding: 0;
-	text-align: center;
-}
-</style>
+	<meta charset="UTF-8">
+	<title>공모전 상세조회</title>
+	<style>
+		ul {
+			list-style: none;
+		}
+
+		button {
+			width: 150px;
+			height: 70px;
+			margin: 5px;
+			padding: 0;
+			text-align: center;
+		}
+
+		.cotestCntn {
+			width: 100px;
+			height: 70px;
+			margin: 5px;
+			padding: 0;
+			text-align: center;
+		}
+	</style>
 </head>
+
 <body>
 	<div layout:fragment="content" class="content">
 		<section class="hero-wrap hero-wrap-2"
@@ -33,10 +35,8 @@ button {
 			data-stellar-background-ratio="0.5">
 			<div class="overlay"></div>
 			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+				<div class="row no-gutters slider-text align-items-end justify-content-center">
+					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
 						<h2 class="mb-0 bread">공모전 상세조회</h2>
 
 					</div>
@@ -50,31 +50,31 @@ button {
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 파일이미지 출력 -->
 						<div th:each="f : ${fileList}">
-							<!-- +${f.fNm} -->
-							<a th:href="|@{/files/contest/}${f.fNm}|" class="image-popup prod-img-bg">
-							<img th:src="|@{/files/contest/}${f.fNm}|" style="width: 540px; height: 785px" class="img-fluid" alt="Colorlib Template"></a>
+							<a th:href="|@{/image/}${f.fNm}|" class="image-popup prod-img-bg">
+								<img th:src="|@{/images/}${f.fNm}|" style="width: 540px; height: 785px"
+									class="img-fluid" alt="Colorlib Template"></a>
 						</div>
 					</div>
-					<div
-						class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+					<div class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+						<div id="show"></div>
 						<span th:text=${contest.cNo} id="cNo"></span>
-						<h3>
-							<span th:text=${contest.category}></span>
-							<span th:text=${contest.ttl}></span>
-						</h3>
+							<p th:text=${contest.category}></p>
+							<h1 th:text=${contest.ttl}></h1>
 
 						<div class="rating d-flex">
-							<p class="text-left mr-4">
-								&#128680;<span th:text=${contest.rprt}></span> <span
-									style='font-size: 30px;'>&#128065;</span><span
-									th:text=${contest.inq}></span> <span class="img_emoti">좋아요</span><span
-									th:text=${contest.likes}></span>
-							</p>
+							<div class="text-left mr-4"> &#128680;
+								 <div class="stage" style="float: right;">
+									<div id="love" class="stage heart" onclick="loveCheck(this)"></div>
+									<span th:text=${contest.likes}></span>
+								</div>
+								<span th:text=${contest.rprt}></span>
+								<span style='font-size: 30px;'>&#128065;</span>
+								<span th:text=${contest.inq}></span>
+							</div>
 						</div>
 						<div th:each="w : ${winnerList}">
 							<p class="price">
-								<span
-									th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
+								<span th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
 							</p>
 						</div>
 
@@ -90,21 +90,25 @@ button {
 							<div class="col-md-12"></div>
 						</div>
 
-						전체회원
-						<p>
-							<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
-							<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
-						</p>
+						<!-- 공모전 작성자 제외 모든회원 -->
+						<div th:if="|${session.member.getUserId()}| != ${contest.writer}">
+							<p>
+								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
+								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
+							</p>
+						</div>
 
-						공모전 등록한 회원만
-						<div>
-							<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button type="button" class="btn btn-primary py-3 px-5 mr-2">수정</button></a>
-							<button type="button" id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
-						</div>
-						<div>
-							<a href="cart.html" ><button type="button" class="btn btn-primary py-3 px-5">마감연장</button></a>
-							<a href="cart.html" ><button type="button" class="btn btn-primary py-3 px-5">결과등록</button></a>
-						</div>
+						<!-- 공모전 작성자만 -->
+						 <div th:if="|${session.member.getUserId()}| == ${contest.writer}">
+							<div>
+								<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button type="button" class="btn btn-primary py-3 px-5 mr-2">수정</button></a>
+								<button type="button" id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
+							</div>
+							<div>
+								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5">마감연장</button></a>
+								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5">결과등록</button></a>
+							</div>
+						 </div>
 					</div>
 				</div>
 
@@ -132,10 +136,10 @@ button {
 
 							<div class="tab-pane fade show active" id="v-pills-1"
 								role="tabpanel" aria-labelledby="day-1-tab">
-								<div class="p-4" style="height: 700px">
+								<div class="p-4" style="height: 1400px">
 									<div id="contestCntn">
 										 <div th:if="${contest.cntn} != null">
-											<span id="question" th:text=${contest.cntn}></span>
+											<span id="cotestCntn" th:text=${contest.cntn}></span>
 										 </div>
 									</div>
 								</div>
@@ -145,55 +149,105 @@ button {
 				</div>
 			</div>
 		</section>
-		<script>
+		
+		<script th:inline="javascript">
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		let cNo = $('#cNo').text();
 	
 		//공모전 삭제
 		$('#delBtn').on('click', delContest);
 		function delContest(){
-			location.href='/contest/delete/' +cNo;
-		}
+			if (!confirm('공모전을 삭제하시겠습니까?')) {
+				return false;
+			}
+			
+			$.ajax({
+	            url:'../contest/delete',
+	            method:"post",
+	            data : {cNo},
+	            beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    				xhr.setRequestHeader(header, token);
+                },
+			}).then(res => {
+				if(res == 1){
+					alert('삭제 완료');
+					location.href="../contest/List";
+				}else {
+					alert('응모작품이 있어 삭제 불가능합니다.');
+					location.href="../contest/select?cNo="+ cNo;
+					
+				}
+				
+			})
+		};
 		
 		//요청사항/문의내용/참여작 버튼이벤트
 		$('#v-pills-1-tab').on('click', contentSelect);
 		$('#v-pills-2-tab').on('click', questions);
 		$('#v-pills-3-tab').on('click', contest);
 		
+		//요청사항 출력
 		function contentSelect(){
-			
+			$.ajax({
+	            url:'../contest/select',
+	            method:"post",
+	            data : {cNo},
+	            beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    				xhr.setRequestHeader(header, token);
+                },
+			}).then(res => {
+				console.log(res);
+				$("#contestCntn").empty();
+				$("#contestCntn").append(res.cntn);
+			})
 			
 		};
 		
+		//문의 및 문의답변 출력
 		function questions(){
-			//문의제목 출력
 			$.ajax({
 	            url:"../questions/qList",
 	            method:"post",
 	            data : {targetId:cNo, category:'T01'},
+	            beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    				xhr.setRequestHeader(header, token);
+                },
 			}).then(res => {
-				
-				console.log(res);
-				
-				$("#question").remove();
-				$('#contestCntn').append($('<p>').attr("id","question"));
-
+				$("#contestCntn").empty();
+				$("#contestCntn").append(questionBox());
+			
 				//리턴값이 없으면 출력
 				if(res == 0){
-					$("#question").append($('<p>').append("문의사항이 없습니다."))
+					$("#contestCntn").append($('<p>').append("문의사항이 없습니다."))
 				}
-				
 				for(data of res){
 					if(data.rerepTgt == null){
-						$("#question").append(make(data));
-					}  else {
+						$("#contestCntn").append(make(data));
+					}					
+					else {
 						$("#" + data.rerepTgt).append(makeRe(data));
-						
-						
 					} 
-					
 				}
 	        })
-	        
+		}
+		//문의사항 박스 생성
+		function questionBox(){
+			let box = `	
+						<form action="/questions/insert" name="questionfrm" method="post">
+						<input type="hidden" id="token" name="${header}" value="${token}" />
+								<ul style="list-style: none;">
+								<li list-style: none;><label>제목</label><input type="text" name="ttl" required="required" ><br/></li>
+								<li><textarea name="cntn" class="form-control" id="cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea></li>
+								</ul>
+								<button type="reset" >초기화</button>
+								<button type="submit" id="insertBtn">등록</button>
+						</form> `;
+			
+			return box;
 		}
 		
 		//문의사항 생성
@@ -202,10 +256,9 @@ button {
 	                  <li class="comment">
 	                    <div class="comment-body" id="${question.qNo}">
 	                      <h3>${question.ttl}</h3>
-	                      <div class="meta">${question.writingDt}</div>
-	                      <div class="meta">${question.userId}</div>
-	                      <div class="meta">${question.cntn}</div>
-	                      <button type="button" id="a${question.qNo}" class="question">답변등록</button>
+	                      <div class="meta">작성자:${question.userId} </div>
+	                      <div class="meta">작성일:${question.writingDt} </div>
+	                      <div class="meta">문의내용:${question.cntn}</div>
 	                      </div>
 	                   </li>
                     </ul>
@@ -218,8 +271,9 @@ button {
    			let p = `<ul class="children">
                 <li class="comment">
                 <div class="comment-body">
-                  <h3>${questionRep.userId}</h3>
-                  <div class="meta">${questionRep.writingDt}</div>
+                <h3>답변</h3>
+                <div class="meta">작성자:${questionRep.userId} </div>
+                <div class="meta">작성일:${questionRep.writingDt} </div>
                   <p>${questionRep.cntn}</p>
                 </div>
               </li>
@@ -227,18 +281,128 @@ button {
             
             return p;
    		}
-		
-		
-		
 			
 		//참여작 출력
 		function contest(){
-			console.log($(this));
-		} 
-		
-		
-		
 			
+			$.ajax({
+	            url:'../contest/design',
+	            method:"post",
+	            data : {cNo},
+	            beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    				xhr.setRequestHeader(header, token);
+                },
+			}).then(res => {
+				$("#contestCntn").empty();
+				if(res  == 0){
+					let p = '참여작이 없습니다.'
+					$("#contestCntn").append(p); 
+					
+				}
+				for(design of res){
+					console.log(design.dgnNo);
+					console.log(design.pubcYn);
+					if(design.pubcYn == 'Y') {//공개여부가 Yes이면
+					 	$("#contestCntn").append(makeDesignYes(design)); 
+					}else{//공개여부가 No이면
+						$("#contestCntn").append(makeDesignNo(design)); 
+					}
+				 }
+			})
+		}
+		
+		//참여작 생성(공개)
+		function makeDesignYes(design){
+   			let div = `<ul>
+		                  <li class="comment">
+		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 40px;">
+		                    <img src="/images/${design.centerImg}" style="width: 400px; height: 400px"></a>
+		                      <div class="meta">${design.dgnNo}</div>
+		                   </li>
+                   		 </ul> `
+   			return div;
+   		}
+		//참여작 생성(비공개)
+		function makeDesignNo(design){
+   			let div = `<ul>
+		                  <li class="comment">
+		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 40px;">
+		                      <div style="width: 400px; height: 400px; background:gray; color:#000; text-align:center; line-height: 350px;")>비공개 작품</div>
+		                      <div class="meta">${design.dgnNo}</div>
+		                   </li>
+                   		 </ul> `
+   			return div;
+   		}
+		
+		//하트클릭시 DB입력(등록,취소)
+		function loveCheck(e) {
+			$(e).toggleClass("active");//css 변경
+			//이벤트객체console.log(this.contest);
+			let category = 'T01';
+			let targetNo = $('#cNo').text();
+			console.log(targetNo);
+			
+			//하트가 눌렸을 경우 실행
+			if ($(e).hasClass("active")) {
+				$.ajax({
+					url: '../likes/lInsert',
+					method: 'post',
+					data: {targetNo,category},
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+				}).then(res => {
+					if(res > 0){
+						alert('관심공모전 추가완료!')
+					}else{
+						alert('관심공모전 추가실패!')
+					}
+				})
+
+			//하트가 눌리지 않았을 경우 실행
+			} else if (!($(e).hasClass("active"))) {
+					$.ajax({
+						url: '../likes/lDelete',
+						method: 'post',
+						data: {targetNo,category},
+						beforeSend: function (xhr) {
+							/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+							xhr.setRequestHeader(header, token);
+						},
+					}).then(res => {
+						if(res > 0){
+							alert('관심공모전 취소완료!')
+						}else{
+							alert('관심공모전 취소실패!')
+						}
+					})
+				}
+		}
+		myLoveCheck();
+		//좋아요 확인
+		function myLoveCheck() {
+			let targetNo = $('#cNo').text();
+			$.ajax({
+				url: '../likes/List',
+				method: 'post',
+				data: {targetNo},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				//현재 공모전이 좋아요등록 상태이면..
+				for(contest of res.contest){
+					console.log(contest.C_NO == targetNo);
+					if(contest.C_NO == targetNo){
+						$('#love').toggleClass("active");
+					}
+				}
+			})
+		}
+		
 	</script>
 	</div>
 </body>

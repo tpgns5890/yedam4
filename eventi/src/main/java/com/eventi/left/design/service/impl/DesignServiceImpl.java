@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eventi.left.common.Paging;
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.design.mapper.DesignMapper;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
@@ -15,7 +15,7 @@ public class DesignServiceImpl implements DesignService{
 	@Autowired DesignMapper mapper;
 	
 	@Override
-	public List<DesignVO> designList(DesignVO vo, Paging paging) {
+	public List<DesignVO> designList(DesignVO vo, PagingVO paging) {
 		paging.setTotalRecord(mapper.count(vo));
 		paging.setPageUnit(4);
 		vo.setFirst(paging.getFirst());

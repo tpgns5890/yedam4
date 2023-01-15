@@ -1,51 +1,54 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
 <head>
-<style>
-/* 화면배치  aside,section => float적용 사이즈조정
+	<style>
+		/* 화면배치  aside,section => float적용 사이즈조정
 		  		  footer => clear: both; */
-.contest_Container {
-	padding: 20px;
-	margin: 0 auto;
-}
+		.contest_Container {
+			padding: 20px;
+			margin: 0 auto;
+		}
 
-.action-filter {
-	width: 1540px;
-	margin: 10px;
-	text-align: right;
-}
+		.action-filter {
+			width: 1540px;
+			margin: 10px;
+			text-align: right;
+		}
 
-aside {
-	width: 200px;
-	text-align: left;
-	padding: 20px;
-	float: left;
-}
+		aside {
+			width: 200px;
+			text-align: left;
+			padding: 20px;
+			float: left;
+		}
 
-section {
-	width: 1500px;
-	padding: 10px;
-	text-align: left;
-	float: left;
-	margin: 0 auto;
-}
+		section {
+			width: 1500px;
+			padding: 10px;
+			text-align: left;
+			float: left;
+			margin: 0 auto;
+		}
 
-.size {
-	width: 300px;
-	height: 340px;
-	float: left;
-	margin: 20px;
-	border-radius: 20px;
-}
+		.size {
+			width: 300px;
+			height: 340px;
+			float: left;
+			margin: 20px;
+			border-radius: 20px;
+		}
 
-.page {
-	clear: both;
-}
-</style>
+		.page {
+			clear: both;
+		}
+
+		#paging {
+			clear: both;
+			margin-left: 800px;
+		}
+	</style>
 </head>
 
 <body>
@@ -55,10 +58,8 @@ section {
 			data-stellar-background-ratio="0.5">
 			<div class="overlay"></div>
 			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+				<div class="row no-gutters slider-text align-items-end justify-content-center">
+					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
 						<h2 class="mb-0 bread">공모전</h2>
 					</div>
 				</div>
@@ -70,8 +71,10 @@ section {
 		<div class="contest_Container">
 
 			<div class="action-filter">
-				<a href="/likes/List"><button id="likeListBtn">관심 공모전</button></a> <a
-					href="./insert"><button>공모전 작성</button></a>
+				<div class="stage" style="float: right;">
+					<div id="love" class="stage heart" onclick="loveClick(this)"></div>
+				</div>
+				<a href="./insert"><button>공모전 작성</button></a>
 
 				<!-- 공모전 정렬기준 -->
 				<select id="order" name="order">
@@ -102,127 +105,144 @@ section {
 			<!-- end -->
 
 			<!-- //페이징 경로 :: 문자 -->
-			<div class="row mt-5">
+			<div class="row mt-5" id="paging">
 				<div class="col text-center">
-					<div class="block-27">
-						<th:block th:replace="fragments/eventPaging :: component(${paging},'gopage')">
+					<div class="block-27" id="returnPaging">
 					</div>
 				</div>
 			</div>
 
-
-
 			<input type="hidden" name="orderSelect" value="dt_Reg">
 			<input type="hidden" name="categorySelect" value="">
 			<input type="hidden" name="page" value="1">
-			
+
 
 			<!-- 자바스크립트 -->
 			<script>
-			contestList(); // 첫 화면 리스트출력
-			
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				contestList(); // 첫 화면 리스트출력
+
 				function gopage(i) {
 					let page = $('input[name="page"]').val(i);
 					checkSelect();
 				}
-		    	
-				 
-				
-				 //공모전 기본 전체리스트
-				function contestList(){
+
+
+
+				//공모전 기본 전체리스트
+				function contestList() {
 					$.ajax({
-	                    url : '../contest/List',
-	                    method : 'post',
-	                    data : JSON.stringify({order}),
-	                    contentType : "application/json"
-	                }).then(res => {
-	                		for(contest of res){
-	                			$('#boxList').append(makeBox(contest));
-	                		}
-	                })
-	                
-	                
-	              //정렬기준 변경 ex)조회순
-					$('#order').on("change",function (){
-		        		let order = $(this).val();
-		        		$('input[name=orderSelect]').val(order);
-		        		checkSelect();
-		        		
-		          	});
-					
-					
-				
+						url: '../contest/List',
+						method: 'post',
+						data: JSON.stringify({
+							order
+						}),
+						contentType: "application/json",
+						beforeSend: function (xhr) {
+							/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+							xhr.setRequestHeader(header, token);
+						},
+					}).then(res => {
+						//map =>  contest,paging 
+						for (contest of res.contest) {
+							$('#boxList').append(makeBox(contest));
+						}
+						$('#returnPaging').append(makePageing(res.paging));
+					})
+
+
+					//정렬기준 변경 ex)조회순
+					$('#order').on("change", function () {
+						let order = $(this).val();
+						$('input[name=orderSelect]').val(order);
+						checkSelect();
+
+					});
+
+
+
 					//분류별 조회 선택 ex)현수막
-				    $('input[type=checkbox][name=category]').each(function(index){
-				    	$(this).change(function() {
-					        if (this.checked) {
-					            $('input[name=categorySelect]').val($(this).val());
-					        }
-				    		checkSelect();
-					    });
-				    });
-	                
+					$('input[type=checkbox][name=category]').each(function (index) {
+						$(this).change(function () {
+							if (this.checked) {
+								$('input[name=categorySelect]').val($(this).val());
+							}
+							checkSelect();
+						});
+					});
+
 				};
 				//전체리스트 끝
-				
+
 				//분류,정렬기준 전체확인 => 리스트 출력.
-				function checkSelect(){
+				function checkSelect() {
 					let category = $('input[name=categorySelect]').val();
 					let order = $('input[name=orderSelect]').val();
 					let page = $('input[name=page]').val();
-					
-			        $.ajax({
-	                    url : '../contest/List',
-	                    method : 'post',
-	                    data : {category,order,page},
-	                }).then(res=>{
-						console.log(res);
-	                	//등록된 공모전이 없을경우 기존페이지로 이동.
-	                	if(res==''){
-	                		location.href='../contest/List';
-	                		alert('등록된 공모전이 없습니다');
-	                	}
-	                	
-	                	//기존 리스트 삭제 -> div생성 붙여넣기
-	                	$('#boxList').remove();
-	                	let box = $('<div>').attr("id","boxList");
-	                	$('.show').append(box);
-	                   	 for(contest of res){
-	                    	  $('#boxList').append(makeBox(contest));
-	                	}
-	                }).catch(error =>console.log(error));
+
+					$.ajax({
+						url: '../contest/List',
+						method: 'post',
+						data: {
+							category,
+							order,
+							page
+						},
+						beforeSend: function (xhr) {
+							/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+							xhr.setRequestHeader(header, token);
+						},
+					}).then(res => {
+						//등록된 공모전이 없을경우 기존페이지로 이동.
+						if (res.contest == '') {
+							location.href = '../contest/List';
+							alert('등록된 공모전이 없습니다');
+						}
+
+						//기존 리스트 삭제 -> div생성 붙여넣기
+						$('#boxList').empty();
+						for (contest of res.contest) {
+							$('#boxList').append(makeBox(contest));
+						}
+
+						//기존 페이징 삭제 -> 다시붙여넣기
+						$('#returnPaging').empty();
+						$('#returnPaging').append(makePageing(res.paging));
+
+
+					}).catch(error => console.log(error));
 				}
-				
+
 				//체크박스 1건만 선택가능하도록 설정.
-				function doOpenCheck(check){
-				    var obj = document.getElementsByName("category");
-				    for(var i=0; i<obj.length; i++){
-				        if(obj[i] != check){
-				            obj[i].checked = false;
-				        }
-				    }
+				function doOpenCheck(check) {
+					var obj = document.getElementsByName("category");
+					for (var i = 0; i < obj.length; i++) {
+						if (obj[i] != check) {
+							obj[i].checked = false;
+						}
+					}
 				}
+
 				//공모전 1건의 대한 박스 생성
-				function makeBox(contest){
-					let p=`
-							<div id="contestBox" class="text p-4 bg-light size box" onClick="location.href='../contest/select?cNo=${contest.cNo}'">
-							
-							<button style="float: right; margin: 0px;" type="button" class="btn_like">
-								<span class="img_emoti" id="likeBtn">좋아요</span>
-							</button>
-		
-							<span id="cNo">${contest.cNo}</span>
+				function makeBox(contest) {
+
+					/* <div class="stage" style="float: right;">
+		  				<div id="love${contest.cNo}" class="stage heart" onclick="loveCheck(this)"></div>
+		   			</div> */
+					let p = `
+							<div id="box${contest.cNo}" class="text p-4 bg-light size box">
 							<p id="writer">${contest.writer}</p>
 							<span id="category">${contest.category}</span>
 							<h3>
-								<a href="#" id="ttl">${contest.ttl}</a>
+								<a href="../contest/select?cNo=${contest.cNo}" id="ttl">${contest.ttl}</a>
 							</h3>
 							<div class="meta">
 								<p>
 									<span id="dtCls">D-${contest.dDay}</span>
 								</p>
 								<p>
-									총 상금 :<span id="pay">${contest.pay}</span>
+									총 상금 :<span id="pay">${contest.pay} 원</span>
 								</p>
 								<p>
 									신고수<span id="rprt">${contest.rprt}</span>
@@ -232,11 +252,172 @@ section {
 							</div>
 						</div>
 						`;
-				return p;
+					return p;
 				}
-				
-				</script>
+
+
+				// 페이징 만들기
+				function makePageing(page) {
+					if (page.totalRecord == 0) {
+						return;
+					}
+					let pagination = $("<div/>").addClass("pagination p1");
+					let ul = $("<ul/>");
+					if (page.startPage > 1) {
+						$(ul).append($("<li/>").html("&laquo;")
+							.css("font-size", "30px")
+							.on("click", function () {
+								gopage(page.startPage - page.pageSize)
+							}));
+					}
+
+					//페이지 버튼 생성.
+					for (let i = page.startPage; i <= page.endPage; i++) {
+						if (page.page == i) {
+							$(ul).append($("<li/>").text(i).attr("class", "active page-link")
+								.css("border-radius", "100%")
+								.css("color", "#000")
+								.css("background", "LightGray")
+							);
+						} else {
+							$(ul).append($("<li/>").text(i).attr("class", "page-link")
+								.css("border-radius", "100%")
+								.css("color", "#000")
+								.on("click", function () {
+									gopage($(this).text());
+								})); //페이지이동 함수
+						}
+					}
+					if (page.endPage < page.lastPage) {
+						$(ul).append($("<li/>").html("&raquo;")
+							.css("font-size", "30px")
+							.on("click", function () {
+								gopage(page.startPage + page.pageSize)
+							}));
+					}
+					pagination.append(ul);
+					return pagination;
+				}
+
+				//공모전 전체하트를 클릭했을 경우 => 나의 좋아요 공모전박스 생성출력.
+				function loveClick(e) {
+					//active 클래스가 없을 경우 생성, 있을 경우 삭제
+					$(e).toggleClass("active");
+
+					if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
+
+						$.ajax({
+							url: '../likes/List',
+							method: 'post',
+							beforeSend: function (xhr) {
+								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+								xhr.setRequestHeader(header, token);
+							},
+						}).then(res => {
+							//map =>  contest,paging 
+							$('#boxList').empty();
+							
+							//관심 공모전이 없을경우
+							if(res.contest == ''){
+								$('#boxList').append($('<p>').append("관심 공모전 없습니다."));
+							}
+							
+							for (contest of res.contest) {
+								$('#boxList').append(makeBox_map(contest));
+							}
+
+							$('#returnPaging').empty();
+							$('#returnPaging').append(makePageing(res.paging));
+
+						})
+					} else if (!$("#love").hasClass("active")) { //하트가 눌리지 않았을 경우 실행
+						//정렬 리스트 불러오는 함수
+						checkSelect();
+					}
+				}
+
+
+				//Map : 로그인회원의 좋아요 공모전박스생성
+				function makeBox_map(contest) {
+					let p = `
+							<div id="box${contest.C_NO}" class="text p-4 bg-light size box">
+							
+							<div class="stage " style="float: right;">
+				  				<div id="love${contest.cNo}" class="stage heart active" onclick="loveCheck(this)"></div>
+				   			</div>
+		
+							<p id="writer">${contest.WRITER}</p>
+							<span id="category">${contest.CATEGORY}</span>
+							<h3>
+								<a href="../contest/select?cNo=${contest.C_NO}" id="ttl">${contest.TTL}</a>
+							</h3>
+							<div class="meta">
+								<p>
+									총 상금 :<span id="pay">${contest.PAY} 원</span>
+								</p>
+								<p>
+									신고수<span id="rprt">${contest.RPRT}</span>
+									조회수<span id="inq">${contest.INQ}</span>
+								</p>
+								<div id="style">#${contest.STYLE}</div>
+							</div>
+						</div>
+						`;
+					return p;
+				}
+
+				//하트클릭시 DB입력(등록,취소)
+				function loveCheck(e) {
+					$(e).toggleClass("active");//css 변경
+					//이벤트객체	
+					console.log(this.contest);
+					let category = 'T01';
+					let targetNo = this.contest.C_NO;
+					console.log(targetNo); 
+					
+					//하트가 눌렸을 경우 실행
+					if ($(e).hasClass("active")) {
+						$.ajax({
+							url: '../likes/lInsert',
+							method: 'post',
+							data: {targetNo,category},
+							beforeSend: function (xhr) {
+								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+								xhr.setRequestHeader(header, token);
+							},
+						}).then(res => {
+							if(res > 0){
+								alert('관심공모전 추가완료!')
+							}else{
+								alert('관심공모전 추가실패!')
+							}
+						})
+
+						//하트가 눌리지 않았을 경우 실행
+					} else if (!($(e).hasClass("active"))) {
+						//하트가 눌렸을 경우 실행
+							$.ajax({
+								url: '../likes/lDelete',
+								method: 'post',
+								data: {targetNo,category}, 
+								beforeSend: function (xhr) {
+									/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+									xhr.setRequestHeader(header, token);
+								},
+							}).then(res => {
+								if(res > 0){
+									alert('관심공모전 취소완료!')
+									$(e).parent().parent().remove();
+									
+								}else{
+									alert('관심공모전 취소실패!')
+								}
+							})
+						}
+				}
+			</script>
 		</div>
 	</div>
 </body>
+
 </html>

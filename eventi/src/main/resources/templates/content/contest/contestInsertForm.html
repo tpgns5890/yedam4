@@ -58,6 +58,13 @@ ul {
 	color: #000;
 	text-decoration: none;
 	cursor: pointer;
+	
+}
+#modelBtn{
+	text-align: center;
+}
+.modelBtn1 {
+	display :inline-block;
 }
 </style>
 </head>
@@ -89,6 +96,7 @@ ul {
 
 			<!-- 공모전등록 입력폼 -->
 			<form action="/contest/insert" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
+				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
 					<li><label>분류</label> 
 						현수막 <input type="radio" name="category" value="D1" checked>
@@ -100,7 +108,7 @@ ul {
 						
 					<!-- 임시저장값 hidden -->
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
-					<li><label>작성자</label><input type="text" name="writer" value=""><br /></li>
+					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
 					<li><label>내용</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 					<li><label>첨부파일1</label><input type="file" name="uploadFile" multiple="multiple"><br /></li>
@@ -121,18 +129,17 @@ ul {
 					</select>
 						<button>추가</button></li>
 
-				<li><label>1등금액</label><input class="wPay" type="number" name="winnerPay[]" required="required" value="3000"><br /></li>
-				<li><label>2등금액</label><input class="wPay" type="number" name="winnerPay[]"><br /></li>
-				<li><label>3등금액</label><input class="wPay" type="number" name="winnerPay[]"><br /></li>
-				<li><lable>임시저장</lable> <input type="radio" name="save" value="Y">
-				</li>
+				<li><label>1등금액</label><input id="wPay1" class="wPay" type="number" name="winnerPay[]" required="required" ><br /></li>
+				<li><label>2등금액</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
+				<li><label>3등금액</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
+				<li><input type="checkbox" name="save" value="Y"><lable>임시저장</lable></li>
 				</ul>
-			<button type="reset" id="resetBtn">초기화</button>
-			<button type="submit" id="insertBtn">등록</button>
+			<button type="reset">초기화</button>
+			<button type="submit">등록</button>
 			</form>
 			
 			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
-			<button id="Btn">등록(->결제)</button>
+			<button id="insertBtn">등록(->결제)</button>
 
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
@@ -141,22 +148,55 @@ ul {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h3>공모전 결제정보</h3>
-					<ul>
-						<li> <span th:text="|공모번호 : ${cNo}|"></span></li>
-						<li> <span th:text="|제목 : |"></span></li>
-						<li> <span th:text="|등록일 : |"></span></li>
-						<li> <span th:text="|상금액 : |"></span></li>
-						<li> <span th:text="|등록비 : |"></span></li>
-						<hr>
-						<li> <span th:text="|합계 : |"></span></li>
+					<ul id="contestPay">
 					</ul>
-					<button style="width: 50px" type="button">결제</button>
-					<button style="width: 50px" type="button">취소</button>
+					<div id="modelBtn">
+						<button id="Payment" class="modelBtn1" style="width:50px;"  type="button" >결제</button>
+						<button id="cancle" class="modelBtn1"style="width:50px;" type="button">취소</button>
+					</div>
 				</div>
 
 			</div>
 
 			<script>
+			
+			//등록누를시 결제통해서 가도록.. 변경하기
+			$('#insertBtn').on("click", function(){
+				
+				//입력한 값 변수저장
+				let ttl = $('input[name="ttl"]').val();
+				let date = $('input[name="dtReg"]').val();
+				let wpay1 =   parseInt($('input[id="wPay1"]').val());
+				let wpay2 =   parseInt($('input[id="wPay2"]').val());
+				let wpay3 =   parseInt($('input[id="wPay3"]').val());
+				let total = (wpay1 + wpay2 + wpay1);
+				let insertPay = parseInt(30000);
+				let Payment = insertPay + total;
+				
+				//문자열 변경후 3자리 콤마지정.
+				total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				insertPay = insertPay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				Payment = Payment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				
+				
+				$('#contestPay').empty();
+				//li태그 생성후 모달창 붙여넣기
+				let li = ` <li> <span></span></li>
+							<li>제 목 : ${ttl} </li>
+							<li>등록일 : ${date} </li>
+							<li>총상금 : ${total} </li>
+							<li>등록비 : ${insertPay}</li>
+							<hr>
+							<li>총합계 : ${Payment}</li>
+						`
+				$('#contestPay').append(li);
+				
+				
+			}); 
+			
+			//csrf설정
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			let oEditors = []
 
 			smartEditor = function() {
@@ -190,7 +230,7 @@ ul {
 			var modal = document.getElementById("myModal");
 			
 			// Get the button that opens the modal
-			var btn = document.getElementById("Btn");
+			var btn = document.getElementById("insertBtn");
 			
 			// Get the <span> element that closes the modal
 			var span = document.getElementsByClassName("close")[0];
@@ -213,26 +253,28 @@ ul {
 			}
 			
 			
-			//등록버튼 누를시 이벤트
-			$('#insertBtn').on('click', function insert() {
+			//폼 등록버튼 전송전 체크함수.
+			function check(){
 					let check = $('input[type="checkbox"]').is(":checked");
-					if (check == false) {
+
+					if (check == false) {//유의사항 체크확인
 						alert('유의사항을 확인하세요.');
 						return false;
 					}
-					if (!confirm('공모전을 등록하시겠습니까?')) {
-						return false;
-
-					}
-					/* if ($('input[name="save"]').is(":checked") == true) {
+					//임시저장 확인
+					else if ($('input[name="save"]').is(":checked") == true) {
 						console.log($(this));
 						if (!confirm('임시저장 하시겠습니까?')) {
 							return false;
 						}
-					} */
-				})
+					} 
+					else{//등록확인
+						if (!confirm('공모전을 등록하시겠습니까?')) {
+							return false;
+						}
+					}
+				}
 		
-			
 		</script>
 		</div>
 	</div>

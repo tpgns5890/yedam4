@@ -36,6 +36,7 @@
 	</update>
 
 	<delete id="deleteWinner">
-
+		delete WINNER
+		where co_no = #{coNo}
 	</delete>
 </mapper>
