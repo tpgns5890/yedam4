@@ -14,6 +14,7 @@ import com.eventi.left.design.service.DesignVO;
 public class DesignController {
 @Autowired DesignService service;
 	
+	//디자인 전체 조회
 	@RequestMapping("/designList")
 	public String bfList(Model model, DesignVO vo, Paging paging) {
 		model.addAttribute("designList", service.designList(vo, paging)); 

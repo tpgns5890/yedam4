@@ -3,16 +3,24 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.likes.mapper.LikesMapper">
-
+	<!-- 좋아요 전체 조회 -->
 	<select id="likeList" resultType="LikesVO">
 		SELECT * FROM likes
 	</select>
-
+	
+	<!-- 좋아요 확인 -->
 	<select id="getLike" resultType="LikesVO">
 		SELECT *
 		FROM LIKES
 		WHERE USER_ID = #{userId}
 		AND TARGET_NO = #{targetNo}
+	</select>
+	
+	<!-- 좋아요 건수 조회 -->
+	<select id="countLike" resultType="int">
+		SELECT COUNT(*) 
+		FROM LIKES 
+		WHERE TARGET_NO=#{targetNo}
 	</select>
 	
 	<!-- 좋아요 등록 -->

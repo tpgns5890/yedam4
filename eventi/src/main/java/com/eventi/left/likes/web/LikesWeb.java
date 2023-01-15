@@ -30,7 +30,6 @@ public class LikesWeb {
 	@PostMapping("/lInsert")
 	@ResponseBody
 	public int likeInsert(LikesVO LikesVO) {
-		System.out.println("연결완료");
 		return service.likeInsert(LikesVO);
 	}
 
@@ -38,7 +37,6 @@ public class LikesWeb {
 	@PostMapping("/lDelete")
 	@ResponseBody
 	public int likeDelete(LikesVO LikesVO) {
-		System.out.println("연결완료");
 		return service.likeDelete(LikesVO);
 	}
 

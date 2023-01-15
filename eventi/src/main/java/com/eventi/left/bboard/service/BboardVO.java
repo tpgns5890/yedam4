@@ -22,6 +22,8 @@ public class BboardVO {
 	private String img; //이미지
 	private Integer rprt; //신고건수
 	private String type; //게시글유형
-
+	private String save = "N"; // 저장여부
+	
+	private Integer cnt; //게시글 별 좋아요 수
 	private String order = "dt"; //조회수, 작성일자 등 정렬에 필요
 }

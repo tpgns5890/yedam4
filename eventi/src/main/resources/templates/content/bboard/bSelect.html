@@ -22,6 +22,10 @@
   }
 
 </style>
+
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <div layout:fragment="content">
@@ -45,12 +49,14 @@
    <th:block th:if="${like == null}">
    	<div class="stage">
   		<div class="stage heart"></div>
+  		<span id="likeCount" th:text="${likeCount}"></span>
    	</div>
    </th:block>
    
    <th:block th:if="${like != null}">
    	<div class="stage">
   		<div class="stage heart active"></div>
+  		<span id="likeCount" th:text="${likeCount}"></span>
    	</div>
    </th:block>
    
@@ -81,18 +87,34 @@
    
    <script>
    $(function() {
+	    //csrf 설정
+	    var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+	   
+	   //좋아요를 눌렀을 경우
 	   $(".heart").on("click", function() {
+		 //클래스가 없을 경우 생성, 클래스가 있을 경우 삭제
 	     $(this).toggleClass("active");
-	     let userId = '사용자2';
+	     let userId = '사용자1';
 	     let targetNo = $("#bBoardNo").text();
 	     let category = $("#type").text();
 	     
+	     //좋아요를 추가했을 경우
 	     if($(this).hasClass("active")){
+	    	 //총 좋아요수 처리
+	    	 let likeCount = $('#likeCount').text();
+	    	 $('#likeCount').text(parseInt(likeCount) + 1);
+	    	 
+	    	 //post방식으로 좋아요 등록하기
 	    	 $.ajax({
 					url : "/likes/lInsert",
 					method : 'post',
 					contentType : 'application/x-www-form-urlencoded',
 					data : {userId, targetNo, category},
+					beforeSend : function(xhr)
+	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	    				xhr.setRequestHeader(header, token);
+	                },
 					success : function(data) {
 						//alert('좋아요 등록 완료');
 					},
@@ -100,14 +122,23 @@
 						alert('필수항목을 입력해주세요')
 					}
 				})
-	     } else if (!$(this).hasClass("active")){
+	     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
+	    	 //총 좋아요수 처리
+	    	 let likeCount = $('#likeCount').text();
+	    	 $('#likeCount').text(parseInt(likeCount) - 1);
+	    	 
+	    	//post방식으로 좋아요 취소하기
 	    	 $.ajax({
 					url : "/likes/lDelete",
 					method : 'post',
 					contentType : 'application/x-www-form-urlencoded',
 					data : {userId, targetNo},
+					beforeSend : function(xhr)
+	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	    				xhr.setRequestHeader(header, token);
+	                },
 					success : function(data) {
-						alert('좋아요 취소 완료');
+						//alert('좋아요 취소 완료');
 					},
 					fail : function(result) {
 						alert('필수항목을 입력해주세요')

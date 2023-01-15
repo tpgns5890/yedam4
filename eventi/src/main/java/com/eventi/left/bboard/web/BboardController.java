@@ -19,12 +19,15 @@ import com.eventi.left.likes.service.LikesVO;
 @Controller
 @RequestMapping("/bboard")
 public class BboardController {
+	//블라인드 게시글 service
 	@Autowired BboardService bboardService;
+	//좋아요 service
 	@Autowired LikesService likeService;
 	
 	//전체조회
 	@GetMapping("/bList")
 	public String bList(Model model, BboardVO bboardVO) {
+		//전체리스트와 타입 구하기
 		model.addAttribute("bList", bboardService.bboardList(bboardVO));
 		model.addAttribute("type", bboardVO.getType());
 		return "content/bboard/bList";
@@ -32,9 +35,10 @@ public class BboardController {
 	
 	//정렬 전체 조회
 	@PostMapping("/bList")
-	@ResponseBody
+	@ResponseBody //ajax로 보낼때 필요
 	public List<BboardVO> bSelectList(Model model, BboardVO bboardVO) {
 		model.addAttribute("type", bboardVO.getType());
+		//정렬 조건이 포함된 전체리스트 조회 후 list에 담아서 보내기
 		List<BboardVO> list = bboardService.bboardList(bboardVO);
 		return list;
 	}
@@ -43,7 +47,7 @@ public class BboardController {
 	@PostMapping("/bLikeList")
 	@ResponseBody
 	public List<BboardVO> bLikeList(BboardVO bboardVO){
-		System.out.println(bboardVO.getWriter());
+		//내가 좋아요 누른 게시글 전체리스트 조회수 list에 담아서 보내기
 		List<BboardVO> list = bboardService.bboardLike(bboardVO);
 		return list;
 	}
@@ -51,9 +55,15 @@ public class BboardController {
 	//단건조회
 	@GetMapping("/bSelect")
 	public String bSelect(Model model, BboardVO bboardVO, LikesVO likesVO) {
+		//내가 좋아요 눌렀는지 확인
 		likesVO.setUserId("사용자1");
 		likesVO.setTargetNo(bboardVO.getBBoardNo());
+		likesVO.setCategory(bboardVO.getType());
 		model.addAttribute("like", likeService.getLike(likesVO));
+		
+		//해당 게시글 좋아요 수
+		model.addAttribute("likeCount", likeService.countLike(likesVO));
+		//해당 게시글 상세 내용
 		model.addAttribute("bSelect", bboardService.bboardSelect(bboardVO));
 		return "content/bboard/bSelect";
 	}
@@ -67,8 +77,10 @@ public class BboardController {
 	
 	//게시글 등록
 	@PostMapping("/bInsert")
-	public String bFreeInsertForm(BboardVO bboardVO, MultipartFile uploadFile) {
+	public String bInsertForm(BboardVO bboardVO, MultipartFile uploadFile) {
+		System.out.println(bboardVO);
 		bboardService.bboardInsert(bboardVO, uploadFile);
+		//내가 등록한 게시글 전체리스트 페이지로 이동
 		return "redirect:/bboard/bList?type=" + bboardVO.getType();
 	}
 	
