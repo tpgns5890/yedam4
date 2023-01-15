@@ -53,4 +53,12 @@
 		DELETE FROM PROMOTION_BOARD
 		WHERE PRO_NO=#{proNo}
 	</delete>
+	
+	<!-- 댓글 조회 -->
+	<select id="proReply" resultType="com.eventi.left.reply.service.ReplyVO">
+		SELECT *
+		FROM REPLY
+		WHERE BOARD_CAT = 'T06'
+		AND REPLY_TGT = #{replyTgt}
+	</select>
 </mapper>
