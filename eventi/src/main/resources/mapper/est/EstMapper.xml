@@ -33,15 +33,7 @@
 		WHERE E_NO =
 		#{eno}
 	</select>
-	<!-- 견적요청서 작성후 작성완료페이지 조회 -->
-	<select id="showEst" resultType="EstVO" parameterType="userId">
-		select *
-		FROM (select *
-		from estimate
-		where user_id = #{userId}
-		order by writing_dt desc)
-		where rownum= 1;
-	</select>
+	
 
 	<!-- 견적요청서별 제안서 전체조회 -->
 	<select id="getPropList" resultType="PropVO">
