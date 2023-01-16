@@ -60,6 +60,14 @@
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</select>
 	
+	<!-- 임시저장한 게시글 불러오기 -->
+	<select id="bSave" resultType="com.eventi.left.bboard.service.BboardVO">
+		SELECT *
+		FROM B_BOARD
+		WHERE WRITER = #{writer}
+		AND SAVE = 'Y'
+	</select>
+	
 	<!-- 조회수 +1 -->
 	<update id="inqUpdate">
 		UPDATE B_BOARD
@@ -85,4 +93,12 @@
 		DELETE FROM B_BOARD
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</delete>
+	
+	<!-- 댓글 불러오기 -->
+	<select id="bboardReply" resultType="com.eventi.left.reply.service.ReplyVO">
+		SELECT *
+		FROM REPLY
+		WHERE BOARD_CAT = #{boardCat}
+		AND REPLY_TGT = #{replyTgt}
+	</select>
 </mapper>
