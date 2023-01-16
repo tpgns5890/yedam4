@@ -17,6 +17,58 @@
 	margin-top: 100px;
 	background: none;
 }
+
+#modal {
+	display: none;
+	position: fixed;
+	top: 25em;
+	left: 0; width : 100%;
+	height: 100%;
+	z-index: 1;
+	width: 100%;
+	
+}
+
+#modal h2 {
+	margin: 0;
+}
+
+#modal button {
+	display: inline-block;
+	width: 100px;
+	border: 0.2px solid black;
+	border-radius:5px;
+}
+
+#modal .modal_content {
+	width: 350px;
+    min-height: 200px;
+	margin: 0 auto;
+	padding: 20px;
+	background: #fff;
+	border: 0.5px solid #666;
+    border-radius: 15px;
+}
+
+#modal .modal_layer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#modal_login_btn{
+	background:#2fb380;
+}
+#button_box{
+	display:flex;
+	margin-top: 40px;
+	justify-content: flex-end;
+}
+
 </style>
 
 </head>
@@ -39,46 +91,54 @@
 		<div id="container">
 			<form>
 				이름<input type="text" class="form-control" name="name" id="name">
-				이메일주z소<input type="text" class="form-control" name="userEmail"
-					id="email"> <input th:name="${_csrf.parameterName}"
-					type="hidden" th:value="${_csrf.token}" />
+				이메일주소<input type="text" class="form-control" name="userEmail"
+					id="email">
+				<div>
+					<font id="find_feedback" size="2"></font>
+				</div>
 				<button id="findBtn" type="button">아이디찾기</button>
 			</form>
-		</div>
+			<div id="modal">
 
+				<div class="modal_content">
+					<h2>아이디 찾기</h2>
+					<p></p>
+					<div id="button_box">
+					<button type="button" id="modal_login_btn" th:onclick="|location.href='@{loginPage}'|">로그인</button>
+					<button type="button" id="modal_close_btn">닫기</button>
+					</div>
+				</div> 
+
+				<div class="modal_layer"></div>
+			</div>
+		</div>
 		<script>
-		/* 아이디 찾기 */
-		$("#findBtn").on('click', findId());
-		
-		function findId() {
-			var name = $("#name").val(); 
-			var email = $("#email").val();
-			console.log(name);
-			
-			$.ajax({
-				url:"/findId",
-				type:"post",
-				data:{
-					name:name,
-					email:email
-				},
-				datatype: 'json',
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success : function(result){
-					if(result){
-						alert("등록된 아이디는 "+result+"입니다.");
-					}else{
-						alert("등록된 정보가 없습니다.")
+			/*모달 창 닫기*/
+			$("#modal_close_btn").on('click', function() {
+				$("#modal").hide();
+			});
+
+			/* 아이디 찾기 */
+			$("#findBtn").on('click', function() {
+				var name = $("#name").val();
+				var email = $("#email").val();
+				$.ajax({
+					url : "findId?name=" + name + "&email=" + email,
+					type : "GET",
+					success : function(result) {
+						if (result) {
+							$("#modal").show();
+							$("#modal p").text("등록된 아이디는" + result + "입니다");
+						} else {
+							$("#find_feedback").html('일치하는 회원정보가 없습니다.');
+							$("#find_feedback").attr('color', '#dc3545');
+						}
+					},
+					error : function() {
+						alert("서버 요청 실패");
 					}
-				},
-				error: function () {
-					alert("서버 요청 실패");
-				}
-			})
-		};
-		
+				});
+			});
 		</script>
 	</div>
 </body>

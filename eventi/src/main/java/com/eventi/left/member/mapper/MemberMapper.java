@@ -15,4 +15,8 @@ public interface MemberMapper {
 
 	public String findId(String name, String email);
 
+	public int findPwCheck(String id, String name, String email);
+
+	public void updatePw(String userId, String userPassword);
+
 }
