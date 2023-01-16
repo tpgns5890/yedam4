@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.reply.service.ReplyVO;
+
 public interface PromotionService {
 	
 	//홍보게시물 전체조회
@@ -20,4 +22,7 @@ public interface PromotionService {
 	
 	//게시글 삭제
 	public int proDelete(PromotionVO promotionVO);
+	
+	//댓글 조회
+	public List<ReplyVO> proReply(ReplyVO replyVO);
 }

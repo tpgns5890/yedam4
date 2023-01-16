@@ -1,16 +1,21 @@
 package com.eventi.left.promotion.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Controller
 public class PromotionController {
@@ -27,9 +32,20 @@ public class PromotionController {
 	
 	//게시글상세조회
 		@RequestMapping(value = "/proDetail", method=RequestMethod.GET) 
-		public String proDetail(Model model, PromotionVO promotionVO) {
+		public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO) {
 			model.addAttribute("proDetail", proService.proDetail(promotionVO));
+			
+			replyVO.setReplyTgt(promotionVO.getUserId());
+			model.addAttribute("proReply", proService.proReply(replyVO));
 			return "content/promotion/proDetail";
+		}
+		
+	//댓글 조회 
+		@RequestMapping(value="/proReply", method=RequestMethod.POST)
+		@ResponseBody
+		public List<ReplyVO> proReply(@RequestBody ReplyVO vo) {
+			List<ReplyVO> a = proService.proReply(vo);
+			return a;
 		}
 		
 	//게시글등록폼이동
@@ -64,5 +80,5 @@ public class PromotionController {
 		public String proDelete(PromotionVO promotionVO) {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
-		}	
+		}
 }

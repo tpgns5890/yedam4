@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.promotion.mapper.PromotionBoardMapper;
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Service
 public class PromotionServiceImpl implements PromotionService{
@@ -63,6 +64,12 @@ public class PromotionServiceImpl implements PromotionService{
 	public int proDelete(PromotionVO promotionVO) {
 		// TODO Auto-generated method stub
 		return proMapper.proDelete(promotionVO);
+	}
+	
+	//댓글 조회
+	@Override
+	public List<ReplyVO> proReply(ReplyVO replyVO) {
+		return proMapper.proReply(replyVO);
 	}
 
 }
