@@ -1,4 +1,4 @@
-package com.eventi.left;
+package com.eventi.left.common;
 
 import java.io.IOException;
 
