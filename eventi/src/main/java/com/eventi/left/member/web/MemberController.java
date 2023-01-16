@@ -39,6 +39,26 @@ public class MemberController {
 	public String busiSignUpPage() {
 		return "content/member/busiSignUp";
 	}
+	
+	//아이디 찾기 페이지 이동
+	@RequestMapping(value= "/findIdPage")
+	public String findId() {
+		return "content/member/findId";
+	}
+	
+	//아이디 찾기 메소드
+	@RequestMapping("/findId")
+	
+	public @ResponseBody String findid(String name, String email) {
+		String result = service.findId(name, email);
+		return result;
+	}
+	
+	//비밀번호 찾기 페이지 이동
+	@RequestMapping(value= "/findPwPage")
+	public String findPw() {
+		return "content/member/findPw";
+	}
 
 	// 아이디 중복 확인
 	@RequestMapping("/memIdCheck")
@@ -71,4 +91,11 @@ public class MemberController {
 		service.insertMember(memberVO);
 		return "redirect:/login";
 	}
+	
+	//로그인페이지 이동
+	@RequestMapping(value="/loginPage")
+    public String loginPage() throws Exception {
+        return "content/member/loginPage";
+    }
+
 }

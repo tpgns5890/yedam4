@@ -18,7 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.header.Header;
 
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.impl.MemberServiceImpl;
@@ -55,19 +54,19 @@ public class SecurityConfig {
 				);
 		
 		http.formLogin()
-				//.loginPage("/signinPage")	// 사용자 정의 로그인 페이지
+				.loginPage("/loginPage")	// 사용자 정의 로그인 페이지
 				.defaultSuccessUrl("/") 	// 로그인 성공 후 이동 페이지
-			    .failureUrl("/signinPage")	    // 로그인 실패 후 이동 페이지
+			    .failureUrl("/loginPage")	    // 로그인 실패 후 이동 페이지
 				.usernameParameter("userid")	// 아이디 파라미터명 설정
 				.passwordParameter("password")	// 패스워드 파라미터명 설정
-				//.loginProcessingUrl("/signin")	// 로그인 Form Action Url
+				.loginProcessingUrl("/login")	// 로그인 Form Action Url
 				.successHandler(loginSuccessHandler)	//LoginSuccessHandler 컴포넌트 호출
 				.failureHandler(
 		                new AuthenticationFailureHandler() {
 		                    @Override
 		                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 		                        System.out.println("exception : " + exception.getMessage());
-		                        response.sendRedirect("/login");
+		                        response.sendRedirect("/loginPage");
 		                    }
 		                }
 		        );

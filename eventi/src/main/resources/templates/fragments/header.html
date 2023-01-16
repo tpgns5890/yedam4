@@ -1,5 +1,5 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!--headerFragment 선언-->
 <div th:fragment="headerFragment">
 	<div class="wrap">
@@ -30,14 +30,16 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						</p>
 					</div>
 					<div sec:authorize="isAuthenticated()">
-          				<span id="sessionId" th:text="|${session.member.getName()}|"></span>
-      				</div>
+						<span id="sessionId" th:text="|${session.member.getName()}|"></span>
+					</div>
+					
 					<div class="reg">
-						<p class="mb-0">
-							<a th:href="@{memQualification}" sec:authorize='!isAuthenticated()' class="mr-2">Sign Up</a> <a href="/login" sec:authorize='!isAuthenticated()'>Log In</a>
-							<a href="/logout" sec:authorize="isAuthenticated()">Logout</a>
-							
-						</p>
+						<input type="button" th:onclick="|location.href='@{memQualification}'|" sec:authorize='!isAuthenticated()' value="회원가입"/>
+						<input type="button" th:onclick="|location.href='@{loginPage}'|" sec:authorize='!isAuthenticated()' value="로그인"/>
+						<form method="post" action="logout"	sec:authorize="isAuthenticated()">
+							<input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
+							<input type="submit" value="로그아웃"/>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -125,8 +127,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						class="nav-link dropdown-toggle" href="#" id="dropdown04"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">게시판</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="/bboard/bList?type=T04">자유게시판</a> 
-							<a class="dropdown-item" href="/bboard/bList?type=T05">멘토링게시판</a>	
+							<a class="dropdown-item" href="/bboard/bList?type=T04">자유게시판</a>
+							<a class="dropdown-item" href="/bboard/bList?type=T05">멘토링게시판</a>
 						</div></li>
 					<li class="nav-item"><a href="/proList" class="nav-link">홍보게시판</a></li>
 					<li class="nav-item dropdown"><a
@@ -139,10 +141,10 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						</div></li>
 					<li class="nav-item dropdown">><a href="#" class="nav-link">My</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="/contest/like">좋아요 리스트</a> 
-							<a class="dropdown-item" href="/contest/mySelect">공모전 리스트</a> 
-							<a class="dropdown-item" href="#"></a> 
-							<a class="dropdown-item" href="#"></a>
+							<a class="dropdown-item" href="/contest/like">좋아요 리스트</a> <a
+								class="dropdown-item" href="/contest/mySelect">공모전 리스트</a> <a
+								class="dropdown-item" href="#"></a> <a class="dropdown-item"
+								href="#"></a>
 						</div>
 					</li>
 				</ul>

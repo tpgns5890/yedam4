@@ -131,6 +131,7 @@
 			</div>
 			</div>
 		</div>
+		
 		<script>
 			/* 아이디 중복 확인 */
 			$('#inputId').keyup(function () {
@@ -142,6 +143,10 @@
 						inputId: inputId
 					},
 					datatype: 'json',
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
 					success: function (result) {
 						if (result == 1) {
 							$("#id_feedback").html('이미 사용중인 아이디입니다.');

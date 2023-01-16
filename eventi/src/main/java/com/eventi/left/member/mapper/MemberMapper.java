@@ -13,4 +13,6 @@ public interface MemberMapper {
 
 	public MemberVO getMember(String userId);
 
+	public String findId(String name, String email);
+
 }

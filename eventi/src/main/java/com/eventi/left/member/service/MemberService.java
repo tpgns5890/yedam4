@@ -20,4 +20,6 @@ public interface MemberService{
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
+	public String findId(String name, String email);
+
 }

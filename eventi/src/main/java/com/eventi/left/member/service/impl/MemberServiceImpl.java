@@ -114,4 +114,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		MemberVO vo = mapper.getMember(username);
 		return vo;
 	}
+
+	@Override
+	public String findId(String name, String email) {
+		return mapper.findId(name, email);
+	}
 }
