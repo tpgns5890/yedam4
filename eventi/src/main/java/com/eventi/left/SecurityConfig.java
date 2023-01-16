@@ -5,34 +5,52 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.header.Header;
 
+import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.impl.MemberServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+	@Autowired
+	MemberService service;
+	
+	@Autowired
+	MemberServiceImpl impl;
+	
+	@Autowired
+	@Qualifier("dataSource")
+	private DataSource dataSource;
+	
+	@Autowired
+	LoginSuccessHandler loginSuccessHandler;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((requests) -> requests
-				.antMatchers("/mc/*").hasRole("MC")
-				.antMatchers("/designer/*").hasRole("DESIGNER")
-				.antMatchers("/busi/*").hasRole("BUSI")
-				.antMatchers("/admin/*").hasRole("ADMIN")
-				.anyRequest().permitAll()
-				);
+		http.headers().frameOptions().sameOrigin(); //security 설정 추가
 		
+		http.authorizeHttpRequests((requests) -> requests
+				.antMatchers("/mc/**").hasRole("MC") //사회자 권한
+				.antMatchers("/designer/**").hasRole("DESIGNER")  //디자이너권한
+				.antMatchers("/busi/**").hasRole("BUSI")	//업체회원권한
+				.antMatchers("/admin/**").hasRole("ADMIN")	//관리자권한
+				.anyRequest().permitAll()	//그외 모든 url 접근권한 없음
+				);
 		http.formLogin()
 				//.loginPage("/signinPage")	// 사용자 정의 로그인 페이지
 				.defaultSuccessUrl("/") 	// 로그인 성공 후 이동 페이지
@@ -40,15 +58,7 @@ public class SecurityConfig {
 				.usernameParameter("userid")	// 아이디 파라미터명 설정
 				.passwordParameter("password")	// 패스워드 파라미터명 설정
 				//.loginProcessingUrl("/signin")	// 로그인 Form Action Url
-				.successHandler(
-		                new AuthenticationSuccessHandler() {
-		                    @Override
-		                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-		                        System.out.println("authentication : " + authentication.getName());
-		                        response.sendRedirect("/"); // 인증이 성공한 후에는 root로 이동
-		                    }
-		                }
-		        )
+				.successHandler(loginSuccessHandler)	//LoginSuccessHandler 컴포넌트 호출
 				.failureHandler(
 		                new AuthenticationFailureHandler() {
 		                    @Override
@@ -57,21 +67,29 @@ public class SecurityConfig {
 		                        response.sendRedirect("/login");
 		                    }
 		                }
-		        )
-				.permitAll();
+		        );
+		http.rememberMe()	//자동로그인
+			.key("key")
+			.rememberMeParameter("remember-me")
+			.userDetailsService(impl)
+			.tokenRepository(persistentTokenRepository()) //DataSource 추가
+			.authenticationSuccessHandler(loginSuccessHandler);
 		
 		http.logout() // 로그아웃 처리
-                .logoutUrl("/logout") // 로그아웃 처리 URL
-                .logoutSuccessUrl("/") // 로그아웃 성공 후 이동페이지
-                .deleteCookies("JSESSIONID", "remember - me");
+			.logoutUrl("/logout")
+			.logoutSuccessUrl("/")
+			.invalidateHttpSession(true) //세션 삭제
+			.deleteCookies("remember-me", "JSESSIONID"); //자동 로그인 쿠키, Tomcat이 발급한 세션 유지 쿠키 삭제
 		
-        http.rememberMe()	//자동로그인
-                .rememberMeParameter("remember");
-        
-        http.csrf().disable(); 
-
+        //http.csrf().disable();
 		return http.build();
 	}
-
+	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+		repo.setDataSource(dataSource);
+		return repo;
+	}
 	
 }
