@@ -10,11 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.bboard.mapper.BboardMapper;
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.files.mapper.FilesMapper;
+import com.eventi.left.files.service.FilesVO;
 
 @Service
 public class BboardServiceImpl implements BboardService{
 	
 	@Autowired BboardMapper bboardMapper;
+	@Autowired FilesMapper filesMapper;
 	
 	//전체 조회
 	@Override
@@ -38,13 +41,16 @@ public class BboardServiceImpl implements BboardService{
 
 	//등록
 	@Override
-	public int bboardInsert(BboardVO bboardVO, MultipartFile uploadFile) {
+	public int bboardInsert(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile) {
 			// 사진 등록
 			String realFolder = "/files/bboard";
 			File dir = new File(realFolder);
 			if(!dir.isDirectory()) {
 				dir.mkdirs();
 			}
+			
+			filesVO.setFNm(uploadFile.getOriginalFilename());
+			
 			
 			//파일 이름 저장
 			String img = uploadFile.getOriginalFilename();
