@@ -123,7 +123,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<input type="submit" id="insert" value="등록" class="btn btn-primary">
-								<input type="button" id="save" value="임시저장" class="btn btn-primary">
+								<input type="checkbox" id="save" name="save" th:value="N" class="btn btn-primary">임시저장
 								<div class="submitting"></div>
 							</div>
 						</div>
@@ -187,6 +187,14 @@
 	    	$("#imgInp").val('');
 	    })
 	    
+	    $('#save').click(function(){
+	    	if($('#save').is(':checked')){
+				$('#save').val('Y');
+				alert($('#save').val());
+			};
+	    })
+	    
+	    
 		//등록버튼을 눌렀을 경우 아래와 설정을 해주지 않을 경우 태그 속성이 저장되지 않는다.
 		$('#insert').on('click', function insert() {
 			oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
@@ -212,7 +220,7 @@
 		})
 		
 		//임시저장
-		$('#save').on('click', function() {
+		/* $('#save').on('click', function() {
 			console.log('클릭');
 			oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 			let cntn = document.getElementById("cntn").value
@@ -234,7 +242,7 @@
 					alert('필수항목을 입력해주세요')
 				}
 			})
-		})
+		}) */
 	</script>
 </div>
 </html>
