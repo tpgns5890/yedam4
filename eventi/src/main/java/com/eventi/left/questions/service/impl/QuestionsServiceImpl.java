@@ -34,5 +34,10 @@ public class QuestionsServiceImpl implements QuestionsService{
 		return mapper.questionsDelete(qNo);
 	}
 
+	@Override
+	public QuestionsVO getQuestions(QuestionsVO vo) {
+		return mapper.getQuestions(vo);
+	}
+
 
 }

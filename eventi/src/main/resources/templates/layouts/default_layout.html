@@ -1,50 +1,72 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 <meta charset="utf-8">
 <title>이벤티</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 <th:block>
-	<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,700;0,800;1,200;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,700;0,800;1,200;1,300;1,400;1,500;1,700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet"
+		href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/css/animate.css">
 	<link rel="stylesheet" href="/css/owl.carousel.min.css">
 	<link rel="stylesheet" href="/css/owl.theme.default.min.css">
 	<link rel="stylesheet" href="/css/magnific-popup.css">
 	<link rel="stylesheet" href="/css/flaticon.css">
 	<link rel="stylesheet" href="/css/style.css">
-	<link rel="stylesheet" href="/css/like.css"> <!-- 좋아요버튼css -->
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/jquery-migrate-3.0.1.min.js"></script>
-	<script src="/js/json.min.js"></script> <!-- serializeObject 사용 -->
+	<script src="/js/json.min.js"></script>
+	<!-- serializeObject 사용 -->
 </th:block>
 <style>
-		/* 개별페이지 float시 적용해제 */
-		footer{
-                clear: both;
-            }
+footer { /* 개별페이지 float시 적용해제 */
+	clear: both; 
+}
+
+.heart { /*좋아요 스타일 */
+	width: 100px;
+	height: 100px;
+	background:
+		url("https://cssanimation.rocks/images/posts/steps/heart.png")
+		no-repeat;
+	background-position: 0 0;
+	cursor: pointer;
+	transition: background-position 1s steps(28);
+	transition-duration: 0s;
+}
+
+.active { /*좋아요 스타일 */
+	transition-duration: 1s;
+	background-position: -2800px 0;
+}
 </style>
-	<script type="text/javascript" src="/smarteditor2/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="/smarteditor2/js/HuskyEZCreator.js" charset="utf-8"></script>
+
 </head>
-
-
 <body>
 
 	<!-- header fragment 사용 -->
-    <th:block th:replace="fragments/header :: headerFragment"></th:block>
-    
-    <!-- content fragment 사용 -->
-    <th:block layout:fragment="content"></th:block>
-    
-    <!-- footer fragment 사용 -->
-    <th:block th:replace="fragments/footer :: footerFragment"></th:block>
-    
-	
+	<th:block th:replace="fragments/header :: headerFragment"></th:block>
+
+	<!-- content fragment 사용 -->
+	<th:block layout:fragment="content"></th:block>
+
+	<!-- footer fragment 사용 -->
+	<th:block th:replace="fragments/footer :: footerFragment"></th:block>
+
+
 	<script src="/js/popper.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
 	<script src="/js/jquery.easing.1.3.js"></script>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+<!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/myPageSide.css">
+</head>
+<body>
+
+	<!-- 2.레이아웃 content적용 -->
+	<div layout:fragment="content" class="content">
+		<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div
+					class="row no-gutters slider-text align-items-end justify-content-center">
+					<div
+						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">좋아요 공모전리스트</h2>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+
+		<!-- <div th:if="${not #strings.isEmpty(likeList)}">
+			<span> 관심 공모전이 없습니다. </span>
+		</div>
+		
+		<div th:if="${#strings.isEmpty(likeList)}"> -->
+		<div id="table">
+			<button type="button" id="deleteBtn">좋아요 취소</button>
+			<table border="1">
+				<thead>
+					<tr>
+						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+						<th>no</th>
+						<th>작성자</th>
+						<th>대상번호</th>
+						<th>분류</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="l : ${likeList}">
+						<td><input class="check delete" type="checkBox" value="delete"></td>
+						<td th:text=${l.LIKE_NO}
+							th:onclick="|location.href='@{select(cNo=${l.TARGET_NO})}'|"></td>
+						<td th:text=${l.USER_ID}>
+						<td th:text=${l.TARGET_NO}>
+						<td th:text=${l.CATEGORY}>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="row mt-5">
+			<div class="col text-center">
+				<div class="block-27">
+					<th:block
+						th:replace="fragments/paging :: component(${paging},'gopage')">
+				</div>
+			</div>
+		</div>
+
+
+		<script>
+		//페이지이동
+		function gopage(i) {
+		    location.href = '/likes/List?page=' + i;
+		    
+		 }
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		// tr 전체체크시 모든항목 체크되도록 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
+		})
+		
+
+		//좋아요 삭제
+		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
+		
+		function deleteContest(deleteCheck) {
+			let trs = document.querySelectorAll('table>tbody>tr');
+
+			if (!confirm('관심공모전을 삭제하시겠습니까?')) {
+				return false;
+			} else {
+				for (let i = 0; i < trs.length; i++) {
+					if (trs[i].children[0].children[0].checked) {
+						
+						let cNo = trs[i].children[1].textContent; //체크된 공모번호
+						
+						//ajax 처리후
+						trs[i].remove(); // tr 화면동적 삭제
+						
+						
+						//ajax 추가할것!!!
+
+					}
+				}
+			}
+		}
+	</script>
+		
+</body>
+</html>

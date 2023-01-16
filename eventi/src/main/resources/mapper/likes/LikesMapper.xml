@@ -4,6 +4,15 @@
 
 <mapper namespace="com.eventi.left.likes.mapper.LikesMapper">
 
+	<!-- join map으로 받을경우, 컬럼명 대문자 인식!! -->
+	<select id="userlikeList" resultType="map">
+		SELECT l.*,c.*
+		FROM likes l
+		join CONTEST c
+		on c.c_no = l.target_no
+		and l.USER_ID = #{userId}
+	</select>
+
 	<select id="likeList" resultType="LikesVO">
 		SELECT * FROM likes
 	</select>
@@ -11,20 +20,31 @@
 	<select id="getLike" resultType="LikesVO">
 		SELECT *
 		FROM LIKES
-		WHERE USER_ID = #{userId}
+		WHERE USER_ID
+		= #{userId}
 		AND TARGET_NO = #{targetNo}
 	</select>
-	
+
 	<!-- 좋아요 등록 -->
 	<insert id="likeInsert">
 		INSERT INTO LIKES
-		VALUES('LI'||LIKENO_SEQ.NEXTVAL, #{userId}, #{targetNo}, #{category})
+		VALUES('LI'||LIKENO_SEQ.NEXTVAL,
+		#{userId}, #{targetNo}, #{category})
 	</insert>
-	
+
 	<!-- 좋아요 취소 -->
 	<delete id="likeDelete">
 		DELETE FROM LIKES
 		WHERE USER_ID = #{userId}
-		AND TARGET_NO = #{targetNo}
+		AND
+		TARGET_NO = #{targetNo}
 	</delete>
+
+	<!-- 게시글 좋아요개수 파악 -->
+	<select id="likeCount" resultType="int">
+		SELECT COUNT(*)
+		FROM CONTEST C RIGHT JOIN LIKES L
+							ON C.C_NO = L.TARGET_NO
+		WHERE C_NO = #{targetNo}
+	</select>
 </mapper>
