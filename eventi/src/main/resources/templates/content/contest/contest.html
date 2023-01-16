@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
 <head>
+<link rel="stylesheet" href="/css/model.css"> <!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/heart.css"> <!-- 좋아요 스타일 -->
 	<meta charset="UTF-8">
 	<title>공모전 상세조회</title>
 	<style>
@@ -51,8 +52,8 @@
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 파일이미지 출력 -->
 						<div th:each="f : ${fileList}">
-							<a th:href="|/fileView/${f.fNm}|" class="image-popup prod-img-bg">
-								<img th:src="|/fileView/${f.fNm}|" style="width: 540px; height: 785px"
+							<a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
+								<img th:src="|/fileView/${f.sevNm}|" style="width: 540px; height: 785px"
 									class="img-fluid" alt="Colorlib Template"></a>
 						</div>
 					</div>
@@ -61,13 +62,33 @@
 						<span th:text=${contest.cNo} id="cNo"></span>
 							<p th:text=${contest.category}></p>
 							<h1 th:text=${contest.ttl}></h1>
+							
+							<!-- 마감연장일 있는경우 -->
+							<div th:if="${contest.dtExtns} != null">
+								<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}|"></div>
+							</div>
+							
+							<!-- 마감연장일 없는경우 -->
+							<div th:if="${contest.dtExtns} == null">
+								<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div>
+							</div>
 
-						<div class="rating d-flex">
+						<div class="rating d-flex" style="height: 100px; width: 500px">
 							<div class="text-left mr-4"> &#128680;
-								 <div class="stage" style="float: right;">
-									<div id="love" class="stage heart" onclick="loveCheck(this)"></div>
-									<span th:text=${contest.likes}></span>
-								</div>
+								<!-- 비회원 하트버튼 -->
+								<th:block sec:authorize="!isAuthenticated()">
+									 <div class="stage" style="float: right; height: 50px;">
+										<a href="../loginPage"><div id="love" class="stage heart"><span th:text=${contest.likes}></span></div></a>
+									</div>
+								</th:block>
+								
+								<!-- 회원 하트버튼 -->
+								<th:block sec:authorize="isAuthenticated()">
+									 <div class="stage" style="float: right;">
+										<div id="love" class="stage heart" onclick="loveCheck(this)"><span th:text=${contest.likes}></span></div>
+									</div>
+								</th:block>
+								
 								<span th:text=${contest.rprt}></span>
 								<span style='font-size: 30px;'>&#128065;</span>
 								<span th:text=${contest.inq}></span>
@@ -95,7 +116,7 @@
 						<th:block sec:authorize="!isAuthenticated()">
 							<p>
 								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
-								<a href="../login" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
+								<a href="../loginPage" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
 							</p>
 						</th:block>
 						
@@ -115,8 +136,8 @@
 								<button type="button" id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
 							</div>
 							<div>
-								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5">마감연장</button></a>
-								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5">결과등록</button></a>
+								<button id="updateDate" type="button" class="btn btn-primary py-3 px-5">마감연장</button>
+								<a href="#" ><button id="winnerInsert" type="button" class="btn btn-primary py-3 px-5">결과등록</button></a>
 							</div>
 						 </div>
 						</th:block>
@@ -161,10 +182,101 @@
 			</div>
 		</section>
 		
-		<script th:inline="javascript">
+		
+		<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+				<!-- Modal content -->
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h3>공모전 마감기한 연장</h3>
+					<div id=updateModel> </div>
+					<div id="modelBtn">
+						<button id="extension" class="modelBtn1" style="width:50px;"  type="button" >연장하기</button>
+					</div>
+				</div>
+
+			</div>
+		
+		
+		<script >
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		let cNo = $('#cNo').text();
+		
+		
+		// Get the modal
+		var modal = document.getElementById("myModal");
+		
+		// Get the button that opens the modal
+		var btn = document.getElementById("updateDate");
+		
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+		
+		// When the user clicks the button, open the modal 
+		btn.onclick = function() {
+		  modal.style.display = "block";
+		}
+		
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		//마감연장 모달창 출력.
+		$('#updateDate').on("click", function(){
+			let dtReg = '[[${#dates.format(contest.dtReg,'yyyy/MM/dd')}]]';
+			let dtCls = '[[${#dates.format(contest.dtCls,'yyyy/MM/dd')}]]';
+			
+			$('#updateModel').empty();
+			//li태그 생성후 모달창 붙여넣기
+			let li = `  <div>등록일 : ${dtReg} </div>
+						<div>마감일 : ${dtCls} </div>
+						<input type="date">
+					`
+			$('#updateModel').append(li);
+			
+		}); 
+		
+		//마감연장 모달창 수정처리
+		$('#extension').on('click', function () {
+			let date = $(this).parent().parent().find($('input[type="date"]')).val();
+			console.log(date);
+			
+			$.ajax({
+		           url:"/contest/update",
+		           method: 'put',
+		           dataType: "json",
+		           data: JSON.stringify({cNo,dtExtns:date}),
+		           contentType : "application/json",
+		           beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+		           success: function (result) {
+		        	   if(result > 0){
+		                 alert('수정처리 성공');
+		        		   
+		        	   }else{
+		        		   alert('마감연장 1회만 가능합니다.')
+		        	   }
+		                  location.href='/contest/select?cNo='+cNo; 
+		           },
+		           fail: function () {
+		                 	alert('수정처리 실패')
+		           }
+				})
+			
+		})
+		
 	
 		//공모전 삭제
 		$('#delBtn').on('click', delContest);
@@ -352,7 +464,6 @@
 			//이벤트객체console.log(this.contest);
 			let category = 'T01';
 			let targetNo = $('#cNo').text();
-			console.log(targetNo);
 			
 			//하트가 눌렸을 경우 실행
 			if ($(e).hasClass("active")) {
@@ -406,7 +517,7 @@
 			}).then(res => {
 				//현재 공모전이 좋아요등록 상태이면..
 				for(contest of res.contest){
-					console.log(contest.C_NO == targetNo);
+					/* console.log(contest.C_NO == targetNo); */
 					if(contest.C_NO == targetNo){
 						$('#love').toggleClass("active");
 					}

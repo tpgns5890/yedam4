@@ -23,7 +23,9 @@ public interface ContestMapper {
 
 		public int insertContest(ContestVO contestVO); // 추가
 
-		public int updateContest(ContestVO contestVO); // 수정
+		public int updateContest(ContestVO contestVO); // 제목,내용 수정
+		
+		public int updateExtension(ContestVO contestVO); //마감연장
 
 		public int deleteContest(ContestVO contestVO); // 삭제
 		

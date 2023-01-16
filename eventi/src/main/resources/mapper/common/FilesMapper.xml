@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.eventi.left.files.mapper.FilesMapper">
+
+	<insert id="insertFile">
+		insert into
+		FILES(F_NO,TARGET_ID,F_NM,SEV_NM,SAVE_ADDR,CATEGORY)
+		values(fno_seq.nextval,#{targetId},#{fNm},#{sevNm},#{saveAddr},#{category})
+	</insert>
+
+
+	<select id="fileList" resultType="FilesVO">
+		select *
+		from files
+		where
+		target_id = #{targetId}
+	</select>
+
+	<select id="getfile" resultType="FilesVO">
+		select *
+		from files
+		where
+		target_id = #{targetId}
+		and f_no = #{fNo}
+	</select>
+
+	<delete id="deleteFile">
+		DELETE FILES
+		WHERE TARGET_ID = #{targetId}
+	</delete>
+
+	<delete id="oneDeleteFile">
+		DELETE FILES
+		WHERE f_no = #{fNo}
+	</delete>
+
+	<update id="updateFile">
+		update FILES
+		set F_NM = #{fNm},
+		SEV_NM = #{sevNm},
+		SAVE_ADDR = #{saveAddr},
+		CATEGORY = #{category}
+		WHERE TARGET_ID = #{targetId}
+		and F_NO = #{fNo}
+	</update>
+</mapper>
