@@ -110,7 +110,7 @@ ul {
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
-					<li><label>내용</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
+					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 					<li><label>첨부파일1</label><input type="file" name="uploadFile" multiple="multiple"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
@@ -135,7 +135,7 @@ ul {
 				<li><input type="checkbox" name="save" value="Y"><lable>임시저장</lable></li>
 				</ul>
 			<button type="reset">초기화</button>
-			<button type="submit">등록</button>
+			<button type="submit" id="insertForm">등록</button>
 			</form>
 			
 			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
@@ -213,10 +213,9 @@ ul {
 				smartEditor()
 			})
 
-			$('#insertBtn').on('click', function insert() {
+			$('#insertForm').on('click', function () {
 				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
-				let cntn = document.getElementById("cntn").value
-			
+				let cntn = document.getElementById("cntn").value;
 			})
 		
 			//등록일 이전날짜 선택불가

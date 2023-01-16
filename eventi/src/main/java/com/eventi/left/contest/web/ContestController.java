@@ -86,6 +86,9 @@ public class ContestController {
 				}
 			}
 			// 코드별 문자열 변환후 세팅
+			LikesVO like = new LikesVO();
+			like.setTargetNo(cVo.getcNo());
+			cVo.setLikes(likeService.countLike(like)); // 좋아요개수
 			cVo.setCategory(codeService.codeSelect(cVo.getCategory()));
 			cVo.setStyle(codeService.codeSelect(cVo.getStyle()));
 			setList.add(cVo);
@@ -106,9 +109,9 @@ public class ContestController {
 		contest.setCategory(codeService.codeSelect(contest.getCategory())); // 카테고리
 		contest.setStyle(codeService.codeSelect(contest.getStyle())); // 스타일
 		
-		
-		contest.setLikes(likeService.likeCount(cVo.getcNo())); //좋아요개수??
-		
+		LikesVO like = new LikesVO();
+		like.setTargetNo(cVo.getcNo());
+		contest.setLikes(likeService.countLike(like)); // 좋아요개수
 		model.addAttribute("contest", contest); // 모델 넘겨주기.
 		model.addAttribute("designList", dService.contestDesignList(cVo.getcNo()));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
@@ -134,8 +137,8 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(Model model, ContestVO vo, FilesVO files, List<MultipartFile> uploadFile,
-			WinnerVO wvo, PagingVO paging) {
+	public String contestInsertForm(Model model, ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo, PagingVO paging) {
+		
 		service.insertContest(vo, files, uploadFile, wvo);
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
@@ -160,7 +163,8 @@ public class ContestController {
 	@GetMapping("/update")
 	public String contestupdate(Model model, ContestVO vo) {
 		model.addAttribute("contest", service.getContest(vo));
-		model.addAttribute("winner", wService.winnerList(vo.getcNo()));
+		model.addAttribute("fileList", fService.fileList(vo.getcNo()));
+		model.addAttribute("winnerList", wService.winnerList(vo.getcNo()));
 		return "content/contest/contestUpdateForm";
 	}
 
@@ -208,6 +212,22 @@ public class ContestController {
 
 		model.addAttribute("likeList", likeService.userlikeList(null, sessionId));
 		return "content/myPage/myLikeLIst";
+	}
+
+	// 로그인회원의 전체 좋아요리스트
+	@PostMapping("/ajaxlike")
+	@ResponseBody
+	public Map<String, Object> userlikeList(LikesVO LikesVO, PagingVO paging) {
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+
+		// 리턴할 최종Map(contest,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("contest", likeService.userlikeList(LikesVO, sessionId));
+		result.put("paging", paging);
+
+		return result;
 	}
 
 }

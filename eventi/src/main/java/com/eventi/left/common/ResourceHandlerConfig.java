@@ -1,4 +1,4 @@
- package com.eventi.left.common;
+package com.eventi.left.common;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -6,9 +6,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class ResourceHandlerConfig implements WebMvcConfigurer {
-   @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/fileView/**")
-              .addResourceLocations("file:///C:/test/");
-    }
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/fileView/**")
+		.addResourceLocations("file:///C:/NaRD_File/");
+
+	}
 }

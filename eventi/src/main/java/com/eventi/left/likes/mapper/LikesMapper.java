@@ -19,6 +19,4 @@ public interface LikesMapper {
 	public int likeInsert(LikesVO LikesVO); // 좋아요 입력
 
 	public int likeDelete(LikesVO LikesVO); // 좋아요 취소
-	
-	public int likeCount(String targetId); //게시글번호 객체저장, 좋아요 개수 조회
 }

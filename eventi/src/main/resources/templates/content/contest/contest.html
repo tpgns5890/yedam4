@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 	<meta charset="UTF-8">
@@ -50,8 +51,8 @@
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 파일이미지 출력 -->
 						<div th:each="f : ${fileList}">
-							<a th:href="|@{/image/}${f.fNm}|" class="image-popup prod-img-bg">
-								<img th:src="|@{/images/}${f.fNm}|" style="width: 540px; height: 785px"
+							<a th:href="|/fileView/${f.fNm}|" class="image-popup prod-img-bg">
+								<img th:src="|/fileView/${f.fNm}|" style="width: 540px; height: 785px"
 									class="img-fluid" alt="Colorlib Template"></a>
 						</div>
 					</div>
@@ -90,8 +91,17 @@
 							<div class="col-md-12"></div>
 						</div>
 
-						<!-- 공모전 작성자 제외 모든회원 -->
-						<div th:if="|${session.member.getUserId()}| != ${contest.writer}">
+						<!-- 비회원 -->
+						<th:block sec:authorize="!isAuthenticated()">
+							<p>
+								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
+								<a href="../login" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
+							</p>
+						</th:block>
+						
+						<!-- 공모전 작성자 제외 일반회원 -->
+						<th:block sec:authorize="isAuthenticated()">
+						<div th:if="|${session.member.getUserId()}| != ${contest.writer} ">
 							<p>
 								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
 								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
@@ -99,7 +109,7 @@
 						</div>
 
 						<!-- 공모전 작성자만 -->
-						 <div th:if="|${session.member.getUserId()}| == ${contest.writer}">
+						 <div th:if="|${session.member.getUserId()}| == ${contest.writer} ">
 							<div>
 								<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button type="button" class="btn btn-primary py-3 px-5 mr-2">수정</button></a>
 								<button type="button" id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
@@ -109,6 +119,7 @@
 								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5">결과등록</button></a>
 							</div>
 						 </div>
+						</th:block>
 					</div>
 				</div>
 
@@ -385,7 +396,7 @@
 		function myLoveCheck() {
 			let targetNo = $('#cNo').text();
 			$.ajax({
-				url: '../likes/List',
+				url: '../contest/ajaxlike',
 				method: 'post',
 				data: {targetNo},
 				beforeSend: function (xhr) {

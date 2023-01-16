@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,9 +22,9 @@ import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.mapper.DesignMapper;
+import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.files.service.FilesVO;
-import com.eventi.left.likes.mapper.LikesMapper;
 import com.eventi.left.member.service.MemberVO;
 
 @Service
@@ -39,6 +40,11 @@ public class ContestServiceImpl implements ContestService {
 	CodeMapper codeMapper;
 	@Autowired
 	DesignMapper dMapper;
+	@Autowired
+	UploadFileMethod newUp; //파일업로드 메소드
+
+	@Value("${spring.servlet.multipart.location}")
+	String filePath;
 
 	// 공모전 전체리스트
 	@Override
@@ -66,37 +72,38 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public int insertContest(ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo) {
 
-		// 사진 등록
-		String realFolder = "/files/contest";
-		File dir = new File(realFolder);
-		if (!dir.isDirectory()) {
-			dir.mkdirs();
-		}
+//		// 사진 등록
+//		String realFolder = "C:/test/";
+//		File dir = new File(realFolder);
+//		if (!dir.isDirectory()) {
+//			dir.mkdirs();
+//		}
+//
+//		// 넘어온 파일개수 리스트 VO저장
+//		for (int i = 0; i < uploadFile.size(); i++) {
+//
+//			// 파일명이 0개 이상일경우만
+//			if (uploadFile.get(i).getSize() > 0) {
+//				// 원본 파일명
+//				String originName = uploadFile.get(i).getOriginalFilename();
+//				files.setFNm(originName);
+//
+//				// 동일 파일명 있을경우
+//				int check = fMapper.NameCheck(files);
+//				if (check != 0) {
+//					String reName = "rename:" + uploadFile.get(i).getOriginalFilename();
+//					files.setSevNm(reName);// 동일 파일명 이름대체
+//				}
+//
+//				files.setTargetId(vo.getcNo()); // 공고번호
+//				files.setCategory("TO1"); // 카테고리(공모전)
+//				files.setSaveAddr(filePath); // 경로지정
+//
+//				fMapper.insertFile(files);
+//			}
+//
+//		}
 
-		// 넘어온 파일개수 리스트 VO저장
-		for (int i = 0; i < uploadFile.size(); i++) {
-
-			// 파일명이 0개 이상일경우만
-			if (uploadFile.get(i).getSize() > 0) {
-				// 원본 파일명
-				String originName = uploadFile.get(i).getOriginalFilename();
-				files.setFNm(originName);
-
-				// 동일 파일명 있을경우
-				int check = fMapper.NameCheck(files);
-				if (check != 0) {
-					String reName = "rename:" + uploadFile.get(i).getOriginalFilename();
-					files.setSevNm(reName);// 동일 파일명 이름대체
-				}
-
-				files.setTargetId(vo.getcNo()); // 공고번호
-				files.setCategory("TO1"); // 카테고리(공모전)
-				files.setSaveAddr(realFolder); // 경로지정
-
-				fMapper.insertFile(files);
-			}
-
-		}
 		// 공모전 우승금액
 		// 1.index 기준으로 등수설정
 		// 2.from입력값이 있다면 insert 및 합계계산후 총상금 지정.
@@ -120,6 +127,8 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전 수정
 	@Override
 	public int updateContest(ContestVO vo) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		vo.setWriter(user.getUserId());
 		return mapper.updateContest(vo);
 	}
 
@@ -171,7 +180,7 @@ public class ContestServiceImpl implements ContestService {
 
 			int Ddays = (int) (calculate / (24 * 60 * 60 * 1000));
 			contest.setdDay(Ddays);
-			
+
 			contestMap.put(contest, Ddays); // map 추가.
 		}
 
@@ -184,7 +193,7 @@ public class ContestServiceImpl implements ContestService {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setWriter(sessionId);
-		
+
 		paging.setTotalRecord(mapper.myContest(vo));
 		paging.setPageUnit(10);
 		vo.setFirst(paging.getFirst());
