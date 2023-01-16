@@ -35,4 +35,5 @@
 		WHERE USER_ID = #{userId}
 		AND TARGET_NO = #{targetNo}
 	</delete>
+	
 </mapper>
