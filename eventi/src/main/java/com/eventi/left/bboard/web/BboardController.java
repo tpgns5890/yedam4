@@ -44,6 +44,8 @@ public class BboardController {
 		return list;
 	}
 	
+	
+	
 	//좋아요 전체 조회
 	@PostMapping("/bLikeList")
 	@ResponseBody
