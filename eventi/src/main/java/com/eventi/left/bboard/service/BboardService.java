@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.files.service.FilesVO;
+
 public interface BboardService {
 	//전체조회
 	public List<BboardVO> bboardList(BboardVO bboardVO);
@@ -15,7 +17,7 @@ public interface BboardService {
 	public List<BboardVO> bboardLike(BboardVO bboardVO);
 	
 	//등록
-	public int bboardInsert(BboardVO bboardVO, MultipartFile uploadFile);
+	public int bboardInsert(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile);
 	
 	//수정
 	public int bboardUpdate(BboardVO bboardVO, MultipartFile uploadFile);

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 
@@ -42,6 +43,8 @@ public class BboardController {
 		List<BboardVO> list = bboardService.bboardList(bboardVO);
 		return list;
 	}
+	
+	
 	
 	//좋아요 전체 조회
 	@PostMapping("/bLikeList")
@@ -77,9 +80,9 @@ public class BboardController {
 	
 	//게시글 등록
 	@PostMapping("/bInsert")
-	public String bInsertForm(BboardVO bboardVO, MultipartFile uploadFile) {
+	public String bInsertForm(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile) {
 		System.out.println(bboardVO);
-		bboardService.bboardInsert(bboardVO, uploadFile);
+		bboardService.bboardInsert(bboardVO, filesVO, uploadFile);
 		//내가 등록한 게시글 전체리스트 페이지로 이동
 		return "redirect:/bboard/bList?type=" + bboardVO.getType();
 	}

@@ -90,13 +90,15 @@
 		</section>
 		
 		<!-- 페이징 처리 -->
-		<div class="row mt-5">
+		<!-- <div class="row mt-5">
 		          <div class="col text-center">
 		            <div class="block-27">
 		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
 		            </div>
 		          </div>
-		        </div>
+		        </div> -->
+		        
+		<p th:text=${paging}></p>
 		
 
 <h2>Modal Example</h2>
@@ -121,7 +123,6 @@
 //페이지이동
 function gopage(i) {
     location.href = '/design/designList?page=' + i;
-    
  }
 
 // Get the modal
