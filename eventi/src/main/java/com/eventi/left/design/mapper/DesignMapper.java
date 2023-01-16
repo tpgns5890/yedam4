@@ -9,7 +9,8 @@ public interface DesignMapper {
 	
 	//디자인 전체 조회
 	public List<DesignVO> designList(DesignVO vo);
-
+	
+	//등록된 디자인 개수
 	public int count(DesignVO vo);
 
 	public List<DesignVO> contestDesignList(String cNo); //공모전 1건에 대한 리스트.

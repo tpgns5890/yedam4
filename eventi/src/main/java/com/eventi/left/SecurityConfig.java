@@ -18,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.header.Header;
 
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.impl.MemberServiceImpl;
@@ -41,6 +42,8 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.headers().frameOptions().sameOrigin(); //security 설정 추가
+		
 		http.authorizeHttpRequests((requests) -> requests
 				.antMatchers("/mc/**").hasRole("MC") //사회자 권한
 				.antMatchers("/designer/**").hasRole("DESIGNER")  //디자이너권한
@@ -78,8 +81,7 @@ public class SecurityConfig {
 			.invalidateHttpSession(true) //세션 삭제
 			.deleteCookies("remember-me", "JSESSIONID"); //자동 로그인 쿠키, Tomcat이 발급한 세션 유지 쿠키 삭제
 		
-        //http.csrf().disable(); 
-		
+        //http.csrf().disable();
 		return http.build();
 	}
 	

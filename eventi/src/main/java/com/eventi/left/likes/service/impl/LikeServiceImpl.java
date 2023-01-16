@@ -34,6 +34,13 @@ public class LikeServiceImpl implements LikesService {
 	public LikesVO getLike(LikesVO LikesVO) {
 		return mapper.getLike(LikesVO);
 	}
+	
+	
+	//좋아요 개수
+	@Override
+	public int countLike(LikesVO LikesVO) {
+		return mapper.countLike(LikesVO);
+	}
 
 	// 좋아요 추가
 	@Override
@@ -56,6 +63,7 @@ public class LikeServiceImpl implements LikesService {
 
 		return mapper.likeDelete(LikesVO);
 	}
+
 
 	@Override
 	public int likeCount(String targetId) {

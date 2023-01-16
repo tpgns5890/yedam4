@@ -3,6 +3,12 @@
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
+   
+<head>
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
 
 <div layout:fragment="content">
 
@@ -37,24 +43,6 @@
          </tr>
       </tbody>
    </table>
-   
-   <!-- <table>
-      <thead>
-         <tr>
-            <th>작성자ID</th>   
-            <th>내용</th>   
-            <th>작성일자</th>   
-         </tr>
-      </thead>
-      <tbody>
-         <tr th:each="mcRey : ${mcReply}">
-            <td th:text=${mcRey.userId}></td>
-            <td th:text=${mcRey.replyCntn}></td>
-            <td th:text=${mcRey.writingDt}></td>
-         </tr>
-      </tbody>
-   </table>
-    -->
     
     <div>
     	<div class="pt-5 mt-5" >
@@ -65,21 +53,30 @@
     </div>
    
    <script>
+   		//csrf 설정
+   		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+   		
+		//해당 포트폴리오 작성자에 대한 댓글을 가져오기 위해 replyTag에 작성자ID를 구해준다.
    		let replyTag = $('#userId').text();
-   		let p = $("<p>").text('test합니다.');
    		
    		//댓글, 대댓글 불러오는 ajax
    		$.ajax({
    			url : '/prtfl/mcReply',
    			method : 'post',
    			data : JSON.stringify({replyTgt:replyTag}),
-   			contentType : "application/json"
+   			contentType : "application/json",
+   			beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+            }
    		}).then(res => {
    			for(reply of res){
    				//댓글일 경우
    				if(reply.rerepTgt == null){
    					$("#reply").append(make(reply));
-   				} else { //대댓글일 경우
+   				} else { //대댓글일 경우, 대댓글의 경우 rerepTgt컬럼에 대댓글을 단 댓글 번호가 적혀있다.
+   					//대댓글은 연관있는 댓글 바로 밑에 들어가야되기 때문에 댓글 생성시 id를 부여하여 rerepTgt이 댓글ID와 같은 번호가 적힌 댓글 밑으로 append한다.
    					$("#" + reply.rerepTgt).append(makeRe(reply));
    				}
    			}
@@ -102,6 +99,9 @@
    		
    		//대댓글 tr생성
    		function makeRe(reply){
+   			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
+   			$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+   			
    			let p = `<ul class="children">
                 <li class="comment">
                 <div class="comment-body">
