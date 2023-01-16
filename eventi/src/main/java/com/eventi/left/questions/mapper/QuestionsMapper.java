@@ -9,6 +9,8 @@ public interface QuestionsMapper {
 		//문의사항
 		public List<QuestionsVO> questionsList(QuestionsVO vo); //전체조회 
 		
+		public QuestionsVO getQuestions(QuestionsVO vo); // 1건 조회
+		
 		public int questionsInsert(QuestionsVO vo); //등록
 		
 		public int questionsUpdate(QuestionsVO vo); //수정

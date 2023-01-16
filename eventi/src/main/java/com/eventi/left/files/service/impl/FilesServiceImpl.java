@@ -22,8 +22,8 @@ public class FilesServiceImpl implements FilesService {
 
 
 	@Override
-	public List<FilesVO> fileList(String cNo) {
-		return mapper.fileList(cNo);
+	public List<FilesVO> fileList(String No) {
+		return mapper.fileList(No);
 	}
 
 

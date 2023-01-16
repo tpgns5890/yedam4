@@ -3,6 +3,7 @@ package com.eventi.left.promotion.mapper;
 import java.util.List;
 
 import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 public interface PromotionBoardMapper {
 	
@@ -23,4 +24,7 @@ public interface PromotionBoardMapper {
 	
 	//게시글 삭제
 	public int proDelete(PromotionVO promotionVO);
+	
+	//댓글 조회
+	public List<ReplyVO> proReply(ReplyVO replyVO);
 }

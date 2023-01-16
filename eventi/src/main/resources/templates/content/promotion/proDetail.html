@@ -53,31 +53,21 @@
             
             <div class="pt-5 mt-5">
               <h3 class="mb-5">6 Comments</h3>
-              <ul class="comment-list">
+              <ul class="comment-list" id=reply>
                 <li class="comment">
                   <div class="vcard bio">
                     <img src="images/person_1.jpg" alt="Image placeholder">
                   </div>
-                  <div class="comment-body">
-                    <h3>John Doe</h3>
+                  <div class="comment-body" th:each="rep : ${proReply}">
+                    <h3 th:text=${rep.userId}></h3>
                     <div class="meta">April 12, 2020 at 1:21am</div>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
                     <p><a href="#" class="reply">Reply</a></p>
                   </div>
                 </li>
 
-                <li class="comment">
-                  <div class="vcard bio">
-                    <img src="images/person_1.jpg" alt="Image placeholder">
-                  </div>
-                  <div class="comment-body">
-                    <h3>John Doe</h3>
-                    <div class="meta">April 12, 2020 at 1:21am</div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                    <p><a href="#" class="reply">Reply</a></p>
-                  </div>
+               
 
-                  <ul class="children">
                     <li class="comment">
                       <div class="vcard bio">
                         <img src="images/person_1.jpg" alt="Image placeholder">
@@ -119,20 +109,8 @@
                       </ul>
                     </li>
                   </ul>
-                </li>
+              
 
-                <li class="comment">
-                  <div class="vcard bio">
-                    <img src="images/person_1.jpg" alt="Image placeholder">
-                  </div>
-                  <div class="comment-body">
-                    <h3>John Doe</h3>
-                    <div class="meta">April 12, 2020 at 1:21am</div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                    <p><a href="#" class="reply">Reply</a></p>
-                  </div>
-                </li>
-              </ul>
               <!-- END comment-list -->
               
               
@@ -238,7 +216,56 @@
       </div>
     </section> <!-- .section -->
 <script>
-
+let replyTag = $('#userId').text();
+	let p = $("<p>").text('test합니다.');
+	
+	//댓글, 대댓글 불러오는 ajax
+	$.ajax({
+		url : '/promotion/proReply',
+		method : 'post',
+		data : JSON.stringify({replyTgt:replyTag}),
+		contentType : "application/json"
+	}).then(res => {
+		for(reply of res){
+			//댓글일 경우
+			if(reply.rerepTgt == null){
+				$("#reply").append(make(reply));
+			} else { //대댓글일 경우
+				$("#" + reply.rerepTgt).append(makeRe(reply));
+			}
+		}
+	})
+	
+	//댓글 tr생성
+	function make(reply){
+		let p = `
+          <li class="comment">
+            <div class="comment-body"  id="${reply.replyNo}">
+              <h3>${reply.userId}</h3>
+              <div class="meta">${reply.writingDt}</div>
+              <p>${reply.replyCntn}</p>
+              <p><a href="#" class="reply">Reply</a></p>
+            </div>
+           </li>
+        `
+		return p;
+	}
+	
+	//대댓글 tr생성
+	function makeRe(reply){
+		let p = `<ul class="children">
+        <li class="comment">
+        <div class="comment-body">
+          <h3>${reply.userId}</h3>
+          <div class="meta">${reply.writingDt}</div>
+          <p>${reply.replyCntn}</p>
+          <p><a href="#" class="reply">Reply</a></p>
+        </div>
+      </li>
+    </ul>`
+    
+    return p;
+	}
 </script>
 </div>
 </html>

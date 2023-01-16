@@ -12,9 +12,22 @@
 		and target_id = #{targetId}
 	</select>
 	
+	<select id="getQuestions">
+		select * 
+		from Questions
+		where category = #{category}
+		and target_id = #{targetId}
+		and q_no = #{qNo}
+	</select>
+	
 	<insert id="questionsInsert">
+		<selectKey keyProperty="qNo" resultType="String" order="BEFORE">
+			SELECT 'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
+			FROM Questions
+		</selectKey>
+	
 		insert into QUESTIONS(Q_NO,USER_ID,TARGET_ID,TTL,CNTN,WRITING_DT,SECRET_YN,CATEGORY,REREP_TGT)
-		values('QU'||qno_seq.NEXTVAL,
+		values(	#{qNo},
 				#{userId},
 				#{targetId},
 				#{Ttl},

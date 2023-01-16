@@ -1,0 +1,90 @@
+* {
+	padding: 0;
+	margin: 0
+}
+
+li {
+	list-style: none
+}
+
+a {
+	text-decoration: none;
+	font-size: 14px
+}
+
+.menu {
+	width: 300px;
+	height: 1000px;
+	overflow: hidden;
+	margin-top: 50px;
+	margin-right: 20px;
+	float: left;
+	margin-right: 20px;
+}
+
+.menu>li {
+	text-align: center;
+	line-height: 50px;
+}
+
+.menu a {
+	color: black;
+}
+
+.submenu {
+	height: 0; /*ul의 높이를 안보이게 처리*/
+	overflow: hidden;
+}
+
+.menu>li:hover {
+	background-color: #94a9ff;
+	transition-duration: 0.5s;
+}
+
+.menu>li:hover .submenu {
+	height: 200px; /*서브메뉴 li한개의 높이 50*5*/
+	transition-duration: 1s;
+}
+
+table {
+	margin-bottom: 50px;
+	table-layout: fixed;
+}
+
+tr:hover {
+	background-color: #94a9ff;
+}
+
+th {
+	padding: 20px 15px;
+	text-align: left;
+	font-weight: 500;
+	font-size: 12px;
+	color: black;
+	text-transform: uppercase;
+}
+
+td {
+	padding: 15px;
+	text-align: left;
+	vertical-align: middle;
+	font-weight: 300;
+	font-size: 12px;
+	color: black;
+}
+
+#deleteBtn {
+	margin-top: 30px;
+	margin-bottom: 10px;
+	margin-left: 165px;
+}
+
+.block-27 {
+	width: 200px;
+	margin-left: 180px;
+}
+
+#search {
+	margin-top: 30px;
+	width: 500px;
+}
