@@ -19,7 +19,7 @@
 				#{targetId},
 				#{Ttl},
 				#{Cntn},
-				#{writingDt},
+				current_date,
 				#{secretYn},
 				#{category},
 				#{rerepTgt}

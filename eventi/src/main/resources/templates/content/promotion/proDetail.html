@@ -19,14 +19,7 @@
          </div>
       </div>
    </section>
-
-<!-- <button type="button" class="btn btn-outline-primary" 
-		th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
-		 
-<button type="button" class="btn btn-outline-primary" 
-		th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
-		
- -->
+	
    <section class="ftco-section ftco-degree-bg">
       <div class="container">
         <div class="row">
@@ -51,12 +44,12 @@
 			
             <div class="tag-widget post-tag-container mb-5 mt-5">
               <div class="tagcloud">
-                <a href="#" class="tag-cloud-link">Life</a>
-                <a href="#" class="tag-cloud-link">Sport</a>
-                <a href="#" class="tag-cloud-link">Tech</a>
-                <a href="#" class="tag-cloud-link">Travel</a>
+                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
+                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
               </div>
             </div>
+            
+<!-- 댓글 -->
             
             <div class="pt-5 mt-5">
               <h3 class="mb-5">6 Comments</h3>
@@ -142,6 +135,8 @@
               </ul>
               <!-- END comment-list -->
               
+              
+<!-- 댓글작성 -->              
               <div class="comment-form-wrap pt-5">
                 <h3 class="mb-5">Leave a comment</h3>
                 <form action="#" class="p-5 bg-light">

@@ -5,6 +5,7 @@
 	layout:decorate="~{layouts/default_layout}">
 
 
+
 <div layout:fragment="content">
 	<section class="hero-wrap hero-wrap-2"
 		style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
@@ -15,7 +16,7 @@
 				class="row no-gutters slider-text align-items-end justify-content-center">
 				<div
 					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<h2 class="mb-0 bread">홍보게시글 등록</h2>
+					<h2 class="mb-0 bread">공지사항 등록</h2>
 				</div>
 			</div>
 		</div>
@@ -24,82 +25,45 @@
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">홍보게시글 작성</h3>
-				<form action="/proInsert" method="POST" id="proInsert" name="proInsert"
+				<h3 class="mb-4">공지사항 작성</h3>
+				<form action="/nocInsert" method="POST" id="nocInsert" name="nocInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 					
 					<div class="row">
-					 	<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">회원ID</label>
-								<input type="text" name="userId" id="userId">
-							</div>
-						</div>
-						 
-						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="ttl">행사명</label> 
-									<input type="text" class="form-control" name="eName" id="eName" >
+								<label class="label" for="ttl">제목</label> 
+									<input type="text" class="form-control" name="ttl" id="ttl" >
 							</div>
 						</div>
 
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">행사시작일</label>
-								<input type="date" class="form-control" name="eSday" id="eSday" >
+								<label class="label" for="#">내용</label>
+								<textarea name="noticeCntn" class="form-control" id="noticeCntn" cols="30" rows="4"></textarea>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">행사종료일</label>
-								<input type="date" class="form-control" name="eEday" id="eEday" >
+								<label class="label" for="#">작성일</label>
+								<input type="date" name="dt" id="dt">
 							</div>
 						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">위치</label>
-								<input type="text" class="form-control" name="loc" id="loc" >
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">소개글</label>
-								<textarea name="intro" class="form-control" id="intro" cols="30" rows="4" ></textarea>
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">행사유형</label>
-								<input type="text" class="form-control" name="eType" id="eType" >
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">입장료</label>
-								<input type="text" class="form-control" name="entrance" id="entrance" >
-							</div>
-						</div>
-						
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">수용인원</label>
-								<input type="text" class="form-control" name="accommodate" id="accommodate" >
-							</div>
-						</div>
-						
+											
 						<div class="col-md-12">
 							<div class="form-group">
 								<input type="file" name="uploadFile">
 							</div>
 						</div>
 						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="#">회원ID</label>
+								<input type="text" name="userId" id="userId">
+							</div>
+						</div>
+
 						<div class="col-md-12">
 							<div class="form-group">
 								<input type="submit" id="insert" value="등록"
@@ -120,7 +84,7 @@ smartEditor = function() {
 	console.log("Naver SmartEditor")
 	nhn.husky.EZCreator.createInIFrame({
 		oAppRef : oEditors,
-		elPlaceHolder : "intro,
+		elPlaceHolder : "noticeCntn",
 		sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
 		fCreator : "createSEditor2"
 	})
@@ -131,8 +95,8 @@ $(document).ready(function() {
 })
 		
 $('#insert').on('click', function insert() {
-			 oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
-			let intro = document.getElementById("intro").value //태그 생성 
+			 oEditors.getById["noticeCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
+			let noticeCntn = document.getElementById("noticeCntn").value //태그 생성 
 			//alert(jobCntn);
 			 <!--var data = $('form[name="jobInsert"]').serializeArray();
 			//구직테이블 입력처리

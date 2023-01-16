@@ -2,29 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.bboard.mapper.BboardMapper">
 	
-	<!-- 조건 -->
+	<!-- 전체 리스트에서 라디오 버튼이 눌린 값에 따른 조건 -->
 	<sql id="bSelect">
+		<!-- 전체일 경우 -->
 		<if test="lclsf !=null and lclsf != '' and lclsf == 'all'"></if>
 		
+		<!-- T04 중 일반일 경우 -->
 		<if test="lclsf !=null and lclsf != '' and lclsf == 'genrl'">
+		
 			AND LCLSF = #{lclsf}
 		</if>
 		
+		<!-- T04 중 후기일 경우 -->
 		<if test="lclsf != null and lclsf != '' and lclsf == 'reply'">
+			AND LCLSF = #{lclsf}
+		</if>
+		
+		<!-- T05 중 사회자일 경우 -->
+		<if test="lclsf != null and lclsf != '' and lclsf == 'mc'">
+			AND LCLSF = #{lclsf}
+		</if>
+		
+		<!-- T04 중 디자이너일 경우 -->
+		<if test="lclsf != null and lclsf != '' and lclsf == 'dgner'">
 			AND LCLSF = #{lclsf}
 		</if>
 	</sql>
 	
 	<!-- type별 전체 게시글 조회 -->
+	<!-- 서브쿼리 이용해서 게시글 번호 별 좋아요 수도 함께 가져온다. -->
+	<!-- 좋아요순으로 정렬을 하고 싶을 경우 ${order}에 좋아요 수 컬럼 별칭을 넣어주면 된다. -->
 	<select id="bboardList" resultType="com.eventi.left.bboard.service.BboardVO">
-		SELECT *
-		FROM B_BOARD
-		WHERE TYPE = #{type}
-		<include refid="bSelect" />
-		ORDER BY ${order} DESC
+	SELECT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
+	FROM B_BOARD b
+	WHERE TYPE = #{type}
+	<include refid="bSelect" />
+	ORDER BY ${order} DESC
 	</select>
 	
 	<!-- type별 좋아요 조회 -->
+	<!-- 내가 좋아요 누른 게시글 리스트 출력 / 로그인중인ID, TYPE 필요 / 정렬도 가능 -->
 	<select id="bboardLike" resultType="com.eventi.left.bboard.service.BboardVO">
 		SELECT b.*, l.like_no
 		FROM B_BOARD b JOIN LIKES l
@@ -50,8 +67,8 @@
 	
 	<!-- 게시글 등록 -->
 	<insert id="bboardInsert">
-		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, IMG, TYPE)
-		VALUES('BB'||BBOARD_SEQ.NEXTVAL, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{img}, #{type}) 
+		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, IMG, TYPE, SAVE)
+		VALUES('BB'||BBOARD_SEQ.NEXTVAL, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{img}, #{type}, #{save}) 
 	</insert>
 	
 	<!-- 게시글 수정 -->

@@ -2,9 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.notice.mapper.NoticeMapper">
-	<select id="getNoticeList" resultType="com.eventi.left.notice.service.NoticeVO">
-		SELECT *
+
+	<!-- 게시글 전체조회 -->
+	<select id="noticeList" resultType="com.eventi.left.notice.service.NoticeVO">
+		SELECT NOTICE_NO, TTL, DT, SEE
 		FROM NOTICE
 	</select>
-
+	
+	<!-- 게시글 등록 -->
+	<insert id="nocInsert">
+		INSERT INTO NOTICE
+		(NOTICE_NO, TTL, NOTICE_CNTN, DT, IMG, USER_ID) <!-- DB -->
+		VALUES('NO'|| NOTICE_SEQ.NEXTVAL, #{ttl}, #{noticeCntn}, #{dt}, #{img}, #{userId}) <!-- VO -->
+	</insert>
+	
+	<!-- 게시판 조회수 -->
+	<update id="seeUp" parameterType="com.eventi.left.notice.service.NoticeVO">
+		UPDATE NOTICE SET
+		SEE = SEE+1
+		WHERE NOTICE_NO  = #{noticeNo}
+	</update>
+	
+	<!-- 게시글 상세조회 -->
+	<select id="nocDetail" resultType="com.eventi.left.notice.service.NoticeVO">
+		SELECT *
+		FROM NOTICE
+		WHERE NOTICE_NO  = #{noticeNo}
+	</select>
+	
+	<!-- 게시글 수정 noticeNo, userid, see 제외-->
+	<update id="nocUpdate" parameterType="com.eventi.left.notice.service.NoticeVO">
+		UPDATE NOTICE
+		SET 
+		TTL = #{ttl},
+		NOTICE_CNTN = #{noticeCntn},
+		DT = #{dt},
+		IMG = #{img}	
+		WHERE NOTICE_NO=#{noticeNo}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="nocDelete">
+		DELETE FROM NOTICE
+		WHERE NOTICE_NO=#{noticeNo}
+	</delete>
 </mapper>

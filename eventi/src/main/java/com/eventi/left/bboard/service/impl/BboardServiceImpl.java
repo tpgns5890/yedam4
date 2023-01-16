@@ -25,6 +25,7 @@ public class BboardServiceImpl implements BboardService{
 	//단건 조회
 	@Override
 	public BboardVO bboardSelect(BboardVO bboardVO) {
+		//조회수 +1
 		bboardMapper.inqUpdate(bboardVO);
 		return bboardMapper.bboardSelect(bboardVO);
 	}

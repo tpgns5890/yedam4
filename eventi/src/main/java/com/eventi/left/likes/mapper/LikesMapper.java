@@ -10,6 +10,9 @@ public interface LikesMapper {
 
 	public LikesVO getLike(LikesVO LikesVO); // 1건조회
 	
+	//좋아요 개수 조회
+	public int countLike(LikesVO LikesVO);
+	
 	//좋아요 입력
 	public int likeInsert(LikesVO LikesVO);
 	
