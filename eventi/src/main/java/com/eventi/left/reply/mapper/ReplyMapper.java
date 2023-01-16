@@ -10,5 +10,7 @@ public interface ReplyMapper {
 		public List<ReplyVO> replyList(ReplyVO ReplyVO); // 전체조회
 
 		public ReplyVO getReply(ReplyVO ReplyVO); // 1건조회
-
+		
+	// 삭제
+		public int replyDelete(ReplyVO ReplyVO);
 }

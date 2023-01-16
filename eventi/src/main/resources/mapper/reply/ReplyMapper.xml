@@ -10,5 +10,11 @@
 
 	<select id="getReply" resultType="ReplyVO">
 	</select>
+	
 
+	<!-- 댓글 삭제 -->
+	<delete id="replyDelete">
+		DELETE FROM REPLY
+		WHERE REPLY_NO=#{replyNo}
+	</delete>
 </mapper>

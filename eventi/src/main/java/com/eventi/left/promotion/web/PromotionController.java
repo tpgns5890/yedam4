@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.reply.service.ReplyService;
 import com.eventi.left.reply.service.ReplyVO;
 
 @Controller
@@ -22,6 +23,9 @@ public class PromotionController {
 
 	@Autowired 
 	PromotionService proService;
+	
+	@Autowired
+	ReplyService service;
 	
 	//홍보게시물 전체조회
 	@RequestMapping(value = "/proList", method=RequestMethod.GET)
@@ -35,17 +39,16 @@ public class PromotionController {
 		public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO) {
 			model.addAttribute("proDetail", proService.proDetail(promotionVO));
 			
-			replyVO.setReplyTgt(promotionVO.getUserId());
-			model.addAttribute("proReply", proService.proReply(replyVO));
 			return "content/promotion/proDetail";
 		}
 		
-	//댓글 조회 
+	//게시물 댓글 및 대댓글 조회
 		@RequestMapping(value="/proReply", method=RequestMethod.POST)
-		@ResponseBody
+		@ResponseBody //vo->json으로 반환
+		//json타입으로 보내면 RequestBody필요(쿼리 스트링이면 필요없음)
 		public List<ReplyVO> proReply(@RequestBody ReplyVO vo) {
-			List<ReplyVO> a = proService.proReply(vo);
-			return a;
+			List<ReplyVO> reply = proService.proReply(vo);
+			return reply;
 		}
 		
 	//게시글등록폼이동
@@ -80,5 +83,11 @@ public class PromotionController {
 		public String proDelete(PromotionVO promotionVO) {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
+		}
+	// 댓글 삭제
+		@PostMapping("/replyDelete")
+		@ResponseBody
+		public int replyDelete(ReplyVO replyVO) {
+			return service.replyDelete(replyVO); 
 		}
 }

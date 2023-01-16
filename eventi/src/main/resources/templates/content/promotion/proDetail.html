@@ -3,6 +3,7 @@
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
+   
 <div layout:fragment="content">
 
 <section class="hero-wrap hero-wrap-2 mb-4 "
@@ -24,11 +25,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 ftco-animate">
-          
             <img src="images/image_1.jpg" alt="" class="img-fluid">  
-            
-          
-            <h2 class="mb-3 mt-5" th:text=${proDetail.proNo}></h2>
+            <h2 class="mb-3 mt-5" th:text=${proDetail.proNo} id="proNo"></h2>
             <h2 class="mb-3" th:text=${proDetail.eName}></h2>
             <p th:text=${proDetail.userId}></p>
 			<p th:text=${proDetail.eSday}></p>
@@ -40,7 +38,6 @@
 				<p th:text=${proDetail.accommodate}></p>
 				<p th:text=${proDetail.img}></p>
 				<p th:text=${proDetail.see}></p>
-			
 			
             <div class="tag-widget post-tag-container mb-5 mt-5">
               <div class="tagcloud">
@@ -54,68 +51,10 @@
             <div class="pt-5 mt-5">
               <h3 class="mb-5">6 Comments</h3>
               <ul class="comment-list" id=reply>
-                <li class="comment">
-                  <div class="vcard bio">
-                    <img src="images/person_1.jpg" alt="Image placeholder">
-                  </div>
-                  <div class="comment-body" th:each="rep : ${proReply}">
-                    <h3 th:text=${rep.userId}></h3>
-                    <div class="meta">April 12, 2020 at 1:21am</div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                    <p><a href="#" class="reply">Reply</a></p>
-                  </div>
-                </li>
-
-               
-
-                    <li class="comment">
-                      <div class="vcard bio">
-                        <img src="images/person_1.jpg" alt="Image placeholder">
-                      </div>
-                      <div class="comment-body">
-                        <h3>John Doe</h3>
-                        <div class="meta">April 12, 2020 at 1:21am</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                        <p><a href="#" class="reply">Reply</a></p>
-                      </div>
-
-
-                      <ul class="children">
-                        <li class="comment">
-                          <div class="vcard bio">
-                            <img src="images/person_1.jpg" alt="Image placeholder">
-                          </div>
-                          <div class="comment-body">
-                            <h3>John Doe</h3>
-                            <div class="meta">April 12, 2020 at 1:21am</div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                            <p><a href="#" class="reply">Reply</a></p>
-                          </div>
-
-                            <ul class="children">
-                              <li class="comment">
-                                <div class="vcard bio">
-                                  <img src="images/person_1.jpg" alt="Image placeholder">
-                                </div>
-                                <div class="comment-body">
-                                  <h3>John Doe</h3>
-                                  <div class="meta">April 12, 2020 at 1:21am</div>
-                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                  <p><a href="#" class="reply">Reply</a></p>
-                                </div>
-                              </li>
-                            </ul>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-              
-
-              <!-- END comment-list -->
-              
-              
-<!-- 댓글작성 -->              
-              <div class="comment-form-wrap pt-5">
+              </ul>
+             </div>
+             
+              <!-- <div class="comment-form-wrap pt-5">
                 <h3 class="mb-5">Leave a comment</h3>
                 <form action="#" class="p-5 bg-light">
                   <div class="form-group">
@@ -140,10 +79,11 @@
                   </div>
 
                 </form>
-              </div>
-            </div>
-
-          </div> <!-- .col-md-8 -->
+              </div> 
+            </div>-->
+  
+<!-- 댓글 끝-->    
+        <!--   </div> .col-md-8
           <div class="col-lg-4 sidebar pl-lg-5 ftco-animate">
             <div class="sidebar-box">
               <form action="#" class="search-form">
@@ -152,10 +92,10 @@
                   <input type="text" class="form-control" placeholder="Type a keyword and hit enter">
                 </div>
               </form>
-            </div>
+            </div> -->
              
 
-            <div class="sidebar-box ftco-animate">
+<!--             <div class="sidebar-box ftco-animate">
               <h3>Recent Blog</h3>
               <div class="block-21 mb-4 d-flex">
                 <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
@@ -204,27 +144,39 @@
                 <a href="#" class="tag-cloud-link">house</a>
                 <a href="#" class="tag-cloud-link">technology</a>
               </div>
-            </div>
+            </div> -->
 
-            <div class="sidebar-box ftco-animate">
+         <!--    <div class="sidebar-box ftco-animate">
               <h3>Paragraph</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
-            </div>
-          </div>
+            </div> -->
+         
 
         </div>
       </div>
+      </div>
     </section> <!-- .section -->
+    
 <script>
-let replyTag = $('#userId').text();
-	let p = $("<p>").text('test합니다.');
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+//해당 포트폴리오 작성자에 대한 댓글을 가져오기 위해 replyTag에 proNo를 구해준다.
+let replyTag = $('#proNo').text();
+	//alert(replyTag);
 	
 	//댓글, 대댓글 불러오는 ajax
-	$.ajax({
-		url : '/promotion/proReply',
+	 $.ajax({
+		url : '/proReply', //controller에서 설정한 경로
 		method : 'post',
 		data : JSON.stringify({replyTgt:replyTag}),
-		contentType : "application/json"
+		contentType : "application/json",
+		beforeSend : function(xhr)
+        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			xhr.setRequestHeader(header, token);
+        }
+		
 	}).then(res => {
 		for(reply of res){
 			//댓글일 경우
@@ -236,23 +188,53 @@ let replyTag = $('#userId').text();
 		}
 	})
 	
-	//댓글 tr생성
+	 //댓글 tr생성
 	function make(reply){
-		let p = `
-          <li class="comment">
-            <div class="comment-body"  id="${reply.replyNo}">
-              <h3>${reply.userId}</h3>
-              <div class="meta">${reply.writingDt}</div>
-              <p>${reply.replyCntn}</p>
-              <p><a href="#" class="reply">Reply</a></p>
-            </div>
-           </li>
-        `
+		let btn = ''; 
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		if(reply.userId ==userId){
+			btn = `<button class='repDelete' href="${reply.replyNo}">삭제</button>`			
+		}
+		let p =`<li class="comment">
+			<div class="comment-body" id="${reply.replyNo}">
+			<h3>${reply.userId}</h3>
+            <div class="meta">${reply.writingDt}</div>
+            <p>${reply.replyCntn} ${btn}</p>
+            <p><a href="#" class="reply">Reply</a></p>
+			</div>
+			</li>`
+		
 		return p;
 	}
+	 $(document).on('click', '.repDelete', function(e){
+			let btn=$(this);
+			let replyNo = $(this).attr("href");	
+			$.ajax({
+				data : {
+					replyNo : replyNo
+				},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+				},
+				url : '/replyDelete',
+				type : 'POST',
+				success : function(result){
+					if(result ==1){
+					btn.parentsUntil(".comment").remove();
+				
+				}
+			}
+		});		
+	});
+	
+	
 	
 	//대댓글 tr생성
+	//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
 	function makeRe(reply){
+		$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+		
 		let p = `<ul class="children">
         <li class="comment">
         <div class="comment-body">
@@ -264,8 +246,11 @@ let replyTag = $('#userId').text();
       </li>
     </ul>`
     
-    return p;
+    return p; 
 	}
+	
+	//댓글삭제
+	
 </script>
 </div>
 </html>

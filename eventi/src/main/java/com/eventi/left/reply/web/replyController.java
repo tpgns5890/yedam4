@@ -20,5 +20,6 @@ public class replyController {
 		model.addAttribute("replyList", service.replyList(null));
 		return "content/reply/replyList";
 	}
-
+	
+	
 }

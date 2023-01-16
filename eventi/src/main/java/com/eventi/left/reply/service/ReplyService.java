@@ -10,5 +10,6 @@ public interface ReplyService {
 
 	public ReplyVO getReply(ReplyVO ReplyVO); // 1건조회
 
-
+	// 삭제
+	public int replyDelete(ReplyVO ReplyVO);
 }

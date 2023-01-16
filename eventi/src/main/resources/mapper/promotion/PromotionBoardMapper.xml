@@ -58,7 +58,8 @@
 	<select id="proReply" resultType="com.eventi.left.reply.service.ReplyVO">
 		SELECT *
 		FROM REPLY
-		WHERE BOARD_CAT = 'T06'
+		WHERE BOARD_CAT = 'T02'
 		AND REPLY_TGT = #{replyTgt}
 	</select>
+	
 </mapper>

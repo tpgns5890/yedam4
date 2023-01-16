@@ -23,5 +23,12 @@ public class ReplyServiceImpl implements ReplyService {
 	public ReplyVO getReply(ReplyVO ReplyVO) {
 		return mapper.getReply(ReplyVO);
 	}
+	
+	//댓글 삭제
+	@Override
+	public int replyDelete(ReplyVO ReplyVO) {
+		// TODO Auto-generated method stub
+		return mapper.replyDelete(ReplyVO);
+	}
 
 }
