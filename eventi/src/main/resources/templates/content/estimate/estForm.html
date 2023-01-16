@@ -4,6 +4,10 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
 <head>
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 <meta charset="UTF-8">
 <style>
 #customers {
@@ -124,47 +128,48 @@ p {
       </div>
    </section>
  <!-- 행사유형 선택 -->
+ <form id="insertFrm" name="insertFrm">
 <div id="bodyContents">
 <h1>어떤 행사를 기획중이신가요?</h1>
 <table id="customers">
   <tr>
     <td><label class="container">기념식
-  <input type="radio" name="type" value="기념식">
+  <input type="radio" name="eventType" value="기념식">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">축제/가요제/플리마켓
-  <input type="radio" name="type" value="축제/가요제/플리마켓">
+  <input type="radio" name="eventType" value="축제/가요제/플리마켓">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">체육대회/단합행사
-  <input type="radio" name="type" value="체육대회/단합행사">
+  <input type="radio" name="eventType" value="체육대회/단합행사">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">세미나/포럼/워크샵
-  <input type="radio" name="type" value="세미나/포럼/워크샵">
+  <input type="radio" name="eventType" value="세미나/포럼/워크샵">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">전시회/박람회
-  <input type="radio" name="type" value="전시회/박람회">
+  <input type="radio" name="eventType" value="전시회/박람회">
   <span class="checkmark"></span>
 </label></td>
   </tr>
     <tr>
    <td><label class="container">신년회/송년회
-  <input type="radio" name="type" value="신년회/송년회">
+  <input type="radio" name="eventType" value="신년회/송년회">
   <span class="checkmark"></span>
 </label></td>
   </tr>
 </table>
-   <input type="button" value="다음" class="next" id="type">
+   <input type="button" value="다음" class="next" id="eventType">
 </div><!-- end of bodyContents -->
 
  <!-- 행사장소 선택 -->
@@ -173,44 +178,43 @@ p {
 <table id="customers">
   <tr>
     <td><label class="container">호텔
-  <input type="radio"  name="place" value="호텔">
+  <input type="radio"  name="expectedPl" value="호텔">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">이벤트/컨벤션홀
-  <input type="radio"  name="place" value="이벤트/컨벤션홀">
+  <input type="radio"  name="expectedPl" value="이벤트/컨벤션홀">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">주거 공간(주택,빌라 등)
-  <input type="radio"  name="place" value="주거 공간">
-   <input name="radio">
+  <input type="radio"  name="expectedPl" value="주거 공간">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">사내 공간(강당, 사무실, 로비 등)
-  <input type="radio"  name="place" value="사내 공간">
+  <input type="radio"  name="expectedPl" value="사내 공간">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">기타 실내(극장, 공연장, 클럽 등)
-  <input type="radio"  name="place" value="기타 실내">
+  <input type="radio"  name="expectedPl" value="기타 실내">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">기타 야외(체육관, 공원, 캠핌장 등)
-  <input type="radio"  name="place" value="기타 야외">
+  <input type="radio"  name="expectedPl" value="기타 야외">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">미정
-   <input type="radio" name="place" value="미정">
+   <input type="radio" name="expectedPl" value="미정">
   <span class="checkmark"></span>
 </label></td>
   </tr>
@@ -222,7 +226,7 @@ p {
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="place">
+ <input type="button" value="다음" class="next" id="expectedPl">
 </div><!-- end of bodyContents -->
 
  <!-- 행사규모 선택 -->
@@ -273,9 +277,9 @@ p {
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
 <h1>행사 날짜를 선택해주세요.</h1>
-<input type="date" name="date" id="date" value=""><br>
+<input type="date" name="eventDate" id="eventDate" value=""><br>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" id="dateCheck" class="next">
+ <input type="button" value="다음" id="eventDate" class="next">
 </div><!-- end of bodyContents -->
 
  <!-- 행사시작시간 선택 -->
@@ -284,23 +288,23 @@ p {
 <table id="customers">
   <tr>
     <td><label class="container">오전
-  <input type="radio"  name="time" value="am">
+  <input type="radio"  name="eventTime" value="am">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">오후
-  <input type="radio"  name="time" value="pm">
+  <input type="radio"  name="eventTime" value="pm">
   <span class="checkmark"></span>
 </label></td>
-  </tr>
+  <!-- </tr>
   <tr>
    <td><label class="container">시간</label>
   <input name="time"></td>
-  </tr>
+  </tr> -->
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="time">
+ <input type="button" value="다음" class="next" id="eventTime">
 </div><!-- end of bodyContents -->
 
  <!-- 행사소요시간 선택 -->
@@ -309,32 +313,31 @@ p {
 <table id="customers">
   <tr>
     <td><label class="container">1시간
-  <input type="radio"  name="duration" value="1">
+  <input type="radio"  name="eventDuration" value="1">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">2시간
-  <input type="radio"  name="duration" value="2">
+  <input type="radio"  name="eventDuration" value="2">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">3시간
-  <input type="radio"  name="duration" value="3">
-   <input name="radio">
+  <input type="radio"  name="eventDuration" value="3">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="container">4시간
-  <input type="radio"  name="duration" value="4">
+  <input type="radio"  name="eventDuration" value="4">
   <span class="checkmark"></span>
 </label></td>
   </tr>
    <tr>
    <td><label class="container">하루 이상
-  <input type="radio"  name="duration" value="24">
+  <input type="radio"  name="eventDuration" value="24">
   <span class="checkmark"></span>
 </label></td>
   </tr>
@@ -346,13 +349,13 @@ p {
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="duration">
+ <input type="button" value="다음" class="next" id="eventDuration">
  </div><!-- end of bodyContents -->
  
   <!-- 행사지역 선택 -->
  <div id="bodyContents" class="hidden">
 <h1>행사 예상 지역을 선택해주세요.</h1>
-<select name="locals" >
+<select name="expectedLocal" >
 	<option value="A00">==지역선택==</option>
 	<option value="A01">서울</option>
 	<option value="A02">인천</option>
@@ -369,28 +372,30 @@ p {
 	<option value="A13">제주도</option>
 </select>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="local">
+ <input type="button" value="다음" class="next" id="expectedLocal">
 </div><!-- end of bodyContents -->
 
  <!-- 행사 희망사항 입력 -->
 <div id="bodyContents" class="hidden">
 <h1>행사 관련 희망사항을 알려주세요.</h1>
-<input name="wish" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
+<input name="wishes" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
  <input type="button" value="이전" class="prev">
  <input type="button" value="견적서 보내기" class="submit">
- 
+ <input type="hidden" th:value="${session.member.userId}" name="userId" /> 
 </div>
+<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
 <script>
 //다음 버튼 클릭 시
 $('.next').click(function() {
 	var name = $(this).attr('id');
 	//선택항목 별 선택여부 체크
 	switch(name){
-	case "type" :
-	case "place" :
+	case "eventType" :
+	case "expectedPl" :
 	case "pats" : 
-	case "time" :
-	case "duration" :
+	case "eventTime" :
+	case "eventDuration" :
 		var checked = $('input[name='+name+']:checked');
 		if(!checked.length) {
 		$('p').remove()
@@ -404,8 +409,8 @@ $('.next').click(function() {
 			$(this).parent().next().removeClass('hidden');
 		break;
 		
-	case "local" :
-		if($("[name=locals] > option:selected").val() == 'A00'){
+	case "expectedLocal" :
+		if($("[name=expectedLocal] > option:selected").val() == 'A00'){
 			$('p').remove()
 			 var p = document.createElement('p')
 			 p.setAttribute('id', 'p')
@@ -417,8 +422,8 @@ $('.next').click(function() {
 			$(this).parent().next().removeClass('hidden');
 		break;
 		
-	case "dateCheck" :
-		var date = $('input[name=date]').val();
+	case "eventDate" :
+		var date = $('input[name=eventDate]').val();
 		if(date == "") {
 			$('p').remove()
 			 var p = document.createElement('p')
@@ -444,7 +449,7 @@ $('.prev').click(function() {
 var now_utc = Date.now()
 var timeOff = new Date().getTimezoneOffset()*60000;
 var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-document.getElementById('date').setAttribute("min", today);
+document.getElementById('eventDate').setAttribute("min", today);
 
 //기타 체크시
 $('input:radio[name=etc]').click(function() { 
@@ -454,26 +459,31 @@ $('input:radio[name=etc]').click(function() {
 	
 //견적서 보내기 버튼 클릭 시
 $('.submit').click(function() {
-	var type = $('input:radio[name=type]:checked').val(); //행사유형
-	console.log(type)
-	var place = $('input[name=place]:checked').val(); //행사장소	
-	console.log(place)
-	var pats = $('input[name=pats]:checked').val();	 //행사규모
-	console.log(pats)
-	var date = $('input[name=date]').val();	 //행사날짜
-	console.log(date)
-	var time = $('input[name=time]:checked').val(); //행사시작시간
-	console.log(time)
-	var duration = $('input[name=duration]:checked').val();//행사소요시간
-	console.log(duration)
-	var local = $("[name=locals] > option:selected").val(); //행사지역
-	console.log(local)
-	var wish = $('input[name=wish]').val(); //행사관련 희망사항
-	var userId = 
-	console.log(wish)
-	//작성완료 페이지 이동
-	//location.href="/estFormDone"; 
-})
+	
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+	var data = $("form[name=insertFrm]").serializeObject();
+	console.log(data);
+	//견적요청서 등록
+ 	$.ajax({
+		url: "/insertEst",
+		method: "POST",
+		contentType: 'application/json',
+		data: JSON.stringify(data),
+		beforeSend : function(xhr)
+        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        xhr.setRequestHeader(header, token);
+        },
+		success: function (data) {
+			console.log(data);
+			//location.href="/estFormDone?eno=" + data;
+         },
+         error: function () {
+				alert("서버 요청 실패");
+			}
+    });
+	}); 
 </script>
 </div>
 </body>
