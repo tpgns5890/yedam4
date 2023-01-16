@@ -1,4 +1,4 @@
-package com.eventi.left;
+package com.eventi.left.common;
 
 import java.io.IOException;
 
@@ -42,7 +42,9 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.headers().frameOptions().sameOrigin(); //security 설정 추가
+		http.headers()
+			.frameOptions()
+			.sameOrigin(); //security 설정 추가
 		
 		http.authorizeHttpRequests((requests) -> requests
 				.antMatchers("/mc/**").hasRole("MC") //사회자 권한
@@ -51,6 +53,7 @@ public class SecurityConfig {
 				.antMatchers("/admin/**").hasRole("ADMIN")	//관리자권한
 				.anyRequest().permitAll()	//그외 모든 url 접근권한 없음
 				);
+		
 		http.formLogin()
 				//.loginPage("/signinPage")	// 사용자 정의 로그인 페이지
 				.defaultSuccessUrl("/") 	// 로그인 성공 후 이동 페이지
@@ -68,6 +71,7 @@ public class SecurityConfig {
 		                    }
 		                }
 		        );
+		
 		http.rememberMe()	//자동로그인
 			.key("key")
 			.rememberMeParameter("remember-me")
@@ -80,11 +84,11 @@ public class SecurityConfig {
 			.logoutSuccessUrl("/")
 			.invalidateHttpSession(true) //세션 삭제
 			.deleteCookies("remember-me", "JSESSIONID"); //자동 로그인 쿠키, Tomcat이 발급한 세션 유지 쿠키 삭제
-		
-        //http.csrf().disable();
+
 		return http.build();
 	}
 	
+	//자동로그인 정보 토큰 저장
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
