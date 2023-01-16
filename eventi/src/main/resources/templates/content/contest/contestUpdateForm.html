@@ -33,6 +33,7 @@ ul{
 		</section>
 		<div class="contestContainer">
 			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
+				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
 					<li>
 						<th:block th:switch="${contest.category}">
@@ -51,7 +52,7 @@ ul{
 					<li>
 						<label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li>
 					<li>
-						<label>내용</label> <textarea rows="10" cols="50" name="cntn" th:text="${contest.cntn}"></textarea></li>
+						<li><label>요청사항</label> <textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 					<li>
 						<label>첨부파일</label><input type="file"  multiple><br /></li>
 					<li>
@@ -82,9 +83,28 @@ ul{
 			</form>
 		</div>
 	<script>
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	let oEditors = []
+
+	smartEditor = function() {
+		console.log("Naver SmartEditor")
+		nhn.husky.EZCreator.createInIFrame({
+			oAppRef : oEditors,
+			elPlaceHolder : "cntn",
+			sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+			fCreator : "createSEditor2"
+		})
+	}
+
+	$(document).ready(function() {
+		smartEditor()
+	})
+
 	
-	//공모전 수정처리(1/10완료)
 	$('#updateBtn').on('click', function (){
+		oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+		
 		var cNo = $("input[name='cNo']").val();
 		console.log(cNo)
 	 	var ttl = $("input[name='ttl']").val();
@@ -96,6 +116,10 @@ ul{
 	           dataType: "json",
 	           data: JSON.stringify({cNo,ttl,cntn}),
 	           contentType : "application/json",
+	           beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
 	           success: function (result) {
 	                 alert('수정처리 성공');
 	                  location.href='/contest/select?cNo='+cNo; 

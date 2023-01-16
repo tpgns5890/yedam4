@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 	<style>
@@ -71,11 +72,31 @@
 		<div class="contest_Container">
 
 			<div class="action-filter">
+				<!-- 비회원 좋아요버튼-->
+				<th:block sec:authorize="!isAuthenticated()">
+				<div class="stage" style="float: right;">
+					<a href="../login"><div id="love" class="stage heart"></div></a>
+				</div>
+				</th:block>
+				
+				<!-- 회원 좋아요버튼-->
+				<th:block sec:authorize="isAuthenticated()">
 				<div class="stage" style="float: right;">
 					<div id="love" class="stage heart" onclick="loveClick(this)"></div>
 				</div>
+				</th:block>
+				
+				<!-- 비회원 공모전작성버튼-->
+				<th:block sec:authorize="!isAuthenticated()">
+				<a href="../login"><button>공모전 작성</button></a>
+				</th:block>
+				
+				<!-- 일반회원 공모전작성버튼-->
+				<th:block sec:authorize="isAuthenticated()">
 				<a href="./insert"><button>공모전 작성</button></a>
-
+				</th:block>
+				
+				
 				<!-- 공모전 정렬기준 -->
 				<select id="order" name="order">
 					<option value="inq">조회수</option>
@@ -247,6 +268,7 @@
 								<p>
 									신고수<span id="rprt">${contest.rprt}</span>
 									조회수<span id="inq">${contest.inq}</span>
+									좋아요<span id="likes">${contest.likes}</span>
 								</p>
 								<div id="style">#${contest.style}</div>
 							</div>
@@ -307,7 +329,7 @@
 					if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
 
 						$.ajax({
-							url: '../likes/List',
+							url: '../contest/ajaxlike',
 							method: 'post',
 							beforeSend: function (xhr) {
 								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/

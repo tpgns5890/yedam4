@@ -65,9 +65,4 @@ public class LikeServiceImpl implements LikesService {
 	}
 
 
-	@Override
-	public int likeCount(String targetId) {
-		return mapper.likeCount(targetId);
-	}
-
 }

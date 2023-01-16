@@ -17,30 +17,29 @@
 		SELECT * FROM likes
 	</select>
 	
-	<!-- 좋아요 확인 -->
+	<!-- 로그인회원의 게시글 좋아요 여부 확인 -->
 	<select id="getLike" resultType="LikesVO">
 		SELECT *
 		FROM LIKES
-		WHERE USER_ID
-		= #{userId}
+		WHERE USER_ID = #{userId}
 		AND TARGET_NO = #{targetNo}
 	</select>
 	
-	<!-- 좋아요 건수 조회 -->
+	<!-- 해당게시글 좋아요 건수 조회 -->
 	<select id="countLike" resultType="int">
 		SELECT COUNT(*) 
 		FROM LIKES 
 		WHERE TARGET_NO=#{targetNo}
 	</select>
 	
-	<!-- 좋아요 등록 -->
+	<!-- 로그인회원의 좋아요 등록 -->
 	<insert id="likeInsert">
 		INSERT INTO LIKES
 		VALUES('LI'||LIKENO_SEQ.NEXTVAL,
 		#{userId}, #{targetNo}, #{category})
 	</insert>
 
-	<!-- 좋아요 취소 -->
+	<!-- 로그인회원의 좋아요 취소 -->
 	<delete id="likeDelete">
 		DELETE FROM LIKES
 		WHERE USER_ID = #{userId}
@@ -48,11 +47,4 @@
 		TARGET_NO = #{targetNo}
 	</delete>
 
-	<!-- 게시글 좋아요개수 파악 -->
-	<select id="likeCount" resultType="int">
-		SELECT COUNT(*)
-		FROM CONTEST C RIGHT JOIN LIKES L
-							ON C.C_NO = L.TARGET_NO
-		WHERE C_NO = #{targetNo}
-	</select>
 </mapper>

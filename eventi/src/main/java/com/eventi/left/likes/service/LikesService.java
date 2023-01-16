@@ -18,6 +18,4 @@ public interface LikesService {
 	//좋아요 개수 조회
 	public int countLike(LikesVO LikesVO);
 
-	
-	public int likeCount(String targetId); //게시글번호 객체저장, 좋아요 개수 조회
 }
