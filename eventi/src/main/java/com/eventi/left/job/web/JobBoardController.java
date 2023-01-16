@@ -70,4 +70,13 @@ public class JobBoardController {
 			return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
 			
 		}
+	//정렬 조회
+	/*
+	 * @PostMapping("/jobList")
+	 * 
+	 * @ResponseBody public List<JobBoardVO> bSelectList(Model model, JobBoardVO
+	 * jobBoardVO) { model.addAttribute("type", jobBoardVO.getType()); //정렬 조건이 포함된
+	 * 전체리스트 조회 후 list에 담아서 보내기 List<JobBoardVO> list =
+	 * jobService.getJobList(jobBoardVO); return list; }
+	 */
 }

@@ -27,4 +27,6 @@ public interface PromotionBoardMapper {
 	
 	//댓글 조회
 	public List<ReplyVO> proReply(ReplyVO replyVO);
+	
+	
 }
