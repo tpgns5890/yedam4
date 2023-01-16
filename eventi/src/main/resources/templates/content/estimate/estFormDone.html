@@ -19,7 +19,29 @@
          </div>
       </div>
    </section>
-      <h2 >견적서 작성이 완료되었습니다.(구현중)</h2>
+      <div id=estfrm>
+<h3>견적요청서</h3>
+<hr>
+<!-- 선택폼 -->
+  <form>
+    <label for="title" id="title">어떤 행사를 계획중이신가요?</label>
+    <input type="text" id="eventType" name="eventType" th:value="${est.eventType}" readonly>
+        <label for="title" id="title" >행사 규모는 어느정도이신가요?</label>
+    <input type="text" id="pats" name="pats" th:value="${est.pats}" readonly>
+        <label for="title" id="title">행사 예정 장소는 어디인가요?</label>
+    <input type="text" id="expectedPl" name="expectedPl" th:value="${est.expectedPl}" readonly>
+        <label for="title" id="title">행사 날짜를 선택해주세요.</label>
+    <input type="text" id="eventDate" name="eventDate" th:value="${est.eventDate}" readonly>
+        <label for="title" id="title">행사 시작시간은 언제인가요?</label>
+    <input type="text" id="eventTime" name="eventTime" th:value="${est.eventTime}" readonly>
+        <label for="title" id="title">행사 예상 소요시간을 선택해주세요.</label>
+    <input type="text" id="eventDuration" name="eventDuration" th:value="${est.eventDuration}" readonly>
+        <label for="title" id="title">행사 예정지역을 선택해주세요.</label>
+    <input type="text" id="expectedLocal" name="expectedLocal" th:value="${est.expectedLocal}" readonly>
+        <label for="title" id="title">행사 관련 희망사항을 알려주세요.</label>
+    <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
+  </form>
+</div>
 </div>
 
 </html>

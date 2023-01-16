@@ -28,8 +28,8 @@ public class EstServiceImpl implements EstService {
 	}
 	//견적요청서 등록
 	@Override
-	public EstVO insertEst(EstVO estVO) {
-		return estMapper.insertEst(estVO);
+	public int insertEst(EstVO estVO) {
+		 return estMapper.insertEst(estVO);
 	}
 	//제안서 견적서별 전체조회
 	@Override
@@ -39,7 +39,6 @@ public class EstServiceImpl implements EstService {
 	//업체 제안서 채택/후기수 조회 
 	@Override
 	public Map<String, String> getCount(String eno, String userId) {
-		
 		return estMapper.getCount(eno, userId);
 	}
 	
