@@ -90,7 +90,9 @@ button {
        <label for="companyInt" class="col-form-label">업체소개</label>
        <input type="text" class="form-control" id="recipient-name">
        <label for="companyInt" class="col-form-label">물품목록</label>
-		
+		<div id="myGdList" >
+		<p>물품목록출력하는곳</p>
+		</div>
        <label for="companyInt" class="col-form-label">기타목록</label>
        <input type="text" class="form-control" id="recipient-name">
        총금액 : 
@@ -110,8 +112,27 @@ button {
 	<input type="hidden" name="userId" value="${prop.userId}">
   <input type="hidden" name="eno" value="${prop.eno}">
     <p th:text="|고용회수 : ${count.adoption}|"></p>	
-    <p th:text="|후기수 : ${count.review}|"></p>	
+    <p th:text="|후기수 : ${count.review}|"></p>
  </div>
+ <input type="hidden" name="userId" th:value="${session.member.userId}">
 </div><!-- End of layout:fragment -->
+<script>
+ $(function () {
+ var token = $("meta[name='_csrf']").attr("content");
+ var header = $("meta[name='_csrf_header']").attr("content");	 
+	 
+var myId = $('input[name="userId"]').val();
+	$.ajax({
+		url: "/myGoodsList?myId="+ myId,
+		method: "GET",
+		success: function (data) {
+			console.log(data);
+         },
+         error: function () {
+				alert("서버 요청 실패");
+			}	
+	});
+ });
+</script>
 </body>
 </html>

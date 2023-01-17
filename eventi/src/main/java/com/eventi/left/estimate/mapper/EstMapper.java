@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.eventi.left.estimate.service.EstVO;
 import com.eventi.left.estimate.service.PropVO;
+import com.eventi.left.rent.service.RentGdVO;
 
 public interface EstMapper {
 	//견적요청서
@@ -16,4 +17,6 @@ public interface EstMapper {
 	public List<PropVO> getPropList(String eno); // 견적서별 전체조회
 	public PropVO insertProp(PropVO propVO);  // 등록
 	public Map<String, String> getCount(String eno, String userId); //업체 제안서 채택/후기수 조회
+	
+	public List<RentGdVO> myGdList(String userId); //해당업체의 물품조회
 }
