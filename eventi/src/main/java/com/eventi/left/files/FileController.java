@@ -15,21 +15,9 @@ import com.eventi.left.files.mapper.FilesMapper;
 
 @Controller
 public class FileController {
-   @Autowired
-   FilesMapper mapper;
-   @Autowired
+
+	@Autowired
    UploadFileMethod newUp;
-   
-   // 파일 1건 등록
-   @PostMapping("/fileUpload")
-   @ResponseBody
-   public String bandImgUpload(@RequestParam MultipartFile uploadFile,String targetId, String category) throws IllegalStateException, IOException{    
-      String newName = null;
-     
-      //경로에 저장된 파일명 반환
-      newName = newUp.uploadOnce(uploadFile, targetId, category);
-      return newName;
-   }
    
    //첨부파일 여러개 업로드할 때 사용
    @PostMapping("/filesUpload")

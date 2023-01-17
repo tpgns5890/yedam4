@@ -49,34 +49,31 @@ ul {
 
 
 		<div class="contestContainer">
-			<textarea rows="20" cols="90">
+			<textarea rows="15" cols="90">
 [콘테스트 참여 약관 동의]
 1. 로고,일러스트 콘테스트에는 어떠한 스톡이미지, 프리백터,클럽아트도 사용해서는 안됩니다.
-  상업적 사용이 제한되는 폰트, 
+  상업적 사용이 제한되는 폰트, 스톡이미지의 사용 규정 및 범위를 위반할 시, 계정이 영구적으로 삭제될 수 있습니다. 작품에 유료 폰트,스톡이미지,프리백터 등을 사용한 경우에는 반드시 의뢰자에게 저작권 문제가 없을을 명시해야한 합니다.
+2. 이벤티의 판단하에 본 디자인이 다른 디자이너의 작품을 도용한 것으로 판단되는 경우, 이벤티는 해당 디자이너의 활동을 제지 혹은 금지할 수 있습니다.
+또한 상금이 지급되었을 경우 라우드소싱은 디자이너에게 전액 환불을 요구 할 수 있으며, 이에서 파생되는 의뢰자와의 분쟁 및 손해에 관해서는 관련법규에 따라 디자이너에게 배상의 의무가 부여될 수 있습니다.
+ 반드시 자신의 디자인만 등록해 주세요.
+3. 로고, 일러스트 드으이 디자인은 반드시 백터 형태로 작업해야 합니다.
+4. 잘못된 디자인으로 인해 법적인 문제에 휘말리게 될 경우, 모든 법적 그리고 금전적인 손실에 대한 책임은 디자이너 측에 있습니다.
+5. 이벤티는 실제 상업적으로 사용될 디자인을 위뢰하는 경우 전문 디자이너 플랫폼입니다.
+   동일 디자이너의 사연에 대해 의뢰자의 불만이 지속적으로 발생 시, 이벤티 내부 검수를 통해 참여가 제한될 수 있습니다.
 </textarea>
 			<br> <input type="checkbox" id="contestCheck">약관에 전부 동의합니다..<br>
 
 			<!-- 공모전등록 입력폼 -->
-			<form action="/contest/insert" enctype="multipart/form-data"
+			<form action="/design/designInsert" enctype="multipart/form-data"
 				name="contestfrm" method="post" onsubmit="return check();">
-				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
-					th:value="${_csrf.token}" />
+				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				<ul>
-					<li><label>분류</label> 현수막 <input type="radio" name="category"
-						value="D1" checked> 배너<input type="radio" name="category"
-						value="D2"> 로고<input type="radio" name="category"
-						value="D3"> 포스터<input type="radio" name="category"
-						value="D4"> 기타 <input type="radio" name="category"
-						value="D5"></li>
-
 					<!-- 임시저장값 hidden -->
-					<li><label>작성자</label><input type="text" name="writer"
-						th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
-					<li><label>등록일</label><input type="date" name="dtReg"
-						th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}"
-						readonly></li>
-					<li><label>제목</label><input type="text" name="ttl"
-						required="required"></li>
+					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"></li>
+					<li><label>디자인번호</label><input type="text" name="dNo" th:value="${dNo}" readonly="readonly"><br /></li>
+					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
+					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly></li>
+					<li><label>제목</label><input type="text" name="ttl" required="required"></li>
 						<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
 
@@ -131,18 +128,11 @@ ul {
 					let check = $('input[type="checkbox"]').is(":checked");
 
 					if (check == false) {//유의사항 체크확인
-						alert('유의사항을 확인하세요.');
+						alert('약관에 동의하세요.');
 						return false;
 					}
-					//임시저장 확인
-					else if ($('input[name="save"]').is(":checked") == true) {
-						console.log($(this));
-						if (!confirm('임시저장 하시겠습니까?')) {
-							return false;
-						}
-					} 
 					else{//등록확인
-						if (!confirm('공모전을 등록하시겠습니까?')) {
+						if (!confirm('디자인 응모시겠습니까?')) {
 							return false;
 						
 						//파일업로드 진행(완료)
@@ -153,7 +143,7 @@ ul {
 							
 					        ///데이터 넘길값 세팅
 					        if(files.length == 0){
-					        	return false;
+					        	return true;
 					        }
 					        for(var i=0; i<files.length; i++) {
 					            formData.append("uploadFile", files[i]);
@@ -172,8 +162,11 @@ ul {
 					            beforeSend: function (xhr) {
 									/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 									xhr.setRequestHeader(header, token);
+					            },
+								success:function(){
 								}
 					        });
+								return true;
 						}
 					}
 			}

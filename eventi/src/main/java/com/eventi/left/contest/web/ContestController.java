@@ -25,6 +25,7 @@ import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
+import com.eventi.left.files.FileDto;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
@@ -65,7 +66,7 @@ public class ContestController {
 
 		// 전체리스트 조회
 		List<ContestVO> contest = service.contestList(vo, paging);
-	
+
 		// 리턴할 최종Map(contest,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -117,17 +118,10 @@ public class ContestController {
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
-			
+
 			// 전체데이터 받기
 			List<ContestVO> contests = service.myContestList(vo, paging);
-			
-			// 코드변환후 리턴할 객체선언.
-			List<ContestVO> setContest = new ArrayList<>();
-			for (ContestVO contest : contests) {
-				contest.setCategory(codeService.codeSelect(vo.getCategory()));
-				setContest.add(contest);
-			}
-			model.addAttribute("contestList", setContest);// 모델에 담기.
+			model.addAttribute("contestList", contests);// 모델에 담기.
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
 
@@ -148,7 +142,7 @@ public class ContestController {
 	@PutMapping("/update")
 	@ResponseBody
 	public int contestupdateForm(@RequestBody ContestVO vo) {
-		
+
 		return service.updateContest(vo);
 	}
 
@@ -210,12 +204,13 @@ public class ContestController {
 
 		return result;
 	}
-	
-	
-	//일반회원 디자인 응모하기 폼 이동. DesignServic
-		@GetMapping("/designInsertForm")
-		public String designInsert() {
-			return "content/contest/contestApplyForm";
-		}
+
+	// 일반회원 디자인 응모하기 폼 이동. DesignServic
+	@GetMapping("/designInsertForm")
+	public String designInsert(Model model, DesignVO vo) {
+		model.addAttribute("cNo" , vo.getCNo());  //html 링크에서 받아오는 값.
+		model.addAttribute("dNo", dService.getSequence());
+		return "content/contest/contestApplyForm";
+	}
 
 }
