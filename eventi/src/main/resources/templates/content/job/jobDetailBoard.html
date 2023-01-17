@@ -56,6 +56,22 @@
 	margin-top: 40px;
 	justify-content: flex-end;
 }
+
+.heart {
+  width: 100px;
+  height: 100px;
+  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  transition: background-position 1s steps(28);
+  transition-duration: 0s;
+  }
+  
+  .active {
+    transition-duration: 1s;
+    background-position: -2800px 0;
+  }
+
 </style>
 </head>
 <body>
@@ -86,9 +102,22 @@
 		
 <button type="button" class="btn btn-outline-primary" 
 		th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-	
+
+<th:block th:if ="${like == null}">		
+<div class="stage">
+  		<div id="love" class="stage heart"></div>
+</div>
+</th:block>
+
+<th:block th:if ="${like != null}">		
+<div class="stage">
+  		<div id="love" class="stage heart active"></div>
+</div>
+</th:block>	
 	<table class="table mb-3" >
 	<thead class="thead-dark">
+	
+	
          <tr>   
             <th>구인게시글번호</th>
             	<th>제목</th>
@@ -135,16 +164,77 @@
 				<div class="modal_layer"></div>
 			</div>
 <script>
-$(function(){
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+/* $(function(){
 	let result = '${param.result}' 
 	if(result !="") {
 		$("#modal").show();
 	}	
-})
+}) */
 /*모달 창 닫기*/
 			$("#modal_close_btn").on('click', function() {
 				$("#modal").hide();
 			});
+			
+			
+			//좋아요를 눌렀을 경우
+			   $(".heart").on("click", function() {
+				 //클래스가 없을 경우 생성, 클래스가 있을 경우 삭제
+			     $(this).toggleClass("active");
+			     let userId = '[[${session.member.userId}]]';
+			     let targetNo = '[[${job.jobNo}]]';
+			     let category = "T03";
+			     
+			     //좋아요를 추가했을 경우
+			     if($(this).hasClass("active")){
+			    	 //총 좋아요수 처리
+			    	//let likeCount = $('#likeCount').text();
+			    	// $('#likeCount').text(parseInt(likeCount) + 1);
+			    	 
+			    	 //post방식으로 좋아요 등록하기
+			    	 $.ajax({
+							url : "/likes/lInsert",
+							method : 'post',
+							contentType : 'application/x-www-form-urlencoded',
+							data : {userId, targetNo, category},
+							beforeSend : function(xhr)
+			                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			    				xhr.setRequestHeader(header, token);
+			                },
+							success : function(data) {
+								//alert('좋아요 등록 완료');
+							},
+							fail : function(result) {
+								alert('필수항목을 입력해주세요')
+							}
+						})
+			     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
+			    	 //총 좋아요수 처리
+			    	// let likeCount = $('#likeCount').text();
+			    	// $('#likeCount').text(parseInt(likeCount) - 1);
+			    	 
+			    	//post방식으로 좋아요 취소하기
+			    	 $.ajax({
+							url : "/likes/lDelete",
+							method : 'post',
+							contentType : 'application/x-www-form-urlencoded',
+							data : {userId, targetNo},
+							beforeSend : function(xhr)
+			                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			    				xhr.setRequestHeader(header, token);
+			                },
+							success : function(data) {
+								//alert('좋아요 취소 완료');
+							},
+							fail : function(result) {
+								alert('필수항목을 입력해주세요')
+							}
+						})
+			     }
+			   });
+			
 </script>
 </div>
 </body>

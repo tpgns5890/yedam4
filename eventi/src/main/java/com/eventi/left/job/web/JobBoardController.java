@@ -13,14 +13,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
+import com.eventi.left.likes.service.LikesService;
+import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.member.service.MemberVO;
 
 @Controller
 public class JobBoardController {
 
 	@Autowired 
 	JobService jobService;
+	//좋아요 service
+	@Autowired LikesService likeService;
 	
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
@@ -56,7 +62,16 @@ public class JobBoardController {
 	
 	//게시글상세조회로이동
 	@RequestMapping(value = "/jobDetail", method=RequestMethod.GET) 
-	public String jobDetail(Model model, JobBoardVO jobBoardVO) {
+	public String jobDetail(Model model, JobBoardVO jobBoardVO, LikesVO likesVO) {
+		//좋아요 눌렀는지 확인
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		System.out.println(user);
+		likesVO.setUserId(user.getUserId());
+		likesVO.setTargetNo(jobBoardVO.getJobNo());
+		likesVO.setCategory("T03");
+		model.addAttribute("like", likeService.getLike(likesVO));
+		//해당 게시글 좋아요 수
+		//model.addAttribute("likeCount", likeService.countLike(likesVO));
 		model.addAttribute("job", jobService.getJob(jobBoardVO));
 		return "content/job/jobDetailBoard";
 	}

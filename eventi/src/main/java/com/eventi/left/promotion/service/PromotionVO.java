@@ -24,4 +24,6 @@ public class PromotionVO {
 	private String accommodate; //수용인원
 	private String img; //첨부파일
 	private Integer see; //관심수
+	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	private Date dt;
 }

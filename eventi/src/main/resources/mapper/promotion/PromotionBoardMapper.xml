@@ -27,9 +27,9 @@
 	<!-- 게시글 등록 -->
 	<insert id="proInsert">
 		INSERT INTO PROMOTION_BOARD
-		(PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO, E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE) <!-- DB -->
+		(PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO, E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE, DT) <!-- DB -->
 		VALUES('PB'|| PROMOTION_BOARD_SEQ.NEXTVAL, #{userId}, #{eName}, 
-				#{eSday}, #{eEday}, #{loc}, #{intro}, #{eType}, #{entrance}, #{accommodate}, #{img}, #{see}) <!-- VO -->
+				#{eSday}, #{eEday}, #{loc}, #{intro}, #{eType}, #{entrance}, #{accommodate}, #{img}, #{see}, sysdate) <!-- VO -->
 	</insert>
 	
 	<!-- 게시글 수정 proNo, userid, see (부분수정)-->
