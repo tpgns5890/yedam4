@@ -35,33 +35,18 @@ ul{
 			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
-					<li>
-						<th:block th:switch="${contest.category}">
-							<span th:case="D1"><label>분류별</label><input type="text"  readonly value="현수막"><br/></span>
-							<span th:case="D2"><label>분류별</label><input type="text"  readonly value="배너"><br/></span>
-							<span th:case="D3"><label>분류별</label><input type="text"  readonly value="로고"><br/></span>
-							<span th:case="D4"><label>분류별</label><input type="text"  readonly value="포스터"><br/></span>
-							<span th:case="D5"><label>분류별</label><input type="text"  readonly value="기타"><br/></span>
-						</th:block>
-					</li>
-					<li>
-						<label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly="readonly"><br />
-					</li>
-					<li>
-						<label>작성자</label><input type="text"  th:value="${contest.writer}" readonly="readonly"><br /></li>
-					<li>
-						<label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li>
-					<li>
-						<li><label>요청사항</label> <textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
+					<li><div th:text="|분류별 ${contest.category}|"></div></li>
+					<li><div th:text="|공모번호 ${contest.cNo}|"></div></li>
+					<li><div th:text="|작성자 ${contest.writer}"></div></li>
+					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li>
+					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
+					<li><textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4" required="required"></textarea></li>
 					<li>
 						<label>첨부파일</label><input type="file"  multiple><br /></li>
 					<li>
-						<label>등록일</label><input type="date" readonly="readonly" th:value="${#dates.format(contest.dtReg, 'yyyy-MM-dd')}"><br />
-					</li>
-					<li>
-						<label>마감일</label><input type="date"  th:value="${#dates.format(contest.dtCls, 'yyyy-MM-dd')}" readonly="readonly"><br />
-					</li>
-					<li>
+					<div th:each="f : ${fileList}">
+						<img th:src="|/fileView/${f.sevNm}|" class="img-fluid" alt="Colorlib Template"></a>
+					</div>
 						
 						
 						<th:block th:switch="${contest.style}">
@@ -77,6 +62,7 @@ ul{
 						<span th:case="DS0"><label>선호스타일</label><span th:text="기타"></span></span>
 					</li>
 				</ul>
+				
 				
 				<button type="button" id="updateBtn">수정</button>
 				<button type="reset">취소</button>
@@ -101,14 +87,16 @@ ul{
 		smartEditor()
 	})
 
-	
+	//수정처리
 	$('#updateBtn').on('click', function (){
 		oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 		
-		var cNo = $("input[name='cNo']").val();
-		console.log(cNo)
+		var cNo = '[[${contest.cNo}]]';
 	 	var ttl = $("input[name='ttl']").val();
 	 	var cntn =  $("textarea[name='cntn']").val();
+	 	console.log(ttl+cntn);
+	 	var fNm = $("input[type='file']").val();
+	 	console.log(fNm);
 		
 		$.ajax({
 	           url:"/contest/update",
@@ -129,6 +117,10 @@ ul{
 	           }
 			})
 		})
+		
+		
+		
+		
 		
 	</script>
 	</div>

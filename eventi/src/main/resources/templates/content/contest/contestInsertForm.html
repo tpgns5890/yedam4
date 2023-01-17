@@ -4,6 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 <head>
+<link rel="stylesheet" href="/css/model.css">
 <style>
 h3 {
 	font-weight: bold;
@@ -18,53 +19,6 @@ h3 {
 
 ul {
 	list-style: none;
-}
-/* The Modal (background) */
-.modal {
-	display: none; /* Hidden by default */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0, 0, 0); /* Fallback color */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-	background-color: #fefefe;
-	margin: auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 40%;
-	height: 60%;
-	text-align: left;
-}
-
-/* The Close Button */
-.close {
-	color: #aaaaaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-	text-align: right;
-}
-
-.close:hover, .close:focus {
-	color: #000;
-	text-decoration: none;
-	cursor: pointer;
-	
-}
-#modelBtn{
-	text-align: center;
-}
-.modelBtn1 {
-	display :inline-block;
 }
 </style>
 </head>
@@ -110,8 +64,6 @@ ul {
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
-					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
-					<li><label>첨부파일1</label><input type="file" name="uploadFile" multiple="multiple"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
 					<li><label>선호스타일</label> <select name="style" >
@@ -133,7 +85,10 @@ ul {
 				<li><label>2등금액</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
 				<li><label>3등금액</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
 				<li><input type="checkbox" name="save" value="Y"><lable>임시저장</lable></li>
+					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
+					<li><label>첨부파일</label><input type="file" name="uploadFile" multiple="multiple"><br /></li>
 				</ul>
+					
 			<button type="reset">초기화</button>
 			<button type="submit" id="insertForm">등록</button>
 			</form>
@@ -159,7 +114,6 @@ ul {
 			</div>
 
 			<script>
-			
 			//등록누를시 결제통해서 가도록.. 변경하기
 			$('#insertBtn').on("click", function(){
 				
@@ -213,10 +167,14 @@ ul {
 				smartEditor()
 			})
 
+			
+			//등록버튼 누를시
 			$('#insertForm').on('click', function () {
 				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 				let cntn = document.getElementById("cntn").value;
-			})
+			
+			 });
+				
 		
 			//등록일 이전날짜 선택불가
 			var now_utc = Date.now()
@@ -270,7 +228,42 @@ ul {
 					else{//등록확인
 						if (!confirm('공모전을 등록하시겠습니까?')) {
 							return false;
+						
+						//파일업로드 진행(완료)
+						}else{
+					        var formData = new FormData();
+					        var inputFile = $("input[name='uploadFile']");
+					        var files = inputFile[0].files;
+					        
+					        ///데이터 넘길값 세팅
+					        if(files.length == 0){
+					        	return false;
+					        }
+					        for(var i=0; i<files.length; i++) {
+					            formData.append("uploadFile", files[i]);
+					        }
+					            formData.append("targetId", $("input[name='cNo']").val());
+					            formData.append("category", 'TO1');
+					        
+					        
+					        $.ajax({
+					            url: '/filesUpload',
+					            type: 'POST',
+					            enctype: 'multipart/form-data',  
+					            data: formData,
+					            contentType: false,
+					            processData : false,
+					            beforeSend: function (xhr) {
+									/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+									xhr.setRequestHeader(header, token);
+								},
+					            success: function(result) {
+					                alert("Uploaded");
+					            }
+					        });
+
 						}
+					
 					}
 				}
 		

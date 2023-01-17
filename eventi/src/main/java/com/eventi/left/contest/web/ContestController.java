@@ -64,39 +64,13 @@ public class ContestController {
 	public Map<String, Object> changeList(ContestVO vo, PagingVO paging) {
 
 		// 전체리스트 조회
-		List<ContestVO> list = service.contestList(vo, paging);
-
-		// 값 세팅후 리턴할 리스트 생성
-		List<ContestVO> setList = new ArrayList<>();
-		ContestVO setVo = new ContestVO();
-
+		List<ContestVO> contest = service.contestList(vo, paging);
+	
 		// 리턴할 최종Map(contest,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		// 전체리스트 반복문
-		for (ContestVO cVo : list) {
-			// 공모전 마감일수 키,값
-			Map<ContestVO, Integer> getDdayList = service.getDday(vo);
-			for (Map.Entry<ContestVO, Integer> entry : getDdayList.entrySet()) {
-//				System.out.println("key :" + entry.getKey().getcNo() + " / value : " + entry.getKey().getdDay());
-
-				// 공고번호가 같은값의 D-day 세팅
-				if (cVo.getcNo().equals(entry.getKey().getcNo())) {
-					cVo.setdDay(entry.getKey().getdDay());
-				}
-			}
-			// 코드별 문자열 변환후 세팅
-			LikesVO like = new LikesVO();
-			like.setTargetNo(cVo.getcNo());
-			cVo.setLikes(likeService.countLike(like)); // 좋아요개수
-			cVo.setCategory(codeService.codeSelect(cVo.getCategory()));
-			cVo.setStyle(codeService.codeSelect(cVo.getStyle()));
-			setList.add(cVo);
-		}
-
-		result.put("contest", setList);
+		result.put("contest", contest);
 		result.put("paging", paging);
-
 		return result;
 	}
 
@@ -108,7 +82,7 @@ public class ContestController {
 		ContestVO contest = service.getContest(cVo);
 		contest.setCategory(codeService.codeSelect(contest.getCategory())); // 카테고리
 		contest.setStyle(codeService.codeSelect(contest.getStyle())); // 스타일
-		
+
 		LikesVO like = new LikesVO();
 		like.setTargetNo(cVo.getcNo());
 		contest.setLikes(likeService.countLike(like)); // 좋아요개수
@@ -137,9 +111,9 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(Model model, ContestVO vo, FilesVO files, List<MultipartFile> uploadFile, WinnerVO wvo, PagingVO paging) {
-		
-		service.insertContest(vo, files, uploadFile, wvo);
+	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging) {
+
+		service.insertContest(vo, wvo);
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
@@ -220,10 +194,15 @@ public class ContestController {
 	public Map<String, Object> userlikeList(LikesVO LikesVO, PagingVO paging) {
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		if (user == null) {
+			return result;
+		}
 		String sessionId = user.getUserId();
 
 		// 리턴할 최종Map(contest,paging VO)
-		Map<String, Object> result = new HashMap<String, Object>();
+
 		result.put("contest", likeService.userlikeList(LikesVO, sessionId));
 		result.put("paging", paging);
 

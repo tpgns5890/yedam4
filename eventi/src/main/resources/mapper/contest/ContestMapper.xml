@@ -31,6 +31,7 @@
 		SELECT COUNT(*) 
 		FROM CONTEST
 		WHERE SAVE = 'N'
+		<include refid="condition" />
 	</select>
 	
 
@@ -107,11 +108,19 @@
 		#{style} )
 	</insert>
 
-	<!-- 공모전 정보수정 -->
+	<!-- 공모전 제목,내용 수정 -->
 	<update id="updateContest">
 		update CONTEST
 		set TTL = #{ttl},
 		CNTN = #{cntn}
+		where c_no = #{cNo}
+		and writer = #{writer}
+	</update>
+	
+	<!-- 공모전 마감연장일 업데이트 -->
+	<update id="updateExtension">
+		update CONTEST
+		set DT_EXTNS = #{dtExtns}
 		where c_no = #{cNo}
 		and writer = #{writer}
 	</update>

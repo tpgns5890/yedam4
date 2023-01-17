@@ -4,6 +4,8 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+<link rel="stylesheet" href="/css/model.css">
+<link rel="stylesheet" href="/css/heart.css">
 	<style>
 		/* 화면배치  aside,section => float적용 사이즈조정
 		  		  footer => clear: both; */
@@ -75,7 +77,7 @@
 				<!-- 비회원 좋아요버튼-->
 				<th:block sec:authorize="!isAuthenticated()">
 				<div class="stage" style="float: right;">
-					<a href="../login"><div id="love" class="stage heart"></div></a>
+					<a href="../loginPage"><div id="love" class="stage heart"></div></a>
 				</div>
 				</th:block>
 				
@@ -167,6 +169,7 @@
 					}).then(res => {
 						//map =>  contest,paging 
 						for (contest of res.contest) {
+							console.log(contest.dtCls +"/"+ contest.dtExtns +"/"+ contest.dDay);
 							$('#boxList').append(makeBox(contest));
 						}
 						$('#returnPaging').append(makePageing(res.paging));
@@ -215,6 +218,7 @@
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
+						console.log(res.paging);
 						//등록된 공모전이 없을경우 기존페이지로 이동.
 						if (res.contest == '') {
 							location.href = '../contest/List';
@@ -253,6 +257,7 @@
 		   			</div> */
 					let p = `
 							<div id="box${contest.cNo}" class="text p-4 bg-light size box">
+							<p id="cNo">${contest.cNo}</p>
 							<p id="writer">${contest.writer}</p>
 							<span id="category">${contest.category}</span>
 							<h3>

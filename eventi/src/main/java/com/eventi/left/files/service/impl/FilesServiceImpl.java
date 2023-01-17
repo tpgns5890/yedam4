@@ -11,27 +11,38 @@ import com.eventi.left.files.service.FilesVO;
 
 @Service
 public class FilesServiceImpl implements FilesService {
-	
-	@Autowired FilesMapper mapper;
 
+	@Autowired
+	FilesMapper mapper;
 
 	@Override
 	public int insertFile(FilesVO vo) {
 		return mapper.insertFile(vo);
 	}
 
-
 	@Override
 	public List<FilesVO> fileList(String No) {
 		return mapper.fileList(No);
 	}
-
 
 	@Override
 	public FilesVO getfile(FilesVO vo) {
 		return mapper.getfile(vo);
 	}
 
+	@Override
+	public int updateFile(FilesVO vo) {
+		return mapper.updateFile(vo);
+	}
 
+	@Override
+	public int deleteFile(String No) {
+		return mapper.deleteFile(No);
+	}
+
+	@Override
+	public int oneDeleteFile(String No) {
+		return mapper.deleteFile(No);
+	}
 
 }
