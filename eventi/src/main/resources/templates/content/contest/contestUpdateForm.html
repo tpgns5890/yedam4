@@ -5,6 +5,9 @@
 	layout:decorate="~{layouts/default_layout}">
 <head>
 <style>
+.fileDown{
+	display : none;
+}
 .contestContainer {
 	padding: 20px;
 	margin: auto;
@@ -41,28 +44,23 @@ ul{
 					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
 					<li><textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4" required="required"></textarea></li>
-					<li>
-						<label>첨부파일</label><input type="file"  multiple><br /></li>
-					<li>
-					<div th:each="f : ${fileList}">
-						<img th:src="|/fileView/${f.sevNm}|" class="img-fluid" alt="Colorlib Template"></a>
-					</div>
-						
-						
-						<th:block th:switch="${contest.style}">
-						<span th:case="DS1"><label>선호스타일</label><span th:text="고전적인"></span></span>
-						<span th:case="DS2"><label>선호스타일</label><span th:text="화사한"></span></span>
-						<span th:case="DS3"><label>선호스타일</label><span th:text="분위기있는"></span></span>
-						<span th:case="DS4"><label>선호스타일</label><span th:text="차분한"></span></span>
-						<span th:case="DS5"><label>선호스타일</label><span th:text="발랄한"></span></span>
-						<span th:case="DS6"><label>선호스타일</label><span th:text="재미있는"></span></span>
-						<span th:case="DS7"><label>선호스타일</label><span th:text="진중한"></span></span>
-						<span th:case="DS8"><label>선호스타일</label><span th:text="귀여운"></span></span>
-						<span th:case="DS9"><label>선호스타일</label><span th:text="단순한"></span></span>
-						<span th:case="DS0"><label>선호스타일</label><span th:text="기타"></span></span>
-					</li>
 				</ul>
 				
+					
+					<div class="col-md-12">
+                     <div class="form-group" id="fileInsert">
+                        <!-- 이미지가 있을 경우와 없을 경우 if문으로 처리 -->
+                        <input type="file" id="imgInp" name="uploadFile" th:if="|${fileList == null}|"/>
+                        <div th:each="f : ${fileList}">
+                           <div th:if="|/fileView/${f.sevNm} != null}|">
+                              <img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
+                              <button type="button" id="cancel" class="btn btn-warning cancel">
+                                   <span>Cancel</span>
+                                  </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
 				
 				<button type="button" id="updateBtn">수정</button>
 				<button type="reset">취소</button>
@@ -94,9 +92,7 @@ ul{
 		var cNo = '[[${contest.cNo}]]';
 	 	var ttl = $("input[name='ttl']").val();
 	 	var cntn =  $("textarea[name='cntn']").val();
-	 	console.log(ttl+cntn);
 	 	var fNm = $("input[type='file']").val();
-	 	console.log(fNm);
 		
 		$.ajax({
 	           url:"/contest/update",
@@ -117,6 +113,58 @@ ul{
 	           }
 			})
 		})
+		
+		//파일 업로드 이미지 미리보기
+       //파일 INPUT창에 변화가 있을 경우 실행
+       $(document).on("change", "#imgInp", function() {
+         $("#imgInp").toggleClass("fileDown");
+          //파일을 다시 등록하는 과정에서 이미지 미리보기 부분이 사라지지 않아서 삭제처리
+          //#imgInp의 바로 밑의 형제 삭제
+          $("#imgInp").next().remove();
+          
+          //이미지 미리보기 생성
+          let fileForm = `
+            <div>
+            <img id="blah" src="#" alt = "your image" width="250px" />
+            <button type="button" id="cancel" class="btn btn-warning cancel">
+                 <span>Cancel</span>
+                </button>
+         </div>`
+          
+          $("#fileInsert").append(fileForm);
+          
+         readURL(this);
+      });
+      
+       //이미지 미리보기 처리
+      function readURL(input){
+         if(input.files && input.files[0]){
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+               $("#blah").attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+         }
+      }
+       
+       //파일 삭제
+       $(document).on('click', "#cancel", function() {
+          //파일 등록부분 모두 삭제 후 다시 생성
+          $("#fileInsert").empty();
+          
+          let fileForm = `<input type="file" id="imgInp" name="uploadFile" />
+            <div class="fileDown">
+            <img id="blah" src="#" alt = "your image" width="250px" />
+            <button type="button" id="cancel" class="btn btn-warning cancel">
+                 <span>Cancel</span>
+                </button>
+         </div>`
+          
+          $("#fileInsert").append(fileForm);
+       })
+      
 		
 		
 		

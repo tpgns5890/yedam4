@@ -53,33 +53,8 @@ public class UploadFileMethod {
 		}
 		return list;
 	}
+	
 
-	// 일반 파일 하나 업로드 시 쓰이는 메소드 
-	public String uploadOnce(MultipartFile uploadfile, String targetId, String category) throws IllegalStateException, IOException {
-		
-		String newName = null;
-		// 파일 경로위치에 물리적으로 저장하기
-		if (!uploadfile.isEmpty()) {
-			FileDto dto = new FileDto(UUID.randomUUID().toString(), uploadfile.getOriginalFilename(),
-					uploadfile.getContentType());
+	
 
-			File newFileName = new File(dto.getUuid() + "_" + dto.getFileName());
-
-			uploadfile.transferTo(newFileName);
-			newName = dto.getUuid() + "_" + dto.getFileName();
-			
-			// 저장한 파일 DB 저장하기
-			FilesVO file = new FilesVO();
-			file.setFNm(uploadfile.getOriginalFilename()); //원본파일명
-			file.setSevNm(dto.getUuid() + "_" + dto.getFileName());//서버파일명.
-			file.setTargetId(targetId); // 공고번호
-			file.setCategory(category); // 카테고리(공모전)
-			file.setSaveAddr(filePath); // 저장경로
-			int r = service.insertFile(file);
-			System.out.println(r + "건입력");
-			System.out.println(newFileName);
-		}
-		// 경로에 저장된 파일 명 반환
-		return newName;
-	}
 }

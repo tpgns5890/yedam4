@@ -11,9 +11,10 @@ import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 
 @Service
-public class DesignServiceImpl implements DesignService{
-	@Autowired DesignMapper mapper;
-	
+public class DesignServiceImpl implements DesignService {
+	@Autowired
+	DesignMapper mapper;
+
 	@Override
 	public List<DesignVO> designList(DesignVO vo, PagingVO paging) {
 		paging.setTotalRecord(mapper.count(vo));
@@ -26,5 +27,25 @@ public class DesignServiceImpl implements DesignService{
 	@Override
 	public List<DesignVO> contestDesignList(String cNo) {
 		return mapper.contestDesignList(cNo);
+	}
+
+	@Override
+	public int insert(DesignVO vo) {
+		return mapper.insert(vo);
+	}
+
+	@Override
+	public int update(DesignVO vo) {
+		return mapper.update(vo);
+	}
+
+	@Override
+	public int delete(String dNo) {
+		return mapper.delete(dNo);
+	}
+
+	@Override
+	public String getSequence() {
+		return mapper.getSequence();
 	}
 }

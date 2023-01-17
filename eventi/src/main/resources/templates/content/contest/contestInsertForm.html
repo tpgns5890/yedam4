@@ -6,6 +6,9 @@
 <head>
 <link rel="stylesheet" href="/css/model.css">
 <style>
+.fileDown{
+	display : none;
+}
 h3 {
 	font-weight: bold;
 	text-align: center;
@@ -84,10 +87,22 @@ ul {
 				<li><label>1등금액</label><input id="wPay1" class="wPay" type="number" name="winnerPay[]" required="required" ><br /></li>
 				<li><label>2등금액</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
 				<li><label>3등금액</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
-				<li><input type="checkbox" name="save" value="Y"><lable>임시저장</lable></li>
 					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
-					<li><label>첨부파일</label><input type="file" name="uploadFile" multiple="multiple"><br /></li>
 				</ul>
+				<li><input type="checkbox" name="save" value="Y"><lable>임시저장</lable></li>
+					
+					<div class="col-md-12">
+						<div class="form-group">
+						<label>첨부파일</label><input id="imgInp" type="file" name="uploadFile" multiple="multiple">
+							<div class="fileDown">
+								<img id="blah" src="#" alt = "your image" width="250px" />
+									<button type="button" id="cancel" class="btn btn-warning cancel">
+										<span>Cancel</span>
+							       </button>
+							</div>
+						</div>
+					</div>
+				
 					
 			<button type="reset">초기화</button>
 			<button type="submit" id="insertForm">등록</button>
@@ -114,40 +129,6 @@ ul {
 			</div>
 
 			<script>
-			//등록누를시 결제통해서 가도록.. 변경하기
-			$('#insertBtn').on("click", function(){
-				
-				//입력한 값 변수저장
-				let ttl = $('input[name="ttl"]').val();
-				let date = $('input[name="dtReg"]').val();
-				let wpay1 =   parseInt($('input[id="wPay1"]').val());
-				let wpay2 =   parseInt($('input[id="wPay2"]').val());
-				let wpay3 =   parseInt($('input[id="wPay3"]').val());
-				let total = (wpay1 + wpay2 + wpay1);
-				let insertPay = parseInt(30000);
-				let Payment = insertPay + total;
-				
-				//문자열 변경후 3자리 콤마지정.
-				total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				insertPay = insertPay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				Payment = Payment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				
-				
-				$('#contestPay').empty();
-				//li태그 생성후 모달창 붙여넣기
-				let li = ` <li> <span></span></li>
-							<li>제 목 : ${ttl} </li>
-							<li>등록일 : ${date} </li>
-							<li>총상금 : ${total} </li>
-							<li>등록비 : ${insertPay}</li>
-							<hr>
-							<li>총합계 : ${Payment}</li>
-						`
-				$('#contestPay').append(li);
-				
-				
-			}); 
-			
 			//csrf설정
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -168,14 +149,6 @@ ul {
 			})
 
 			
-			//등록버튼 누를시
-			$('#insertForm').on('click', function () {
-				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
-				let cntn = document.getElementById("cntn").value;
-			
-			 });
-				
-		
 			//등록일 이전날짜 선택불가
 			var now_utc = Date.now()
 			var timeOff = new Date().getTimezoneOffset()*60000;
@@ -210,6 +183,13 @@ ul {
 			}
 			
 			
+			//등록버튼 누를시
+			$('#insertForm').on('click', function () {
+				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+				let cntn = document.getElementById("cntn").value;
+			
+			 });
+				
 			//폼 등록버튼 전송전 체크함수.
 			function check(){
 					let check = $('input[type="checkbox"]').is(":checked");
@@ -234,10 +214,10 @@ ul {
 					        var formData = new FormData();
 					        var inputFile = $("input[name='uploadFile']");
 					        var files = inputFile[0].files;
-					        
+							
 					        ///데이터 넘길값 세팅
 					        if(files.length == 0){
-					        	return false;
+					        	return true;
 					        }
 					        for(var i=0; i<files.length; i++) {
 					            formData.append("uploadFile", files[i]);
@@ -257,15 +237,80 @@ ul {
 									/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 									xhr.setRequestHeader(header, token);
 								},
-					            success: function(result) {
-					                alert("Uploaded");
-					            }
+								success:function(){
+								}
 					        });
-
+								return true;
 						}
 					
+						
 					}
 				}
+			
+			//등록누를시 결제통해서 가도록.. 변경하기
+			$('#insertBtn').on("click", function(){
+				
+				//입력한 값 변수저장
+				let ttl = $('input[name="ttl"]').val();
+				let date = $('input[name="dtReg"]').val();
+				let wpay1 =   parseInt($('input[id="wPay1"]').val());
+				let wpay2 =   parseInt($('input[id="wPay2"]').val());
+				let wpay3 =   parseInt($('input[id="wPay3"]').val());
+				let total = (wpay1 + wpay2 + wpay1);
+				let insertPay = parseInt(30000);
+				let Payment = insertPay + total;
+				
+				//문자열 변경후 3자리 콤마지정.
+				total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				insertPay = insertPay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				Payment = Payment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				
+				
+				$('#contestPay').empty();
+				//li태그 생성후 모달창 붙여넣기
+				let li = ` <li> <span></span></li>
+							<li>제 목 : ${ttl} </li>
+							<li>등록일 : ${date} </li>
+							<li>총상금 : ${total} </li>
+							<li>등록비 : ${insertPay}</li>
+							<hr>
+							<li>총합계 : ${Payment}</li>
+						`
+				$('#contestPay').append(li);
+				
+				
+			}); 
+			
+			 //파일 업로드 이미지 미리보기
+		    //파일 INPUT창에 변화가 있을 경우 실행
+		    $("#imgInp").on('change', function() {
+		    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
+		    	$(this).toggleClass("fileDown"); //input파일
+		    	$(this).next().toggleClass("fileDown"); //div
+				readURL(this);
+			});
+			
+		    //이미지 미리보기 처리
+			function readURL(input){
+				if(input.files && input.files[0]){
+					var reader = new FileReader();
+					
+					reader.onload = function(e) {
+						$("#blah").attr('src', e.target.result);
+					}
+					
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+		    
+		    //파일 삭제
+		    $("#cancel").on('click', function() {
+		    	//파일을 지우고 싶을때 삭제버튼을 누르면 이미지는 사라지고 input type=file 입력폼이 다시 나타난다.
+		    	$(this).parent().prev().toggleClass("fileDown");
+		    	$(this).parent().toggleClass("fileDown");
+		    	//file영역에 있던 값 삭제
+		    	$("#imgInp").val('');
+		    })
 		
 		</script>
 		</div>

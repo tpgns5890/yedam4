@@ -40,9 +40,7 @@
 		update FILES
 		set F_NM = #{fNm},
 		SEV_NM = #{sevNm},
-		SAVE_ADDR = #{saveAddr},
-		CATEGORY = #{category}
-		WHERE TARGET_ID = #{targetId}
-		and F_NO = #{fNo}
+		SAVE_ADDR = #{saveAddr}
+		WHERE F_NO = #{fNo}
 	</update>
 </mapper>

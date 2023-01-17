@@ -169,7 +169,7 @@
 					}).then(res => {
 						//map =>  contest,paging 
 						for (contest of res.contest) {
-							console.log(contest.dtCls +"/"+ contest.dtExtns +"/"+ contest.dDay);
+							console.log( contest.cNo  + ':' +contest.dtCls +"/"+ contest.dtExtns +"/"+ contest.dDay);
 							$('#boxList').append(makeBox(contest));
 						}
 						$('#returnPaging').append(makePageing(res.paging));

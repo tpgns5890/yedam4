@@ -125,7 +125,8 @@
 						<div th:if="|${session.member.getUserId()}| != ${contest.writer} ">
 							<p>
 								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
-								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
+								<!-- 공모게시글에 대한 응모하기 버튼 -->
+								<a th:href="@{/contest/designInsertForm(cNo=${contest.cNo})}" ><button type="button" class="btn btn-primary py-3 px-5 mr-2" >응모하기</button></a>
 							</p>
 						</div>
 
@@ -171,7 +172,7 @@
 								<div class="p-4" style="height: 1400px">
 									<div id="contestCntn">
 										 <div th:if="${contest.cntn} != null">
-											<span id="cotestCntn" th:text=${contest.cntn}></span>
+											<span id="cotestCntn" th:utext=${contest.cntn}></span>
 										 </div>
 									</div>
 								</div>
@@ -262,9 +263,9 @@
 						xhr.setRequestHeader(header, token);
 					},
 		           success: function (result) {
-		        	   if(result > 0){
+		        	   console.log(result);
+		        	   if(result > 0){ //수정처리된 객체가 있다면
 		                 alert('수정처리 성공');
-		        		   
 		        	   }else{
 		        		   alert('마감연장 1회만 가능합니다.')
 		        	   }
