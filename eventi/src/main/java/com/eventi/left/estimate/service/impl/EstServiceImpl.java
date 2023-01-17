@@ -10,6 +10,7 @@ import com.eventi.left.estimate.mapper.EstMapper;
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
 import com.eventi.left.estimate.service.PropVO;
+import com.eventi.left.rent.service.RentGdVO;
 
 @Service
 public class EstServiceImpl implements EstService {
@@ -46,5 +47,11 @@ public class EstServiceImpl implements EstService {
 	@Override
 	public PropVO insertProp(PropVO propVO) {
 		return estMapper.insertProp(propVO);
+	}
+	
+	//해당업체의 물품조회
+	@Override
+	public List<RentGdVO> myGdList(String userId) {
+		return estMapper.myGdList(userId);
 	}
 }

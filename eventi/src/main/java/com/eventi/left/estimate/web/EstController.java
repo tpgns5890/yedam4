@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
-import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.rent.service.RentGdVO;
+import com.eventi.left.rent.service.RentService;
 
 @Controller
 public class EstController {
@@ -32,10 +33,11 @@ public class EstController {
 	}
 	//견적서 상세페이지
 	@RequestMapping(value = "/estDetail")
-	public String estDetail(Model model, @RequestParam String eno, @RequestParam String userId) {
+	public String estDetail(Model model, @RequestParam String eno, @RequestParam String userId, @RequestParam String myId) {
 		model.addAttribute("est", estService.getEst(eno));
 		model.addAttribute("propList", estService.getPropList(eno));
 		model.addAttribute("count", estService.getCount(eno, userId));
+		model.addAttribute("myGdList", estService.myGdList(myId));
 		return "content/estimate/estDetail";
 	}
 	
@@ -48,9 +50,16 @@ public class EstController {
 		}
 	
 	//견적요청서 작성완료페이지
-		@RequestMapping(value = "/estFormDone")
-		public String estFormDone(Model model, String eno) {
-			model.addAttribute("est", estService.getEst(eno));
-			return "content/estimate/estFormDone";
+	@RequestMapping(value = "/estFormDone")
+	public String estFormDone(Model model, String eno) {
+		model.addAttribute("est", estService.getEst(eno));
+		return "content/estimate/estFormDone";
 		}
+		
+	//해당업체의 물품조회
+	@RequestMapping(value = "/myGoodsList")
+	public String myGdList(Model model, @RequestParam String userId) {
+		return "content/estimate/estDetail";
+		}
+	
 }
