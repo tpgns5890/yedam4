@@ -19,5 +19,8 @@ public interface JobBoardMapper {
 	public int jobInsert(JobBoardVO jobBoardVO); 
 	
 	//게시글 삭제
-	public int jobDelete(JobBoardVO jobBoardVO); 
+	public int jobDelete(JobBoardVO jobBoardVO);
+	
+	//게시글 개수
+	public int count(JobBoardVO jobBoardVO);
 }

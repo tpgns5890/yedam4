@@ -26,4 +26,7 @@ public class JobBoardVO {
 	private String img; //이미지
 	private String userId; //회원ID
 	Integer interest; //관심수
+	
+	Integer first =1; //첫 페이지
+	Integer last = 5; //마지막 페이지
 }

@@ -1,5 +1,7 @@
 package com.eventi.left.job.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 
@@ -21,9 +24,19 @@ public class JobBoardController {
 	
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
-	public String jobList(Model model) {
-		model.addAttribute("jobList", jobService.getJobList(null));
+	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
+		model.addAttribute("jobList", jobService.getJobList(jobBoardVO, paging ));
+		model.addAttribute("paging", paging);
+		System.out.println(paging);
 		return "content/job/jobList";
+	}
+	
+	//정렬 전체 조회
+	@PostMapping("/jobList")
+	@ResponseBody
+	public List<JobBoardVO> jSelectList(JobBoardVO jobBoardVO, PagingVO paging){
+		List<JobBoardVO> list = jobService.getJobList(jobBoardVO, paging);
+		return list;
 	}
 	
 	//구인등록폼이동

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.job.mapper.JobBoardMapper;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
@@ -19,10 +20,14 @@ public class JobServiceImpl implements JobService{
 	
 	//게시글 전체조회
 	@Override
-	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO) {
-		// TODO Auto-generated method stub
+	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO, PagingVO paging) {
+		paging.setTotalRecord(jobmapper.count(jobBoardVO));
+		paging.setPageUnit(5);
+		jobBoardVO.setFirst(jobBoardVO.getFirst());
+		jobBoardVO.setLast(jobBoardVO.getLast());
 		return jobmapper.getJobList(jobBoardVO);
 	}
+	
 	//단건조회
 	@Override
 	public JobBoardVO getJob(JobBoardVO jobBoardVO) {

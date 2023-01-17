@@ -25,7 +25,7 @@
 				<h3 class="mb-4">구직자 상세조회</h3>
 				<form action="/resumeDetail" method="POST" id="resumeDetail" name="resumeDetail"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
-					
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">

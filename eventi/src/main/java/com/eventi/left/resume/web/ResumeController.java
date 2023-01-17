@@ -6,9 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eventi.left.job.service.JobBoardVO;
+import com.eventi.left.job.service.JobService;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 import com.eventi.left.resume.service.ResumeService;
@@ -18,6 +19,9 @@ public class ResumeController {
 
 	@Autowired 
 	ResumeService resumeService;
+	
+	@Autowired 
+	JobService jobService;
 	
 	//전체조회(메인구직게시판-회원ID가 작성한 글에 신청한 구직자들 전체조회)
 	@RequestMapping(value = "/resumeList", method=RequestMethod.GET) 
@@ -45,8 +49,9 @@ public class ResumeController {
 	
 	//구직신청폼 이동
 		@RequestMapping(value = "/ApplyForm", method=RequestMethod.GET) 
-		public String getJob(Model model, MemberVO memberVO) {
-			model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨 
+		public String getJob(Model model, MemberVO memberVO, JobBoardVO jobBoardVO) {
+			model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨
+			model.addAttribute("jobNo", jobBoardVO.getJobNo());
 			return "content/resume/ApplyForm"; //content -html링크
 	}
 		

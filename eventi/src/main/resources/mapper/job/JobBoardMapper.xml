@@ -2,9 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.job.mapper.JobBoardMapper">
+	<!-- 구인게시글 검색(이걸하는 이유... 데이터 용량때문...) --> 
+	<sql id="jSelect">
+	<where>
+		<!-- 검색창 입력 시 -->
+		<if test="title !=null and title != ''">
+			( TITLE LIKE '%${title}%' OR JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+		</if>
+		<!-- option 선택 시-->
+		<if test="eType !=null and eType != ''">
+			AND E_TYPE = #{eType}
+		</if>
+		</where>
+	</sql>	
+	
 	<!-- 구인게시글 전체조회 -->
 	<select id="getJobList" resultType="com.eventi.left.job.service.JobBoardVO">
-		SELECT *
+		SELECT JOB_NO,
+				TITLE,
+				JOB_CNTN,
+				PAY,
+				LOC,
+				code_select(E_TYPE) E_TYPE,
+				W_SDAY,
+				W_EDAY,
+				W_HOUR,
+				QUALIFICATION,
+				PREFERENCE,
+				IMG,
+				USER_ID,
+				INTEREST	
+		FROM (SELECT ROWNUM RN, A.* FROM (
+			SELECT *
+			FROM JOB_BOARD
+	  	<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
+		<include refid="jSelect" />
+	</select>
+	
+	<!-- 게시글 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
 		FROM JOB_BOARD
 	</select>
 	

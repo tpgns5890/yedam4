@@ -22,18 +22,17 @@
    </section>
    
 <div class="dropdown">
-<a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-    구인종류
-  </a>
-  
- <div class="dropdown-menu">
-    <a class="dropdown-item" href="#">기념식</a>
-    <a class="dropdown-item" href="#">축제/가요제/플리마켓</a>
-    <a class="dropdown-item" href="#">체육대회/단합행사</a>
-    <a class="dropdown-item" href="#">세미나/포럼/워크샵</a>
-    <a class="dropdown-item" href="#">전시회/박람회</a>
-    <a class="dropdown-item" href="#">신념회/송년회</a>
-  </div>
+<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
+	<select id="etype" name="etype"  onchange="order()">
+		<option value="" selected>------</option>
+		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
+		<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
+		<option value="E02" th:selected="${jobBoardVO.eType=='E02'}" >돌잔치</option>
+		<option value="E03" th:selected="${jobBoardVO.eType=='E03'}" >개인행사</option>
+		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
+		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
+	</select> 
+
 </div>
 <button type="button" class="btn btn-outline-primary" onclick="jobInsert()" >구인등록</button>
 <button type="button" class="btn btn-outline-primary" onclick="resumeList()">신청자조회</button>
@@ -52,7 +51,7 @@
 				<th>회원ID</th>
 			</tr>		
 		</thead>
-		<tbody>
+		<tbody id="check">
 			<tr th:each="job : ${jobList}" th:myName = "${job.jobNo}"
 			th:onclick="jobDetail(this.getAttribute('myName'))">
 				<td th:text=${job.jobNo}></td>
@@ -62,8 +61,18 @@
 			</tr>
 		</tbody>
 	</table>
-	
+	<div class="row mt-5">
+		          <div class="col text-center">
+		            <div class="block-27">
+		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+		            </div>
+		          </div>
+		        </div>
 <script>
+function gopage(i) {
+    location.href = '/jobList?page=' + i;
+}
+
 link1 = 'jobInsert'; //구인등록폼 이동
 function jobInsert(){
 	location.href = link1;
@@ -82,35 +91,67 @@ function jobDetail(jobNo){
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
-//검색 기능
+	//정렬
+	function order(){
+		let etype = $("#etype").val();
+		location.href=`/jobList?eType=${etype}`
+				
+/* 		$.ajax({
+			url : '/jobList',		
+			data: {eType:etype},
+		}).then(res =>{
+			//tbody밑에 있는 데이터 지우기
+			$("#check").empty();
+			
+			//tbody에 들어갈 tr 생성
+			for(r of res){
+				$("#check").append(makeTr(r));
+			}
+		}) */
+	}
+	
+	//검색 기능
 	$('#find').click(function() {
 		//입력한 값 가져오기
 		let search = $("input[name=search]").val();
-		//let type = $("#type").text();
 		
 		//post방식으로 리스트 불러오기
 	$.ajax({
 		url : '/jobList',
 		method : 'post',
-		data : {type:type},
+		data : {title:search}, //title = search(title변수안에 data)
 		beforeSend : function(xhr)
         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 			xhr.setRequestHeader(header, token);
         }
 	}).then(res => {
 		//tbody밑에 있는 데이터 지우기
+		
 		$("#check").empty();
 		
 		//tbody에 들어갈 tr 생성
-		for(r of res){
-			if(r.title.includes(search) || r.jobCntn.includes(search)){
+		for(r of res){ //제목, 내용 검색 시
+			//if(r.title.includes(search) || r.jobCntn.includes(search)){
+				//alert(r.loc)
 				$("#check").append(makeTr(r));
-   			}
+   			//}
 		}
 	})
 		
 	$("input[name=search]").val('');
 	})
+	
+	//tr 생성 함수
+	function makeTr(r){
+	console.log(r)
+	let tr = `<tr onclick="location.href='/jobDetail?jobNo=${r.jobNo}'">
+					<td>${r.jobNo}</td>
+					<td>${r.title}</td>
+		 			<td>${r.etype}</td> 
+					<td>${r.userId}</td>
+			  </tr>`
+	return tr;
+}	
 </script>
 </div>
 
