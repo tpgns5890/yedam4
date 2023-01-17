@@ -36,7 +36,7 @@
 					<div class="reg">
 						<input type="button" th:onclick="|location.href='@{/memQualification}'|" sec:authorize='!isAuthenticated()' value="회원가입"/>
 						<input type="button" th:onclick="|location.href='@{/loginPage}'|" sec:authorize='!isAuthenticated()' value="로그인"/>
-						<form method="post" action="logout"	sec:authorize="isAuthenticated()">
+						<form method="post" action="../logout"	sec:authorize="isAuthenticated()">
 							<input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
 							<input type="submit" value="로그아웃"/>
 						</form>

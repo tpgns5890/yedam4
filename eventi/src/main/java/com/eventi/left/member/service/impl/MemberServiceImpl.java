@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.member.mapper.MemberMapper;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberService;
@@ -148,5 +149,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<CodeVO> getCountry() {
+		return mapper.getCountry();
 	}
 }

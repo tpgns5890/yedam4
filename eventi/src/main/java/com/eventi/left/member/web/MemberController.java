@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,7 +39,9 @@ public class MemberController {
 
 	// 업체회원 가입페이지 이동
 	@RequestMapping(value = "/memBusiSignUp")
-	public String busiSignUpPage() {
+	public String busiSignUpPage(Model model, CodeVO codeVO) {
+		model.addAttribute("country", service.getCountry());
+		
 		return "content/member/busiSignUp";
 	}
 	

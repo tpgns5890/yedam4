@@ -1,67 +1,77 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+
 <head>
-<style>
-#container {
-	width: 80%;
-	margin: 0 auto;
-}
+	<style>
+		#container {
+			width: 80%;
+			margin: 0 auto;
+		}
 
-#signInBox {
-	padding: 20px;
-	min-height: 550px;
-	display: flex;
-	line-height: 3em;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-}
+		#signIn {
+			display: flex;
+		}
 
-#signIn-left {
-	padding: 20px;
-	width: 50%;
-	display: inline-block;
-	border-right: 1px solid black;
-}
+		#signInBox {
+			padding: 20px;
+			min-height: 550px;
+			display: flex;
+			line-height: 3em;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: flex-end;
+		}
 
-#signIn-right {
-	padding: 20px;
-	width: 50%;
-	display: inline-block;
-}
+		#signIn-left {
+			padding: 20px;
+			width: 50%;
+			display: inline-block;
+			border-right: 1px solid black;
+		}
 
-#submitArea {
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
+		#signIn-right {
+			padding: 20px;
+			width: 50%;
+			display: inline-block;
+		}
 
-label {
-	width: 130px;
-	margin-top: 40px;
-}
+		#submitArea {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
 
-input {
-	width: 300px;
-	margin-right: 15px;
-}
+		label {
+			width: 130px;
+			margin-top: 40px;
+		}
 
-.inputRadio {
-	width: 20px;
-}
+		input {
+			width: 300px;
+			margin-right: 15px;
+		}
 
-.labelRadio {
-	width: 80px;
-}
+		.inputRadio {
+			width: 20px;
+		}
 
-#inputEmailChk {
-	width: 150px;
-	margin-left: 280px;
-}
-</style>
+		.labelRadio {
+			width: 80px;
+		}
+
+		#inputEmailChk {
+			width: 150px;
+			margin-left: 280px;
+		}
+
+		.busiArea {
+			width: 30px;
+			margin: 0;
+			display:block;
+		}
+	</style>
 </head>
+
 <body>
 	<div layout:fragment="content">
 		<section class="hero-wrap hero-wrap-2"
@@ -69,10 +79,8 @@ input {
 			data-stellar-background-ratio="0.5">
 			<div class="overlay"></div>
 			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+				<div class="row no-gutters slider-text align-items-end justify-content-center">
+					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
 						<h2 class="mb-0 bread">업체회원 회원가입</h2>
 					</div>
 				</div>
@@ -80,74 +88,52 @@ input {
 		</section>
 		<div id="container">
 			<div id="signInBox">
-				<div id="signIn-left">
-					<form id="signIn" name="signIn">
+				<form id="signIn" name="signIn">
+					<div id="signIn-left">
 						<h3 class="mb-4 billing-heading">기본정보(필수)</h3>
-						<label for="id">아이디</label><input type="text" name="userId"
-							id="inputId">
+						<label for="userId">아이디</label><input type="text" name="userId" id="inputId">
 						<div>
 							<font id="id_feedback" size="2" value="1"></font>
 						</div>
-						<label for="password">비밀번호</label><input type="password"
-							name="userPassword" id="pw1"
+						<label for="userPassword">비밀번호</label><input type="password" name="userPassword" id="pw1"
 							placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
 						<div>
 							<font id="pwc_feedback" size="2" value="1"></font>
 						</div>
-						<label for="passwordchk">비밀번호확인</label><input type="password"
-							name="passwordchk" id="pw2">
+						<label for="passwordchk">비밀번호확인</label><input type="password" name="passwordchk" id="pw2">
 						<div>
 							<font id="pw_feedback" size="2" value="1"></font>
 						</div>
-						<label for="name">대표자명</label><input type="text" name="userName"
-							id="inputName"><br> <label for="email">이메일주소</label><input
-							type="text" name="userEmail" id="inputEmail">
-						<button type='button' id="sendEmail">인증번호전송</button>
-						<br> <span class="mail_input_box_warn"></span> <input
-							id="inputEmailChk" type="text">
+						<label for="name">성명</label><input type="text" name="name" id="inputName"><br>
+						<label for="userEmail">이메일주소</label><input type="text" name="userEmail" id="inputEmail">
+						<button type='button' id="sendEmail">인증번호전송</button><br>
+						<span class="mail_input_box_warn"></span> <input id="inputEmailChk" type="text">
 						<div>
 							<font id="email_feedback" size="2" value="1"></font>
 						</div>
-						<label for="mailGet">메일 알림수신</label> <input type="radio"
-							class="inputRadio" name="userMessaging" value="s1" checked><label
-							class="labelRadio">수신동의</label> <input type="radio"
-							class="inputRadio" name="userMessaging" value="s0"><label
+						<label for="mailGet">메일 알림수신</label>
+						<input type="radio" class="inputRadio" name="userMessaging" value="s1" checked><label
+							class="labelRadio">수신동의</label>
+						<input type="radio" class="inputRadio" name="userMessaging" value="s0"><label
 							class="labelRadio">수신거부</label>
-					</form>
-				</div>
-				<div id="signIn-right">
-					<h3 class="mb-4 billing-heading">행사업체정보</h3>
+					</div>
 
-					<label for="name">상호명</label><input type="text" placeholder=""><br>
-					<label for="name">사업자번호</label><input type="text" placeholder=""><br>
-					<label for="country">행사가능지역</label>
-					<div class="select-wrap">
-						<div class="icon">
-							<span class="ion-ios-arrow-down"></span>
+					<div id="signIn-right">
+						<h3 class="mb-4 billing-heading">사업자정보</h3>
+						<label for="p_nm">대표자성명</label><input type="text" name="p_nm"><br>
+						<label for="BNo">사업자등록번호</label><input type="text" name="BNo"><br>
+						<label for="start_dt">개업일자</label><input type="date" name="start_dt"><br>
+						<label for="b_nm">상호명</label><input type="text" name="b_nm"><br>
+						<label for="busiArea">행사가능지역</label>
+						<input th:each="c : ${country}" type="checkbox" class="busiArea" name="busiArea"
+							th:text="${c.codeName}" width="20px"><br>
+						<label for="password">업체유형</label>
+						<div class="radio">
+							<label class="mr-3"><input type="radio" name="optradio">
+								행사업체</label> <label><input type="radio" name="optradio">렌탈업체</label>
 						</div>
-						<select name="" id="" class="form-control">
-							<option value="">지역</option>
-							<option value="">서울</option>
-							<option value="">인천</option>
-							<option value="">대구</option>
-							<option value="">광주</option>
-							<option value="">대전</option>
-							<option value="">울산</option>
-							<option value="">부산</option>
-							<option value="">경기도</option>
-							<option value="">강원도</option>
-							<option value="">충청도</option>
-							<option value="">전라도</option>
-							<option value="">경상도</option>
-							<option value="">제주도</option>
-						</select>
 					</div>
-					<label for="password">업체유형</label>
-					<div class="radio">
-						<label class="mr-3"><input type="radio" name="optradio">
-							행사업체</label> <label><input type="radio" name="optradio">렌탈업체</label>
-					</div>
-				</div>
+				</form>
 				<div id="submitArea">
 					<button class="btn btn-primary py-3 px-5" id="normalSignIn">초기화</button>
 					<button class="btn btn-primary py-3 px-5" id="normalSignIn">회원가입</button>
@@ -155,17 +141,23 @@ input {
 			</div>
 		</div>
 		<script>
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var token = $("meta[name='_csrf']").attr("content");
+			
 			/* 아이디 중복 확인 */
-			$('#inputId').keyup(function() {
+			$('#inputId').keyup(function () {
 				var inputId = $('#inputId').val(); //입력한 ID
 				$.ajax({
-					url : "/memIdCheck",
-					type : "post",
-					data : {
-						inputId : inputId
+					url: "/memIdCheck",
+					type: "post",
+					data: {
+						inputId: inputId
 					},
-					datatype : 'json',
-					success : function(result) {
+					datatype: 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (result) {
 						if (result == 1) {
 							$("#id_feedback").html('이미 사용중인 아이디입니다.');
 							$("#id_feedback").attr('color', '#dc3545');
@@ -176,14 +168,14 @@ input {
 							$("#id_feedback").attr('value', '0');
 						}
 					},
-					error : function() {
+					error: function () {
 						alert("서버 요청 실패");
 					}
 				})
 			})
 
 			//비밀번호 유효성 검사
-			$('#pw1').keyup(function() {
+			$('#pw1').keyup(function () {
 				var p1 = $('#pw1').val();
 				if (pwFormCheck(p1)) {
 					$("#pwc_feedback").html('사용할 수 있는 비밀번호 입니다.');
@@ -198,13 +190,12 @@ input {
 
 			//비밀번호 형식 검사 메소드
 			function pwFormCheck(p1) {
-				var form = /^[A-Za-z0-9]{6,12}$/;
-				;
+				var form = /^[A-Za-z0-9]{6,12}$/;;
 				return form.test(p1);
 			}
 
 			/* 비밀번호 확인 */
-			$('#pw2').keyup(function() {
+			$('#pw2').keyup(function () {
 				var p1 = $('#pw1').val(); //비밀번호 값
 				var p2 = $('#pw2').val(); //비밀번호 확인
 				if (p1 == p2) {
@@ -220,7 +211,7 @@ input {
 
 			/* 이메일 인증번호 전송 */
 			var code = ""; //이메일전송 인증번호 저장위한 코드
-			$("#sendEmail").click(function() {
+			$("#sendEmail").click(function () {
 				var warnMsg = $(".mail_input_box_warn");
 				var email = $("#inputEmail").val(); // 입력한 이메일
 
@@ -233,13 +224,13 @@ input {
 					return false;
 				}
 				$.ajax({
-					type : "GET",
-					url : "mailCheck?email=" + email,
-					success : function(data) {
+					type: "GET",
+					url: "mailCheck?email=" + email,
+					success: function (data) {
 						code = data;
 						$("#sendEmail").attr('disabled', 'disabled');
 					},
-					error : function() {
+					error: function () {
 						alert("서버 요청 실패");
 					}
 				});
@@ -252,7 +243,7 @@ input {
 			}
 
 			/* 인증번호 비교 */
-			$("#inputEmailChk").keyup(function() {
+			$("#inputEmailChk").keyup(function () {
 				var inputCode = $("#inputEmailChk").val();
 				var checkResult = $("#email_feedback");
 				if (inputCode == code) { // 일치할 경우
@@ -266,7 +257,7 @@ input {
 				}
 			});
 			//유효성 최종 검사 후 회원가입 처리
-			$("#normalSignIn").click(function() {
+			$("#normalSignIn").click(function () {
 				var idCheck = $("#id_feedback").attr('value');
 				var pwCheck = $("#pw_feedback").attr('value');
 				var pwcCheck = $("#pwc_feedback").attr('value');
@@ -299,20 +290,20 @@ input {
 				var data = $('form[name="signIn"]').serializeObject();
 				data.crtfs = qualArray;
 				$.ajax({
-					url : "/insertMember",
-					method : "post",
-					contentType : 'application/json',
-					data : JSON.stringify(data),
-					success : function(result) {
+					url: "/insertMember",
+					method: "post",
+					contentType: 'application/json',
+					data: JSON.stringify(data),
+					success: function (result) {
 						//location.href='/';
 						alert('등록완료!');
 					},
-					error : function() {
+					error: function () {
 						alert("서버 요청 실패");
 					}
 				})
 			}
-			
+
 			/* 
 			일반 인증키(Encoding)	
 			ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D
@@ -347,4 +338,5 @@ input {
 		</script>
 	</div>
 </body>
+
 </html>
