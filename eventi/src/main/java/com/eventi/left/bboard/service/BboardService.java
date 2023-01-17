@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 public interface BboardService {
 	//전체조회
@@ -12,6 +13,9 @@ public interface BboardService {
 	
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
+	
+	//임시저장된 게시글 조회
+	public BboardVO bSave(BboardVO bboardVO);
 	
 	//좋아요 조회
 	public List<BboardVO> bboardLike(BboardVO bboardVO);
@@ -24,4 +28,7 @@ public interface BboardService {
 	
 	//삭제
 	public int bboardDelete(BboardVO bboardVO);
+	
+	//게시글 댓글 조회
+	public List<ReplyVO> bboardReply(ReplyVO reply);
 }

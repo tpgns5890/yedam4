@@ -12,6 +12,7 @@ import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Service
 public class BboardServiceImpl implements BboardService{
@@ -31,6 +32,12 @@ public class BboardServiceImpl implements BboardService{
 		//조회수 +1
 		bboardMapper.inqUpdate(bboardVO);
 		return bboardMapper.bboardSelect(bboardVO);
+	}
+	
+	//임시저장된 게시글 가져오기
+	@Override
+	public BboardVO bSave(BboardVO bboardVO) {
+		return bboardMapper.bSave(bboardVO);
 	}
 	
 	//좋아요 조회
@@ -85,4 +92,11 @@ public class BboardServiceImpl implements BboardService{
 	public int bboardDelete(BboardVO bboardVO) {
 		return bboardMapper.bboardDelete(bboardVO);
 	}
+	
+	//댓글 리스트
+	@Override
+	public List<ReplyVO> bboardReply(ReplyVO reply) {
+		return bboardMapper.bboardReply(reply);
+	}
+
 }

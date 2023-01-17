@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +18,7 @@ import com.eventi.left.bboard.service.BboardVO;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Controller
 @RequestMapping("/bboard")
@@ -71,6 +74,13 @@ public class BboardController {
 		return "content/bboard/bSelect";
 	}
 	
+	//임시저장된 게시글 들고오기
+	@PostMapping("/bSave")
+	@ResponseBody
+	public BboardVO bSave(@RequestBody BboardVO bboardVO) {
+		return bboardService.bSave(bboardVO);
+	}
+	
 	//게시글 등록폼 이동
 	@GetMapping("/bInsert")
 	public String bInsert(Model model, BboardVO bboardVO) {
@@ -80,8 +90,7 @@ public class BboardController {
 	
 	//게시글 등록
 	@PostMapping("/bInsert")
-	public String bInsertForm(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile) {
-		System.out.println(bboardVO);
+	public String bInsertForm(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile) {		
 		bboardService.bboardInsert(bboardVO, filesVO, uploadFile);
 		//내가 등록한 게시글 전체리스트 페이지로 이동
 		return "redirect:/bboard/bList?type=" + bboardVO.getType();
@@ -108,6 +117,14 @@ public class BboardController {
 		bboardService.bboardDelete(bboardVO);
 		
 		return "redirect:/bboard/bList?type=" + type;
+	}
+	
+	//해당 게시글의 댓글 및 대댓글 조회
+	@RequestMapping(value="/bReply", method=RequestMethod.POST)
+	@ResponseBody
+	public List<ReplyVO> bReply(@RequestBody ReplyVO vo) {
+		List<ReplyVO> reply = bboardService.bboardReply(vo);
+		return reply;
 	}
 	
 }

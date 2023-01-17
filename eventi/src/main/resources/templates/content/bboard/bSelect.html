@@ -42,8 +42,12 @@
          </div>
       </div>
    </section>
+   
+   <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+   <th:block th:if="${session.member.userId} == ${bSelect.writer}">
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo}, type=${bSelect.type})}'|">글 삭제하기</button>
+   </th:block>
    
    <th:block th:if="${like == null}">
    	<div class="stage">
@@ -84,12 +88,90 @@
       </tbody>
    </table>
    
+   <div>
+    	<div class="pt-5 mt-5" >
+          <h3 class="mb-5">댓글</h3>
+            	<ul class="comment-list" id=reply>
+           		</ul>
+        </div>
+    </div>
+        
+    <form id="replyInsertFrm">
+    	
+    	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
+    	<button type="button" id="repInsertBtn">댓글추가</button>
+    </form>
+   
    <script>
    $(function() {
 	    //csrf 설정
 	    var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-	   
+		
+		let userId = '[[${session.member.userId}]]';
+		let boardCat = $("#type").text();
+		let replyTgt = $("#bBoardNo").text();
+		
+		$.ajax({
+   			url : '/bboard/bReply',
+   			method : 'post',
+   			data : JSON.stringify({userId:userId, boardCat:boardCat, replyTgt:replyTgt}),
+   			contentType : "application/json",
+   			beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+            }
+   		}).then(res => {
+   			for(reply of res){
+   				//댓글일 경우
+   				if(reply.rerepTgt == null){
+   					$("#reply").append(make(reply));
+   				} else { //대댓글일 경우, 대댓글의 경우 rerepTgt컬럼에 대댓글을 단 댓글 번호가 적혀있다.
+   					//대댓글은 연관있는 댓글 바로 밑에 들어가야되기 때문에 댓글 생성시 id를 부여하여 rerepTgt이 댓글ID와 같은 번호가 적힌 댓글 밑으로 append한다.
+   					$("#" + reply.rerepTgt).append(makeRe(reply));
+   				}
+   			}
+   		})
+		
+   	//댓글 tr생성
+   		function make(reply){
+   			let p = `
+                  <li class="comment">
+                    <div class="comment-body"  id="${reply.replyNo}">
+                      <h3>${reply.userId}</h3>
+                      <div class="meta">${reply.writingDt}</div>
+                      <p>${reply.replyCntn}</p>
+                      <p><a href="#" class="reply">Reply</a></p>
+                    </div>
+                   </li>
+                `
+   			return p;
+   		}
+   		
+   		//대댓글 tr생성
+   		function makeRe(reply){
+   			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
+   			$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+   			
+   			let p = `<ul class="children">
+                <li class="comment">
+                <div class="comment-body">
+                  <h3>${reply.userId}</h3>
+                  <div class="meta">${reply.writingDt}</div>
+                  <p>${reply.replyCntn}</p>
+                  <p><a href="#" class="reply">Reply</a></p>
+                </div>
+              </li>
+            </ul>`
+            
+            return p;
+   		}
+
+		//댓글 추가
+		$("#repInsertBtn").on("click", function() {
+			
+		})
+		
 	   //좋아요를 눌렀을 경우
 	   $(".heart").on("click", function() {
 		 //클래스가 없을 경우 생성, 클래스가 있을 경우 삭제
