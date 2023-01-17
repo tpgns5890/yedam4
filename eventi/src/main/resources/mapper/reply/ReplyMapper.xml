@@ -4,8 +4,12 @@
 
 <mapper namespace="com.eventi.left.reply.mapper.ReplyMapper">
 
-	<select id="replyList" resultType="ReplyVO">
-		SELECT * FROM REPLY
+	<!-- 댓글 불러오기 -->
+	<select id="replyList" resultType="com.eventi.left.reply.service.ReplyVO">
+		SELECT *
+		FROM REPLY
+		WHERE BOARD_CAT = #{boardCat}
+		AND REPLY_TGT = #{replyTgt}
 	</select>
 
 	<select id="getReply" resultType="ReplyVO">

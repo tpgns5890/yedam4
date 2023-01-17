@@ -22,7 +22,6 @@ public class FileController {
    //첨부파일 여러개 업로드할 때 사용
    @PostMapping("/filesUpload")
    public String filesUpload(@RequestParam MultipartFile[] uploadFile, String targetId, String category) throws IllegalStateException, IOException{    
-     
 	   List<FileDto> list= new ArrayList<FileDto>();
       //파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
       list = newUp.uploadFiles(uploadFile, targetId, category);

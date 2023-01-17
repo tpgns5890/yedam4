@@ -20,8 +20,11 @@ public interface BboardService {
 	//좋아요 조회
 	public List<BboardVO> bboardLike(BboardVO bboardVO);
 	
+	//시퀀스값찾기
+	public String getSeq();
+	
 	//등록
-	public int bboardInsert(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile);
+	public int bboardInsert(BboardVO bboardVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//수정
 	public int bboardUpdate(BboardVO bboardVO, MultipartFile uploadFile);

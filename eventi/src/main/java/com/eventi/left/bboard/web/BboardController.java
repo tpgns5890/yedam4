@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
@@ -27,6 +28,8 @@ public class BboardController {
 	@Autowired BboardService bboardService;
 	//좋아요 service
 	@Autowired LikesService likeService;
+	//파일 service
+	@Autowired FilesService filesService;
 	
 	//전체조회
 	@GetMapping("/bList")
@@ -47,8 +50,6 @@ public class BboardController {
 		return list;
 	}
 	
-	
-	
 	//좋아요 전체 조회
 	@PostMapping("/bLikeList")
 	@ResponseBody
@@ -66,11 +67,12 @@ public class BboardController {
 		likesVO.setTargetNo(bboardVO.getBBoardNo());
 		likesVO.setCategory(bboardVO.getType());
 		model.addAttribute("like", likeService.getLike(likesVO));
-		
 		//해당 게시글 좋아요 수
 		model.addAttribute("likeCount", likeService.countLike(likesVO));
 		//해당 게시글 상세 내용
 		model.addAttribute("bSelect", bboardService.bboardSelect(bboardVO));
+		//이미지
+		model.addAttribute("file", filesService.fileList(bboardVO.getBBoardNo()));
 		return "content/bboard/bSelect";
 	}
 	
@@ -85,12 +87,13 @@ public class BboardController {
 	@GetMapping("/bInsert")
 	public String bInsert(Model model, BboardVO bboardVO) {
 		model.addAttribute("type", bboardVO.getType());
+		model.addAttribute("nextNo", bboardService.getSeq());
 		return "content/bboard/bInsert";
 	}
 	
 	//게시글 등록
 	@PostMapping("/bInsert")
-	public String bInsertForm(BboardVO bboardVO, FilesVO filesVO, MultipartFile uploadFile) {		
+	public String bInsertForm(BboardVO bboardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		bboardService.bboardInsert(bboardVO, filesVO, uploadFile);
 		//내가 등록한 게시글 전체리스트 페이지로 이동
 		return "redirect:/bboard/bList?type=" + bboardVO.getType();
@@ -100,6 +103,8 @@ public class BboardController {
 	@GetMapping("/bUpdate")
 	public String bUpdate(Model model, BboardVO bboardVO) {
 		model.addAttribute("bSelect", bboardService.bboardSelect(bboardVO));
+		//이미지
+		model.addAttribute("file", filesService.fileList(bboardVO.getBBoardNo()));
 		return "content/bboard/bUpdate";
 	}
 	
@@ -118,13 +123,4 @@ public class BboardController {
 		
 		return "redirect:/bboard/bList?type=" + type;
 	}
-	
-	//해당 게시글의 댓글 및 대댓글 조회
-	@RequestMapping(value="/bReply", method=RequestMethod.POST)
-	@ResponseBody
-	public List<ReplyVO> bReply(@RequestBody ReplyVO vo) {
-		List<ReplyVO> reply = bboardService.bboardReply(vo);
-		return reply;
-	}
-	
 }
