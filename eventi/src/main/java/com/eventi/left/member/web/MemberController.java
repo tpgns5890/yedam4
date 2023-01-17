@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.common.CodeVO;
+import com.eventi.left.member.service.BusiVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,7 +41,8 @@ public class MemberController {
 	// 업체회원 가입페이지 이동
 	@RequestMapping(value = "/memBusiSignUp")
 	public String busiSignUpPage(Model model, CodeVO codeVO) {
-		model.addAttribute("country", service.getCountry());
+		model.addAttribute("busiArea", service.getCountry());
+		model.addAttribute("busiType", service.getType());
 		
 		return "content/member/busiSignUp";
 	}
@@ -99,7 +101,7 @@ public class MemberController {
 		return responseEntity;
 	}
 	
-	//회원가입 처리
+	//일반회원가입 처리
 	@PostMapping("/insertMember")
 	@ResponseBody
 	public String insertMember(@RequestBody MemberVO memberVO) {
@@ -107,6 +109,14 @@ public class MemberController {
 		service.insertMember(memberVO);
 		return "redirect:/login";
 	}
+	//업체회원가입 처리
+		@PostMapping("/insertBusiMember")
+		@ResponseBody
+		public String insertBusiMember(@RequestBody MemberVO memberVO, @RequestBody BusiVO busiVO) {
+			memberVO.setUserPassword(passwordEncoder.encode(memberVO.getPassword()));
+			service.insertBusiMember(memberVO, busiVO);
+			return "redirect:/login";
+		}
 	
 	//로그인페이지 이동
 	@RequestMapping(value="/loginPage")

@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.member.mapper.MemberMapper;
+import com.eventi.left.member.service.BusiVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
@@ -60,6 +61,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 			mapper.insertCrtf(crVO);
 		}
 		return i;
+	}
+	// 업체회원 회원가입
+	@Override
+	public int insertBusiMember(MemberVO memberVO, BusiVO busiVO) {
+		int i = mapper.insertbusiMember(memberVO);
+		return 0;
 	}
 
 	// 메일 인증
@@ -154,5 +161,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public List<CodeVO> getCountry() {
 		return mapper.getCountry();
+	}
+
+	@Override
+	public List<CodeVO> getType() {
+		return mapper.getType();
 	}
 }
