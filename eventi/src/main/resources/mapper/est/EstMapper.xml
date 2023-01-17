@@ -30,8 +30,7 @@
 	<select id="getEst" resultType="EstVO">
 		SELECT *
 		FROM ESTIMATE
-		WHERE E_NO =
-		#{eno}
+		WHERE E_NO = #{eno}
 	</select>
 	
 
@@ -44,6 +43,11 @@
 
 	<!-- 견적요청서 등록 -->
 	<insert id="insertEst">
+	<selectKey keyProperty="eno" resultType="String" order="AFTER">
+			SELECT
+			'ES'||(MAX(TO_NUMBER(SUBSTR(E_NO,3)))) ENO
+			FROM ESTIMATE
+		</selectKey>
 		INSERT INTO ESTIMATE
 		VALUES('ES'||eno_seq.nextval, #{userId}, #{eventType}, #{pats},
 		#{expectedPl}, #{eventDate}, #{eventTime}, #{eventDuration},

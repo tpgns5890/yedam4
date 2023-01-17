@@ -476,8 +476,7 @@ $('.submit').click(function() {
         xhr.setRequestHeader(header, token);
         },
 		success: function (data) {
-			console.log(data);
-			//location.href="/estFormDone?eno=" + data;
+			location.href="/estFormDone?eno=" + data;
          },
          error: function () {
 				alert("서버 요청 실패");

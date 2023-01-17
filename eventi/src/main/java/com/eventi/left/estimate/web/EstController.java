@@ -42,9 +42,9 @@ public class EstController {
 	//견적서 등록
 	@PostMapping("/insertEst")
 	@ResponseBody
-	public String insertEst(@RequestBody EstVO estVO) {
+	public String insertEst(Model model, @RequestBody EstVO estVO) {
 		estService.insertEst(estVO);
-		return "content/estimate/estForm?="+estVO;
+		return estVO.getEno();
 		}
 	
 	//견적요청서 작성완료페이지
