@@ -47,13 +47,23 @@
 						<th>진행현황</th>
 						<th>지원자조회</th>
 						<th>우승자등록</th>
+						<th>등록현황</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="contest : ${contestList}">
+					<tr th:each="contest : ${contestList} ">
 						<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
-						<td th:text=${contest.cNo}
-							th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|"></td>
+						
+						<!-- 등록된 게시글로 이동 -->
+						<th:block th:if="${contest.save} == 'N'">
+							<td th:text=${contest.cNo} ></td>
+						</th:block>
+						
+						<!-- 임시저장된 게시글 누를시 수정폼이동 -->
+						<th:block th:if="${contest.save} == 'Y'">
+							<td th:text=${contest.cNo} th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|"></td>
+						</th:block>
+							
 						<td th:text=${contest.writer}></td>
 						<td th:text=${contest.category}></td>
 						<td th:text=${contest.ttl}></td>
@@ -63,6 +73,14 @@
 						<td>진행현황..</td>
 						<td><button type="button" id="selete">지원자조회</button></td>
 						<td><button type="button" id="winnerInsert">우승자등록</button></td>
+						
+						<th:block th:if="${contest.save} == 'Y'">
+							<td th:text="임시저장"></td>
+						</th:block>
+						<th:block th:if="${contest.save} == 'N'">
+							<td th:text="등록완료"></td>
+						</th:block>
+						
 					</tr>
 				</tbody>
 			</table>

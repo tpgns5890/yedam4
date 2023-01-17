@@ -117,8 +117,10 @@ public class ContestController {
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
+			
 			// 전체데이터 받기
 			List<ContestVO> contests = service.myContestList(vo, paging);
+			
 			// 코드변환후 리턴할 객체선언.
 			List<ContestVO> setContest = new ArrayList<>();
 			for (ContestVO contest : contests) {
@@ -126,7 +128,7 @@ public class ContestController {
 				setContest.add(contest);
 			}
 			model.addAttribute("contestList", setContest);// 모델에 담기.
-			return "content/myPage/myCotestList"; // view
+			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
 
 		// 등록인경우 결제 후 공모전상세페이지 이동.
@@ -145,9 +147,9 @@ public class ContestController {
 	// 수정처리(완료)
 	@PutMapping("/update")
 	@ResponseBody
-	public ContestVO contestupdateForm(@RequestBody ContestVO vo) {
-		service.updateContest(vo);
-		return vo;
+	public int contestupdateForm(@RequestBody ContestVO vo) {
+		
+		return service.updateContest(vo);
 	}
 
 	// 삭제처리(링크처리는 get/ deleteMappging form)
@@ -208,5 +210,12 @@ public class ContestController {
 
 		return result;
 	}
+	
+	
+	//일반회원 디자인 응모하기 폼 이동. DesignServic
+		@GetMapping("/designInsertForm")
+		public String designInsert() {
+			return "content/contest/contestApplyForm";
+		}
 
 }

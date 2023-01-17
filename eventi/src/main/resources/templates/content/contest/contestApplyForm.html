@@ -1,10 +1,217 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<link rel="stylesheet" href="/css/model.css">
+<style>
+.fileDown{
+	display : none;
+}
+h3 {
+	font-weight: bold;
+	text-align: center;
+}
+
+.contestContainer {
+	padding: 20px;
+	margin: auto;
+	float: center;
+}
+
+ul {
+	list-style: none;
+}
+</style>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	<h3>공모전 응모신청</h3>
+	<div layout:fragment="content" class="content">
+		<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div
+					class="row no-gutters slider-text align-items-end justify-content-center">
+					<div
+						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">공모전 응모신청</h2>
+
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<div class="contestContainer">
+			<textarea rows="20" cols="90">
+[콘테스트 참여 약관 동의]
+1. 로고,일러스트 콘테스트에는 어떠한 스톡이미지, 프리백터,클럽아트도 사용해서는 안됩니다.
+  상업적 사용이 제한되는 폰트, 
+</textarea>
+			<br> <input type="checkbox" id="contestCheck">약관에 전부 동의합니다..<br>
+
+			<!-- 공모전등록 입력폼 -->
+			<form action="/contest/insert" enctype="multipart/form-data"
+				name="contestfrm" method="post" onsubmit="return check();">
+				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}" />
+				<ul>
+					<li><label>분류</label> 현수막 <input type="radio" name="category"
+						value="D1" checked> 배너<input type="radio" name="category"
+						value="D2"> 로고<input type="radio" name="category"
+						value="D3"> 포스터<input type="radio" name="category"
+						value="D4"> 기타 <input type="radio" name="category"
+						value="D5"></li>
+
+					<!-- 임시저장값 hidden -->
+					<li><label>작성자</label><input type="text" name="writer"
+						th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
+					<li><label>등록일</label><input type="date" name="dtReg"
+						th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}"
+						readonly></li>
+					<li><label>제목</label><input type="text" name="ttl"
+						required="required"></li>
+						<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
+				</ul>
+
+					<div class="col-md-12">
+						<div class="form-group">
+						<label>첨부파일</label><input id="imgInp" type="file" name="uploadFile" multiple="multiple">
+							<div class="fileDown">
+								<img id="blah" src="#" alt = "your image" width="250px" />
+									<button type="button" id="cancel" class="btn btn-warning cancel">
+										<span>Cancel</span>
+							       </button>
+							</div>
+						</div>
+					</div>
+
+				<button type="reset">초기화</button>
+				<button type="submit" id="insertForm">등록</button>
+			</form>
+			<button type="button" id="cancleBtn"
+				onclick="location.href='/contest/List'">취소</button>
+
+		</div>
+		<script>
+			//csrf설정
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			let oEditors = []
+
+			smartEditor = function() {
+				console.log("Naver SmartEditor")
+				nhn.husky.EZCreator.createInIFrame({
+					oAppRef : oEditors,
+					elPlaceHolder : "cntn",
+					sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+					fCreator : "createSEditor2"
+				})
+			}
+
+			$(document).ready(function() {
+				smartEditor()
+			})
+
+			//등록버튼 누를시
+			$('#insertForm').on('click', function() {
+				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+				let cntn = document.getElementById("cntn").value;
+
+			});
+			
+			//폼 등록버튼 전송전 체크함수.
+			function check(){
+					let check = $('input[type="checkbox"]').is(":checked");
+
+					if (check == false) {//유의사항 체크확인
+						alert('유의사항을 확인하세요.');
+						return false;
+					}
+					//임시저장 확인
+					else if ($('input[name="save"]').is(":checked") == true) {
+						console.log($(this));
+						if (!confirm('임시저장 하시겠습니까?')) {
+							return false;
+						}
+					} 
+					else{//등록확인
+						if (!confirm('공모전을 등록하시겠습니까?')) {
+							return false;
+						
+						//파일업로드 진행(완료)
+						}else{
+					        var formData = new FormData();
+					        var inputFile = $("input[name='uploadFile']");
+					        var files = inputFile[0].files;
+							
+					        ///데이터 넘길값 세팅
+					        if(files.length == 0){
+					        	return false;
+					        }
+					        for(var i=0; i<files.length; i++) {
+					            formData.append("uploadFile", files[i]);
+					        }
+					            formData.append("targetId", $("input[name='cNo']").val());
+					            formData.append("category", 'TO1');
+					        
+					        
+					        $.ajax({
+					            url: '/filesUpload',
+					            type: 'POST',
+					            enctype: 'multipart/form-data',  
+					            data: formData,
+					            contentType: false,
+					            processData : false,
+					            beforeSend: function (xhr) {
+									/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+									xhr.setRequestHeader(header, token);
+								}
+					        });
+						}
+					}
+			}
+			
+			//파일 업로드 이미지 미리보기
+		    //파일 INPUT창에 변화가 있을 경우 실행
+		    $("#imgInp").on('change', function() {
+		    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
+		    	$(this).toggleClass("fileDown"); //input파일
+		    	$(this).next().toggleClass("fileDown"); //div
+				readURL(this);
+			});
+			
+		    //이미지 미리보기 처리
+			function readURL(input){
+				if(input.files && input.files[0]){
+					var reader = new FileReader();
+					
+					reader.onload = function(e) {
+						$("#blah").attr('src', e.target.result);
+					}
+					
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+
+		    //파일 삭제
+		    $("#cancel").on('click', function() {
+		    	//파일을 지우고 싶을때 삭제버튼을 누르면 이미지는 사라지고 input type=file 입력폼이 다시 나타난다.
+		    	$(this).parent().prev().toggleClass("fileDown");
+		    	$(this).parent().toggleClass("fileDown");
+		    	//file영역에 있던 값 삭제
+		    	$("#imgInp").val('');
+		    })
+
+			
+			
+		</script>
+	</div>
 </body>
 </html>
