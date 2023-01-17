@@ -11,10 +11,29 @@
 		WHERE BOARD_CAT = #{boardCat}
 		AND REPLY_TGT = #{replyTgt}
 	</select>
-
+	
+	<!-- 댓글 한건 보기 -->
 	<select id="getReply" resultType="ReplyVO">
+		SELECT *
+		FROM REPLY
+		WHERE REPLY_NO = #{replyNo}
 	</select>
 	
+	<!-- 댓글 입력 -->
+	<insert id="replyInsert">
+		<selectKey keyProperty="replyNo" resultType="String" order="BEFORE">
+			SELECT 'RP'||REPLYNO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO REPLY(REPLY_NO, USER_ID, REPLY_TGT, REPLY_CNTN, WRITING_DT, BOARD_CAT, REREP_TGT)
+		VALUES(#{replyNo}, #{userId}, #{replyTgt}, #{replyCntn}, SYSDATE, #{boardCat}, #{rerepTgt})
+	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="replyUpdate">
+		UPDATE SET REPLY_CNTN = #{replyCntn}
+		FROM REPLY
+		WHERE REPLY_NO = #{replyNo}
+	</update>
 
 	<!-- 댓글 삭제 -->
 	<delete id="replyDelete">

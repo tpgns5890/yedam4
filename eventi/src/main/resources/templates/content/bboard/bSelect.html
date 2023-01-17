@@ -52,14 +52,14 @@
    <th:block th:if="${like == null}">
    	<div class="stage">
   		<div class="stage heart"></div>
-  		<span id="likeCount" th:text="${likeCount}"></span>
+  		<span id="likeCount" th:text="${bSelect.cnt}"></span>
    	</div>
    </th:block>
    
    <th:block th:if="${like != null}">
    	<div class="stage">
   		<div class="stage heart active"></div>
-  		<span id="likeCount" th:text="${likeCount}"></span>
+  		<span id="likeCount" th:text="${bSelect.cnt}"></span>
    	</div>
    </th:block>
    
@@ -113,13 +113,13 @@
 		var header = $("meta[name='_csrf_header']").attr("content");
 		
 		let userId = '[[${session.member.userId}]]';
-		let boardCat = $("#type").text();
-		let replyTgt = $("#bBoardNo").text();
+		let type = '[[${bSelect.type}]]';
+		let bBoardNo = '[[${bSelect.bBoardNo}]]';
 		
 		$.ajax({
    			url : '/replyList',
    			method : 'post',
-   			data : JSON.stringify({boardCat:boardCat, replyTgt:replyTgt}),
+   			data : JSON.stringify({boardCat:type, replyTgt:bBoardNo}),
    			contentType : "application/json",
    			beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -139,13 +139,24 @@
 		
    	//댓글 tr생성
    		function make(reply){
+			let delBtn = '';
+			let upBtn = '';
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			
+			//댓글 작성자일 경우에만 삭제 버튼 생성
+			if(reply.userId ==userId){
+				delBtn = `<button class='repDelete'>삭제</button>`;
+				upBtn = `<button class='repUpdate'>수정</button>`;
+			}
+			
    			let p = `
                   <li class="comment">
                     <div class="comment-body"  id="${reply.replyNo}">
                       <h3>${reply.userId}</h3>
                       <div class="meta">${reply.writingDt}</div>
                       <p>${reply.replyCntn}</p>
-                      <p><a href="#" class="reply">Reply</a></p>
+                      <button type="button" class="reply">Reply</button>
+                      ${delBtn} ${upBtn}
                     </div>
                    </li>
                 `
@@ -155,7 +166,7 @@
    		//대댓글 tr생성
    		function makeRe(reply){
    			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
-   			$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+   			$("#" + reply.rerepTgt).children('button:eq(0)').remove();
    			
    			let p = `<ul class="children">
                 <li class="comment">
@@ -163,7 +174,6 @@
                   <h3>${reply.userId}</h3>
                   <div class="meta">${reply.writingDt}</div>
                   <p>${reply.replyCntn}</p>
-                  <p><a href="#" class="reply">Reply</a></p>
                 </div>
               </li>
             </ul>`
@@ -173,16 +183,129 @@
 
 		//댓글 추가
 		$("#repInsertBtn").on("click", function() {
+			//textarea에 있는 값 들고 오기
+			let replyCntn = $('#replyCntn').val();
 			
+			$.ajax({
+	   			url : '/replyInsert',
+	   			method : 'post',
+	   			data : JSON.stringify({userId:userId, replyTgt:bBoardNo, replyCntn:replyCntn, boardCat:type}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            }
+	   		}).then(res => {
+	   			//댓글 부분에 등록하기
+	   			$("#reply").append(make(res));
+	   			$('#replyCntn').val('');
+	   		})
+		});
+		
+		//reply버튼을 클릭했을 경우 대댓글 입력 폼 생성
+		$(document).on('click', '.reply', function(e){
+		    e.preventDefault();
+		    //대댓글을 작성할 replyNo 구하기
+		    let rerepTgt = $(this).parent("div").attr('id');
+		    //대댓글 입력할 수 있는 폼 생성
+		  	$(this).parent("div").append(makeFrm(rerepTgt));
+		  	
+		  	//reply버튼 숨김
+		  	$(this).hide();
 		})
+		
+		//대댓글 입력 폼
+		function makeFrm(rerepTgt) {
+			let form = `<form>
+				<input type="hidden" id="rerepTgt" name="rerepTgt" value="${rerepTgt}">
+	            <textarea class="form-control" id="replyCntn" name="replyCntn" rows="3"></textarea>
+	            <button type="button" id="rerepTgt" class="reply">답변</button>
+	        </form>`
+		    
+		    return form;
+		}
+		
+		//대댓글 추가
+		$(document).on('click', '#rerepTgt', function(e){
+			let replyCntn = $('#replyCntn').val();
+			let rerepTgt = $('#rerepTgt').val();
+			
+			$(this).parent("form").remove();
+			$.ajax({
+	   			url : '/replyInsert',
+	   			method : 'post',
+	   			data : JSON.stringify({userId:userId, replyTgt:bBoardNo, replyCntn:replyCntn, boardCat:type, rerepTgt:rerepTgt}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            }
+	   		}).then(res => {
+	   			
+	   			$("#" + res.rerepTgt).append(makeRe(res));
+	   		})
+		})
+		
+		//댓글 삭제
+		$(document).on('click', '.repDelete', function(e){
+			let btn=$(this);
+			//let replyNo = $(this).attr("href");
+			console.log('삭제')
+			let replyNo = $(this).parent("div").attr('id');
+			console.log(replyNo);
+			$.ajax({
+				url : '/replyDelete',
+				type : 'POST',
+				data : {
+					replyNo : replyNo
+				},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+				},
+				success : function(result){
+					if(result ==1){
+					btn.parentsUntil(".comment").remove();
+				}
+			}
+		});		
+	});
+		
+		//댓글 수정 폼으로 변경
+		$(document).on('click', '.repUpdate', function(e){
+			let replyNo = $(this).parent("div").attr('id');
+			let p = $(".comment p").text();
+			$(this).prev().prev().prev().html("<input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input> <button type='button' id='updateBtn'>수정</button>");
+			
+			$(this).remove();
+		});
+		
+		//댓글 수정
+		$(document).on('click', '#updateBtn', function(e){
+			let btn = $(this);
+			let replyCntn = $('#replyCntn').val();
+			let replyNo = $('#replyNo').val();
+			
+			$.ajax({
+				url : '/replyUpdate',
+				type : 'POST',
+				data : {
+					replyNo : replyNo, replyCntn : replyCntn
+				},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+				},
+				success : function(result){
+					btn.html("<p>" + result.replyCntn + "</p>");
+				}		
+			})
+		});
 		
 	   //좋아요를 눌렀을 경우
 	   $(".heart").on("click", function() {
 		 //클래스가 없을 경우 생성, 클래스가 있을 경우 삭제
 	     $(this).toggleClass("active");
-	     let userId = '사용자1';
-	     let targetNo = $("#bBoardNo").text();
-	     let category = $("#type").text();
 	     
 	     //좋아요를 추가했을 경우
 	     if($(this).hasClass("active")){
@@ -195,7 +318,7 @@
 					url : "/likes/lInsert",
 					method : 'post',
 					contentType : 'application/x-www-form-urlencoded',
-					data : {userId, targetNo, category},
+					data : {userId:userId, targetNo:bBoardNo, category:type},
 					beforeSend : function(xhr)
 	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 	    				xhr.setRequestHeader(header, token);
@@ -234,5 +357,4 @@
 	 });
    </script>
 </div>
-
 </html>

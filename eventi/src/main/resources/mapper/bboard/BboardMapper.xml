@@ -26,6 +26,13 @@
 		<if test="lclsf != null and lclsf != '' and lclsf == 'dgner'">
 			AND LCLSF = #{lclsf}
 		</if>
+		
+	</sql>
+	
+	<sql id="likeSelect">
+		<if test="writer != null and writer != ''">
+			AND l.user_id = #{writer}
+		</if>
 	</sql>
 	
 	<!-- type별 전체 게시글 조회 -->
@@ -33,10 +40,12 @@
 	<!-- 좋아요순으로 정렬을 하고 싶을 경우 ${order}에 좋아요 수 컬럼 별칭을 넣어주면 된다. -->
 	<select id="bboardList" resultType="com.eventi.left.bboard.service.BboardVO">
 	SELECT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
-	FROM B_BOARD b
+	FROM B_BOARD b LEFT JOIN likes l
+	ON b.b_board_no = l.target_no
 	WHERE TYPE = #{type}
 	AND SAVE = 'N'
 	<include refid="bSelect" />
+	<include refid="likeSelect" />
 	ORDER BY ${order} DESC
 	</select>
 	
@@ -54,8 +63,8 @@
 	
 	<!-- 게시글 단건 조회 -->
 	<select id="bboardSelect" resultType="com.eventi.left.bboard.service.BboardVO">
-		SELECT *
-		FROM B_BOARD
+		SELECT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
+		FROM B_BOARD b
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</select>
 	
