@@ -25,7 +25,7 @@
 			   #{userEmail}, 
 			   #{name}, 
 			   #{userMessaging},
-			   'ROLE_MEMBER', 
+			   'ROLE_MEM', 
 			   SYSDATE)
 	</insert>
 
@@ -36,7 +36,8 @@
 			   #{userId}, 
 			   #{certName}, 
 			   #{certNum},
-			   'N')
+			   'N',
+			   #{certType})
 	</insert>
 
 	<!-- 회원 단건 조회 -->
@@ -80,4 +81,10 @@
 	SET USER_PASSWORD = #{userPassword}
 	WHERE USER_ID = #{userId}
 	</update>
+	
+	<select id="getCountry" resultType="CodeVO">
+	SELECT CODE_NAME
+	FROM MNCODE 
+	WHERE CL_ID = 'A'
+	</select>
 </mapper>

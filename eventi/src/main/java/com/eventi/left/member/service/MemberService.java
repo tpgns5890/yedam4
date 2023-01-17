@@ -1,9 +1,12 @@
 package com.eventi.left.member.service;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.eventi.left.common.CodeVO;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public interface MemberService{
@@ -23,5 +26,7 @@ public interface MemberService{
 	public String findId(String name, String email); //아이디 찾기
 
 	public String findPw(String id, String name, String email); //비밀번호 찾기
+
+	public List<CodeVO> getCountry();
 
 }

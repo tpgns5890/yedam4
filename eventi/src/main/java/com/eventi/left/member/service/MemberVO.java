@@ -34,7 +34,6 @@ public class MemberVO implements UserDetails {
 	private int accnt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date userRegDate;
-	
 	private List<CrtfVO> crtfs;
 
 	@Override
