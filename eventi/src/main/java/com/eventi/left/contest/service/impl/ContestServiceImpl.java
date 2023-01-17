@@ -95,7 +95,7 @@ public class ContestServiceImpl implements ContestService {
 
 	// 공모전 1건
 	@Override
-	public ContestVO getContest(ContestVO vo) {
+	public ContestVO getContest(String vo) {
 		// 상세조회시 조회수 업데이트
 		mapper.selectUpdate(vo);
 		return mapper.getContest(vo);
@@ -133,7 +133,8 @@ public class ContestServiceImpl implements ContestService {
 
 		// 마감연장 할경우
 		if (vo.getDtExtns() != null) {
-			if (mapper.getContest(vo).getDtExtns() == null) {
+			ContestVO contest = mapper.getContest(vo.getcNo());
+			if (contest.getDtExtns() == null) {
 				return mapper.updateExtension(vo);
 			} else {
 				return 0;
@@ -162,13 +163,8 @@ public class ContestServiceImpl implements ContestService {
 		return mapper.getSequence();
 	}
 
-//	// 공모전 마감일수
-//	@Override
-//	public List<ContestVO> getDday(ContestVO vo) {
-//
-//		
-//	}
 
+	//마이페이지 나의 공모전조회.
 	@Override
 	public List<ContestVO> myContestList(ContestVO vo, PagingVO paging) {
 		// 로그인 회원정보

@@ -10,7 +10,7 @@ public interface ContestService {
 
 	public List<ContestVO> myContestList(ContestVO ContestVO, PagingVO paging); // 작성한 공모전리스트 조회
 
-	public ContestVO getContest(ContestVO contestVO); // 공모전 1건에 대한 등록조회
+	public ContestVO getContest(String cVo); // 공모전 1건에 대한 등록조회
 
 	public int updateContest(ContestVO contestVO); // 수정
 
@@ -21,7 +21,5 @@ public interface ContestService {
 	// 공모전,우승상금 등록
 	public int insertContest(ContestVO vo, WinnerVO wvo);
 
-	// 공모전 마감일수
-//	public  List<ContestVO> getDday(ContestVO vo);
 
 }

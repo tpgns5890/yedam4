@@ -41,7 +41,9 @@
 
 	<!-- 공모전 1건 상세조회 -->
 	<select id="getContest" resultType="ContestVO">
-		SELECT *
+		SELECT c_no,writer,ttl,cntn,code_select(category) category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+	        ,code_select(style) style
+	      	,(select count(*) from likes where target_no = c_no) AS likes
 		FROM CONTEST
 		WHERE
 		C_NO = #{cNo}

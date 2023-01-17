@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
@@ -25,7 +24,6 @@ import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
-import com.eventi.left.files.FileDto;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
@@ -80,13 +78,8 @@ public class ContestController {
 	public String contestSelect(Model model, ContestVO cVo) {
 
 		// 객체생성 및 코드별 문자열 변환후 세팅
-		ContestVO contest = service.getContest(cVo);
-		contest.setCategory(codeService.codeSelect(contest.getCategory())); // 카테고리
-		contest.setStyle(codeService.codeSelect(contest.getStyle())); // 스타일
-
-		LikesVO like = new LikesVO();
-		like.setTargetNo(cVo.getcNo());
-		contest.setLikes(likeService.countLike(like)); // 좋아요개수
+		ContestVO contest = service.getContest(cVo.getcNo());
+		
 		model.addAttribute("contest", contest); // 모델 넘겨주기.
 		model.addAttribute("designList", dService.contestDesignList(cVo.getcNo()));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
@@ -99,8 +92,8 @@ public class ContestController {
 	@PostMapping("/select")
 	@ResponseBody
 	public ContestVO contestSelect(ContestVO vo) {
-		vo = service.getContest(vo);
-		return vo;
+		ContestVO contest = service.getContest(vo.getcNo());
+		return contest;//리스트 1건 반환.
 	}
 
 	// 등록화면이동
@@ -132,7 +125,7 @@ public class ContestController {
 	// 수정화면이동
 	@GetMapping("/update")
 	public String contestupdate(Model model, ContestVO vo) {
-		model.addAttribute("contest", service.getContest(vo));
+		model.addAttribute("contest", service.getContest(vo.getcNo()));
 		model.addAttribute("fileList", fService.fileList(vo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(vo.getcNo()));
 		return "content/contest/contestUpdateForm";
@@ -204,13 +197,29 @@ public class ContestController {
 
 		return result;
 	}
+	
+	// 공모전 지원자조회페이지
+	// 공모전번호 매개변수 => 응모디자인 리스트 + 파일 리스트
+		@GetMapping("/designRead")
+		public String designRead(Model model,String cNo) {
+			
+			Map<String,Object> result = new HashMap<>();
+			List<DesignVO> designs = dService.contestDesignList(cNo); //공모전에 접수된 디자인
+			
+			//디자인 1건에 대한 파일리스트.
+			for(DesignVO design : designs) {
+//				 result.put(design.getDgnNo(), fService.fileList(design.getDgnNo()));
+				 result.put("file", fService.fileList(design.getDgnNo()));
+			}
+			
+			result.put("design", designs);
+			
+			
+			model.addAttribute("map", result);
+			
+			return "content/contest/cotestDesignList"; 
+		}
 
-	// 일반회원 디자인 응모하기 폼 이동. DesignServic
-	@GetMapping("/designInsertForm")
-	public String designInsert(Model model, DesignVO vo) {
-		model.addAttribute("cNo" , vo.getCNo());  //html 링크에서 받아오는 값.
-		model.addAttribute("dNo", dService.getSequence());
-		return "content/contest/contestApplyForm";
-	}
+	
 
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+<!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/myPageSide.css">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	footer {
+		clear: both;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+		<section class="hero-wrap hero-wrap-2"
+			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
+			data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div
+					class="row no-gutters slider-text align-items-end justify-content-center">
+					<div
+						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+						<h2 class="mb-0 bread">디자인 상세조회</h2>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+		
+		<div th:text="${design}"></div>
+
+		
+	</div>
+</body>
+</html>

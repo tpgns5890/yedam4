@@ -20,7 +20,7 @@
 					class="row no-gutters slider-text align-items-end justify-content-center">
 					<div
 						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">공모전 리스트</h2>
+						<h2 class="mb-0 bread">공모전 게시글관리</h2>
 					</div>
 				</div>
 			</div>
@@ -71,7 +71,7 @@
 							th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}">
 						</td>
 						<td>진행현황..</td>
-						<td><button type="button" id="selete">지원자조회</button></td>
+						<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
 						<td><button type="button" id="winnerInsert">우승자등록</button></td>
 						
 						<th:block th:if="${contest.save} == 'Y'">
