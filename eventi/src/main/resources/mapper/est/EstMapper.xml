@@ -69,4 +69,11 @@
 	from rental_gd
 	where user_id = #{userId}
 	</select>
+	
+	<!-- 견적요청서 삭제 -->
+	<delete id="deleteEst">
+	delete estimate
+	where e_no = #{eno}
+	and userId = #{userId}
+	</delete>
 </mapper>

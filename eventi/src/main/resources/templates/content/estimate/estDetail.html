@@ -99,12 +99,12 @@ button {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">등록</button>
+        <button type="button" class="btn btn-primary" id="insertBtn">등록</button>
       </div>
     </div>
   </div>
 </div><!--  end of Modal -->
-  <button type="button">견적서 삭제</button><br>
+  <button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
   <hr>
  <div id="propList" th:each="prop : ${propList}">
 	<p th:text="|업체소개 : ${prop.companyInt}|"></p>
@@ -117,6 +117,10 @@ button {
  <input type="hidden" name="userId" th:value="${session.member.userId}">
 </div><!-- End of layout:fragment -->
 <script>
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
  $(function () {
  var token = $("meta[name='_csrf']").attr("content");
  var header = $("meta[name='_csrf_header']").attr("content");	 
@@ -132,6 +136,49 @@ var myId = $('input[name="userId"]').val();
 				alert("서버 요청 실패");
 			}	
 	});
+ });
+ //견적서 삭제
+ $('#deleteBtn').on("click", function(){
+     var eno = $('#deleteBtn').val();	 
+	 if(!confirm('삭제하시겠습니까?')) {
+		 return false;
+	 }
+	 $.ajax({
+		 url:"/deleteEst",
+		 method:"POST",
+		 data: {eno},
+		 beforeSend : function(xhr)
+         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+         },
+         success: function(data){
+        	 if(data == 1){
+        		 alert('삭제되었습니다.');
+        		 location.href="/estList";
+        	 }
+         },
+          error: function () {
+ 				alert("서버 요청 실패");
+ 			}
+	 });
+ });
+ //제안서 등록
+ $('#insertBtn').on("click", function(){	 
+	 $.ajax({
+		 url:"/insertEst",
+		 method:"POST",
+		 data: {eno},
+		 beforeSend : function(xhr)
+         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+         },
+         success: function(data){
+
+         },
+          error: function () {
+ 				alert("서버 요청 실패");
+ 			}
+	 });
  });
 </script>
 </body>

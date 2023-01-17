@@ -45,7 +45,7 @@ public class EstServiceImpl implements EstService {
 	
 	// 제안서 등록
 	@Override
-	public PropVO insertProp(PropVO propVO) {
+	public int insertProp(PropVO propVO) {
 		return estMapper.insertProp(propVO);
 	}
 	
@@ -53,5 +53,11 @@ public class EstServiceImpl implements EstService {
 	@Override
 	public List<RentGdVO> myGdList(String userId) {
 		return estMapper.myGdList(userId);
+	}
+	
+	//견적요청서 삭제
+	@Override
+	public int deleteEst(EstVO estVO) {
+		return estMapper.deleteEst(estVO);
 	}
 }
