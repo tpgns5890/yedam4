@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
+
 public interface JobService {
 	
 	//전체조회
-	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO); 
+	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO, PagingVO paging); 
 	
 	//게시물 상세조회
 	public JobBoardVO getJob(JobBoardVO jobBoardVO); 

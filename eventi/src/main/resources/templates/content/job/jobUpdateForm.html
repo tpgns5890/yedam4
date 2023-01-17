@@ -25,8 +25,8 @@
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
 				<h3 class="mb-4">구인게시글 수정</h3>
-				<form method="POST" id="jobUpdate" name="jobUpdate"
-					class="contactForm">
+				<form method="POST" id="jobUpdate" name="jobUpdate"class="contactForm">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">

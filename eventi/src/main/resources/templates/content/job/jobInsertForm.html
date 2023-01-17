@@ -28,7 +28,7 @@
 				<h3 class="mb-4">구인게시글 작성</h3>
 				<form action="/jobInsert" method="POST" id="jobInsert" name="jobInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
-					
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -60,8 +60,16 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">행사유형</label>
-								<textarea name="eType" class="form-control" id="eType" cols="30" rows="4" ></textarea>
+								<label class="label" for="#">행사유형</label> 
+								<select id="eType" name="eType">
+									<option value="">행사유형을 선택해 주세요.</option>
+									<option value="E01">결혼식</option>
+									<option value="E02">돌잔치</option>
+									<option value="E03">개인행사</option>
+									<option value="E04">기업행사</option>
+									<option value="E05">각종축제</option>
+									<option value="E00">기타</option>
+								</select>
 							</div>
 						</div>
 						
