@@ -13,9 +13,61 @@
 }
 
 #container form {
-	position:relative;
+	position: relative;
 	margin-top: 100px;
-	background:none;
+	background: none;
+}
+
+#modal {
+	display: none;
+	position: fixed;
+	top: 25em;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	width: 100%;
+}
+
+#modal h2 {
+	margin: 0;
+}
+
+#modal button {
+	display: inline-block;
+	width: 100px;
+	border: 0.2px solid black;
+	border-radius: 5px;
+}
+
+#modal .modal_content {
+	width: 350px;
+	min-height: 200px;
+	margin: 0 auto;
+	padding: 20px;
+	background: #fff;
+	border: 0.5px solid #666;
+	border-radius: 15px;
+}
+
+#modal .modal_layer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#modal_login_btn {
+	background: #2fb380;
+}
+
+#button_box {
+	display: flex;
+	margin-top: 40px;
+	justify-content: flex-end;
 }
 </style>
 
@@ -31,27 +83,63 @@
 					class="row no-gutters slider-text align-items-end justify-content-center">
 					<div
 						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">일반회원 회원가입</h2>
+						<h2 class="mb-0 bread">비밀번호 찾기</h2>
 					</div>
 				</div>
 			</div>
 		</section>
 		<div id="container">
-			<form class="px-4 py-3" action="/login" method="post">
-				아이디<input type="text" class="form-control" name="userid"
-					placeholder="example"> 비밀번호<input type="password"
-					class="form-control" name="password" placeholder="Password">
-				<input th:name="${_csrf.parameterName}" type="hidden"
-					th:value="${_csrf.token}" />
-				<p>
-					<input type="checkbox" name="remember-me"> 자동로그인
-				</p>
-				<input name="submit" type="submit" value="로그인">
+			<form>
+				아이디<input type="text" class="form-control" id="id"> 이름<input
+					type="text" class="form-control" id="name"> 이메일주소<input
+					type="text" class="form-control" id="email">
+				<div>
+					<font id="find_feedback" size="2"></font> <font id="find_feedback"
+						size="2">임시비밀번호가 메일로 전송됩니다.</font>
+				</div>
+				<button id="findBtn" type="button">전송</button>
 			</form>
-			<a th:href="@{findId}">아이디 찾기</a> 
-			<span>|</span> 
-			<a th:href="@{findPw}">비밀번호 찾기</a>
+			<div id="modal">
+				<div class="modal_content">
+					<h2>전송완료!</h2>
+					<p>임시비밀번호를 이용하여 로그인 해주세요.</p>
+					<div id="button_box">
+						<button type="button" id="modal_login_btn"
+							th:onclick="|location.href='@{loginPage}'|">로그인</button>
+						<button type="button" id="modal_close_btn">닫기</button>
+					</div>
+				</div>
+				<div class="modal_layer"></div>
+			</div>
 		</div>
+		<script>
+			/*모달 창 닫기*/
+			$("#modal_close_btn").on('click', function() {
+				$("#modal").hide();
+			});
+
+			/* 임시비밀번호 전송 */
+			$("#findBtn").on('click', function() {
+				var id = $("#id").val();
+				var name = $("#name").val();
+				var email = $("#email").val();
+				$.ajax({
+					url : "findPw?id=" + id + "&name=" + name + "&email=" + email,
+					type : "GET",
+					success : function(result) {
+						if (result == "전송완료!") {
+							$("#modal").show();
+						} else {
+							$("#find_feedback").html(result);
+							$("#find_feedback").attr('color', '#dc3545');
+						}
+					},
+					error : function() {
+						alert("서버 요청 실패");
+					}
+				});
+			});
+		</script>
 	</div>
 </body>
 </html>

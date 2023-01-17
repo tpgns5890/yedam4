@@ -15,6 +15,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,13 +33,15 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	MemberMapper mapper;
 	@Autowired
 	private JavaMailSender mailSender;
-	
-	//회원단건조회
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
+
+	// 회원단건조회
 	@Override
 	public MemberVO getMember(String userId) {
 		return mapper.getMember(userId);
 	}
-	
+
 	// 아이디 중복확인
 	@Override
 	public int IdCheck(String inputId) {
@@ -65,23 +68,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		Random random = new Random();
 		int checkNum = random.nextInt(888888) + 111111;
 
-		/* 이메일 보내기 */
-		String setFrom = "yedam4eventi@gmail.com";
-		String toMail = email;
 		String title = "EVENTI 회원가입 인증 이메일 입니다.";
 		String content = "EVENTI를 방문해주셔서 감사합니다." + "<br><br>" + "인증 번호는 " + checkNum + "입니다." + "<br>"
 				+ "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
-		try {
-			MimeMessage message = mailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-			helper.setFrom(setFrom);
-			helper.setTo(toMail);
-			helper.setSubject(title);
-			helper.setText(content, true);
-			mailSender.send(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		mailing(email, title, content);
 
 		String num = Integer.toString(checkNum);
 		return num; // 임의의 변수 6자리 리턴
@@ -108,15 +98,55 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 		return ResponseEntity.ok(result);
 	}
-	
+
+	// userdetails
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		MemberVO vo = mapper.getMember(username);
 		return vo;
 	}
 
+	// 아이디 찾기
 	@Override
 	public String findId(String name, String email) {
 		return mapper.findId(name, email);
+	}
+
+	// 비밀번호 찾기
+	@Override
+	public String findPw(String id, String name, String email) {
+		int n = mapper.findPwCheck(id, name, email);
+		if (n == 1) {
+			/* 인증번호(난수) 생성 */
+			Random random = new Random();
+			int checkNum = random.nextInt(888888) + 111111;
+			mapper.updatePw(id, passwordEncoder.encode(Integer.toString(checkNum)));
+			String title = "EVENTI 임시비밀번호 확인 메일입니다.";
+			String content = "EVENTI를 방문해주셔서 감사합니다." + "<br><br>" + "임시비밀번호는 " + checkNum + "입니다." + "<br>"
+					+ "해당 임시비밀번호를 이용해 로그인 후 비밀번호를 변경하여 주세요.";
+			mailing(email, title, content);
+			return "전송완료!";
+		} else {
+			return "failed!";
+		}
+	}
+
+	public void mailing(String email, String setTitle, String setContent) {
+		/* 이메일 보내기 */
+		String setFrom = "yedam4eventi@gmail.com";
+		String toMail = email;
+		String title = setTitle;
+		String content = setContent;
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+			helper.setFrom(setFrom);
+			helper.setTo(toMail);
+			helper.setSubject(title);
+			helper.setText(content, true);
+			mailSender.send(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

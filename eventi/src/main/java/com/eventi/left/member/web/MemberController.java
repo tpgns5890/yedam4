@@ -20,7 +20,8 @@ public class MemberController {
 
 	@Autowired
 	MemberService service;
-	@Autowired BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	// 이용약관 동의페이지 이동
 	@RequestMapping(value = "/memQualification")
@@ -42,22 +43,33 @@ public class MemberController {
 	
 	//아이디 찾기 페이지 이동
 	@RequestMapping(value= "/findIdPage")
-	public String findId() {
+	public String findIdPage() {
 		return "content/member/findId";
 	}
 	
 	//아이디 찾기 메소드
-	@RequestMapping("/findId")
-	
-	public @ResponseBody String findid(String name, String email) {
+	@RequestMapping(value= "/findId")
+	@ResponseBody
+	public String findid(String name, String email) {
 		String result = service.findId(name, email);
 		return result;
 	}
 	
 	//비밀번호 찾기 페이지 이동
 	@RequestMapping(value= "/findPwPage")
-	public String findPw() {
+	public String findPwPage() {
 		return "content/member/findPw";
+	}
+	
+	//비밀번호 찾기 메소드
+	@RequestMapping(value= "/findPw")
+	@ResponseBody
+	public String findPw(String id, String name, String email) {
+		String result = service.findPw(id, name, email);
+		if(result=="전송완료!") {
+			return "전송완료!";
+		}
+		return "입력한 정보와 일치하는 회원이 없습니다.";
 	}
 
 	// 아이디 중복 확인
