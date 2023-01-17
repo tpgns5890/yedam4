@@ -18,6 +18,7 @@ public class DesignController {
 	@RequestMapping("/designList")
 	public String bfList(Model model, DesignVO vo, PagingVO paging) {
 		model.addAttribute("designList", service.designList(vo, paging));
+		model.addAttribute("paging", paging);
 		System.out.println(paging);
 		return "content/design/designList";
 	}

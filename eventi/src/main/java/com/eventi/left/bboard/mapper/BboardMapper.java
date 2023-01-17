@@ -21,6 +21,9 @@ public interface BboardMapper {
 	//조회수 +1
 	public int inqUpdate(BboardVO bboardVO);
 	
+	//시퀀스값찾기
+	public String getSeq();
+	
 	//등록
 	public int bboardInsert(BboardVO bboardVO);
 	

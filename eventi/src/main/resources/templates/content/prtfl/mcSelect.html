@@ -8,6 +8,12 @@
 <!-- csrf 설정 -->
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+<style>
+	footer {
+		clear:both;
+	}
+</style>
 </head>
 
 <div layout:fragment="content">
@@ -62,9 +68,9 @@
 
    		//댓글, 대댓글 불러오는 ajax
    		$.ajax({
-   			url : '/prtfl/mcReply',
+   			url : '/replyList',
    			method : 'post',
-   			data : JSON.stringify({replyTgt:replyTag}),
+   			data : JSON.stringify({replyTgt:replyTag, boardCat:'T06'}),
    			contentType : "application/json",
    			beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/

@@ -87,7 +87,12 @@
          </tr>
       </tbody>
    </table>
-   
+   			
+	<div th:each="f : ${file}">
+       <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
+       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+   </div>
+
    <div>
     	<div class="pt-5 mt-5" >
           <h3 class="mb-5">댓글</h3>
@@ -97,7 +102,6 @@
     </div>
         
     <form id="replyInsertFrm">
-    	
     	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
     	<button type="button" id="repInsertBtn">댓글추가</button>
     </form>
@@ -113,9 +117,9 @@
 		let replyTgt = $("#bBoardNo").text();
 		
 		$.ajax({
-   			url : '/bboard/bReply',
+   			url : '/replyList',
    			method : 'post',
-   			data : JSON.stringify({userId:userId, boardCat:boardCat, replyTgt:replyTgt}),
+   			data : JSON.stringify({boardCat:boardCat, replyTgt:replyTgt}),
    			contentType : "application/json",
    			beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/

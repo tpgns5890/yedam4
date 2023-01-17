@@ -9,7 +9,6 @@
 		
 		<!-- T04 중 일반일 경우 -->
 		<if test="lclsf !=null and lclsf != '' and lclsf == 'genrl'">
-		
 			AND LCLSF = #{lclsf}
 		</if>
 		
@@ -75,16 +74,27 @@
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</update>
 	
+	<!-- 게시글 시퀀스번호 찾기 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'BB' || (MAX(TO_NUMBER(SUBSTR(B_BOARD_NO,3)))+1) B_BOARD_NO
+		FROM B_BOARD
+	</select>
+	
 	<!-- 게시글 등록 -->
 	<insert id="bboardInsert">
+		<selectKey keyProperty="bBoardNo" resultType="String" order="BEFORE">
+			SELECT 'BB' || (MAX(TO_NUMBER(SUBSTR(B_BOARD_NO,3)))+1) B_BOARD_NO
+			FROM B_BOARD
+		</selectKey>
+	
 		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, IMG, TYPE, SAVE)
-		VALUES('BB'||BBOARD_SEQ.NEXTVAL, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{img}, #{type}, #{save}) 
+		VALUES(#{bBoardNo}, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{img}, #{type}, #{save}) 
 	</insert>
 	
 	<!-- 게시글 수정 -->
 	<update id="bboardUpdate">
 		UPDATE B_BOARD
-		SET TTL=#{ttl}, CNTN=#{cntn}, IMG=#{img}
+		SET WRITER=#{writer}, TTL=#{ttl}, LCLSF=#{lclsf}, MCLSF=#{mclsf}, CNTN=#{cntn}, IMG=#{img}, SAVE=#{save}
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</update>
 	
@@ -93,12 +103,5 @@
 		DELETE FROM B_BOARD
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</delete>
-	
-	<!-- 댓글 불러오기 -->
-	<select id="bboardReply" resultType="com.eventi.left.reply.service.ReplyVO">
-		SELECT *
-		FROM REPLY
-		WHERE BOARD_CAT = #{boardCat}
-		AND REPLY_TGT = #{replyTgt}
-	</select>
+
 </mapper>
