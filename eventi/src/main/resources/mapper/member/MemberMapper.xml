@@ -25,8 +25,24 @@
 			   #{userEmail}, 
 			   #{name}, 
 			   #{userMessaging},
-			   'ROLE_MEM', 
+			   #{auth}, 
 			   SYSDATE)
+	</insert>
+	
+	<!-- 업체 회원가입 -->
+	<insert id="insertBusi">
+		INSERT INTO BUSI_MEMBER (USER_ID,
+								 BUSI_NUM,
+								 BUSI_TITLE,
+								 BUSI_TYPE,
+								 BUSI_AREA,
+								 BUSI_STYLE)
+		VALUES(#{userId}, 
+			   #{busiNum}, 
+			   #{busiTitle}, 
+			   #{busiType}, 
+			   #{busiArea},
+			   #{busiStyle})
 	</insert>
 
 	<!-- 자격증 승인신청 -->

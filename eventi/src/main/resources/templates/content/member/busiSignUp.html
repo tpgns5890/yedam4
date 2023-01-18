@@ -15,10 +15,10 @@
 
 		#signInBox {
 			padding: 20px;
-    		min-height: 550px;
-		    display: flex;
-		    line-height: 3em;
-		    flex-direction: column;
+			min-height: 550px;
+			display: flex;
+			line-height: 3em;
+			flex-direction: column;
 		}
 
 		#signIn-left {
@@ -36,13 +36,14 @@
 
 		#submitArea {
 			margin-top: 20px;
-		    margin-bottom: 20px;
-		    display: flex;
-		    flex-direction: row;
-		    justify-content: flex-end;
+			margin-bottom: 20px;
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
 		}
-		#submitArea button{
-			margin-left:10px;
+
+		#submitArea button {
+			margin-left: 10px;
 		}
 
 		.formLabel {
@@ -52,9 +53,9 @@
 
 		.formInput {
 			width: 300px;
-			
+
 		}
-		
+
 		#inputEmailChk {
 			width: 150px;
 			margin-left: 280px;
@@ -72,23 +73,27 @@
 		.busiArea {
 			width: 30px;
 			margin: 0;
-			display:block;
+			display: block;
 		}
-		#chkArea{
-			width:530px;
-			display:flex;
+
+		#chkArea {
+			width: 530px;
+			display: flex;
 			justify-content: space-evenly;
 		}
-		.chkArea{
-			width:115px;
-			height:200px;
+
+		.chkArea {
+			width: 115px;
+			height: 250px;
 			overflow: scroll;
-			border:0.3px solid black;
+			border: 0.3px solid black;
 			line-height: 1.5em;
 		}
-		.busiTypeR input{
-			margin-left:20px;
+
+		.busiTypeR input {
+			margin-left: 20px;
 		}
+
 		#modal {
 			display: none;
 			position: fixed;
@@ -163,29 +168,34 @@
 				<form id="signIn" name="signIn">
 					<div id="signIn-left">
 						<h3 class="mb-4 billing-heading">기본정보(필수)</h3>
-						<label for="userId" class="formLabel">아이디</label><input type="text" class="formInput" name="userId" id="inputId">
+						<label for="userId" class="formLabel">아이디</label><input type="text" class="formInput"
+							name="userId" id="inputId">
 						<div>
 							<font id="id_feedback" size="2" value="1"></font>
 						</div>
-						<label for="userPassword" class="formLabel">비밀번호</label><input type="password" class="formInput" name="userPassword" id="pw1"
-							placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
+						<label for="userPassword" class="formLabel">비밀번호</label><input type="password" class="formInput"
+							name="userPassword" id="pw1" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
 						<div>
 							<font id="pwc_feedback" size="2" value="1"></font>
 						</div>
-						<label for="passwordchk" class="formLabel">비밀번호확인</label><input type="password" class="formInput" name="passwordchk" id="pw2">
+						<label for="passwordchk" class="formLabel">비밀번호확인</label><input type="password"
+							class="formInput" name="passwordchk" id="pw2">
 						<div>
 							<font id="pw_feedback" size="2" value="1"></font>
 						</div>
-						<label for="name" class="formLabel">성명</label><input type="text" class="formInput" name="name" id="inputName"><br>
-						<label for="userEmail" class="formLabel">이메일주소</label><input type="text" class="formInput" name="userEmail" id="inputEmail">
+						<label for="name" class="formLabel">성명</label><input type="text" class="formInput" name="name"
+							id="inputName"><br>
+						<label for="userEmail" class="formLabel">이메일주소</label><input type="text" class="formInput"
+							name="userEmail" id="inputEmail">
 						<button type='button' id="sendEmail">인증번호전송</button><br>
 						<span class="mail_input_box_warn"></span> <input id="inputEmailChk" type="text">
 						<div>
 							<font id="email_feedback" size="2" value="1"></font>
 						</div>
 						<div class="busiTypeR">메일 알림수신
-						<label class="labelRadio"><input type="radio" name="userMessaging" value="s1" checked>수신동의</label>
-						<label class="labelRadio"><input type="radio" name="userMessaging" value="s0">수신거부</label>
+							<label class="labelRadio"><input type="radio" name="userMessaging" value="S1"
+									checked>수신동의</label>
+							<label class="labelRadio"><input type="radio" name="userMessaging" value="S0">수신거부</label>
 						</div>
 					</div>
 
@@ -193,13 +203,13 @@
 						<h3 class="mb-4 billing-heading">사업자정보</h3>
 						<div class="busiTypeR">
 							업체유형
-							<label><input type="radio" name="busiType" value="U1">기획업체</label>
-							<label><input type="radio" name="busiType" value="U2">렌탈업체</label>
+							<input type="radio" name="busiType" value="U1" checked><label>기획업체</label>
+							<input type="radio" name="busiType" value="U2"><label>렌탈업체</label>
 						</div>
-						<label for="p_nm" class="formLabel">대표자성명</label><input type="text" name="presiName" class="formInput" id="inputPnm"><br>
-						<label for="BNo" class="formLabel">사업자등록번호</label><input type="text" name="busiNum" class="formInput" id="inputBno"><br>
-						<label for="start_dt" class="formLabel">개업일자</label><input type="date" name="busiStartDate" class="formInput" id="inputDt"><br>
-						<label for="b_nm" class="formLabel">상호명</label><input type="text" name="busiTitle" class="formInput">
+						<label for="b_nm" class="formLabel">상호명</label><input type="text" name="busiTitle"
+							class="formInput" id="busiTitle"><br>
+						<label for="BNo" class="formLabel">사업자등록번호</label><input type="text" name="busiNum"
+							class="formInput" id="inputBno">
 						<button type='button' id="busiChk">사업자인증</button><br>
 						<div>
 							<font id="busi_feedback" size="2" value="1"></font>
@@ -208,7 +218,8 @@
 							<div>행사가능지역
 								<div class="chkArea">
 									<div th:each="area : ${busiArea}">
-										<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}" name="busiArea">
+										<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}"
+											name="busiArea">
 										<label th:text="${area.codeName}" th:for="${area.codeId}"></label>
 									</div>
 								</div>
@@ -216,7 +227,8 @@
 							<div>행사유형
 								<div class="chkArea">
 									<div th:each="type : ${busiStyle}">
-										<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}" name="busiStyle">
+										<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}"
+											name="busiStyle">
 										<label th:text="${type.codeName}" th:for="${type.codeId}"></label>
 									</div>
 								</div>
@@ -226,8 +238,8 @@
 				</form>
 			</div>
 			<div id="submitArea">
-				<button class="btn btn-primary py-3 px-5">초기화</button>
-				<button class="btn btn-primary py-3 px-5">회원가입</button>
+				<button type="reset" class="btn btn-primary py-3 px-5">초기화</button>
+				<button type="button" id="busiSignUp" class="btn btn-primary py-3 px-5">회원가입</button>
 			</div>
 		</div>
 		<div id="modal">
@@ -241,213 +253,233 @@
 			</div>
 			<div class="modal_layer"></div>
 		</div>
-	<script>
-		var header = $("meta[name='_csrf_header']").attr("content");
-		var token = $("meta[name='_csrf']").attr("content");
-		
-		/* 아이디 중복 확인 */
-		$('#inputId').keyup(function () {
-			var inputId = $('#inputId').val(); //입력한 ID
-			$.ajax({
-				url: "/memIdCheck",
-				type: "post",
-				data: {
-					inputId: inputId
-				},
-				datatype: 'json',
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success: function (result) {
-					if (result == 1) {
-						$("#id_feedback").html('이미 사용중인 아이디입니다.');
-						$("#id_feedback").attr('color', '#dc3545');
-						$("#id_feedback").attr('value', '1');
-					} else {
-						$("#id_feedback").html('사용할 수 있는 아이디입니다.');
-						$("#id_feedback").attr('color', '#2fb380');
-						$("#id_feedback").attr('value', '0');
+		<script>
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var token = $("meta[name='_csrf']").attr("content");
+
+			/* 아이디 중복 확인 */
+			$('#inputId').keyup(function () {
+				var inputId = $('#inputId').val(); //입력한 ID
+				$.ajax({
+					url: "/memIdCheck",
+					type: "post",
+					data: {
+						inputId: inputId
+					},
+					datatype: 'json',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (result) {
+						if (result == 1) {
+							$("#id_feedback").html('이미 사용중인 아이디입니다.');
+							$("#id_feedback").attr('color', '#dc3545');
+							$("#id_feedback").attr('value', '1');
+						} else {
+							$("#id_feedback").html('사용할 수 있는 아이디입니다.');
+							$("#id_feedback").attr('color', '#2fb380');
+							$("#id_feedback").attr('value', '0');
+						}
+					},
+					error: function () {
+						alert("서버 요청 실패");
 					}
-				},
-				error: function () {
-					alert("서버 요청 실패");
+				})
+			})
+
+			//비밀번호 유효성 검사
+			$('#pw1').keyup(function () {
+				var p1 = $('#pw1').val();
+				if (pwFormCheck(p1)) {
+					$("#pwc_feedback").html('사용할 수 있는 비밀번호 입니다.');
+					$("#pwc_feedback").attr('color', '#2fb380');
+					$("#pwc_feedback").attr('value', '0');
+				} else {
+					$("#pwc_feedback").html('사용할 수 없는 비밀번호 입니다.');
+					$("#pwc_feedback").attr('color', '#dc3545');
+					$("#pwc_feedback").attr('value', '1');
 				}
 			})
-		})
 
-		//비밀번호 유효성 검사
-		$('#pw1').keyup(function () {
-			var p1 = $('#pw1').val();
-			if (pwFormCheck(p1)) {
-				$("#pwc_feedback").html('사용할 수 있는 비밀번호 입니다.');
-				$("#pwc_feedback").attr('color', '#2fb380');
-				$("#pwc_feedback").attr('value', '0');
-			} else {
-				$("#pwc_feedback").html('사용할 수 없는 비밀번호 입니다.');
-				$("#pwc_feedback").attr('color', '#dc3545');
-				$("#pwc_feedback").attr('value', '1');
+			//비밀번호 형식 검사 메소드
+			function pwFormCheck(p1) {
+				var form = /^[A-Za-z0-9]{6,12}$/;;
+				return form.test(p1);
 			}
-		})
 
-		//비밀번호 형식 검사 메소드
-		function pwFormCheck(p1) {
-			var form = /^[A-Za-z0-9]{6,12}$/;;
-			return form.test(p1);
-		}
+			/* 비밀번호 확인 */
+			$('#pw2').keyup(function () {
+				var p1 = $('#pw1').val(); //비밀번호 값
+				var p2 = $('#pw2').val(); //비밀번호 확인
+				if (p1 == p2) {
+					$("#pw_feedback").html('비밀번호가 일치합니다.');
+					$("#pw_feedback").attr('color', '#2fb380');
+					$("#pw_feedback").attr('value', '0');
+				} else {
+					$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
+					$("#pw_feedback").attr('color', '#dc3545');
+					$("#pw_feedback").attr('value', '1');
+				}
+			})
 
-		/* 비밀번호 확인 */
-		$('#pw2').keyup(function () {
-			var p1 = $('#pw1').val(); //비밀번호 값
-			var p2 = $('#pw2').val(); //비밀번호 확인
-			if (p1 == p2) {
-				$("#pw_feedback").html('비밀번호가 일치합니다.');
-				$("#pw_feedback").attr('color', '#2fb380');
-				$("#pw_feedback").attr('value', '0');
-			} else {
-				$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
-				$("#pw_feedback").attr('color', '#dc3545');
-				$("#pw_feedback").attr('value', '1');
+			/* 이메일 인증번호 전송 */
+			var code = ""; //이메일전송 인증번호 저장위한 코드
+			$("#sendEmail").click(function () {
+				var warnMsg = $(".mail_input_box_warn");
+				var email = $("#inputEmail").val(); // 입력한 이메일
+
+				if (mailFormCheck(email)) {
+					warnMsg.html("이메일이 전송 되었습니다. 이메일을 확인해주세요.");
+					warnMsg.css("display", "inline-block");
+				} else {
+					warnMsg.html("올바르지 못한 이메일 형식입니다.");
+					warnMsg.css("display", "inline-block");
+					return false;
+				}
+				$.ajax({
+					type: "GET",
+					url: "mailCheck?email=" + email,
+					success: function (data) {
+						code = data;
+						$("#sendEmail").attr('disabled', 'disabled');
+					},
+					error: function () {
+						alert("서버 요청 실패");
+					}
+				});
+			});
+
+			//이메일 형식 검사 메소드
+			function mailFormCheck(email) {
+				var form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+				return form.test(email);
 			}
-		})
 
-		/* 이메일 인증번호 전송 */
-		var code = ""; //이메일전송 인증번호 저장위한 코드
-		$("#sendEmail").click(function () {
-			var warnMsg = $(".mail_input_box_warn");
-			var email = $("#inputEmail").val(); // 입력한 이메일
-
-			if (mailFormCheck(email)) {
-				warnMsg.html("이메일이 전송 되었습니다. 이메일을 확인해주세요.");
-				warnMsg.css("display", "inline-block");
-			} else {
-				warnMsg.html("올바르지 못한 이메일 형식입니다.");
-				warnMsg.css("display", "inline-block");
-				return false;
-			}
-			$.ajax({
-				type: "GET",
-				url: "mailCheck?email=" + email,
-				success: function (data) {
-					code = data;
-					$("#sendEmail").attr('disabled', 'disabled');
-				},
-				error: function () {
-					alert("서버 요청 실패");
+			/* 인증번호 비교 */
+			$("#inputEmailChk").keyup(function () {
+				var inputCode = $("#inputEmailChk").val();
+				var checkResult = $("#email_feedback");
+				if (inputCode == code) { // 일치할 경우
+					checkResult.html("인증번호가 일치합니다.");
+					checkResult.attr('color', '#2fb380');
+					checkResult.attr('value', '0');
+				} else { // 일치하지 않을 경우
+					checkResult.html("인증번호를 다시 확인해주세요.");
+					checkResult.attr('color', '#dc3545');
+					checkResult.attr('value', '1');
 				}
 			});
-		});
 
-		//이메일 형식 검사 메소드
-		function mailFormCheck(email) {
-			var form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-			return form.test(email);
-		}
+			//유효성 최종 검사 후 회원가입 처리
+			$("#busiSignUp").click(function () {
+				var idCheck = $("#id_feedback").attr('value');
+				var pwCheck = $("#pw_feedback").attr('value');
+				var pwcCheck = $("#pwc_feedback").attr('value');
+				var emailCheck = $("#email_feedback").attr('value');
+				var busiCheck = $("#busi_feedback").attr('value');
+				var name = $("#inputName").val();
+				var vTitle = $("#busiTitle").val();
 
-		/* 인증번호 비교 */
-		$("#inputEmailChk").keyup(function () {
-			var inputCode = $("#inputEmailChk").val();
-			var checkResult = $("#email_feedback");
-			if (inputCode == code) { // 일치할 경우
-				checkResult.html("인증번호가 일치합니다.");
-				checkResult.attr('color', '#2fb380');
-				checkResult.attr('value', '0');
-			} else { // 일치하지 않을 경우
-				checkResult.html("인증번호를 다시 확인해주세요.");
-				checkResult.attr('color', '#dc3545');
-				checkResult.attr('value', '1');
-			}
-		});
-		
-		//유효성 최종 검사 후 회원가입 처리
-		$("#normalSignIn").click(function () {
-			var idCheck = $("#id_feedback").attr('value');
-			var pwCheck = $("#pw_feedback").attr('value');
-			var pwcCheck = $("#pwc_feedback").attr('value');
-			var emailCheck = $("#email_feedback").attr('value');
-			var busiCheck = $("#busi_feedback").attr('value');
-			var name = $("#inputName").val();
-
-			if (idCheck == 1) {
-				alert("아이디 중복체크 검사는 필수입니다.");
-			} else if (pwCheck == 1) {
-				alert("비밀번호와 비밀번호확인 값이 다릅니다.");
-			} else if (pwcCheck == 1) {
-				alert("비밀번호를 확인해주세요.");
-			} else if (emailCheck == 1) {
-				alert("이메일 인증 절차를 진행해 주세요.");
-			} else if (name == "") {
-				alert("이름을 입력해 주세요.");
-			} else if(busiCheck == 1){
-				alert("사업자 인증 절차를 진행해 주세요.");
-			}else {
-				signIn(); //회원가입 함수 실행
-			}
-		});
-
-		//회원가입 메소드
-		function signIn() {
-			var data = $('form[name="signIn"]').serializeObject();
-			$.ajax({
-				url: "/insertBusiMember",
-				method: "post",
-				contentType: 'application/json',
-				data: JSON.stringify(data),
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success: function (result) {
-					$("#modal").show();
-				},
-				error: function () {
-					alert("서버 요청 실패");
+				if (idCheck == 1) {
+					alert("아이디 중복체크 검사는 필수입니다.");
+				} else if (pwCheck == 1) {
+					alert("비밀번호와 비밀번호확인 값이 다릅니다.");
+					$("#pw2").focus();
+				} else if (pwcCheck == 1) {
+					alert("비밀번호를 확인해주세요.");
+					$("#pw1").focus();
+				} else if (emailCheck == 1) {
+					alert("이메일 인증 절차를 진행해 주세요.");
+				} else if (name == "") {
+					alert("이름을 입력해 주세요.");
+					$("#inputName").focus();
+				} else if (vTitle == "") {
+					alert("상호명을 입력해 주세요.");
+					$("#busiTitle").focus();
+				} else if (busiCheck == 1) {
+					alert("사업자 인증 절차를 진행해 주세요.");
+				} else {
+					signUp(); //회원가입 함수 실행
 				}
-			})
-		}
-		//사업자인증
-		$('#busiChk').click(function(){
-			var pnm = $('#inputPnm').val();
-			var bno = $('#inputBno').val();
-			var date = $('#inputDt').val();
-			var startdate = date.split("-").join("");
-			var busiResult = $("#busi_feedback");
-			var data = {
-					  "businesses": [
-						    {
-						      "b_no": bno,
-						      "start_dt": startdate,
-						      "p_nm": pnm,
-						      "p_nm2": "",
-						      "b_nm": "",
-						      "corp_no": "",
-						      "b_sector": "",
-						      "b_type": ""
-						    }
-						  ]
-						}; 
-			$.ajax({
-				  url: "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D",  // serviceKey 값을 xxxxxx에 입력
-				  type: "POST",
-				  data: JSON.stringify(data), // json 을 string으로 변환하여 전송
-				  dataType: "JSON",
-				  contentType: "application/json",
-				  accept: "application/json",
-				success:function(result){
-					if (result==true) { // 진위확인 완료할 경우
-						busiResult.html("사업자 인증완료!");
-						busiResult.attr('color', '#2fb380');
-						busiResult.attr('value', '0');
-					} else { // 실패
-						busiResult.html("사업자 인증실패!");
-						busiResult.attr('color', '#dc3545');
-						busiResult.attr('value', '1');
+			});
+
+			//회원가입 메소드
+			function signUp() {
+				var busiAreaArr = [];
+				var busiStyleArr = [];
+				var id = $('#inputId').val()
+				var busiNum = $('#inputBno').val();
+				var busiTitle = $('#busiTitle').val();
+				var busiType = $('input:radio[name="busiType"]:checked').val();
+				var areaChecked = $('input:checkbox[name="busiArea"]:checked');
+				var styleChecked = $('input:checkbox[name="busiStyle"]:checked');
+				for(var i = 0; i<areaChecked.length;i++){
+					busiAreaArr.push(areaChecked.eq(i).val())
+				}
+				for(var i = 0; i<styleChecked.length;i++){
+					busiStyleArr.push(styleChecked.eq(i).val())
+				}
+				var busiArea = busiAreaArr.toString();
+				var busiStyle = busiStyleArr.toString();
+				var busi = {
+					"userId":id,
+					"busiNum":busiNum,
+					"busiTitle":busiTitle,
+					"busiType":busiType,
+					"busiArea":busiArea,
+					"busiStyle":busiStyle,
+				};
+				var data = $('form[name="signIn"]').serializeObject();
+				data.busi = busi
+				$.ajax({
+					url: "/insertBusiMember",
+					method: "post",
+					contentType: 'application/json',
+					data: JSON.stringify(data),
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (result) {
+						$("#modal").show();
+					},
+					error: function () {
+						alert("서버 요청 실패");
 					}
-				},
-				error: function(result){
-					alert(result.responseText);
+				})
+			}
+			
+			//사업자인증
+			$('#busiChk').click(function () {
+				var bno = $('#inputBno').val();
+				var busiResult = $("#busi_feedback");
+				var data = {
+					"b_no": [bno]
 				}
+				$.ajax({
+					url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D", // serviceKey 값을 xxxxxx에 입력
+					type: "POST",
+					data: JSON.stringify(data), // json 을 string으로 변환하여 전송
+					dataType: "JSON",
+					contentType: "application/json",
+					accept: "application/json",
+					success: function (result) {
+						if (result.match_cnt == 1) { // 진위확인 완료할 경우
+							busiResult.html("사업자 인증완료!");
+							busiResult.attr('color', '#2fb380');
+							busiResult.attr('value', '0');
+						} else { // 실패
+							busiResult.html("사업자 인증실패!");
+							busiResult.attr('color', '#dc3545');
+							busiResult.attr('value', '1');
+						}
+					},
+					error: function (result) {
+						alert(result.responseText);
+					}
+				})
 			})
-		})
-	</script>
+		</script>
 	</div>
 </body>
+
 </html>
