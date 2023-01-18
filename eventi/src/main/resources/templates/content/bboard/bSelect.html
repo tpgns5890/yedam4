@@ -249,10 +249,7 @@
 		//댓글 삭제
 		$(document).on('click', '.repDelete', function(e){
 			let btn=$(this);
-			//let replyNo = $(this).attr("href");
-			console.log('삭제')
 			let replyNo = $(this).parent("div").attr('id');
-			console.log(replyNo);
 			$.ajax({
 				url : '/replyDelete',
 				type : 'POST',
@@ -274,10 +271,9 @@
 		//댓글 수정 폼으로 변경
 		$(document).on('click', '.repUpdate', function(e){
 			let replyNo = $(this).parent("div").attr('id');
-			let p = $(".comment p").text();
-			$(this).prev().prev().prev().html("<input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input> <button type='button' id='updateBtn'>수정</button>");
+			let p = $(this).parent("div").children("p").text();			
+			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
 			
-			$(this).remove();
 		});
 		
 		//댓글 수정
@@ -285,19 +281,19 @@
 			let btn = $(this);
 			let replyCntn = $('#replyCntn').val();
 			let replyNo = $('#replyNo').val();
+			let updateBtn = `<button class='repUpdate'>수정</button>`;
 			
 			$.ajax({
 				url : '/replyUpdate',
 				type : 'POST',
-				data : {
-					replyNo : replyNo, replyCntn : replyCntn
-				},
+				data : JSON.stringify({replyNo : replyNo, replyCntn : replyCntn}),
+				contentType : "application/json",
 				beforeSend: function (xhr) {
 					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
 				},
 				success : function(result){
-					btn.html("<p>" + result.replyCntn + "</p>");
+					btn.parent().replaceWith("<p>" + result.replyCntn + "</p>");
 				}		
 			})
 		});
