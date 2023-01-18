@@ -5,21 +5,18 @@
 	layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-	<section class="hero-wrap hero-wrap-2"
-		style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-		data-stellar-background-ratio="0.5">
-		<div class="overlay"></div>
-		<div class="container">
-			<div
-				class="row no-gutters slider-text align-items-end justify-content-center">
-				<div
-					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-				</div>
-			</div>
-		</div>
-	</section>
-	<table>
-		<thead>
+<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">Big Title</h2>
+                <div class="module-subtitle font-serif">Small Title</div>
+              </div>
+            </div>
+          </div>
+        </section>
+	<table class="table mb-3">
+		<thead class="thead-dark">
 			<tr>
 				<th>견적서번호</th>
 				<th>행사유형</th>
@@ -27,11 +24,12 @@
 				<th>제안서 채택유무</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id="check">
 			<tr th:each="est : ${estList}" th:onclick="|location.href='@{estDetail(eno=${est.eno}, userId=${est.userId}, myId=${session.member.userId})}'|">
 				<td th:text=${est.eno}></td> 
 				<td th:text=${est.eventType}></td>
 				<td th:text=${est.writingDate}></td>
+				<td th:text=${est.adoptionYn}></td>
 			</tr>
 		</tbody>
 	</table>
