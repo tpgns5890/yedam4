@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public int insertMember(MemberVO memberVO) {
 		List<CrtfVO> crtfVO = memberVO.getCrtfs();
-
+		memberVO.setAuth("ROLE_MEM");
 		int i = mapper.insertMember(memberVO);
 		for (CrtfVO crVO : crtfVO) {
 			crVO.setUserId(memberVO.getUserId());
@@ -64,9 +64,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	}
 	// 업체회원 회원가입
 	@Override
-	public int insertBusiMember(MemberVO memberVO, BusiVO busiVO) {
-		int i = mapper.insertbusiMember(memberVO);
-		return 0;
+	public int insertBusiMember(MemberVO memberVO) {
+		memberVO.setAuth("ROLE_BUSI");
+		int i = mapper.insertMember(memberVO);
+		BusiVO busiVO = memberVO.getBusi();
+		mapper.insertBusi(busiVO);
+		return i;
 	}
 
 	// 메일 인증
@@ -87,6 +90,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	/* ajax 함수내에서 cors 우회가 불가능하여 서버쪽에서 request 요청을 만들어 CORS 해결 */
 	/* RestTemplate 사용 */
+	/* 자격증 진위확인 */
 	@Override
 	public ResponseEntity<JsonNode> crtfCheck(String name, String qNo) {
 		String url = "http://data.kca.kr/api/v1/cq/certificate/check"; // api url
@@ -139,8 +143,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 	}
 
+	/* 이메일 보내기 */
 	public void mailing(String email, String setTitle, String setContent) {
-		/* 이메일 보내기 */
 		String setFrom = "yedam4eventi@gmail.com";
 		String toMail = email;
 		String title = setTitle;
@@ -158,11 +162,13 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 	}
 
+	//행사지역 불러오기
 	@Override
 	public List<CodeVO> getCountry() {
 		return mapper.getCountry();
 	}
 
+	//행사유형 불러오기
 	@Override
 	public List<CodeVO> getType() {
 		return mapper.getType();

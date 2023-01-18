@@ -42,7 +42,7 @@ public class MemberController {
 	@RequestMapping(value = "/memBusiSignUp")
 	public String busiSignUpPage(Model model, CodeVO codeVO) {
 		model.addAttribute("busiArea", service.getCountry());
-		model.addAttribute("busiType", service.getType());
+		model.addAttribute("busiStyle", service.getType());
 		
 		return "content/member/busiSignUp";
 	}
@@ -112,9 +112,10 @@ public class MemberController {
 	//업체회원가입 처리
 		@PostMapping("/insertBusiMember")
 		@ResponseBody
-		public String insertBusiMember(@RequestBody MemberVO memberVO, @RequestBody BusiVO busiVO) {
+		public String insertBusiMember(@RequestBody MemberVO memberVO) {
 			memberVO.setUserPassword(passwordEncoder.encode(memberVO.getPassword()));
-			service.insertBusiMember(memberVO, busiVO);
+			System.out.println(memberVO);
+			service.insertBusiMember(memberVO);
 			return "redirect:/login";
 		}
 	

@@ -3,6 +3,7 @@ package com.eventi.left.member.mapper;
 import java.util.List;
 
 import com.eventi.left.common.CodeVO;
+import com.eventi.left.member.service.BusiVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
 
@@ -25,7 +26,8 @@ public interface MemberMapper {
 	public List<CodeVO> getCountry();
 
 	public List<CodeVO> getType();
+	
+	public int insertBusi(BusiVO busiVO);
 
-	public int insertbusiMember(MemberVO memberVO);
 
 }

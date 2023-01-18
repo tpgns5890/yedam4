@@ -31,7 +31,7 @@ public interface MemberService{
 
 	public List<CodeVO> getType();
 
-	public int insertBusiMember(MemberVO memberVO, BusiVO busiVO);
+	public int insertBusiMember(MemberVO memberVO);
 
 
 }
