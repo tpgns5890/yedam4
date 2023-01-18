@@ -50,11 +50,17 @@ public class ResumeServiceImpl implements ResumeService{
 		// TODO Auto-generated method stub
 		return resumeMapper.ApplyInsert(resumeBoardVO);
 	}
-
+	//구직자 채용 
 	@Override
 	public int hireUpdate(ResumeBoardVO resumeBoardVO) {
 		// TODO Auto-generated method stub
 		return resumeMapper.hireUpdate(resumeBoardVO);
+	}
+	//구직자 미채용 
+	@Override
+	public int unHireUpdate(ResumeBoardVO resumeBoardVO) {
+		// TODO Auto-generated method stub
+		return resumeMapper.unHireUpdate(resumeBoardVO);
 	}
 
 

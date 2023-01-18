@@ -21,6 +21,9 @@ public class QuestionsVO {
 	private String category;	//대상구분
 	private String rerepTgt;	//문의:null 답변:문의번호입력
 	
+	//답변유무
+	String ans;
+	
 	public String getqNo() {
 		return qNo;
 	}

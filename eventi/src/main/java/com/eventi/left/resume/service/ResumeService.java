@@ -24,6 +24,9 @@ public interface ResumeService {
 	//구직신청폼 등록
 	public int ApplyInsert(ResumeBoardVO resumeBoardVO);
 	
-	//구직자 채용여부 수정
-	public int hireUpdate(ResumeBoardVO resumeBoardVO); 
+	//구직자 채용
+	public int hireUpdate(ResumeBoardVO resumeBoardVO);
+	
+	//구직자 미채용 
+	public int unHireUpdate(ResumeBoardVO resumeBoardVO); 
 }
