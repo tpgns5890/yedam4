@@ -171,7 +171,7 @@ console.log('%c ♥ 예담 최고의 아웃풋 "4조" 화이팅 ♥ ', 'backgrou
         function navbarSubmenu(width) {
             if (width > 767) {
                 $('.navbar-custom .navbar-nav > li.dropdown').hover(function() {
-                    var MenuLeftOffset  = $('.dropdown-menu', $(this)).offset().left;
+                    var MenuLeftOffset  = $('.dropdown-menu', $(this)).offset();
                     var Menu1LevelWidth = $('.dropdown-menu', $(this)).width();
                     if (width - MenuLeftOffset < Menu1LevelWidth * 2) {
                         $(this).children('.dropdown-menu').addClass('leftauto');

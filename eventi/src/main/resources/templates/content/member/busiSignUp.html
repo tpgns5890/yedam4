@@ -5,7 +5,7 @@
 <head>
 	<style>
 		#container {
-			width: 80%;
+			width: 65%;
 			margin: 0 auto;
 		}
 
@@ -84,7 +84,7 @@
 
 		.chkArea {
 			width: 115px;
-			height: 250px;
+			height: 200px;
 			overflow: scroll;
 			border: 0.3px solid black;
 			line-height: 1.5em;
@@ -151,18 +151,16 @@
 
 <body>
 	<div layout:fragment="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row no-gutters slider-text align-items-end justify-content-center">
-					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">업체회원 회원가입</h2>
-					</div>
-				</div>
-			</div>
-		</section>
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">업체회원 회원가입</h2>
+                <div class="module-subtitle font-serif">Business Member SignIn</div>
+              </div>
+            </div>
+          </div>
+        </section>
 		<div id="container">
 			<div id="signInBox">
 				<form id="signIn" name="signIn">
@@ -214,6 +212,7 @@
 						<div>
 							<font id="busi_feedback" size="2" value="1"></font>
 						</div>
+						<br>
 						<div id="chkArea">
 							<div>행사가능지역
 								<div class="chkArea">
@@ -238,8 +237,7 @@
 				</form>
 			</div>
 			<div id="submitArea">
-				<button type="reset" class="btn btn-primary py-3 px-5">초기화</button>
-				<button type="button" id="busiSignUp" class="btn btn-primary py-3 px-5">회원가입</button>
+				<button type="button" id="busiSignUp" class="btn btn-border-d btn-round">회원가입</button>
 			</div>
 		</div>
 		<div id="modal">

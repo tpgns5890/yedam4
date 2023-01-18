@@ -1,9 +1,18 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!--headerFragment 선언-->
 <div th:fragment="headerFragment">
+  <div class="page-loader">
+    <div class="loader">Loading...</div>
+  </div>
   <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#custom-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
         <a class="navbar-brand" href="/">EVENTI</a>
       </div>
       <div class="collapse navbar-collapse" id="custom-collapse">
@@ -12,14 +21,15 @@
             <ul class="dropdown-menu">
               <li class="dropdown"><a class="dropdown" href="/estForm">견적작성</a></li>
               <li class="dropdown"><a class="dropdown" href="/estList">견적게시판</a>
-            </li></ul>
+              </li>
+            </ul>
           </li>
           <li class="dropdown"><a href="#">대여</a></li>
           <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">포트폴리오</a>
             <ul class="dropdown-menu" role="menu">
-              <li class="dropdown"><a class="dropdown" href="/prtfl/mcList">사회자</a></li>
-              <li class="dropdown"><a class="dropdown" href="/design/designList">디자인</a></li>
-              <li class="dropdown"><a class="dropdown" href="/prtfl/busiList">행사업체</a></li>
+              <li><a href="/prtfl/mcList">사회자</a></li>
+              <li><a href="/design/designList">디자인</a></li>
+              <li><a href="/prtfl/busiList">행사업체</a></li>
             </ul>
           </li>
           <li class="dropdown"><a href="/contest/List">공모전</a></li>
@@ -38,16 +48,20 @@
               <li class="dropdown"><a class="dropdown" href="/faqList">FAQ</a></li>
             </ul>
           </li>
-		  <li class="nav-item" sec:authorize="isAuthenticated()"><a href="/myPage/test" class="nav-link">My</a></li>
+          <li class="nav-item" sec:authorize="isAuthenticated()"><a href="/myPage/test" class="nav-link">My</a></li>
+          <li class="nav-item">
+            <button class="btn btn-border-w btn-round btn-xs" th:onclick="|location.href='@{/memQualification}'|"
+              sec:authorize='!isAuthenticated()' style="margin-top:11px;">회원가입</button>
+          </li>
           <li>
-            <div class="reg">
-						<input type="button" th:onclick="|location.href='@{/memQualification}'|" sec:authorize='!isAuthenticated()' value="회원가입"/>
-						<input type="button" th:onclick="|location.href='@{/loginPage}'|" sec:authorize='!isAuthenticated()' value="로그인"/>
-						<form method="post" action="../logout"	sec:authorize="isAuthenticated()">
-							<input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
-							<input type="submit" value="로그아웃"/>
-						</form>
-					</div>
+            <button class="btn btn-border-w btn-round btn-xs" th:onclick="|location.href='@{/loginPage}'|"
+              sec:authorize='!isAuthenticated()' style="margin-top:11px;margin-left:3px;">로그인</button>
+          </li>
+          <li>
+            <form method="post" action="../logout" sec:authorize="isAuthenticated()">
+              <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
+              <button class="btn btn-border-w btn-round btn-xs" type="submit" style="margin-top:11px;">로그아웃</button>
+            </form>
           </li>
         </ul>
       </div>
