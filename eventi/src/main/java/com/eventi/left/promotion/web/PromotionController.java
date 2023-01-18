@@ -84,10 +84,4 @@ public class PromotionController {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
 		}
-	// 댓글 삭제
-		@PostMapping("/replyDelete")
-		@ResponseBody
-		public int replyDelete(ReplyVO replyVO) {
-			return service.replyDelete(replyVO); 
-		}
 }
