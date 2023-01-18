@@ -59,7 +59,6 @@ button {
 <body>
 <div layout:fragment="content">
    <section class="hero-wrap hero-wrap-2",
-      style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
       data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
@@ -93,6 +92,7 @@ button {
     <input type="text" id="expectedLocal" name="expectedLocal" th:value="${est.expectedLocal}" readonly>
         <label for="title" id="title">행사 관련 희망사항을 알려주세요.</label>
     <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
+    <input type="hidden" id="thisEno" th:value="${est.eno}">
   </form>
 </div>
 <!-- Button trigger modal -->
@@ -115,6 +115,7 @@ button {
 		<table id="myGdList" class="list">
 		<thead>
 		<tr>
+	    <th><input type="checkbox" id="all_select"></th>	
 		<th>물품명</th>
 		<th>금액</th>
 		<th>개수</th>
@@ -149,15 +150,69 @@ button {
     </div>
   </div>
 </div><!--  end of Modal -->
+
   <button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
   <hr>
+  <!-- 업체제안서 리스트 -->
  <div id="propList" th:each="prop : ${propList}">
 	<p th:text="|업체소개 : ${prop.companyInt}|"></p>
+	<p th:text="|업체아이디 : ${prop.userId}|"></p>
 	<p th:text="|총금액 : ${prop.totalPrc}원|"></p>
   <input type="hidden" name="eno" value="${prop.eno}">
     <p th:text="|고용회수 : ${count.adoption}|"></p>	
     <p th:text="|후기수 : ${count.review}|"></p>
-    <button type="button" id="detailProp">제안서보기</button>
+     <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" th:id="${prop.userId}">제안서 보기</button>
+ <!-- Modal -->
+<div class="modal fade" th:id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">제안서 보기</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <label for="companyInt" class="col-form-label">업체소개</label>
+       <input type="text" class="form-control" id="recipient-name">
+       <label for="companyInt" class="col-form-label">물품목록</label>
+   		
+		<table id="myGdList" class="list">
+		<thead>
+		<tr>	
+		<th>물품명</th>
+		<th>금액</th>
+		<th>개수</th>
+		</tr>
+		</thead>
+		<tbody>
+		
+		</tbody>
+		</table>
+       <label for="companyInt" class="col-form-label">기타목록</label>
+       <table id="etcList" class="list">
+		<thead>
+		<tr>
+		<th>명목</th>
+		<th>금액</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+		<td><input id="title" style="border: 0;"></td>
+		<td><input id="price" style="border: 0;"></td>
+		</tr>
+		</tbody>
+		</table>
+       <p id="total"></p> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div><!--  end of Modal -->
  </div>
 
  <input type="hidden" name="sessionId"  class="btn btn-primary"th:value="${session.member.userId}">
@@ -167,7 +222,7 @@ var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
 //해당업체의 등록된물품 조회
- $(function() { 
+ $(function() {
 var userId = $('input[name="sessionId"]').val();
 var data = {"userId" : userId};
  	$.ajax({
@@ -182,7 +237,8 @@ var data = {"userId" : userId};
         },
 		success: function (data) {
 			$.each(data, function(idx, goods){
-				var tr = $("<tr />")
+			//	if(goods.userId ==)
+				var tr = $("<tr />").append($("<input type=checkbox name=chk>"))
 				var goodsNm = $("<td />").append(goods.goodsNm);
 				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
 				var stock = $("<td class='stock'/>").append(goods.stock);
@@ -196,7 +252,7 @@ var data = {"userId" : userId};
 	});
 });
  //물품값 자동계산
- $('#prop').on("click", function(){;
+ $('#etcList').keyup(function(){
 		$('#total').html("");
 	    var goods = $('#myGdList tbody tr'); //물품의 행
 	    var etc = $('#etcList tbody tr');
@@ -204,32 +260,63 @@ var data = {"userId" : userId};
 		var etcSum = 0; //기타합
 		var total = 0; //전체합
 		for(let i = 0; i < goods.length; i++){
+			if(parseInt($('#myGdList tbody tr').eq(i).is(":checked"))){
 		 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html())
-		 				* $('#myGdList tbody tr').eq(i).find('td').eq(2).html();
+		 			  * parseInt($('#etcList tbody tr').eq(i).find('td').eq(2).html());
+			}
 		 }
 		for(let i = 0; i < etc.length; i++){
 			etcSum += parseInt($('#etcList tbody tr').eq(i).find('td').eq(1).html())
 		 }
-		 $('#total').append(goodsSum);
- })
+		 console.log($('#myGdList tbody tr').eq(1).find('td').eq(2).html())
+		 $('#total').append("총금액: "+ goodsSum+"원");
+ });
  
  //기타목록 추가
  $("#addCol").on("click", function() {
-	 var tr = $("#etcList>tbody tr")
-	 var td = $("<td />").append($("<input style='border: 0;' />"))
+	 var tr = $("<tr />")
+	 var td = $("<td />")
+	 var td2 = $("<td />")
+	 td.append($("<input style='border: 0;' /> "))
+	 td2.append($("<input style='border: 0;' /> "))
+	 tr.append(td, td2)
 	 $('#etcList>tbody').append(tr);
 	 
  })
+ 
+ //th체크박스 선택시 전체체크
+ $('#all_select').on("click", function() {
+	 if($("#all_select").is(":checked")){
+		 $("input[name='chk']").prop("checked", true);		 
+	 } else {
+		 $("input[name='chk']").prop("checked", false);
+	 }
+	 $("input[name=chk]").click(function() {
+			var total = $("input[name=chk]").length;
+			var checked = $("input[name=chk]:checked").length;
+			
+			if(total != checked) {
+				$("#all_select").prop("checked", false);
+				}
+			else{
+				$("#all_select").prop("checked", true);
+				}
+		});
+ });
  //견적서 삭제
  $('#deleteBtn').on("click", function(){
-     var eno = $('#deleteBtn').val();	 
+     var thisEno = $('#thisEno').val();
+     var userId = $('#deleteBtn').val();
+     var data = {"eno": thisEno, "userId": userId};
+   
 	 if(!confirm('삭제하시겠습니까?')) {
 		 return false;
 	 }
 	 $.ajax({
 		 url:"/deleteEst",
 		 method:"POST",
-		 data: {eno},
+		 data: JSON.stringify(data),
+		 contentType: 'application/json',
 		 beforeSend : function(xhr)
          {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 				xhr.setRequestHeader(header, token);
@@ -264,6 +351,7 @@ var data = {"userId" : userId};
 	 });
  });
 
+ //제안서 상세보기
 </script>
 </div><!-- End of layout:fragment -->
 </body>

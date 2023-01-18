@@ -386,7 +386,7 @@ p {
 <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 </form>
 <script>
-
+//기타 입력값 radio value에 입력
 $('body').on('change','[id$="etcVal"]', function() {
 	$(this).closest('td').find('[type="radio"]').val($(this).val())
 })
@@ -473,10 +473,6 @@ var now_utc = Date.now()
 var timeOff = new Date().getTimezoneOffset()*60000;
 var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 document.getElementById('eventDate').setAttribute("min", today);
-
-
-	
-
 
 //견적서 보내기 버튼 클릭 시
 $('.submit').click(function() {
