@@ -7,6 +7,7 @@
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
 			SELECT *
 			FROM design
+			order by dt DESC
 	  	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
 		]]>
@@ -22,16 +23,19 @@
 		from contest c join design d
 		                on c.c_no = d.c_no    
 		and c.c_no = #{cNo}
+		order by dt DESC
 	</select>
 	
 	<select id="userDesignList" resultType="DesignVO">
 		SELECT * FROM DESIGN
 		WHERE USER_ID = #{userId}
+		order by dt DESC
 	</select>
 	
 	<select id="getDesign" resultType="DesignVO">
 		SELECT * FROM DESIGN
 		WHERE dgn_no = #{dgnNo}
+		order by dt DESC
 	</select>
 	
 	<insert id="insert">

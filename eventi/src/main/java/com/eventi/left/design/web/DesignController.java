@@ -97,22 +97,38 @@ public class DesignController {
 		return service.delete(vo);
 	}
 
-	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회
-	// 2.디자이너 : 응모관리 -> 디자인조회
+	// 1.디자이너 : 응모관리 -> 디자인조회
 	@GetMapping("/select")
-	public String designSelect(Model model, String dgnNo) {
-		
-		//디자인 1건조회
+	public String userDesignSelect(Model model, String dgnNo) {
+
+		// 디자인 1건조회
 		DesignVO design = service.getDesign(dgnNo);
 		List<FilesVO> files = new ArrayList<>();
-		
-		//1건에 대한 파일리스트 받고 디자인vo 세팅 후 모델담기.
+
+		// 1건에 대한 파일리스트 받고 디자인vo 세팅 후 모델담기.
 		files = fService.fileList(design.getDgnNo());
 		design.setFiles(files);
 		model.addAttribute("design", design);
-		
+
 		return "content/myPage/design";
 	}
-	
+
+	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회 -
+	@PostMapping("/ajaxSelect")
+	@ResponseBody
+	public DesignVO designSelect(String dgnNo) {
+
+		System.out.println(dgnNo);
+		
+		// 디자인 1건조회
+		DesignVO design = service.getDesign(dgnNo);
+		List<FilesVO> files = new ArrayList<>();
+
+		// 1건에 대한 파일리스트 받고 디자인vo 세팅 후 모델담기.
+		files = fService.fileList(design.getDgnNo());
+		design.setFiles(files);
+
+		return design;
+	}
 
 }
