@@ -30,8 +30,8 @@
 	
 	<!-- 댓글 수정 -->
 	<update id="replyUpdate">
-		UPDATE SET REPLY_CNTN = #{replyCntn}
-		FROM REPLY
+		UPDATE REPLY
+		SET REPLY_CNTN = #{replyCntn}
 		WHERE REPLY_NO = #{replyNo}
 	</update>
 
