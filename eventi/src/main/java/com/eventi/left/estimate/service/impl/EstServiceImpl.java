@@ -51,8 +51,8 @@ public class EstServiceImpl implements EstService {
 	
 	//해당업체의 물품조회
 	@Override
-	public List<RentGdVO> myGdList(String userId) {
-		return estMapper.myGdList(userId);
+	public List<RentGdVO> myGdList(RentGdVO rentGdVO) {
+		return estMapper.myGdList(rentGdVO);
 	}
 	
 	//견적요청서 삭제

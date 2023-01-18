@@ -65,7 +65,7 @@
 	
 	<!-- 해당업체의 물품 조회(제안서 작성페이지) -->
 	<select id="myGdList" resultType="rentGdVO">
-	select goods_no, goods_nm, stock, rpst_img, sale_yn, goods_size, total_stock
+	select goods_no, goods_nm, stock, rental_prc, rpst_img, goods_size, total_stock
 	from rental_gd
 	where user_id = #{userId}
 	</select>

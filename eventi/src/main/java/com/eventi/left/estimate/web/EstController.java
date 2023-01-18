@@ -1,5 +1,7 @@
 package com.eventi.left.estimate.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +44,6 @@ public class EstController {
 		model.addAttribute("est", estService.getEst(eno));
 		model.addAttribute("propList", estService.getPropList(eno));
 		model.addAttribute("count", estService.getCount(eno, userId));
-		model.addAttribute("myGdList", estService.myGdList(myId));
 		return "content/estimate/estDetail";
 	}
 	
@@ -62,9 +63,10 @@ public class EstController {
 		}
 		
 	//해당업체의 물품조회
-	@RequestMapping(value = "/myGoodsList")
-	public String myGdList(Model model, @RequestParam String userId) {
-		return "content/estimate/estDetail";
+	@PostMapping("/myGoodsList")
+	@ResponseBody
+	public List<RentGdVO> myGdList(@RequestBody RentGdVO rentGdvo) {
+		return estService.myGdList(rentGdvo);
 		}
 	
 	//견적서 삭제
