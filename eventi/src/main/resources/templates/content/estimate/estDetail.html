@@ -31,13 +31,34 @@ button {
 #propList {
   border: 1px solid black;
   width: 70%;
+  height: auto;
   margin: 15px auto;
+}
+.list {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.list td, .list th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+.list tr:nth-child(even){background-color: #f2f2f2;}
+
+.list tr:hover {background-color: #ddd;}
+
+.list th {
+  text-align: left;
+  background-color: #b7472A;
+  color: white;
 }
 </style>
 </head>
 <body>
 <div layout:fragment="content">
-   <section class="hero-wrap hero-wrap-2"
+   <section class="hero-wrap hero-wrap-2",
       style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
       data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -75,7 +96,7 @@ button {
   </form>
 </div>
 <!-- Button trigger modal -->
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">제안서 작성</button>
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop">제안서 작성</button>
  <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -90,12 +111,36 @@ button {
        <label for="companyInt" class="col-form-label">업체소개</label>
        <input type="text" class="form-control" id="recipient-name">
        <label for="companyInt" class="col-form-label">물품목록</label>
-		<div id="myGdList" >
-		<p>물품목록출력하는곳</p>
-		</div>
+   		
+		<table id="myGdList" class="list">
+		<thead>
+		<tr>
+		<th>물품명</th>
+		<th>금액</th>
+		<th>개수</th>
+		</tr>
+		</thead>
+		<tbody>
+		
+		</tbody>
+		</table>
        <label for="companyInt" class="col-form-label">기타목록</label>
-       <input type="text" class="form-control" id="recipient-name">
-       총금액 : 
+       <button id="addCol">기타목록추가</button>
+       <table id="etcList" class="list">
+		<thead>
+		<tr>
+		<th>명목</th>
+		<th>금액</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+		<td><input id="title" style="border: 0;"></td>
+		<td><input id="price" style="border: 0;"></td>
+		</tr>
+		</tbody>
+		</table>
+       <p id="total">총금액 :</p> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -109,34 +154,72 @@ button {
  <div id="propList" th:each="prop : ${propList}">
 	<p th:text="|업체소개 : ${prop.companyInt}|"></p>
 	<p th:text="|총금액 : ${prop.totalPrc}원|"></p>
-	<input type="hidden" name="userId" value="${prop.userId}">
   <input type="hidden" name="eno" value="${prop.eno}">
     <p th:text="|고용회수 : ${count.adoption}|"></p>	
     <p th:text="|후기수 : ${count.review}|"></p>
+    <button type="button" id="detailProp">제안서보기</button>
  </div>
- <input type="hidden" name="userId" th:value="${session.member.userId}">
-</div><!-- End of layout:fragment -->
-<script>
+
+ <input type="hidden" name="sessionId"  class="btn btn-primary"th:value="${session.member.userId}">
+ <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
- $(function () {
- var token = $("meta[name='_csrf']").attr("content");
- var header = $("meta[name='_csrf_header']").attr("content");	 
-	 
-var myId = $('input[name="userId"]').val();
-	$.ajax({
-		url: "/myGoodsList?myId="+ myId,
-		method: "GET",
+//해당업체의 등록된물품 조회
+ $(function() { 
+var userId = $('input[name="sessionId"]').val();
+var data = {"userId" : userId};
+ 	$.ajax({
+		url: "/myGoodsList",
+		method: "POST",
+		data: JSON.stringify(data),
+		contentType: 'application/json',
+		beforeSend : function(xhr)
+        {   
+			//데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+        xhr.setRequestHeader(header, token);
+        },
 		success: function (data) {
-			console.log(data);
+			$.each(data, function(idx, goods){
+				var tr = $("<tr />")
+				var goodsNm = $("<td />").append(goods.goodsNm);
+				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
+				var stock = $("<td class='stock'/>").append(goods.stock);
+				tr.append(goodsNm, rentalPrc, stock)
+				$('#myGdList>tbody').append(tr);
+			})
          },
          error: function () {
 				alert("서버 요청 실패");
 			}	
 	});
- });
+});
+ //물품값 자동계산
+ $('#prop').on("click", function(){;
+		$('#total').html("");
+	    var goods = $('#myGdList tbody tr'); //물품의 행
+	    var etc = $('#etcList tbody tr');
+		var goodsSum = 0; //물품합
+		var etcSum = 0; //기타합
+		var total = 0; //전체합
+		for(let i = 0; i < goods.length; i++){
+		 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html())
+		 				* $('#myGdList tbody tr').eq(i).find('td').eq(2).html();
+		 }
+		for(let i = 0; i < etc.length; i++){
+			etcSum += parseInt($('#etcList tbody tr').eq(i).find('td').eq(1).html())
+		 }
+		 $('#total').append(goodsSum);
+ })
+ 
+ //기타목록 추가
+ $("#addCol").on("click", function() {
+	 var tr = $("#etcList>tbody tr")
+	 var td = $("<td />").append($("<input style='border: 0;' />"))
+	 $('#etcList>tbody').append(tr);
+	 
+ })
  //견적서 삭제
  $('#deleteBtn').on("click", function(){
      var eno = $('#deleteBtn').val();	 
@@ -165,7 +248,7 @@ var myId = $('input[name="userId"]').val();
  //제안서 등록
  $('#insertBtn').on("click", function(){	 
 	 $.ajax({
-		 url:"/insertEst",
+		 url:"/insert",
 		 method:"POST",
 		 data: {eno},
 		 beforeSend : function(xhr)
@@ -180,6 +263,8 @@ var myId = $('input[name="userId"]').val();
  			}
 	 });
  });
+
 </script>
+</div><!-- End of layout:fragment -->
 </body>
 </html>

@@ -24,5 +24,5 @@ public interface EstMapper {
 
 	public Map<String, String> getCount(String eno, String userId); // 업체 제안서 채택/후기수 조회
 
-	public List<RentGdVO> myGdList(String userId); // 해당업체의 물품조회
+	public List<RentGdVO> myGdList(RentGdVO rentGdVO); // 해당업체의 물품조회
 }

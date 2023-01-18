@@ -48,6 +48,6 @@ public class replyController {
 		@PostMapping("/replyDelete")
 		@ResponseBody
 		public int replyDelete(ReplyVO replyVO) {
-			return service.replyDelete(replyVO); 
+			return replyService.replyDelete(replyVO); 
 		}
 }
