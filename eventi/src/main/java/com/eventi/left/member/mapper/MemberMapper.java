@@ -24,4 +24,8 @@ public interface MemberMapper {
 
 	public List<CodeVO> getCountry();
 
+	public List<CodeVO> getType();
+
+	public int insertbusiMember(MemberVO memberVO);
+
 }

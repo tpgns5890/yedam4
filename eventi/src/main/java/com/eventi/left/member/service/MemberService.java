@@ -29,4 +29,9 @@ public interface MemberService{
 
 	public List<CodeVO> getCountry();
 
+	public List<CodeVO> getType();
+
+	public int insertBusiMember(MemberVO memberVO, BusiVO busiVO);
+
+
 }

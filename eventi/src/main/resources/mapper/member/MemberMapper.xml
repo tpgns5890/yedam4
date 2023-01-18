@@ -83,8 +83,14 @@
 	</update>
 	
 	<select id="getCountry" resultType="CodeVO">
-	SELECT CODE_NAME
+	SELECT CODE_ID, CODE_NAME
 	FROM MNCODE 
 	WHERE CL_ID = 'A'
+	</select>
+	
+	<select id="getType" resultType="CodeVO">
+	SELECT CODE_ID, CODE_NAME
+	FROM MNCODE 
+	WHERE CL_ID = 'E'
 	</select>
 </mapper>
