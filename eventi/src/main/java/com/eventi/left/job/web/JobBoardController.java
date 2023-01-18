@@ -33,6 +33,7 @@ public class JobBoardController {
 	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
 		model.addAttribute("jobList", jobService.getJobList(jobBoardVO, paging ));
 		model.addAttribute("paging", paging);
+		System.out.println(jobService.getJobList(jobBoardVO, paging ));
 		return "content/job/jobList";
 	}
 	
@@ -64,7 +65,7 @@ public class JobBoardController {
 	public String jobDetail(Model model, JobBoardVO jobBoardVO, LikesVO likesVO) {
 		//좋아요 눌렀는지 확인
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		System.out.println(user);
+		//System.out.println(user);
 		likesVO.setUserId(user.getUserId());
 		likesVO.setTargetNo(jobBoardVO.getJobNo());
 		likesVO.setCategory("T03");

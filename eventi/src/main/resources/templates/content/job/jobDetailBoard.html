@@ -132,7 +132,8 @@
 				<th>우대사항</th>
 				<th>이미지</th>
 				<th>회원ID</th>
-				<th>관심수</th> 
+				<th>좋아요수</th>
+				<th>작성날짜</th>  
          </tr>
       </thead>
       <tbody>
@@ -150,7 +151,8 @@
 				<td th:text=${job.preference}></td>
 				<td th:text=${job.img}></td>
 				<td th:text=${job.userId}></td>
-				<td th:text=${job.interest}></td>
+				<td th:text=${job.cnt}></td>
+				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 			</tr>
       </tbody>
    </table>
@@ -164,15 +166,18 @@
 				<div class="modal_layer"></div>
 			</div>
 <script>
+//script에서 th값 가져올때는 <!--/*[[]]*/*/-->대괄호 쓰기!
+
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-/* $(function(){
-	let result = '${param.result}' 
+
+ $(function(){
+	let result = '[[${result}]]' 
 	if(result !="") {
 		$("#modal").show();
 	}	
-}) */
+}) 
 /*모달 창 닫기*/
 			$("#modal_close_btn").on('click', function() {
 				$("#modal").hide();

@@ -13,11 +13,10 @@
 		<if test="eType !=null and eType != ''">
 			AND E_TYPE = #{eType}
 		</if>
-		
+		AND CLOSE_DT >= SYSDATE 
 	</sql>	
 	
 	<sql id="likeSelect">
-
 		<if test="userId != null and userId != ''">
 		AND L.USER_ID = #{userId}			
 		</if>
@@ -38,18 +37,25 @@
 				PREFERENCE,
 				IMG,
 				USER_ID,
-				INTEREST,
-				(SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = JOB_NO) AS cnt
-				
-			FROM (SELECT ROWNUM RN, A.* FROM (
-			SELECT J.* 
-            FROM JOB_BOARD J, LIKES L
-            WHERE J.JOB_NO = L.TARGET_NO(+)
-            
+				DT,
+				CLOSE_DT,
+				CLOSE_DT - SYSDATE AS remain,
+				<!-- 순서대로 컬럼명 쓰기 -->
+                CNT,
+                RECOUNT              
+         FROM (SELECT ROWNUM RN, A.* FROM(
+		           SELECT DISTINCT J.*, 
+		                 (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = J.JOB_NO) AS CNT,
+		                 (SELECT COUNT(*) FROM RESUME_BOARD WHERE JOB_NO = J.JOB_NO) AS reCount
+		            FROM JOB_BOARD J, LIKES L, RESUME_BOARD R
+		           WHERE J.JOB_NO = L.TARGET_NO(+)
+		             AND J.JOB_NO = R.JOB_NO(+)
+                
 			<include refid="jSelect" />
 			<include refid="likeSelect" />
 	  	<![CDATA[
-			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
 		]]>
 	</select>
 	
@@ -87,9 +93,9 @@
 	<!-- 게시글 등록 -->
 	<insert id="jobInsert">
 		INSERT INTO JOB_BOARD
-		(JOB_NO, TITLE, JOB_CNTN, PAY, LOC, E_TYPE, W_SDAY, W_EDAY, W_HOUR, QUALIFICATION, PREFERENCE, IMG, USER_ID, DT ) <!-- DB -->
+		(JOB_NO, TITLE, JOB_CNTN, PAY, LOC, E_TYPE, W_SDAY, W_EDAY, W_HOUR, QUALIFICATION, PREFERENCE, IMG, USER_ID, DT, CLOSE_DT ) <!-- DB -->
 		VALUES('JB'|| JOB_BOARD_SEQ.NEXTVAL, #{title}, #{jobCntn}, 
-				#{pay}, #{loc}, #{eType}, #{wSday}, #{wEday}, #{wHour}, #{qualification}, #{preference}, #{img}, #{userId}, sysdate) <!-- VO -->
+				#{pay}, #{loc}, #{eType}, #{wSday}, #{wEday}, #{wHour}, #{qualification}, #{preference}, #{img}, #{userId}, sysdate, #{closeDt}) <!-- VO -->
 	</insert>
 	
 	<!-- 게시글 삭제 -->

@@ -23,8 +23,8 @@ public class JobServiceImpl implements JobService{
 	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO, PagingVO paging) {
 		paging.setTotalRecord(jobmapper.count(jobBoardVO));
 		paging.setPageUnit(5);
-		jobBoardVO.setFirst(jobBoardVO.getFirst());
-		jobBoardVO.setLast(jobBoardVO.getLast());
+		jobBoardVO.setFirst(paging.getFirst());
+		jobBoardVO.setLast(paging.getLast());
 		return jobmapper.getJobList(jobBoardVO);
 	}
 	
