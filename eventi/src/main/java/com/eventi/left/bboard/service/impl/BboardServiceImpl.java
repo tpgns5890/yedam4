@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.bboard.mapper.BboardMapper;
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
@@ -29,7 +30,12 @@ public class BboardServiceImpl implements BboardService{
 	
 	//전체 조회
 	@Override
-	public List<BboardVO> bboardList(BboardVO bboardVO) {
+	public List<BboardVO> bboardList(BboardVO bboardVO, PagingVO paging) {
+		paging.setTotalRecord(bboardMapper.count(bboardVO));
+		paging.setPageUnit(15);
+		bboardVO.setFirst(paging.getFirst());
+		bboardVO.setLast(paging.getLast());
+		
 		return bboardMapper.bboardList(bboardVO);
 	}
 	

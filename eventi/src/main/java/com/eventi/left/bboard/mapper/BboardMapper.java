@@ -12,6 +12,9 @@ public interface BboardMapper {
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
 	
+	//게시글 총 수
+	public int count(BboardVO bboardVO);
+	
 	//임시저장된 게시글 조회
 	public BboardVO bSave(BboardVO bboardVO);
 	
