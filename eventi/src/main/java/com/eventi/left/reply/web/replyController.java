@@ -44,4 +44,10 @@ public class replyController {
 			replyService.replyUpdate(replyVO);
 			return replyVO;
 		}
+		// 댓글 삭제
+		@PostMapping("/replyDelete")
+		@ResponseBody
+		public int replyDelete(ReplyVO replyVO) {
+			return service.replyDelete(replyVO); 
+		}
 }
