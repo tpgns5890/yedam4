@@ -51,6 +51,12 @@ public class ResumeServiceImpl implements ResumeService{
 		return resumeMapper.ApplyInsert(resumeBoardVO);
 	}
 
+	@Override
+	public int hireUpdate(ResumeBoardVO resumeBoardVO) {
+		// TODO Auto-generated method stub
+		return resumeMapper.hireUpdate(resumeBoardVO);
+	}
+
 
 	
 }

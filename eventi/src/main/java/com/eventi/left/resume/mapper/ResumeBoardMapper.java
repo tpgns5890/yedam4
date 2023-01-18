@@ -20,6 +20,9 @@ public interface ResumeBoardMapper {
 	public ResumeBoardVO getApplyForm(MemberVO memberVO); 
 	
 	//구직신청폼 등록
-	public int ApplyInsert(ResumeBoardVO resumeBoardVO); 
+	public int ApplyInsert(ResumeBoardVO resumeBoardVO);
+	
+	//구직자 채용여부 수정
+	public int hireUpdate(ResumeBoardVO resumeBoardVO); 
 }
                                      

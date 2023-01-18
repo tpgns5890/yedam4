@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 import com.eventi.left.member.service.MemberVO;
@@ -26,8 +28,8 @@ public class ResumeController {
 	//전체조회(메인구직게시판-회원ID가 작성한 글에 신청한 구직자들 전체조회)
 	@RequestMapping(value = "/resumeList", method=RequestMethod.GET) 
 	public String resumeList(Model model, ResumeBoardVO resumeBoardVO) {
-		//System.out.println(resumeBoardVO.getResumeNo());
-		//set(resumeBoard.seekerId, "지금로그인한사람")
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		resumeBoardVO.setSeekerId(user.getUserId());
 		model.addAttribute("resumeList", resumeService.getResumeList(resumeBoardVO));
 		return "content/resume/resumeList";
 	}
@@ -65,5 +67,11 @@ public class ResumeController {
 	
 		return "redirect:/jobDetail?jobNo=" + resumeBoardVO.getJobNo(); //redirect -mapping 링크, param임..
 		}
-
+	
+	//채용여부 수정
+	@PostMapping("/hireUpdate")
+	@ResponseBody //ajax방식
+	public int hireUpdate(ResumeBoardVO resumeBoardVO) {
+		return resumeService.hireUpdate(resumeBoardVO);
+			}
 }

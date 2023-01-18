@@ -23,4 +23,5 @@ public interface JobBoardMapper {
 	
 	//게시글 개수
 	public int count(JobBoardVO jobBoardVO);
+	
 }
