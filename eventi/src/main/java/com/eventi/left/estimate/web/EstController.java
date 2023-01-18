@@ -40,7 +40,7 @@ public class EstController {
 	}
 	//견적서 상세페이지
 	@RequestMapping(value = "/estDetail", method = {RequestMethod.GET, RequestMethod.POST})
-	public String estDetail(Model model, @RequestParam String eno, @RequestParam String userId, @RequestParam String myId) {
+	public String estDetail(Model model, @RequestParam String eno, @RequestParam String userId) {
 		model.addAttribute("est", estService.getEst(eno));
 		model.addAttribute("propList", estService.getPropList(eno));
 		model.addAttribute("count", estService.getCount(eno, userId));

@@ -65,15 +65,15 @@
 	
 	<!-- 해당업체의 물품 조회(제안서 작성페이지) -->
 	<select id="myGdList" resultType="rentGdVO">
-	select goods_no, goods_nm, stock, rental_prc, rpst_img, goods_size, total_stock
-	from rental_gd
-	where user_id = #{userId}
+	SELECT USER_ID, GOODS_NO, GOODS_NM, STOCK, RENTAL_PRC, RPST_IMG, GOODS_SIZE, TOTAL_STOCK
+	FROM RENTAL_GD
+	WHERE USER_ID = #{userId}
 	</select>
 	
 	<!-- 견적요청서 삭제 -->
 	<delete id="deleteEst">
-	delete estimate
-	where e_no = #{eno}
-	and userId = #{userId}
+	DELETE ESTIMATE
+	WHERE E_NO = #{eno}
+	AND USER_ID = #{userId}
 	</delete>
 </mapper>
