@@ -171,6 +171,7 @@ public class ContestServiceImpl implements ContestService {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setWriter(sessionId);
+		
 
 		paging.setTotalRecord(mapper.myContest(vo));
 		paging.setPageUnit(10);

@@ -6,15 +6,72 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+
 <title>Insert title here</title>
 <style>
-	footer {
-		clear: both;
-	}
-	img{
-		margin-top : 50px;
-		margin-right : 20px;
-	}
+footer {
+	clear: both;
+}
+
+img {
+	margin-top: 50px;
+	margin-right: 20px;
+}
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 120%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 40%;
+	height: 60%;
+	text-align: left;
+	max-height: calc(100vh - 200px);
+    overflow-y: auto;
+	
+}
+
+/* The Close Button */
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	text-align: right;
+	
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+	
+}
+#modelBtn{
+	text-align: center;
+}
+.modelBtn1 {
+	display :inline-block;
+}
+
+/* 모달스크롤 적용 */
+
+
 </style>
 </head>
 <body>
@@ -40,16 +97,17 @@
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
 		<div id="show"></div>
-		
-		<!-- The Modal -->
-			<div id="myModal" class="modal">
 
-				<!-- Modal content -->
-				<div class="modal-content">
-					<span class="close">&times;</span>
-					<h3>응모디자인 상세조회</h3>
-					</div>
-				</div>
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h3 id="title"></h3>
+				<div id="modelSelect"></div>
+			</div>
+		</div>
 
 
 		<script>
@@ -70,33 +128,38 @@
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			//1건의 디자인에 대한 파일리스트..
-			for(design of res){
-				let dNo = design.dgnNo;
-				let title = design.name;
-				let userId = design.userId;
-				console.log(design);
-				console.log(userId);
-				/*  console.log(design.files)  */
-				
-				for(file of design.files){
-					//디자인 파일리스트 중 대표이미지가 같을경우 생성.
-					if(design.centerImg == file.fNm){
-						makeImg(file.sevNm,title,dNo,userId);
+			
+			if(res == 0){
+				alert('지원자가 없습니다.')
+				location.href = '../contest/mySelect';
+			}else{
+			
+				//1건의 디자인에 대한 파일리스트..
+				for(design of res){
+					let dNo = design.dgnNo;
+					let title = design.name;
+					let userId = design.userId;
+					/*  console.log(design.files)  */
+					
+					for(file of design.files){
+						//디자인 파일리스트 중 대표이미지가 같을경우 생성.
+						if(design.centerImg == file.fNm){
+							makeImg(file.sevNm,title,dNo,userId);
+						}
+							
 					}
-						
-				}
-			} 
-				
+				} 
+			}
 		})
 	}
 	
+/* 								<a href="../design/select?dgnNo=${dNo}"> */
 	//디자인 응모작품 생성.
 	function makeImg(fileName,title,dNo,userId){
-		let design = ` <div id="design" style="float: left ">
-							<a href="../design/select?dgnNo=${dNo}">
+		let design = ` <div class="design" id="${dNo}" style="float: left ">
 								<img src="/fileView/${fileName}" style="width: 300px; height: 300px">
 							</a>
+						   <p class="dNo">${dNo}</p>
 						   <div>작성자:${userId} <p>제목:${title}</p></a></div>
 					   </div>
 					  `
@@ -104,9 +167,77 @@
 		
 	}
 	
-
+	//디자인선택시 모달창 
+	//응모된 디자인의 전체 파일 및 정보출력.
+	$('#show').on("click", ".design" , function(){
+		let dNo = $(this).attr("id");
+		
+		$.ajax({
+			url: '/design/ajaxSelect',
+			method: 'post',
+			data: {dgnNo:dNo},
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			let user = res.userId;
+			let title = res.name;
+			let cntn = res.cntn;
+			
+			$('#title').empty();
+			let content = `<h3>${user} 님의 참여작품 </h3>
+							<p>작품명 : ${title} </p>
+							<p>${cntn} </p>
+						  `
+			
+			$('#title').append(content);
+			
+			//모달내용을 지운뒤 붙여넣기.
+			$('#modelSelect').empty();
+			for(file of res.files){
+				makeDesign(file.sevNm,title,dNo);
+			}
+			
+		})
+	})
+	
+	//모달창 :디자인 응모작품 생성.
+	function makeDesign(fileName,dNo){
+		let design = `  <div class="design" id="${dNo}" style="float: left ">
+								<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
+					   </div>
+					  `
+			$('#modelSelect').append(design);
+		
+	}
 	
 	
+			// Get the modal
+			var modal = document.getElementById("myModal");
+			
+			// Get the button that opens the modal
+			var btn = document.getElementById("show");
+			
+			// Get the <span> element that closes the modal
+			var span = document.getElementsByClassName("close")[0];
+			
+			// When the user clicks the button, open the modal 
+			btn.onclick = function() {
+			  modal.style.display = "block";
+			}
+			
+			// When the user clicks on <span> (x), close the modal
+			span.onclick = function() {
+			  modal.style.display = "none";
+			}
+			
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+			  if (event.target == modal) {
+			    modal.style.display = "none";
+			  }
+			}
 
 	
 	</script>

@@ -72,7 +72,7 @@
 						</td>
 						<td>진행현황..</td>
 						<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
-						<td><button type="button" id="winnerInsert">우승자등록</button></td>
+						<td><button type="button" id="winnerInsert" th:onclick="|location.href='@{/winner/insert(cNo=${contest.cNo})'|">우승자등록</button></td>
 						
 						<th:block th:if="${contest.save} == 'Y'">
 							<td th:text="임시저장"></td>
