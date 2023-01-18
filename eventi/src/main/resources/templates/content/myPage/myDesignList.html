@@ -20,13 +20,160 @@
 					class="row no-gutters slider-text align-items-end justify-content-center">
 					<div
 						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">응모리스트</h2>
+						<h2 class="mb-0 bread">공모전 응모관리</h2>
 					</div>
 				</div>
 			</div>
 		</section>
 
-	</div>
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+		<!-- 테이블 -->
+		<div id="table">
+			게시글 검색 <input type="text" name="search" id="search" onkeyup="myFunction()">
+			<button type="button" id="deleteBtn">응모취소</button>
+			<table border="1" id="myTable">
+				<thead>
+					<tr>
+						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+						<th>no</th>
+						<th>공모전번호</th>
+						<th>분류</th>
+						<th>제목</th>
+						<th>우승여부</th>
+						<th>등록일</th>
+						<th>대표이미지</th>
+						<th>공개여부</th>
+						<th>상세조회</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="d: ${design} ">
+						<td><input class="check delete" type="checkBox"
+							value="delete" onkeyup="myFunction()"></td>
+						<td th:text=${d.dgnNo}></td>
+						<td th:text=${d.cNo} th:onclick="|location.href='@{/contest/select(cNo=${d.cNo})}'|"></td>
+						<td th:text=${d.caregory}></td>
+						<td th:text=${d.name}></td>
+						<td th:text=${d.winYn}></td>
+						<td th:text="${#dates.format(d.dt, 'yyyy-MM-dd')}"></td>
+						
+						<!-- 파일리스트가 대표이미지랑 같다면. -->
+						<th:block th:each="f : ${fileList}">
+							<td th:if="${f.fNm} == ${d.centerImg}"><img th:src="|/fileView/${f.sevNm}|" style="height:300px; width: 300px;"></td>
+							<!-- <td th:if="${f.fNm} != ${d.centerImg}" th:text="${d.centerImg}"></td> -->
+						</th:block>
+						
+						<!-- 공개여부 출력 -->
+						<th:block th:if="${d.pubcYn} == 'N'">
+							<td th:text="공개"></td>
+						</th:block>
+						<th:block th:if="${d.pubcYn} == 'Y'">
+							<td th:text="비공개"></td>
+						</th:block>
+						
+						<td style="width: 100px">
+							<button type="button" th:onclick="|location.href='@{/contest/select(cNo=${d.cNo})}'|">공모전</button>
+							<button type="button" th:onclick="|location.href='@{/design/select(dgnNo=${d.dgnNo})}'|">디자인</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+				 
+<!-- 		<div class="row mt-5">
+			<div class="col text-center">
+				<div class="block-27">
+					<th:block
+						th:replace="fragments/paging :: component(${paging},'gopage')">
+				</div>
+			</div>
+		</div> -->
+	
+		<script>
+		//페이지이동
+		/* function gopage(i) {
+		    location.href = '/contest/mySelect?page=' + i;
+		    
+		 } */
 		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		// tr 전체체크시 모든항목 체크되도록 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
+		})
+		
+
+		//응모디자인 삭제
+		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
+		
+		function deleteContest(deleteCheck) {
+			let trs = document.querySelectorAll('table>tbody>tr');
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			console.log(trs);
+			console.log(userId);
+			
+			if (!confirm('응모 취소하시겠습니까?')) {
+				return false;
+			} else {
+				for (let i = 0; i < trs.length; i++) {
+					if (trs[i].children[0].children[0].checked) {
+						
+						let dgnNo = trs[i].children[1].textContent; //체크된 공모번호
+
+						//삭제처리 ajax
+						$.ajax({
+							url: '../design/delete',
+							method: "post",
+							data: {dgnNo,userId},
+							beforeSend: function (xhr) {
+								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+								xhr.setRequestHeader(header, token);
+							},
+						}).then(res => {
+							if (res >= 1) {
+								trs[i].remove(); // tr 화면동적 삭제
+								alert('삭제 완료');
+							} else {
+								alert('삭제 실패');
+							}
+						})
+					}
+				}
+			}
+		}
+		
+		function myFunction() {
+			let input = document.getElementById("search");
+			let filter = input.value.toUpperCase();
+			let table = document.getElementById("myTable");
+			let tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[4];
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+		</script>
+
+
+	</div>
 </body>
 </html>
+							
+
+

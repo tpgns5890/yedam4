@@ -13,13 +13,17 @@ public interface DesignMapper {
 	//등록된 디자인 개수
 	public int count(DesignVO vo);
 
-	public List<DesignVO> contestDesignList(String cNo); //공모전 1건에 대한 리스트.
+	public List<DesignVO> contestDesignList(String cNo); //게시글 1건 디자인리스트.
+	
+	public List<DesignVO> userDesignList(String userId); //유저 디자인리스트.
+	
+	public DesignVO userDesign(String userId, String dgnNo); //유저 디자인1건.
 	
 	public int insert(DesignVO vo); //추가
 	 
 	public int update(DesignVO vo); //수정
 	
-	public int delete(String dNo); //삭제
+	public int delete(DesignVO vo); //삭제
 	
 	public String getSequence(); //시퀀스 맥시멈번호 찾기.
 

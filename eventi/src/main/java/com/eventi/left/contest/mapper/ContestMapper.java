@@ -15,9 +15,9 @@ public interface ContestMapper {
 		
 		public int myContest(ContestVO ContestVO); //로그인된 회원의 공모전 등록건수조회.
 
-		public ContestVO getContest(ContestVO contestVO); // 1건조회
+		public ContestVO getContest(String cVo); // 1건조회
 		
-		public int selectUpdate(ContestVO contestVO); // 상세조회 조회수 업데이트.
+		public int selectUpdate(String cVo); // 상세조회 조회수 업데이트.
 		
 		public int selectLikes(ContestVO contestVO); //공모전 좋아요수 조회.
 
