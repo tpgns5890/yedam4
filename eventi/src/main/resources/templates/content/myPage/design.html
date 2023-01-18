@@ -12,6 +12,10 @@
 	footer {
 		clear: both;
 	}
+	#cntn,img{
+		margin-top : 50px;
+		margin-right : 20px;
+	}
 </style>
 </head>
 <body>
@@ -25,7 +29,7 @@
 					class="row no-gutters slider-text align-items-end justify-content-center">
 					<div
 						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">디자인 상세조회</h2>
+						<h2 th:text="|${design.name} 디자인|" class="mb-0 bread"></h2>
 					</div>
 				</div>
 			</div>
@@ -34,8 +38,14 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
-		<div th:text="${design}"></div>
-
+		<!-- vo 담긴 리스트 불러오기 <div th:text="${design.files}"></div> -->
+		<p id="cntn" th:utext="${design.cntn}" ></p>  <!-- utext로 에디터내용 태그삭제 -->
+		<div th:each="file : ${design.files} ">
+			<div id="design" style="float: left ">
+				<img th:src="|/fileView/${file.sevNm}|" style="width: 300px; height: 300px">
+				<div th:text="|${file.fNo} ${file.fNm}|"></div>
+			</div>
+		</div>
 		
 	</div>
 </body>

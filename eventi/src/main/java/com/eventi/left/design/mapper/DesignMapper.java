@@ -17,7 +17,7 @@ public interface DesignMapper {
 	
 	public List<DesignVO> userDesignList(String userId); //유저 디자인리스트.
 	
-	public DesignVO userDesign(String userId, String dgnNo); //유저 디자인1건.
+	public DesignVO getDesign(String dgnNo); // 디자인1건.
 	
 	public int insert(DesignVO vo); //추가
 	 

@@ -6,6 +6,16 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<title>Insert title here</title>
+<style>
+	footer {
+		clear: both;
+	}
+	img{
+		margin-top : 50px;
+		margin-right : 20px;
+	}
+</style>
 </head>
 <body>
 	<!-- 2.레이아웃 content적용 -->
@@ -19,7 +29,8 @@
 					class="row no-gutters slider-text align-items-end justify-content-center">
 					<div
 						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">공모전 지원자 조회</h2>
+						<h2 th:text="|${cNo} 지원자 조회|" class="mb-0 bread"></h2>
+						<input hidden="hidden" th:value="${cNo}" id="cNo">
 					</div>
 				</div>
 			</div>
@@ -27,29 +38,78 @@
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
-			
-			
-			<!-- map타입 디자인번호 == 파일 타겟번호 출력-->
-			<div th:each="d : ${map.design}">
-				<span th:text="${d.dgnNo}"></span>
-				<span th:text="${d.name}"></span>
-				<span th:text="${d.cntn}"></span>
-				<span th:each="f : ${map.file}" th:if="${d.dgnNo} == ${f.targetId}">
-					<span th:text="${f.fNo}"></span>
-					<div><img th:src="|/fileView/${f.sevNm}|" style="height:300px; width: 300px;"></div>
-				</span>	
-			</div>
 
-<!-- 		<span th:text="${design}"></span>  -->
-<!-- 		<span th:text="${fileList}"></span>
+		<div id="show"></div>
 		
-			<div th:each="f : ${fileList}">
-							<a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
-								<img th:src="|/fileView/${f.sevNm}|" style="width: 540px; height: 785px"
-									class="img-fluid" alt="Colorlib Template"></a>
-						</div> -->
+		<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+				<!-- Modal content -->
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h3>응모디자인 상세조회</h3>
+					</div>
+				</div>
 
 
+		<script>
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	select(); 
+	
+	function select(){
+		let cNo = $('#cNo').val();
+		console.log(cNo);
+		
+		$.ajax({
+			url: '../contest/ajaxDesignRead',
+			method: 'post',
+			data: {cNo},
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			//1건의 디자인에 대한 파일리스트..
+			for(design of res){
+				let dNo = design.dgnNo;
+				let title = design.name;
+				let userId = design.userId;
+				console.log(design);
+				console.log(userId);
+				/*  console.log(design.files)  */
+				
+				for(file of design.files){
+					//디자인 파일리스트 중 대표이미지가 같을경우 생성.
+					if(design.centerImg == file.fNm){
+						makeImg(file.sevNm,title,dNo,userId);
+					}
+						
+				}
+			} 
+				
+		})
+	}
+	
+	//디자인 응모작품 생성.
+	function makeImg(fileName,title,dNo,userId){
+		let design = ` <div id="design" style="float: left ">
+							<a href="../design/select?dgnNo=${dNo}">
+								<img src="/fileView/${fileName}" style="width: 300px; height: 300px">
+							</a>
+						   <div>작성자:${userId} <p>제목:${title}</p></a></div>
+					   </div>
+					  `
+			$('#show').append(design);
+		
+	}
+	
+
+	
+	
+
+	
+	</script>
 	</div>
 </body>
 </html>

@@ -18,7 +18,7 @@
 	</select>
 	
 	<select id="contestDesignList" resultType="DesignVO">
-		select c.c_no, d.dgn_no, d.user_id d_user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn
+		select c.c_no, d.dgn_no, d.user_id user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn
 		from contest c join design d
 		                on c.c_no = d.c_no    
 		and c.c_no = #{cNo}
@@ -27,6 +27,11 @@
 	<select id="userDesignList" resultType="DesignVO">
 		SELECT * FROM DESIGN
 		WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="getDesign" resultType="DesignVO">
+		SELECT * FROM DESIGN
+		WHERE dgn_no = #{dgnNo}
 	</select>
 	
 	<insert id="insert">
@@ -67,10 +72,4 @@
 		FROM DESIGN
 	</select>
 	
-	<select id="userDesign" resultType="DesignVO">
-		SELECT * 
-		FROM DESIGN
-		WHERE USER_ID = #{userId}
-		and dgn_no = #{dgnNo}
-	</select>
 </mapper>

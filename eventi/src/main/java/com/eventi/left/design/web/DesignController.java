@@ -97,16 +97,22 @@ public class DesignController {
 		return service.delete(vo);
 	}
 
-	// 내 디자인 조회
+	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회
+	// 2.디자이너 : 응모관리 -> 디자인조회
 	@GetMapping("/select")
 	public String designSelect(Model model, String dgnNo) {
-
-		// 로그인 회원정보
-		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		String sessionId = user.getUserId();
-		model.addAttribute("design", service.userDesign(sessionId,dgnNo));
-
-		return "content/myPage/myDesign";
+		
+		//디자인 1건조회
+		DesignVO design = service.getDesign(dgnNo);
+		List<FilesVO> files = new ArrayList<>();
+		
+		//1건에 대한 파일리스트 받고 디자인vo 세팅 후 모델담기.
+		files = fService.fileList(design.getDgnNo());
+		design.setFiles(files);
+		model.addAttribute("design", design);
+		
+		return "content/myPage/design";
 	}
+	
 
 }
