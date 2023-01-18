@@ -79,7 +79,7 @@ public class ContestController {
 
 		// 객체생성 및 코드별 문자열 변환후 세팅
 		ContestVO contest = service.getContest(cVo.getcNo());
-		
+
 		model.addAttribute("contest", contest); // 모델 넘겨주기.
 		model.addAttribute("designList", dService.contestDesignList(cVo.getcNo()));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
@@ -93,7 +93,7 @@ public class ContestController {
 	@ResponseBody
 	public ContestVO contestSelect(ContestVO vo) {
 		ContestVO contest = service.getContest(vo.getcNo());
-		return contest;//리스트 1건 반환.
+		return contest;// 리스트 1건 반환.
 	}
 
 	// 등록화면이동
@@ -161,6 +161,7 @@ public class ContestController {
 	// 나의 공모전리스트
 	@GetMapping("/mySelect")
 	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
+		
 		model.addAttribute("contestList", service.myContestList(vo, paging));
 		model.addAttribute("paging", paging);
 		return "content/myPage/myCotestList";
@@ -197,29 +198,31 @@ public class ContestController {
 
 		return result;
 	}
-	
-	// 공모전 지원자조회페이지
-	// 공모전번호 매개변수 => 응모디자인 리스트 + 파일 리스트
-		@GetMapping("/designRead")
-		public String designRead(Model model,String cNo) {
-			
-			Map<String,Object> result = new HashMap<>();
-			List<DesignVO> designs = dService.contestDesignList(cNo); //공모전에 접수된 디자인
-			
-			//디자인 1건에 대한 파일리스트.
-			for(DesignVO design : designs) {
-//				 result.put(design.getDgnNo(), fService.fileList(design.getDgnNo()));
-				 result.put("file", fService.fileList(design.getDgnNo()));
-			}
-			
-			result.put("design", designs);
-			
-			
-			model.addAttribute("map", result);
-			
-			return "content/contest/cotestDesignList"; 
-		}
 
-	
+	// 공모전 지원자조회페이지 이동
+	@GetMapping("/designRead")
+	public String designRead(Model model,String cNo) {
+		
+		model.addAttribute("cNo", cNo);
+		return "content/contest/cotestDesignList";
+	}
+
+	// 공모전 지원자조회페이지(응모디자인조회 ajax)
+	@PostMapping("/ajaxDesignRead")
+	@ResponseBody
+	public List<DesignVO> ajaxDesignRead(String cNo) {
+
+		// 1건의 공모전에 접수된 디자인리스트
+		List<DesignVO> designs = dService.contestDesignList(cNo); 
+		List<FilesVO> files = new ArrayList<>();
+
+		// 디자인 1건에 대한 파일리스트.
+		for (DesignVO design : designs) {
+			files = fService.fileList(design.getDgnNo());
+			design.setFiles(files);
+		}
+		
+		return designs; //디자인리스트+파일리스트 반환.
+	}
 
 }
