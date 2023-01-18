@@ -11,6 +11,12 @@ public interface ReplyMapper {
 
 		public ReplyVO getReply(ReplyVO ReplyVO); // 1건조회
 		
+		//댓글 추가
+		public int replyInsert(ReplyVO replyVO);
+		
+		//댓글 수정
+		public int replyUpdate(ReplyVO replyVO);
+		
 	// 삭제
 		public int replyDelete(ReplyVO ReplyVO);
 }

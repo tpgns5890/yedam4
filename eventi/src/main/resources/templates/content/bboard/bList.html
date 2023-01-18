@@ -20,7 +20,6 @@
     transition-duration: 1s;
     background-position: -2800px 0;
   }
-
 </style>
 
 <!-- csrf 설정 -->
@@ -43,7 +42,7 @@
          </div>
       </div>
    </section>
-   
+   	
    	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글 등록하기</button>
    	
    	<!-- 라디오 버튼 게시글별 정렬 -->
@@ -151,7 +150,6 @@
 		   			}
 				}
 			})
-   			
 			$("input[name=search]").val('');
    		})
    		
@@ -229,7 +227,7 @@
 	     if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
 	    	 $("input:radio[name='lclsf']:radio[value='all']").prop('checked', true); // 전체 라디오 버튼선택하기
 	    	 $.ajax({
-					url : '/bboard/bLikeList',
+					url : '/bboard/bList',
 					method : 'post',
 					data : {writer:userId, type:type, order:order},
 					beforeSend : function(xhr)

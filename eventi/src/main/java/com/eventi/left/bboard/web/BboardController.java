@@ -15,10 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.reply.service.ReplyVO;
 
 @Controller
@@ -62,13 +64,15 @@ public class BboardController {
 	//단건조회
 	@GetMapping("/bSelect")
 	public String bSelect(Model model, BboardVO bboardVO, LikesVO likesVO) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+
 		//내가 좋아요 눌렀는지 확인
-		likesVO.setUserId("사용자1");
+		likesVO.setUserId(user.getUserId());
 		likesVO.setTargetNo(bboardVO.getBBoardNo());
 		likesVO.setCategory(bboardVO.getType());
 		model.addAttribute("like", likeService.getLike(likesVO));
 		//해당 게시글 좋아요 수
-		model.addAttribute("likeCount", likeService.countLike(likesVO));
+		//model.addAttribute("likeCount", likeService.countLike(likesVO));
 		//해당 게시글 상세 내용
 		model.addAttribute("bSelect", bboardService.bboardSelect(bboardVO));
 		//이미지
