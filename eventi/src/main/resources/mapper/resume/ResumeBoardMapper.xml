@@ -5,12 +5,12 @@
 	
 	<!-- 전체간단조회(메인구인게시판) -->
 	<select id="getResumeList" resultType="com.eventi.left.resume.service.ResumeBoardVO">
-		SELECT R.RESUME_NO, R.SEEKER_ID, R.SEEKER_CNTN, R.JOB_NO, J.USER_ID 
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.SEEKER_CNTN, R.JOB_NO, J.USER_ID, R.HIRE 
 		FROM RESUME_BOARD R, JOB_BOARD J
 		WHERE R.JOB_NO = J.JOB_NO 
 		AND J.JOB_NO IN (SELECT JOB_NO 
 						FROM JOB_BOARD
-						WHERE USER_ID = 'HONG')
+						WHERE USER_ID = #{seekerId})
 	</select>
 	
 	<!-- 전체간단조회(상세구인게시판) -->
@@ -44,4 +44,13 @@
 		VALUES('RB'|| RESUME_BOARD_SEQ.NEXTVAL, #{seekerId}, #{seekerCntn}, 
 				#{jobNo}, #{resumeCntn}, #{files}, #{userName}, #{userEmail}, #{userPhone}) <!-- VO -->
 	</insert>
+	
+	<!-- 구직자 채용여부 변경 -->
+	<update id="hireUpdate" parameterType="com.eventi.left.resume.service.ResumeBoardVO">
+		UPDATE RESUME_BOARD
+		SET
+		HIRE = 'Y'
+		WHERE RESUME_NO = #{resumeNo}
+	</update>
+	
 </mapper>

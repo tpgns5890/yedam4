@@ -14,9 +14,9 @@ public class ResumeBoardVO {
 	private String resumeCntn; //자기소개서
 	private String files; //첨부파일
 	
-	private String userName;
-	private String userEmail;
-	private String userPhone;
-	
+	private String userName; //회원이름
+	private String userEmail; //회원이메일
+	private String userPhone; //회원전화번호
+	private String hire; //채용여부
 	
 }
