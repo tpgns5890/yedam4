@@ -11,20 +11,20 @@
 
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">공모전 응모관리</h2>
-					</div>
-				</div>
-			</div>
-		</section>
+		
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">마이페이지</h2>
+                <div class="module-subtitle font-serif">공모전 응모관리</div>
+              </div>
+            </div>
+          </div>
+        </section>
+	
+		<div style="min-height: 700px">
+		<h2 class="mb-0 bread">공모전 응모관리</h2>
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
@@ -62,7 +62,6 @@
 						<!-- 파일리스트가 대표이미지랑 같다면. -->
 						<th:block th:each="f : ${fileList}">
 							<td th:if="${f.fNm} == ${d.centerImg}"><img th:src="|/fileView/${f.sevNm}|" style="height:300px; width: 300px;"></td>
-							<!-- <td th:if="${f.fNm} != ${d.centerImg}" th:text="${d.centerImg}"></td> -->
 						</th:block>
 						
 						<!-- 공개여부 출력 -->
@@ -82,15 +81,7 @@
 			</table>
 		</div>
 				 
-<!-- 		<div class="row mt-5">
-			<div class="col text-center">
-				<div class="block-27">
-					<th:block
-						th:replace="fragments/paging :: component(${paging},'gopage')">
-				</div>
-			</div>
-		</div> -->
-	
+		</div>
 		<script>
 		//페이지이동
 		/* function gopage(i) {

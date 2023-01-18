@@ -27,24 +27,32 @@
 			padding: 0;
 			text-align: center;
 		}
+		
+		#wrapper{
+		  height: auto;
+		  min-height: 100%;
+		  padding-bottom: (footer높이);
+		}
+		footer{
+		  height: (footer높이);
+		  position : relative;
+		  transform : translateY(-100%);
+		}
 	</style>
 </head>
 
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row no-gutters slider-text align-items-end justify-content-center">
-					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">공모전 상세조회</h2>
-
-					</div>
-				</div>
-			</div>
-		</section>
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">공모전</h2>
+                <div class="module-subtitle font-serif" th:text="|${contest.ttl}|"></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
 		<section class="ftco-section">
 			<div class="container">
@@ -106,7 +114,7 @@
 								<span th:text="|#${contest.style}|"></span>
 							</p>
 						</div>
-						<div class="row mt-4">
+						<div class="col-sm-6">
 							<div class="input-group col-md-6 d-flex mb-3"></div>
 							<div class="w-100"></div>
 							<div class="col-md-12"></div>
@@ -115,8 +123,8 @@
 						<!-- 비회원 -->
 						<th:block sec:authorize="!isAuthenticated()">
 							<p>
-								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
-								<a href="../loginPage" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">응모하기</button></a>
+								<a href="#" ><button type="button" class="btn btn-g btn-round btn-lg">링크복사</button></a>
+								<a href="../loginPage" ><button type="button" class="btn btn-g btn-round btn-lg">응모하기</button></a>
 							</p>
 						</th:block>
 						
@@ -126,19 +134,19 @@
 							<p>
 								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
 								<!-- 공모게시글에 대한 응모하기 버튼 -->
-								<a th:href="@{/design/designInsertForm(cNo=${contest.cNo})}" ><button type="button" class="btn btn-primary py-3 px-5 mr-2" >응모하기</button></a>
+								<a th:href="@{/design/designInsertForm(cNo=${contest.cNo})}" ><button type="button" class="btn btn-g btn-round btn-lg" >응모하기</button></a>
 							</p>
 						</div>
 
 						<!-- 공모전 작성자만 -->
 						 <div th:if="|${session.member.getUserId()}| == ${contest.writer} ">
 							<div>
-								<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button type="button" class="btn btn-primary py-3 px-5 mr-2">수정</button></a>
-								<button type="button" id="delBtn" class="btn btn-primary py-3 px-5">삭제</button>
+								<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button type="button" class="btn btn-g btn-round btn-lg">수정</button></a>
+								<button type="button" id="delBtn" class="btn btn-g btn-round btn-lg5">삭제</button>
 							</div>
 							<div>
-								<button id="updateDate" type="button" class="btn btn-primary py-3 px-5">마감연장</button>
-								<a href="#" ><button id="winnerInsert" type="button" class="btn btn-primary py-3 px-5">결과등록</button></a>
+								<button id="updateDate" type="button" class="btn btn-g btn-round btn-lg">마감연장</button>
+								<a href="#" ><button id="winnerInsert" type="button" class="btn btn-g btn-round btn-lg">결과등록</button></a>
 							</div>
 						 </div>
 						</th:block>
@@ -149,38 +157,26 @@
 					<div class="col-md-12 nav-link-wrap">
 						<div class="nav nav-pills d-flex text-center" id="v-pills-tab"
 							role="tablist" aria-orientation="vertical">
-							<a
-								class="nav-link ftco-animate active mr-lg-1 fadeInUp ftco-animated"
-								id="v-pills-1-tab" data-toggle="pill" role="tab"
-								aria-controls="v-pills-1" aria-selected="true">요청사항</a> <a
-								class="nav-link ftco-animate mr-lg-1 fadeInUp ftco-animated"
-								id="v-pills-2-tab" data-toggle="pill" role="tab"
-								aria-controls="v-pills-2" aria-selected="false">문의사항</a> <a
-								class="nav-link ftco-animate fadeInUp ftco-animated"
-								id="v-pills-3-tab" data-toggle="pill" role="tab"
-								aria-controls="v-pills-3" aria-selected="false">참여작</a>
-
-						</div>
+							
+						<ul class="nav nav-tabs font-alt" role="tablist">
+		                  <li class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2" id="contestCntn">요청사항</span></a></li>
+		                  <li><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2" id="questions">문의사항</span></a></li>
+		                  <li><a href="#reviews" data-toggle="tab"><span class="icon-tools-2" id="entry">참여작</span></a></li>
+		                </ul>
 					</div>
 
-					<div class="col-md-12 tab-wrap">
-
-						<div class="tab-content bg-light" id="v-pills-tabContent">
-
-							<div class="tab-pane fade show active" id="v-pills-1"
-								role="tabpanel" aria-labelledby="day-1-tab">
-								<div class="p-4" style="height: 1400px">
-									<div id="contestCntn">
+						<div class="col-sm-12"  style="height: 300px">
+							<div class="tab-content" role="tabpanel" aria-labelledby="day-1-tab">
+									<div id="contestCntn" class="tab-pane active">
 										 <div th:if="${contest.cntn} != null">
 											<span id="cotestCntn" th:utext=${contest.cntn}></span>
 										 </div>
 									</div>
-								</div>
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
+		</div>
 		</section>
 		
 		
@@ -204,7 +200,7 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		let cNo = $('#cNo').text();
-		
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		
 		// Get the modal
 		var modal = document.getElementById("myModal");
@@ -308,9 +304,9 @@
 		};
 		
 		//요청사항/문의내용/참여작 버튼이벤트
-		$('#v-pills-1-tab').on('click', contentSelect);
-		$('#v-pills-2-tab').on('click', questions);
-		$('#v-pills-3-tab').on('click', contest);
+		$('#contestCntn').on('click', contentSelect);
+		$('#questions').on('click', questions);
+		$('#entry').on('click', contest);
 		
 		//요청사항 출력
 		function contentSelect(){
@@ -324,8 +320,8 @@
                 },
 			}).then(res => {
 				console.log(res);
-				$("#contestCntn").empty();
-				$("#contestCntn").append(res.cntn);
+				$("#cotestCntn").empty();
+				$("#cotestCntn").append(res.cntn);
 			})
 			
 		};
@@ -341,16 +337,16 @@
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
-				$("#contestCntn").empty();
-				$("#contestCntn").append(questionBox());
+				$("#cotestCntn").empty();
+				$("#cotestCntn").append(questionBox());
 			
 				//리턴값이 없으면 출력
 				if(res == 0){
-					$("#contestCntn").append($('<p>').append("문의사항이 없습니다."))
+					$("#cotestCntn").append($('<p>').append("문의사항이 없습니다."))
 				}
 				for(data of res){
 					if(data.rerepTgt == null){
-						$("#contestCntn").append(make(data));
+						$("#cotestCntn").append(make(data));
 					}					
 					else {
 						$("#" + data.rerepTgt).append(makeRe(data));
@@ -408,6 +404,7 @@
 			
 		//참여작 출력
 		function contest(){
+			console.log($(this));
 			
 			$.ajax({
 	            url:'../contest/design',
@@ -418,19 +415,19 @@
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
-				$("#contestCntn").empty();
+				$("#cotestCntn").empty();
 				if(res  == 0){
 					let p = '참여작이 없습니다.'
-					$("#contestCntn").append(p); 
+					$("#cotestCntn").append(p); 
 					
 				}
 				for(design of res){
 					console.log(design.dgnNo);
 					console.log(design.pubcYn);
 					if(design.pubcYn == 'Y') {//공개여부가 Yes이면
-					 	$("#contestCntn").append(makeDesignYes(design)); 
+					 	$("#cotestCntn").append(makeDesignYes(design)); 
 					}else{//공개여부가 No이면
-						$("#contestCntn").append(makeDesignNo(design)); 
+						$("#cotestCntn").append(makeDesignNo(design)); 
 					}
 				 }
 			})
@@ -452,7 +449,7 @@
    			let div = `<ul>
 		                  <li class="comment">
 		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 40px;">
-		                      <div style="width: 400px; height: 400px; background:gray; color:#000; text-align:center; line-height: 350px;")>비공개 작품</div>
+		                      <div class=" icon-lock" style="width: 400px; height: 400px; background:gray; color:#f0f0ef; text-align:center; line-height: 350px;")> 비공개 작품</div>
 		                      <div class="meta">${design.dgnNo}</div>
 		                   </li>
                    		 </ul> `

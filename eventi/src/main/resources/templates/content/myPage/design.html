@@ -9,43 +9,49 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	footer {
-		clear: both;
-	}
-	#cntn,img{
-		margin-top : 50px;
-		margin-right : 20px;
-	}
+footer {
+	clear: both;
+}
+
+#cntn, img {
+	margin-top: 50px;
+	margin-right: 20px;
+}
 </style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 th:text="|${design.name} 디자인|" class="mb-0 bread"></h2>
+		<div style="min-height: 2000px">
+			<section class="module bg-dark-60 gallery-page-header parallax-bg"
+				data-background="/assets/images/gallery_bg.jpg"
+				style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-6 col-sm-offset-3">
+							<h2 class="module-title font-alt">마이페이지</h2>
+							<div class="module-subtitle font-serif"
+								th:text="|${design.name} 디자인|"></div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</section>
+			</section>
 
-		<!-- 3.현재페이지 myPageSide 적용 -->
-		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
-		
-		<!-- vo 담긴 리스트 불러오기 <div th:text="${design.files}"></div> -->
-		<div th:each="file : ${design.files} ">
-			<div id="design" style="float: left ">
-				<img th:src="|/fileView/${file.sevNm}|" style="width: 300px; height: 300px">
-				<div th:text="|${file.fNo}|"></div>
+
+			<!-- 3.현재페이지 myPageSide 적용 -->
+			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+
+
+			<!-- vo 담긴 리스트 불러오기 <div th:text="${design.files}"></div> -->
+			<div class="col-sm-6 col-md-4 col-lg-4 design" id="|${design.dgnNo}|">
+					<div id="|${design.dgnNo}|" class="shop-item">
+						<div th:each="file : ${design.files} ">
+								<img th:src="|/fileView/${file.sevNm}|" style="width: 500px; height: 500px">
+								<h3 class="content-box-title font-serif dNo" th:text="|${file.fNo}|"></h3>
+						</div>
+					</div>
 			</div>
 		</div>
-		
 	</div>
 </body>
 </html>

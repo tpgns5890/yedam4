@@ -35,8 +35,16 @@ public class DesignServiceImpl implements DesignService {
 	}
 
 	@Override
-	public List<DesignVO> contestDesignList(String cNo) {
-		return mapper.contestDesignList(cNo);
+	 // 공모전 1건에 지원자리스트!!
+	public List<DesignVO> contestDesignList(DesignVO vo,PagingVO paging) {
+		paging.setTotalRecord(mapper.entryDesign(vo.getcNo()));
+		paging.setPageUnit(2); // 4개 출력 (default 10)
+		System.out.println(paging);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
+		
+		
+		return mapper.contestDesignList(vo);
 	}
 
 	@Override

@@ -72,18 +72,18 @@ public class DesignController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 
-		List<DesignVO> designlist = service.userDesignList(sessionId);
-		List<FilesVO> fileList = new ArrayList<>();
+		List<DesignVO> designs = service.userDesignList(sessionId);
+		List<FilesVO> files = new ArrayList<>();
 
-		// 디자인응모번호에 등록한 파일 찾기
-		FilesVO file = new FilesVO();
-		for (DesignVO design : designlist) {
-			fileList = (fService.fileList(design.getDgnNo()));
+		// 디자인 1건에 대한 파일리스트.
+		for (DesignVO design : designs) {
+			files = fService.fileList(design.getDgnNo());
+			design.setFiles(files);
 		}
 
 		// 모델담기
-		model.addAttribute("fileList", fileList);
-		model.addAttribute("design", designlist);
+		model.addAttribute("fileList", files);
+		model.addAttribute("design", designs);
 		return "content/myPage/myDesignList";
 	}
 
@@ -119,7 +119,7 @@ public class DesignController {
 	public DesignVO designSelect(String dgnNo) {
 
 		System.out.println(dgnNo);
-		
+
 		// 디자인 1건조회
 		DesignVO design = service.getDesign(dgnNo);
 		List<FilesVO> files = new ArrayList<>();

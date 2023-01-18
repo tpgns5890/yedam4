@@ -11,21 +11,18 @@
 
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">관심 공모전</h2>
-					</div>
-				</div>
-			</div>
-		</section>
-
+	
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">마이페이지</h2>
+                <div class="module-subtitle font-serif" > 관심공모전</div>
+              </div>
+            </div>
+          </div>
+        </section>
+		
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
@@ -69,7 +66,7 @@
 				</div>
 			</div> -->
 		</div>
-
+	</div>
 
 		<script>
 		//페이지이동
