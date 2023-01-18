@@ -25,14 +25,17 @@ public class JobBoardVO {
 	private String preference; //우대사항
 	private String img; //이미지
 	private String userId; //회원ID
-	Integer interest; //관심수
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
-	private Date dt;
+	private Date dt; //작성날짜
+	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	private Date closeDt;
 	
 	Integer first =1; //첫 페이지
-	Integer last = 5; //마지막 페이지
+	Integer last = 4; //마지막 페이지
 	//좋아요 수 
 	Integer cnt;
 	//구직신청한 수 
 	Integer reCount;
+	//마감 남은 일수
+	private Integer remain;
 }

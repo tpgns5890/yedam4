@@ -51,7 +51,15 @@
 		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
 		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
 	</select> 
-
+	
+<!-- 게시글 정렬기준 -->
+	<select id="see" name="see">
+		<option value="" selected>------</option>
+		<option value="dt">작성순</option>
+		<option value="look">조회수</option>
+		<option value="like">좋아요순</option>
+	</select>
+	
 </div>
 <button type="button" class="btn btn-outline-primary" onclick="jobInsert()" >구인등록</button>
 <button type="button" class="btn btn-outline-primary" onclick="resumeList()">신청자조회</button>
@@ -61,9 +69,8 @@
 	<input type="button" id="find" value="찾기"><span></span></input>
 <!-- 좋아요 -->	
 <div class="stage">
-  		<div id="love" class="stage heart"></div>
+  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active"  ></div>
 </div>	
-	
 	<table class="table mb-3" >
 	<thead class="thead-dark">
 			<tr>
@@ -71,8 +78,11 @@
 				<th>제목</th>
 				<th>행사유형</th>
 				<th>회원ID</th>
-				<th>좋아요 수</th>
-				<th>신청수</th>
+				<th>좋아요수</th>
+				<th>신청자수</th>
+				<th>작성날짜</th>
+				<th>마감일</th>
+				<th>남은 마감일</th>
 			</tr>		
 		</thead>
 		<tbody id="check">
@@ -84,6 +94,9 @@
 				<td th:text=${job.userId}></td>
 				<td th:text=${job.cnt}></td>
 				<td th:text=${job.reCount}></td>
+				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
+				<td th:text="${#dates.format(job.closeDt, 'yyyy/MM/dd')}"></td>
+				<td th:text="|${job.remain} 일전|"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -96,6 +109,7 @@
 		        </div>
 <script>
 function gopage(i) {
+    console.log(i);
     location.href = '/jobList?page=' + i;
 }
 
@@ -121,19 +135,6 @@ var header = $("meta[name='_csrf_header']").attr("content");
 	function order(){
 	let etype = $("#etype").val(); //공통으로 씀 
 		location.href=`/jobList?eType=${etype}`
-				
-/* 		$.ajax({
-			url : '/jobList',		
-			data: {eType:etype},
-		}).then(res =>{
-			//tbody밑에 있는 데이터 지우기
-			$("#check").empty();
-			
-			//tbody에 들어갈 tr 생성
-			for(r of res){
-				$("#check").append(makeTr(r));
-			}
-		}) */
 	}
 	
 	//검색 기능
@@ -180,18 +181,25 @@ var header = $("meta[name='_csrf_header']").attr("content");
 }
 	
 	//좋아요를 눌렀을 경우
-	   $(".heart").on("click", function() {
+	    $(".heart").on("click", function() {
 		 let etype = $("#etype").val();
 		 
 		 //클래스가 없을 경우 생성, 클래스가 있을 경우 삭제
 	     $(this).toggleClass("active");
-	     let userId = '[[${session.member.userId}]]';
 	     //controller에 job이 없음, 두가지로 좋아요한 게시물 정렬 
 	     let category = "T03";
 	     
+	     if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
 	     //좋아요를 추가했을 경우
+	     let userId = '[[${session.member.userId}]]';
 	     location.href=`/jobList?userId=${userId}&eType=${etype}` //변수넣기 
+	    	
+	     } else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
+	    	 location.href=`/jobList?eType=${etype}`
+	     }
 	   });
+	
+
 </script>
 </div>
 
