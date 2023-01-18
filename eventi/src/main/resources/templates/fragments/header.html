@@ -1,39 +1,46 @@
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!--headerFragment 선언-->
 <div th:fragment="headerFragment">
-	<div class="wrap">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 d-flex align-items-center">
-					<p class="mb-0 phone pl-md-2">
-						<a href="#" class="mr-2"><span class="fa fa-phone mr-1"></span>
-							+00 1234 567</a> <a href="#"><span class="fa fa-paper-plane mr-1"></span>
-							youremail@email.com</a>
-					</p>
-				</div>
-				<div class="col-md-6 d-flex justify-content-md-end">
-					<div class="social-media mr-4">
-						<p class="mb-0 d-flex">
-							<a href="#"
-								class="d-flex align-items-center justify-content-center"><span
-								class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a> <a
-								href="#"
-								class="d-flex align-items-center justify-content-center"><span
-								class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a> <a
-								href="#"
-								class="d-flex align-items-center justify-content-center"><span
-								class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
-							<a href="#"
-								class="d-flex align-items-center justify-content-center"><span
-								class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>
-						</p>
-					</div>
-					<div sec:authorize="isAuthenticated()">
-						<span id="sessionId" th:text="|${session.member.getName()}|"></span>
-					</div>
-					
-					<div class="reg">
+  <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">EVENTI</a>
+      </div>
+      <div class="collapse navbar-collapse" id="custom-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">견적</a>
+            <ul class="dropdown-menu">
+              <li class="dropdown"><a class="dropdown" href="/estForm">견적작성</a></li>
+              <li class="dropdown"><a class="dropdown" href="/estList">견적게시판</a>
+            </li></ul>
+          </li>
+          <li class="dropdown"><a href="#">대여</a></li>
+          <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">포트폴리오</a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="dropdown"><a class="dropdown" href="/prtfl/mcList">사회자</a></li>
+              <li class="dropdown"><a class="dropdown" href="/design/designList">디자인</a></li>
+              <li class="dropdown"><a class="dropdown" href="/prtfl/busiList">행사업체</a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="/contest/List">공모전</a></li>
+          <li class="dropdown"><a href="/jobList">구인구직</a></li>
+          <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">게시판</a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="dropdown"><a class="dropdown" href="/bboard/bList?type=T04">자유게시판</a></li>
+              <li class="dropdown"><a class="dropdown" href="/bboard/bList?type=T05">멘토링게시판</a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="/proList">홍보게시판</a></li>
+          <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">공지사항</a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="dropdown"><a class="dropdown" href="/nocList">공지사항</a></li>
+              <li class="dropdown"><a class="dropdown" href="product-single.html">Q&amp;A</a></li>
+              <li class="dropdown"><a class="dropdown" href="/faqList">FAQ</a></li>
+            </ul>
+          </li>
+		  <li class="nav-item" sec:authorize="isAuthenticated()"><a href="/myPage/test" class="nav-link">My</a></li>
+          <li>
+            <div class="reg">
 						<input type="button" th:onclick="|location.href='@{/memQualification}'|" sec:authorize='!isAuthenticated()' value="회원가입"/>
 						<input type="button" th:onclick="|location.href='@{/loginPage}'|" sec:authorize='!isAuthenticated()' value="로그인"/>
 						<form method="post" action="../logout"	sec:authorize="isAuthenticated()">
@@ -41,112 +48,11 @@
 							<input type="submit" value="로그아웃"/>
 						</form>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<nav
-		class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
-		id="ftco-navbar">
-		<div class="container">
-			<a class="navbar-brand" href="/">EVEN <span>TI</span></a>
-			<div class="order-lg-last btn-group">
-				<a href="#" class="btn-cart dropdown-toggle dropdown-toggle-split"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="flaticon-shopping-bag"></span>
-					<div class="d-flex justify-content-center align-items-center">
-						<small>3</small>
-					</div>
-				</a>
-				<div class="dropdown-menu dropdown-menu-right">
-					<div class="dropdown-item d-flex align-items-start" href="#">
-						<div class="img" style="background-image: url(images/prod-1.jpg);"></div>
-						<div class="text pl-3">
-							<h4>Bacardi 151</h4>
-							<p class="mb-0">
-								<a href="#" class="price">$25.99</a><span class="quantity ml-3">Quantity:
-									01</span>
-							</p>
-						</div>
-					</div>
-					<div class="dropdown-item d-flex align-items-start" href="#">
-						<div class="img" style="background-image: url(images/prod-2.jpg);"></div>
-						<div class="text pl-3">
-							<h4>Jim Beam Kentucky Straight</h4>
-							<p class="mb-0">
-								<a href="#" class="price">$30.89</a><span class="quantity ml-3">Quantity:
-									02</span>
-							</p>
-						</div>
-					</div>
-					<div class="dropdown-item d-flex align-items-start" href="#">
-						<div class="img" style="background-image: url(images/prod-3.jpg);"></div>
-						<div class="text pl-3">
-							<h4>Citadelle</h4>
-							<p class="mb-0">
-								<a href="#" class="price">$22.50</a><span class="quantity ml-3">Quantity:
-									01</span>
-							</p>
-						</div>
-					</div>
-					<a class="dropdown-item text-center btn-link d-block w-100"
-						href="cart.html"> View All <span
-						class="ion-ios-arrow-round-forward"></span>
-					</a>
-				</div>
-			</div>
-
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#ftco-nav" aria-controls="ftco-nav"
-				aria-expanded="false" aria-label="Toggle navigation">
-				<span class="oi oi-menu"></span> Menu
-			</button>
-
-			<div class="collapse navbar-collapse" id="ftco-nav">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="#" id="dropdown04"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">견적</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="/estForm">견적작성</a> <a
-								class="dropdown-item" href="/estList">견적게시판</a>
-						</div></li>
-					<li class="nav-item"><a href="blog.html" class="nav-link">대여</a></li>
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="#" id="dropdown04"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">포트폴리오</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="/prtfl/mcList">사회자</a> <a
-								class="dropdown-item" href="/design/designList">디자인</a> <a
-								class="dropdown-item" href="/prtfl/busiList">행사업체</a>
-						</div></li>
-					<li class="nav-item"><a href="/contest/List" class="nav-link">공모전</a></li>
-					<li class="nav-item"><a href="/jobList" class="nav-link">구인구직</a></li>
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="#" id="dropdown04"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">게시판</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="/bboard/bList?type=T04">자유게시판</a>
-							<a class="dropdown-item" href="/bboard/bList?type=T05">멘토링게시판</a>
-						</div></li>
-					<li class="nav-item"><a href="/proList" class="nav-link">홍보게시판</a></li>
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="#" id="dropdown04"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공지사항</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="/nocList">공지사항</a> <a
-								class="dropdown-item" href="product-single.html">Q&A</a> <a
-								class="dropdown-item" href="/faqList">FAQ</a>
-						</div></li>
-					
-					<!-- 로그인 회원만 -->
-					<th:block sec:authorize="isAuthenticated()">
-						<li class="nav-item"><a href="/myPage/test" class="nav-link">My</a></li>
-					</th:block>
-				</ul>
-			</div>
-		</div>
-	</nav>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </div>
+
 </html>
