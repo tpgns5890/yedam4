@@ -17,7 +17,7 @@ public class QuestionsVO {
 	private String Cntn;		//문의내용
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Date writingDt;		//작성일자
-	private String secretYn;	//비밀글 유무
+	private String secretYn = "N";	//비밀글 유무
 	private String category;	//대상구분
 	private String rerepTgt;	//문의:null 답변:문의번호입력
 	

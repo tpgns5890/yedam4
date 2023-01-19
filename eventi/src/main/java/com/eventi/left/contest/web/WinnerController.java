@@ -30,10 +30,9 @@ public class WinnerController {
 
 	// 등록처리
 	@PostMapping("/update")
-	@ResponseBody
 	public String winnerUpdate(WinnerVO vo) {
 		int r = service.updateWinner(vo);
-		return "redirect:/contest/List"; //??
+		return "redirect:/contest/List"; 
 	}
 
 }

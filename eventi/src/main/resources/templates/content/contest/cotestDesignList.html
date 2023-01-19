@@ -155,15 +155,16 @@ img {
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
+			console.log(res);
 			console.log(res.paging);
-			if(res.designs == 0){
+			if(res.design == 0){
 				alert('지원자가 없습니다.')
 				location.href = '/contest/mySelect';
 			}else{
 				
 				$('#boxList').empty();
 				//1건의 디자인에 대한 파일리스트..
-				for(design of res.designs){
+				for(design of res.design){
 					
 					let dNo = design.dgnNo;
 					let title = design.name;
@@ -212,11 +213,10 @@ img {
 	// 우승자등록버튼 
 	$('#boxList').on("click", ".winner" , function(e){
 		let dNo = $(this).attr("id");
-		
+		e.stopPropagation();
 		$('input[name="dgnNo[]"]').each(function (i) {
-			console.log('check');
 			if($(this).val() == '' || null || undefined || 0 || NaN){
-					$(this).val(dNo);
+				$(this).val(dNo);
 				index ++;
 			}
 		});
@@ -224,7 +224,8 @@ img {
 	
 	
 	//디자인선택시 모달창 
-	//응모된 디자인의 전체 파일 및 정보출력.
+	//응모된 1건의 디자인
+	// 전체 파일리스트+ 정보출력.
 	$('#boxList').on("click", ".design" , function(e){
 		let dNo = $(this).attr("id");
 
@@ -238,6 +239,7 @@ img {
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
+			console.log(res);
 			let user = res.userId;
 			let title = res.name;
 			let cntn = res.cntn;
@@ -330,9 +332,9 @@ img {
 			var span = document.getElementsByClassName("close")[0];
 			
 			// When the user clicks the button, open the modal 
-			btn.onclick = function() {
+			$('btn').on("click",function() {
 			  modal.style.display = "block";
-			}
+			})
 			
 			// When the user clicks on <span> (x), close the modal
 			span.onclick = function() {

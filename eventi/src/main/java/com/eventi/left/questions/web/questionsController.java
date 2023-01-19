@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,8 +32,11 @@ public class questionsController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String qestionsInsert(QuestionsVO vo) {
+	@ResponseBody
+	public String qestionsInsert(@RequestBody QuestionsVO vo) {
 		 qService.questionsInsert(vo); //등록처리
+		 System.out.println(vo);
+		 
 		 return "redirect:/contest/select?cNo=" + vo.getTargetId();
 	}
 	

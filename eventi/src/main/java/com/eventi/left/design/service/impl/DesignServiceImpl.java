@@ -38,7 +38,7 @@ public class DesignServiceImpl implements DesignService {
 	 // 공모전 1건에 지원자리스트!!
 	public List<DesignVO> contestDesignList(DesignVO vo,PagingVO paging) {
 		paging.setTotalRecord(mapper.entryDesign(vo.getcNo()));
-		paging.setPageUnit(2); // 4개 출력 (default 10)
+		paging.setPageUnit(6); // 6개 출력 (default 10)
 		System.out.println(paging);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
