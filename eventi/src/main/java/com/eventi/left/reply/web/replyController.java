@@ -24,6 +24,7 @@ public class replyController {
 		@ResponseBody
 		public List<ReplyVO> bReply(@RequestBody ReplyVO replyVo) {
 			List<ReplyVO> reply = replyService.replyList(replyVo);
+			System.out.println(reply);
 			return reply;
 		}
 		

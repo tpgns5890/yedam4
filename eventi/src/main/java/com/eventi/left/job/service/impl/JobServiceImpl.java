@@ -31,7 +31,8 @@ public class JobServiceImpl implements JobService{
 	//단건조회
 	@Override
 	public JobBoardVO getJob(JobBoardVO jobBoardVO) {
-		// TODO Auto-generated method stub
+		//top column
+		jobmapper.seeUp(jobBoardVO);
 		return jobmapper.getJob(jobBoardVO);
 	}
 	

@@ -6,10 +6,9 @@
 
 	<!-- 댓글 불러오기 -->
 	<select id="replyList" resultType="com.eventi.left.reply.service.ReplyVO">
-		SELECT *
-		FROM REPLY
-		WHERE BOARD_CAT = #{boardCat}
-		AND REPLY_TGT = #{replyTgt}
+	  SELECT R.*, NVL(REREP_TGT, REPLY_NO) GP FROM REPLY R
+      WHERE REPLY_TGT = #{replyTgt} AND BOARD_CAT = #{boardCat}
+      ORDER BY GP DESC , WRITING_DT DESC
 	</select>
 	
 	<!-- 댓글 한건 보기 -->
