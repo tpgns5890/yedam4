@@ -2,7 +2,6 @@ package com.eventi.left.design.mapper;
 
 import java.util.List;
 
-import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.design.service.DesignVO;
 
 public interface DesignMapper {
@@ -12,8 +11,10 @@ public interface DesignMapper {
 	
 	//등록된 디자인 개수
 	public int count(DesignVO vo);
+	
+	public int entryDesign(String cNo);
 
-	public List<DesignVO> contestDesignList(String cNo); //게시글 1건 디자인리스트.
+	public List<DesignVO> contestDesignList(DesignVO vo); //게시글 1건 디자인리스트.
 	
 	public List<DesignVO> userDesignList(String userId); //유저 디자인리스트.
 	

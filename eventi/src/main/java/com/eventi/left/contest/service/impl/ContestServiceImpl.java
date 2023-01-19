@@ -52,7 +52,8 @@ public class ContestServiceImpl implements ContestService {
 	public List<ContestVO> contestList(ContestVO vo, PagingVO paging) {
 		// 페이징 동적쿼리로 카테고리 입력시 개수파악(setFirst,setLast 세팅)
 		paging.setTotalRecord(mapper.contestCount(vo));
-		paging.setPageUnit(12); // 12개 출력 (default 10)
+		paging.setPageUnit(6); // 12개 출력 (default 10)
+		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
@@ -116,7 +117,7 @@ public class ContestServiceImpl implements ContestService {
 			if (array[i] != null && !array[i].equals("")) {
 				System.out.println(i + 1 + "등 : " + array[i] + "원");
 				wvo.setGrade(i + 1); // 등수
-				wvo.setWPay(Integer.parseInt(array[i])); // 상금금액
+				wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
 				hap += Integer.parseInt(array[i]); // 합계계산
 				wMapper.insertWinner(wvo);
 			}
@@ -148,7 +149,7 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public int deleteContest(ContestVO vo) {
 		// 응모한 디자인이 있으면 삭제불가.
-		if (dMapper.contestDesignList(vo.getcNo()).size() > 0) {
+		if (dMapper.entryDesign(vo.getcNo()) > 0) {
 			return 0;
 		}
 		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제

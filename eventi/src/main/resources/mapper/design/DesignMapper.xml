@@ -19,11 +19,15 @@
 	</select>
 	
 	<select id="contestDesignList" resultType="DesignVO">
-		select c.c_no, d.dgn_no, d.user_id user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn
-		from contest c join design d
-		                on c.c_no = d.c_no    
-		and c.c_no = #{cNo}
-		order by dt DESC
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+			select c.c_no, d.dgn_no, d.user_id user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn
+			from contest c join design d
+			                on c.c_no = d.c_no    
+			and c.c_no = #{cNo}
+			order by dt DESC
+		<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
 	</select>
 	
 	<select id="userDesignList" resultType="DesignVO">
@@ -74,6 +78,12 @@
 	<select id="getSequence" resultType="string">
 		SELECT 'DE'||(MAX(TO_NUMBER(SUBSTR(DGN_NO,3)))+1) dgnNo
 		FROM DESIGN
+	</select>
+	
+	<select id="entryDesign" resultType="int">
+		select count(*)
+		from design
+		where c_no =#{cNo}
 	</select>
 	
 </mapper>

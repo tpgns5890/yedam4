@@ -63,25 +63,39 @@ public class ContestController {
 	public Map<String, Object> changeList(ContestVO vo, PagingVO paging) {
 
 		// 전체리스트 조회
-		List<ContestVO> contest = service.contestList(vo, paging);
-
+		List<ContestVO> contests = service.contestList(vo, paging);
+		
+		// 공모전작성게시 사진파일
+		List<FilesVO> files = new ArrayList<>();
+		for (ContestVO contest : contests) {
+			files = fService.fileList(contest.getcNo());
+			
+			//파일리스트 저장된 파일정보가 공모번호와 같다면 이미지셋팅.
+			for(FilesVO file : files) {
+				if(file.getTargetId().equals(contest.getcNo())) {
+					contest.setImg(file.getSevNm());
+				}
+			}
+		}
 		// 리턴할 최종Map(contest,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		result.put("contest", contest);
+		result.put("contest", contests);
 		result.put("paging", paging);
 		return result;
 	}
 
 	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
-	public String contestSelect(Model model, ContestVO cVo) {
+	public String contestSelect(Model model, ContestVO cVo,PagingVO paging) {
 
 		// 객체생성 및 코드별 문자열 변환후 세팅
 		ContestVO contest = service.getContest(cVo.getcNo());
 
 		model.addAttribute("contest", contest); // 모델 넘겨주기.
-		model.addAttribute("designList", dService.contestDesignList(cVo.getcNo()));
+		DesignVO dVo = new DesignVO();
+		dVo.setcNo(cVo.getcNo());
+		model.addAttribute("designList", dService.contestDesignList(dVo, paging));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
 
@@ -154,14 +168,15 @@ public class ContestController {
 	// 공모전 디자인 응모내역 리스트
 	@PostMapping("/design")
 	@ResponseBody
-	public List<DesignVO> contestSelect(String cNo) {
-		return dService.contestDesignList(cNo);
+	public List<DesignVO> contestSelect(DesignVO vo, PagingVO paging) {
+		
+		return dService.contestDesignList(vo,paging);
 	}
 
 	// 나의 공모전리스트
 	@GetMapping("/mySelect")
 	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
-		
+
 		model.addAttribute("contestList", service.myContestList(vo, paging));
 		model.addAttribute("paging", paging);
 		return "content/myPage/myCotestList";
@@ -192,7 +207,6 @@ public class ContestController {
 		String sessionId = user.getUserId();
 
 		// 리턴할 최종Map(contest,paging VO)
-
 		result.put("contest", likeService.userlikeList(LikesVO, sessionId));
 		result.put("paging", paging);
 
@@ -201,8 +215,7 @@ public class ContestController {
 
 	// 공모전 지원자조회페이지 이동
 	@GetMapping("/designRead")
-	public String designRead(Model model,String cNo) {
-		
+	public String designRead(Model model, String cNo) {
 		model.addAttribute("cNo", cNo);
 		return "content/contest/cotestDesignList";
 	}
@@ -210,10 +223,12 @@ public class ContestController {
 	// 공모전 지원자조회페이지(응모디자인조회 ajax)
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
-	public List<DesignVO> ajaxDesignRead(String cNo) {
-
+	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		DesignVO dVo = new DesignVO();
+		dVo.setcNo(cNo);
 		// 1건의 공모전에 접수된 디자인리스트
-		List<DesignVO> designs = dService.contestDesignList(cNo); 
+		List<DesignVO> designs = dService.contestDesignList(dVo,paging);
 		List<FilesVO> files = new ArrayList<>();
 
 		// 디자인 1건에 대한 파일리스트.
@@ -221,8 +236,10 @@ public class ContestController {
 			files = fService.fileList(design.getDgnNo());
 			design.setFiles(files);
 		}
-		
-		return designs; //디자인리스트+파일리스트 반환.
+		result.put("designs",designs);
+		result.put("paging", paging);
+
+		return result; // 디자인리스트+파일리스트 반환.
 	}
 
 }

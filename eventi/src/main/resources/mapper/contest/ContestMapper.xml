@@ -58,10 +58,16 @@
 	<!-- 나의 공모전 전체목록 조회 -->
 	<select id="myContestList" resultType="ContestVO">
 		SELECT * FROM ( select ROWNUM RN, A.*FROM(
-			SELECT *
-			FROM CONTEST
-			WHERE writer = #{writer}
-			order by c_no DESC
+         SELECT c.*, CASE WHEN dt_extns IS NOT NULL THEN CASE WHEN TO_DATE(dt_extns,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
+                                                     ELSE '마감'
+                                                END
+                WHEN dt_extns IS NULL THEN CASE WHEN TO_DATE(dt_cls,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
+                                                    ELSE '마감'
+                                                END
+                END AS ing
+         FROM CONTEST c
+         WHERE writer = #{writer}
+         order by c_no DESC
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>

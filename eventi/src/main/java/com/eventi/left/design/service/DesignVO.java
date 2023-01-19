@@ -30,8 +30,8 @@ public class DesignVO {
 	public void setcNo(String cNo) {
 		this.cNo = cNo;
 	}
-	Integer first = 1; //첫페이지
-	Integer last = 5; //마지막페이지
+	private int first;
+	private int last;
 	
 	private List<FilesVO> files;
 	

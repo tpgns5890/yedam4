@@ -12,5 +12,6 @@ public interface WinnerMapper {
 	public int insertWinner(WinnerVO WinnerVO); // 추가
 	public int updateWinner(WinnerVO WinnerVO); // 수정
 	public int deleteWinner(String wNo); // 삭제
+	public List<WinnerVO> updateGetWinner(WinnerVO WinnerVO); //등록된 공고번호 체크후 객체얻어서 업데이트.
 
 }

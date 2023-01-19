@@ -1,5 +1,6 @@
 package com.eventi.left.contest.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,11 @@ import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
 
 @Service
-public class WinnerServiceImpl implements WinnerService{
+public class WinnerServiceImpl implements WinnerService {
 
-	@Autowired WinnerMapper mapper;	
-	
+	@Autowired
+	WinnerMapper mapper;
+
 	@Override
 	public List<WinnerVO> winnerList(String cNo) {
 		return mapper.winnerList(cNo);
@@ -25,13 +27,24 @@ public class WinnerServiceImpl implements WinnerService{
 	}
 
 	@Override
-	public int insertWinner(WinnerVO WinnerVO) {
-		return mapper.insertWinner(WinnerVO);
-	}
+	public int updateWinner(WinnerVO vo) {
 
-	@Override
-	public int updateWinner(WinnerVO WinnerVO) {
-		return mapper.updateWinner(WinnerVO);
+		// 등록된 공고번호가 없다면
+		List<WinnerVO> list = new ArrayList<>();
+		List<WinnerVO> winners = mapper.updateGetWinner(vo);
+		WinnerVO winner = null;
+		String[] str;
+		str = vo.getDgnNo();
+		for (int i = 0; i < winners.size(); i++) {
+			winner = winners.get(i);
+		}
+		for (int i = 1; i < str.length; i++) {
+			winner.setdNo(str[i]);
+			winner.setGrade(i);
+			mapper.updateWinner(winner);
+			System.out.println(winner);
+		}
+		return 0;
 	}
 
 	@Override

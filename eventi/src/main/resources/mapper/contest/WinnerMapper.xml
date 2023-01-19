@@ -32,11 +32,20 @@
 		#{wPay})
 	</insert>
 	<update id="updateWinner">
-
+		update WINNER
+		set d_no = #{dNo}
+		where grade = #{grade}
+		and CO_NO=#{coNo}
 	</update>
 
 	<delete id="deleteWinner">
 		delete WINNER
 		where co_no = #{coNo}
 	</delete>
+	
+	<select id="updateGetWinner" resultType="WinnerVO">
+		select * from winner
+		where co_no = #{coNo}
+	</select>
+	
 </mapper>

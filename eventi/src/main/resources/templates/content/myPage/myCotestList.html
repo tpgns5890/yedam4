@@ -11,20 +11,17 @@
 
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">공모전 게시글관리</h2>
-					</div>
-				</div>
-			</div>
-		</section>
+	
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">마이페이지</h2>
+                <div class="module-subtitle font-serif" th:text="공모전게시글관리"></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
@@ -45,9 +42,8 @@
 						<th>제목</th>
 						<th>진행기간</th>
 						<th>진행현황</th>
-						<th>지원자조회</th>
-						<th>우승자등록</th>
 						<th>등록현황</th>
+						<th>지원자조회/우승자등록</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -56,7 +52,7 @@
 						
 						<!-- 등록된 게시글로 이동 -->
 						<th:block th:if="${contest.save} == 'N'">
-							<td th:text=${contest.cNo} ></td>
+							<td th:text=${contest.cNo} th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|"></td>
 						</th:block>
 						
 						<!-- 임시저장된 게시글 누를시 수정폼이동 -->
@@ -70,15 +66,18 @@
 						<td
 							th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}">
 						</td>
-						<td>진행현황..</td>
-						<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
-						<td><button type="button" id="winnerInsert" th:onclick="|location.href='@{/winner/insert(cNo=${contest.cNo})'|">우승자등록</button></td>
+						<td th:text="${contest.ing}"></td>
+						
 						
 						<th:block th:if="${contest.save} == 'Y'">
 							<td th:text="임시저장"></td>
 						</th:block>
 						<th:block th:if="${contest.save} == 'N'">
 							<td th:text="등록완료"></td>
+						</th:block>
+						
+						<th:block th:if="${contest.save} == 'N'">
+						<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회 및 등록</button></td>
 						</th:block>
 						
 					</tr>
