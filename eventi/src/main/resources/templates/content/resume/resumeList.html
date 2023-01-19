@@ -5,26 +5,23 @@
    layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-<section class="hero-wrap hero-wrap-2 mb-4 "
-      style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-      data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-         <div
-            class="row no-gutters slider-text align-items-end justify-content-center">
-            <div
-               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">구직자조회</h2>
+<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">구직자 리스트</h2>
+                <div class="module-subtitle font-serif">Small Title</div>
+              </div>
             </div>
-         </div>
-      </div>
-   </section>
+          </div>
+        </section>
 <button type="button" id="hireBtn">채용</button>
+<button type="button" id="unHireBtn">미채용</button>
 	<table class="table mb-3" >
 	<thead class="thead-dark">
 			<tr>
 				<th><input type="checkBox" value="채용" class="hire" id="allHire" 
-					></th> <!-- th:if="${res.hire} == 'Y'" disabled -->
+					></th> 
 				<th>구직신청게시글번호</th>
 				<th>구직자ID</th> 
 				<th>구직자정보</th>
@@ -34,7 +31,13 @@
 		</thead>
 		<tbody>
 			<tr th:each="res : ${resumeList}">
-			<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()"></td>
+			<th:block th:if="${res.hire} == 'Y'" >
+				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()" checked></td> 
+				</th:block>
+				
+				<th:block th:if ="${res.hire} == 'N'">
+				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()"></td> 
+				</th:block>
 				<td th:text=${res.resumeNo}></td>
 				<td th:text=${res.seekerId}></td>
 				<td th:text=${res.seekerCntn}></td>
@@ -64,7 +67,7 @@ document.querySelector('#hireBtn').addEventListener('click', hireSeeker);
 function hireSeeker(hireCheck){
 	let trs = document.querySelectorAll('table>tbody>tr');
 	
-	if(!confirm('해당 회원을 채용하시겠습니까?')){
+	if(!confirm('채용하시겠습니까?')){
 		return false;
 	}else{
 		for (let i = 0; i < trs.length; i++) {
@@ -93,7 +96,40 @@ function hireSeeker(hireCheck){
 		}
 	}
 }
+//구직자 미채용
+document.querySelector('#unHireBtn').addEventListener('click', unHireSeeker);
+function unHireSeeker(hireCheck){
+	let trs = document.querySelectorAll('table>tbody>tr');
+	
+	if(!confirm('채용을 취소하시겠습니까?')){
+		return false;
+	}else{
+		for (let i = 0; i < trs.length; i++) {
+			if (trs[i].children[0].children[0].checked) {
+				//alert(trs[i].children[0])
+				let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
 
+				//업데이트처리 ajax
+  				$.ajax({
+					url: '/unHireUpdate',
+					method: "post",
+					data: {resumeNo},
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+				}).then(res => {
+					if (res == 1) {
+						location.href=`/resumeList`
+						alert('채용취소완료');
+					} else {
+						alert('채용취소가 불가능합니다.');
+					}
+				})   
+			}
+		}
+	}
+}
 </script>
 </div>
 </html>

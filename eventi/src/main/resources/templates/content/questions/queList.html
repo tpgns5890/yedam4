@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+<section class="hero-wrap hero-wrap-2"
+      style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
+      data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+         <div
+            class="row no-gutters slider-text align-items-end justify-content-center">
+            <div
+               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
+               <h2 class="mb-0 bread">문의사항</h2>
+            </div>
+         </div>
+      </div>
+   </section>
+	<button type="button" class="btn btn-outline-primary" 
+	th:onclick="|location.href='@{queInsert}'|">문의등록</button>
+	<table class="table mb-3" >
+	<thead class="thead-dark">
+			<tr>
+				<th>문의사항번호</th>
+				<th>문의사항제목</th>
+				<th>작성일자</th>
+				<th>답변유무</th>
+			</tr>			
+		</thead>
+		<tbody>
+			<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo})}'|">
+				<td th:text=${q.qNo}></td>
+				<td th:text=${q.ttl}></td>
+				<td th:text=${q.writingDt}></td>
+				<td th:text=${q.ans}></td>
+			</tr>
+		</tbody>
+		
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">
+                <h4 class="font-alt mb-30">Frequently Asked Questions</h4>
+                <div class="panel-group" id="accordion">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#support1">Support Question 1</a></h4>
+                    </div>
+                    <div class="panel-collapse collapse in" id="support1">
+                      <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+	</table> 
+</div>
+
+</html>

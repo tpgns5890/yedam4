@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.eventi.left.contest.service.ContestVO;
-import com.eventi.left.contest.service.WinnerVO;
-import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.common.SessionUtil;
+import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 
@@ -35,5 +35,16 @@ public class questionsController {
 		 qService.questionsInsert(vo); //등록처리
 		 return "redirect:/contest/select?cNo=" + vo.getTargetId();
 	}
-
+	
+	// 나의 문의내역 전체조회
+	@GetMapping("/myqnaList") 
+	public String qnaList(Model model, QuestionsVO questionsVO) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		questionsVO.setUserId(user.getUserId());
+		model.addAttribute("qnaList", qService.qnaList(questionsVO));
+		System.out.println(questionsVO);
+		//model.addAttribute("paging", paging);
+		return "content/questions/queList";
+	}
+	
 }

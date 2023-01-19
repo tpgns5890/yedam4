@@ -38,6 +38,13 @@ public class QuestionsServiceImpl implements QuestionsService{
 	public QuestionsVO getQuestions(QuestionsVO vo) {
 		return mapper.getQuestions(vo);
 	}
+	
+	//Q&A 전체조회 
+	@Override
+	public List<QuestionsVO> qnaList(QuestionsVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.qnaList(vo);
+	}
 
 
 }

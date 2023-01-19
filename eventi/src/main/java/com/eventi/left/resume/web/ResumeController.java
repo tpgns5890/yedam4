@@ -68,10 +68,18 @@ public class ResumeController {
 		return "redirect:/jobDetail?jobNo=" + resumeBoardVO.getJobNo(); //redirect -mapping 링크, param임..
 		}
 	
-	//채용여부 수정
+	//채용하기 
 	@PostMapping("/hireUpdate")
 	@ResponseBody //ajax방식
 	public int hireUpdate(ResumeBoardVO resumeBoardVO) {
 		return resumeService.hireUpdate(resumeBoardVO);
 			}
+	
+	//채용취소하기 
+		@PostMapping("/unHireUpdate")
+		@ResponseBody //ajax방식
+		public int unHireUpdate(ResumeBoardVO resumeBoardVO) {
+			return resumeService.unHireUpdate(resumeBoardVO);
+				}
+	
 }

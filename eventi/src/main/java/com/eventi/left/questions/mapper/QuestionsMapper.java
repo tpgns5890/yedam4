@@ -17,5 +17,7 @@ public interface QuestionsMapper {
 
 		public int questionsDelete(String qNo); //삭제
 		
+		//Q&A 전체조회
+		public List<QuestionsVO> qnaList(QuestionsVO vo); 
 
 }
