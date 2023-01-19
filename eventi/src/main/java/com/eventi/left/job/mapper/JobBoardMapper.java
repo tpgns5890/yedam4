@@ -3,6 +3,7 @@ package com.eventi.left.job.mapper;
 import java.util.List;
 
 import com.eventi.left.job.service.JobBoardVO;
+import com.eventi.left.notice.service.NoticeVO;
 
 public interface JobBoardMapper {
 	
@@ -23,5 +24,8 @@ public interface JobBoardMapper {
 	
 	//게시글 개수
 	public int count(JobBoardVO jobBoardVO);
+	
+	//게시물 조회수 
+	public int seeUp(JobBoardVO jobBoardVO);
 	
 }

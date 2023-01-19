@@ -42,7 +42,8 @@
 				CLOSE_DT - SYSDATE AS remain,
 				<!-- 순서대로 컬럼명 쓰기 -->
                 CNT,
-                RECOUNT              
+                RECOUNT,
+                SEE              
          FROM (SELECT ROWNUM RN, A.* FROM(
 		           SELECT DISTINCT J.*, 
 		                 (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = J.JOB_NO) AS CNT,
@@ -103,4 +104,11 @@
 		DELETE FROM JOB_BOARD
 		WHERE JOB_NO=#{jobNo}
 	</delete>
+	
+	<!-- 게시판 조회수 -->
+	<update id="seeUp" parameterType="com.eventi.left.job.service.JobBoardVO">
+		UPDATE JOB_BOARD SET
+		SEE = SEE+1
+		WHERE JOB_NO  = #{jobNo}
+	</update>
 </mapper>

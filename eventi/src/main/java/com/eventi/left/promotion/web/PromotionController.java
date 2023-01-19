@@ -1,5 +1,6 @@
 package com.eventi.left.promotion.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.SessionUtil;
+import com.eventi.left.files.service.FilesService;
+import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.reply.service.ReplyService;
@@ -23,44 +26,58 @@ public class PromotionController {
 
 	@Autowired 
 	PromotionService proService;
-	
+	//댓글 service
 	@Autowired
 	ReplyService service;
+	//파일 service
+	@Autowired FilesService filesService;
 	
 	//홍보게시물 전체조회
 	@RequestMapping(value = "/proList", method=RequestMethod.GET)
-	public String noticeList(Model model) {
-		model.addAttribute("proList", proService.proList(null));
+	public String proList(Model model, PromotionVO promotionVO) {
+		//전체리스트 조회
+		List<PromotionVO> contents = proService.proList(promotionVO);
+		
+		//사진파일
+		List<FilesVO> files = new ArrayList<>();
+		for(PromotionVO content : contents) {
+			files = filesService.fileList(content.getProNo());
+			
+			//파일리스트 저장된 파일정보가 홍보번호와 같다면 이미지셋팅.
+			for(FilesVO file : files) {
+				if(file.getTargetId().equals(content.getProNo())) {
+					content.setImg(file.getSevNm());
+				}
+			}
+		}
+		model.addAttribute("proList", contents);
+		//이미지
+		model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 		return "content/promotion/proList";
 	}
 	
 	//게시글상세조회
 		@RequestMapping(value = "/proDetail", method=RequestMethod.GET) 
 		public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO) {
+			MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+			//상세내용
 			model.addAttribute("proDetail", proService.proDetail(promotionVO));
-			
+			//이미지
+			model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 			return "content/promotion/proDetail";
-		}
-		
-	//게시물 댓글 및 대댓글 조회
-		@RequestMapping(value="/proReply", method=RequestMethod.POST)
-		@ResponseBody //vo->json으로 반환
-		//json타입으로 보내면 RequestBody필요(쿼리 스트링이면 필요없음)
-		public List<ReplyVO> proReply(@RequestBody ReplyVO vo) {
-			List<ReplyVO> reply = proService.proReply(vo);
-			return reply;
 		}
 		
 	//게시글등록폼이동
 		@RequestMapping(value = "/proInsert", method=RequestMethod.GET) 
-		public String proInsert() {
+		public String proInsert(Model model) {
+			model.addAttribute("nextNo", proService.getSeq());
 			return "content/promotion/proInsert";
 		}
 	
 	//게시글 등록
 		@PostMapping("/proInsert")
-		public String proInsert(PromotionVO promotionVO, MultipartFile uploadFile) {
-			proService.proInsert(promotionVO, uploadFile ); //값이 vo자동으로 저장
+		public String proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+			proService.proInsert(promotionVO, filesVO, uploadFile); //값이 vo자동으로 저장
 			return "redirect:/proList";
 		}		
 	
@@ -68,13 +85,15 @@ public class PromotionController {
 		@RequestMapping(value = "/proUpdate", method=RequestMethod.GET) 
 		public String proUpdate(Model model, PromotionVO promotionVO) {
 			model.addAttribute("proUpdate", proService.proDetail(promotionVO));
+			//이미지
+			model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 			return "content/promotion/proUpdate";
 		}
 		
 	//게시글 수정
 		@PostMapping("/proUpdate")
-		public String proUpdate(PromotionVO promotionVO) {
-			proService.proUpdate(promotionVO);
+		public String proUpdate(PromotionVO promotionVO, MultipartFile uploadFile) {
+			proService.proUpdate(promotionVO,uploadFile );
 			return "redirect:/proList";
 		}
 

@@ -16,6 +16,9 @@ public interface PromotionBoardMapper {
 	//게시물 상세조회
 	public PromotionVO proDetail(PromotionVO promotionVO); //vo로 들고오면 하나의 값 지정 안해도 됨
 	
+	//시퀀스 값 찾기
+	public String getSeq();
+	
 	//게시글 등록
 	public int proInsert(PromotionVO promotionVO);
 	

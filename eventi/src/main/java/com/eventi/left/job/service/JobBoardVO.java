@@ -28,7 +28,8 @@ public class JobBoardVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date dt; //작성날짜
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
-	private Date closeDt;
+	private Date closeDt; //마감일
+	private Integer see; //조회수
 	
 	Integer first =1; //첫 페이지
 	Integer last = 4; //마지막 페이지
