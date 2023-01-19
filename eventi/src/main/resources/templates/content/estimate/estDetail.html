@@ -58,19 +58,16 @@ button {
 </head>
 <body>
 <div layout:fragment="content">
-   <section class="hero-wrap hero-wrap-2",
-      data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-         <div
-            class="row no-gutters slider-text align-items-end justify-content-center">
-            <div
-               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">견적서 상세페이지</h2>
+ <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">Big Title</h2>
+                <div class="module-subtitle font-serif">Small Title</div>
+              </div>
             </div>
-         </div>
-      </div>
-   </section>
+          </div>
+        </section>
 <div id=estfrm>
 <h3>견적요청서</h3>
 <hr>
@@ -115,7 +112,7 @@ button {
 		<table id="myGdList" class="list">
 		<thead>
 		<tr>
-	    <th><input type="checkbox" id="all_select"></th>	
+	    <th><input type="checkbox" id="all_select" checked></th>	
 		<th>물품명</th>
 		<th>금액</th>
 		<th>개수</th>
@@ -237,8 +234,7 @@ var data = {"userId" : userId};
         },
 		success: function (data) {
 			$.each(data, function(idx, goods){
-			//	if(goods.userId ==)
-				var tr = $("<tr />").append($("<input type=checkbox name=chk>"))
+				var tr = $("<tr />").append($("<input type=checkbox name=chk checked>"))
 				var goodsNm = $("<td />").append(goods.goodsNm);
 				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
 				var stock = $("<td class='stock'/>").append(goods.stock);
