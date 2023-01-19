@@ -60,4 +60,16 @@ public class EstServiceImpl implements EstService {
 	public int deleteEst(EstVO estVO) {
 		return estMapper.deleteEst(estVO);
 	}
+	
+	//해당업체의 제안서 조회
+	@Override
+	public PropVO getProp(PropVO propVO) {
+		return estMapper.getProp(propVO);
+	}
+	
+	//제안서 삭제
+	@Override
+	public int delProp(PropVO propVO) {
+		return estMapper.delProp(propVO);
+	}
 }

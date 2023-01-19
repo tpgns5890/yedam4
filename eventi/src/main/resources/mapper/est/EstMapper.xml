@@ -76,4 +76,40 @@
 	WHERE E_NO = #{eno}
 	AND USER_ID = #{userId}
 	</delete>
+	
+	<!-- 제안서 등록 -->
+	<insert id="insertProp">
+	INSERT INTO PROPOSAL
+	VALUES('PR'||PNO_SEQ.NEXTVAL, #{eno}, #{userId}, #{companyInt}, #{eventExps}, #{totalPrc}, 'N', SYSDATE)
+	</insert>
+	
+	
+	<!-- 제안서 한건조회 result Map -->
+	<resultMap type="PropVO" id="propMap">
+		<result column="p_no" property="pno" />
+		<result column="event_type" property="eventType" />
+		<result column="writing_dt" property="writingDt" />
+		<result column="adoption_yn" property="adoptionYn" />
+		<collection property="propGdList" resultMap="propGdMap" /> <!-- vo에 추가한 join용 변수 -->
+	</resultMap>
+	
+	<resultMap type="PropGdVO" id="propGdMap">
+		<result column="goods_nm" property="goodsNm" />
+		<result column="unit_prc" property="unitPrc" />
+		<result column="count" property="count" />
+	</resultMap>
+	
+	<!-- 제안서 한건 조회 join -->
+	<select id="getProp" resultType="PropVO" resultMap="propMap">
+	 SELECT p.p_no, p.company_int, p.event_exps, p.total_prc, p.writing_dt, gd.goods_nm, gd.unit_prc, gd.count
+	 FROM PROPOSAL P LEFT JOIN PROPOSAL_GD gd
+	 ON p.p_no = gd.p_no
+	 WHERE p.p_no = #{pno}
+	</select>
+	
+	<!-- 제안서 삭제 -->
+	<delete id="delProp">
+	DELETE FROM proposal
+	WHERE p_no = #{pno}
+	</delete>
 </mapper>

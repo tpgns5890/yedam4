@@ -112,7 +112,7 @@ button {
 		<table id="myGdList" class="list">
 		<thead>
 		<tr>
-	    <th><input type="checkbox" id="all_select" checked></th>	
+	    <th><input type="checkbox" id="all_select"></th>	
 		<th>물품명</th>
 		<th>금액</th>
 		<th>개수</th>
@@ -122,8 +122,7 @@ button {
 		
 		</tbody>
 		</table>
-       <label for="companyInt" class="col-form-label">기타목록</label>
-       <button id="addCol">기타목록추가</button>
+       <label for="companyInt" class="col-form-label">기타비용</label>
        <table id="etcList" class="list">
 		<thead>
 		<tr>
@@ -133,8 +132,8 @@ button {
 		</thead>
 		<tbody>
 		<tr>
-		<td><input id="title" style="border: 0;"></td>
-		<td><input id="price" style="border: 0;"></td>
+		<td>행사운영비</td>
+		<td><input id="price" style="border: 0"></td>
 		</tr>
 		</tbody>
 		</table>
@@ -150,16 +149,18 @@ button {
 
   <button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
   <hr>
-  <!-- 업체제안서 리스트 -->
+  
+<!-- 업체제안서 리스트 -->
  <div id="propList" th:each="prop : ${propList}">
 	<p th:text="|업체소개 : ${prop.companyInt}|"></p>
 	<p th:text="|업체아이디 : ${prop.userId}|"></p>
 	<p th:text="|총금액 : ${prop.totalPrc}원|"></p>
-  <input type="hidden" name="eno" value="${prop.eno}">
+  <input type="hidden" name="pno" id="pno" th:value="${prop.pno}">
     <p th:text="|고용회수 : ${count.adoption}|"></p>	
     <p th:text="|후기수 : ${count.review}|"></p>
      <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" th:id="${prop.userId}">제안서 보기</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" id="getProp" th:value="${prop.userId}">제안서 보기</button>
+    <button type="button" class="btn btn-primary" id="delProp">제안서 삭제</button>
  <!-- Modal -->
 <div class="modal fade" th:id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -172,10 +173,10 @@ button {
       </div>
       <div class="modal-body">
        <label for="companyInt" class="col-form-label">업체소개</label>
-       <input type="text" class="form-control" id="recipient-name">
-       <label for="companyInt" class="col-form-label">물품목록</label>
+       <p th:text="|업체아이디 : ${prop.userId}|"></p>
+       <label for="gdList" class="col-form-label">물품목록</label>
    		
-		<table id="myGdList" class="list">
+		<table id="fixedGdList" class="list">
 		<thead>
 		<tr>	
 		<th>물품명</th>
@@ -187,8 +188,8 @@ button {
 		
 		</tbody>
 		</table>
-       <label for="companyInt" class="col-form-label">기타목록</label>
-       <table id="etcList" class="list">
+       <label for="etcList" class="col-form-label">기타비용</label>
+       <table id="fixedEtcList" class="list">
 		<thead>
 		<tr>
 		<th>명목</th>
@@ -197,23 +198,23 @@ button {
 		</thead>
 		<tbody>
 		<tr>
-		<td><input id="title" style="border: 0;"></td>
-		<td><input id="price" style="border: 0;"></td>
+		<td>행사운영비</td>
+		<td></td>
 		</tr>
 		</tbody>
 		</table>
        <p id="total"></p> 
       </div>
       <div class="modal-footer">
+               <button type="button" class="btn btn-primary" id="insertBtn">채택</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div><!--  end of Modal -->
  </div>
-
- <input type="hidden" name="sessionId"  class="btn btn-primary"th:value="${session.member.userId}">
- <script>
+ <input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}">
+<script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
@@ -234,7 +235,7 @@ var data = {"userId" : userId};
         },
 		success: function (data) {
 			$.each(data, function(idx, goods){
-				var tr = $("<tr />").append($("<input type=checkbox name=chk checked>"))
+				var tr = $("<tr />").append($("<input type=checkbox name=chk>"))
 				var goodsNm = $("<td />").append(goods.goodsNm);
 				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
 				var stock = $("<td class='stock'/>").append(goods.stock);
@@ -248,7 +249,7 @@ var data = {"userId" : userId};
 	});
 });
  //물품값 자동계산
- $('#etcList').keyup(function(){
+ $('.modal-body').on("change", function(){
 		$('#total').html("");
 	    var goods = $('#myGdList tbody tr'); //물품의 행
 	    var etc = $('#etcList tbody tr');
@@ -256,30 +257,27 @@ var data = {"userId" : userId};
 		var etcSum = 0; //기타합
 		var total = 0; //전체합
 		for(let i = 0; i < goods.length; i++){
-			if(parseInt($('#myGdList tbody tr').eq(i).is(":checked"))){
+		if($('#myGdList tbody tr').eq(i).find('input').is(":checked")) {
 		 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html())
-		 			  * parseInt($('#etcList tbody tr').eq(i).find('td').eq(2).html());
-			}
+		 			  * parseInt($('#myGdList tbody tr').eq(i).find('td').eq(2).html());
 		 }
-		for(let i = 0; i < etc.length; i++){
-			etcSum += parseInt($('#etcList tbody tr').eq(i).find('td').eq(1).html())
-		 }
-		 console.log($('#myGdList tbody tr').eq(1).find('td').eq(2).html())
-		 $('#total').append("총금액: "+ goodsSum+"원");
+		}
+		 var inputVal = parseInt($('#etcList input').val());
+		 console.log(inputVal)
+		if(!isNaN(inputVal)){
+			etcSum += inputVal;
+		}
+		total = goodsSum + etcSum;
+		 $('#total').append("총금액: "+total+"원");
  });
  
- //기타목록 추가
- $("#addCol").on("click", function() {
-	 var tr = $("<tr />")
-	 var td = $("<td />")
-	 var td2 = $("<td />")
-	 td.append($("<input style='border: 0;' /> "))
-	 td2.append($("<input style='border: 0;' /> "))
-	 tr.append(td, td2)
-	 $('#etcList>tbody').append(tr);
+ //제안서버튼 누를시 기존에 작성된 기타목록 제거
+ $('#prop').on('click', function() {
+	 $('#etcList tbody tr').not(":first").remove(); //첫번쨰 tr빼고 제거
+	 $('#etcList tbody input').val("");
+	 $('#total').html("총금액: "); //총금액 초기화
 	 
  })
- 
  //th체크박스 선택시 전체체크
  $('#all_select').on("click", function() {
 	 if($("#all_select").is(":checked")){
@@ -329,25 +327,108 @@ var data = {"userId" : userId};
 	 });
  });
  //제안서 등록
- $('#insertBtn').on("click", function(){	 
-	 $.ajax({
-		 url:"/insert",
-		 method:"POST",
-		 data: {eno},
+ $('#insertBtn').on("click", function(){
+	 //행사운영비 금액
+	 var inputVal = parseInt($('#etcList input').val());
+	 if(inputVal == 0){
+		 alert('행사운영비를 입력해주세요.')
+			$("#etcList input").focus();
+		 return false;
+	 }
+	 
+	 var eno = $('#thisEno').val();
+	 var userId = $('#sessionId').val();
+	 var companyInt = 'test';
+	 var eventExps = parseInt(inputVal);
+	 var totalPrc = parseInt($('#total').html().substr(5));
+	
+	 var data = {
+			 "eno": eno,
+			 "userId": userId,
+			 "companyInt": companyInt,
+			 "totalPrc": totalPrc,
+			 "eventExps": eventExps
+	 };
+	 console.log(data)
+	  $.ajax({
+		 url: "/insertProp",
+		 method: "POST",
+		 contentType: 'application/json',
+		 data: JSON.stringify(data),
 		 beforeSend : function(xhr)
-         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
 				xhr.setRequestHeader(header, token);
          },
          success: function(data){
-
+			if(data == 1)
+				alert('등록이 완료되었습니다.')
+				location.reload(true)				
+         },
+          error: function () {
+ 				alert("서버 요청 실패");
+ 			}
+	 });  
+ });
+ //제안서 상세보기
+ $('#getProp').on('click', function() {
+	 var userId = $(this).val();
+	 console.log(userId);
+	 var pno = $('#pno').val();
+	 var data = {"userId": userId, "pno": pno};
+	 
+	 $.ajax({
+		 url: "/getProp",
+		 method: "POST",
+		 contentType: 'application/json',
+		 data: JSON.stringify(data),
+		 beforeSend : function(xhr)
+         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+				xhr.setRequestHeader(header, token);
+         },
+         success: function(res){
+        	 console.log(res)
+        	 $.each(res, function(idx, goods){
+        		var goodsNm = $("<td />").append(goods.goodsNm);
+ 				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
+ 				var stock = $("<td class='stock'/>").append(goods.stock);
+ 				 
+ 				tr.append(goodsNm, rentalPrc, stock)
+ 				$('#myGdList>tbody').append(tr);
+        	 })		
          },
           error: function () {
  				alert("서버 요청 실패");
  			}
 	 });
  });
-
- //제안서 상세보기
+ 
+ //제안서 삭제
+ $('#delProp').on('click', function(){
+	 if(!confirm('정말 삭제하시겠습니까?')) {
+		 return false;
+	 }
+	 var pno = $('#pno').val();
+	 var data = {"pno": pno}
+	 $.ajax({
+		 url: "/delProp",
+		 method: "POST",
+		 data: JSON.stringify(data),
+		 contentType: 'application/json',
+		 beforeSend : function(xhr)
+         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+				xhr.setRequestHeader(header, token);
+         },
+         success: function(data){
+        	if(data == 1) {
+        		alert('삭제완료되었습니다.')
+        		location.href="/estList"
+        	}	
+         },
+          error: function () {
+ 				alert("서버 요청 실패");
+ 			}
+	 });
+ });
 </script>
 </div><!-- End of layout:fragment -->
 </body>

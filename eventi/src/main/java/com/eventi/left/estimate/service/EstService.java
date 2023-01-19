@@ -17,10 +17,15 @@ public interface EstService {
 
 	// 제안서
 	public List<PropVO> getPropList(String eno); // 견적서별 전체조회
+	
+	public PropVO getProp(PropVO propVO); //해당업체의 제안서 조회
 
 	public int insertProp(PropVO propVO); // 등록
 
 	public Map<String, String> getCount(String eno, String userId); // 업체 제안서 채택/후기수 조회
 
-	public List<RentGdVO> myGdList(RentGdVO rentGdVO); // 해당업체의 물품조회
+	public List<RentGdVO> myGdList(RentGdVO rentGdVO); // 해당업체의 물품조회\
+	
+	public int delProp(PropVO propVO); // 제안서 삭제
+	
 }

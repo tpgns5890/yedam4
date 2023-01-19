@@ -1,6 +1,7 @@
 package com.eventi.left.estimate.service;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,6 @@ public class PropVO {
 	private Integer totalPrc; //총금액
 	private String adoptionYn; //채택유무
 	private Date writingDt; //작성일시
+	
+	private List<PropGdVO> propGdList;
 }

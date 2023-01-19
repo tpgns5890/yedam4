@@ -86,4 +86,18 @@ public class EstController {
 	public int insertProp(@RequestBody PropVO propVO) {
 		return estService.insertProp(propVO);
 		}
+	
+	//제안서 상세조회
+	@PostMapping("/getProp")
+	@ResponseBody
+	public PropVO getProp(@RequestBody PropVO propVO) {
+		return estService.getProp(propVO);
+		}
+	
+	//제안서 삭제
+	@PostMapping("/delProp")
+	@ResponseBody
+	public int delProp(@RequestBody PropVO propVO) {
+		return estService.delProp(propVO);	
+	}
 }

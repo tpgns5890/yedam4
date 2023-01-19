@@ -471,7 +471,7 @@ document.getElementById('eventDate').setAttribute("min", today);
 
 //견적서 보내기 버튼 클릭 시
 $('.submit').click(function() {
-	
+	//csrf 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 	
