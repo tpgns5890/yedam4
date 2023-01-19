@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.bboard.service.BboardService;
 import com.eventi.left.bboard.service.BboardVO;
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
@@ -35,9 +36,10 @@ public class BboardController {
 	
 	//전체조회
 	@GetMapping("/bList")
-	public String bList(Model model, BboardVO bboardVO) {
+	public String bList(Model model, BboardVO bboardVO, PagingVO paging) {
 		//전체리스트와 타입 구하기
-		model.addAttribute("bList", bboardService.bboardList(bboardVO));
+		model.addAttribute("bList", bboardService.bboardList(bboardVO, paging));
+		model.addAttribute("paging", paging);
 		model.addAttribute("type", bboardVO.getType());
 		return "content/bboard/bList";
 	}
@@ -45,10 +47,10 @@ public class BboardController {
 	//정렬 전체 조회
 	@PostMapping("/bList")
 	@ResponseBody //ajax로 보낼때 필요
-	public List<BboardVO> bSelectList(Model model, BboardVO bboardVO) {
+	public List<BboardVO> bSelectList(Model model, BboardVO bboardVO, PagingVO paging) {
 		model.addAttribute("type", bboardVO.getType());
 		//정렬 조건이 포함된 전체리스트 조회 후 list에 담아서 보내기
-		List<BboardVO> list = bboardService.bboardList(bboardVO);
+		List<BboardVO> list = bboardService.bboardList(bboardVO, paging);
 		return list;
 	}
 	
@@ -71,8 +73,6 @@ public class BboardController {
 		likesVO.setTargetNo(bboardVO.getBBoardNo());
 		likesVO.setCategory(bboardVO.getType());
 		model.addAttribute("like", likeService.getLike(likesVO));
-		//해당 게시글 좋아요 수
-		//model.addAttribute("likeCount", likeService.countLike(likesVO));
 		//해당 게시글 상세 내용
 		model.addAttribute("bSelect", bboardService.bboardSelect(bboardVO));
 		//이미지

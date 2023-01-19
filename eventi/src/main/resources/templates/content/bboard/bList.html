@@ -102,11 +102,26 @@
 	         </tr>
 	      </tbody>
 	   </table>
+	   
+	<!-- 페이징 처리 -->
+		<div class="row mt-5">
+		          <div class="col text-center">
+		            <div class="block-27">
+		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+		            </div>
+		          </div>
+		        </div>
    
    <script>
     //csrf 설정
     var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	//페이지이동
+	function gopage(i) {
+	    location.href = '/bboard/bList?type=T04&page=' + i;
+	 }
+	
    		//라디오 버튼 정렬 클릭시
    		$("input:radio[name=lclsf]").click(function(){
    			//좋아요 눌려져 있을 경우 active 클래스 삭제
@@ -160,13 +175,15 @@
 				let type = $("#type").text();
 				let order = $("#order option:selected").val();
 				
+				//location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}`
+				
 				//post방식으로 리스트 불러오기
-				$.ajax({
+				 $.ajax({
 					url : '/bboard/bList',
 					method : 'post',
 					data : {lclsf:lclsf, type:type, order:order},
 					beforeSend : function(xhr)
-	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	                {  
 	    				xhr.setRequestHeader(header, token);
 	                }
 				}).then(res => {
@@ -177,7 +194,7 @@
 					for(r of res){
 						$("#check").append(makeTr(r));
 					}
-				})
+				}) 
    		}
    		
    		//tr 생성 함수
@@ -220,7 +237,7 @@
   	   function heart(){
    		 //정렬 기준
    		 //로그인 된 아이디 집어넣을 예정
-  		 let userId = '사용자1'; 
+  		 let userId = '[[${session.member.userId}]]'; 
 	     let type = $("#type").text();
 	     let order = $("#order option:selected").val();
 	     

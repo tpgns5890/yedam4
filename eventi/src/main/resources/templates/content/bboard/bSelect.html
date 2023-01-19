@@ -28,19 +28,15 @@
 </head>
 
 <div layout:fragment="content">
-   <section class="hero-wrap hero-wrap-2"
-      style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-      data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-         <div
-            class="row no-gutters slider-text align-items-end justify-content-center">
-            <div
-               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">게시글</h2>
-            </div>
+   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+     <div class="container">
+       <div class="row">
+         <div class="col-sm-6 col-sm-offset-3">
+           <h2 class="module-title font-alt">Big Title</h2>
+           <div class="module-subtitle font-serif">Small Title</div>
          </div>
-      </div>
+       </div>
+     </div>
    </section>
    
    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
@@ -49,6 +45,7 @@
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo}, type=${bSelect.type})}'|">글 삭제하기</button>
    </th:block>
    
+   <!-- 해당 게시글에 좋아요를 눌렀을 경우에는 채워진 하트가 나타남 -->
    <th:block th:if="${like == null}">
    	<div class="stage">
   		<div class="stage heart"></div>
@@ -63,6 +60,7 @@
    	</div>
    </th:block>
    
+   <!-- 테이블 생성 -->
    <table class="table mb-3">
       <thead class="thead-dark">
          <tr>
@@ -87,20 +85,22 @@
          </tr>
       </tbody>
    </table>
-   			
+   	
+   	<!-- 이미지 나타내기 -->	
 	<div th:each="f : ${file}">
        <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
        <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-   </div>
+   	</div>
 
+   <!-- 댓글 폼 -->
    <div>
     	<div class="pt-5 mt-5" >
           <h3 class="mb-5">댓글</h3>
-            	<ul class="comment-list" id=reply>
-           		</ul>
+          <ul class="comment-list" id=reply></ul>
         </div>
     </div>
-        
+    
+    <!-- 댓글 작성 -->
     <form id="replyInsertFrm">
     	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
     	<button type="button" id="repInsertBtn">댓글추가</button>
@@ -116,6 +116,7 @@
 		let type = '[[${bSelect.type}]]';
 		let bBoardNo = '[[${bSelect.bBoardNo}]]';
 		
+		//댓글 불러오기
 		$.ajax({
    			url : '/replyList',
    			method : 'post',
@@ -165,15 +166,26 @@
    		
    		//대댓글 tr생성
    		function makeRe(reply){
+   			let delBtn = '';
+			let upBtn = '';
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			
+			//댓글 작성자일 경우에만 삭제 버튼 생성
+			if(reply.userId ==userId){
+				delBtn = `<button class='repDelete'>삭제</button>`;
+				upBtn = `<button class='repUpdate'>수정</button>`;
+			}
+   			
    			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
    			$("#" + reply.rerepTgt).children('button:eq(0)').remove();
    			
    			let p = `<ul class="children">
                 <li class="comment">
-                <div class="comment-body">
+                <div class="comment-body" id="${reply.replyNo}">
                   <h3>${reply.userId}</h3>
                   <div class="meta">${reply.writingDt}</div>
                   <p>${reply.replyCntn}</p>
+                  ${delBtn} ${upBtn}
                 </div>
               </li>
             </ul>`
@@ -262,7 +274,7 @@
 				},
 				success : function(result){
 					if(result ==1){
-					btn.parentsUntil(".comment").remove();
+					btn.closest(".comment").remove();
 				}
 			}
 		});		
@@ -274,10 +286,12 @@
 			let p = $(this).parent("div").children("p").text();			
 			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
 			
+			$(this).toggleClass("updateBtn");
 		});
 		
 		//댓글 수정
-		$(document).on('click', '#updateBtn', function(e){
+		$(document).on('click', '.updateBtn', function(e){
+			$(this).toggleClass("updateBtn");
 			let btn = $(this);
 			let replyCntn = $('#replyCntn').val();
 			let replyNo = $('#replyNo').val();
@@ -293,7 +307,7 @@
 					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
 				},
 				success : function(result){
-					btn.parent().replaceWith("<p>" + result.replyCntn + "</p>");
+					btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
 				}		
 			})
 		});
@@ -320,7 +334,6 @@
 	    				xhr.setRequestHeader(header, token);
 	                },
 					success : function(data) {
-						//alert('좋아요 등록 완료');
 					},
 					fail : function(result) {
 						alert('필수항목을 입력해주세요')

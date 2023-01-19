@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.reply.service.ReplyVO;
 
 public interface BboardService {
 	//전체조회
-	public List<BboardVO> bboardList(BboardVO bboardVO);
+	public List<BboardVO> bboardList(BboardVO bboardVO, PagingVO paging);
 	
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
