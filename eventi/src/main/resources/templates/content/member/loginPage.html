@@ -13,42 +13,56 @@
 }
 
 #container form {
-	position:relative;
+	position: relative;
 	margin-top: 100px;
-	background:none;
+	background: none;
+}
+
+#form_area {
+	width: 25%;
+	height: 300px;
+	margin: 0 auto;
+	padding: 30px;
+	color: gray;
+	background: rgba(255, 255, 255, 0.8);
+	border-radius: 15px;
+}
+.bg-dark a:hover{
+	color: black !important;
 }
 </style>
 
 </head>
 <body>
 	<div layout:fragment="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">로그인</h2>
-                <div class="module-subtitle font-serif">LogIn</div>
-              </div>
-            </div>
-          </div>
-        </section>
-		<div id="container">
-			<form class="form" action="/login" method="post">
-			<h4 class="font-alt">Login</h4>
-			<hr class="divider-w mb-10">
-				<input type="text" class="form-control" name="userid" placeholder="Username">
-				<input type="password" class="form-control" name="password" placeholder="Password">
-				<input th:name="${_csrf.parameterName}" type="hidden"
-					th:value="${_csrf.token}" />
-				<p>
-					<input type="checkbox" name="remember-me"> 자동로그인
-				</p>
-				<input name="submit" type="submit" value="로그인">
-			</form>
-			<a th:href="@{findIdPage}">아이디 찾기</a> 
-			<span>|</span> 
-			<a th:href="@{findPwPage}">비밀번호 찾기</a>
-		</div>
+		<section class="home-section home-full-height bg-dark bg-gradient"
+			id="home" data-background="assets/images/section-11.jpg"
+			style="height: 937px; background-image: url(&quot;assets/images/section-11.jpg&quot;);">
+			<div class="titan-caption">
+				<div class="caption-content">
+					<div class="font-alt mb-40 titan-title-size-4">"Sign In"</div>
+					<div id="form_area">
+						<form class="form" action="/login" method="post"
+							style="text-align: left;">
+							아이디<input type="text" class="form-control" name="userid"
+								placeholder="UserId"><br>비밀번호<input type="password"
+								class="form-control" name="password" placeholder="Password">
+							<input th:name="${_csrf.parameterName}" type="hidden"
+								th:value="${_csrf.token}" />
+	   							<font th:if="error" id="valid" style="color: red; font-size:12px;"><a th:text="${exception}"></a></font>
+							<p>
+								<input type="checkbox" name="remember-me"> 자동로그인
+							</p>
+							<div style="float: right;">
+								<input style="width:100%;" class="btn btn-round btn-b" name="submit" type="submit"
+									value="로그인"> <br> <a th:href="@{findIdPage}">아이디
+									찾기</a> <span>|</span> <a th:href="@{findPwPage}">비밀번호 찾기</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
 	</div>
 </body>
 </html>

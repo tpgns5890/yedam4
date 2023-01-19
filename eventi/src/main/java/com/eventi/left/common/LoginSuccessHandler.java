@@ -1,6 +1,7 @@
 package com.eventi.left.common;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,16 +17,33 @@ import com.eventi.left.member.service.MemberService;
 
 @Component
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
- 
-    @Autowired
-    private MemberService service;
-     
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException, ServletException {
-    	HttpSession session = request.getSession();
-        session.setAttribute("member", service.getMember(authentication.getName())); //로그인한 사용자VO 세션에 저장
-        response.sendRedirect("/"); // 인증이 성공한 후에는 root로 이동
-    }
-    
+
+	@Autowired
+	private MemberService service;
+
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
+		HttpSession session = request.getSession();
+		session.setAttribute("member", service.getMember(authentication.getName())); // 로그인한 사용자VO 세션에 저장
+		System.out.println(request.getRequestURI());
+		if(request.getRequestURI().contains("loginPage")) {
+			response.sendRedirect("/");
+		}
+		Back(response, -1);
+	}
+
+	public static void Back(HttpServletResponse response, int num) {
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter w = response.getWriter();
+			w.write("<script>history.go('" + num + "');</script>");
+			w.flush();
+			w.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 }
