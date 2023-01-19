@@ -124,7 +124,8 @@ public class DesignController {
 		DesignVO design = service.getDesign(dgnNo);
 		List<FilesVO> files = new ArrayList<>();
 
-		// 1건에 대한 파일리스트 받고 디자인vo 세팅 후 모델담기.
+		// 1건에 대한 파일리스트 받고 
+		// 디자인vo 대표사진 서버명 받기...제발.
 		files = fService.fileList(design.getDgnNo());
 		design.setFiles(files);
 

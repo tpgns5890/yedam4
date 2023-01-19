@@ -30,11 +30,12 @@
 	]]>
 	</select>
 
-	<!-- 공모전 등록처리된 개수(임시저장 제외) -->
+	<!-- 공모전 등록처리된 개수(임시저장/마감일 지난경우 제외) -->
 	<select id="contestCount" resultType="int">
-		SELECT COUNT(*) 
+		SELECT COUNT(*)
 		FROM CONTEST
 		WHERE SAVE = 'N'
+		AND NVL2(dt_cls,dt_cls,dt_extns) > SYSDATE
 		<include refid="condition" />
 	</select>
 	

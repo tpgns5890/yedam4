@@ -82,6 +82,7 @@ ul {
 
 				<div class="col-md-12">
 					<div class="form-group">
+						<div><input type="checkbox" name="pubcYn" value="Y">비공개</div>
 						<label>첨부파일</label><input id="imgInp" type="file" name="uploadFile" multiple="multiple" required="required">
 						<div class="fileDown">
 							<img id="blah" src="#" alt="your image" width="250px" />
@@ -91,12 +92,10 @@ ul {
 						</div>
 					</div>
 				</div>
-
 				<button type="reset">초기화</button>
 				<button type="submit" id="insertForm">등록</button>
 			</form>
-			<button type="button" id="cancleBtn"
-				onclick="location.href='/contest/List'">취소</button>
+			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 
 		</div>
 		<script>
@@ -134,6 +133,12 @@ ul {
 				if (!check) {
 					alert('약관에 동의하세요.');
 					return false;
+					//임시저장 확인
+				}else if ($('input[name="pubcYn"]').is(":checked") == true) {
+					if (!confirm('비공개로 응모하시겠습니까?')) {
+						return false;
+					}
+				
 				}// 등록 확인
 				if (!confirm('디자인 응모시겠습니까?')) {
 					return false;

@@ -75,9 +75,10 @@
 						<th:block th:if="${contest.save} == 'N'">
 							<td th:text="등록완료"></td>
 						</th:block>
+							<td th:text="${contest.save}"></td>
 						
 						<th:block th:if="${contest.save} == 'N'">
-						<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회 및 등록</button></td>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회 및 등록</button></td>
 						</th:block>
 						
 					</tr>

@@ -42,7 +42,8 @@ public class WinnerServiceImpl implements WinnerService {
 			winner.setdNo(str[i]);
 			winner.setGrade(i);
 			mapper.updateWinner(winner);
-			System.out.println(winner);
+			System.out.println(str[i]);
+			System.out.println(winner.getdNo());
 		}
 		return 0;
 	}

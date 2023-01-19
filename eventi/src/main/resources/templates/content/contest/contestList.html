@@ -157,6 +157,7 @@ h2 {
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
+						console.log(res.paging)
 						
 						//map =>  contest,paging 
 						for (contest of res.contest) {
@@ -208,10 +209,11 @@ h2 {
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
-						/* console.log(res.paging);
-						console.log(res.contest); */
+						console.log(res.paging);
+					 	/* console.log(res.paging);
+						console.log(res.contest);  */
 						//등록된 공모전이 없을경우 기존페이지로 이동.
-						if (res.contest == '') {
+						if (res.contest == 0) {
 							location.href = '../contest/List';
 							alert('등록된 공모전이 없습니다');
 						}
@@ -248,7 +250,7 @@ h2 {
 					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 665px; height: 750px">
 					                    <div class="shop-item-detail">
 					                    	<div class="stage" >
-							  					<div id="love${contest.cNo}" class="stage heart" onclick="loveCheck(this)"></div>
+							  					<div id="${contest.cNo}" class="stage heart" onclick="loveCheck(this)"></div>
 							   				</div>
 							   				<div>
 							   				  <h3 class="content-box-title font-serif">${contest.writer}</h3>
@@ -363,7 +365,7 @@ h2 {
 			                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 665px; height: 750px">
 			                    <div class="shop-item-detail">
 			                    	<div class="stage" >
-					  					<div id="love${contest.C_NO}" class="stage heart" onclick="loveCheck(this)"></div>
+					  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
 					   				</div>
 					   				<div>
 					   				  <h3 class="content-box-title font-serif">${contest.WRITER}</h3>
@@ -389,7 +391,7 @@ h2 {
 				//하트클릭시 DB입력(등록,취소)
 				$('#boxList').on("click",".shop-item" ,function(){
 					let cNo = $(this).attr("id");
-					console.log(cNo);
+					//console.log(cNo);
 					
 				})
 				//이벤트 e찾기..
@@ -397,8 +399,7 @@ h2 {
 					$(e).toggleClass("active");//css 변경
 					//이벤트객체	console.log(this.contest);
 					let category = 'T01';
-					let targetNo = this.contest.C_NO;
-					console.log(targetNo); 
+					let targetNo = e.id; //이벤트 윈도우객체에서 찾기.
 					
 					//하트가 눌렸을 경우 실행
 					if ($(e).hasClass("active")) {
@@ -432,7 +433,7 @@ h2 {
 							}).then(res => {
 								if(res > 0){
 									alert('관심공모전 취소완료!')
-									$(e).parent().parent().remove();
+									$(e).parent().parent().remove(); //확인해보기
 									
 								}else{
 									alert('관심공모전 취소실패!')
