@@ -22,25 +22,22 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">일반회원 회원가입</h2>
-					</div>
-				</div>
-			</div>
-		</section>
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">로그인</h2>
+                <div class="module-subtitle font-serif">LogIn</div>
+              </div>
+            </div>
+          </div>
+        </section>
 		<div id="container">
-			<form class="px-4 py-3" action="/login" method="post">
-				아이디<input type="text" class="form-control" name="userid"
-					placeholder="example"> 비밀번호<input type="password"
-					class="form-control" name="password" placeholder="Password">
+			<form class="form" action="/login" method="post">
+			<h4 class="font-alt">Login</h4>
+			<hr class="divider-w mb-10">
+				<input type="text" class="form-control" name="userid" placeholder="Username">
+				<input type="password" class="form-control" name="password" placeholder="Password">
 				<input th:name="${_csrf.parameterName}" type="hidden"
 					th:value="${_csrf.token}" />
 				<p>

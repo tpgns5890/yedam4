@@ -5,7 +5,7 @@
 <head>
 	<style>
 		#container {
-			width: 80%;
+			width: 65%;
 			margin: 0 auto;
 		}
 
@@ -18,7 +18,23 @@
 			flex-wrap: wrap;
 			justify-content: flex-end;
 		}
-
+		.quDelBtn{
+			padding: 10px;
+		    cursor: pointer;
+		    background: 0 0;
+		    border: 0;
+		    font-size: 15px;
+    		color: #000;
+    		text-shadow: 0 1px 0 #fff;
+    		opacity: .5;
+		}
+		.quDelBtn:hover{
+			color: #000;
+    		text-decoration: none;
+    		cursor: pointer;
+    		opacity: 1;
+		}
+    
 		#signIn-left {
 			padding: 20px;
 			width: 50%;
@@ -117,24 +133,22 @@
 
 <body>
 	<div layout:fragment="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row no-gutters slider-text align-items-end justify-content-center">
-					<div class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">일반회원 회원가입</h2>
-					</div>
-				</div>
-			</div>
-		</section>
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">일반회원 회원가입</h2>
+                <div class="module-subtitle font-serif">Normal Member SignIn</div>
+              </div>
+            </div>
+          </div>
+        </section>
 		<div id="container">
 			<div id="signInBox">
 				<div id="signIn-left">
 					<form id="signIn" name="signIn">
 						<h3 class="mb-4 billing-heading">기본정보(필수)</h3>
-						<label for="id">아이디</label><input type="text" name="userId" id="inputId">
+						<label for="id" class="font-alt mb-0">아이디</label><input type="text" name="userId" id="inputId">
 						<div>
 							<font id="id_feedback" size="2" value="1"></font>
 						</div>
@@ -164,7 +178,7 @@
 					</form>
 				</div>
 				<div id="signIn-right">
-					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?(선택)</h3>
+					<h3 class="mb-4 billing-heading">사회자/디자이너회원으로 활동하실 계획이라면?</h3>
 					<input type="radio" class="inputRadio" name="certType" value="MC"><label
 						class="labelRadio">사회자</label>
 					<input type="radio" class="inputRadio" name="certType" value="DESIGNER"><label
@@ -172,27 +186,28 @@
 					<br>
 					<label for="name">자격증 발급번호</label><input type="text" id="inputQno">
 					<button type='button' id="qPlus">추가</button>
+					<br><br>
 					<ul id="qList">
 						<li class="qualLi"><span
 								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
 								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">x</button></li>
+							<button type="button" class="quDelBtn">X</button></li>
 						<li class="qualLi"><span
 								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
 								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">x</button></li>
+							<button type="button" class="quDelBtn">X</button></li>
 						<li class="qualLi"><span
 								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
 								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">x</button></li>
+							<button type="button" class="quDelBtn">X</button></li>
 						<li class="qualLi"><span
 								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
 								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">x</button></li>
+							<button type="button" class="quDelBtn">X</button></li>
 						<li class="qualLi"><span
 								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
 								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">x</button></li>
+							<button type="button" class="quDelBtn">X</button></li>
 					</ul>
 				</div>
 				<div id="submitArea">
@@ -353,7 +368,7 @@
 								$("<button/>").attr({
 									type: "button",
 									class: "qDel"
-								}).text("x").on('click', function () {
+								}).text("X").on('click', function () {
 									$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
 								})
 							))

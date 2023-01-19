@@ -5,22 +5,20 @@
 	layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-	<section class="hero-wrap hero-wrap-2"
-		style="background-image: url(&quot;images/bg_2.jpg&quot;); background-position: 50% 0%;"
-		data-stellar-background-ratio="0.5">
-		<div class="overlay"></div>
-		<div class="container">
-			<div
-				class="row no-gutters slider-text align-items-end justify-content-center">
-				<div
-					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<h2 class="mb-0 bread">회원가입</h2>
-				</div>
-			</div>
-		</div>
-	</section>
-	<div align="center">
-		<h3 class="mb-3 mt-5">이용약관</h3>
+	<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;/assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">사이트 이용약관</h2>
+                <div class="module-subtitle font-serif">Qualification</div>
+              </div>
+            </div>
+          </div>
+        </section>
+	<div align="center" style="width:60%;margin:0 auto;">
+		<br>
+		<h2>이용약관</h2>
+		<form class="form">
 		<textarea rows="20" cols="100">
 < 예담4조 >('www.sah.com'이하 '행사대행')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
 
@@ -133,8 +131,11 @@
 4. 경찰청 : (국번없이) 182 (ecrm.cyber.go.kr)
 「개인정보보호법」제35조(개인정보의 열람), 제36조(개인정보의 정정·삭제), 제37조(개인정보의 처리정지 등)의 규정에 의한 요구에 대 하여 공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익의 침해를 받은 자는 행정심판법이 정하는 바에 따라 행정심판을 청구할 수 있습니다.
 ※ 행정심판에 대해 자세한 사항은 중앙행정심판위원회(www.simpan.go.kr) 홈페이지를 참고하시기 바랍니다."readonly></textarea>
-		<br> <input type="checkbox" id="qual1">이용약관에 동의합니다.
-		<h3 class="mb-3 mt-5">개인정보 수집 및 이용</h3>
+		</form>
+		<input type="checkbox" id="qual1" style="text-align:right;">이용약관에 동의합니다.
+		<br><br><br><br>
+		<h2>개인정보 수집 및 이용</h2>
+		<form class="form">
 		<textarea rows="20" cols="100">
 	< 예담4조 >('www.sah.com'이하 '행사대행')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
 
@@ -248,11 +249,11 @@
 「개인정보보호법」제35조(개인정보의 열람), 제36조(개인정보의 정정·삭제), 제37조(개인정보의 처리정지 등)의 규정에 의한 요구에 대 하여 공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익의 침해를 받은 자는 행정심판법이 정하는 바에 따라 행정심판을 청구할 수 있습니다.
 ※ 행정심판에 대해 자세한 사항은 중앙행정심판위원회(www.simpan.go.kr) 홈페이지를 참고하시기 바랍니다.
 </textarea>
-		<br> <input type="checkbox" id="qual2">개인정보 수집 및 이용에
-		동의합니다. <br> <br>
-		<button class="btn btn-primary py-3 px-5" id="normalSignUp">일반회원
+		</form><input type="checkbox" id="qual2">개인정보 수집 및 이용에
+		동의합니다. <br><br><br>
+		<button class="btn btn-d btn-round" id="normalSignUp">일반회원
 			회원가입</button>
-		<button class="btn btn-primary py-3 px-5" id="busiSignUp">업체회원
+		<button class="btn btn-d btn-round" id="busiSignUp">업체회원
 			회원가입</button>
 		<br> <br> <br>
 	</div>
