@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eventi.left.message.mapper.MessageMapper">
+	<select id="msgList" resultType="com.eventi.left.message.service.MessageVO">
+		SELECT *
+		FROM MESSAGE
+		WHERE CHA_ID = #{chaId}
+	</select>
+	
+	<insert id="msgInsert">
+		INSERT INTO NESSAGE(MSG_ID, CHA_ID, TO_ID, FROM_ID, MSG_CNTN)
+		VALUES('ME'||MSG_SEQ.NEXTVAL, #{chaId}, #{toId}, #{fromId}, #{msgCntn})
+	</insert>
+</mapper>
