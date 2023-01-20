@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 <style>
@@ -36,8 +37,8 @@
 <body>
 	<div layout:fragment="content">
 		<section class="home-section home-full-height bg-dark bg-gradient"
-			id="home" data-background="assets/images/section-11.jpg"
-			style="height: 937px; background-image: url(&quot;assets/images/section-11.jpg&quot;);">
+			id="home" data-background="/assets/images/section-11.jpg"
+			style="height: 937px; background-image: url(&quot;/assets/images/section-11.jpg&quot;);">
 			<div class="titan-caption">
 				<div class="caption-content">
 					<div class="font-alt mb-40 titan-title-size-4">"Sign In"</div>
@@ -63,6 +64,14 @@
 				</div>
 			</div>
 		</section>
+		<script>
+		$(function(){
+			var session = '[[${session.member != null? session.member.userId:""}]]';
+			if(session!=''){
+				window.location.href='/'
+			}
+		})
+		</script>
 	</div>
 </body>
 </html>

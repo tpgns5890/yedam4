@@ -25,11 +25,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		HttpSession session = request.getSession();
+		System.out.println(request.getHeaderNames());
 		session.setAttribute("member", service.getMember(authentication.getName())); // 로그인한 사용자VO 세션에 저장
-		System.out.println(request.getRequestURI());
-		if(request.getRequestURI().contains("loginPage")) {
-			response.sendRedirect("/");
-		}
 		Back(response, -1);
 	}
 
