@@ -31,7 +31,7 @@ public class BboardServiceImpl implements BboardService{
 	@Override
 	public List<BboardVO> bboardList(BboardVO bboardVO, PagingVO paging) {
 		paging.setTotalRecord(bboardMapper.count(bboardVO));
-		paging.setPageUnit(15);
+		paging.setPageUnit(10);
 		bboardVO.setFirst(paging.getFirst());
 		bboardVO.setLast(paging.getLast());
 		

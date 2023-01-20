@@ -30,5 +30,5 @@ public class BboardVO {
 	private String order = "dt"; //조회수, 작성일자 등 정렬에 필요
 	
 	Integer first = 1; //첫페이지
-	Integer last = 15; //마지막페이지
+	Integer last = 5; //마지막페이지
 }

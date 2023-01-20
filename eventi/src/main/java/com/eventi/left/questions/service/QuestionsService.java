@@ -15,7 +15,7 @@ public interface QuestionsService {
 
 	public int questionsUpdate(QuestionsVO vo); // 수정
 
-	public int questionsDelete(String qNo); // 삭제
+	public int questionsDelete(QuestionsVO questionsVO); // 삭제
 
 	//Q&A 전체조회
 	public List<QuestionsVO> qnaList(QuestionsVO vo); 
