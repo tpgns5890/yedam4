@@ -268,7 +268,6 @@ footer {
 		//마감연장 모달창 수정처리
 		$('#extension').on('click', function () {
 			let date = $(this).parent().parent().find($('input[type="date"]')).val();
-			console.log(date);
 			
 			$.ajax({
 		           url:"/contest/update",
@@ -281,7 +280,6 @@ footer {
 						xhr.setRequestHeader(header, token);
 					},
 		           success: function (result) {
-		        	   console.log(result);
 		        	   if(result > 0){ //수정처리된 객체가 있다면
 		                 alert('수정처리 성공');
 		        	   }else{
@@ -341,7 +339,6 @@ footer {
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
-				console.log(res);
 				$("#cotestCntn").empty();
 				$("#cotestCntn").append(res.cntn);
 			})
@@ -351,14 +348,11 @@ footer {
 		//문의사항 관련 생성 함수 --------------------------------------------------------
 		//문의사항 박스 생성
 		function questionBox(){
-			let box = `	
-								<ul style="list-style: none;">
-								<li list-style: none;><label>제목</label><input type="text" name="Ttl" required="required" ><br/></li>
-								<li><textarea name="cntn" class="form-control" id="Cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea></li>
-								</ul>
-								<button type="reset" class="btn btn-g btn-round btn-lg">초기화</button>
-								<button type="button" id="insertBtn" class="btn btn-g btn-round btn-lg">등록</button>
-						`;
+			let box = `	 <label>제목</label><input type="text" name="Ttl" required="required" ><br>
+						<textarea name="cntn" class="form-control" id="Cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea>
+						<input type="checkbox" id="secretYn" name="secretYn">비밀글 
+						<button type="button" id="insertBtn" class="btn btn-g btn-round btn-lg">등록</button>
+					`;
 			
 			return box;
 		} 
@@ -368,26 +362,43 @@ footer {
 			let delBtn = '';
 			let upBtn = '';
 			let repInsert = '';
+			let p = '';
 			
-			//문의 작성자일 경우에만 삭제 버튼 생성
-			if(question.userId ==userId){
+			//문의 작성자일 경우만 삭제,수정버튼
+			if(question.userId == userId){
 				delBtn = `<button class='qDelete'>삭제</button>`;
 				upBtn = `<button class='qUpdate'>수정</button>`;
+			
 			//공모전 작성자일 경우에만 답변등록.
 			}if(writer ==userId){
 				repInsert = `<button type="button" class="questionRep">답변등록</button>`
 			}
 			
 			 //회원아이디에 따라 다르게 표시됌.(수정,삭제,답변등록)
-			let p =`<li class="comment">
-						<div class="comment-body" id="${question.qNo}">
-							<h3>${question.userId} : ${question.ttl}</h3>
-				            <div class="meta">${question.writingDt}</div>
-				            <p>${question.cntn}</p>
-				            ${delBtn} ${upBtn}
-				            ${repInsert}
-						</div>
+			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
+			 console.log(writer)
+			if(question.secretYn == 'Y' && question.userId != userId &&  writer != userId){
+				p =`<li class="comment">
+					<div class="comment-body" id="${question.qNo}">
+						<h3>비공개 문의</h3>
+			            <div class="meta">${question.writingDt}</div>
+			            <p>비공개내용입니다.</p>
+			            ${delBtn} ${upBtn}
+			            ${repInsert}
+					</div>
 					</li>`
+			}
+			else { //공개인경우
+			p =`<li class="comment">
+				<div class="comment-body" id="${question.qNo}">
+					<h3>${question.userId} : ${question.ttl}</h3>
+		            <div class="meta">${question.writingDt}</div>
+		            <p>${question.cntn}</p>
+		            ${delBtn} ${upBtn}
+		            ${repInsert}
+				</div>
+				</li>`
+			}
    			return p;
    		}
 		//답변생성
@@ -397,15 +408,18 @@ footer {
 			 let upBtn = '';
 			 let userId = '[[${session.member != null ? session.member.userId :''}]]';
 				
-			//문의답변 작성자일 경우에만 삭제 버튼 생성
+			//한 문의당 답변은 1개만 가능 답변등록 버튼 삭제
+	   			$("#" + questionRep.rerepTgt).children('button:eq(0)').remove();
+			 
+			//문의답변 작성자일 경우에만 삭제,수정 버튼 생성
 				if(questionRep.userId ==userId){
-					delBtn = `<button class='qpDelete'>삭제</button>`;
+					delBtn = `<button class='qDelete'>삭제</button>`;
 					upBtn = `<button class='qUpdate'>수정</button>`;
 				}
 			 
    			let p = `<ul class="children">
                 <li class="comment">
-                <div class="comment-body">
+                <div class="comment-body" id="${questionRep.qNo}">
                 <h3>${questionRep.userId}</h3>
                 <div class="meta">작성일:${questionRep.writingDt} </div>
                   <p>${questionRep.cntn}</p>
@@ -438,12 +452,15 @@ footer {
 				//리턴값 문의사항이 없으면 출력
 				if(res == 0){
 					$("#cotestCntn").append($('<p>').append("문의사항이 없습니다."))
-				}//문의사항이 있다면
+				}
+				//문의사항이 있다면
 				for(data of res){
-					if(data.rerepTgt == null){ //문의사항
+					if(data.rerepTgt == null){ 
+						//문의사항
 						$("#cotestCntn").append(make(data));
 					}					
-					else {//답변사항
+					else {
+						//답변사항
 						$("#" + data.rerepTgt).append(makeRe(data));
 					} 
 				}
@@ -453,11 +470,18 @@ footer {
 		//일반회원 문의등록,수정삭제 -----------------------------------------------------------------------
 		//문의등록처리
 		$('#divCntn').on("click", "#insertBtn", function(){
- 			let Ttl =$(this).parent().children('ul').children('li:eq(1)').children('textarea').val();
- 			let Cntn = $(this).parent().children('ul').children('li:eq(0)').children('input').val(); 
+			
+			//비밀글 체크시 값
+			let secretYn;
+			if($(this).prev('input').is(":checked")){
+				secretYn = 'Y';
+			}
+			let Ttl =$(this).parent().children('input').val();
+ 			let Cntn = $(this).parent().children('textarea').val(); 
  			let targetId = cNo;
  			let category = 'T01';
- 			console.log(Ttl, Cntn, targetId, category, userId);
+ 			
+ 			console.log(Cntn,Ttl)
  			
  			//내용이 없고 등록버튼을 눌렀을경우
  			if(Cntn == '' || Ttl  == ''){
@@ -467,7 +491,7 @@ footer {
  				$.ajax({
  	 	   			url : '/questions/insert',
  	 	   			method : 'post',
- 	 	   			data : {userId, Ttl, Cntn, targetId,category},
+ 	 	   			data : {userId, Ttl, Cntn, targetId,category,secretYn},
  	 	   			beforeSend : function(xhr)
  	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
  	 					xhr.setRequestHeader(header, token);
@@ -493,15 +517,13 @@ footer {
  					xhr.setRequestHeader(header, token);
  	            },
 				success : function(result){
-					console.log(result);
-					if(result ==1){
 						alert('삭제완료');
 						btn.closest(".comment").remove();
-					}else{
-						alert('삭제실패');
-					}
-				}
- 	   		})
+				 },
+		           fail: function () {
+		        	   alert('삭제실패');
+		           }
+				})
 		});
 		
 		//문의내용 수정폼으로 변경
@@ -523,8 +545,6 @@ footer {
 			let targetId = cNo;
  			let category = 'T01';
  			
-			console.log(qCntn,qNo);
-			
 			let updateBtn = `<button class='qUpdate'>수정</button>`;
 			
 			$.ajax({
@@ -536,20 +556,63 @@ footer {
 					xhr.setRequestHeader(header, token);
 				},
 				success : function(result){
-					console.log(result);
-					if(result){
 						alert('수정성공');
 						btn.parent().children('div:eq(1)').replaceWith("<p>" + result.cntn + "</p>");
-					}else{
-						alert('수정실패');
-					}
-				}		
+				},
+		        fail: function () {
+	                 	alert('수정실패')
+	           }		
 			})
 		});
 		//공모작성자 문의답변 등록,수정,삭제 -----------------------------------------------------------------------
+		//답변등록 입력폼
+		function makeFrm(qTgt) {
+			let form = `<form>
+				<input type="hidden" id="qTgt" name="qTgt" value="${qTgt}">
+	            <textarea class="form-control" id="qCntn" name="qCntn" rows="3"></textarea>
+	            <button type="button" id="qTgt" class="questionRepInsert">답변등록</button>
+	        </form>`
+		    
+		    return form;
+		}
 		
-	 	
-		
+		//답변등록 누를경우 생성되는 등록 입력폼
+		$('#divCntn').on("click", ".questionRep", function(){
+			 let qTgt = $(this).parent("div").attr('id');
+ 			$(this).parent("div").append(makeFrm(qTgt));
+ 			$(this).remove();
+ 			
+		});
+		//답변등록처리 및 붙여넣기.
+		$('#divCntn').on("click", "#qTgt", function(){
+			let btn =  $(this);
+			let insertForm = $(this).parent('form');
+			let qNo = $(this).prev().prev().val();
+			let Cntn =$(this).prev().val();
+			
+			if(Cntn == '' ){
+ 				alert('답변을 입력해주세요');
+ 			//문의사항 등록처리
+ 			}else{
+ 				$.ajax({
+ 	 	   			url : '/questions/insert',
+ 	 	   			method : 'post',
+ 	 	   			data : {userId, Cntn, rerepTgt:qNo,category:'T01',targetId:cNo},
+ 	 	   			beforeSend : function(xhr)
+ 	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+ 	 					xhr.setRequestHeader(header, token);
+ 	 	            },
+	 	 	   		success : function(result){
+	 	 	   			alert('답변등록 완료')
+	 	 	   			insertForm.replaceWith(makeRe(result)); //답변 등록폼 제거, 댓글교체
+	 	 	   			
+	 	 	   		},
+		            fail: function () {
+		                 	alert('수정처리 실패')
+		            }
+ 				})
+			}
+		})
 			
 		//참여작 출력-----------------------------------------------------------
 		function contest(){
@@ -568,8 +631,6 @@ footer {
 					$("#cotestCntn").append(p); 
 				}
 				for(design of res.design){
-					console.log(design);
-					//console.log(design);
 					if(design.pubcYn == 'N') {//공개여부가 Yes이면
 					 	$("#cotestCntn").append(makeDesignNo(design)); 
 					}else{//공개여부가 No이면
