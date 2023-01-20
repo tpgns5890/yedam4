@@ -184,6 +184,13 @@ public class ContestServiceImpl implements ContestService {
 		String sessionId = user.getUserId();
 		vo.setWriter(sessionId);
 		
+		//페이징처리
+		paging.setTotalRecord(mapper.myContest(vo));
+		paging.setPageUnit(10); // 12개 출력 (default 10)
+		paging.setPageSize(5);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
+		
 
 		paging.setTotalRecord(mapper.myContest(vo));
 		paging.setPageUnit(10);

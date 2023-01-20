@@ -149,7 +149,7 @@ public class ContestController {
 	// 수정처리
 	@PostMapping("/update")
 	public String contestupdateForm(ContestVO vo, MultipartFile[] uploadFile) {
-		service.updateContest(vo,uploadFile);
+		service.updateContest(vo, uploadFile);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
@@ -165,24 +165,6 @@ public class ContestController {
 		return service.deleteContest(vo);
 	}
 
-	// 공모전 디자인 응모내역 리스트
-	/* 중복 주석체크
-	 * // @PostMapping("/design") // @ResponseBody // public Map<String, Object>
-	 * contestSelect(DesignVO vo, PagingVO paging) { // // Map<String, Object>map =
-	 * new HashMap<String, Object>(); // List<DesignVO>list =
-	 * dService.contestDesignList(vo, paging); // //센터이미지 와 서버이미지 끝자리가 같은경우??? //
-	 * //System.out.println(list.get(0)); // // map.put("design",list); //
-	 * map.put("paging",paging); // // return map; // // }
-	 */
-	// 나의 공모전리스트
-	
-	@GetMapping("/mySelect")
-	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
-
-		model.addAttribute("contestList", service.myContestList(vo, paging));
-		model.addAttribute("paging", paging);
-		return "content/myPage/myCotestList";
-	}
 
 	// 공모전 좋아요리스트
 	@GetMapping("/like")
@@ -214,20 +196,36 @@ public class ContestController {
 
 		return result;
 	}
-
-	// 공모전 지원자조회페이지 이동
+	// 나의 공모전게시글관리
+	@GetMapping("/mySelect")
+	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
+		model.addAttribute("contestList", service.myContestList(vo, paging));
+		model.addAttribute("paging", paging);
+		return "content/myPage/myCotestList";
+	}
+	
+	// 나의 공모전 검색기능
+//	@PostMapping("/mySelectAjax")
+//	public Map<String, Object> mySelectSearch(ContestVO vo, PagingVO paging) {
+//		Map<String, Object> result = new HashMap<String, Object>();
+//		result.put("contestList", service.myContestList(vo, paging));
+//		result.put("paging",paging);
+//		return result;
+//	}
+	
+	// 나의공모전관리 지원자조회페이지 이동
 	@GetMapping("/designRead")
 	public String designRead(Model model, String cNo) {
 		model.addAttribute("cNo", cNo);
 		return "content/contest/cotestDesignList";
 	}
 
-	// 1.나의공모전 -> 응모디자인조회 
-	// 2.공모전 -> 상세정보 
+	// 1.나의공모전 -> 응모디자인조회
+	// 2.공모전 -> 상세정보
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
 	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
-	
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		DesignVO dVo = new DesignVO();
 		dVo.setcNo(cNo);

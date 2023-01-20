@@ -30,7 +30,13 @@
 		<!-- 테이블 -->
 		<div id="table">
 			<!-- 게시글 검색 -->
-			검색  <input type="text" name="search" id="search" onkeyup="myFunction()">
+			<form name="searchFrm">
+				제목<input type="text" name="ttl" value="">
+				내용<input type="text" name="cntn" value="">
+				<input type="hidden" name="page" value="1">
+				<button type="submit">검색</button>
+			</form>
+			
 			<button type="button" id="deleteBtn">공모전삭제</button>
 			<table border="1" id="myTable">
 				<thead>
@@ -43,8 +49,7 @@
 						<th>진행기간</th>
 						<th>진행현황</th>
 						<th>등록현황</th>
-						<th>지원자조회</th>
-						<th>우승자등록</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -72,21 +77,28 @@
 						
 						<th:block th:if="${contest.save} == 'Y'">
 							<td th:text="임시저장"></td>
-						</th:block>
-						<th:block th:if="${contest.save} == 'N'">
-							<td th:text="등록완료"></td>
+							<td><button type="button" id="selete" th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|">공모전등록</button></td>
 						</th:block>
 						
 						<th:block th:if="${contest.save} == 'N'">
-								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
-								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
+						<th:block th:if="${contest.ing} == '진행중'">
+							<td th:text="등록완료"></td>
+							<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+						</th:block>
+						</th:block>
+						
+						<th:block th:if="${contest.save} == 'N'">
+						<th:block th:if="${contest.ing} == '마감'">
+							<td th:text="등록완료"></td>
+							<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
+						</th:block>
 						</th:block>
 						
 					</tr>
 				</tbody>
 			</table>
 		</div>
-
+		<h3 th:text="${paging}"></h3>
 		<div class="row mt-5">
 			<div class="col text-center">
 				<div class="block-27">
@@ -98,10 +110,14 @@
 
 
 		<script>
-		//페이지이동
+		//페이지이동 및 검색
+		//페이징개수 변환 myContest 동적쿼리
 		function gopage(i) {
-		    location.href = '/contest/mySelect?page=' + i;
-		    
+			//내용초기화
+			$('input[name="ttl"]').val('');
+			$('input[name="cntn"]').val('');
+			searchFrm.page.value = i;
+			searchFrm.submit();
 		 }
 		
 		var token = $("meta[name='_csrf']").attr("content");
@@ -134,7 +150,7 @@
 
 						//삭제처리 ajax
 						$.ajax({
-							url: '../contest/delete',
+							url: '/contest/delete',
 							method: "post",
 							data: {cNo},
 							beforeSend: function (xhr) {
@@ -154,23 +170,12 @@
 			}
 		}
 		
-		function myFunction() {
-			let input = document.getElementById("search");
-			let filter = input.value.toUpperCase();
-			let table = document.getElementById("myTable");
-			let tr = table.getElementsByTagName("tr");
-			for (i = 0; i < tr.length; i++) {
-				td = tr[i].getElementsByTagName("td")[4];
-				if (td) {
-					txtValue = td.textContent || td.innerText;
-					if (txtValue.toUpperCase().indexOf(filter) > -1) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
-					}
-				}
-			}
-		}
+		//검색 기능
+   		$('#find').click(function() {
+   			//입력한 값 가져오기
+   			let search = $("input[name=search]").val();
+   			location.href="/content/mySelect?search=" +search;
+   		})
 		
 	</script>
 	</div>
