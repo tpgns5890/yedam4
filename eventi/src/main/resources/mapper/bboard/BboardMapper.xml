@@ -40,7 +40,7 @@
 	<!-- 좋아요순으로 정렬을 하고 싶을 경우 ${order}에 좋아요 수 컬럼 별칭을 넣어주면 된다. -->
 	<select id="bboardList" resultType="com.eventi.left.bboard.service.BboardVO">
 	SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-	SELECT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
+	SELECT DISTINCT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
 	FROM B_BOARD b LEFT JOIN likes l
 	ON b.b_board_no = l.target_no
 	WHERE TYPE = #{type}
@@ -56,7 +56,7 @@
 	<!-- type별 좋아요 조회 -->
 	<!-- 내가 좋아요 누른 게시글 리스트 출력 / 로그인중인ID, TYPE 필요 / 정렬도 가능 -->
 	<select id="bboardLike" resultType="com.eventi.left.bboard.service.BboardVO">
-		SELECT b.*, l.like_no, (select count(*) from likes where target_no = b.b_board_no) AS cnt
+		SELECT DISTINCT b.*, l.like_no, (select count(*) from likes where target_no = b.b_board_no) AS cnt
 		FROM B_BOARD b JOIN LIKES l
 		ON b.b_board_no = l.target_no
 		WHERE l.user_id = #{writer}
@@ -68,6 +68,7 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM B_BOARD
+		WHERE TYPE=#{type}
 	</select>
 	
 	<!-- 게시글 단건 조회 -->

@@ -43,8 +43,9 @@
       </div>
    </section>
    	
-   	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글 등록하기</button>
    	
+   	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글 등록하기</button>
+
    	<!-- 라디오 버튼 게시글별 정렬 -->
    	<th:block th:if="${type =='T04'}">
 		<input type="radio" name="lclsf" value="all" checked>전체
@@ -59,9 +60,10 @@
    	
    	<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
 	<select id="order" name="order">
-		<option value="dt" selected>작성일순</option>
-		<option value="inq">조회순</option>
-		<option value="cnt">좋아요순</option>
+		<option value="" selected>====</option>
+		<option value="dt" th:selected="${bboardVO.order=='dt'}">작성일순</option>
+		<option value="inq" th:selected="${bboardVO.order=='inq'}">조회순</option>
+		<option value="cnt" th:selected="${bboardVO.order=='cnt'}">좋아요순</option>
 	</select>
 	
 	<!-- 게시글 검색 -->
@@ -175,10 +177,10 @@
 				let type = $("#type").text();
 				let order = $("#order option:selected").val();
 				
-				//location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}`
+				location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}`
 				
 				//post방식으로 리스트 불러오기
-				 $.ajax({
+				 /* $.ajax({
 					url : '/bboard/bList',
 					method : 'post',
 					data : {lclsf:lclsf, type:type, order:order},
@@ -194,7 +196,7 @@
 					for(r of res){
 						$("#check").append(makeTr(r));
 					}
-				}) 
+				})  */
    		}
    		
    		//tr 생성 함수
