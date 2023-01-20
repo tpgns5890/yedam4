@@ -2,10 +2,49 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<style>
+/* Modal Content */
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 40%;
+	height: 60%;
+	text-align: left;
+	max-height: calc(100vh - 200px);
+    overflow-y: auto;
+	
+}
+
+/* The Close Button */
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	text-align: right;
+	
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+	
+}
+#modelBtn{
+	text-align: center;
+}
+.modelBtn1 {
+	display :inline-block;
+}
+</style>
 </head>
 <body>
 
@@ -23,14 +62,66 @@
           </div>
         </section>
 	
-		<div style="min-height: 700px">
+		<div style="min-height: 1200px">
 		<h2 class="mb-0 bread">공모전 응모관리</h2>
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
-
+			
+		
+		<!-- 게시글 검색 -->
+		<form name="searchFrm">
+			디자인명<input type="text" name="name" value="">
+			<input type="hidden" name="page" value="1">
+			<button type="submit">검색</button>
+		</form>		
+		
+			
+			<div th:each="d: ${design} ">
+				<div class="col-sm-6 col-md-4 col-lg-4 design">
+					<div class="shop-item">
+						<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px" class="img-fluid">
+						    <div class="shop-item-detail">
+								<div>
+							   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
+							   			<h3 class="content-box-title font-serif dNo" th:text="${d.dgnNo}"></h3>
+							   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
+						        </div>
+						        <div class="btn btn-round btn-b">
+						              <span class="select">상세보기</span>
+					             </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		<!-- The Modal -->
+			<div id="myModal" class="modal">
+	
+				<!-- Modal content -->
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h3 id="title"></h3>
+					<div id="modelSelect"></div>
+				</div>
+			</div>
+			
+		<!-- 페이징처리 -->
+		<h3 th:text="${paging}"></h3>
+		<div class="row mt-5">
+			<div class="col text-center">
+				<div class="block-27">
+					<th:block
+						th:replace="fragments/paging :: component(${paging},'gopage')">
+				</div>
+			</div>
+		</div>
+			
+		
+		
 		<!-- 테이블 -->
-		<div id="table">
+		<!-- <div id="table">
 			게시글 검색 <input type="text" name="search" id="search" onkeyup="myFunction()">
 			<button type="button" id="deleteBtn">응모취소</button>
 			<table border="1" id="myTable">
@@ -59,12 +150,12 @@
 						<td th:text=${d.winYn}></td>
 						<td th:text="${#dates.format(d.dt, 'yyyy-MM-dd')}"></td>
 						
-						<!-- 파일리스트가 대표이미지랑 같다면. -->
+						파일리스트가 대표이미지랑 같다면.
 						<th:block th:each="f : ${fileList}">
 							<td th:if="${f.fNm} == ${d.centerImg}"><img th:src="|/fileView/${f.sevNm}|" style="height:300px; width: 300px;"></td>
 						</th:block>
 						
-						<!-- 공개여부 출력 -->
+						공개여부 출력
 						<th:block th:if="${d.pubcYn} == 'N'">
 							<td th:text="공개"></td>
 						</th:block>
@@ -78,91 +169,100 @@
 						</td>
 					</tr>
 				</tbody>
-			</table>
+			</table> -->
 		</div>
 				 
-		</div>
-		<script>
-		//페이지이동
-		/* function gopage(i) {
-		    location.href = '/contest/mySelect?page=' + i;
-		    
-		 } */
 		
+		<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-
-		// tr 전체체크시 모든항목 체크되도록 
-		let allDelete = document.querySelector("#allDelete")
-		let deleteCheck = document.querySelector(".delete")
-		allDelete.addEventListener('change', function () {
-			//forEach 반복문사용.
-			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
-					deleteCheck.checked = allDelete.checked;
+		
+		//페이지이동 및 검색
+		//페이징개수 변환 myContest 동적쿼리
+		function gopage(i) {
+			$('input[name="name"]').val('');
+			searchFrm.page.value = i;
+			searchFrm.submit();
+		 }
+		 
+		 
+		//디자인선택시 모달창 
+			//응모된 1건의 디자인
+			// 전체 파일리스트+ 정보출력.
+		 
+			$('.select').on("click", function(e){
+				let dNo = $(this).parent().prev().children().eq(1).text()
+				console.log(dNo)
+				
+				$.ajax({
+					url: '/design/ajaxSelect',
+					method: 'post',
+					data: {dgnNo:dNo},
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+				}).then(res => {
+					let user = res.userId;
+					let title = res.name;
+					let cntn = res.cntn;
+					let cNo = res.cNo;
+					
+					$('#title').empty();
+					let content = `<h3>${user} 님의 참여작품 </h3>
+									<p>${cNo}</p>
+									<p>작품명 : ${title} </p>
+									<p>${cntn} </p>
+								  `
+					
+					$('#title').append(content);
+					
+					//모달내용을 지운뒤 붙여넣기.
+					$('#modelSelect').empty();
+					for(file of res.files){
+						makeDesign(file.sevNm,title,dNo);
+					}
+					
+				})
 			})
-		})
-		
-
-		//응모디자인 삭제
-		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
-		
-		function deleteContest(deleteCheck) {
-			let trs = document.querySelectorAll('table>tbody>tr');
-			let userId = '[[${session.member != null ? session.member.userId :''}]]';
-			console.log(trs);
-			console.log(userId);
 			
-			if (!confirm('응모 취소하시겠습니까?')) {
-				return false;
-			} else {
-				for (let i = 0; i < trs.length; i++) {
-					if (trs[i].children[0].children[0].checked) {
-						
-						let dgnNo = trs[i].children[1].textContent; //체크된 공모번호
-
-						//삭제처리 ajax
-						$.ajax({
-							url: '../design/delete',
-							method: "post",
-							data: {dgnNo,userId},
-							beforeSend: function (xhr) {
-								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-								xhr.setRequestHeader(header, token);
-							},
-						}).then(res => {
-							if (res >= 1) {
-								trs[i].remove(); // tr 화면동적 삭제
-								alert('삭제 완료');
-							} else {
-								alert('삭제 실패');
-							}
-						})
-					}
-				}
+			//모달창 :디자인 응모작품 생성.
+			function makeDesign(fileName,dNo){
+				let design = `  <div class="design" id="${dNo}" style="float: left ">
+										<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
+							   </div>
+							  `
+					$('#modelSelect').append(design);
+				
 			}
-		}
+			
+			// Get the modal
+			var modal = document.getElementById("myModal");
+			
+			// Get the <span> element that closes the modal
+			var span = document.getElementsByClassName("close")[0];
+			
+			// open the modal 
+			$('.select').on("click",function() {
+			  modal.style.display = "block";
+			})
+			
+			// When the user clicks on <span> (x), close the modal
+			span.onclick = function() {
+			  modal.style.display = "none";
+			}
+			
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+			  if (event.target == modal) {
+			    modal.style.display = "none";
+			  }
+			}
 		
-		function myFunction() {
-			let input = document.getElementById("search");
-			let filter = input.value.toUpperCase();
-			let table = document.getElementById("myTable");
-			let tr = table.getElementsByTagName("tr");
-			for (i = 0; i < tr.length; i++) {
-				td = tr[i].getElementsByTagName("td")[4];
-				if (td) {
-					txtValue = td.textContent || td.innerText;
-					if (txtValue.toUpperCase().indexOf(filter) > -1) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
-					}
-				}
-			}
-		}
+
+		
 		</script>
-
-
-	</div>
+</div>
 </body>
 </html>
 							

@@ -11,12 +11,13 @@
 		</if>
 	</sql>
 	
+	<!-- 검색처리 -->
 	<sql id="search">
 		<if test="ttl != null and ttl != ''">
 			and ttl LIKE '%'||#{ttl}||'%' 
 		</if>
 		<if test="cntn != null and cntn != ''">
-			or cntn LIKE '%'||#{cntn}||'%' 
+			and cntn LIKE '%'||#{cntn}||'%' 
 		</if>
 	</sql>
 	

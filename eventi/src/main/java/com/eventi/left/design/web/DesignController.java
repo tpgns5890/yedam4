@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -66,24 +67,16 @@ public class DesignController {
 
 	// 디자인응모리스트(마이페이지)
 	@GetMapping("/designMypage")
-	public String designMypage(Model model) {
+	public String designMypage(Model model, DesignVO vo, PagingVO paging) {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
-
-		List<DesignVO> designs = service.userDesignList(sessionId);
-		List<FilesVO> files = new ArrayList<>();
-
-		// 디자인 1건에 대한 파일리스트.
-		for (DesignVO design : designs) {
-			files = fService.fileList(design.getDgnNo());
-			design.setFiles(files);
-		}
+		vo.setUserId(sessionId);
 
 		// 모델담기
-		model.addAttribute("fileList", files);
-		model.addAttribute("design", designs);
+		model.addAttribute("design", service.userDesignList(vo, paging));
+		model.addAttribute("paging", paging);
 		return "content/myPage/myDesignList";
 	}
 
@@ -113,7 +106,7 @@ public class DesignController {
 		return "content/myPage/design";
 	}
 
-	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회 -
+	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회 
 	@PostMapping("/ajaxSelect")
 	@ResponseBody
 	public DesignVO designSelect(String dgnNo) {
@@ -121,10 +114,10 @@ public class DesignController {
 		DesignVO design = service.getDesign(dgnNo);
 		List<FilesVO> files = new ArrayList<>();
 
-		// 1건에 대한 파일리스트 받고 
+		// 1건에 대한 파일리스트 받고
 		files = fService.fileList(design.getDgnNo());
 		design.setFiles(files);
-		
+
 		return design;
 	}
 

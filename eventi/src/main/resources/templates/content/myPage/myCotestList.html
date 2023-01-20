@@ -6,6 +6,9 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<style>
+
+</style>
 </head>
 <body>
 
@@ -27,16 +30,16 @@
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
 
+		<!-- 게시글 검색 -->
+		<form name="searchFrm">
+			제목<input type="text" name="ttl" value="">
+			내용<input type="text" name="cntn" value="">
+			<input type="hidden" name="page" value="1">
+			<button type="submit">검색</button>
+		</form>
+			
 		<!-- 테이블 -->
 		<div id="table">
-			<!-- 게시글 검색 -->
-			<form name="searchFrm">
-				제목<input type="text" name="ttl" value="">
-				내용<input type="text" name="cntn" value="">
-				<input type="hidden" name="page" value="1">
-				<button type="submit">검색</button>
-			</form>
-			
 			<button type="button" id="deleteBtn">공모전삭제</button>
 			<table border="1" id="myTable">
 				<thead>
@@ -98,6 +101,8 @@
 				</tbody>
 			</table>
 		</div>
+		
+		<!-- 페이징처리 -->
 		<h3 th:text="${paging}"></h3>
 		<div class="row mt-5">
 			<div class="col text-center">

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class DesignServiceImpl implements DesignService {
 	FilesMapper filesMapper;
 	@Autowired
 	UploadFileMethod newUp;
+	
 
 	@Override
 	public List<DesignVO> designList(DesignVO vo, PagingVO paging) {
@@ -78,8 +80,13 @@ public class DesignServiceImpl implements DesignService {
 	}
 
 	@Override
-	public List<DesignVO> userDesignList(String userId) {
-		return mapper.userDesignList(userId);
+	public List<DesignVO> userDesignList(DesignVO vo,PagingVO paging) {
+		paging.setTotalRecord(mapper.count(vo));
+		paging.setPageUnit(4);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
+		
+		return mapper.userDesignList(vo);
 	}
 
 	@Override

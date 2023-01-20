@@ -16,7 +16,7 @@ public interface DesignMapper {
 
 	public List<DesignVO> contestDesignList(DesignVO vo); //게시글 1건 디자인리스트.
 	
-	public List<DesignVO> userDesignList(String userId); //유저 디자인리스트.
+	public List<DesignVO> userDesignList(DesignVO vo); //유저 디자인리스트.
 	
 	public DesignVO getDesign(String dgnNo); // 디자인1건.
 	
