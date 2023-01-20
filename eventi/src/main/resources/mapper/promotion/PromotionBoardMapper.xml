@@ -23,9 +23,19 @@
 		WHERE PRO_NO  = #{proNo}
 	</select>
 	
+	<!-- 게시글 시퀀스번호 찾기 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'PB' || (MAX(TO_NUMBER(SUBSTR(PRO_NO,3)))+1) PRO_NO
+		FROM PROMOTION_BOARD
+	</select>
 	
 	<!-- 게시글 등록 -->
 	<insert id="proInsert">
+		<selectKey keyProperty="proNo" resultType="String" order="BEFORE">
+			SELECT 'PB' || (MAX(TO_NUMBER(SUBSTR(PRO_NO,3)))+1) PRO_NO
+		FROM PROMOTION_BOARD
+		</selectKey>
+	
 		INSERT INTO PROMOTION_BOARD
 		(PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO, E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE, DT) <!-- DB -->
 		VALUES('PB'|| PROMOTION_BOARD_SEQ.NEXTVAL, #{userId}, #{eName}, 

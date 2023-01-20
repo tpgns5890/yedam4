@@ -79,6 +79,8 @@
 				<th>작성날짜</th>
 				<th>마감일</th>
 				<th>남은 마감일</th>
+				<th>조회수</th>
+				
 			</tr>		
 		</thead>
 		<tbody id="check">
@@ -93,6 +95,7 @@
 				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 				<td th:text="${#dates.format(job.closeDt, 'yyyy/MM/dd')}"></td>
 				<td th:text="|${job.remain} 일전|"></td>
+				<td th:text=${job.see}></td>
 			</tr>
 		</tbody>
 	</table>

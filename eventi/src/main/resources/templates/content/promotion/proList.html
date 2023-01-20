@@ -20,29 +20,32 @@
       </div>
    </section>
 
-
    <section class="ftco-section" >
-<button type="button" class="btn btn-outline-primary" onclick="proInsert()" >구인등록</button>
+<button type="button" class="btn btn-outline-primary" onclick="proInsert()">게시글등록</button>
       <div class="container">
-		
         <div class="row d-flex" >
           <div class="col-lg-6 d-flex align-items-stretch ftco-animate"  th:each="pro : ${proList}">
           	<div class="blog-entry d-md-flex" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|">
-          		<a href="#" class="block-20 img" th:style="'background-image:url('+ @{/images/}+${pro.img} +');'">
-              </a>
               <div class="text p-4 bg-light">
+               <img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
               	<div class="meta">
-              		<p><span th:text=${pro.proNo} > </span></p> <p><span th:text=${pro.see}></span></p>
+              		<p><span th:text=${pro.proNo}></span></p> 
+              		<p><span th:text=${pro.see}></span></p>
               	</div>
-                <h3 class="heading mb-3" th:text=${pro.eName}><a href="#" > </a></h3>
+                <h3 class="heading mb-3" th:text=${pro.eName}></h3>
+                 <img th:src="${pro.img}" />
                  <p th:text=${pro.eType}></p> 작성자:<p th:text=${pro.userId}></p>
                 <a href="#" class="btn-custom">Continue <span class="fa fa-long-arrow-right"></span></a>
 
               </div>
             </div>
           </div>
-      
         </div>
+        
+        <!-- 이미지 나타내기 -->	
+		
+	      
+
         
         <div class="row mt-5">
           <div class="col text-center">
@@ -62,6 +65,10 @@
       </div>
     </section>	
 <script>
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
 link1 = 'proInsert'; //구인등록폼 이동
 function proInsert(){
 	location.href = link1;

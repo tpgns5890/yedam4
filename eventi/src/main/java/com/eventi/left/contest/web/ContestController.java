@@ -64,15 +64,15 @@ public class ContestController {
 
 		// 전체리스트 조회
 		List<ContestVO> contests = service.contestList(vo, paging);
-		
+
 		// 공모전작성게시 사진파일
 		List<FilesVO> files = new ArrayList<>();
 		for (ContestVO contest : contests) {
 			files = fService.fileList(contest.getcNo());
-			
-			//파일리스트 저장된 파일정보가 공모번호와 같다면 이미지셋팅.
-			for(FilesVO file : files) {
-				if(file.getTargetId().equals(contest.getcNo())) {
+
+			// 파일리스트 저장된 파일정보가 공모번호와 같다면 이미지셋팅.
+			for (FilesVO file : files) {
+				if (file.getTargetId().equals(contest.getcNo())) {
 					contest.setImg(file.getSevNm());
 				}
 			}
@@ -87,7 +87,7 @@ public class ContestController {
 
 	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
-	public String contestSelect(Model model, ContestVO cVo,PagingVO paging) {
+	public String contestSelect(Model model, ContestVO cVo, PagingVO paging) {
 
 		// 객체생성 및 코드별 문자열 변환후 세팅
 		ContestVO contest = service.getContest(cVo.getcNo());
@@ -166,14 +166,16 @@ public class ContestController {
 	}
 
 	// 공모전 디자인 응모내역 리스트
-	@PostMapping("/design")
-	@ResponseBody
-	public List<DesignVO> contestSelect(DesignVO vo, PagingVO paging) {
-		
-		return dService.contestDesignList(vo,paging);
-	}
-
+	/* 중복 주석체크
+	 * // @PostMapping("/design") // @ResponseBody // public Map<String, Object>
+	 * contestSelect(DesignVO vo, PagingVO paging) { // // Map<String, Object>map =
+	 * new HashMap<String, Object>(); // List<DesignVO>list =
+	 * dService.contestDesignList(vo, paging); // //센터이미지 와 서버이미지 끝자리가 같은경우??? //
+	 * //System.out.println(list.get(0)); // // map.put("design",list); //
+	 * map.put("paging",paging); // // return map; // // }
+	 */
 	// 나의 공모전리스트
+	
 	@GetMapping("/mySelect")
 	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
 
@@ -220,7 +222,9 @@ public class ContestController {
 		return "content/contest/cotestDesignList";
 	}
 
-	// 공모전 지원자조회페이지(응모디자인조회 ajax)
+	//!!!!!!! 디자인 1 , 12, 123 으로나옴..
+	// 1.나의공모전 -> 응모디자인조회 
+	// 2.공모전 -> 상세정보 
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
 	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
@@ -228,7 +232,7 @@ public class ContestController {
 		DesignVO dVo = new DesignVO();
 		dVo.setcNo(cNo);
 		// 1건의 공모전에 접수된 디자인리스트
-		List<DesignVO> designs = dService.contestDesignList(dVo,paging);
+		List<DesignVO> designs = dService.contestDesignList(dVo, paging);
 		List<FilesVO> files = new ArrayList<>();
 
 		// 디자인 1건에 대한 파일리스트.
@@ -236,7 +240,7 @@ public class ContestController {
 			files = fService.fileList(design.getDgnNo());
 			design.setFiles(files);
 		}
-		result.put("designs",designs);
+		result.put("design", designs);
 		result.put("paging", paging);
 
 		return result; // 디자인리스트+파일리스트 반환.

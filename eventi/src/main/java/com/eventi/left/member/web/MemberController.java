@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.common.CodeVO;
-import com.eventi.left.member.service.BusiVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -121,7 +121,13 @@ public class MemberController {
 	
 	//로그인페이지 이동
 	@RequestMapping(value="/loginPage")
-    public String loginPage() throws Exception {
+    public String loginPage(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "exception", required = false) String exception,
+			Model model) throws Exception {
+		
+		/* 에러와 예외를 모델에 담아 view resolve */
+		model.addAttribute("error", error);
+		model.addAttribute("exception", exception);
         return "content/member/loginPage";
     }
 

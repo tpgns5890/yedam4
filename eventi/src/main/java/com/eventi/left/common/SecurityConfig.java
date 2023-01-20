@@ -1,10 +1,5 @@
 package com.eventi.left.common;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -22,6 +16,9 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.impl.MemberServiceImpl;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -39,6 +36,9 @@ public class SecurityConfig {
 	@Autowired
 	LoginSuccessHandler loginSuccessHandler;
 	
+	@Autowired
+	AuthenticationFailureHandler customFailureHandler;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.headers()
@@ -55,21 +55,13 @@ public class SecurityConfig {
 		
 		http.formLogin()
 				.loginPage("/loginPage")	// 사용자 정의 로그인 페이지
-				.defaultSuccessUrl("/") 	// 로그인 성공 후 이동 페이지
-			    .failureUrl("/loginPage")	    // 로그인 실패 후 이동 페이지
+				//.defaultSuccessUrl("/") 	// 로그인 성공 후 이동 페이지
+			    //.failureUrl("/loginPage")	    // 로그인 실패 후 이동 페이지
 				.usernameParameter("userid")	// 아이디 파라미터명 설정
 				.passwordParameter("password")	// 패스워드 파라미터명 설정
 				.loginProcessingUrl("/login")	// 로그인 Form Action Url
 				.successHandler(loginSuccessHandler)	//LoginSuccessHandler 컴포넌트 호출
-				.failureHandler(
-		                new AuthenticationFailureHandler() {
-		                    @Override
-		                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-		                        System.out.println("exception : " + exception.getMessage());
-		                        response.sendRedirect("/loginPage");
-		                    }
-		                }
-		        );
+				.failureHandler(customFailureHandler);
 		
 		http.rememberMe()	//자동로그인
 			.key("key")

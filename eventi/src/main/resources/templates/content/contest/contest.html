@@ -1,58 +1,57 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<link rel="stylesheet" href="/css/model.css"> <!-- 모달 스타일 -->
-<link rel="stylesheet" href="/css/heart.css"> <!-- 좋아요 스타일 -->
-	<meta charset="UTF-8">
-	<title>공모전 상세조회</title>
-	<style>
-		ul {
-			list-style: none;
-		}
+<link rel="stylesheet" href="/css/model.css">
+<!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/heart.css">
+<!-- 좋아요 스타일 -->
+<meta charset="UTF-8">
+<title>공모전 상세조회</title>
+<style>
+ul {
+	list-style: none;
+}
 
-		button {
-			width: 150px;
-			height: 70px;
-			margin: 5px;
-			padding: 0;
-			text-align: center;
-		}
+.cotestCntn {
+	width: 100px;
+	height: 70px;
+	margin: 5px;
+	padding: 0;
+	text-align: center;
+}
 
-		.cotestCntn {
-			width: 100px;
-			height: 70px;
-			margin: 5px;
-			padding: 0;
-			text-align: center;
-		}
-		
-		#wrapper{
-		  height: auto;
-		  min-height: 100%;
-		  padding-bottom: (footer높이);
-		}
-		footer{
-		  height: (footer높이);
-		  position : relative;
-		  transform : translateY(-100%);
-		}
-	</style>
+#wrapper {
+	height: auto;
+	min-height: 100%;
+	padding-bottom: (footer높이);
+}
+
+footer {
+	height: (footer높이);
+	position: relative;
+	transform: translateY(-100%);
+}
+</style>
 </head>
 
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">공모전</h2>
-                <div class="module-subtitle font-serif" th:text="|${contest.ttl}|"></div>
-              </div>
-            </div>
-          </div>
-        </section>
+		<section class="module bg-dark-60 gallery-page-header parallax-bg"
+			data-background="/assets/images/gallery_bg.jpg"
+			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h2 class="module-title font-alt">공모전</h2>
+						<div class="module-subtitle font-serif" th:text="|${contest.ttl}|"></div>
+					</div>
+				</div>
+			</div>
+		</section>
 
 		<section class="ftco-section">
 			<div class="container">
@@ -60,51 +59,62 @@
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 파일이미지 출력 -->
 						<div th:each="f : ${fileList}">
-							<a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
-								<img th:src="|/fileView/${f.sevNm}|" style="width: 540px; height: 785px"
-									class="img-fluid" alt="Colorlib Template"></a>
+							<a th:href="|/fileView/${f.sevNm}|"
+								class="image-popup prod-img-bg"> <img
+								th:src="|/fileView/${f.sevNm}|"
+								style="width: 540px; height: 785px" class="img-fluid"
+								alt="Colorlib Template"></a>
 						</div>
 					</div>
-					<div class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+					<div
+						class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 						<div id="show"></div>
 						<span th:text=${contest.cNo} id="cNo"></span>
-							<p th:text=${contest.category}></p>
-							<h1 th:text=${contest.ttl}></h1>
-							
-							<!-- 마감연장일 있는경우 -->
-							<div th:if="${contest.dtExtns} != null">
-								<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}|"></div>
-							</div>
-							
-							<!-- 마감연장일 없는경우 -->
-							<div th:if="${contest.dtExtns} == null">
-								<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div>
-							</div>
+						<p th:text=${contest.category}></p>
+						<h1 th:text=${contest.ttl}></h1>
+
+						<!-- 마감연장일 있는경우 -->
+						<div th:if="${contest.dtExtns} != null">
+							<div
+								th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}|"></div>
+						</div>
+
+						<!-- 마감연장일 없는경우 -->
+						<div th:if="${contest.dtExtns} == null">
+							<div
+								th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div>
+						</div>
 
 						<div class="rating d-flex" style="height: 100px; width: 500px">
-							<div class="text-left mr-4"> &#128680;
+							<div class="text-left mr-4">
+								&#128680;
 								<!-- 비회원 하트버튼 -->
 								<th:block sec:authorize="!isAuthenticated()">
-									 <div class="stage" style="float: right; height: 50px;">
-										<a href="../loginPage"><div id="love" class="stage heart"><span th:text=${contest.likes}></span></div></a>
+									<div class="stage" style="float: right; height: 50px;">
+										<a href="../loginPage"><div id="love" class="stage heart">
+												<span th:text=${contest.likes}></span>
+											</div></a>
 									</div>
 								</th:block>
-								
+
 								<!-- 회원 하트버튼 -->
 								<th:block sec:authorize="isAuthenticated()">
-									 <div class="stage" style="float: right;">
-										<div id="love" class="stage heart" onclick="loveCheck(this)"><span th:text=${contest.likes}></span></div>
+									<div class="stage" style="float: right;">
+										<div id="love" class="stage heart" onclick="loveCheck(this)">
+											<span th:text=${contest.likes}></span>
+										</div>
 									</div>
 								</th:block>
-								
-								<span th:text=${contest.rprt}></span>
-								<span style='font-size: 30px;'>&#128065;</span>
-								<span th:text=${contest.inq}></span>
+
+								<span th:text=${contest.rprt}></span> <span
+									style='font-size: 30px;'>&#128065;</span> <span
+									th:text=${contest.inq}></span>
 							</div>
 						</div>
 						<div th:each="w : ${winnerList}">
 							<p class="price">
-								<span th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
+								<span
+									th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
 							</p>
 						</div>
 
@@ -123,85 +133,101 @@
 						<!-- 비회원 -->
 						<th:block sec:authorize="!isAuthenticated()">
 							<p>
-								<a href="#" ><button type="button" class="btn btn-g btn-round btn-lg">링크복사</button></a>
-								<a href="../loginPage" ><button type="button" class="btn btn-g btn-round btn-lg">응모하기</button></a>
+								<a href="#"><button type="button" class="btn btn-g btn-round btn-lg">링크복사</button></a> <a
+									href="../loginPage"><button type="button" class="btn btn-g btn-round btn-lg">응모하기</button></a>
 							</p>
 						</th:block>
-						
+
 						<!-- 공모전 작성자 제외 일반회원 -->
 						<th:block sec:authorize="isAuthenticated()">
-						<div th:if="|${session.member.getUserId()}| != ${contest.writer} ">
-							<p>
-								<a href="#" ><button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
-								<!-- 공모게시글에 대한 응모하기 버튼 -->
-								<a th:href="@{/design/designInsertForm(cNo=${contest.cNo})}" ><button type="button" class="btn btn-g btn-round btn-lg" >응모하기</button></a>
-							</p>
-						</div>
+							<div
+								th:if="|${session.member.getUserId()}| != ${contest.writer} ">
+								<p>
+									<a href="#"><button type="button"
+											class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
+									<!-- 공모게시글에 대한 응모하기 버튼 -->
+									<a th:href="@{/design/designInsertForm(cNo=${contest.cNo})}"><button
+											type="button" class="btn btn-g btn-round btn-lg">응모하기</button></a>
+								</p>
+							</div>
 
-						<!-- 공모전 작성자만 -->
-						 <div th:if="|${session.member.getUserId()}| == ${contest.writer} ">
-							<div>
-								<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button type="button" class="btn btn-g btn-round btn-lg">수정</button></a>
-								<button type="button" id="delBtn" class="btn btn-g btn-round btn-lg5">삭제</button>
+							<!-- 공모전 작성자만 -->
+							<div
+								th:if="|${session.member.getUserId()}| == ${contest.writer} ">
+								<div>
+									<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button
+											type="button" class="btn btn-g btn-round btn-lg">수정</button></a>
+									<button type="button" id="delBtn"
+										class="btn btn-g btn-round btn-lg5">삭제</button>
+								</div>
+								<div>
+									<button id="updateDate" type="button"
+										class="btn btn-g btn-round btn-lg">마감연장</button>
+									<a href="#"><button id="winnerInsert" type="button"
+											class="btn btn-g btn-round btn-lg">결과등록</button></a>
+								</div>
 							</div>
-							<div>
-								<button id="updateDate" type="button" class="btn btn-g btn-round btn-lg">마감연장</button>
-								<a href="#" ><button id="winnerInsert" type="button" class="btn btn-g btn-round btn-lg">결과등록</button></a>
-							</div>
-						 </div>
 						</th:block>
 					</div>
 				</div>
 
 				<div class="row mt-5">
-					<div class="col-md-12 nav-link-wrap">
+					<div class="col-md-12 nav-link-wrap" style="min-height: 500px;">
 						<div class="nav nav-pills d-flex text-center" id="v-pills-tab"
 							role="tablist" aria-orientation="vertical">
-							
-						<ul class="nav nav-tabs font-alt" role="tablist">
-		                  <li class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2" id="contestCntn">요청사항</span></a></li>
-		                  <li><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2" id="questions">문의사항</span></a></li>
-		                  <li><a href="#reviews" data-toggle="tab"><span class="icon-tools-2" id="entry">참여작</span></a></li>
-		                </ul>
-					</div>
 
-						<div class="col-sm-12"  style="height: 300px">
-							<div class="tab-content" role="tabpanel" aria-labelledby="day-1-tab">
-									<div id="contestCntn" class="tab-pane active">
-										 <div th:if="${contest.cntn} != null">
-											<span id="cotestCntn" th:utext=${contest.cntn}></span>
-										 </div>
+							<ul class="nav nav-tabs font-alt" role="tablist">
+								<li id="liCntn" class="active"><a href="#description"
+									data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
+								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span
+										class="icon-tools-2">문의사항</span></a></li>
+								<li id="lientry"><a href="#reviews" data-toggle="tab"><span
+										class="icon-tools-2">참여작</span></a></li>
+							</ul>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="tab-content" role="tabpanel"
+								aria-labelledby="day-1-tab">
+								<div id="divCntn" class="tab-pane active">
+									<div th:if="${contest.cntn} != null">
+										  <span id="cotestCntn" th:utext=${contest.cntn}></span>
+										<div></div>
 									</div>
+								</div>
 							</div>
 						</div>
-				</div>
-			</div>
-		</div>
-		</section>
-		
-		
-		<!-- The Modal -->
-			<div id="myModal" class="modal">
-
-				<!-- Modal content -->
-				<div class="modal-content">
-					<span class="close">&times;</span>
-					<h3>공모전 마감기한 연장</h3>
-					<div id=updateModel> </div>
-					<div id="modelBtn">
-						<button id="extension" class="modelBtn1" style="width:50px;"  type="button" >연장하기</button>
 					</div>
 				</div>
-
 			</div>
-		
-		
-		<script >
+		</section>
+
+
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h3>공모전 마감기한 연장</h3>
+				<div id=updateModel></div>
+				<div id="modelBtn">
+					<button id="extension" class="modelBtn1" style="width: 50px;"
+						type="button">연장하기</button>
+				</div>
+			</div>
+
+		</div>
+
+
+		<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		let cNo = $('#cNo').text();
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		
+		
+		//모달창-----------------------------------------------------------
 		// Get the modal
 		var modal = document.getElementById("myModal");
 		
@@ -212,9 +238,9 @@
 		var span = document.getElementsByClassName("close")[0];
 		
 		// When the user clicks the button, open the modal 
-		btn.onclick = function() {
+		$('btn').on("click", function(){ 
 		  modal.style.display = "block";
-		}
+		})
 		
 		// When the user clicks on <span> (x), close the modal
 		span.onclick = function() {
@@ -233,12 +259,13 @@
 			let dtReg = '[[${#dates.format(contest.dtReg,'yyyy/MM/dd')}]]';
 			let dtCls = '[[${#dates.format(contest.dtCls,'yyyy/MM/dd')}]]';
 			
+			
+	/* 		//li태그 생성후 모달창 붙여넣기 */
 			$('#updateModel').empty();
-			//li태그 생성후 모달창 붙여넣기
 			let li = `  <div>등록일 : ${dtReg} </div>
 						<div>마감일 : ${dtCls} </div>
 						<input type="date">
-					`
+					`;
 			$('#updateModel').append(li);
 			
 		}); 
@@ -275,7 +302,7 @@
 		})
 		
 	
-		//공모전 삭제
+		//공모전 삭제-----------------------------------------------------------
 		$('#delBtn').on('click', delContest);
 		function delContest(){
 			if (!confirm('공모전을 삭제하시겠습니까?')) {
@@ -303,17 +330,17 @@
 			})
 		};
 		
-		//요청사항/문의내용/참여작 버튼이벤트
-		$('#contestCntn').on('click', contentSelect);
-		$('#questions').on('click', questions);
-		$('#entry').on('click', contest);
+		//요청사항/문의내용/참여작 버튼이벤트-----------------------------------------------------------
+		$('#liCntn').on('click', contentSelect);
+		$('#liQuestions').on('click', questions);
+		$('#lientry').on('click', contest);
 		
 		//요청사항 출력
 		function contentSelect(){
 			$.ajax({
 	            url:'../contest/select',
 	            method:"post",
-	            data : {cNo},
+	            data : {cNo,userId},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);
@@ -326,8 +353,9 @@
 			
 		};
 		
-		//문의 및 문의답변 출력
+		//문의 및 문의답변 출력-----------------------------------------------------------
 		function questions(){
+			
 			$.ajax({
 	            url:"../questions/qList",
 	            method:"post",
@@ -339,7 +367,8 @@
 			}).then(res => {
 				$("#cotestCntn").empty();
 				$("#cotestCntn").append(questionBox());
-			
+				
+				//console.log(res);
 				//리턴값이 없으면 출력
 				if(res == 0){
 					$("#cotestCntn").append($('<p>').append("문의사항이 없습니다."))
@@ -354,60 +383,108 @@
 				}
 	        })
 		}
-		//문의사항 박스 생성
+		
+		//문의등록처리.
+		$('#divCntn').on("click", "#insertBtn", function(){
+			
+			
+ 			let Ttl =$(this).parent().children('ul').children('li:eq(1)').children('textarea').val();
+ 			let Cntn = $(this).parent().children('ul').children('li:eq(0)').children('input').val(); 
+ 			let targetId = cNo;
+ 			let category = 'TO1';
+ 			console.log(Ttl, Cntn, targetId, category, userId);
+			
+			
+ 			$.ajax({
+ 	   			url : '/questions/insert',
+ 	   			method : 'post',
+ 	   			data : {userId, Ttl, Cntn, targetId,category},
+ 	   			beforeSend : function(xhr)
+ 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+ 					xhr.setRequestHeader(header, token);
+ 	            }
+ 	   		}).then(res => {
+ 	   			console.log(res);
+ 	   			//댓글 부분에 등록하기
+ 	   		})
+		});
+		
+		
+	 	//문의사항 박스 생성
 		function questionBox(){
 			let box = `	
-						<form action="/questions/insert" name="questionfrm" method="post">
 						<input type="hidden" id="token" name="${header}" value="${token}" />
 								<ul style="list-style: none;">
-								<li list-style: none;><label>제목</label><input type="text" name="ttl" required="required" ><br/></li>
-								<li><textarea name="cntn" class="form-control" id="cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea></li>
+								<li list-style: none;><label>제목</label><input type="text" name="Ttl" required="required" ><br/></li>
+								<li><textarea name="cntn" class="form-control" id="Cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea></li>
 								</ul>
-								<button type="reset" >초기화</button>
-								<button type="submit" id="insertBtn">등록</button>
-						</form> `;
+								<button type="reset" class="btn btn-g btn-round btn-lg">초기화</button>
+								<button type="button" id="insertBtn" class="btn btn-g btn-round btn-lg">등록</button>
+						`;
 			
 			return box;
-		}
+		} 
 		
 		//문의사항 생성
 		function make(question){
-   			let p = `<ul>
-	                  <li class="comment">
-	                    <div class="comment-body" id="${question.qNo}">
-	                      <h3>${question.ttl}</h3>
-	                      <div class="meta">작성자:${question.userId} </div>
-	                      <div class="meta">작성일:${question.writingDt} </div>
-	                      <div class="meta">문의내용:${question.cntn}</div>
-	                      </div>
-	                   </li>
-                    </ul>
-                	`
+			let delBtn = '';
+			let upBtn = '';
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			console.log(userId);
+			
+			//문의 작성자일 경우에만 삭제 버튼 생성
+			if(question.userId ==userId){
+				delBtn = `<button class='repDelete'>삭제</button>`;
+				upBtn = `<button class='repUpdate'>수정</button>`;
+			}
+			
+			let p =`<li class="comment">
+						<div class="comment-body" id="${question.qNo}">
+							<h3>${question.userId} : ${question.ttl}</h3>
+				            <div class="meta">${question.writingDt}</div>
+				            <p>${question.cntn}</p>
+				            ${delBtn} ${upBtn}
+						</div>
+					</li>`
    			return p;
    		}
 		//답변생성
+		//답변이 있으면 id확인하고 있으면 답변등록 없애기..
 		 function makeRe(questionRep){
-			//답변이 있으면 id확인하고 있으면 답변등록 없애기..
+			 let delBtn = '';
+			 let upBtn = '';
+			 let userId = '[[${session.member != null ? session.member.userId :''}]]';
+				
+			//문의답변 작성자일 경우에만 삭제 버튼 생성
+				if(questionRep.userId ==userId){
+					delBtn = `<button class='repDelete'>삭제</button>`;
+					upBtn = `<button class='repUpdate'>수정</button>`;
+				}
+			
+				//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
+	   			//$("#" + questionRep.rerepTgt).children('button:eq(0)').remove();
+			 
    			let p = `<ul class="children">
                 <li class="comment">
                 <div class="comment-body">
-                <h3>답변</h3>
-                <div class="meta">작성자:${questionRep.userId} </div>
+                <h3>${questionRep.userId}</h3>
                 <div class="meta">작성일:${questionRep.writingDt} </div>
                   <p>${questionRep.cntn}</p>
+                  ${delBtn} ${upBtn}
                 </div>
               </li>
             </ul>`
             
             return p;
    		}
+		
+		
+		
 			
-		//참여작 출력
+		//참여작 출력-----------------------------------------------------------
 		function contest(){
-			console.log($(this));
-			
 			$.ajax({
-	            url:'../contest/design',
+	            url:'../contest/ajaxDesignRead',
 	            method:"post",
 	            data : {cNo},
 	            beforeSend : function(xhr)
@@ -419,44 +496,63 @@
 				if(res  == 0){
 					let p = '참여작이 없습니다.'
 					$("#cotestCntn").append(p); 
-					
 				}
-				for(design of res){
-					console.log(design.dgnNo);
-					console.log(design.pubcYn);
-					if(design.pubcYn == 'Y') {//공개여부가 Yes이면
-					 	$("#cotestCntn").append(makeDesignYes(design)); 
+				for(design of res.design){
+					console.log(design);
+					//console.log(design);
+					if(design.pubcYn == 'N') {//공개여부가 Yes이면
+					 	$("#cotestCntn").append(makeDesignNo(design)); 
 					}else{//공개여부가 No이면
-						$("#cotestCntn").append(makeDesignNo(design)); 
+						$("#cotestCntn").append(makeDesignYes(design)); 
 					}
-				 }
+				 }		
+					
+					//페이징 div태그 붙이기			
+					$("#cotestCntn").next().append(DesignPage()); 
+					//페이징태그 붙이기
+					
+					///태그값 찾아서 지우고 붙이기..
+					/* $('#returnPaging').empty();
+					//$('#returnPaging').append(makePageing(res.paging)); */
+					
 			})
 		}
 		
+		//페이징 기본틀..
+		function DesignPage(){
+			let divtag = `<div class="row mt-5" id="paging">
+								<div class="col text-center">
+								<div class="block-27" id="returnPaging">
+								</div>
+							</div>
+						</div>`
+			return divtag;
+		}
+		
 		//참여작 생성(공개)
-		function makeDesignYes(design){
+		function makeDesignNo(design){
    			let div = `<ul>
 		                  <li class="comment">
-		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 40px;">
-		                    <img src="/images/${design.centerImg}" style="width: 400px; height: 400px"></a>
+		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
+		                    <img src="/fileView/${design.sevNm}" style="width: 300px; height: 300px"></a>
 		                      <div class="meta">${design.dgnNo}</div>
 		                   </li>
                    		 </ul> `
    			return div;
    		}
-		//참여작 생성(비공개)
-		function makeDesignNo(design){
-   			let div = `<ul>
+		//참여작 생성(비공개)   
+		function makeDesignYes(design){
+   			let div = `<ul> 
 		                  <li class="comment">
-		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 40px;">
-		                      <div class=" icon-lock" style="width: 400px; height: 400px; background:gray; color:#f0f0ef; text-align:center; line-height: 350px;")> 비공개 작품</div>
+		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
+		                  	  <img src="/images/public.jpg" class=" icon-lock" style="width: 300px; height: 300px"></a>
 		                      <div class="meta">${design.dgnNo}</div>
 		                   </li>
                    		 </ul> `
    			return div;
    		}
 		
-		//하트클릭시 DB입력(등록,취소)
+		//하트클릭시 DB입력(등록,취소)-----------------------------------------------------------
 		function loveCheck(e) {
 			$(e).toggleClass("active");//css 변경
 			//이벤트객체console.log(this.contest);
@@ -500,8 +596,10 @@
 					})
 				}
 		}
+		
+		//좋아요 확인-----------------------------------------------------------
 		myLoveCheck();
-		//좋아요 확인
+		
 		function myLoveCheck() {
 			let targetNo = $('#cNo').text();
 			$.ajax({
@@ -521,6 +619,50 @@
 					}
 				}
 			})
+		}
+		
+		
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
+			}
+			let pagination = $("<div/>").addClass("block-27");
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+					.css("font-size", "30px")
+					.on("click", function () {
+						gopage(page.startPage - page.pageSize)
+					}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>").text(i).attr("class", "active")
+						.css("border-radius", "100%")
+						.css("color", "#000")
+						.css("background", "LightGray")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).attr("class", "page-link")
+						.css("border-radius", "100%")
+						.css("color", "#000")
+						.on("click", function () {
+							gopage($(this).text());
+						})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+					.css("font-size", "30px")
+					.on("click", function () {
+						gopage(page.startPage + page.pageSize)
+					}));
+			}
+			pagination.append(ul);
+			return pagination;
 		}
 		
 	</script>
