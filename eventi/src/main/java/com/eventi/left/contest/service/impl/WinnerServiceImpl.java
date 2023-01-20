@@ -1,6 +1,5 @@
 package com.eventi.left.contest.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +29,22 @@ public class WinnerServiceImpl implements WinnerService {
 	public int updateWinner(WinnerVO vo) {
 
 		// 등록된 공고번호가 없다면
-		List<WinnerVO> list = new ArrayList<>();
-		List<WinnerVO> winners = mapper.updateGetWinner(vo);
-		WinnerVO winner = null;
-		String[] str;
-		str = vo.getDgnNo();
+		List<WinnerVO> winners = mapper.winnerList(vo.getCoNo());
+		System.out.println(winners);
+		String[] dgnNo;
+		String[] userIdArr;
+		
+		// 공모전 우승입력개수 가져와서 사이즈만큼 반복문
+		// str 값에 입력한 디자이너번호를 받고
+		// 1등부터 순서대로 update
 		for (int i = 0; i < winners.size(); i++) {
-			winner = winners.get(i);
-		}
-		for (int i = 1; i < str.length; i++) {
-			winner.setdNo(str[i]);
-			winner.setGrade(i);
-			mapper.updateWinner(winner);
-			System.out.println(str[i]);
-			System.out.println(winner.getdNo());
+			dgnNo = vo.getDgnNo();
+			userIdArr = vo.getUserIdArr();
+			winners.get(i).setCoNo(vo.getCoNo());
+			winners.get(i).setdNo(dgnNo[i]);
+			winners.get(i).setGrade(i+1);
+			winners.get(i).setUserId(userIdArr[i]);
+			mapper.updateWinner(winners.get(i));
 		}
 		return 0;
 	}

@@ -281,7 +281,7 @@ footer {
 			let date = $(this).parent().parent().find($('input[type="date"]')).val();
 			
 			$.ajax({
-		           url:"/contest/update",
+		           url:"/contest/updateExtension",
 		           method: 'put',
 		           dataType: "json",
 		           data: JSON.stringify({cNo,dtExtns:date}),

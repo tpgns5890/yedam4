@@ -59,9 +59,17 @@ ul{
                         </div>
                      </div>
                   </div>
+                 <!-- 임시저장일경우 등록및 결제처리.. -->
+				<th:block th:if="${contest.save} == 'Y'">
+					<button type="submit" id="insertForm">등록</button>
+					<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
+				</th:block>
 				
-				<button type="submit" id="updateBtn">수정</button>
-				<button type="reset">취소</button>
+				 <!-- 등록된경우 등록및 결제처리.. -->
+				<th:block th:if="${contest.save} == 'N'">
+					<button type="submit" id="updateBtn">수정</button>
+					<button type="button" id="cancleBtn" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
+				</th:block>
 			</form>
 		</div>
 	<script>

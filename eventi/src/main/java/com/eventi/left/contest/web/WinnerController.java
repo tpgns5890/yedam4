@@ -1,9 +1,11 @@
 package com.eventi.left.contest.web;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,17 +24,28 @@ public class WinnerController {
 	DesignService dService;
 
 	// 우승자 전체리스트
-	@RequestMapping(value = "/List")
-	public String winnerList(Model model) {
-		model.addAttribute("winnerList", service.winnerList(null));
-		return "content/contest/winnerList";
+	@PostMapping("/List")
+	@ResponseBody
+	public List<WinnerVO> winnerList(WinnerVO vo) {
+		return service.winnerList(vo.getCoNo());
+	}
+
+	// 우승자 등록확인
+	@PostMapping("/check")
+	@ResponseBody
+	public boolean  winnerCheck(WinnerVO vo) {
+		 List<WinnerVO>list = service.winnerList(vo.getCoNo());
+		 if(list.get(0).getdNo() != null) {
+			 return true;
+		 }
+		return false;
 	}
 
 	// 등록처리
 	@PostMapping("/update")
 	public String winnerUpdate(WinnerVO vo) {
 		int r = service.updateWinner(vo);
-		return "redirect:/contest/List"; 
+		return "redirect:/contest/List";
 	}
 
 }

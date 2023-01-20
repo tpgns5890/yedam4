@@ -75,7 +75,7 @@ img {
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif" th:text="|${cNo} 지원자 조회|"></div>
+                <div class="module-subtitle font-serif" th:text="|${contest.cNo} 지원자 조회|"></div>
               </div>
             </div>
           </div>
@@ -109,207 +109,283 @@ img {
 				</div>
 			</div>
 		</div>
+		<th:block th:if="${contest.ing} == '마감' ">
+		<h3 th:text="${winner}"></h3>
 		<!-- 우승자 등록 -->
 		<div class="col-sm-8 col-sm-offset-2">
                 <h4 class="font-alt mb-0">우승자 등록</h4>
                 <hr class="divider-w mt-10 mb-20">
-                <form class="form" role="form" action="/winner/update" name="winnerfrm" method="post">
+                <form class="form" role="form" action="/winner/update" name="winnerfrm" method="post" onsubmit="return check();">
 	                  <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-	                  <input type="hidden" th:name="coNo" th:value="${cNo}"/>
-	                  <div class="form-group">
-	                    1등<input class="form-control input-lg" type="text" id="grade_01" name="dgnNo[]" required="required">
-	                  </div>
-	                  <div class="form-group">
-	                    2등<input class="form-control input-lg" type="text" id="grade_02" name="dgnNo[]">
-	                  </div>
-	                  <div class="form-group">
-	                    3등<input class="form-control input-lg " type="text" id="grade_03" name="dgnNo[]">
-	                  </div>
+	                  <input type="hidden" th:name="coNo" th:value="${contest.cNo}"/>
+
+
+					<!-- 공모전작성자가 입력한 등수만  출력 -->					
+					<th:block th:if="${winner.size} == 1">
+			                <div>
+			                 1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+			                 회원ID<input type="text" name="userIdArr[]">
+			                </div>
+					</th:block>
+					
+					<th:block th:if="${winner.size} == 2">
+						  <div>
+			                 1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+			                 회원ID<input type="text" name="userIdArr[]">
+			                </div>	
+		                  <div>
+		                    2등<input  type="text" id="grade_02" name="dgnNo[]">
+		                    회원ID<input  type="text" name="userIdArr[]">
+		                  </div>
+	                </th:block>
+	                  
+	                 <th:block th:if="${winner.size} == 3">
+	                 	   <div>
+			                 1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+			                 회원ID<input type="text" name="userIdArr[]">
+			                </div>	
+		                  <div>
+		                    2등<input  type="text" id="grade_02" name="dgnNo[]">
+		                    회원ID<input  type="text" name="userIdArr[]">
+		                  </div>
+		                  <div >
+		                    3등<input type="text" id="grade_03" name="dgnNo[]">
+		                    회원ID<input  type="text" name="userIdArr[]">
+		                  </div>
+	                 </th:block>
 	                  
                		  <button type="reset" class="btn btn-g btn-round btn-lg">초기화</button>	
 	                  <button type="submit" class="btn btn-g btn-round btn-lg">등록</button>
                 </form>
           </div>
+          </th:block>
           
 		<!-- 페이지처리를 위한 히든인풋. -->
 		<input type="hidden" name="page" value="1">
 		</div>
-		
 
 		<script>
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	select(); 
-	
-	//접수된 각 대표디자인1건에 대한 리스트
-	function select(){
-		let cNo ='[[${cNo}]]';
-		let page = $('input[name="page"]').val(); //페이지처리를 위한 변수.
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		let cNo = '[[${contest.cNo}]]';
+		select(); 
 		
-		$.ajax({
-			url: '/contest/ajaxDesignRead',
-			method: 'post',
-			//조회번호,페이지번호 넘기기.
-			data: {cNo,page}, 
-			beforeSend: function (xhr) {
-				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-				xhr.setRequestHeader(header, token);
-			},
-		}).then(res => {
-			if(res.design == 0){
-				alert('지원자가 없습니다.')
-				location.href = '/contest/mySelect';
-			}else{
-				$('#boxList').empty();
-				//1건의 디자인에 대한 파일리스트..
-				for(design of res.design){
-					let dNo = design.dgnNo;
-					let title = design.name;
-					let userId = design.userId;
-					makeImg(design.sevNm,title,dNo,userId);
+		
+		//등록된 우승자가 없을경우만 우승자등록.
+		function check(e){
+			
+			$.ajax({
+		           url:"/winner/check",
+		           method: 'post',
+		           data: {coNo:cNo},
+		           beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+		           success: function (result) {
+		        	   //값이 true이면
+		        	   if(result){
+		        		   console.log(result);
+		        		   alert('이미 등록된 우승자가 있습니다.')
+		        		    e.preventDefault();
+		        	   }else {
+		        		   alert('우승자등록 완료.')
+		        		   return true;
+		        	   }
+		           },
+		           fail: function () {
+		           }
+				})
+			
+		}
+		
+		
+		//접수된 각 대표디자인1건에 대한 리스트
+		function select(){
+			let cNo ='[[${contest.cNo}]]';
+			let page = $('input[name="page"]').val(); //페이지처리를 위한 변수.
+			
+			$.ajax({
+				url: '/contest/ajaxDesignRead',
+				method: 'post',
+				//조회번호,페이지번호 넘기기.
+				data: {cNo,page}, 
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				console.log(res.design)
+				if(res.design == 0){
+					alert('지원자가 없습니다.')
+					location.href = '/contest/mySelect';
+				}else{
+					$('#boxList').empty();
+					//1건의 디자인에 대한 파일리스트..
+					for(design of res.design){
+						let dNo = design.dgnNo;
+						let title = design.name;
+						let userId = design.userId;
+						makeImg(design.sevNm,title,dNo,userId);
+					}
+					$('#returnPaging').empty();
+					$('#returnPaging').append(makePageing(res.paging));
 				}
-				$('#returnPaging').empty();
-				$('#returnPaging').append(makePageing(res.paging));
-			}
-		})
-	}
+			})
+		}
+		
+		//디자인 응모작품 생성.
+		function makeImg(fileName,title,dNo,userId){
+			
+			let design = ` <div class="col-sm-6 col-md-4 col-lg-4 design" id="${dNo}">
+					            <div class="shop-item">
+					            <div class="shop-item-image"><img src="/fileView/${fileName}" style="width: 500px; height: 500px">
+					              <div class="shop-item-detail">
 	
-	//디자인 응모작품 생성.
-	function makeImg(fileName,title,dNo,userId){
-		
-		let design = ` <div class="col-sm-6 col-md-4 col-lg-4 design" id="${dNo}">
-				            <div class="shop-item">
-				            <div class="shop-item-image"><img src="/fileView/${fileName}" style="width: 500px; height: 500px">
-				              <div class="shop-item-detail">
-
-				              <div>
-					   				  <h3 class="content-box-title font-serif dNo">${dNo}</h3>
-					   				  <h3 class="content-box-title font-serif">회원:${userId}</h3>
-					   				  <h3 class="content-box-title font-serif">제목:${title}</h3>
-				              </div>
-				              <div class="btn btn-round btn-b">
-					              <span id="${dNo}" class="icon-magnifying-glass winner">우승자등록</span>
-				              </div>
-				            </div>
-				          </div>
-				        </div> `;
-		
-			$('#boxList').append(design);
-		
-	}
-	//-----------------------------------------------------------------------------------------
-	// 우승자등록버튼 
-	$('#boxList').on("click", ".winner" , function(e){
-		let dNo = $(this).attr("id");
-		e.stopPropagation();
-		$('input[name="dgnNo[]"]').each(function (i) {
-			if($(this).val() == '' || null || undefined || 0 || NaN){
-				$(this).val(dNo);
-				index ++;
-			}
+					              <div id ="${userId}">
+						   				  <h3 class="content-box-title font-serif dNo">${dNo}</h3>
+						   				  <h3 class="content-box-title font-serif">회원:${userId}</h3>
+						   				  <h3 class="content-box-title font-serif">제목:${title}</h3>
+					              </div>
+					              <div class="btn btn-round btn-b">
+						              <span id="${dNo}" class="icon-magnifying-glass winner">우승자등록</span>
+					              </div>
+					            </div>
+					          </div>
+					        </div> `;
+			
+				$('#boxList').append(design);
+			
+		}
+		//-----------------------------------------------------------------------------------------
+		// 우승자등록버튼 
+		$('#boxList').on("click", ".winner" , function(e){
+			let dNo = $(this).attr("id");
+			let userId = $(this).parent().prev().attr("id");
+			console.log(dNo);
+			console.log(userId);
+			
+			//이벤트 전파중지.
+			e.stopPropagation(); 
+			
+			//반복문으로 input값이 null이면 입력하고 
+			//1건만 입력하기 위해 입력된 경우 false 로 빠져나감.
+			 $('input[name="dgnNo[]"]').each(function (i) {
+				if($(this).val() == '' || null || undefined || 0 || NaN){
+					$(this).val(dNo);
+					return false;
+				}
+			})
+			
+			$('input[name="userIdArr[]"]').each(function (i) {
+				console.log($(this));
+				if($(this).val() == '' || null || undefined || 0 || NaN){
+					$(this).val(userId);
+					return false;
+				}
+			}) 
 		});
-	});
-	
-	
-	//디자인선택시 모달창 
-	//응모된 1건의 디자인
-	// 전체 파일리스트+ 정보출력.
-	$('#boxList').on("click", ".design" , function(e){
-		let dNo = $(this).attr("id");
-
 		
-		$.ajax({
-			url: '/design/ajaxSelect',
-			method: 'post',
-			data: {dgnNo:dNo},
-			beforeSend: function (xhr) {
-				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-				xhr.setRequestHeader(header, token);
-			},
-		}).then(res => {
-			console.log(res);
-			let user = res.userId;
-			let title = res.name;
-			let cntn = res.cntn;
+		
+		//디자인선택시 모달창 
+		//응모된 1건의 디자인
+		// 전체 파일리스트+ 정보출력.
+		$('#boxList').on("click", ".design" , function(e){
+			let dNo = $(this).attr("id");
+	
 			
-			$('#title').empty();
-			let content = `<h3>${user} 님의 참여작품 </h3>
-							<p>작품명 : ${title} </p>
-							<p>${cntn} </p>
-						  `
-			
-			$('#title').append(content);
-			
-			//모달내용을 지운뒤 붙여넣기.
-			$('#modelSelect').empty();
-			for(file of res.files){
-				makeDesign(file.sevNm,title,dNo);
-			}
-			
+			$.ajax({
+				url: '/design/ajaxSelect',
+				method: 'post',
+				data: {dgnNo:dNo},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				console.log(res);
+				let user = res.userId;
+				let title = res.name;
+				let cntn = res.cntn;
+				
+				$('#title').empty();
+				let content = `<h3>${user} 님의 참여작품 </h3>
+								<p>작품명 : ${title} </p>
+								<p>${cntn} </p>
+							  `
+				
+				$('#title').append(content);
+				
+				//모달내용을 지운뒤 붙여넣기.
+				$('#modelSelect').empty();
+				for(file of res.files){
+					makeDesign(file.sevNm,title,dNo);
+				}
+				
+			})
 		})
-	})
-	
-	//모달창 :디자인 응모작품 생성.
-	function makeDesign(fileName,dNo){
-		let design = `  <div class="design" id="${dNo}" style="float: left ">
-								<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
-					   </div>
-					  `
-			$('#modelSelect').append(design);
 		
-	}
-	//----------------------------------------------------------------------------------------------------
-	//페이지 이동 함수
-	function gopage(i) {
-		$('input[name="page"]').val(i); //페이징처리를 위한 input값 변경.
-		select();
-	}
-	
-	// 페이징 만들기
-	function makePageing(page) {
-		if (page.totalRecord == 0) {
-			return;
+		//모달창 :디자인 응모작품 생성.
+		function makeDesign(fileName,dNo){
+			let design = `  <div class="design" id="${dNo}" style="float: left ">
+									<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
+						   </div>
+						  `
+				$('#modelSelect').append(design);
+			
 		}
-		let pagination = $("<div/>").addClass("block-27");
-		let ul = $("<ul/>").attr("class","pagination");
-		if (page.startPage > 1) {
-			$(ul).append($("<li/>").html("&laquo;")
-				.css("font-size", "30px")
-				.on("click", function () {
-					gopage(page.startPage - page.pageSize)
-				}));
+		//----------------------------------------------------------------------------------------------------
+		//페이지 이동 함수
+		function gopage(i) {
+			$('input[name="page"]').val(i); //페이징처리를 위한 input값 변경.
+			select();
 		}
-
-		//페이지 버튼 생성.
-		for (let i = page.startPage; i <= page.endPage; i++) {
-			if (page.page == i) {
-				$(ul).append($("<li/>").text(i).attr("class", "active")
-					.css("border-radius", "100%")
-					.css("color", "#000")
-					.css("background", "LightGray")
-				);
-			} else {
-				$(ul).append($("<li/>").text(i).attr("class", "page-link")
-					.css("border-radius", "100%")
-					.css("color", "#000")
-					.on("click", function () {
-						gopage($(this).text());
-					})); //페이지이동 함수
+		
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
 			}
-		}
-		if (page.endPage < page.lastPage) {
-			$(ul).append($("<li/>").html("&raquo;")
-				.css("font-size", "30px")
-				.on("click", function () {
-					gopage(page.startPage + page.pageSize)
-				}));
-		}
-		pagination.append(ul);
-		return pagination;
-	}
-
+			let pagination = $("<div/>").addClass("block-27");
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+					.css("font-size", "30px")
+					.on("click", function () {
+						gopage(page.startPage - page.pageSize)
+					}));
+			}
 	
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>").text(i).attr("class", "active")
+						.css("border-radius", "100%")
+						.css("color", "#000")
+						.css("background", "LightGray")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).attr("class", "page-link")
+						.css("border-radius", "100%")
+						.css("color", "#000")
+						.on("click", function () {
+							gopage($(this).text());
+						})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+					.css("font-size", "30px")
+					.on("click", function () {
+						gopage(page.startPage + page.pageSize)
+					}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
 	
+		
+		
 			// Get the modal
 			var modal = document.getElementById("myModal");
 			

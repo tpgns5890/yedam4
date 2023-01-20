@@ -54,6 +54,13 @@
 		SELECT c_no,writer,ttl,cntn,code_select(category) category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
 	        ,code_select(style) style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
+            ,CASE WHEN dt_extns IS NOT NULL THEN CASE WHEN TO_DATE(dt_extns,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
+                                                     ELSE '마감'
+                                                END
+                WHEN dt_extns IS NULL THEN CASE WHEN TO_DATE(dt_cls,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
+                                                    ELSE '마감'
+                                                END
+                END AS ing
 		FROM CONTEST
 		WHERE
 		C_NO = #{cNo}

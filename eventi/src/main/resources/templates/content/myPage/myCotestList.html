@@ -72,9 +72,18 @@
 						<td th:text=${contest.writer}></td>
 						<td th:text=${contest.category}></td>
 						<td th:text=${contest.ttl}></td>
-						<td
-							th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}">
-						</td>
+						
+						<!-- 마감기한만 있을경우 -->
+						<th:block th:if="${contest.dtExtns} == null">
+							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}"></td>
+						</th:block>
+						
+						<!-- 마감연장 1회 한경우 -->
+						<th:block th:if="${contest.dtExtns} != null">
+							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}"></td>
+						</th:block>
+						
+						
 						<td th:text="${contest.ing}"></td>
 						
 						

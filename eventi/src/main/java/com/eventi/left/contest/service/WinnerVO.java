@@ -13,10 +13,12 @@ public class WinnerVO {
 	private int grade; // 선택등수
 	private int wPay; // 상금액
 	private String dNo; // 디자인번호
+	private String userId; // 우승자ID(회원ID)
 
 	// 정보처리를 위한 필드선언.
 	private String[] winnerPay; // form 입력 배열.
 	private String[] dgnNo;
+	private String[] userIdArr;
 	
 	
 	public String getwNo() {
@@ -43,6 +45,6 @@ public class WinnerVO {
 		this.dNo = dNo;
 	}
 
-	private String userId; // 우승자ID(회원ID)
+	
 
 }

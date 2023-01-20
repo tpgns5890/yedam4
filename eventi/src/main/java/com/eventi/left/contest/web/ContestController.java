@@ -153,6 +153,13 @@ public class ContestController {
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
+	// 마감연장 수정처리
+	@PutMapping("/updateExtension")
+	@ResponseBody
+	public int contestExtension(@RequestBody ContestVO vo, MultipartFile[] uploadFile) {
+		return service.updateContest(vo, uploadFile);
+	}
+
 	// 삭제처리(링크처리는 get/ deleteMappging form)
 	@PostMapping("/delete")
 	@ResponseBody
@@ -164,7 +171,6 @@ public class ContestController {
 
 		return service.deleteContest(vo);
 	}
-
 
 	// 공모전 좋아요리스트
 	@GetMapping("/like")
@@ -196,6 +202,7 @@ public class ContestController {
 
 		return result;
 	}
+
 	// 나의 공모전게시글관리
 	@GetMapping("/mySelect")
 	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
@@ -203,20 +210,12 @@ public class ContestController {
 		model.addAttribute("paging", paging);
 		return "content/myPage/myCotestList";
 	}
-	
-	// 나의 공모전 검색기능
-//	@PostMapping("/mySelectAjax")
-//	public Map<String, Object> mySelectSearch(ContestVO vo, PagingVO paging) {
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		result.put("contestList", service.myContestList(vo, paging));
-//		result.put("paging",paging);
-//		return result;
-//	}
-	
+
 	// 나의공모전관리 지원자조회페이지 이동
 	@GetMapping("/designRead")
 	public String designRead(Model model, String cNo) {
-		model.addAttribute("cNo", cNo);
+		model.addAttribute("contest", service.getContest(cNo));
+		model.addAttribute("winner", wService.winnerList(cNo));
 		return "content/contest/cotestDesignList";
 	}
 
