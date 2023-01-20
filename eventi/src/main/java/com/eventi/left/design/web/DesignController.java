@@ -117,18 +117,14 @@ public class DesignController {
 	@PostMapping("/ajaxSelect")
 	@ResponseBody
 	public DesignVO designSelect(String dgnNo) {
-
-		System.out.println(dgnNo);
-
 		// 디자인 1건조회
 		DesignVO design = service.getDesign(dgnNo);
 		List<FilesVO> files = new ArrayList<>();
 
 		// 1건에 대한 파일리스트 받고 
-		// 디자인vo 대표사진 서버명 받기...제발.
 		files = fService.fileList(design.getDgnNo());
 		design.setFiles(files);
-
+		
 		return design;
 	}
 

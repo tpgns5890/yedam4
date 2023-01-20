@@ -43,7 +43,8 @@
 						<th>진행기간</th>
 						<th>진행현황</th>
 						<th>등록현황</th>
-						<th>지원자조회/우승자등록</th>
+						<th>지원자조회</th>
+						<th>우승자등록</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -75,10 +76,10 @@
 						<th:block th:if="${contest.save} == 'N'">
 							<td th:text="등록완료"></td>
 						</th:block>
-							<td th:text="${contest.save}"></td>
 						
 						<th:block th:if="${contest.save} == 'N'">
-								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회 및 등록</button></td>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
 						</th:block>
 						
 					</tr>

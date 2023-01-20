@@ -222,24 +222,18 @@ public class ContestController {
 		return "content/contest/cotestDesignList";
 	}
 
-	//!!!!!!! 디자인 1 , 12, 123 으로나옴..
 	// 1.나의공모전 -> 응모디자인조회 
 	// 2.공모전 -> 상세정보 
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
 	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
+	
 		Map<String, Object> result = new HashMap<String, Object>();
 		DesignVO dVo = new DesignVO();
 		dVo.setcNo(cNo);
 		// 1건의 공모전에 접수된 디자인리스트
 		List<DesignVO> designs = dService.contestDesignList(dVo, paging);
-		List<FilesVO> files = new ArrayList<>();
 
-		// 디자인 1건에 대한 파일리스트.
-		for (DesignVO design : designs) {
-			files = fService.fileList(design.getDgnNo());
-			design.setFiles(files);
-		}
 		result.put("design", designs);
 		result.put("paging", paging);
 

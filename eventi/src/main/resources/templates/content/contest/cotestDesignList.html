@@ -155,31 +155,18 @@ img {
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			console.log(res);
-			console.log(res.paging);
 			if(res.design == 0){
 				alert('지원자가 없습니다.')
 				location.href = '/contest/mySelect';
 			}else{
-				
 				$('#boxList').empty();
 				//1건의 디자인에 대한 파일리스트..
 				for(design of res.design){
-					
 					let dNo = design.dgnNo;
 					let title = design.name;
 					let userId = design.userId;
-					/*  console.log(design.files)  */
-					
-					for(file of design.files){
-						//디자인 파일리스트 중 대표이미지가 같을경우 생성.
-						if(design.centerImg == file.fNm){
-							makeImg(file.sevNm,title,dNo,userId);
-						}
-							
-					}
+					makeImg(design.sevNm,title,dNo,userId);
 				}
-				
 				$('#returnPaging').empty();
 				$('#returnPaging').append(makePageing(res.paging));
 			}
@@ -325,14 +312,12 @@ img {
 			// Get the modal
 			var modal = document.getElementById("myModal");
 			
-			// Get the button that opens the modal
-			var btn = document.getElementById("boxList"); //태그id 변경시 확인!!
 			
 			// Get the <span> element that closes the modal
 			var span = document.getElementsByClassName("close")[0];
 			
-			// When the user clicks the button, open the modal 
-			$('btn').on("click",function() {
+			// open the modal 
+			$('#boxList').on("click",function() {
 			  modal.style.display = "block";
 			})
 			
