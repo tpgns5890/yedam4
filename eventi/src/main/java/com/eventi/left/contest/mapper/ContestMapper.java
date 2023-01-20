@@ -6,7 +6,7 @@ import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 
 public interface ContestMapper {
-	// 공모전
+		// 공모전
 		public List<ContestVO> contestList(ContestVO contestVO); // 전체조회
 		
 		public List<ContestVO> myContestList(ContestVO ContestVO); // 작성한 공모전리스트 조회
@@ -30,5 +30,6 @@ public interface ContestMapper {
 		public int deleteContest(ContestVO contestVO); // 삭제
 		
 		public String getSequence(); //시퀀스 맥시멈번호 찾기.
+		
 		
 }

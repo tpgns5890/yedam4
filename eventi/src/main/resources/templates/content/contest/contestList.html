@@ -66,7 +66,7 @@ h2 {
               <div class="col-sm-3">
               	<!-- 비회원 공모전작성버튼-->
 				<th:block sec:authorize="!isAuthenticated()">
-				<a href="../login"><button class="btn btn-block btn-round btn-g">공모전 작성</button></a>
+				<button class="btn btn-block btn-round btn-g" onclick="login()">공모전 작성</button></a>
 				</th:block>
 				
 				<!-- 일반회원 공모전작성버튼-->
@@ -79,7 +79,7 @@ h2 {
 				<!-- 비회원 좋아요버튼-->
 				<th:block sec:authorize="!isAuthenticated()">
 				<div class="stage" style="float: right;">
-					<a href="../loginPage"><div id="love" class="stage heart"></div></a>
+					<div id="love" class="stage heart" onclick="login()"></div>
 				</div>
 				</th:block>
 				
@@ -136,6 +136,10 @@ h2 {
 				var header = $("meta[name='_csrf_header']").attr("content");
 				contestList(); // 첫 화면 리스트출력
 
+				function login(){
+					 $("#header_modal").show();
+				}
+				
 				function gopage(i) {
 					let page = $('input[name="page"]').val(i);
 					checkSelect();

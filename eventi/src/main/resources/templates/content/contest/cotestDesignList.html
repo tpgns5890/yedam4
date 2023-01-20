@@ -130,6 +130,7 @@ img {
 	                  <button type="submit" class="btn btn-g btn-round btn-lg">등록</button>
                 </form>
           </div>
+          
 		<!-- 페이지처리를 위한 히든인풋. -->
 		<input type="hidden" name="page" value="1">
 		</div>
@@ -155,31 +156,18 @@ img {
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			console.log(res);
-			console.log(res.paging);
 			if(res.design == 0){
 				alert('지원자가 없습니다.')
 				location.href = '/contest/mySelect';
 			}else{
-				
 				$('#boxList').empty();
 				//1건의 디자인에 대한 파일리스트..
 				for(design of res.design){
-					
 					let dNo = design.dgnNo;
 					let title = design.name;
 					let userId = design.userId;
-					/*  console.log(design.files)  */
-					
-					for(file of design.files){
-						//디자인 파일리스트 중 대표이미지가 같을경우 생성.
-						if(design.centerImg == file.fNm){
-							makeImg(file.sevNm,title,dNo,userId);
-						}
-							
-					}
+					makeImg(design.sevNm,title,dNo,userId);
 				}
-				
 				$('#returnPaging').empty();
 				$('#returnPaging').append(makePageing(res.paging));
 			}
@@ -200,7 +188,7 @@ img {
 					   				  <h3 class="content-box-title font-serif">제목:${title}</h3>
 				              </div>
 				              <div class="btn btn-round btn-b">
-					              <span id="${dNo}" class="icon-magnifying-glass winner">우승자등록</span></a>
+					              <span id="${dNo}" class="icon-magnifying-glass winner">우승자등록</span>
 				              </div>
 				            </div>
 				          </div>
@@ -325,14 +313,12 @@ img {
 			// Get the modal
 			var modal = document.getElementById("myModal");
 			
-			// Get the button that opens the modal
-			var btn = document.getElementById("boxList"); //태그id 변경시 확인!!
 			
 			// Get the <span> element that closes the modal
 			var span = document.getElementsByClassName("close")[0];
 			
-			// When the user clicks the button, open the modal 
-			$('btn').on("click",function() {
+			// open the modal 
+			$('#boxList').on("click",function() {
 			  modal.style.display = "block";
 			})
 			

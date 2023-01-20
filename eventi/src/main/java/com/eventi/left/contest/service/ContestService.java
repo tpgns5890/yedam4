@@ -2,7 +2,11 @@ package com.eventi.left.contest.service;
 
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.files.service.FilesVO;
 
 public interface ContestService {
 
@@ -12,14 +16,12 @@ public interface ContestService {
 
 	public ContestVO getContest(String cVo); // 공모전 1건에 대한 등록조회
 
-	public int updateContest(ContestVO contestVO); // 수정
+	public int updateContest(ContestVO vo, MultipartFile[] uploadFile); // 수정
 
 	public int deleteContest(ContestVO contestVO); // 삭제
 
 	public String getSequence(); // 시퀀스 맥시멈번호 찾기.
 
-	// 공모전,우승상금 등록
-	public int insertContest(ContestVO vo, WinnerVO wvo);
-
-
+	public int insertContest(ContestVO vo, WinnerVO wvo); // 공모전,우승상금 등록
+	
 }

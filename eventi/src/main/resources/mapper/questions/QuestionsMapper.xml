@@ -6,10 +6,10 @@
 	namespace="com.eventi.left.questions.mapper.QuestionsMapper">
 
 	<select id="questionsList" resultType="QuestionsVO">
-		select * 
-		from Questions
-		where category = #{category}
-		and target_id = #{targetId}
+		select *
+		from Questions 
+		where target_id =#{targetId}
+		and category = #{category}
 	</select>
 	
 	<!-- 문의사항 전체조회 -->
@@ -25,7 +25,7 @@
 	    
 	</select>
 	
-	<select id="getQuestions">
+	<select id="getQuestions" resultType="QuestionsVO">
 		select * 
 		from Questions
 		where category = #{category}
@@ -53,11 +53,18 @@
 	</insert>
 	
 	<update id="questionsUpdate">
-	
+		update QUESTIONS
+		set CNTN= #{Cntn},
+			WRITING_DT = current_date,
+			SECRET_YN = #{secretYn}
+		where q_no = #{qNo}
+		and user_id = #{userId}
 	</update>
 	
 	<delete id="questionsDelete">
-	
+		delete questions
+		where q_no = #{qNo}
+		and user_id = #{userId}
 	</delete>
 
 </mapper>

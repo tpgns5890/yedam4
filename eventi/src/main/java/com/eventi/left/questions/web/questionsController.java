@@ -15,6 +15,7 @@ import com.eventi.left.common.SessionUtil;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Controller
 @RequestMapping("/questions")
@@ -29,26 +30,38 @@ public class questionsController {
 	public List<QuestionsVO> qestionsList(QuestionsVO vo) {
 		return qService.questionsList(vo);
 	}
-
+	
 	// 등록처리
 	@PostMapping("/insert")
 	@ResponseBody
-	public String qestionsInsert(@RequestBody QuestionsVO vo) {
-		 qService.questionsInsert(vo); //등록처리
-		 System.out.println(vo);
-		 
-		 return "redirect:/contest/select?cNo=" + vo.getTargetId();
+	public QuestionsVO qestionsInsert(QuestionsVO vo) {
+		qService.questionsInsert(vo); // 등록처리
+		return qService.getQuestions(vo);
 	}
-	
+
 	// 나의 문의내역 전체조회
-	@GetMapping("/myqnaList") 
-	public String qnaList(Model model, QuestionsVO questionsVO) {
+	@GetMapping("/myqnaList")
+	public String qnaList(Model model, QuestionsVO vo) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		questionsVO.setUserId(user.getUserId());
-		model.addAttribute("qnaList", qService.qnaList(questionsVO));
-		System.out.println(questionsVO);
-		//model.addAttribute("paging", paging);
+		vo.setUserId(user.getUserId());
+		model.addAttribute("qnaList", qService.qnaList(vo));
+		// model.addAttribute("paging", paging);
 		return "content/questions/queList";
 	}
-	
+
+	// 댓글 수정
+	@PostMapping("/update")
+	@ResponseBody
+	public QuestionsVO replyUpdate(QuestionsVO vo) {
+		 qService.questionsUpdate(vo);
+		 return qService.getQuestions(vo);
+	}
+
+	// 댓글 삭제
+	@PostMapping("/delete")
+	@ResponseBody
+	public int qestionsDelete(QuestionsVO vo) {
+		return qService.questionsDelete(vo);
+	}
+
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
@@ -20,8 +21,10 @@ import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.mapper.DesignMapper;
+import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.mapper.LikesMapper;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
@@ -128,10 +131,10 @@ public class ContestServiceImpl implements ContestService {
 
 	// 공모전 수정
 	@Override
-	public int updateContest(ContestVO vo) {
+	public int updateContest(ContestVO vo,MultipartFile[] uploadFile) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setWriter(user.getUserId());
-
+		
 		// 마감연장 할경우
 		if (vo.getDtExtns() != null) {
 			ContestVO contest = mapper.getContest(vo.getcNo());
@@ -141,8 +144,16 @@ public class ContestServiceImpl implements ContestService {
 				return 0;
 			}
 		}
-		// 파일수정 추가할것.
-		return mapper.updateContest(vo);
+		// 공모전수정
+		int r = mapper.updateContest(vo);
+			List<FileDto> list= new ArrayList<FileDto>();
+			//파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+			try {
+				list = newUp.updateFiles(uploadFile, vo.getcNo(), vo.getCategory());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	     return r;
 	}
 
 	// 공모전,우승상금 삭제
@@ -172,6 +183,13 @@ public class ContestServiceImpl implements ContestService {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setWriter(sessionId);
+		
+		//페이징처리
+		paging.setTotalRecord(mapper.myContest(vo));
+		paging.setPageUnit(10); // 12개 출력 (default 10)
+		paging.setPageSize(5);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
 		
 
 		paging.setTotalRecord(mapper.myContest(vo));

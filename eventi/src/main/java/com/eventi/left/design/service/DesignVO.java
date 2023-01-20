@@ -24,6 +24,8 @@ public class DesignVO {
 	private String centerImg; //대표이미지
 	private String pubcYn = "N"; //공개여부
 	
+	private String contestTtl; //공모전제목
+	
 	private String sevNm;		//서버내파일명
 	
 	public String getcNo() {

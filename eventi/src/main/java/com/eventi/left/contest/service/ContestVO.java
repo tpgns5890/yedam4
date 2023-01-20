@@ -33,9 +33,11 @@ public class ContestVO {
 	private int rprt; 	 //신고수
 	private String style; 	 //선호하는태그(최대 3개)
 	
-	//정렬기준
+	//정렬,검색
 	private String order = "dt_Reg"; //정렬기준
-	private String ing; //진행,마감체크
+	private String search;
+	//진행,마감체크
+	private String ing; 
 	
 	//공모전 파일
 	private String img;

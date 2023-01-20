@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.design.mapper.DesignMapper">
 	
+	<!-- 회원 아이디가 있다면 -->
+	<sql id="check">
+		<where>
+			<if test="userId != null and userId != ''">
+				user_Id = #{userId}
+			</if>
+		</where>
+	</sql>
+	<!-- 검색처리 -->
+	<sql id="search">
+			<if test="name != null and name != ''">
+				and name LIKE '%'||#{name}||'%' 
+			</if>
+	</sql>	
 	
 	<select id="designList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
@@ -16,8 +30,11 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM DESIGN
+		<include refid="check" /> 
+		<include refid="search" /> 
 	</select>
 	
+	<!-- 공모전1건에 대한 디자인리스트중에서 1번째 대표이미지와 같은 파일명가져오기. -->
 	<select id="contestDesignList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
 			select c.c_no, d.dgn_no, d.user_id user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn, f.sev_nm sevNm
@@ -26,16 +43,28 @@
                            join files f
                           		 on f.target_id = d.dgn_no
 			and c.c_no = #{cNo}
+			and d.center_img = f.f_nm
 			order by dt DESC
 		<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
 		]]>
 	</select>
 	
+	<!-- 회원유저의 디자인리스트 대한 내역 -->
 	<select id="userDesignList" resultType="DesignVO">
-		SELECT * FROM DESIGN
-		WHERE USER_ID = #{userId}
+	SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT d.*,f.sev_nm sevNm,c.ttl contestTtl 
+		FROM DESIGN d join files f
+		                on f.target_id = d.dgn_no
+		              join contest c
+                         on d.c_no = c.c_no
+		and USER_ID = #{userId}
+		and d.center_img = f.f_nm
+		<include refid="search" /> 
 		order by dt DESC
+	<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
 	</select>
 	
 	<select id="getDesign" resultType="DesignVO">

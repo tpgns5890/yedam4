@@ -30,8 +30,8 @@ public class QuestionsServiceImpl implements QuestionsService{
 	}
 
 	@Override
-	public int questionsDelete(String qNo) {
-		return mapper.questionsDelete(qNo);
+	public int questionsDelete(QuestionsVO questionsVO) {
+		return mapper.questionsDelete(questionsVO);
 	}
 
 	@Override
