@@ -169,8 +169,8 @@ footer {
 					</div>
 				</div>
 
-				<div class="row mt-5">
-					<div class="col-md-12 nav-link-wrap" style="min-height: 500px;">
+				<div class="row mt-5" >
+					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
 						<div class="nav nav-pills d-flex text-center" id="v-pills-tab"
 							role="tablist" aria-orientation="vertical">
 
@@ -189,11 +189,13 @@ footer {
 								aria-labelledby="day-1-tab">
 								<div id="divCntn" class="tab-pane active">
 									<div th:if="${contest.cntn} != null">
-										  <span id="cotestCntn" th:utext=${contest.cntn}></span>
-										<div></div>
+										<div id="cotestCntn" th:utext=${contest.cntn}></div>
 									</div>
 								</div>
 							</div>
+						</div>
+						<div>
+							<div class="block-27" id="returnPaging"></div>
 						</div>
 					</div>
 				</div>
@@ -213,6 +215,10 @@ footer {
 					<button id="extension" class="modelBtn1" style="width: 50px;" type="button">연장하기</button>
 				</div>
 			</div>
+			
+			<!-- 페이지처리를 위한 히든인풋. -->
+		<input type="hidden" name="designPage" value="1">
+
 
 		</div>
 
@@ -328,6 +334,14 @@ footer {
 		$('#liQuestions').on('click', questions);
 		$('#lientry').on('click', contest);
 		
+		//페이지 이동 함수
+		function gopage(i) {
+			console.log(i)
+			$('input[name="designPage"]').val(i); //페이징처리를 위한 input값 변경.
+			contest(); //찾을수없음..??
+		}
+		//-------------------------------------------------------------
+		
 		//요청사항 출력
 		function contentSelect(){
 			$.ajax({
@@ -339,6 +353,7 @@ footer {
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
+				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
 				$("#cotestCntn").append(res.cntn);
 			})
@@ -443,6 +458,7 @@ footer {
                 },
 			}).then(res => {
 				//기존 박스 지우기
+				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
 				
 				//작성자가 아니면 문의사항 입력박스 출력
@@ -616,10 +632,12 @@ footer {
 			
 		//참여작 출력-----------------------------------------------------------
 		function contest(){
+			let page = $('input[name="designPage"]').val();
+			
 			$.ajax({
 	            url:'../contest/ajaxDesignRead',
 	            method:"post",
-	            data : {cNo},
+	            data : {cNo,page},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);
@@ -637,27 +655,12 @@ footer {
 						$("#cotestCntn").append(makeDesignYes(design)); 
 					}
 				 }		
+					//기존 페이징 삭제후 붙이기
+					$('#returnPaging').empty();
+					$('#returnPaging').append(makePageing(res.paging)); 
 					
-					//페이징 div태그 붙이기			
-					$("#cotestCntn").next().append(DesignPage()); 
-					//페이징태그 붙이기
-					
-					///태그값 찾아서 지우고 붙이기..
-					/* $('#returnPaging').empty();
-					//$('#returnPaging').append(makePageing(res.paging)); */
 					
 			})
-		}
-		
-		//페이징 기본틀..
-		function DesignPage(){
-			let divtag = `<div class="row mt-5" id="paging">
-								<div class="col text-center">
-								<div class="block-27" id="returnPaging">
-								</div>
-							</div>
-						</div>`
-			return divtag;
 		}
 		
 		//참여작 생성(공개)
