@@ -32,13 +32,14 @@ ul{
         </section>
         
 		<div class="contestContainer">
-			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
+			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" >
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
 					<li><div th:text="|분류별 ${contest.category}|"></div></li>
 					<li><div th:text="|공모번호 ${contest.cNo}|"></div></li>
 					<li><div th:text="|작성자 ${contest.writer}"></div></li>
 					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li>
+					<li><input hidden="hidden" type="text" name="cNo" th:value="${contest.cNo}"><br /></li> <li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
 					<li><textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4" required="required"></textarea></li>
 				</ul>
@@ -47,7 +48,7 @@ ul{
 					<div class="col-md-12">
                      <div class="form-group" id="fileInsert">
                         <!-- 이미지가 있을 경우와 없을 경우 if문으로 처리 -->
-                        <input type="file" id="imgInp" name="uploadFile" th:if="|${fileList == null}|"/>
+                        <input type="file" id="imgInp" name="uploadFile" multiple="multiple" th:if="|${fileList == null}|"/>
                         <div th:each="f : ${fileList}">
                            <div th:if="|/fileView/${f.sevNm} != null}|">
                               <img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
@@ -59,7 +60,7 @@ ul{
                      </div>
                   </div>
 				
-				<button type="button" id="updateBtn">수정</button>
+				<button type="submit" id="updateBtn">수정</button>
 				<button type="reset">취소</button>
 			</form>
 		</div>
@@ -82,34 +83,6 @@ ul{
 		smartEditor()
 	})
 
-	//수정처리
-	$('#updateBtn').on('click', function (){
-		oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
-		
-		var cNo = '[[${contest.cNo}]]';
-	 	var ttl = $("input[name='ttl']").val();
-	 	var cntn =  $("textarea[name='cntn']").val();
-	 	var fNm = $("input[type='file']").val();
-		
-		$.ajax({
-	           url:"/contest/update",
-	           method: 'put',
-	           dataType: "json",
-	           data: JSON.stringify({cNo,ttl,cntn}),
-	           contentType : "application/json",
-	           beforeSend: function (xhr) {
-					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-					xhr.setRequestHeader(header, token);
-				},
-	           success: function (result) {
-	                 alert('수정처리 성공');
-	                  location.href='/contest/select?cNo='+cNo; 
-	           },
-	           fail: function () {
-	                 	alert('수정처리 실패')
-	           }
-			})
-		})
 		
 		//파일 업로드 이미지 미리보기
        //파일 INPUT창에 변화가 있을 경우 실행

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
@@ -145,12 +146,11 @@ public class ContestController {
 		return "content/contest/contestUpdateForm";
 	}
 
-	// 수정처리(완료)
-	@PutMapping("/update")
-	@ResponseBody
-	public int contestupdateForm(@RequestBody ContestVO vo) {
-
-		return service.updateContest(vo);
+	// 수정처리
+	@PostMapping("/update")
+	public String contestupdateForm(ContestVO vo, MultipartFile[] uploadFile) {
+		service.updateContest(vo,uploadFile);
+		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
 	// 삭제처리(링크처리는 get/ deleteMappging form)

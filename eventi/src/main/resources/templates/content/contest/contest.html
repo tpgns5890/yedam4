@@ -91,9 +91,9 @@ footer {
 								<!-- 비회원 하트버튼 -->
 								<th:block sec:authorize="!isAuthenticated()">
 									<div class="stage" style="float: right; height: 50px;">
-										<a href="../loginPage"><div id="love" class="stage heart">
+										<div id="love" class="stage heart" onclick="login()">
 												<span th:text=${contest.likes}></span>
-											</div></a>
+											</div>
 									</div>
 								</th:block>
 
@@ -133,8 +133,8 @@ footer {
 						<!-- 비회원 -->
 						<th:block sec:authorize="!isAuthenticated()">
 							<p>
-								<a href="#"><button type="button" class="btn btn-g btn-round btn-lg">링크복사</button></a> <a
-									href="../loginPage"><button type="button" class="btn btn-g btn-round btn-lg">응모하기</button></a>
+								<a href="#"><button type="button" class="btn btn-g btn-round btn-lg">링크복사</button></a> 
+								<button type="button" class="btn btn-g btn-round btn-lg" onclick="login()">응모하기</button>
 							</p>
 						</th:block>
 
@@ -230,6 +230,11 @@ footer {
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		let writer = '[[${contest.writer}]]';
 		
+		//로그인모달창.
+		function login(){
+			 $("#header_modal").show();
+		}
+
 		
 		//모달창-----------------------------------------------------------
 		// Get the modal
@@ -386,7 +391,7 @@ footer {
 			
 			//공모전 작성자일 경우에만 답변등록.
 			}if(writer ==userId){
-				repInsert = `<button type="button" class="questionRep">답변등록</button>`
+				repInsert = `<button type="button" class="questionRep" >답변등록</button>`
 			}
 			
 			 //회원아이디에 따라 다르게 표시됌.(수정,삭제,답변등록)
@@ -499,8 +504,10 @@ footer {
  			
  			console.log(Cntn,Ttl)
  			
+ 			if(userId == ''){
+ 				login() //로그인모달창.
  			//내용이 없고 등록버튼을 눌렀을경우
- 			if(Cntn == '' || Ttl  == ''){
+ 			}else if(Cntn == '' || Ttl  == ''){
  				alert('문의사항을 입력해주세요');
  			//문의사항 등록처리
  			}else{
@@ -513,7 +520,7 @@ footer {
  	 					xhr.setRequestHeader(header, token);
  	 	            }
  	 	   		}).then(res => {
- 	 	   			//댓글 부분에 등록하기
+ 	 	   			//문의 부분에 등록하기
  	 	   			alert('문의등록 완료')
  	 	   			$("#cotestCntn").append(make(res));
  	 	   		})
