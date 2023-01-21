@@ -20,6 +20,50 @@
     transition-duration: 1s;
     background-position: -2800px 0;
   }
+  
+  #modal {
+			display: none;
+			position: fixed;
+			top: 25em;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			width: 100%;
+
+		}
+
+		#modal h2 {
+			margin: 0;
+		}
+
+		#modal button {
+			display: inline-block;
+			width: 100px;
+			border: 0.2px solid black;
+			border-radius: 5px;
+		}
+
+		#modal .modal_content {
+			width: 350px;
+			min-height: 200px;
+			margin: 0 auto;
+			padding: 20px;
+			background: #fff;
+			border: 0.5px solid #666;
+			border-radius: 15px;
+		}
+
+		#modal .modal_layer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+
 </style>
 
 <!-- csrf 설정 -->
@@ -44,6 +88,9 @@
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo}, type=${bSelect.type})}'|">글 삭제하기</button>
    </th:block>
+   
+   <!-- 신고하기 -->
+   <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
    
    <!-- 해당 게시글에 좋아요를 눌렀을 경우에는 채워진 하트가 나타남 -->
    <th:block th:if="${like == null}">
@@ -76,7 +123,8 @@
       <tbody>
          <tr>
             <td id="bBoardNo" th:text=${bSelect.bBoardNo}></td>
-            <td th:text=${bSelect.writer}></td>
+            <td th:if="${bSelect.ano} == 'N'" th:text=${bSelect.writer}></td>
+	        <td th:if="${bSelect.ano} == 'Y'" th:text=${bSelect.checkano}></td>
             <td th:text=${bSelect.ttl}></td>
             <td th:utext=${bSelect.cntn}></td>
             <td th:text=${bSelect.inq}></td>
@@ -105,6 +153,23 @@
     	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
     	<button type="button" id="repInsertBtn">댓글추가</button>
     </form>
+    
+    <div id="modal">
+			<div class="modal_content">
+				<h2>신고</h2>
+				<div id="box">
+					<label>신고게시글</label>
+					<input type="text" id="targetId" name="targetId" th:value="${bSelect.bBoardNo}" readonly><br>
+					<label>신고자</label>
+					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+					<label>신고사유</label>
+					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+					<button type="button" id="cancel">취소</button>
+					<button type="button" id="punish">신고</button>
+				</div>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
    
    <script>
    $(function() {
@@ -349,7 +414,7 @@
 					url : "/likes/lDelete",
 					method : 'post',
 					contentType : 'application/x-www-form-urlencoded',
-					data : {userId, targetNo},
+					data : {userId:userId, targetNo:bBoardNo, category:type},
 					beforeSend : function(xhr)
 	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 	    				xhr.setRequestHeader(header, token);
@@ -363,6 +428,43 @@
 				})
 	     }
 	   });
+	   
+	   //신고부분
+	   //신고 모달창 띄우기
+	   $('#modalUp').on('click', function() {
+		   console.log('클릭');
+		   $("#modal").show();
+	   })
+	   
+	   //모달창에서 취소를 눌렀을 경우
+	   $("#cancel").on('click', function() {
+			$("#modal").hide();
+		});
+	   
+	   //모달창에서 신고를 눌렀을 경우
+	   $("#punish").on('click', function() {
+		   let targetId = $("#targetId").val();
+		   let banCntn = $("#banCntn").val();
+		   console.log(userId, targetId, banCntn, type);
+		   
+		    $.ajax({
+					url : "/punishInsert",
+					method : 'post',
+					contentType : 'application/x-www-form-urlencoded',
+					data : {userId:userId, targetId:bBoardNo, banCntn:banCntn, targetCat:type},
+					beforeSend : function(xhr)
+	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	    				xhr.setRequestHeader(header, token);
+	                },
+					success : function(data) {
+						alert('신고되었습니다.');
+						$("#modal").hide();
+					},
+					fail : function(result) {
+						alert('필수항목을 입력해주세요')
+					}
+				})
+	   })
 	 });
    </script>
 </div>

@@ -41,7 +41,12 @@ public class ReplyServiceImpl implements ReplyService {
 	//댓글 삭제
 	@Override
 	public int replyDelete(ReplyVO ReplyVO) {
-		// TODO Auto-generated method stub
 		return mapper.replyDelete(ReplyVO);
+	}
+	
+	//게시글 삭제시 함께 댓글 삭제
+	@Override
+	public int replySelectDelete(ReplyVO replyVO) {
+		return mapper.replySelectDelete(replyVO);
 	}
 }

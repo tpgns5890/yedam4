@@ -39,4 +39,11 @@
 		DELETE FROM REPLY
 		WHERE REPLY_NO=#{replyNo}
 	</delete>
+	
+	<!-- 댓글이 달린 게시글 삭제시 해당하는 댓글 및 대댓글도 함께 삭제 -->
+	<delete id="replySelectDelete">
+		DELETE FROM REPLY
+		WHERE REPLY_TGT = #{replyTgt}
+		AND BOARD_CAT = #{boardCat}
+	</delete>
 </mapper>

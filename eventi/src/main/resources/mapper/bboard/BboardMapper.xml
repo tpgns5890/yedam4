@@ -2,33 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.bboard.mapper.BboardMapper">
 	
-	<!-- 전체 리스트에서 라디오 버튼이 눌린 값에 따른 조건 -->
+	<!-- 전체 리스트에서 정렬 조건 -->
 	<sql id="bSelect">
-		<!-- 전체일 경우 -->
-		<if test="lclsf !=null and lclsf != '' and lclsf == 'all'"></if>
-		
-		<!-- T04 중 일반일 경우 -->
-		<if test="lclsf !=null and lclsf != '' and lclsf == 'genrl'">
-			AND LCLSF = #{lclsf}
+		<!-- 대분류 정렬 -->
+		<if test="lclsf !=null and lclsf != ''">
+			<if test="lclsf != 'all'">
+				AND LCLSF = #{lclsf}			
+			</if>
 		</if>
-		
-		<!-- T04 중 후기일 경우 -->
-		<if test="lclsf != null and lclsf != '' and lclsf == 'reply'">
-			AND LCLSF = #{lclsf}
+
+		<!-- 검색 정렬 -->
+		<if test="ttl !=null and ttl != ''">
+			AND ( TTL LIKE '%${ttl}%' OR CNTN LIKE '%${ttl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
-		
-		<!-- T05 중 사회자일 경우 -->
-		<if test="lclsf != null and lclsf != '' and lclsf == 'mc'">
-			AND LCLSF = #{lclsf}
-		</if>
-		
-		<!-- T04 중 디자이너일 경우 -->
-		<if test="lclsf != null and lclsf != '' and lclsf == 'dgner'">
-			AND LCLSF = #{lclsf}
-		</if>
-		
 	</sql>
 	
+	<!-- 전체 리스트에서 좋아요 정렬 -->
 	<sql id="likeSelect">
 		<if test="writer != null and writer != ''">
 			AND l.user_id = #{writer}
@@ -40,7 +29,7 @@
 	<!-- 좋아요순으로 정렬을 하고 싶을 경우 ${order}에 좋아요 수 컬럼 별칭을 넣어주면 된다. -->
 	<select id="bboardList" resultType="com.eventi.left.bboard.service.BboardVO">
 	SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-	SELECT DISTINCT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
+	SELECT DISTINCT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt, rpad(substr(WRITER,'1','1'),LENGTH(WRITER),'*') AS CHECKANO
 	FROM B_BOARD b LEFT JOIN likes l
 	ON b.b_board_no = l.target_no
 	WHERE TYPE = #{type}
@@ -53,27 +42,20 @@
 	]]>
 	</select>
 	
-	<!-- type별 좋아요 조회 -->
-	<!-- 내가 좋아요 누른 게시글 리스트 출력 / 로그인중인ID, TYPE 필요 / 정렬도 가능 -->
-	<select id="bboardLike" resultType="com.eventi.left.bboard.service.BboardVO">
-		SELECT DISTINCT b.*, l.like_no, (select count(*) from likes where target_no = b.b_board_no) AS cnt
-		FROM B_BOARD b JOIN LIKES l
-		ON b.b_board_no = l.target_no
-		WHERE l.user_id = #{writer}
-		AND b.type = #{type}
-		AND b.SAVE = 'N'
-		ORDER BY ${order} DESC
-	</select>
-	
+	<!-- 조건별 게시글 총 건수 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
-		FROM B_BOARD
-		WHERE TYPE=#{type}
+		FROM B_BOARD b LEFT JOIN likes l
+		ON b.b_board_no = l.target_no
+		WHERE TYPE = #{type}
+		AND SAVE = 'N'
+		<include refid="bSelect" />
+		<include refid="likeSelect" />
 	</select>
 	
 	<!-- 게시글 단건 조회 -->
 	<select id="bboardSelect" resultType="com.eventi.left.bboard.service.BboardVO">
-		SELECT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt
+		SELECT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt, rpad(substr(WRITER,'1','1'),LENGTH(WRITER),'*') AS CHECKANO
 		FROM B_BOARD b
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</select>
@@ -106,8 +88,8 @@
 			FROM B_BOARD
 		</selectKey>
 	
-		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, IMG, TYPE, SAVE)
-		VALUES(#{bBoardNo}, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{img}, #{type}, #{save}) 
+		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, ANO, TYPE, SAVE)
+		VALUES(#{bBoardNo}, #{writer}, #{ttl}, #{lclsf}, #{mclsf}, #{cntn}, #{ano}, #{type}, #{save}) 
 	</insert>
 	
 	<!-- 게시글 수정 -->
@@ -122,5 +104,4 @@
 		DELETE FROM B_BOARD
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</delete>
-
 </mapper>

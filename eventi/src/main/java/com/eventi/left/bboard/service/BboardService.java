@@ -15,8 +15,11 @@ public interface BboardService {
 	//단건조회
 	public BboardVO bboardSelect(BboardVO bboardVO);
 	
+	//조회수 +1
+	public int inqUpdate(BboardVO bboardVO);
+	
 	//임시저장된 게시글 조회
-	public BboardVO bSave(BboardVO bboardVO);
+	public List<BboardVO> bSave(BboardVO bboardVO);
 	
 	//좋아요 조회
 	public List<BboardVO> bboardLike(BboardVO bboardVO);
@@ -28,7 +31,7 @@ public interface BboardService {
 	public int bboardInsert(BboardVO bboardVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//수정
-	public int bboardUpdate(BboardVO bboardVO, MultipartFile uploadFile);
+	public int bboardUpdate(BboardVO bboardVO, MultipartFile[] uploadFile);
 	
 	//삭제
 	public int bboardDelete(BboardVO bboardVO);
