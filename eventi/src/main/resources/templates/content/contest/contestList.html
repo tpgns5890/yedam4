@@ -28,9 +28,9 @@
                  <!-- 공모전 정렬기준 -->
               <div class="col-sm-3 mb-sm-20">
                 <select id="order" name="order" class="form-control">
-					<option value="inq DESC">조회수</option>
+					<option value="inq DESC" selected="selected">조회수</option>
 					<option value="pay DESC">금액순</option>
-					<option value="dt_cls" selected="selected">마감일순</option>
+					<option value="dt_cls">마감일순</option>
                 </select>
               </div>
               
@@ -132,9 +132,8 @@
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
-						console.log(res.paging)
-						
 						//map =>  contest,paging 
+						console.log(res.paging)
 						for (contest of res.contest) {
 							$('#boxList').append(makeBox(contest));
 						}
@@ -184,26 +183,22 @@
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
-						console.log(res.paging);
-					 	/* console.log(res.paging);
-						console.log(res.contest);  */
+						
 						//등록된 공모전이 없을경우 기존페이지로 이동.
 						if (res.contest == 0) {
-							location.href = '../contest/List';
+							location.href = '/contest/List';
 							alert('등록된 공모전이 없습니다');
+						}else{
+							//기존 리스트 삭제 -> div생성 붙여넣기
+							$('#boxList').empty();
+							for (contest of res.contest) {
+								$('#boxList').append(makeBox(contest));
+							}
+
+							//기존 페이징 삭제 -> 다시붙여넣기
+							$('#returnPaging').empty();
+							$('#returnPaging').append(makePageing(res.paging));
 						}
-
-						//기존 리스트 삭제 -> div생성 붙여넣기
-						$('#boxList').empty();
-						for (contest of res.contest) {
-							$('#boxList').append(makeBox(contest));
-						}
-
-						//기존 페이징 삭제 -> 다시붙여넣기
-						$('#returnPaging').empty();
-						$('#returnPaging').append(makePageing(res.paging));
-
-
 					}).catch(error => console.log(error));
 				}
 
@@ -219,15 +214,24 @@
 
 				//공모전 1건의 대한 박스 생성
 				function makeBox(contest) {
+					
+					//로그인 회원의 하트눌려진것만 체크
+					let active = null;
+					if(contest.userLike > 0){
+						//console.log(contest.cNo);
+						//console.log(contest.userLike);
+						active = 'active';
+					}
 					let p = ` 
 								<div class="col-sm-6 col-md-4 col-lg-4">
 					                <div id="${contest.cNo}" class="shop-item">
 					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 665px; height: 700px">
 					                    <div class="shop-item-detail">
 					                    	<div class="stage" >
-							  					<div id="${contest.cNo}" class="stage heart" onclick="loveCheck(this)"></div>
+							  					<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)"></div>
 							   				</div>
 							   				<div>
+							   				  <h3 class="content-box-title font-serif">${contest.cNo}</h3>
 							   				  <h3 class="content-box-title font-serif">${contest.writer}</h3>
 							   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
 							                  <h3 class="content-box-title font-serif">D-${contest.dDay}</h3>
@@ -312,15 +316,15 @@
 							},
 						}).then(res => {
 							//map =>  contest,paging 
+							console.log(res.contest);
+							
 							$('#boxList').empty();
 							
 							//관심 공모전이 없을경우
 							if(res.contest == ''){
 								$('#boxList').append($('<p>').append("관심 공모전 없습니다."));
 							}
-						
 							for (contest of res.contest) {
-								console.log(contest)
 								$('#boxList').append(makeBox_map(contest));
 							}
 
@@ -336,7 +340,7 @@
 
 
 				//Map : 로그인회원의 좋아요 공모전박스생성
-				function makeBox_map(contest) {
+				 function makeBox_map(contest) {
 					let p = ` 
 						<div class="col-sm-6 col-md-4 col-lg-4">
 			                <div id="${contest.C_NO}" class="shop-item">
@@ -364,7 +368,7 @@
 			              </div> `;
 					
 					return p;
-				}
+				} 
 
 				//하트클릭시 DB입력(등록,취소)
 				$('#boxList').on("click",".shop-item" ,function(){
@@ -411,11 +415,13 @@
 								if(res > 0){
 									alert('관심공모전 취소완료!')
 
-									//전체하트눌려있는상태 : 나의 관심공모전 리스트에서만 삭제.
+									//전체하트가 눌려진 상태로 재실행
 									if ($("#love").hasClass("active")) { 
-										$(e).parent().parent().parent().remove(); //확인해보기
+										loveClick();
+										
+									//기본 정렬리스트 재실행
 									}else{
-										return;
+										checkSelect();
 									}
 									
 								}else{

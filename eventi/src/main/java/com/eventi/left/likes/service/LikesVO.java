@@ -12,4 +12,6 @@ public class LikesVO {
 	private String userId;		//작성자Id
 	private String targetNo;	//대상번호
 	private String category;	//대상구분
+	
+	private String img;	// 파일이미지
 }

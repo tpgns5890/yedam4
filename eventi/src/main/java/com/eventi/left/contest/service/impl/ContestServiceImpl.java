@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,14 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전 전체리스트
 	@Override
 	public List<ContestVO> contestList(ContestVO vo, PagingVO paging) {
+
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		if (user != null) {
+			String sessionId = user.getUserId();
+			vo.setUserId(sessionId);
+		}
+
 		// 페이징 동적쿼리로 카테고리 입력시 개수파악(setFirst,setLast 세팅)
 		paging.setTotalRecord(mapper.contestCount(vo));
 		paging.setPageUnit(6); // 12개 출력 (default 10)
@@ -131,10 +140,10 @@ public class ContestServiceImpl implements ContestService {
 
 	// 공모전 수정
 	@Override
-	public int updateContest(ContestVO vo,MultipartFile[] uploadFile) {
+	public int updateContest(ContestVO vo, MultipartFile[] uploadFile) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setWriter(user.getUserId());
-		
+
 		// 마감연장 할경우
 		if (vo.getDtExtns() != null) {
 			ContestVO contest = mapper.getContest(vo.getcNo());
@@ -146,14 +155,14 @@ public class ContestServiceImpl implements ContestService {
 		}
 		// 공모전수정
 		int r = mapper.updateContest(vo);
-			List<FileDto> list= new ArrayList<FileDto>();
-			//파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
-			try {
-				list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	     return r;
+		List<FileDto> list = new ArrayList<FileDto>();
+		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+		try {
+			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r;
 	}
 
 	// 공모전,우승상금 삭제
@@ -175,22 +184,20 @@ public class ContestServiceImpl implements ContestService {
 		return mapper.getSequence();
 	}
 
-
-	//마이페이지 나의 공모전조회.
+	// 마이페이지 나의 공모전조회.
 	@Override
 	public List<ContestVO> myContestList(ContestVO vo, PagingVO paging) {
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setWriter(sessionId);
-		
-		//페이징처리
+
+		// 페이징처리
 		paging.setTotalRecord(mapper.myContest(vo));
 		paging.setPageUnit(10); // 12개 출력 (default 10)
 		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
-		
 
 		paging.setTotalRecord(mapper.myContest(vo));
 		paging.setPageUnit(10);

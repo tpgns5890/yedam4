@@ -34,7 +34,7 @@ public class ContestVO {
 	private String style; 	 //선호하는태그(최대 3개)
 	
 	//정렬,검색
-	private String order = "dt_Reg"; //정렬기준
+	private String order = "inq DESC"; //기본 정렬기준
 	private String search;
 	
 	//진행,마감체크
@@ -51,12 +51,13 @@ public class ContestVO {
 	private int last;
 	
 	//좋아요
-	private int likes; 
+	private int likes; //공모전 1건 좋아요개수
+	private int userLike; //로그인회원의 좋아요개수
+	private String userId; //로그인회원
 	
 	//D-day
 	private int dDay;
-	
-	
+
 	
 	public String getcNo() {
 		return cNo;

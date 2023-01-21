@@ -9,6 +9,8 @@ public interface LikesMapper {
 	// 좋아요
 	public List<LikesVO> userlikeList(LikesVO LikesVO, String userId); // 전체조회,세션아이디 조회.
 
+	public int userlikecheck(String targetNo,String category, String userId); // 세션아이디 좋아요 체크
+	
 	public List<LikesVO> likeList(LikesVO LikesVO); // 전체조회
 
 	public LikesVO getLike(LikesVO LikesVO); // 1건조회

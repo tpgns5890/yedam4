@@ -13,11 +13,9 @@
 	<!-- 좋아요 전체 조회 -->
 	<!-- join map으로 받을경우, 컬럼명 대문자 인식!! -->
 	<select id="userlikeList" resultType="map">
-		SELECT l.*,c.*,f.sev_nm IMG
-      	FROM likes l JOIN CONTEST c
-                       ON C.C_NO = L.TARGET_NO
-                     JOIN FILES F
-                       ON L.TARGET_NO = F.TARGET_ID
+		SELECT l.*,c.*,(select sev_nm from files where target_Id = c_no) AS img
+		FROM likes l JOIN CONTEST c
+		               ON C.C_NO = L.TARGET_NO
 		and l.USER_ID = #{userId}
 	</select>
 
@@ -49,9 +47,18 @@
 
 	<!-- 로그인회원의 좋아요 취소 -->
 	<delete id="likeDelete">
-		DELETE FROM LIKESㄴ
+		DELETE FROM LIKES
 		WHERE TARGET_NO = #{targetNo}
 		AND CATEGORY = #{category}
 		<include refid="userIdSelect" />
 	</delete>
+	
+	<!-- 게시글에 대한 로그인회원의 좋아요 확인 -->
+	<select id="userlikecheck" resultType="int">
+		select count(*)
+		from likes
+		where user_id = #{userId}
+		and target_No = #{targetNo}
+		and category = #{category}
+	</select>
 </mapper>

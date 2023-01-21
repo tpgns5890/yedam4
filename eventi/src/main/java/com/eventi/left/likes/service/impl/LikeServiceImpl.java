@@ -49,8 +49,13 @@ public class LikeServiceImpl implements LikesService {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		LikesVO.setUserId(sessionId);
-
-		return mapper.likeInsert(LikesVO);
+		
+		//좋아요 누른 게시글이 이미등록된경우 리턴.
+		int check = mapper.userlikecheck(LikesVO.getTargetNo(), LikesVO.getCategory(), sessionId);
+		if(check == 0) {
+			return mapper.likeInsert(LikesVO);
+		}
+		return 0;
 	}
 
 	// 좋아요 취소

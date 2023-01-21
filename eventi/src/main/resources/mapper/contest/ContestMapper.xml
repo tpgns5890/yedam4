@@ -21,12 +21,19 @@
 		</if>
 	</sql>
 	
+	<sql id="loginLikeCheck">
+		<if test="userId != null and userId != ''">
+			,(select count(*) from likes where target_no = c_no and user_id= #{userId})AS userLike
+		</if>
+	</sql>
+	
 
 	<!-- 공모전 전체조회(임시저장 제외,페이징) -->
 	<select id="contestList" resultType="ContestVO">
 	SELECT RN,c_no,writer,ttl,cntn,code_select(category) category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
 	        ,code_select(style) style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
+	      	<include refid="loginLikeCheck" />
 	FROM ( select ROWNUM RN, A.*
 			        FROM(
 			            SELECT *
