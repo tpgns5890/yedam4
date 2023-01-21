@@ -3,13 +3,21 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.likes.mapper.LikesMapper">
+	<!-- 삭제조건에 userId가 있을 경우 -->
+	<sql id="userIdSelect">
+		<if test="userId !=null and userId != ''">
+			AND USER_ID = #{userId}
+		</if>
+	</sql>
+
 	<!-- 좋아요 전체 조회 -->
 	<!-- join map으로 받을경우, 컬럼명 대문자 인식!! -->
 	<select id="userlikeList" resultType="map">
-		SELECT l.*,c.*
-		FROM likes l
-		join CONTEST c
-		on c.c_no = l.target_no
+		SELECT l.*,c.*,f.sev_nm IMG
+      	FROM likes l JOIN CONTEST c
+                       ON C.C_NO = L.TARGET_NO
+                     JOIN FILES F
+                       ON L.TARGET_NO = F.TARGET_ID
 		and l.USER_ID = #{userId}
 	</select>
 
@@ -41,10 +49,9 @@
 
 	<!-- 로그인회원의 좋아요 취소 -->
 	<delete id="likeDelete">
-		DELETE FROM LIKES
-		WHERE USER_ID = #{userId}
-		AND
-		TARGET_NO = #{targetNo}
+		DELETE FROM LIKESㄴ
+		WHERE TARGET_NO = #{targetNo}
+		AND CATEGORY = #{category}
+		<include refid="userIdSelect" />
 	</delete>
-
 </mapper>

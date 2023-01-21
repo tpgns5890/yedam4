@@ -16,6 +16,8 @@ import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.likes.mapper.LikesMapper;
+import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.reply.mapper.ReplyMapper;
 import com.eventi.left.reply.service.ReplyVO;
 
@@ -26,6 +28,7 @@ public class BboardServiceImpl implements BboardService{
 	@Autowired FilesMapper filesMapper;
 	@Autowired UploadFileMethod newUp;
 	@Autowired ReplyMapper replyMapper;
+	@Autowired LikesMapper likesMapper;
 	
 	//전체 조회
 	@Override
@@ -41,14 +44,19 @@ public class BboardServiceImpl implements BboardService{
 	//단건 조회
 	@Override
 	public BboardVO bboardSelect(BboardVO bboardVO) {
-		//조회수 +1
-		bboardMapper.inqUpdate(bboardVO);
 		return bboardMapper.bboardSelect(bboardVO);
 	}
 	
+	//조회수 +1 
+	@Override
+	public int inqUpdate(BboardVO bboardVO) {
+		return bboardMapper.inqUpdate(bboardVO);
+	}
+
+	
 	//임시저장된 게시글 가져오기
 	@Override
-	public BboardVO bSave(BboardVO bboardVO) {
+	public List<BboardVO> bSave(BboardVO bboardVO) {
 		return bboardMapper.bSave(bboardVO);
 	}
 	
@@ -74,26 +82,39 @@ public class BboardServiceImpl implements BboardService{
 	
 	//수정
 	@Override
-	public int bboardUpdate(BboardVO bboardVO, MultipartFile uploadFile) {
-		// 사진 등록
-		String realFolder = "/files/bboard";
-		File dir = new File(realFolder);
-		if(!dir.isDirectory()) {
-			dir.mkdirs();
-		}
-					
-		//파일 이름 저장
-		String img = uploadFile.getOriginalFilename();
-					
-		//VO에 IMG 부분에 파일 이름 저장
-		bboardVO.setImg(img);
+	public int bboardUpdate(BboardVO bboardVO, MultipartFile[] uploadFile) {
+		//내용 수정
+		int r = bboardMapper.bboardUpdate(bboardVO);
 		
-		return bboardMapper.bboardUpdate(bboardVO);
+		List<FileDto> list= new ArrayList<FileDto>();
+		//파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+		try {
+			list = newUp.updateFiles(uploadFile, bboardVO.getBBoardNo(), bboardVO.getType());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return r;
 	}
 	
 	//삭제
 	@Override
 	public int bboardDelete(BboardVO bboardVO) {
+		//좋아요 삭제
+		LikesVO like = new LikesVO();
+		like.setTargetNo(bboardVO.getBBoardNo());
+		like.setCategory(bboardVO.getType());
+		likesMapper.likeDelete(like);
+		
+		//댓글 삭제
+		ReplyVO reply = new ReplyVO();
+		reply.setReplyTgt(bboardVO.getBBoardNo());
+		reply.setBoardCat(bboardVO.getType());
+		replyMapper.replySelectDelete(reply);
+		
+		//파일 삭제
+		filesMapper.deleteFile(bboardVO.getBBoardNo());
+		
 		return bboardMapper.bboardDelete(bboardVO);
 	}
 	
@@ -108,5 +129,4 @@ public class BboardServiceImpl implements BboardService{
 	public String getSeq() {
 		return bboardMapper.getSeq();
 	}
-
 }

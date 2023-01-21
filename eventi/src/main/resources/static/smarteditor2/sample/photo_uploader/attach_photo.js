@@ -3,8 +3,8 @@
 	var htImageInfo = [];		//image file정보 저장
 	var aResult = [];
 	
-	var rFilter = /^(image\/bmp|image\/gif|image\/jpg|image\/jpeg|image\/png)$/i;  
-	var rFilter2 = /^(bmp|gif|jpg|jpeg|png)$/i; 
+	var rFilter = /^(image\/bmp|image\/gif|image\/jpg|image\/jpeg|image\/png|video\/mp4)$/i;  
+	var rFilter2 = /^(bmp|gif|jpg|jpeg|png|mp4)$/i; 
 	var nTotalSize = 0;
 	var nMaxImageSize = 10*1024*1024;
 	var nMaxTotalImageSize = 50*1024*1024;
@@ -307,10 +307,13 @@
 		sFileSize = setUnitString(ofile.size);
 		sFileName = cuttingNameByLength(ofile.name, 15);
 		bExceedLimitTotalSize = checkTotalImageSize(ofile.size);
-
+		
+		
+		
 		if( !!bExceedLimitTotalSize ){
 			alert("전체 이미지 용량이 50MB를 초과하여 등록할 수 없습니다. \n\n (파일명 : "+sFileName+", 사이즈 : "+sFileSize+")");
 		} else {
+			
 			//이미지 정보 저장							
 			htImageInfo['img'+nImageInfoCnt] = ofile;
 			
@@ -334,10 +337,11 @@
     	var tempFile,
     		sUploadURL;
     	
-    	sUploadURL= 'file_uploader_html5.php'; 	//upload URL
+    	sUploadURL= '/blog/multiImageUploader'; 	//upload URL  호경
     	
     	//파일을 하나씩 보내고, 결과를 받음.
     	for(var j=0, k=0; j < nImageInfoCnt; j++) {
+			
     		tempFile = htImageInfo['img'+j];
     		try{
 	    		if(!!tempFile){
@@ -348,21 +352,44 @@
 	    	}catch(e){}
     		tempFile = null;
     	}
+    	
 	}
-    
+    let resultCount = 0;
     function callAjaxForHTML5 (tempFile, sUploadURL){
     	var oAjax = jindo.$Ajax(sUploadURL, {
 			type: 'xhr',
 			method : "post",
 			onload : function(res){ // 요청이 완료되면 실행될 콜백 함수
 				var sResString = res._response.responseText;
+				
+				console.log(sResString);
 				if (res.readyState() == 4) {
 					if(sResString.indexOf("NOTALLOW_") > -1){
 						var sFileName = sResString.replace("NOTALLOW_", "");
-						alert("이미지 파일(jpg,gif,png,bmp)만 업로드 하실 수 있습니다. ("+sFileName+")");
+						alert("이미지 파일(jpg,gif,png,bmp,mp4)만 업로드 하실 수 있습니다. ("+sFileName+")");
 					}else{
+						console.log(sResString);
+						const URLSearch = new URLSearchParams(sResString);
+						let fileRoute = URLSearch.get('sFileURL');
+						if(fileRoute.endsWith(".mp4")){
+							opener.nhn.husky.PopUpManager.setCallback(window, 'PASTE_HTML', ["<video src='"+fileRoute+"' controls style='width: 500px'></video>"])
+							resultCount = resultCount+1;
+							console.log("nImageFileCount = "+nImageFileCount);
+							console.log("resultCount = "+resultCount);
+							if(resultCount == nImageFileCount){
+								resultCount = 0;
+					    		window.close();
+				    		}
+						}else{
 						//성공 시에  responseText를 가지고 array로 만드는 부분.
-						makeArrayFromString(res._response.responseText);
+						opener.nhn.husky.PopUpManager.setCallback(window, 'PASTE_HTML', ["<img src='"+fileRoute+"' style='width: 500px'></img>"])
+						resultCount = resultCount+1;
+						if(resultCount == nImageFileCount){
+							resultCount = 0;
+				    		window.close();
+				    	}
+//						makeArrayFromString(res._response.responseText);
+						}    	
 					}
 				}
 			},

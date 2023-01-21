@@ -66,6 +66,9 @@ public class BboardController {
 	//단건조회
 	@GetMapping("/bSelect")
 	public String bSelect(Model model, BboardVO bboardVO, LikesVO likesVO) {
+		//조회수 +1
+		bboardService.inqUpdate(bboardVO);
+		
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 
 		//내가 좋아요 눌렀는지 확인
@@ -80,11 +83,18 @@ public class BboardController {
 		return "content/bboard/bSelect";
 	}
 	
-	//임시저장된 게시글 들고오기
+	//임시저장된 게시글 전체들고오기
 	@PostMapping("/bSave")
 	@ResponseBody
-	public BboardVO bSave(@RequestBody BboardVO bboardVO) {
+	public List<BboardVO> bSave(@RequestBody BboardVO bboardVO) {
 		return bboardService.bSave(bboardVO);
+	}
+	
+	//임시저장된 게시글 상세들고오기
+	@PostMapping("/bSelect")
+	@ResponseBody
+	public BboardVO bSaveSelect(@RequestBody BboardVO bboardVO) {
+		return bboardService.bboardSelect(bboardVO);
 	}
 	
 	//게시글 등록폼 이동
@@ -114,7 +124,7 @@ public class BboardController {
 	
 	//게시글 수정
 	@PostMapping("/bUpdate")
-	public String bFreeUpdateForm(BboardVO bboardVO, MultipartFile uploadFile) {
+	public String bFreeUpdateForm(BboardVO bboardVO, MultipartFile[] uploadFile) {
 		bboardService.bboardUpdate(bboardVO, uploadFile);
 		return "redirect:/bboard/bSelect?bBoardNo=" + bboardVO.getBBoardNo();
 	}

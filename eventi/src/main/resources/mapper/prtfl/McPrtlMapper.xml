@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.prtfl.mapper.McPrtflMapper">
+	<!-- 사회자 전체조회 -->
 	<select id="mcAll" resultType="com.eventi.left.prtfl.service.McPrtflVO">
 		SELECT *
 		FROM MC_PRTFL
 	</select>
 	
+	<!-- 사회자 단건조회 -->
 	<select id="mcSelect" resultType="com.eventi.left.prtfl.service.McPrtflVO">
 		SELECT *
 		FROM MC_PRTFL
 		WHERE USER_ID = #{userId}
 	</select>
 	
+	<!-- 사회자별 리플 -->
 	<select id="mcReply" resultType="com.eventi.left.reply.service.ReplyVO">
 		SELECT *
 		FROM REPLY
 		WHERE BOARD_CAT = 'T06'
 		AND REPLY_TGT = #{replyTgt}
 	</select>
+	
+	<!-- 조회수 +1 -->
+	<select id="getSeq" resultType="String">
+		UPDATE MC_PRTFL
+		SET INQ = INQ+1
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 사회자 입력 -->
+	<insert id="mcInsert">
+		INSERT INTO MC_PRTFL(USER_ID, ONE_INTRO, CARR_YEAR, CASTING_PRICE, MC_AREA, MC_TYPE, PROG_STYLE, SELF_INTRO, CAREER, DT)
+		VALUES(#{userId}, #{oneIntro}, #{carrYear}, #{castingPrice}, #{mcArea}, #{mcType}, #{progStyle}, #{selfIntro}, #{career}, SYSDATE)
+	</insert>
+	
+	<!-- 사회자 수정 -->
+	<update id="mcUpdate">
+		UPDATE MC_PRTFL
+		SET ONE_INTRO = #{oneIntro}, CARR_YEAR = #{carrYear}, CASTING_PRICE = #{castingPrice}, MC_AREA = #{mcArea}, MC_TYPE = #{mcType}, PROG_STYLE = #{progStyle}, CAREER = #{career}
+		WHERE USER_ID = #{userId}
+	</update>
+	
 </mapper>

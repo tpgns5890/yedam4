@@ -16,7 +16,7 @@ public interface BboardMapper {
 	public int count(BboardVO bboardVO);
 	
 	//임시저장된 게시글 조회
-	public BboardVO bSave(BboardVO bboardVO);
+	public List<BboardVO> bSave(BboardVO bboardVO);
 	
 	//좋아요 조회
 	public List<BboardVO> bboardLike(BboardVO bboardVO);

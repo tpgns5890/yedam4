@@ -6,8 +6,61 @@
 
 <head>
 	<style>
-		.fileDown{
-			display : none;
+		.fileShow{
+			display : none !important;
+		}
+		
+		#modal {
+			display: none;
+			position: fixed;
+			top: 25em;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			width: 100%;
+
+		}
+
+		#modal h2 {
+			margin: 0;
+		}
+
+		#modal button {
+			display: inline-block;
+			width: 100px;
+			border: 0.2px solid black;
+			border-radius: 5px;
+		}
+
+		#modal .modal_content {
+			width: 350px;
+			min-height: 200px;
+			margin: 0 auto;
+			padding: 20px;
+			background: #fff;
+			border: 0.5px solid #666;
+			border-radius: 15px;
+		}
+
+		#modal .modal_layer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+
+		#modal_login_btn {
+			background: #2fb380;
+		}
+
+		#button_box {
+			display: flex;
+			margin-top: 40px;
+			justify-content: flex-end;
 		}
 	</style>
 	
@@ -64,7 +117,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="email">작성자</label> 
-								<input type="checkbox" name="secri" value="secri">익명 
+								<input type="checkbox" id="ano" name="ano" th:value="N" class="btn btn-primary">익명 
 								<input type="text" class="form-control" name="writer" id="writer" th:value="${session.member.userId}" readonly>
 							</div>
 						</div>
@@ -94,9 +147,11 @@
 								<label class="label" for="mclsf">질문</label> 
 								<select id="mclsf" name="mclsf">
 									<option value="">질문내용을 선택해 주세요.</option>
-									<option value="계약">계약</option>
-									<option value="진행">진행</option>
-									<option value="기타">기타</option>
+									<option value="contract">계약에 대해 궁금해요!</option>
+									<option value="freelancer">프리랜서, 아직 막막해요...</option>
+									<option value="style">현재 나의 스타일, 이대로 괜찮을까요?</option>
+									<option value="advice">멘토님! 조언을 구하고 싶어요.</option>
+									<option value="etc">기타 문의사항은?</option>
 								</select>
 							</div>
 						</div>
@@ -112,7 +167,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<input type="file" id="imgInp" name="uploadFile" multiple="multiple"/>
-								<div class="fileDown">
+								<div class="fileShow">
 									<img id="blah" src="#" alt = "your image" width="250px" />
 									<button type="button" id="cancel" class="btn btn-warning cancel">
 						              <span>Cancel</span>
@@ -133,6 +188,18 @@
 			</div>
 		</div>
 	</div>
+	
+	<div id="modal">
+			<div class="modal_content">
+				<h2>임시저장된 게시글입니다.</h2>
+				<p>불러올 게시글을 선택해 주세요.</p>
+				<div id="button_box">
+					<!-- <button type="button" id="modal_login_btn" th:onclick="|location.href='@{loginPage}'|">로그인</button>
+					<button type="button" id="modal_main_btn" th:onclick="|location.href='/'|">홈으로</button> -->
+				</div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
 
 	<script>
 		//csrf 설정
@@ -160,8 +227,8 @@
 	    //파일 INPUT창에 변화가 있을 경우 실행
 	    $("#imgInp").on('change', function() {
 	    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
-	    	$(this).toggleClass("fileDown");
-	    	$(this).next().toggleClass("fileDown");
+	    	$(this).toggleClass("fileShow");
+	    	$(this).next().toggleClass("fileShow");
 			readURL(this);
 		});
 		
@@ -176,11 +243,18 @@
 			}
 		}
 	    
+	    //중분류 선택했을 경우
+	    $("#mclsf").on('change', function() {
+	    	let mclsf = $("#mclsf option:selected").text();
+	    	let tag = `<p><span style="font-size: 14pt; color: rgb(255, 108, 0);"><b><span style="font-size: 12pt;">﻿</span><span style="font-size: 12pt;">&lt;${mclsf}&gt;</span></b><span style="background-color: rgb(119, 119, 119);"><b>﻿​</b></span></span>&nbsp;</p>`
+	    	oEditors.getById["cntn"].exec("PASTE_HTML", [tag]);
+	    })
+	    
 	    //파일 삭제
 	    $("#cancel").on('click', function() {
 	    	//파일을 지우고 싶을때 삭제버튼을 누르면 이미지는 사라지고 input type=file 입력폼이 다시 나타난다.
-	    	$(this).parent().prev().toggleClass("fileDown");
-	    	$(this).parent().toggleClass("fileDown");
+	    	$(this).parent().prev().toggleClass("fileShow");
+	    	$(this).parent().toggleClass("fileShow");
 	    	//file영역에 있던 값 삭제
 	    	$("#imgInp").val('');
 	    })
@@ -189,6 +263,13 @@
 	    $('#save').click(function(){
 	    	if($('#save').is(':checked')){
 				$('#save').val('Y');
+			};
+	    })
+	    
+	    //임시저장 체크박스를 클릭했을 경우
+	    $('#ano').click(function(){
+	    	if($('#ano').is(':checked')){
+				$('#ano').val('Y');
 			};
 	    })
 	    
@@ -217,18 +298,25 @@
 					//임시저장된 게시글이 없을 경우
 					if(data == 0){
 						alert('임시저장된 게시글이 없습니다.');
-					} else { //임시저장된 게시글이 있을 경우
-						$("#bBoardNo").val(data.bboardNo);
-						$("#ttl").val(data.ttl);
-						$("input:radio[name='lclsf']:radio[value='"+data.lclsf+"']").attr('checked', true);
-						
-						if(data.mclsf != null){
-							$("#mclsf").val(data.mclsf).attr("selected", true);
+					} else if(data.length == 1){ //임시저장된 게시글이 있을 경우
+						for(r of data){
+							$("#bBoardNo").val(r.bboardNo);
+							$("#ttl").val(r.ttl);
+							$("input:radio[name='lclsf']:radio[value='"+r.lclsf+"']").attr('checked', true);
+							
+							if(data.mclsf != null){
+								$("#mclsf").val(r.mclsf).attr("selected", true);
+							}
+							
+							oEditors.getById["cntn"].exec("PASTE_HTML", [r.cntn]);
+							
+							$("#bBoardForm").attr("action", "/bboard/bUpdate");
 						}
-						
-						oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
-						
-						$("#bBoardForm").attr("action", "/bboard/bUpdate");
+					} else {
+						for(r of data){
+							$("#modal").show();
+							$("#button_box").append(a(r));
+						}
 					}
 				},
 				fail : function(result) {
@@ -236,6 +324,47 @@
 				}
 			})
 		})
+		
+		function a(r) {
+	    	let p = `<button type="button" id="modal_login_btn" onclick=checkFile('${r.bboardNo}')>${r.bboardNo}</button>`;
+	    	return p;
+	    }
+	    
+	    //임시저장된 게시글 중 한건 가져오기
+	    function checkFile(no) {
+	    	$("#modal").hide();
+	    	
+	    	let bBoardNo = no;
+
+	    	//게시글 불러오기
+			$.ajax({
+				url : "/bboard/bSelect",
+				method : 'POST',
+				data : JSON.stringify({bboardNo:bBoardNo}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					console.log(data);
+							$("#bBoardNo").val(data.bboardNo);
+							$("#ttl").val(data.ttl);
+							$("input:radio[name='lclsf']:radio[value='"+data.lclsf+"']").attr('checked', true);
+							
+							if(data.mclsf != null){
+								$("#mclsf").val(data.mclsf).attr("selected", true);
+							}
+							
+							oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
+							
+							$("#bBoardForm").attr("action", "/bboard/bUpdate");
+						},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+	    })
+	    }
 	</script>
 </div>
 </html>

@@ -18,4 +18,7 @@ public interface ReplyService {
 
 	// 삭제
 	public int replyDelete(ReplyVO ReplyVO);
+	
+	//게시글 삭제시 함께 삭제되는 댓글
+	public int replySelectDelete(ReplyVO replyVO);
 }
