@@ -40,10 +40,8 @@ footer {
 
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg"
-			data-background="/assets/images/gallery_bg.jpg"
-			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-			<div class="container">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+			<div class="container" >
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
 						<h2 class="module-title font-alt">공모전</h2>
@@ -53,9 +51,9 @@ footer {
 			</div>
 		</section>
 
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row">
+		<section class="ftco-section" style="padding-top: 20px">
+			<div class="container" >
+				<div class="row" style="padding-top: 20px"> 
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 파일이미지 출력 -->
 						<div th:each="f : ${fileList}">
@@ -130,23 +128,18 @@ footer {
 
 						<!-- 비회원 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<p>
-								<a href="#"><button type="button" class="btn btn-g btn-round btn-lg">링크복사</button></a> 
+							<div>
+								<button type="button" class="btn btn-g btn-round btn-lg">링크복사</button>
 								<button type="button" class="btn btn-g btn-round btn-lg" onclick="login()">응모하기</button>
-							</p>
+							</div>
 						</th:block>
 
 						<!-- 공모전 작성자 제외 일반회원 -->
 						<th:block sec:authorize="isAuthenticated()">
-							<div
-								th:if="|${session.member.getUserId()}| != ${contest.writer} ">
-								<p>
-									<a href="#"><button type="button"
-											class="btn btn-primary py-3 px-5 mr-2">링크복사</button></a>
+							<div th:if="|${session.member.getUserId()}| != ${contest.writer} ">
+									<button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button>
 									<!-- 공모게시글에 대한 응모하기 버튼 -->
-									<a th:href="@{/design/designInsertForm(cNo=${contest.cNo})}"><button
-											type="button" class="btn btn-g btn-round btn-lg">응모하기</button></a>
-								</p>
+									<button type="button" class="btn btn-g btn-round btn-lg" th:onclick="|location.href='@{/design/designInsertForm(cNo=${contest.cNo})}'|">응모하기</button> 
 							</div>
 
 							<!-- 공모전 작성자만 -->
@@ -163,10 +156,9 @@ footer {
 
 				<div class="row mt-5" >
 					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
-						<div class="nav nav-pills d-flex text-center" id="v-pills-tab"
-							role="tablist" aria-orientation="vertical">
+						<div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-							<ul class="nav nav-tabs font-alt" role="tablist">
+							<ul class="nav nav-tabs font-alt" role="tablist" >
 								<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
 								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">문의사항</span></a></li>
 								<li id="lientry"><a href="#reviews" data-toggle="tab"><span class="icon-tools-2">참여작</span></a></li>
@@ -441,8 +433,8 @@ footer {
 					upBtn = `<button class='qUpdate'>수정</button>`;
 				}
 			 
-   			let p = `<ul class="children">
-                <li class="comment">
+   			let p = `<ul class="children" style="list-style: none">
+                <li class="comment" >
                 <div class="comment-body" id="${questionRep.qNo}">
                 <h3>${questionRep.userId}</h3>
                 <div class="meta">작성일:${questionRep.writingDt} </div>
@@ -640,7 +632,6 @@ footer {
  				})
 			}
 		})
-			
 		//참여작 출력-----------------------------------------------------------
 		function contest(){
 			let page = $('input[name="designPage"]').val();
@@ -772,43 +763,47 @@ footer {
 			if (page.totalRecord == 0) {
 				return;
 			}
-			let pagination = $("<div/>").addClass("block-27");
+			let pagination = $("<div/>")
 			let ul = $("<ul/>").attr("class","pagination");
 			if (page.startPage > 1) {
 				$(ul).append($("<li/>").html("&laquo;")
-					.css("font-size", "30px")
-					.on("click", function () {
-						gopage(page.startPage - page.pageSize)
-					}));
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
 			}
-			
+
 			//페이지 버튼 생성.
 			for (let i = page.startPage; i <= page.endPage; i++) {
 				if (page.page == i) {
-					$(ul).append($("<li/>").text(i).attr("class", "active")
-						.css("border-radius", "100%")
-						.css("color", "#000")
-						.css("background", "LightGray")
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
 					);
 				} else {
-					$(ul).append($("<li/>").text(i).attr("class", "page-link")
-						.css("border-radius", "100%")
-						.css("color", "#000")
-						.on("click", function () {
-							gopage($(this).text());
-						})); //페이지이동 함수
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
 				}
 			}
 			if (page.endPage < page.lastPage) {
 				$(ul).append($("<li/>").html("&raquo;")
-					.css("font-size", "30px")
-					.on("click", function () {
-						gopage(page.startPage + page.pageSize)
-					}));
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
 			}
 			pagination.append(ul);
 			return pagination;
 		}
+
 		
 	</script>
 	</div>

@@ -1,0 +1,32 @@
+.fileDown {
+	display: none;
+}
+
+h3 {
+	font-weight: bold;
+	text-align: center;
+}
+
+.contestContainer {
+	width:600px;
+	margin: 0 auto;
+}
+
+ul {
+	padding: 0px;
+	list-style: none;
+}
+
+input[type=text], select, input[type=number], input[type=date] {
+	width: 30%;
+	padding: 12px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: vertical;
+}
+
+label {
+	padding: 10px 80px 12px 0;
+	display: inline-block;
+}

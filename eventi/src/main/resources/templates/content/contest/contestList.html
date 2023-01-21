@@ -6,39 +6,9 @@
 <head>
 <link rel="stylesheet" href="/css/model.css">
 <link rel="stylesheet" href="/css/heart.css">
-<style>
-h2 {
-	margin-top: 90px;
-	text-align: center;
-	font-weight: bolder;
-}
-
-.action-filter {
-	width: 1540px;
-	margin: 10px;
-	text-align: right;
-}
-
-.sidebar {
-	width: 200px;
-	height: 1500px;
-	text-align: left;
-	padding: 20px;
-	float: left;
-}
-
-
-.page {
-	clear: both;
-}
-
-#paging {
-	clear: both;
-	margin-left: 800px;
-}
-</style>
 </head>
-
+<style>
+</style>
 <body>
 	<div layout:fragment="content" class="content">
 		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -55,64 +25,66 @@ h2 {
 
 		<section class="module-small">
           <div class="container">
-              <div class="col-sm-3 mb-sm-20">
                  <!-- 공모전 정렬기준 -->
+              <div class="col-sm-3 mb-sm-20">
                 <select id="order" name="order" class="form-control">
-					<option value="inq">조회수</option>
-					<option value="pay">금액순</option>
+					<option value="inq DESC">조회수</option>
+					<option value="pay DESC">금액순</option>
 					<option value="dt_cls" selected="selected">마감일순</option>
                 </select>
               </div>
+              
+              
+              	<!-- 분류별 기준 뽑아오기 -->
+              	 <div class="col-sm-3 mb-sm-20">
+	                <div>
+	                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막
+							<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너
+							<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고
+							<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);">포스터
+							<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);">기타
+					</div>
+                </div>
+              
               <div class="col-sm-3">
               	<!-- 비회원 공모전작성버튼-->
 				<th:block sec:authorize="!isAuthenticated()">
-				<button class="btn btn-block btn-round btn-g" onclick="login()">공모전 작성</button></a>
+					<button class="btn btn-block btn-round btn-g" onclick="login()">공모전 작성</button></a>
 				</th:block>
 				
 				<!-- 일반회원 공모전작성버튼-->
 				<th:block sec:authorize="isAuthenticated()">
-				<a href="./insert"><button class="btn btn-block btn-round btn-g">공모전 작성</button></a>
+					<a href="./insert"><button class="btn btn-block btn-round btn-g">공모전 작성</button></a>
 				</th:block>
               </div>
               
               	<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<!-- 비회원 좋아요버튼-->
-				<th:block sec:authorize="!isAuthenticated()">
-				<div class="stage" style="float: right;">
-					<div id="love" class="stage heart" onclick="login()"></div>
+					<!-- 비회원 좋아요버튼-->
+				<div class="col-sm-3 mb-sm-20">
+					<th:block sec:authorize="!isAuthenticated()">
+						<div class="stage" style="float: right;">
+							<div id="love" class="stage heart" onclick="login()"></div>
+						</div>
+					</th:block>
+					
+					<!-- 회원 좋아요버튼-->
+					<th:block sec:authorize="isAuthenticated()">
+						<div class="stage" style="float: right;">
+							<div id="love" class="stage heart" onclick="loveClick(this)"></div>
+						</div>
+					</th:block>
 				</div>
-				</th:block>
-				
-				<!-- 회원 좋아요버튼-->
-				<th:block sec:authorize="isAuthenticated()">
-				<div class="stage" style="float: right;">
-					<div id="love" class="stage heart" onclick="loveClick(this)"></div>
-				</div>
-				</th:block>
-              
           </div>
         </section>
 		
 		
-			<div class="col-sm-4 col-md-3 sidebar">
-                <div class="widget">
-				<!-- 분류별 체크박스 -->
-                  <h5 class=" font-alt" style="margin-left: 10px" >카테고리</h5>
-                  <ul class="icon-list" style="margin-left: 10px">
-						<li><input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막</li>
-						<li><input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너</li>
-						<li><input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고</li>
-						<li><input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);">포스터</li>
-						<li><input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);">기타</li>
-                  </ul>
-                </div>
-              </div>
+			
               
            
 
 			<!-- 공모전 리스트 -->
 			<div class="container">
-				<div class="row multi-columns-row" id="boxList"> </div>
+				<div class="row multi-columns-row" id="boxList"  > </div>
 			<!-- end -->
 
 				<!-- //페이징 경로 :: 문자 -->
@@ -250,7 +222,7 @@ h2 {
 					let p = ` 
 								<div class="col-sm-6 col-md-4 col-lg-4">
 					                <div id="${contest.cNo}" class="shop-item">
-					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 665px; height: 750px">
+					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 665px; height: 700px">
 					                    <div class="shop-item-detail">
 					                    	<div class="stage" >
 							  					<div id="${contest.cNo}" class="stage heart" onclick="loveCheck(this)"></div>
@@ -283,39 +255,42 @@ h2 {
 					if (page.totalRecord == 0) {
 						return;
 					}
-					let pagination = $("<div/>").addClass("block-27");
+					let pagination = $("<div/>")
 					let ul = $("<ul/>").attr("class","pagination");
 					if (page.startPage > 1) {
 						$(ul).append($("<li/>").html("&laquo;")
-							.css("font-size", "30px")
-							.on("click", function () {
-								gopage(page.startPage - page.pageSize)
-							}));
+												.css("font-size", "30px")
+												.attr("class","page-item")
+												.on("click", function () {
+														gopage(page.startPage - page.pageSize)
+												}));
 					}
 
 					//페이지 버튼 생성.
 					for (let i = page.startPage; i <= page.endPage; i++) {
 						if (page.page == i) {
-							$(ul).append($("<li/>").text(i).attr("class", "active")
-								.css("border-radius", "100%")
-								.css("color", "#000")
-								.css("background", "LightGray")
+							$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+													.css("padding", "10px")
+													.css("border-radius", " 10% / 50% ")
+													.css("background", "#dce3fd")
+													.attr("class", "page-link active")
 							);
 						} else {
-							$(ul).append($("<li/>").text(i).attr("class", "page-link")
-								.css("border-radius", "100%")
-								.css("color", "#000")
-								.on("click", function () {
-									gopage($(this).text());
-								})); //페이지이동 함수
+							$(ul).append($("<li/>").text(i).css("font-size", "20px")
+													.css("padding", "10px")
+													.attr("class", "page-link")
+													.on("click", function () {
+														gopage($(this).text());
+													})); //페이지이동 함수
 						}
 					}
 					if (page.endPage < page.lastPage) {
 						$(ul).append($("<li/>").html("&raquo;")
-							.css("font-size", "30px")
-							.on("click", function () {
-								gopage(page.startPage + page.pageSize)
-							}));
+												.css("font-size", "30px")
+												.attr("class","page-item")
+												.on("click", function () {
+														gopage(page.startPage + page.pageSize)
+												}));
 					}
 					pagination.append(ul);
 					return pagination;

@@ -38,8 +38,7 @@ img {
 	height: 60%;
 	text-align: left;
 	max-height: calc(100vh - 200px);
-    overflow-y: auto;
-	
+	overflow-y: auto;
 }
 
 /* The Close Button */
@@ -49,58 +48,61 @@ img {
 	font-size: 28px;
 	font-weight: bold;
 	text-align: right;
-	
 }
 
 .close:hover, .close:focus {
 	color: #000;
 	text-decoration: none;
 	cursor: pointer;
-	
 }
-#modelBtn{
+
+#modelBtn {
 	text-align: center;
 }
+
 .modelBtn1 {
-	display :inline-block;
+	display: inline-block;
 }
 </style>
 </head>
 <body>
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-	<div style="min-height: 3000px">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif" th:text="|${contest.cNo} 지원자 조회|"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-	
-			<!-- 3.현재페이지 myPageSide 적용 -->
-			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
-	
-			<!-- 지원자 디자인 리스트 -->
+		<section class="module bg-dark-60 gallery-page-header parallax-bg"
+			data-background="/assets/images/gallery_bg.jpg"
+			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
 			<div class="container">
-				<div class="row multi-columns-row" id="boxList"> 
-				</div>
-			<!-- end -->
-			
-			<!-- //페이징 경로 :: 문자 -->
-				<div class="row mt-5" id="paging">
-					<div class="col text-center">
-						<div class="block-27" id="returnPaging">
-						</div>
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h2 class="module-title font-alt">마이페이지</h2>
+						<div class="module-subtitle font-serif"
+							th:text="|${contest.cNo} 지원자 조회|"></div>
 					</div>
 				</div>
-	
+			</div>
+		</section>
+
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+		<!-- 지원자 수 -->
+		<div id="count"></div>
+
+		<!-- 지원자 디자인 리스트 -->
+		<div class="container">
+			<div class="row multi-columns-row" id="boxList"></div>
+			<!-- end -->
+
+			<!-- //페이징 경로 :: 문자 -->
+			<div class="row mt-5" id="paging">
+				<div class="col text-center">
+					<div class="block-27" id="returnPaging"></div>
+				</div>
+			</div>
+
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
-	
+
 				<!-- Modal content -->
 				<div class="modal-content">
 					<span class="close">&times;</span>
@@ -109,59 +111,72 @@ img {
 				</div>
 			</div>
 		</div>
+				<!-- <div th:if="${winner[0].dNo} == null">
+					<h3>없는경우</h3>
+				</div>
+				<div th:if="${winner[0].dNo} != null">
+					<h3>있는경우</h3>
+				</div> -->
+				
+		<!--마감이면서 우승자등록이 되어있지 않은경우만 -->
 		<th:block th:if="${contest.ing} == '마감' ">
-		<h3 th:text="${winner}"></h3>
-		<!-- 우승자 등록 -->
-		<div class="col-sm-8 col-sm-offset-2">
-                <h4 class="font-alt mb-0">우승자 등록</h4>
-                <hr class="divider-w mt-10 mb-20">
-                <form class="form" role="form" action="/winner/update" name="winnerfrm" method="post" onsubmit="return check();">
-	                  <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-	                  <input type="hidden" th:name="coNo" th:value="${contest.cNo}"/>
+			<div th:if="${winner[0].dNo} == null">
 
-
-					<!-- 공모전작성자가 입력한 등수만  출력 -->					
-					<th:block th:if="${winner.size} == 1">
-			                <div>
-			                 1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
-			                 회원ID<input type="text" name="userIdArr[]">
-			                </div>
-					</th:block>
-					
-					<th:block th:if="${winner.size} == 2">
-						  <div>
-			                 1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
-			                 회원ID<input type="text" name="userIdArr[]">
-			                </div>	
-		                  <div>
-		                    2등<input  type="text" id="grade_02" name="dgnNo[]">
-		                    회원ID<input  type="text" name="userIdArr[]">
-		                  </div>
-	                </th:block>
-	                  
-	                 <th:block th:if="${winner.size} == 3">
-	                 	   <div>
-			                 1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
-			                 회원ID<input type="text" name="userIdArr[]">
-			                </div>	
-		                  <div>
-		                    2등<input  type="text" id="grade_02" name="dgnNo[]">
-		                    회원ID<input  type="text" name="userIdArr[]">
-		                  </div>
-		                  <div >
-		                    3등<input type="text" id="grade_03" name="dgnNo[]">
-		                    회원ID<input  type="text" name="userIdArr[]">
-		                  </div>
-	                 </th:block>
-	                  
-               		  <button type="reset" class="btn btn-g btn-round btn-lg">초기화</button>	
-	                  <button type="submit" class="btn btn-g btn-round btn-lg">등록</button>
-                </form>
-          </div>
-          </th:block>
-          
-		<!-- 페이지처리를 위한 히든인풋. -->
-		<input type="hidden" name="page" value="1">
+					<!-- 우승자 등록 -->
+					<div>
+						<h4 class="font-alt mb-0">우승자 등록</h4>
+						<hr class="divider-w mt-10 mb-20">
+						<div>
+							<form class="form" role="form" action="/winner/update" name="winnerfrm" method="post" onsubmit="return check();">
+									<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+									<input type="hidden" th:name="coNo" th:value="${contest.cNo}" />
+		
+									<!-- 공모전작성자가 입력한 등수만  출력 -->
+									<th:block th:if="${winner.size} == 1">
+										<div>
+											1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+											회원ID<input type="text" name="userIdArr[]">
+										</div>
+									</th:block>
+		
+									<th:block th:if="${winner.size} == 2">
+										<div>
+											1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+											회원ID<input type="text"name="userIdArr[]">
+										</div>
+										<div>
+											2등<input type="text" id="grade_02" name="dgnNo[]">
+											회원ID<input type="text" name="userIdArr[]">
+										</div>
+									</th:block>
+		
+									<th:block th:if="${winner.size} == 3">
+										<div>
+											1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+											회원ID<input type="text" name="userIdArr[]">
+										</div>
+										<div>
+											2등<input type="text" id="grade_02" name="dgnNo[]">
+											회원ID<input type="text" name="userIdArr[]">
+										</div>
+										<div>
+											3등<input type="text" id="grade_03" name="dgnNo[]">
+											회원ID<input type="text" name="userIdArr[]">
+										</div>
+									</th:block>
+		
+									<button type="reset" class="btn btn-g btn-round btn-lg">초기화</button>
+									<button type="submit" class="btn btn-g btn-round btn-lg">등록</button>
+							</form>
+						</div>
+					</div>
+			</div>
+		</th:block>
+		
+		
+		<div>
+			<!-- 페이지처리를 위한 히든인풋. -->
+			<input type="hidden" name="page" value="1">
 		</div>
 
 		<script>
@@ -215,7 +230,6 @@ img {
 					xhr.setRequestHeader(header, token);
 				},
 			}).then(res => {
-				console.log(res.design)
 				if(res.design == 0){
 					alert('지원자가 없습니다.')
 					location.href = '/contest/mySelect';
@@ -346,44 +360,46 @@ img {
 			if (page.totalRecord == 0) {
 				return;
 			}
-			let pagination = $("<div/>").addClass("block-27");
+			let pagination = $("<div/>")
 			let ul = $("<ul/>").attr("class","pagination");
 			if (page.startPage > 1) {
 				$(ul).append($("<li/>").html("&laquo;")
-					.css("font-size", "30px")
-					.on("click", function () {
-						gopage(page.startPage - page.pageSize)
-					}));
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
 			}
-	
+
 			//페이지 버튼 생성.
 			for (let i = page.startPage; i <= page.endPage; i++) {
 				if (page.page == i) {
-					$(ul).append($("<li/>").text(i).attr("class", "active")
-						.css("border-radius", "100%")
-						.css("color", "#000")
-						.css("background", "LightGray")
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
 					);
 				} else {
-					$(ul).append($("<li/>").text(i).attr("class", "page-link")
-						.css("border-radius", "100%")
-						.css("color", "#000")
-						.on("click", function () {
-							gopage($(this).text());
-						})); //페이지이동 함수
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
 				}
 			}
 			if (page.endPage < page.lastPage) {
 				$(ul).append($("<li/>").html("&raquo;")
-					.css("font-size", "30px")
-					.on("click", function () {
-						gopage(page.startPage + page.pageSize)
-					}));
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
 			}
 			pagination.append(ul);
 			return pagination;
 		}
-	
 		
 		
 			// Get the modal
