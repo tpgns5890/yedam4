@@ -84,27 +84,40 @@
 	</insert>
 	
 	
-	<!-- 제안서 한건조회 result Map -->
+<!--  제안서 한건조회 result Map 
 	<resultMap type="PropVO" id="propMap">
 		<result column="p_no" property="pno" />
 		<result column="event_type" property="eventType" />
 		<result column="writing_dt" property="writingDt" />
 		<result column="adoption_yn" property="adoptionYn" />
-		<collection property="propGdList" resultMap="propGdMap" /> <!-- vo에 추가한 join용 변수 -->
+		<collection property="propGdList" resultMap="propGdMap" /> vo에 추가한 join용 변수
 	</resultMap>
 	
 	<resultMap type="PropGdVO" id="propGdMap">
 		<result column="goods_nm" property="goodsNm" />
 		<result column="unit_prc" property="unitPrc" />
 		<result column="count" property="count" />
-	</resultMap>
-	
-	<!-- 제안서 한건 조회 join -->
+	</resultMap> 
+	제안서 한건 조회 join
 	<select id="getProp" resultType="PropVO" resultMap="propMap">
 	 SELECT p.p_no, p.company_int, p.event_exps, p.total_prc, p.writing_dt, gd.goods_nm, gd.unit_prc, gd.count
 	 FROM PROPOSAL P LEFT JOIN PROPOSAL_GD gd
 	 ON p.p_no = gd.p_no
 	 WHERE p.p_no = #{pno}
+	</select> -->
+	
+	<!-- 제안서 단건조회 -->
+	<select id="getProp" resultType="PropVO">
+	 select *
+	 from proposal
+	 where p_no = #{pno}
+	</select>
+	
+	<!-- 제안서에 등록된 물품조회 -->
+	<select id="getPropGdList" resultType="PropGdVO">
+	select *
+	from proposal_gd
+	where p_no = #{pno}
 	</select>
 	
 	<!-- 제안서 삭제 -->
@@ -112,4 +125,11 @@
 	DELETE FROM proposal
 	WHERE p_no = #{pno}
 	</delete>
+	
+	<!--  제안서 채택 -->
+	<update id="chooesProp">
+	update proposal
+	set adoption_yn = 'Y'
+	where p_no = #{pno}
+	</update>
 </mapper>

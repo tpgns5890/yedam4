@@ -172,8 +172,9 @@ button {
         </button>
       </div>
       <div class="modal-body">
+      <div id="companyInt">
        <label for="companyInt" class="col-form-label">업체소개</label>
-       <p th:text="|업체아이디 : ${prop.userId}|"></p>
+       </div>
        <label for="gdList" class="col-form-label">물품목록</label>
    		
 		<table id="fixedGdList" class="list">
@@ -206,7 +207,7 @@ button {
        <p id="total"></p> 
       </div>
       <div class="modal-footer">
-               <button type="button" class="btn btn-primary" id="insertBtn">채택</button>
+               <button type="button" class="btn btn-primary" id="chooesProp">채택</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -221,6 +222,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 
 //해당업체의 등록된물품 조회
  $(function() {
+	 
 var userId = $('input[name="sessionId"]').val();
 var data = {"userId" : userId};
  	$.ajax({
@@ -371,11 +373,10 @@ var data = {"userId" : userId};
  });
  //제안서 상세보기
  $('#getProp').on('click', function() {
-	 var userId = $(this).val();
-	 console.log(userId);
+	 $('#companyInt').html("");
+	 $('#fixedGdList tbody tr').remove();
 	 var pno = $('#pno').val();
-	 var data = {"userId": userId, "pno": pno};
-	 
+	 var data = {"pno": pno};
 	 $.ajax({
 		 url: "/getProp",
 		 method: "POST",
@@ -385,16 +386,39 @@ var data = {"userId" : userId};
          {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
 				xhr.setRequestHeader(header, token);
          },
-         success: function(res){
-        	 console.log(res)
-        	 $.each(res, function(idx, goods){
-        		var goodsNm = $("<td />").append(goods.goodsNm);
- 				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
- 				var stock = $("<td class='stock'/>").append(goods.stock);
- 				 
- 				tr.append(goodsNm, rentalPrc, stock)
- 				$('#myGdList>tbody').append(tr);
-        	 })		
+         success: function(res){ 
+        	 var companyInt = res.companyInt;
+        	$('#companyInt').append(companyInt);
+        	//제안서 물품조회
+        	console.log(data)
+        	$.ajax({
+        		url: "/propGdList",
+        		method: "POST",
+        		data: JSON.stringify(data),
+        		contentType: 'application/json',
+        		beforeSend : function(xhr)
+                {   
+        			//데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+                xhr.setRequestHeader(header, token);
+                },
+        		success: function (data) {
+        			console.log(data)
+        			$.each(data, function(idx, goods){
+        				var tr = $("<tr />")
+        				var goodsNm = $("<td />").append(goods.goodsNm);
+        				var unitPrc = $("<td class='prc'/>").append(goods.unitPrc);
+        				var count = $("<td class='stock'/>").append(goods.count);
+        				tr.append(goodsNm, unitPrc, count)
+        				$('#fixedGdList>tbody').append(tr);
+        			})
+                 },
+                 error: function () {
+        				alert("서버 요청 실패");
+        			}	
+        	});// end of ajax in ajax
+        		
+        		
+        		console.log(res.eventExps)  
          },
           error: function () {
  				alert("서버 요청 실패");
@@ -429,6 +453,35 @@ var data = {"userId" : userId};
  			}
 	 });
  });
+ 
+ //제안서 채택
+ $('#chooesProp').on('click', function(){
+	 if(!confirm('채택하시겠습니까?')) {
+		 return false;
+	 }
+	 var pno = $('#pno').val();
+	 var data = {"pno": pno};
+	 console.log(data);
+	 $.ajax({
+		 url: "/chooesProp",
+		 method: "POST",
+		 data: JSON.stringify(data),
+		 contentType: 'application/json',
+		 beforeSend : function(xhr)
+         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+				xhr.setRequestHeader(header, token);
+         },
+         success: function(data){
+        	if(data == 1) {
+        		alert('채택되었습니다.');
+        		location.href="/estList"
+        	}	
+         },
+          error: function () {
+ 				alert("서버 요청 실패");
+ 			}
+	 });
+ })
 </script>
 </div><!-- End of layout:fragment -->
 </body>

@@ -24,8 +24,12 @@ public interface EstService {
 
 	public Map<String, String> getCount(String eno, String userId); // 업체 제안서 채택/후기수 조회
 
-	public List<RentGdVO> myGdList(RentGdVO rentGdVO); // 해당업체의 물품조회\
+	public List<RentGdVO> myGdList(RentGdVO rentGdVO); // 해당업체의 물품조회
 	
 	public int delProp(PropVO propVO); // 제안서 삭제
+	
+	public List<PropGdVO> getPropGdList(PropGdVO propGdVO); //제안서에 등록된 물품 조회
+	
+	public int chooesProp(PropVO propVO); //제안서 채택
 	
 }
