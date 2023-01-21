@@ -61,9 +61,9 @@ public class UploadFileMethod {
 			List<FilesVO> filesChecklist = new ArrayList<>();
 			FilesVO fileVO = new FilesVO();
 			
-			// 파일이 없다면.
-			if(service.fileList(targetId) == null) {
-				return null;
+			// 파일이 없다면. insert
+			if(service.fileList(targetId).size() == 0) {
+				uploadFiles(uploadfile,targetId, category);
 			}
 			
 			// 파일 경로위치에 물리적으로 저장하기

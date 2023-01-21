@@ -149,7 +149,7 @@ public class ContestServiceImpl implements ContestService {
 			List<FileDto> list= new ArrayList<FileDto>();
 			//파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
 			try {
-				list = newUp.updateFiles(uploadFile, vo.getcNo(), vo.getCategory());
+				list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -38,7 +38,9 @@ ul {
             </div>
           </div>
         </section>		
-
+		
+		<div style="min-height: 1600px">
+		
 		<div class="contestContainer">
 			<textarea rows="20" cols="90">
 [공모전 유의사항]
@@ -87,6 +89,7 @@ ul {
 				<li><label>3등금액</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
 					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
+				
 				<input type="checkbox" name="save" value="Y"><lable>임시저장</lable>
 					
 					<div class="col-md-12">
@@ -104,11 +107,11 @@ ul {
 					
 			<button type="reset">초기화</button>
 			<button type="submit" id="insertForm">등록</button>
-			</form>
-			
 			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 			<button id="insertBtn">등록(->결제)</button>
-
+			</form>
+			
+			
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
 
@@ -123,7 +126,7 @@ ul {
 						<button id="cancle" class="modelBtn1"style="width:50px;" type="button">취소</button>
 					</div>
 				</div>
-
+			</div>
 			</div>
 
 			<script>
@@ -152,7 +155,6 @@ ul {
 			var timeOff = new Date().getTimezoneOffset()*60000;
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
-			
 		
 			// Get the modal
 			var modal = document.getElementById("myModal");

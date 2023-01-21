@@ -27,6 +27,15 @@
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
 
+		<!-- 게시글 검색 -->
+		<form name="searchFrm">
+			제목<input type="text" name="ttl" value="">
+			내용<input type="text" name="cntn" value="">
+			<input type="hidden" name="page" value="1">
+			<button type="submit">검색</button>
+		</form>
+
+	
 		<!-- <div th:if="${not #strings.isEmpty(likeList)}">
 			<span> 관심 공모전이 없습니다. </span>
 		</div>
@@ -39,20 +48,19 @@
 					<tr>
 						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
 						<th>no</th>
+						<th>공모전</th>
 						<th>작성자</th>
 						<th>대상번호</th>
-						<th>분류</th>
 
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="l : ${likeList}">
 						<td><input class="check delete" type="checkBox" value="delete"></td>
-						<td th:text=${l.LIKE_NO}
-							th:onclick="|location.href='@{select(cNo=${l.TARGET_NO})}'|"></td>
+						<td th:text=${l.LIKE_NO} th:onclick="|location.href='@{select(cNo=${l.TARGET_NO})}'|"></td>
+						<td th:text=${l.TTL} th:onclick="|location.href='@{select(cNo=${l.TARGET_NO})}'|"></td>
 						<td th:text=${l.USER_ID}>
 						<td th:text=${l.TARGET_NO}>
-						<td th:text=${l.CATEGORY}>
 					</tr>
 				</tbody>
 			</table>
@@ -66,7 +74,7 @@
 				</div>
 			</div> -->
 		</div>
-	</div>
+	
 
 		<script>
 		//페이지이동
@@ -113,6 +121,6 @@
 			}
 		}
 	</script>
-		
+	</div>	
 </body>
 </html>

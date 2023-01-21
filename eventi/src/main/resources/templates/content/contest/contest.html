@@ -73,21 +73,18 @@ footer {
 						<p th:text=${contest.category}></p>
 						<h1 th:text=${contest.ttl}></h1>
 
+						
 						<!-- 마감연장일 있는경우 -->
 						<div th:if="${contest.dtExtns} != null">
-							<div
-								th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}|"></div>
+							<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}|"></div>
 						</div>
 
 						<!-- 마감연장일 없는경우 -->
 						<div th:if="${contest.dtExtns} == null">
-							<div
-								th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div>
+							<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div>
 						</div>
 
 						<div class="rating d-flex" style="height: 100px; width: 500px">
-							<div class="text-left mr-4">
-								&#128680;
 								<!-- 비회원 하트버튼 -->
 								<th:block sec:authorize="!isAuthenticated()">
 									<div class="stage" style="float: right; height: 50px;">
@@ -106,10 +103,11 @@ footer {
 									</div>
 								</th:block>
 
-								<span th:text=${contest.rprt}></span> <span
-									style='font-size: 30px;'>&#128065;</span> <span
-									th:text=${contest.inq}></span>
-							</div>
+								<!-- 신고수 -->
+								<span style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+								
+								<!-- 조회수 -->
+								 <span style='font-size: 30px;'>&#128065;</span><span th:text=${contest.inq}></span>
 						</div>
 						<div th:each="w : ${winnerList}">
 							<p class="price">
@@ -154,16 +152,10 @@ footer {
 							<!-- 공모전 작성자만 -->
 							<div
 								th:if="|${session.member.getUserId()}| == ${contest.writer} ">
-								<div>
-									<a th:href="@{/contest/update(cNo=${contest.cNo})}"><button
-											type="button" class="btn btn-g btn-round btn-lg">수정</button></a>
-									<button type="button" id="delBtn"
-										class="btn btn-g btn-round btn-lg5">삭제</button>
-								</div>
-								<div>
+									<button id="contestUpdate" type="button" class="btn btn-g btn-round btn-lg" >수정</button>
+									<button id="delBtn" type="button"  class="btn btn-g btn-round btn-lg5">삭제</button>
 									<button id="updateDate" type="button" class="btn btn-g btn-round btn-lg">마감연장</button>
-									<a href="#"><button id="winnerInsert" type="button" class="btn btn-g btn-round btn-lg">결과등록</button></a>
-								</div>
+									<button id="winnerInsert" type="button" class="btn btn-g btn-round btn-lg">결과등록</button>
 							</div>
 						</th:block>
 					</div>
@@ -175,12 +167,9 @@ footer {
 							role="tablist" aria-orientation="vertical">
 
 							<ul class="nav nav-tabs font-alt" role="tablist">
-								<li id="liCntn" class="active"><a href="#description"
-									data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
-								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span
-										class="icon-tools-2">문의사항</span></a></li>
-								<li id="lientry"><a href="#reviews" data-toggle="tab"><span
-										class="icon-tools-2">참여작</span></a></li>
+								<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
+								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">문의사항</span></a></li>
+								<li id="lientry"><a href="#reviews" data-toggle="tab"><span class="icon-tools-2">참여작</span></a></li>
 							</ul>
 						</div>
 
@@ -218,8 +207,6 @@ footer {
 			
 			<!-- 페이지처리를 위한 히든인풋. -->
 		<input type="hidden" name="designPage" value="1">
-
-
 		</div>
 
 
@@ -234,7 +221,7 @@ footer {
 		function login(){
 			 $("#header_modal").show();
 		}
-
+		
 		
 		//모달창-----------------------------------------------------------
 		// Get the modal
@@ -243,9 +230,17 @@ footer {
 		// Get the <span> element that closes the modal
 		var span = document.getElementsByClassName("close")[0];
 		
-		// When the user clicks the button, open the modal 
+		// 모달창 띄우기.
+		// 마감연장일이 이미 지정된 경우 모달창 띄우지 않도록.
 		$('#updateDate').on("click", function(){ 
-		  modal.style.display = "block";
+		  
+		let dtExtns = '[[${#dates.format(contest.dtExtns,'yyyy/MM/dd')}]]';
+			if(dtExtns != null || dtExtns != ''){
+				alert('마감연장 1회만 가능합니다.')
+				return false;
+			}else{
+			  modal.style.display = "block";
+			}
 		})
 		
 		// When the user clicks on <span> (x), close the modal
@@ -265,12 +260,11 @@ footer {
 			let dtReg = '[[${#dates.format(contest.dtReg,'yyyy/MM/dd')}]]';
 			let dtCls = '[[${#dates.format(contest.dtCls,'yyyy/MM/dd')}]]';
 			
-			
-	/* 		//li태그 생성후 모달창 붙여넣기 */
+		/*	//li태그 생성후 모달창 붙여넣기 */
 			$('#updateModel').empty();
 			let li = `  <div>등록일 : ${dtReg} </div>
-						<div>마감일 : ${dtCls} </div>
-						<input type="date">
+						<div >마감일 : ${dtCls} </div>
+						<input type="date" id="dtCls">
 					`;
 			$('#updateModel').append(li);
 			
@@ -278,6 +272,7 @@ footer {
 		
 		//마감연장 모달창 수정처리
 		$('#extension').on('click', function () {
+
 			let date = $(this).parent().parent().find($('input[type="date"]')).val();
 			
 			$.ajax({
@@ -305,6 +300,15 @@ footer {
 			
 		})
 		
+		//공모전 수정페이지 이동
+		$('#contestUpdate').on('click', function(){
+			if (!confirm('공모전을 수정하시겠습니까?')) {
+				return false;
+			}else{
+				location.href="/contest/update?cNo="+cNo;
+			}
+			
+		});
 	
 		//공모전 삭제-----------------------------------------------------------
 		$('#delBtn').on('click', delContest);
@@ -314,7 +318,7 @@ footer {
 			}
 			
 			$.ajax({
-	            url:'../contest/delete',
+	            url:'/contest/delete',
 	            method:"post",
 	            data : {cNo},
 	            beforeSend : function(xhr)
@@ -324,7 +328,7 @@ footer {
 			}).then(res => {
 				if(res == 1){
 					alert('삭제 완료');
-					location.href="../contest/List";
+					location.href="/contest/List";
 				}else {
 					alert('응모작품이 있어 삭제 불가능합니다.');
 					location.href="../contest/select?cNo="+ cNo;

@@ -172,15 +172,10 @@ public class ContestController {
 		return service.deleteContest(vo);
 	}
 
-	// 공모전 좋아요리스트
+	// 공모전 좋아요리스트 페이지이동
 	@GetMapping("/like")
-	public String likeList(Model model) {
-		// 로그인 회원정보
-		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		String sessionId = user.getUserId();
-
-		model.addAttribute("likeList", likeService.userlikeList(null, sessionId));
-		return "content/myPage/myLikeLIst";
+	public String likeList() { // 로그인 회원정보
+		return "content/myPage/myContestLike";
 	}
 
 	// 로그인회원의 전체 좋아요리스트
@@ -235,6 +230,12 @@ public class ContestController {
 		result.put("paging", paging);
 
 		return result; // 디자인리스트+파일리스트 반환.
+	}
+
+	// 공모전 나의 문의리스트 페이지이동
+	@GetMapping("/QnaList")
+	public String ContestQnaList() { // 로그인 회원정보
+		return "content/myPage/myContestQnaList";
 	}
 
 }
