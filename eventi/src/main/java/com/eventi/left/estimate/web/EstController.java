@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
+import com.eventi.left.estimate.service.PropGdVO;
 import com.eventi.left.estimate.service.PropVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.rent.service.RentGdVO;
@@ -86,4 +87,32 @@ public class EstController {
 	public int insertProp(@RequestBody PropVO propVO) {
 		return estService.insertProp(propVO);
 		}
+	
+	//제안서 상세조회
+	@PostMapping("/getProp")
+	@ResponseBody
+	public PropVO getProp(@RequestBody PropVO propVO) {
+		return estService.getProp(propVO);
+		}
+	
+	//제안서 삭제
+	@PostMapping("/delProp")
+	@ResponseBody
+	public int delProp(@RequestBody PropVO propVO) {
+		return estService.delProp(propVO);	
+	}
+	
+	//제안서에 등록된 물품 조회
+	@PostMapping("/propGdList")
+	@ResponseBody
+	public List<PropGdVO> getPropGdList(@RequestBody PropGdVO propGdVO) {
+		return estService.getPropGdList(propGdVO);
+		}
+	
+	//제안서 채택
+	@PostMapping("/chooesProp")
+	@ResponseBody
+	public int chooesProp(@RequestBody PropVO propVO) {
+		return estService.chooesProp(propVO);	
+	}
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.eventi.left.estimate.mapper.EstMapper;
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
+import com.eventi.left.estimate.service.PropGdVO;
 import com.eventi.left.estimate.service.PropVO;
 import com.eventi.left.rent.service.RentGdVO;
 
@@ -59,5 +60,29 @@ public class EstServiceImpl implements EstService {
 	@Override
 	public int deleteEst(EstVO estVO) {
 		return estMapper.deleteEst(estVO);
+	}
+	
+	//해당업체의 제안서 조회
+	@Override
+	public PropVO getProp(PropVO propVO) {
+		return estMapper.getProp(propVO);
+	}
+	
+	//제안서 삭제
+	@Override
+	public int delProp(PropVO propVO) {
+		return estMapper.delProp(propVO);
+	}
+	
+	//제안서에 등록된 물품 조회
+	@Override
+	public List<PropGdVO> getPropGdList(PropGdVO propGdVO) {
+		return estMapper.getPropGdList(propGdVO);
+	}
+	
+	//제안서 채택
+	@Override
+	public int chooesProp(PropVO propVO) {
+		return estMapper.chooesProp(propVO);
 	}
 }
