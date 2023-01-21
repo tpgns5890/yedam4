@@ -5,25 +5,7 @@
 	layout:decorate="~{layouts/default_layout}">
 <head>
 <link rel="stylesheet" href="/css/model.css">
-<style>
-.fileDown{
-	display : none;
-}
-h3 {
-	font-weight: bold;
-	text-align: center;
-}
-
-.contestContainer {
-	padding: 20px;
-	margin: auto;
-	float: center;
-}
-
-ul {
-	list-style: none;
-}
-</style>
+<link rel="stylesheet" href="/css/cotestForm.css">
 </head>
 <body>
 	<div layout:fragment="content" class="content">
@@ -38,7 +20,9 @@ ul {
             </div>
           </div>
         </section>		
-
+		
+		<div style="min-height: 1600px">
+		
 		<div class="contestContainer">
 			<textarea rows="20" cols="90">
 [공모전 유의사항]
@@ -53,21 +37,21 @@ ul {
 			<form action="/contest/insert" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
-					<li><label>분류</label> 
-						현수막 <input type="radio" name="category" value="D1" checked>
+					<li>분류:
+						현수막  <input type="radio" name="category" value="D1" checked>
 						배너<input type="radio" name="category" value="D2"> 
-						로고<input type="radio" name="category" value="D3">
-						포스터<input type="radio" name="category" value="D4"> 
+						로고 <input type="radio" name="category" value="D3">
+						포스터 <input type="radio" name="category" value="D4"> 
 						기타 <input type="radio" name="category" value="D5"></li>
 						
 						
 					<!-- 임시저장값 hidden -->
-					<li><label>공모번호</label><input type="text" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
+					<li><input type="hidden" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
-					<li><label>제목</label><input type="text" name="ttl" required="required"><br /></li>
+					<li><label>제  목</label><input type="text" name="ttl" required="required"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
-					<li><label>선호스타일</label> <select name="style" >
+					<li><label>스타일</label> <select name="style" >
 							<option value="none">=== 선호스타일 ===</option>
 							<option value="DS1">고전적인</option>
 							<option value="DS2">화사한</option>
@@ -81,17 +65,20 @@ ul {
 							<option value="DS0">기타</option>
 					</select>
 						<button>추가</button></li>
-
-				<li><label>1등금액</label><input id="wPay1" class="wPay" type="number" name="winnerPay[]" required="required" ><br /></li>
-				<li><label>2등금액</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
-				<li><label>3등금액</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
+	
+	
+				<li style="color: red">*상금액 1등필수, 2,3등 선택사항입니다.</li>
+				<li><label>1 등</label><input id="wPay1" class="wPay" type="number" name="winnerPay[]" required="required" ><br /></li>
+				<li><label>2 등</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
+				<li><label>3 등</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
 					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
-				<input type="checkbox" name="save" value="Y"><lable>임시저장</lable>
+				
+				<input type="checkbox" name="save" value="Y"><lable>임시저장</lable><br>
 					
 					<div class="col-md-12">
 						<div class="form-group">
-						<label>첨부파일</label><input id="imgInp" type="file" name="uploadFile">
+							<input id="imgInp" type="file" name="uploadFile">
 							<div class="fileDown">
 								<img id="blah" src="#" alt = "your image" width="250px" />
 									<button type="button" id="cancel" class="btn btn-warning cancel">
@@ -102,13 +89,15 @@ ul {
 					</div>
 				
 					
+				
+					
 			<button type="reset">초기화</button>
 			<button type="submit" id="insertForm">등록</button>
-			</form>
-			
 			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 			<button id="insertBtn">등록(->결제)</button>
-
+			</form>
+			
+			
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
 
@@ -123,7 +112,7 @@ ul {
 						<button id="cancle" class="modelBtn1"style="width:50px;" type="button">취소</button>
 					</div>
 				</div>
-
+			</div>
 			</div>
 
 			<script>
@@ -152,7 +141,6 @@ ul {
 			var timeOff = new Date().getTimezoneOffset()*60000;
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
-			
 		
 			// Get the modal
 			var modal = document.getElementById("myModal");

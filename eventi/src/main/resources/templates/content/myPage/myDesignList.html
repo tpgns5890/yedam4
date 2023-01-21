@@ -108,7 +108,6 @@
 			</div>
 			
 		<!-- 페이징처리 -->
-		<h3 th:text="${paging}"></h3>
 		<div class="row mt-5">
 			<div class="col text-center">
 				<div class="block-27">
@@ -189,7 +188,6 @@
 		//디자인선택시 모달창 
 			//응모된 1건의 디자인
 			// 전체 파일리스트+ 정보출력.
-		 
 			$('.select').on("click", function(e){
 				let dNo = $(this).parent().prev().children().eq(1).text()
 				console.log(dNo)
@@ -228,7 +226,7 @@
 			
 			//모달창 :디자인 응모작품 생성.
 			function makeDesign(fileName,dNo){
-				let design = `  <div class="design" id="${dNo}" style="float: left ">
+				let design = `  <div class="design" id="${dNo}" style="float: left; margin:10px">
 										<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
 							   </div>
 							  `

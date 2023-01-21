@@ -33,7 +33,8 @@
 	</insert>
 	<update id="updateWinner">
 		update WINNER
-		set d_no = #{dNo}
+		set d_no = #{dNo},
+		    user_id = #{userId}
 		where grade = #{grade}
 		and CO_NO=#{coNo}
 	</update>

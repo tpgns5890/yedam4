@@ -31,16 +31,16 @@
 
 
 		<!-- 게시글 검색 -->
-		<form name="searchFrm">
-			제목<input type="text" name="ttl" value="">
-			내용<input type="text" name="cntn" value="">
-			<input type="hidden" name="page" value="1">
-			<button type="submit">검색</button>
-		</form>
+			<form name="searchFrm">
+				제목<input type="text" name="ttl" value="">
+				내용<input type="text" name="cntn" value="">
+				<input type="hidden" name="page" value="1">
+				<button type="submit">검색</button>
+				<button type="button" id="deleteBtn">공모전삭제</button>
+			</form>
 			
 		<!-- 테이블 -->
 		<div id="table">
-			<button type="button" id="deleteBtn">공모전삭제</button>
 			<table border="1" id="myTable">
 				<thead>
 					<tr>
@@ -52,7 +52,6 @@
 						<th>진행기간</th>
 						<th>진행현황</th>
 						<th>등록현황</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -72,9 +71,18 @@
 						<td th:text=${contest.writer}></td>
 						<td th:text=${contest.category}></td>
 						<td th:text=${contest.ttl}></td>
-						<td
-							th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}">
-						</td>
+						
+						<!-- 마감기한만 있을경우 -->
+						<th:block th:if="${contest.dtExtns} == null">
+							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}"></td>
+						</th:block>
+						
+						<!-- 마감연장 1회 한경우 -->
+						<th:block th:if="${contest.dtExtns} != null">
+							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}"></td>
+						</th:block>
+						
+						
 						<td th:text="${contest.ing}"></td>
 						
 						
@@ -83,19 +91,22 @@
 							<td><button type="button" id="selete" th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|">공모전등록</button></td>
 						</th:block>
 						
-						<th:block th:if="${contest.save} == 'N'">
-						<th:block th:if="${contest.ing} == '진행중'">
+						
+						
+						<th:block th:if="${contest.save} == 'N'and ${contest.ing} == '진행중'">
 							<td th:text="등록완료"></td>
 							<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
 						</th:block>
-						</th:block>
 						
-						<th:block th:if="${contest.save} == 'N'">
-						<th:block th:if="${contest.ing} == '마감'">
+						<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} == 0">
 							<td th:text="등록완료"></td>
 							<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
 						</th:block>
+						
+						<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} > 0">
+							<td th:text="우승자선정완료"></td>
 						</th:block>
+						
 						
 					</tr>
 				</tbody>
@@ -103,7 +114,6 @@
 		</div>
 		
 		<!-- 페이징처리 -->
-		<h3 th:text="${paging}"></h3>
 		<div class="row mt-5">
 			<div class="col text-center">
 				<div class="block-27">
@@ -115,6 +125,7 @@
 
 
 		<script>
+		
 		//페이지이동 및 검색
 		//페이징개수 변환 myContest 동적쿼리
 		function gopage(i) {

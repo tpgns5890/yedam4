@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+<!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/myPageSide.css">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 2.레이아웃 content적용 -->
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg"
+			data-background="/assets/images/gallery_bg.jpg"
+			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h2 class="module-title font-alt">마이페이지</h2>
+						<div class="module-subtitle font-serif">공모전 문의리스트</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<div style="min-height: 700px">
+			<!-- 3.현재페이지 myPageSide 적용 -->
+			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+			<!-- 게시글 검색 -->
+			<form name="searchFrm">
+				제목<input type="text" name="ttl" value=""> 내용<input
+					type="text" name="cntn" value=""> <input type="hidden"
+					name="page" value="1">
+				<button type="submit">검색</button>
+			</form>
+
+			<!-- 테이블 -->
+			<div id="table">
+				<button type="button" id="deleteBtn">상세보기</button>
+				<table border="1" id="myTable">
+					<thead>
+						<tr>
+							<th><input type="checkBox" value="삭제" class="delete"
+								id="allDelete"></th>
+							<th>공모no</th>
+							<th>문의no</th>
+							<th>분류별</th>
+							<th>제목</th>
+							<th>진행기간</th>
+							<th>문의등록일</th>
+							<th>답변현황</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- <tr th:each="contest : ${contestList} ">
+							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
+							<td th:text=${contest.cNo} th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|"></td>
+							<td th:text=${contest.writer}></td>
+							<td th:text=${contest.category}></td>
+							<td th:text=${contest.ttl}></td>
+							<th:block th:if="${contest.dtExtns} == null">
+						</tr> -->
+					</tbody>
+				</table>
+			</div>
+
+			<!-- 페이징처리 -->
+			<!-- <h3 th:text="${paging}"></h3>
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
+					</div>
+				</div>
+			</div> -->
+
+
+
+
+
+		</div>
+
+		<script>
+			
+		</script>
+	</div>
+</body>
+</html>

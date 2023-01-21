@@ -34,11 +34,13 @@ ul{
 		<div class="contestContainer">
 			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" >
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+					<p style="color: red">*공모전에 중요사항은 참가작품에 영향을 끼칠수 있기때문에 수정에 제한적입니다.</p>
 				<ul>
 					<li><div th:text="|분류별 ${contest.category}|"></div></li>
 					<li><div th:text="|공모번호 ${contest.cNo}|"></div></li>
 					<li><div th:text="|작성자 ${contest.writer}"></div></li>
 					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li>
+					
 					<li><input hidden="hidden" type="text" name="cNo" th:value="${contest.cNo}"><br /></li> <li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
 					<li><textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4" required="required"></textarea></li>
@@ -48,7 +50,8 @@ ul{
 					<div class="col-md-12">
                      <div class="form-group" id="fileInsert">
                         <!-- 이미지가 있을 경우와 없을 경우 if문으로 처리 -->
-                        <input type="file" id="imgInp" name="uploadFile" multiple="multiple" th:if="|${fileList == null}|"/>
+                        <input type="file" id="imgInp" name="uploadFile" multiple="multiple" th:if="|$lists.isEmpty(fileList)|"/>
+                   <!-- <input type="file" id="imgInp" name="uploadFile" multiple="multiple" th:if="|${fileList == null}|"/> -->
                         <div th:each="f : ${fileList}">
                            <div th:if="|/fileView/${f.sevNm} != null}|">
                               <img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
@@ -59,9 +62,17 @@ ul{
                         </div>
                      </div>
                   </div>
+                 <!-- 임시저장일경우 등록및 결제처리.. -->
+				<th:block th:if="${contest.save} == 'Y'">
+					<button type="submit" id="insertForm">등록</button>
+					<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
+				</th:block>
 				
-				<button type="submit" id="updateBtn">수정</button>
-				<button type="reset">취소</button>
+				 <!-- 등록된경우 등록및 결제처리.. -->
+				<th:block th:if="${contest.save} == 'N'">
+					<button type="submit" id="updateBtn">수정</button>
+					<button type="button" id="cancleBtn" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
+				</th:block>
 			</form>
 		</div>
 	<script>

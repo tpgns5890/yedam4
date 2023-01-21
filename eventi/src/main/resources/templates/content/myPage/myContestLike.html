@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+<!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/myPageSide.css">
+<link rel="stylesheet" href="/css/heart.css">
+</head>
+<body>
+
+	<!-- 2.레이아웃 content적용 -->
+	<div layout:fragment="content" class="content">
+	
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">마이페이지</h2>
+                <div class="module-subtitle font-serif" > 관심공모전</div>
+              </div>
+            </div>
+          </div>
+        </section>
+		
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+		
+		
+		<!-- 공모전 리스트 -->
+			<div class="container">
+				<div class="row multi-columns-row" id="boxList"> </div>
+		<!-- end -->
+
+				<!-- //페이징 경로 :: 문자 -->
+				<div class="row mt-5" id="paging">
+					<div class="col text-center">
+						<div class="block-27" id="returnPaging">
+						</div>
+					</div>
+				</div>
+	
+			</div>
+			
+			
+
+
+	<script >
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	loveClick();
+	
+	//나의 좋아요 공모전박스 생성출력.
+	function loveClick() {
+
+			$.ajax({
+				url: '/contest/ajaxlike',
+				method: 'post',
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				//map =>  contest,paging 
+				$('#boxList').empty();
+				
+				//관심 공모전이 없을경우
+				if(res.contest == ''){
+					$('#boxList').append($('<p>').append("관심 공모전 없습니다."));
+				}
+			
+				for (contest of res.contest) {
+					console.log(contest)
+					$('#boxList').append(makeBox_map(contest));
+				}
+
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging));
+
+			})
+	}
+
+	//Map : 로그인회원의 좋아요 공모전박스생성
+	function makeBox_map(contest) {
+		let p = ` 
+			<div class="col-sm-6 col-md-4 col-lg-4">
+                <div id="${contest.C_NO}" class="shop-item">
+                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 665px; height: 750px">
+                    <div class="shop-item-detail">
+                    	<div class="stage" >
+		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
+		   				</div>
+		   				<div>
+		   				  <h3 class="content-box-title font-serif">${contest.WRITER}</h3>
+		   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
+		                  <h3 class="content-box-title font-serif">총상금 ${contest.PAY} 원</h3>
+		                  <p>
+		                  	   <span>${contest.CATEGORY}</span>
+							   <span>#${contest.STYLE}</span>
+								신고<span id="rprt">${contest.RPRT}</span>
+								조회<span id="inq">${contest.INQ}</span>
+						   </p>
+						</div>
+                    	<a href="../contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
+                    	<span class="icon-magnifying-glass">상세조회</span></a>
+                    </div>
+                  </div>
+                </div>
+              </div> `;
+		
+		return p;
+	}
+
+			
+	//하트클릭시 DB입력(등록,취소)
+	$('#boxList').on("click",".shop-item" ,function(){
+		let cNo = $(this).attr("id");
+		
+	})
+	//마이페이지 좋아요 DB삭제
+	function loveCheck(e) {
+		$(e).toggleClass("active");//css 변경
+		//이벤트객체	console.log(this.contest);
+		let category = 'T01';
+		let targetNo = e.id; //이벤트 윈도우객체에서 찾기.
+		
+		//하트가 눌리지 않았을 경우 실행
+		 if (!($(e).hasClass("active"))) {
+			//하트가 눌렸을 경우 실행
+				$.ajax({
+					url: '../likes/lDelete',
+					method: 'post',
+					data: {targetNo,category}, 
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+				}).then(res => {
+					if(res > 0){
+						alert('관심공모전 취소완료!')
+							$(e).parent().parent().parent().remove(); //확인해보기
+					}else{
+						alert('관심공모전 취소실패!')
+					}
+				})
+			}
+	}	
+	
+	// 페이징 만들기
+	function makePageing(page) {
+		if (page.totalRecord == 0) {
+			return;
+		}
+		let pagination = $("<div/>").addClass("block-27");
+		let ul = $("<ul/>").attr("class","pagination");
+		if (page.startPage > 1) {
+			$(ul).append($("<li/>").html("&laquo;")
+				.css("font-size", "30px")
+				.on("click", function () {
+					gopage(page.startPage - page.pageSize)
+				}));
+		}
+
+		//페이지 버튼 생성.
+		for (let i = page.startPage; i <= page.endPage; i++) {
+			if (page.page == i) {
+				$(ul).append($("<li/>").text(i).attr("class", "active")
+					.css("border-radius", "100%")
+					.css("color", "#000")
+					.css("background", "LightGray")
+				);
+			} else {
+				$(ul).append($("<li/>").text(i).attr("class", "page-link")
+					.css("border-radius", "100%")
+					.css("color", "#000")
+					.on("click", function () {
+						gopage($(this).text());
+					})); //페이지이동 함수
+			}
+		}
+		if (page.endPage < page.lastPage) {
+			$(ul).append($("<li/>").html("&raquo;")
+				.css("font-size", "30px")
+				.on("click", function () {
+					gopage(page.startPage + page.pageSize)
+				}));
+		}
+		pagination.append(ul);
+		return pagination;
+	}
+
+			
+	</script>
+	</div>	
+</body>
+</html>

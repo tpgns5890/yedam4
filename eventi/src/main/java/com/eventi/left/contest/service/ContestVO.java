@@ -36,8 +36,12 @@ public class ContestVO {
 	//정렬,검색
 	private String order = "dt_Reg"; //정렬기준
 	private String search;
+	
 	//진행,마감체크
 	private String ing; 
+	
+	//우승자등록 체크
+	private String winnerCheck;
 	
 	//공모전 파일
 	private String img;
