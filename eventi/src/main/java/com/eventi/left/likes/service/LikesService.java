@@ -2,10 +2,12 @@ package com.eventi.left.likes.service;
 
 import java.util.List;
 
+import com.eventi.left.common.PagingVO;
+
 public interface LikesService {
 
 	// 좋아요
-	public List<LikesVO> userlikeList(LikesVO LikesVO, String userId); // 전체조회,세션아이디 조회.
+	public List<LikesVO> userlikeList(LikesVO LikesVO, String userId,PagingVO paging); // 페이징 추가
 
 	public List<LikesVO> likeList(LikesVO LikesVO); // 전체조회
 

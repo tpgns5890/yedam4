@@ -5,7 +5,7 @@
 <mapper namespace="com.eventi.left.contest.mapper.ContestMapper">
 
 	<!-- 분류별 카테고리/정렬순서 -->
-	<sql id="condition">
+	<sql id="category">
 		<if test="category != null and category != ''">
 			and category = #{category}
 		</if>
@@ -30,18 +30,24 @@
 
 	<!-- 공모전 전체조회(임시저장 제외,페이징) -->
 	<select id="contestList" resultType="ContestVO">
-	SELECT RN,c_no,writer,ttl,cntn,code_select(category) category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
-	        ,code_select(style) style
-	      	,(select count(*) from likes where target_no = c_no) AS likes
+
+	 SELECT RN,c_no,writer,ttl,cntn,code_select(category) category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+		        ,code_select(style) style
+		      	,likes
+	            ,dDay
 	      	<include refid="loginLikeCheck" />
-	FROM ( select ROWNUM RN, A.*
+	 FROM ( select ROWNUM RN, A.*
 			        FROM(
-			            SELECT *
+			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt,style
+                            , CASE WHEN dt_extns IS NOT NULL THEN (TO_DATE (dt_extns, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD')) 
+                                                ELSE (TO_DATE (dt_cls, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD'))
+                                                END AS dDay
+                            ,(select count(*) from likes where target_no = c_no) AS likes
 			            FROM CONTEST
 			            WHERE SAVE = 'N'
-			            AND DT_CLS > current_date   
-			<include refid="condition" />
-			order by ${order} 
+			            AND DT_CLS > current_date 
+						<include refid="category" />
+						order by ${order} 
 	<![CDATA[
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 	]]>
@@ -53,7 +59,7 @@
 		FROM CONTEST
 		WHERE SAVE = 'N'
 		AND NVL2(dt_cls,dt_cls,dt_extns) > SYSDATE
-		<include refid="condition" />
+		<include refid="category" />
 	</select>
 	
 	<!-- 공모전 1건 상세조회 -->

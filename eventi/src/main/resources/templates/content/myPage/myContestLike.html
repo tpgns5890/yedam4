@@ -43,25 +43,34 @@
 	
 			</div>
 			
-			
+			<!-- 페이징처리 -->
+			<input type="hidden" name="page" value="1">
 
 
 	<script >
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
-	loveClick();
+	likeSelect();
 	
+	function gopage(i) {
+		let page = $('input[name="page"]').val(i);
+		likeSelect();
+	}
+
 	//나의 좋아요 공모전박스 생성출력.
-	function loveClick() {
+	function likeSelect() {
+		let page = $('input[name=page]').val();
 
 			$.ajax({
 				url: '/contest/ajaxlike',
 				method: 'post',
+				data:{category:'T01',page},
 				beforeSend: function (xhr) {
 					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 					xhr.setRequestHeader(header, token);
 				},
 			}).then(res => {
+				console.log(res);
 				//map =>  contest,paging 
 				$('#boxList').empty();
 				
@@ -69,9 +78,7 @@
 				if(res.contest == ''){
 					$('#boxList').append($('<p>').append("관심 공모전 없습니다."));
 				}
-			
 				for (contest of res.contest) {
-					console.log(contest)
 					$('#boxList').append(makeBox_map(contest));
 				}
 
@@ -82,35 +89,38 @@
 	}
 
 	//Map : 로그인회원의 좋아요 공모전박스생성
-	function makeBox_map(contest) {
+	 function makeBox_map(contest) {
 		let p = ` 
 			<div class="col-sm-6 col-md-4 col-lg-4">
-                <div id="${contest.C_NO}" class="shop-item">
-                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 665px; height: 750px">
-                    <div class="shop-item-detail">
-                    	<div class="stage" >
+               <div id="${contest.C_NO}" class="shop-item">
+                 <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 665px; height: 750px">
+                   <div class="shop-item-detail">
+                   	<div class="stage" >
 		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
 		   				</div>
 		   				<div>
+		   				 <h3 class="content-box-title font-serif">${contest.C_NO}</h3>
 		   				  <h3 class="content-box-title font-serif">${contest.WRITER}</h3>
 		   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
+		   				  <h3 class="content-box-title font-serif">D-${contest.DDAY}</h3>
 		                  <h3 class="content-box-title font-serif">총상금 ${contest.PAY} 원</h3>
 		                  <p>
 		                  	   <span>${contest.CATEGORY}</span>
 							   <span>#${contest.STYLE}</span>
 								신고<span id="rprt">${contest.RPRT}</span>
 								조회<span id="inq">${contest.INQ}</span>
+								관심<span id="likes">${contest.LIKES}</span>
 						   </p>
 						</div>
-                    	<a href="../contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
-                    	<span class="icon-magnifying-glass">상세조회</span></a>
-                    </div>
-                  </div>
-                </div>
-              </div> `;
+                   	<a href="/contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
+                   	<span class="icon-magnifying-glass">상세조회</span></a>
+                   </div>
+                 </div>
+               </div>
+             </div> `;
 		
 		return p;
-	}
+	} 
 
 			
 	//하트클릭시 DB입력(등록,취소)
@@ -152,43 +162,47 @@
 		if (page.totalRecord == 0) {
 			return;
 		}
-		let pagination = $("<div/>").addClass("block-27");
+		let pagination = $("<div/>")
 		let ul = $("<ul/>").attr("class","pagination");
 		if (page.startPage > 1) {
 			$(ul).append($("<li/>").html("&laquo;")
-				.css("font-size", "30px")
-				.on("click", function () {
-					gopage(page.startPage - page.pageSize)
-				}));
+									.css("font-size", "30px")
+									.attr("class","page-item")
+									.on("click", function () {
+											gopage(page.startPage - page.pageSize)
+									}));
 		}
 
 		//페이지 버튼 생성.
 		for (let i = page.startPage; i <= page.endPage; i++) {
 			if (page.page == i) {
-				$(ul).append($("<li/>").text(i).attr("class", "active")
-					.css("border-radius", "100%")
-					.css("color", "#000")
-					.css("background", "LightGray")
+				$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+										.css("padding", "10px")
+										.css("border-radius", " 10% / 50% ")
+										.css("background", "#dce3fd")
+										.attr("class", "page-link active")
 				);
 			} else {
-				$(ul).append($("<li/>").text(i).attr("class", "page-link")
-					.css("border-radius", "100%")
-					.css("color", "#000")
-					.on("click", function () {
-						gopage($(this).text());
-					})); //페이지이동 함수
+				$(ul).append($("<li/>").text(i).css("font-size", "20px")
+										.css("padding", "10px")
+										.attr("class", "page-link")
+										.on("click", function () {
+											gopage($(this).text());
+										})); //페이지이동 함수
 			}
 		}
 		if (page.endPage < page.lastPage) {
 			$(ul).append($("<li/>").html("&raquo;")
-				.css("font-size", "30px")
-				.on("click", function () {
-					gopage(page.startPage + page.pageSize)
-				}));
+									.css("font-size", "30px")
+									.attr("class","page-item")
+									.on("click", function () {
+											gopage(page.startPage + page.pageSize)
+									}));
 		}
 		pagination.append(ul);
 		return pagination;
 	}
+
 
 			
 	</script>

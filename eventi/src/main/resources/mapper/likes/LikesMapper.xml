@@ -13,10 +13,17 @@
 	<!-- 좋아요 전체 조회 -->
 	<!-- join map으로 받을경우, 컬럼명 대문자 인식!! -->
 	<select id="userlikeList" resultType="map">
-		SELECT l.*,c.*,(select sev_nm from files where target_Id = c_no) AS img
-		FROM likes l JOIN CONTEST c
-		               ON C.C_NO = L.TARGET_NO
-		and l.USER_ID = #{userId}
+             SELECT c.c_no,c.writer,c.ttl,c.cntn,c.pay,c.inq,c.rprt,c.dt_reg,c.dt_cls,c.dt_extns
+                    , CASE WHEN c.dt_extns IS NOT NULL THEN (TO_DATE (c.dt_extns, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD')) 
+                                                ELSE (TO_DATE (c.dt_cls, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD'))
+                                                END AS dDay
+                    ,(select sev_nm from files where target_Id = c_no) AS img
+		            ,code_select(c.style) style
+		            ,code_select(c.category) category
+			      	,(select count(*) from likes where target_no = c_no) AS likes
+			FROM likes l JOIN CONTEST c
+			               ON C.C_NO = L.TARGET_NO
+			and l.USER_ID = #{userId}
 	</select>
 
 	<select id="likeList" resultType="LikesVO">
@@ -61,4 +68,13 @@
 		and target_No = #{targetNo}
 		and category = #{category}
 	</select>
+	
+	<!-- 게시글에 대한 로그인회원의 좋아요 확인 -->
+	<select id="setTotalRecord" resultType="int">
+		select count(*)
+		from likes
+		where user_id = #{userId}
+		and category = #{category}
+	</select>
+	
 </mapper>

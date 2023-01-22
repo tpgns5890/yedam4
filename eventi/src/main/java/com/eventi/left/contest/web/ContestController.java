@@ -182,6 +182,7 @@ public class ContestController {
 	@PostMapping("/ajaxlike")
 	@ResponseBody
 	public Map<String, Object> userlikeList(LikesVO LikesVO, PagingVO paging) {
+		
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -192,7 +193,9 @@ public class ContestController {
 		String sessionId = user.getUserId();
 
 		// 리턴할 최종Map(contest,paging VO)
-		result.put("contest", likeService.userlikeList(LikesVO, sessionId));
+		System.out.println("==================================================");
+		System.out.println(likeService.userlikeList(LikesVO, sessionId, paging));
+		result.put("contest", likeService.userlikeList(LikesVO, sessionId, paging));
 		result.put("paging", paging);
 
 		return result;

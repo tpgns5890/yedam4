@@ -70,40 +70,7 @@ public class ContestServiceImpl implements ContestService {
 		vo.setLast(paging.getLast());
 
 		List<ContestVO> list = mapper.contestList(vo); // 전체리스트 조회
-		List<ContestVO> resultList = new ArrayList<>(); // 반환 리스트
-
-		// 현재날짜
-		String todayFm = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis())); // 오늘날짜
-
-		// 객체별 날짜계산
-		for (ContestVO cVo : list) {
-			Date strDate;
-
-			// 기준 날짜 데이터(("yyyy-MM-dd")의 형태)
-			if (cVo.getDtExtns() != null) {
-				strDate = cVo.getDtExtns(); // 연장일.
-			} else {
-				strDate = cVo.getDtCls(); // 마감연장일이 없다면
-			}
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-			Date date = new Date((strDate).getTime());
-			Date today = null;
-			try {
-				today = new Date(dateFormat.parse(todayFm).getTime());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-			// D-day 계산
-			long calculate = date.getTime() - today.getTime();
-			int Ddays = (int) (calculate / (24 * 60 * 60 * 1000));
-			cVo.setdDay(Ddays);
-
-			resultList.add(cVo);
-		}
-
-		return resultList;
+		return list;
 	}
 
 	// 공모전 1건
@@ -199,10 +166,6 @@ public class ContestServiceImpl implements ContestService {
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
-		paging.setTotalRecord(mapper.myContest(vo));
-		paging.setPageUnit(10);
-		vo.setFirst(paging.getFirst());
-		vo.setLast(paging.getLast());
 		return mapper.myContestList(vo);
 	}
 

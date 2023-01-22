@@ -25,12 +25,13 @@
 
 		<section class="module-small">
           <div class="container">
-                 <!-- 공모전 정렬기준 -->
+              <!-- 공모전 정렬기준 -->
               <div class="col-sm-3 mb-sm-20">
                 <select id="order" name="order" class="form-control">
 					<option value="inq DESC" selected="selected">조회수</option>
 					<option value="pay DESC">금액순</option>
-					<option value="dt_cls">마감일순</option>
+					<option value="dDay">마감일 빠른순</option>
+					<option value="dDay DESC">마감 느린순</option>
                 </select>
               </div>
               
@@ -76,10 +77,6 @@
 				</div>
           </div>
         </section>
-		
-		
-			
-              
            
 
 			<!-- 공모전 리스트 -->
@@ -94,7 +91,8 @@
 						</div>
 					</div>
 				</div>
-	
+		
+				<!-- 페이징/정렬처리 -->
 				<input type="hidden" name="orderSelect" value="dt_Reg">
 				<input type="hidden" name="categorySelect" value="">
 				<input type="hidden" name="page" value="1">
@@ -214,7 +212,6 @@
 
 				//공모전 1건의 대한 박스 생성
 				function makeBox(contest) {
-					
 					//로그인 회원의 하트눌려진것만 체크
 					let active = null;
 					if(contest.userLike > 0){
@@ -304,21 +301,25 @@
 				function loveClick(e) {
 					//active 클래스가 없을 경우 생성, 있을 경우 삭제
 					$(e).toggleClass("active");
+					let category = 'T01';
 
 					if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
 
 						$.ajax({
 							url: '/contest/ajaxlike',
 							method: 'post',
+							data:{category},
 							beforeSend: function (xhr) {
 								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 								xhr.setRequestHeader(header, token);
 							},
 						}).then(res => {
 							//map =>  contest,paging 
-							console.log(res.contest);
+							console.log(res);
 							
 							$('#boxList').empty();
+							$('#cotestHeader').empty();
+							
 							
 							//관심 공모전이 없을경우
 							if(res.contest == ''){
@@ -350,17 +351,20 @@
 					  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
 					   				</div>
 					   				<div>
+					   				 <h3 class="content-box-title font-serif">${contest.C_NO}</h3>
 					   				  <h3 class="content-box-title font-serif">${contest.WRITER}</h3>
 					   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
+					   				  <h3 class="content-box-title font-serif">D-${contest.DDAY}</h3>
 					                  <h3 class="content-box-title font-serif">총상금 ${contest.PAY} 원</h3>
 					                  <p>
 					                  	   <span>${contest.CATEGORY}</span>
 										   <span>#${contest.STYLE}</span>
 											신고<span id="rprt">${contest.RPRT}</span>
 											조회<span id="inq">${contest.INQ}</span>
+											관심<span id="likes">${contest.LIKES}</span>
 									   </p>
 									</div>
-			                    	<a href="../contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
+			                    	<a href="/contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
 			                    	<span class="icon-magnifying-glass">상세조회</span></a>
 			                    </div>
 			                  </div>
@@ -385,7 +389,7 @@
 					//하트가 눌렸을 경우 실행
 					if ($(e).hasClass("active")) {
 						$.ajax({
-							url: '../likes/lInsert',
+							url: '/likes/lInsert',
 							method: 'post',
 							data: {targetNo,category},
 							beforeSend: function (xhr) {
