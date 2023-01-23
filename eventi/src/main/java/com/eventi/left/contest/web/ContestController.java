@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.bboard.service.BboardVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.common.service.CodeService;
@@ -63,7 +64,6 @@ public class ContestController {
 
 		// 리턴할 최종Map(contest,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
-
 		result.put("contest", service.contestList(vo, paging));
 		result.put("paging", paging);
 		return result;
@@ -72,23 +72,21 @@ public class ContestController {
 	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
 	public String contestSelect(Model model, ContestVO cVo, PagingVO paging) {
-		
-		//로그인 회원정보
+
+		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
-		
+
 		// 객체생성 및 코드별 문자열 변환후 세팅
 		ContestVO contest = service.getContest(cVo.getcNo());
-		
+
+		// 상세리스트 1건의 회원의 좋아요 체크 확인을 위한 정보세팅.
 		LikesVO likeCheck = new LikesVO();
 		likeCheck.setTargetNo(cVo.getcNo());
 		likeCheck.setUserId(sessionId);
-		model.addAttribute("likeCheck", likeService.getLike(likeCheck)); // 모델 넘겨주기.
-		
-		DesignVO dVo = new DesignVO();
-		dVo.setcNo(cVo.getcNo());
-		model.addAttribute("designList", dService.contestDesignList(dVo, paging));
-		
+
+		// 모델 넘겨주기.
+		model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
 		model.addAttribute("contest", contest); // 모델 넘겨주기.
@@ -96,8 +94,8 @@ public class ContestController {
 		return "content/contest/contest";
 	}
 
-	// 2.공모전 상세리스트(ajax)
-	@PostMapping("/select")
+	// 2.공모전 상세리스트(요청사항ajax)
+	@PostMapping("/cntnSelect")
 	@ResponseBody
 	public ContestVO contestSelect(ContestVO vo) {
 		ContestVO contest = service.getContest(vo.getcNo());
@@ -173,7 +171,7 @@ public class ContestController {
 	@PostMapping("/ajaxlike")
 	@ResponseBody
 	public Map<String, Object> userlikeList(LikesVO vo, PagingVO paging) {
-		
+
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -185,7 +183,7 @@ public class ContestController {
 		vo.setUserId(sessionId);
 
 		// 리턴할 최종Map(contest,paging VO)
-		result.put("contest", likeService.userlikeList(vo,  paging));
+		result.put("contest", likeService.userlikeList(vo, paging));
 		result.put("paging", paging);
 
 		return result;
@@ -225,10 +223,25 @@ public class ContestController {
 		return result; // 디자인리스트+파일리스트 반환.
 	}
 
-	// 공모전 나의 문의리스트 페이지이동
+	// --------------------------------------------------------------------------
+	// 공모전 나의 문의리스트 페이지이동(추가해야함)
 	@GetMapping("/QnaList")
-	public String ContestQnaList() { // 로그인 회원정보
+	public String ContestQnaList() {
 		return "content/myPage/myContestQnaList";
+	}
+
+	// 임시저장된 게시글 전체들고오기
+	@PostMapping("/cSave")
+	@ResponseBody
+	public List<ContestVO> cSave(ContestVO vo) {
+		return service.cSave(vo);
+	}
+
+	// 임시저장된 게시글 상세들고오기
+	@PostMapping("/saveSelect")
+	@ResponseBody
+	public ContestVO saveSelect(ContestVO vo) {
+		return service.getContest(vo.getcNo());
 	}
 
 }

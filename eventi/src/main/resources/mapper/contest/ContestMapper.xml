@@ -56,40 +56,6 @@
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 	]]>
 	</select>
-
-	<!-- 공모전 등록처리된 개수(임시저장/마감일 지난경우 제외) -->
-	<select id="contestCount" resultType="int">
-		SELECT COUNT(*)
-		FROM CONTEST
-		WHERE SAVE = 'N'
-		AND NVL2(dt_cls,dt_cls,dt_extns) > SYSDATE
-		<include refid="category" />
-	</select>
-	
-	<!-- 공모전 1건 상세조회 -->
-	<select id="getContest" resultType="ContestVO">
-		SELECT c_no,writer,ttl,cntn,code_select(category) category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
-	        ,code_select(style) style
-	      	,(select count(*) from likes where target_no = c_no) AS likes
-            ,CASE WHEN dt_extns IS NOT NULL THEN CASE WHEN TO_DATE(dt_extns,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
-                                                     ELSE '마감'
-                                                END
-                WHEN dt_extns IS NULL THEN CASE WHEN TO_DATE(dt_cls,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
-                                                    ELSE '마감'
-                                                END
-                END AS ing
-		FROM CONTEST
-		WHERE
-		C_NO = #{cNo}
-	</select>
-	
-	<!-- 나의 공모전 총 등록개수 조회 -->
-    <!-- 검색결과만큼 개수반환 -->
-	<select id="myContest" resultType="int">
-		select count(*) from contest
-		where writer = #{writer}
-		 <include refid="search" /> 
-	</select>
 	
 	<!-- 나의 공모전 전체목록 조회 -->
 	<select id="myContestList" resultType="ContestVO">
@@ -112,29 +78,42 @@
 		]]>
 	</select>
 
+	<!-- 공모전 등록처리된 개수(임시저장/마감일 지난경우 제외) -->
+	<select id="contestCount" resultType="int">
+		SELECT COUNT(*)
+		FROM CONTEST
+		WHERE SAVE = 'N'
+		AND NVL2(dt_cls,dt_cls,dt_extns) > SYSDATE
+		<include refid="category" />
+	</select>
+	
+	<!-- 나의 공모전 총 등록개수 조회/검색결과만큼 개수반환 -->
+	<select id="myContest" resultType="int">
+		select count(*) from contest
+		where writer = #{writer}
+		 <include refid="search" /> 
+	</select>
+	
+	
+	<!-- 공모전 1건 상세조회 -->
+	<select id="getContest" resultType="ContestVO">
+		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+	        ,category categoryCode
+	        ,style styleCode
+	        ,code_select(category) category
+	        ,code_select(style) style
+	      	,(select count(*) from likes where target_no = c_no) AS likes
+		FROM CONTEST
+		WHERE
+		C_NO = #{cNo}
+	</select>
+	
 	<!-- 상세조회 조회수 업데이트 -->
 	<update id="selectUpdate">
 		update contest
 		set INQ = INQ+1
 		where c_no = #{cNo}
 	</update>
-
-	<!-- 상세조회 좋아요 개수 확인 -->
-	<select id="selectLikes" resultType="int">
-		SELECT count(*)
-		from CONTEST
-		a join LIKES b
-		on a.c_no = b.target_no
-		and a.C_NO = #{cNo}
-		and b.category = #{category}
-	</select>
-
-	<!-- 공모전 시퀀스번호 찾기 -->
-	<select id="getSequence" resultType="String">
-		SELECT
-		'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
-		FROM CONTEST
-	</select>
 
 
 	<!-- 공모전 등록(cno 시퀀스 최대값+1 (문자열->숫자+1->문자열 변경) -->
@@ -183,6 +162,20 @@
 		and writer = #{writer}
 	</delete>
 	
-
+	<!-- 공모전 시퀀스번호 찾기 -->
+	<select id="getSequence" resultType="String">
+		SELECT
+		'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
+		FROM CONTEST
+	</select>
+	
+	<!-- 임시저장한 게시글 불러오기 -->
+	<select id="cSave" resultType="ContestVO">
+		select * 
+		FROM contest
+		WHERE WRITER =  #{writer}
+		AND SAVE = 'Y'
+	</select>
+	
 
 </mapper>

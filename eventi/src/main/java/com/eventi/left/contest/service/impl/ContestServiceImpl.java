@@ -162,4 +162,10 @@ public class ContestServiceImpl implements ContestService {
 		return mapper.myContestList(vo);
 	}
 
+	//공모전 임시지정 조회.
+	@Override
+	public List<ContestVO> cSave(ContestVO vo) {
+		return mapper.cSave(vo);
+	}
+
 }
