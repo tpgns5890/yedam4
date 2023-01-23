@@ -69,16 +69,18 @@ public class LikeServiceImpl implements LikesService {
 		return mapper.likeDelete(LikesVO);
 	}
 
-	// 로그인회원의 좋아요 리스트(공모전)
 	@Override
-	public List<LikesVO> userlikeList(LikesVO vo, String userId, PagingVO paging) {
+	public List<LikesVO> userlikeList(LikesVO vo,PagingVO paging) {
 
-		paging.setTotalRecord(mapper.setTotalRecord(vo.getCategory(),userId));
+		paging.setTotalRecord(mapper.setTotalRecord("T01",vo.getUserId()));
 		paging.setPageUnit(6); // 12개 출력 (default 10)
 		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
-		return mapper.userlikeList(vo,userId);
+		
+		
+
+		return mapper.userlikeList(vo);
 	}
 
 }

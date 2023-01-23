@@ -7,7 +7,7 @@ import com.eventi.left.common.PagingVO;
 public interface LikesService {
 
 	// 좋아요
-	public List<LikesVO> userlikeList(LikesVO LikesVO, String userId,PagingVO paging); // 페이징 추가
+	public List<LikesVO> userlikeList(LikesVO vo,PagingVO paging) ; // 전체조회,세션아이디 조회.
 
 	public List<LikesVO> likeList(LikesVO LikesVO); // 전체조회
 
@@ -16,8 +16,8 @@ public interface LikesService {
 	public int likeInsert(LikesVO LikesVO); // 좋아요 입력
 
 	public int likeDelete(LikesVO LikesVO); // 좋아요 취소
-	
-	//좋아요 개수 조회
+
+	// 좋아요 개수 조회
 	public int countLike(LikesVO LikesVO);
 
 }

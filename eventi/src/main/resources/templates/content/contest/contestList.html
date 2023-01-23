@@ -111,7 +111,15 @@
 				
 				function gopage(i) {
 					let page = $('input[name="page"]').val(i);
-					checkSelect();
+					//하트가 눌렸을 경우 실행
+					if ($("#love").hasClass("active")) { 
+						loveClick()
+					
+					} else { //하트가 눌리지 않았을 경우 실행
+						//정렬 리스트 불러오는 함수
+						checkSelect();
+					}
+					
 				}
 
 
@@ -299,16 +307,16 @@
 
 				//공모전 전체하트를 클릭했을 경우 => 나의 좋아요 공모전박스 생성출력.
 				function loveClick(e) {
+					let page = $('input[name=page]').val();
 					//active 클래스가 없을 경우 생성, 있을 경우 삭제
 					$(e).toggleClass("active");
-					let category = 'T01';
 
 					if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
 
 						$.ajax({
 							url: '/contest/ajaxlike',
 							method: 'post',
-							data:{category},
+							data:{page},
 							beforeSend: function (xhr) {
 								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 								xhr.setRequestHeader(header, token);

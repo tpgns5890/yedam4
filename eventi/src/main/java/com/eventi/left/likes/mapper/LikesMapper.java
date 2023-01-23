@@ -8,7 +8,7 @@ import com.eventi.left.likes.service.LikesVO;
 public interface LikesMapper {
 
 	// 좋아요
-	public List<LikesVO> userlikeList(LikesVO LikesVO, String userId); // 전체조회,세션아이디 조회.
+	public List<LikesVO> userlikeList(LikesVO LikesVO); // 전체조회,세션아이디 조회.
 
 	public int userlikecheck(String targetNo,String category, String userId); // 세션아이디 좋아요확인처리
 	

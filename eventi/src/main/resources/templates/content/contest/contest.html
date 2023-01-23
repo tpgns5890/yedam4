@@ -739,7 +739,7 @@ footer {
 		function myLoveCheck() {
 			let targetNo = $('#cNo').text();
 			$.ajax({
-				url: '../contest/ajaxlike',
+				url: '/contest/ajaxlike',
 				method: 'post',
 				data: {targetNo},
 				beforeSend: function (xhr) {
@@ -749,7 +749,7 @@ footer {
 			}).then(res => {
 				//현재 공모전이 좋아요등록 상태이면..
 				for(contest of res.contest){
-					/* console.log(contest.C_NO == targetNo); */
+					 console.log(contest.C_NO == targetNo); 
 					if(contest.C_NO == targetNo){
 						$('#love').toggleClass("active");
 					}
