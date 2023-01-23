@@ -8,5 +8,22 @@
 		select code_select(#{code})
 		FROM DUAL
 	</select>
-
+	
+	<select id="getCountry" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'A'
+	</select>
+	
+	<select id="getType" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'E'
+	</select>
+	
+	<select id="getMcStyle" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'ST'
+	</select>
 </mapper>

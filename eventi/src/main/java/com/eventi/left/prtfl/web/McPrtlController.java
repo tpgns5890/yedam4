@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.service.CodeService;
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.prtfl.service.McPrtflService;
 import com.eventi.left.prtfl.service.McPrtflVO;
 import com.eventi.left.reply.service.ReplyVO;
@@ -19,6 +22,7 @@ import com.eventi.left.reply.service.ReplyVO;
 @RequestMapping("/prtfl")
 public class McPrtlController {
 	@Autowired McPrtflService mcPrtflService;
+	@Autowired CodeService codeService;
 	
 	//사회자 전체 조회
 	@RequestMapping("/mcList")
@@ -44,15 +48,20 @@ public class McPrtlController {
 	
 	//사회자입력폼으로 이동
 	@GetMapping("/mcInsert")
-	public String mcInsert(McPrtflVO mcPrtlVo) {
+	public String mcInsert(Model model, McPrtflVO mcPrtlVo) {
+		model.addAttribute("areas", codeService.getCountry());
+		model.addAttribute("types", codeService.getType());
+		model.addAttribute("mcStyles", codeService.getMcStyle());
+		
 		return "content/prtfl/mcInsert";
 	}
 	
 	//사회자 입력
 	@PostMapping("/mcInsert")
 	@ResponseBody
-	public int mcInsertFrm(@RequestBody McPrtflVO mcPrtflVO) {
-		return mcPrtflService.mcInsert(mcPrtflVO);
+	public String mcInsertFrm(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		mcPrtflService.mcInsert(mcPrtflVO, filesVO, uploadFile);
+		return "redirect:/prtfl/mcSelect?userId=" + mcPrtflVO.getUserId();
 	}
 	
 }
