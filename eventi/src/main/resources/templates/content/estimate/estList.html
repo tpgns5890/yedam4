@@ -25,7 +25,7 @@
 			</tr>
 		</thead>
 		<tbody id="check">
-			<tr th:each="est : ${estList}" th:onclick="|location.href='@{estDetail(eno=${est.eno}, userId=${est.userId}, myId=${session.member.userId})}'|">
+			<tr th:each="est : ${estList}" th:onclick="location.href='@{estDetail(eno=${est.eno}'">
 				<td th:text=${est.eno}></td> 
 				<td th:text=${est.eventType}></td>
 				<td th:text=${est.writingDate}></td>

@@ -5,14 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
@@ -20,7 +18,7 @@ import com.eventi.left.estimate.service.PropGdVO;
 import com.eventi.left.estimate.service.PropVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.rent.service.RentGdVO;
-import com.eventi.left.rent.service.RentService;
+
 
 @Controller
 public class EstController {
@@ -40,11 +38,16 @@ public class EstController {
 		return "content/estimate/estForm";
 	}
 	//견적서 상세페이지
-	@RequestMapping(value = "/estDetail", method = {RequestMethod.GET, RequestMethod.POST})
-	public String estDetail(Model model, @RequestParam String eno, @RequestParam String userId) {
+	@RequestMapping(value = "/estDetail")
+	public String estDetail(Model model, @RequestParam String eno) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");	
+		if(user == null) {
+			return null;
+		}
+		String sessionId = user.getUserId();
 		model.addAttribute("est", estService.getEst(eno));
 		model.addAttribute("propList", estService.getPropList(eno));
-		model.addAttribute("count", estService.getCount(eno, userId));
+		model.addAttribute("count", estService.getCount(eno, sessionId));
 		return "content/estimate/estDetail";
 	}
 	

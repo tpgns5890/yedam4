@@ -93,7 +93,10 @@ button {
   </form>
 </div>
 <!-- Button trigger modal -->
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop">제안서 작성</button>
+ 	<!-- 비회원 로그인창 띄우기-->		
+<th:block sec:authorize="!isAuthenticated()">			
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop" onclick="login()">제안서 작성</button>
+ 	</th:block>
  <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -482,6 +485,10 @@ var data = {"userId" : userId};
  			}
 	 });
  })
+ //비회원 로그인창 띄우기
+ function login(){
+					 $("#header_modal").show();
+				}
 </script>
 </div><!-- End of layout:fragment -->
 </body>

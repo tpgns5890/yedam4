@@ -94,7 +94,7 @@ h1 {
 
   text-align: center;
 }
-p {
+#p {
 	color: red;
 }
 .hidden {
@@ -273,7 +273,7 @@ p {
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
 <h1>행사 날짜를 선택해주세요.</h1>
-<input type="date" name="eventDate" id="eventDate" value=""><br>
+<input type="date" name="eventDate" value=""><br>
  <input type="button" value="이전" class="prev">
  <input type="button" value="다음" id="eventDate" class="next">
 </div><!-- end of bodyContents -->
@@ -376,12 +376,26 @@ p {
 <h1>행사 관련 희망사항을 알려주세요.</h1>
 <input name="wishes" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
  <input type="button" value="이전" class="prev">
- <input type="button" value="견적서 보내기" class="submit">
- <input type="hidden" th:value="${session.member.userId}" name="userId" /> 
+ 
+ <!-- 비회원 로그인창 띄우기 -->
+ <th:block sec:authorize="!isAuthenticated()">			
+ <input type="button" value="견적서 보내기" class="submit" onclick="login()">
+ </th:block>
+<!-- 로그인 회원 버튼표시 -->
+<th:block sec:authorize="isAuthenticated()">
+<input type="button" value="견적서 보내기" class="submit">
+</th:block> 
+<!--  <input type="hidden" th:value="${session.member.userId}" name="userId" />  -->
 </div>
 <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 </form>
 <script>
+//페이지 벗어나기전 알림
+ var checkUnload = true;
+ $(window).on("beforeunload", function(){
+	 if(checkUnload) return "이 페이지를 벗어나면 작성된 내용은 저장되지 않습니다.";
+});
+
 //기타 입력값 radio value에 입력
 $('body').on('change','[id$="etcVal"]', function() {
 	$(this).closest('td').find('[type="radio"]').val($(this).val())
@@ -472,13 +486,13 @@ document.getElementById('eventDate').setAttribute("min", today);
 
 //견적서 보내기 버튼 클릭 시
 $('.submit').click(function() {
+	checkUnload = false; //페이지 벗어날 때 alert 제한
 	//csrf 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 	
 	var data = $("form[name=insertFrm]").serializeObject();
-	console.log(data);
-	//견적요청서 등록
+  	//견적요청서 등록
  	$.ajax({
 		url: "/insertEst",
 		method: "POST",
@@ -496,7 +510,11 @@ $('.submit').click(function() {
 				alert("서버 요청 실패");
 			}
     });
-	}); 
+	});
+//비회원 로그인창 띄우기
+function login(){
+	 $("#header_modal").show();
+}
 </script>
 </div>
 </body>
