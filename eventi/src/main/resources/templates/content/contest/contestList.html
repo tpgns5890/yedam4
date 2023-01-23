@@ -224,8 +224,8 @@
 					//로그인 회원의 하트눌려진것만 체크
 					let active = null;
 					if(contest.userLike > 0){
-						//console.log(contest.cNo);
-						//console.log(contest.userLike);
+						console.log(contest.cNo);
+						console.log(contest.userLike);
 						active = 'active';
 					}
 					let p = ` 
@@ -409,6 +409,14 @@
 						}).then(res => {
 							if(res > 0){
 								alert('관심공모전 추가완료!')
+									//전체하트가 눌려진 상태로 재실행
+									if ($("#love").hasClass("active")) { 
+										loveClick();
+									//기본 정렬리스트 재실행
+									}else{
+										checkSelect();
+									}
+								
 							}else{
 								alert('관심공모전 추가실패!')
 							}
@@ -418,7 +426,7 @@
 					} else if (!($(e).hasClass("active"))) {
 						//하트가 눌렸을 경우 실행
 							$.ajax({
-								url: '../likes/lDelete',
+								url: '/likes/lDelete',
 								method: 'post',
 								data: {targetNo,category}, 
 								beforeSend: function (xhr) {

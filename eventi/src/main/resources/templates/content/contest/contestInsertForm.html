@@ -32,7 +32,7 @@
 			<br> <input type="checkbox" id="contestCheck">확인하였습니다.<br>
 
 			<!-- 공모전등록 입력폼 -->
-			<form action="/contest/insert" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
+			<form action="/contest/insert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post" onsubmit="return check();">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
 					<li>분류:
@@ -206,42 +206,8 @@
 					else{//등록확인
 						if (!confirm('공모전을 등록하시겠습니까?')) {
 							return false;
-						
-						//파일업로드 진행(완료)
-						}else{
-					        var formData = new FormData();
-					        var inputFile = $("input[name='uploadFile']");
-					        var files = inputFile[0].files;
-							
-					        ///데이터 넘길값 세팅
-					        if(files.length == 0){
-					        	return true;
-					        }
-					        for(var i=0; i<files.length; i++) {
-					            formData.append("uploadFile", files[i]);
-					        }
-					            formData.append("targetId", $("input[name='cNo']").val());
-					            formData.append("category", 'TO1');
-					        
-					        
-					        $.ajax({
-					            url: '/filesUpload',
-					            type: 'POST',
-					            enctype: 'multipart/form-data',  
-					            data: formData,
-					            contentType: false,
-					            processData : false,
-					            beforeSend: function (xhr) {
-									/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-									xhr.setRequestHeader(header, token);
-								},
-								success:function(){
-								}
-					        });
-								return true;
 						}
-					
-						
+						return true;
 					}
 				}
 			
@@ -374,7 +340,7 @@
 									$("#style").val(contest.styleCode).attr("selected", true);
 								}
 								
-								$("#contestfrm").attr("action", "/contest/update");
+								$("#contestfrm").attr("action", "/contest/saveUpdate");
 					
 					},
 					fail : function(result) {

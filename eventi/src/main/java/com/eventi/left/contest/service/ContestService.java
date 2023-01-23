@@ -14,6 +14,8 @@ public interface ContestService {
 	public ContestVO getContest(String cVo); // 공모전 1건에 대한 등록조회
 
 	public int updateContest(ContestVO vo, MultipartFile[] uploadFile); // 수정
+	
+	public int saveUpdateContest(ContestVO vo, MultipartFile[] uploadFile, WinnerVO wvo); //임시저장 불러오기 수정.
 
 	public int deleteContest(ContestVO contestVO); // 삭제
 

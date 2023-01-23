@@ -21,6 +21,7 @@
 		</if>
 	</sql>
 	
+	<!-- 로그인했을경우, 좋아요 체크확인 -->
 	<sql id="loginLikeCheck">
 		<if test="userId != null and userId != ''">
 			,(select count(*) from likes where target_no = c_no and user_id= #{userId})AS userLike
@@ -36,9 +37,9 @@
 		        ,code_select(style) style
 	            ,dDay
 		      	,likes
-	            ,userLike
 	            ,(select sev_nm from files where target_Id = c_no) AS img
-	      	<include refid="loginLikeCheck" />
+	            <include refid="loginLikeCheck" />
+	      
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(
 			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt,style
@@ -46,7 +47,6 @@
                                                 ELSE (TO_DATE (dt_cls, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD'))
                                                 END AS dDay
                             ,(select count(*) from likes where target_no = c_no) AS likes
-                            ,(select count(*) from likes where target_no = c_no and user_id= 'test02')AS userLike
 			            FROM CONTEST
 			            WHERE SAVE = 'N'
 			            AND DT_CLS > current_date 
@@ -143,6 +143,21 @@
 		update CONTEST
 		set TTL = #{ttl},
 		CNTN = #{cntn}
+		where c_no = #{cNo}
+		and writer = #{writer}
+	</update>
+	
+	<!-- 공모전  임시저장 불러오기 수정 -->
+	<update id="saveUpdateContest">
+		update CONTEST
+		set TTL = #{ttl},
+            CNTN = #{cntn},
+            CATEGORY = #{category},
+            DT_REG  = #{dtReg},
+            DT_CLS = #{dtCls},
+            PAY = #{pay},
+            SAVE = #{save},
+            STYLE = #{style}
 		where c_no = #{cNo}
 		and writer = #{writer}
 	</update>

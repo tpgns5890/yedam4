@@ -25,15 +25,15 @@ public class WinnerServiceImpl implements WinnerService {
 		return mapper.getWinner(WinnerVO);
 	}
 
+	// 공고 마감후 우승자등록(업데이트)
 	@Override
 	public int updateWinner(WinnerVO vo) {
 
-		// 등록된 공고번호가 없다면
 		List<WinnerVO> winners = mapper.winnerList(vo.getCoNo());
-		System.out.println(winners);
 		String[] dgnNo;
 		String[] userIdArr;
-		
+		int r = 0;
+
 		// 공모전 우승입력개수 가져와서 사이즈만큼 반복문
 		// str 값에 입력한 디자이너번호를 받고
 		// 1등부터 순서대로 update
@@ -42,11 +42,11 @@ public class WinnerServiceImpl implements WinnerService {
 			userIdArr = vo.getUserIdArr();
 			winners.get(i).setCoNo(vo.getCoNo());
 			winners.get(i).setdNo(dgnNo[i]);
-			winners.get(i).setGrade(i+1);
+			winners.get(i).setGrade(i + 1);
 			winners.get(i).setUserId(userIdArr[i]);
-			mapper.updateWinner(winners.get(i));
+			r += mapper.updateWinner(winners.get(i));
 		}
-		return 0;
+		return r;
 	}
 
 	@Override

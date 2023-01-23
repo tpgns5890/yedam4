@@ -75,21 +75,21 @@ public class ContestController {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		String sessionId = user.getUserId();
+		Map<String, Object> result = new HashMap<String, Object>();
 
-		// 객체생성 및 코드별 문자열 변환후 세팅
-		ContestVO contest = service.getContest(cVo.getcNo());
+		if (user != null) {
+			String sessionId = user.getUserId();
+			// 상세리스트 1건의 회원의 좋아요 체크 확인을 위한 정보세팅.
+			LikesVO likeCheck = new LikesVO();
+			likeCheck.setTargetNo(cVo.getcNo());
+			likeCheck.setUserId(sessionId);
+			// 모델 넘겨주기.
+			model.addAttribute("likeCheck", likeService.getLike(likeCheck));
+		}
 
-		// 상세리스트 1건의 회원의 좋아요 체크 확인을 위한 정보세팅.
-		LikesVO likeCheck = new LikesVO();
-		likeCheck.setTargetNo(cVo.getcNo());
-		likeCheck.setUserId(sessionId);
-
-		// 모델 넘겨주기.
-		model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
-		model.addAttribute("contest", contest); // 모델 넘겨주기.
+		model.addAttribute("contest", service.getContest(cVo.getcNo())); 
 
 		return "content/contest/contest";
 	}
@@ -139,6 +139,13 @@ public class ContestController {
 	@PostMapping("/update")
 	public String contestupdateForm(ContestVO vo, MultipartFile[] uploadFile) {
 		service.updateContest(vo, uploadFile);
+		return "redirect:/contest/select?cNo=" + vo.getcNo();
+	}
+	
+	// 임시저장 불러오기 수정처리
+	@PostMapping("/saveUpdate")
+	public String saveUpdateContest(ContestVO vo, MultipartFile[] uploadFile, WinnerVO wvo) {
+		service.saveUpdateContest(vo, uploadFile,wvo);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
