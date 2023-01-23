@@ -98,14 +98,22 @@
 	<!-- 공모전 1건 상세조회 -->
 	<select id="getContest" resultType="ContestVO">
 		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
-	        ,category categoryCode
-	        ,style styleCode
 	        ,code_select(category) category
 	        ,code_select(style) style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
 		FROM CONTEST
 		WHERE
 		C_NO = #{cNo}
+	</select>
+	
+	<!-- 공모전 1건 상세조회 -->
+	<select id="saveGetContest" resultType="ContestVO">
+		SELECT c.c_no,c.writer,c.ttl,c.cntn,c.dt_reg,c.dt_cls,c.pay,c.save,c.category,c.style,w.grade,w.w_pay wPay
+			   ,(select sev_nm from files where target_Id = c_no) AS img
+		FROM CONTEST c join winner w
+                        on c.c_no = w.co_no
+		and c.C_NO = #{cNo}
+		and c.save = 'Y'
 	</select>
 	
 	<!-- 상세조회 조회수 업데이트 -->

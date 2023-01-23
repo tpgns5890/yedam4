@@ -76,7 +76,7 @@ public class ContestServiceImpl implements ContestService {
 
 	// 공모전 등록
 	@Override
-	public int insertContest(ContestVO vo, WinnerVO wvo) {
+	public int insertContest(ContestVO vo, WinnerVO wvo, MultipartFile[] uploadFile) {
 
 		// 공모전 우승금액
 		// 1.index 기준으로 등수설정
@@ -95,6 +95,15 @@ public class ContestServiceImpl implements ContestService {
 			}
 		}
 		vo.setPay(hap); // 총 상금합계.
+		
+		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return mapper.insertContest(vo);
 	}
 
@@ -113,16 +122,14 @@ public class ContestServiceImpl implements ContestService {
 				return 0;
 			}
 		}
-		// 공모전수정
-		int r = mapper.updateContest(vo);
-		List<FileDto> list = new ArrayList<FileDto>();
 		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+		List<FileDto> list = new ArrayList<FileDto>();
 		try {
 			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return r;
+		return mapper.updateContest(vo);
 	}
 
 	// 공모전 임시저장 불러오기 수정
@@ -155,12 +162,13 @@ public class ContestServiceImpl implements ContestService {
 					wvo.setGrade(i + 1); // 등수
 					wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
 					hap += Integer.parseInt(array[i]); // 합계계산
-					wMapper.updateSaveWinner(wvo);
+					if(wMapper.updateSaveWinner(wvo) == 0) {
+						wMapper.insertWinner(wvo);
+					}
 				}
 			}
 
 		}
-
 		// 총 상금합계.
 		vo.setPay(hap);
 
@@ -217,6 +225,12 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public List<ContestVO> cSave(ContestVO vo) {
 		return mapper.cSave(vo);
+	}
+	
+	//공모전 임시저장 1건 조회.
+	@Override
+	public List<ContestVO> saveGetContest(ContestVO contestVO) {
+		return mapper.saveGetContest(contestVO);
 	}
 
 }

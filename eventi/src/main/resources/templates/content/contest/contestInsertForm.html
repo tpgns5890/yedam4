@@ -278,7 +278,6 @@
 		    
 		    
 		    
-		  //수정진행중 ------------------------------------------------------------------------------
 		  //불러오기
 		 $('#saveFile').on('click', function() {
 			let userId = '[[${session.member.userId}]]';
@@ -327,19 +326,28 @@
 		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 						xhr.setRequestHeader(header, token);
 		            },
-					success : function(contest) {
-						console.log(contest);
-						console.log(contest.styleCode);
-								$("#cNo").val(contest.cNo);
-								$("#ttl").val(contest.ttl);
-								$("#dtCls").val(contest.dtCls);
-								oEditors.getById["cntn"].exec("PASTE_HTML", [contest.cntn]);
-								$("#contestfrm").attr("action", "/contest/update");
-								$("input:radio[name='category']:radio[value='"+contest.categoryCode+"']").attr('checked', true);
-								if(contest.styleCode != null){
-									$("#style").val(contest.styleCode).attr("selected", true);
-								}
+					success : function(data) {
+								$("#cNo").val(data[0].cNo);
+								$("#ttl").val(data[0].ttl);
+								$("input:radio[name='category']:radio[value='"+data[0].category+"']").attr('checked', true);
+								oEditors.getById["cntn"].exec("PASTE_HTML", [data[0].cntn]);
 								
+								//등록된 스타일이 있을경우
+								if(data[0].style != null){
+									$("#style").val(data[0].style).attr("selected", true);
+								}
+								//등록된 상금내역 불러오기
+								$('input[name="winnerPay[]"]').each(function (i) {
+									if(data[i].wpay != null){
+										$(this).val(data[i].wpay);
+									}
+								})
+								
+								console.log(data[0].img)
+								if(data[0].img != null){
+							    	imgReader(data[0].img);
+								}
+								//from 업데이트로 변경.
 								$("#contestfrm").attr("action", "/contest/saveUpdate");
 					
 					},
@@ -348,6 +356,13 @@
 					}
 		    })
 		    }
+		    
+		    //이미지 미리보기 처리
+			function imgReader(img){
+				$("#imgInp").toggleClass("fileDown"); //input파일
+				$("#imgInp").next().toggleClass("fileDown"); //div
+				$("#blah").attr('src', '/fileView/'+img);
+			}
 		    
 		    
 		 

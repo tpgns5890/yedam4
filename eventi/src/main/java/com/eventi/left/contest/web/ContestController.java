@@ -89,7 +89,7 @@ public class ContestController {
 
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
-		model.addAttribute("contest", service.getContest(cVo.getcNo())); 
+		model.addAttribute("contest", service.getContest(cVo.getcNo()));
 
 		return "content/contest/contest";
 	}
@@ -111,9 +111,10 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging) {
+	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging,
+			MultipartFile[] uploadFile) {
 
-		service.insertContest(vo, wvo);
+		service.insertContest(vo, wvo, uploadFile);
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
@@ -141,11 +142,11 @@ public class ContestController {
 		service.updateContest(vo, uploadFile);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
-	
+
 	// 임시저장 불러오기 수정처리
 	@PostMapping("/saveUpdate")
 	public String saveUpdateContest(ContestVO vo, MultipartFile[] uploadFile, WinnerVO wvo) {
-		service.saveUpdateContest(vo, uploadFile,wvo);
+		service.saveUpdateContest(vo, uploadFile, wvo);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
@@ -230,13 +231,6 @@ public class ContestController {
 		return result; // 디자인리스트+파일리스트 반환.
 	}
 
-	// --------------------------------------------------------------------------
-	// 공모전 나의 문의리스트 페이지이동(추가해야함)
-	@GetMapping("/QnaList")
-	public String ContestQnaList() {
-		return "content/myPage/myContestQnaList";
-	}
-
 	// 임시저장된 게시글 전체들고오기
 	@PostMapping("/cSave")
 	@ResponseBody
@@ -247,8 +241,15 @@ public class ContestController {
 	// 임시저장된 게시글 상세들고오기
 	@PostMapping("/saveSelect")
 	@ResponseBody
-	public ContestVO saveSelect(ContestVO vo) {
-		return service.getContest(vo.getcNo());
+	public List<ContestVO> saveSelect(ContestVO vo) {
+		return service.saveGetContest(vo);
+	}
+
+	// --------------------------------------------------------------------------
+	// 공모전 나의 문의리스트 페이지이동(추가해야함)
+	@GetMapping("/QnaList")
+	public String ContestQnaList() {
+		return "content/myPage/myContestQnaList";
 	}
 
 }
