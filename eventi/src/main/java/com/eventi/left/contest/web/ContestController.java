@@ -89,16 +89,27 @@ public class ContestController {
 	// 1.공모전 상세리스트(get)
 	@GetMapping("/select")
 	public String contestSelect(Model model, ContestVO cVo, PagingVO paging) {
-
+		
+		//로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+		
 		// 객체생성 및 코드별 문자열 변환후 세팅
 		ContestVO contest = service.getContest(cVo.getcNo());
 
-		model.addAttribute("contest", contest); // 모델 넘겨주기.
+		
+		LikesVO likeCheck = new LikesVO();
+		likeCheck.setTargetNo(cVo.getcNo());
+		likeCheck.setUserId(sessionId);
+		model.addAttribute("likeCheck", likeService.getLike(likeCheck)); // 모델 넘겨주기.
+		
 		DesignVO dVo = new DesignVO();
 		dVo.setcNo(cVo.getcNo());
 		model.addAttribute("designList", dService.contestDesignList(dVo, paging));
+		
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
+		model.addAttribute("contest", contest); // 모델 넘겨주기.
 
 		return "content/contest/contest";
 	}

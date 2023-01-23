@@ -111,6 +111,7 @@
 				
 				function gopage(i) {
 					let page = $('input[name="page"]').val(i);
+					
 					//하트가 눌렸을 경우 실행
 					if ($("#love").hasClass("active")) { 
 						loveClick()
@@ -308,6 +309,7 @@
 				//공모전 전체하트를 클릭했을 경우 => 나의 좋아요 공모전박스 생성출력.
 				function loveClick(e) {
 					let page = $('input[name=page]').val();
+					
 					//active 클래스가 없을 경우 생성, 있을 경우 삭제
 					$(e).toggleClass("active");
 

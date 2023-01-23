@@ -19,4 +19,5 @@ public class LikesVO {
 	// 페이징 처리관련
 	private int first;
 	private int last;
+	private String order;
 }
