@@ -15,5 +15,9 @@ public class NoticeVO {
 	private String dt; //작성날짜
 	private String img; //이미지
 	private String userId; //회원ID
-	private Integer see;
+	private Integer see; //조회수 
+	
+	Integer first =1;
+	Integer last =4;
+	 
 }

@@ -31,5 +31,6 @@ public interface PromotionBoardMapper {
 	//댓글 조회
 	public List<ReplyVO> proReply(ReplyVO replyVO);
 	
-	
+	//게시글 개수
+	public int count(PromotionVO promotionVO);
 }

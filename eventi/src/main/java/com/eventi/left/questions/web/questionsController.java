@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 import com.eventi.left.reply.service.ReplyVO;
@@ -31,6 +34,13 @@ public class questionsController {
 		return qService.questionsList(vo);
 	}
 	
+	//게시글등록폼이동
+	@RequestMapping(value = "/queInsert", method=RequestMethod.GET) 
+	public String proInsert(Model model) {
+		model.addAttribute("nextNo", qService.getSeq());
+		return "content/questions/queInsert";
+	}
+			
 	// 등록처리
 	@PostMapping("/insert")
 	@ResponseBody
@@ -41,14 +51,23 @@ public class questionsController {
 
 	// 나의 문의내역 전체조회
 	@GetMapping("/myqnaList")
-	public String qnaList(Model model, QuestionsVO vo) {
+	public String qnaList(Model model, QuestionsVO vo, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setUserId(user.getUserId());
-		model.addAttribute("qnaList", qService.qnaList(vo));
-		// model.addAttribute("paging", paging);
+		System.out.println(vo);
+		model.addAttribute("qnaList", qService.qnaList(vo, paging));
+		model.addAttribute("paging", paging);
 		return "content/questions/queList";
 	}
-
+	//게시글상세조회
+	@RequestMapping(value = "/queDetail", method=RequestMethod.GET) 
+	public String proDetail(Model model, QuestionsVO vo) {
+		//MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		//상세내용
+		model.addAttribute("queDetail", qService.getQuestions(vo));
+		return "content/questions/queDetail";
+	}
+			
 	// 댓글 수정
 	@PostMapping("/update")
 	@ResponseBody

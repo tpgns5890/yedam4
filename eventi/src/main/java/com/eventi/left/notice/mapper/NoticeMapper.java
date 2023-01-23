@@ -24,5 +24,9 @@ public interface NoticeMapper {
 	//게시글 삭제
 	public int nocDelete(NoticeVO noticeVO); 
 	
+	//게시글 개수
+	public int count(NoticeVO noticeVO);
 	
+	//시퀀스 값 찾기
+	public String getSeq();
 }

@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
+import com.eventi.left.files.UploadFileMethod;
+import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.notice.mapper.NoticeMapper;
 import com.eventi.left.notice.service.NoticeService;
 import com.eventi.left.notice.service.NoticeVO;
@@ -16,11 +19,16 @@ public class NoticeServiceImpl implements NoticeService{
 	
 	@Autowired 
 	NoticeMapper nocmapper;
+	@Autowired FilesMapper filesMapper;
+	@Autowired UploadFileMethod newUp;
 	
 	//게시글 전체조회
 	@Override
-	public List<NoticeVO> noticeList(NoticeVO noticeVO) {
-		// TODO Auto-generated method stub
+	public List<NoticeVO> noticeList(NoticeVO noticeVO, PagingVO paging) {
+		paging.setTotalRecord(nocmapper.count(noticeVO));
+		paging.setPageUnit(5);
+		noticeVO.setFirst(paging.getFirst());
+		noticeVO.setLast(paging.getLast());
 		return nocmapper.noticeList(noticeVO);
 	}
 	
@@ -63,6 +71,26 @@ public class NoticeServiceImpl implements NoticeService{
 	public int nocDelete(NoticeVO noticeVO) {
 		// TODO Auto-generated method stub
 		return nocmapper.nocDelete(noticeVO);
+	}
+
+	@Override
+	public int count(NoticeVO noticeVO) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	//조회
+	@Override
+	public int seeUp(NoticeVO noticeVO) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	//시퀀스 값 얻기
+	@Override
+	public String getSeq() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

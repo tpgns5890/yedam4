@@ -23,6 +23,8 @@
 	<th:block th:if="${session.member.userId} == ${proDetail.userId}">
 	</th:block>
 
+
+	
 	<section class="ftco-section ftco-degree-bg">
 		<div class="container">
 			<div class="row">
@@ -79,6 +81,8 @@
 	let proNo = '[[${proDetail.proNo}]]';
 	let boardCat = 'T02';
 	
+	
+	
 	//댓글 불러오는 ajax
 	 $.ajax({
 		url : '/replyList', //controller에서 설정한 경로
@@ -103,11 +107,13 @@
 	
 	 //댓글 tr생성
 	function make(reply){
-		let delbtn = ''; 
+		let delbtn = '';
+		let upBtn = '';
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		
 		if(reply.userId ==userId){
-			delbtn = `<button class='repDelete' >삭제</button>`;			
+			delbtn = `<button class='repDelete' >삭제</button>`;
+			upBtn = `<button class='repUpdate'>수정</button>`;
 		}
 		
 		let p =`
@@ -117,7 +123,7 @@
 	            <div class="meta">${reply.writingDt}</div>
 	            <p>${reply.replyCntn}</p>
 	            <button type="button" class="reply">Reply</button>
-	            ${delbtn}
+	            ${delbtn} ${upBtn}
 				</div>
 			</li>`
 		
@@ -126,11 +132,13 @@
 	//대댓글 tr생성
 	function makeRe(reply){
 		let delBtn = '';
+		let upBtn = '';
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		
 		//댓글 작성자일 경우에만 삭제 버튼 생성
 		if(reply.userId ==userId){
-			delbtn = `<button class='repDelete'>삭제</button>`;			
+			delbtn = `<button class='repDelete'>삭제</button>`;
+			upBtn = `<button class='repUpdate'>수정</button>`;
 		}
 		//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
 		$("#" + reply.rerepTgt).children('button:eq(0)').remove();
@@ -141,7 +149,7 @@
           <h3>${reply.userId}</h3>
           <div class="meta">${reply.writingDt}</div>
           <p>${reply.replyCntn}</p>
-          ${delBtn}
+          ${delBtn} ${upBtn}
         </div>
       </li>
     </ul>`
@@ -238,6 +246,37 @@
 	});		
 });
 	
+	//댓글 수정 폼으로 변경
+	$(document).on('click', '.repUpdate', function(e){
+		let replyNo = $(this).parent("div").attr('id');
+		let p = $(this).parent("div").children("p").text();			
+		$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
+		
+		$(this).toggleClass("updateBtn");
+	});
+	
+	//댓글 수정
+	$(document).on('click', '.updateBtn', function(e){
+		$(this).toggleClass("updateBtn");
+		let btn = $(this);
+		let replyCntn = $('#replyCntn').val();
+		let replyNo = $('#replyNo').val();
+		let updateBtn = `<button class='repUpdate'>수정</button>`;
+		
+		$.ajax({
+			url : '/replyUpdate',
+			type : 'POST',
+			data : JSON.stringify({replyNo : replyNo, replyCntn : replyCntn}),
+			contentType : "application/json",
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+			},
+			success : function(result){
+				btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
+			}		
+		})
+	});
 </script>
 </div>
 </html>

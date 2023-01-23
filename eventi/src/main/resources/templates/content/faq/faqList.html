@@ -26,25 +26,91 @@
 <form method="post">
 
 
-		<input type="text" title="검색">
-		<input type="submit" value="검색">
-
-<ul id="ul">
+<!--<ul id="ul">
 <th:block  th:each="faq : ${faqList}">
 				<li><label th:text=${faq.faqNo}></label> 
 				  	<label th:text=${faq.faqTtl} class="ttl"></label>
 				  	<textarea cols="30" rows="5" th:text=${faq.faqAns} class="ans"  ></textarea>
 				 </li>		
 </th:block>
-</ul>
+</ul>-->
+
+<!-- 게시글 검색 -->
+	<input type="text" name="search">
+	<input type="button" id="find" value="찾기"><span></span></input>
+	
+          <div class="container">
+            <div class="row" >
+              <div class="col-sm-6">
+                <h4 class="font-alt mb-30">자주 묻는 질문</h4>
+                <div class="panel-group" id="accordion" th:each="faq : ${faqList}">
+                  <div class="panel panel-default">
+                    <div class="panel-heading" >  
+                      <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#support1" th:text=${faq.faqTtl}>Support Question 1</a></h4>
+                    </div>
+                    <div class="panel-collapse collapse in" id="support1">
+                      <div class="panel-body" th:text=${faq.faqAns} >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 </form>
 		
 <script>
-	const ul = document.querySelector('#ul');
-	ul.addEventListener('click', function (ev){
-		ev.target.nextElementSibling.classList.toggle("ans")
+	const accordion = document.querySelector('#accordion');
+	panel-heading.addEventListener('click', function (ev){
+		ev.target.nextElementSibling.classList.toggle("panel-body")
 	});
 	
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+
+	//검색 기능
+	$('#find').click(function() {
+		//입력한 값 가져오기
+		let search = $("input[name=search]").val();
+		
+		//post방식으로 리스트 불러오기
+	$.ajax({
+		url : '/faqList',
+		method : 'post',
+		data : {ttl:search}, //title = search(title변수안에 data)
+		beforeSend : function(xhr)
+        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			xhr.setRequestHeader(header, token);
+        }
+	}).then(res => {
+		//tbody밑에 있는 데이터 지우기
+		
+		$("#check").empty();
+		
+		//tbody에 들어갈 tr 생성
+		for(r of res){ //제목, 내용 검색 시
+			//if(r.title.includes(search) || r.jobCntn.includes(search)){
+				//alert(r.loc)
+				$("#check").append(makeTr(r));
+   			//}
+		}
+	})
+		
+	$("input[name=search]").val('');
+	})
+	
+	//tr 생성 함수
+	<!--function makeTr(r){
+	console.log(r)
+	let tr = `<tr onclick="location.href='/jobDetail?jobNo=${r.jobNo}'">
+					<td>${r.jobNo}</td>
+					<td>${r.title}</td>
+		 			<td>${r.etype}</td> 
+					<td>${r.userId}</td>
+			  </tr>`
+	return tr;-->
 	
 </script>
 </div>

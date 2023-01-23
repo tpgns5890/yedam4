@@ -2,10 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.promotion.mapper.PromotionBoardMapper">
-
+<sql id="pSelect">
+	
+		<!-- 검색창 입력 시 -->
+		<if test="eName !=null and eName != ''">
+			AND ( ENAME LIKE '%${eName}%' OR INTRO LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+		</if>
+		<!-- option 선택 시-->
+		<if test="eType !=null and eType != ''">
+			AND E_TYPE = #{eType}
+		</if>
+		
+</sql>	
+		
 	<!-- 홍보게시판 메인 -->
 	<select id="proList" resultType="com.eventi.left.promotion.service.PromotionVO">
-		SELECT PRO_NO, USER_ID, E_NAME, E_TYPE, IMG, SEE
+		SELECT PRO_NO, USER_ID, E_NAME, code_select(E_TYPE) E_TYPE, IMG, SEE
+		 FROM (SELECT ROWNUM RN, A.* FROM( PROMOTION_BOARD
+		<include refid="pSelect" />
+	<![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<!-- 게시글 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
 		FROM PROMOTION_BOARD
 	</select>
 	
@@ -38,7 +61,7 @@
 	
 		INSERT INTO PROMOTION_BOARD
 		(PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO, E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE, DT) <!-- DB -->
-		VALUES('PB'|| PROMOTION_BOARD_SEQ.NEXTVAL, #{userId}, #{eName}, 
+		VALUES(#{proNo}, #{userId}, #{eName}, 
 				#{eSday}, #{eEday}, #{loc}, #{intro}, #{eType}, #{entrance}, #{accommodate}, #{img}, #{see}, sysdate) <!-- VO -->
 	</insert>
 	

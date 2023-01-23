@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
@@ -27,8 +28,11 @@ public class PromotionServiceImpl implements PromotionService{
 
 	//홍보게시글 전체조회
 	@Override
-	public List<PromotionVO> proList(PromotionVO promotionVO) {
-		// TODO Auto-generated method stub
+	public List<PromotionVO> proList(PromotionVO promotionVO, PagingVO paging) {
+		paging.setTotalRecord(proMapper.count(promotionVO));
+		paging.setPageUnit(5);
+		promotionVO.setFirst(paging.getFirst());
+		promotionVO.setLast(paging.getLast());
 		return proMapper.proList(promotionVO);
 	}
 	
@@ -90,5 +94,12 @@ public class PromotionServiceImpl implements PromotionService{
 	public String getSeq() {
 		// TODO Auto-generated method stub
 		return proMapper.getSeq();
+	}
+	
+	//조회
+	@Override
+	public int seeUp(PromotionVO promotionVO) {
+		// TODO Auto-generated method stub
+		return proMapper.seeUp(promotionVO);
 	}
 }
