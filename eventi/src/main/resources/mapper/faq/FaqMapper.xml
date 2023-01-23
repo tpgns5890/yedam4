@@ -3,9 +3,18 @@
 
 
 <mapper namespace="com.eventi.left.faq.mapper.FaqMapper">
+<sql id="fSelect">
+	
+		<!-- 검색창 입력 시 -->
+		<if test="ttl !=null and ttl != ''">
+			AND ( FAQ_TTL LIKE '%${ttl}%' OR FAQ_ANS  LIKE '%${ttl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+		</if>
+		
+</sql>		
 	<select id="getFaqList" resultType="FaqVO">
 		SELECT *
 		FROM faq
+		<include refid="fSelect" />
 	</select>
 
 </mapper>

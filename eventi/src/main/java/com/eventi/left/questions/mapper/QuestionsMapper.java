@@ -2,6 +2,7 @@ package com.eventi.left.questions.mapper;
 
 import java.util.List;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.questions.service.QuestionsVO;
 
 public interface QuestionsMapper {
@@ -18,6 +19,11 @@ public interface QuestionsMapper {
 		public int questionsDelete(QuestionsVO vo); //삭제
 		
 		//Q&A 전체조회
-		public List<QuestionsVO> qnaList(QuestionsVO vo); 
-
+		public List<QuestionsVO> qnaList(QuestionsVO vo, PagingVO paging); 
+		
+		//시퀀스 값 찾기
+		public String getSeq();
+		
+		//게시글 개수
+		public int count(QuestionsVO questionsVO);
 }

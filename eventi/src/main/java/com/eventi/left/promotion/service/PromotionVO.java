@@ -25,5 +25,8 @@ public class PromotionVO {
 	private String img; //첨부파일
 	private Integer see; //관심수
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
-	private Date dt;
+	private Date dt; //작성날짜
+	
+	Integer first =1; //첫 페이지
+	Integer last = 4; //마지막 페이지
 }

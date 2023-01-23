@@ -21,5 +21,6 @@ public interface JobService {
 	public int jobInsert(JobBoardVO jobBoardVO, MultipartFile uploadFile); 
 	
 	//게시글 삭제
-	public int jobDelete(JobBoardVO jobBoardVO); 
+	public int jobDelete(JobBoardVO jobBoardVO);
+	
 }

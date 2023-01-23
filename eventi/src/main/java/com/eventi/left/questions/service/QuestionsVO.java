@@ -30,6 +30,8 @@ public class QuestionsVO {
 	public void setqNo(String qNo) {
 		this.qNo = qNo;
 	}
-	
+	//페이징 
+	Integer first =1; //첫 페이지
+	Integer last = 4; //마지막 페이지
 	
 }

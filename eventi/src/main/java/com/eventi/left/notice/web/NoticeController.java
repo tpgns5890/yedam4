@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.notice.service.NoticeService;
 import com.eventi.left.notice.service.NoticeVO;
 import com.eventi.left.promotion.service.PromotionVO;
@@ -21,14 +22,26 @@ public class NoticeController {
 	
 	//게시물 전체조회
 	@RequestMapping(value = "/nocList", method=RequestMethod.GET)
-	public String noticeList(Model model) {
-		model.addAttribute("nocList", nocService.noticeList(null));
+	public String noticeList(Model model, NoticeVO noticeVO, PagingVO paging) {
+		model.addAttribute("nocList", nocService.noticeList(noticeVO, paging));
+		model.addAttribute("paging", paging);
 		return "content/notice/nocList";
+	}
+	
+	//게시글상세조회로이동
+	@RequestMapping(value = "/nocDetail", method=RequestMethod.GET) 
+	public String nocDetail(Model model, NoticeVO noticeVO) {
+		//조회수
+		nocService.seeUp(noticeVO);
+		//상세내용 
+		model.addAttribute("nocDetail", nocService.nocDetail(noticeVO));
+		return "content/notice/nocDetail";
 	}
 	
 	//구인등록폼이동
 	@RequestMapping(value = "/nocInsert", method=RequestMethod.GET) 
-	public String nocInsert() {
+	public String nocInsert(Model model) {
+		model.addAttribute("nextNo", nocService.getSeq());
 		return "content/notice/nocInsert";
 	}
 		
@@ -40,12 +53,6 @@ public class NoticeController {
 		return "redirect:/nocList";
 	}
 		
-	//게시글상세조회로이동
-	@RequestMapping(value = "/nocDetail", method=RequestMethod.GET) 
-	public String nocDetail(Model model, NoticeVO noticeVO) {
-		model.addAttribute("nocDetail", nocService.nocDetail(noticeVO));
-		return "content/notice/nocDetail";
-	}
 	
 	//게시글수정페이지로이동
 	@RequestMapping(value = "/nocUpdate", method=RequestMethod.GET) 

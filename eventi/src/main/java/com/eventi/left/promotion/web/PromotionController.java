@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;
@@ -34,9 +37,10 @@ public class PromotionController {
 	
 	//홍보게시물 전체조회
 	@RequestMapping(value = "/proList", method=RequestMethod.GET)
-	public String proList(Model model, PromotionVO promotionVO) {
+	public String proList(Model model, PromotionVO promotionVO, PagingVO paging) {
 		//전체리스트 조회
-		List<PromotionVO> contents = proService.proList(promotionVO);
+		List<PromotionVO> contents = proService.proList(promotionVO, paging);
+		model.addAttribute("paging", paging);
 		
 		//사진파일
 		List<FilesVO> files = new ArrayList<>();
@@ -56,9 +60,18 @@ public class PromotionController {
 		return "content/promotion/proList";
 	}
 	
+	//정렬 전체 조회
+	@PostMapping("/proList")
+	@ResponseBody
+	public List<PromotionVO> jSelectList(PromotionVO promotionVO, PagingVO paging){
+		List<PromotionVO> list = proService.proList(promotionVO, paging);
+		return list;
+	}
 	//게시글상세조회
 		@RequestMapping(value = "/proDetail", method=RequestMethod.GET) 
 		public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO) {
+			//조회수
+			proService.seeUp(promotionVO);
 			MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 			//상세내용
 			model.addAttribute("proDetail", proService.proDetail(promotionVO));

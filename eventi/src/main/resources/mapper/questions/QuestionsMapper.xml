@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper
-	namespace="com.eventi.left.questions.mapper.QuestionsMapper">
+<mapper namespace="com.eventi.left.questions.mapper.QuestionsMapper">
 
 	<select id="questionsList" resultType="QuestionsVO">
 		select *
@@ -22,7 +21,10 @@
 	        END AS ANS
 		FROM QUESTIONS QU
         WHERE USER_ID = #{userId}
-	    
+	   <!-- <![CDATA[
+			 AND ROWNUM <= #{last} 
+	    AND RN >= #{first}
+		]]>-->
 	</select>
 	
 	<select id="getQuestions" resultType="QuestionsVO">
@@ -31,6 +33,12 @@
 		where category = #{category}
 		and target_id = #{targetId}
 		and q_no = #{qNo}
+	</select>
+	
+	<!-- 게시글 시퀀스번호 찾기 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
+			FROM Questions
 	</select>
 	
 	<insert id="questionsInsert">
@@ -66,5 +74,10 @@
 		where q_no = #{qNo}
 		and user_id = #{userId}
 	</delete>
-
+	
+	<!-- 게시글 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
+		FROM QUESTIONS
+	</select>
 </mapper>

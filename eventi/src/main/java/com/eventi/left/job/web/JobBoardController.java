@@ -33,7 +33,6 @@ public class JobBoardController {
 	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
 		model.addAttribute("jobList", jobService.getJobList(jobBoardVO, paging ));
 		model.addAttribute("paging", paging);
-		System.out.println(jobService.getJobList(jobBoardVO, paging ));
 		return "content/job/jobList";
 	}
 	
