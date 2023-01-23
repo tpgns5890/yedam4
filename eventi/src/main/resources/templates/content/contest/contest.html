@@ -50,7 +50,7 @@ footer {
 				</div>
 			</div>
 		</section>
-
+		
 		<section class="ftco-section" style="padding-top: 20px">
 			<div class="container" >
 				<div class="row" style="padding-top: 20px"> 
@@ -237,12 +237,14 @@ footer {
 		// 마감연장일이 이미 지정된 경우 모달창 띄우지 않도록.
 		$('#updateDate').on("click", function(){ 
 		  
-		let dtExtns = '[[${#dates.format(contest.dtExtns,'yyyy/MM/dd')}]]';
-			if(dtExtns != null || dtExtns != ''){
+		let dtExtns = '[[${contest.dtExtns}]]';
+		console.log(dtExtns);
+		
+		if(dtExtns == '' || null || undefined || 0 || NaN){
+			  modal.style.display = "block";
+		}else{
 				alert('마감연장 1회만 가능합니다.')
 				return false;
-			}else{
-			  modal.style.display = "block";
 			}
 		})
 		
@@ -275,8 +277,15 @@ footer {
 		
 		//마감연장 모달창 수정처리
 		$('#extension').on('click', function () {
-
+			
 			let date = $(this).parent().parent().find($('input[type="date"]')).val();
+			let dtCls = '[[${#dates.format(contest.dtCls,'yyyy/MM/dd')}]]';
+			
+			if(date <= dtCls){
+				alert(dtCls + '이전날짜는 불가능합니다.')
+				console.log(dtCls);
+				return false;
+			}
 			
 			$.ajax({
 		           url:"/contest/updateExtension",

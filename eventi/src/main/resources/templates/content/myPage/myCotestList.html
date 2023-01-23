@@ -87,7 +87,7 @@
 						
 						<th:block th:if="${contest.save} == 'Y'">
 							<td th:text="임시저장"></td>
-							<td><button type="button" id="selete" th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|">공모전등록</button></td>
+							<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
 						</th:block>
 						
 						

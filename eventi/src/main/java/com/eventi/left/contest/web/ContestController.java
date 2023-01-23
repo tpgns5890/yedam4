@@ -139,6 +139,7 @@ public class ContestController {
 	// 수정처리
 	@PostMapping("/update")
 	public String contestupdateForm(ContestVO vo, MultipartFile[] uploadFile) {
+		System.out.println(vo);
 		service.updateContest(vo, uploadFile);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}

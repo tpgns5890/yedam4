@@ -35,12 +35,13 @@
 			<form action="/contest/insert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post" onsubmit="return check();">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
-					<li>분류:
-						현수막  <input type="radio" name="category" value="D1" checked>
-						배너<input type="radio" name="category" value="D2"> 
-						로고 <input type="radio" name="category" value="D3">
-						포스터 <input type="radio" name="category" value="D4"> 
-						기타 <input type="radio" name="category" value="D5"></li>
+					<li>
+						<input type="radio" name="category" value="D1" checked>현수막  
+						<input type="radio" name="category" value="D2">배너
+						<input type="radio" name="category" value="D3">로고 
+						<input type="radio" name="category" value="D4">포스터 
+						<input type="radio" name="category" value="D5">기타
+					</li> 
 						
 						
 					<!-- 임시저장값 hidden -->
