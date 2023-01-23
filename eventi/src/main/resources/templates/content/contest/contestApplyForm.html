@@ -13,25 +13,20 @@
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="hero-wrap hero-wrap-2"
-			style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-			data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div
-					class="row no-gutters slider-text align-items-end justify-content-center">
-					<div
-						class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-						<h2 class="mb-0 bread">공모전 응모신청</h2>
 
-					</div>
-				</div>
-			</div>
-		</section>
-
-
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">공모전</h2>
+                <div class="module-subtitle font-serif" >공모전 응모신청</div>
+              </div>
+            </div>
+          </div>
+        </section>		
+		
 		<div class="contestContainer">
-			<textarea rows="15" cols="90">
+			<textarea rows="20" cols="90">
 [콘테스트 참여 약관 동의]
 1. 로고,일러스트 콘테스트에는 어떠한 스톡이미지, 프리백터,클럽아트도 사용해서는 안됩니다.
   상업적 사용이 제한되는 폰트, 스톡이미지의 사용 규정 및 범위를 위반할 시, 계정이 영구적으로 삭제될 수 있습니다. 작품에 유료 폰트,스톡이미지,프리백터 등을 사용한 경우에는 반드시 의뢰자에게 저작권 문제가 없을을 명시해야한 합니다.
@@ -77,7 +72,6 @@
 				<button type="submit" id="insertForm">등록</button>
 				<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 			</form>
-
 		</div>
 		<script>
 			//csrf설정

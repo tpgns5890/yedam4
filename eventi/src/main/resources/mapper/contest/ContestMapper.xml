@@ -37,6 +37,7 @@
 	            ,dDay
 		      	,likes
 	            ,userLike
+	            ,(select sev_nm from files where target_Id = c_no) AS img
 	      	<include refid="loginLikeCheck" />
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(

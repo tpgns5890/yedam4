@@ -140,6 +140,7 @@
 						},
 					}).then(res => {
 						//map =>  contest,paging 
+						console.log(res.contest)
 						console.log(res.paging)
 						for (contest of res.contest) {
 							$('#boxList').append(makeBox(contest));
@@ -190,7 +191,6 @@
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
-						
 						//등록된 공모전이 없을경우 기존페이지로 이동.
 						if (res.contest == 0) {
 							location.href = '/contest/List';

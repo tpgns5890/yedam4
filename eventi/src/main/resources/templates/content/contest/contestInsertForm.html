@@ -21,8 +21,6 @@
           </div>
         </section>		
 		
-		<div style="min-height: 1600px">
-		
 		<div class="contestContainer">
 			<textarea rows="20" cols="90">
 [공모전 유의사항]
@@ -74,7 +72,7 @@
 					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
 				
-				<input type="checkbox" name="save" value="Y"><lable>임시저장</lable><br>
+				<input type="checkbox" name="save" value="Y">임시저장<br>
 					
 					<div class="col-md-12">
 						<div class="form-group">
@@ -87,14 +85,12 @@
 							</div>
 						</div>
 					</div>
-				
-					
-				
 					
 			<button type="reset">초기화</button>
+			<button type="button" id="saveFile" >불러오기</button>
+			<button type="button" id="insertBtn">등록(->결제)</button>
+			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button><br>
 			<button type="submit" id="insertForm">등록</button>
-			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
-			<button id="insertBtn">등록(->결제)</button>
 			</form>
 			
 			
@@ -112,7 +108,6 @@
 						<button id="cancle" class="modelBtn1"style="width:50px;" type="button">취소</button>
 					</div>
 				</div>
-			</div>
 			</div>
 
 			<script>
@@ -297,6 +292,95 @@
 		    	//file영역에 있던 값 삭제
 		    	$("#imgInp").val('');
 		    })
+		    
+		    
+		    
+		  //수정진행중 ------------------------------------------------------------------------------
+		    //불러오기
+		 $('#saveFile').on('click', function() {
+			let userId = '[[${session.member.userId}]]';
+			
+			//게시글 불러오기
+			$.ajax({
+				url : "/bboard/bSave",
+				method : 'post',
+				data : JSON.stringify({writer:userId, save:'Y'}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					console.log(data);
+					//임시저장된 게시글이 없을 경우
+					if(data == 0){
+						alert('임시저장된 게시글이 없습니다.');
+					} else if(data.length == 1){ //임시저장된 게시글이 있을 경우
+						for(r of data){
+							$("#bBoardNo").val(r.bboardNo);
+							$("#ttl").val(r.ttl);
+							$("input:radio[name='lclsf']:radio[value='"+r.lclsf+"']").attr('checked', true);
+							
+							if(data.mclsf != null){
+								$("#mclsf").val(r.mclsf).attr("selected", true);
+							}
+							
+							oEditors.getById["cntn"].exec("PASTE_HTML", [r.cntn]);
+							
+							$("#bBoardForm").attr("action", "/bboard/bUpdate");
+						}
+					} else {
+						for(r of data){
+							$("#modal").show();
+							$("#button_box").append(a(r));
+						}
+					}
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+		})
+		
+		function a(r) {
+	    	let p = `<button type="button" id="modal_login_btn" onclick=checkFile('${r.bboardNo}')>${r.bboardNo}</button>`;
+	    	return p;
+	    }
+	    
+	    //임시저장된 게시글 중 한건 가져오기
+	    function checkFile(no) {
+	    	$("#modal").hide();
+	    	
+	    	let bBoardNo = no;
+
+	    	//게시글 불러오기
+			$.ajax({
+				url : "/bboard/bSelect",
+				method : 'POST',
+				data : JSON.stringify({bboardNo:bBoardNo}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					console.log(data);
+							$("#bBoardNo").val(data.bboardNo);
+							$("#ttl").val(data.ttl);
+							$("input:radio[name='lclsf']:radio[value='"+data.lclsf+"']").attr('checked', true);
+							
+							if(data.mclsf != null){
+								$("#mclsf").val(data.mclsf).attr("selected", true);
+							}
+							
+							oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
+							
+							$("#bBoardForm").attr("action", "/bboard/bUpdate");
+						},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+	    })
 		
 		</script>
 		</div>

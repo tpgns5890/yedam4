@@ -1,6 +1,5 @@
 package com.eventi.left.contest.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
-import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
@@ -63,25 +61,10 @@ public class ContestController {
 	@ResponseBody
 	public Map<String, Object> changeList(ContestVO vo, PagingVO paging) {
 
-		// 전체리스트 조회
-		List<ContestVO> contests = service.contestList(vo, paging);
-
-		// 공모전작성게시 사진파일
-		List<FilesVO> files = new ArrayList<>();
-		for (ContestVO contest : contests) {
-			files = fService.fileList(contest.getcNo());
-
-			// 파일리스트 저장된 파일정보가 공모번호와 같다면 이미지셋팅.
-			for (FilesVO file : files) {
-				if (file.getTargetId().equals(contest.getcNo())) {
-					contest.setImg(file.getSevNm());
-				}
-			}
-		}
 		// 리턴할 최종Map(contest,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		result.put("contest", contests);
+		result.put("contest", service.contestList(vo, paging));
 		result.put("paging", paging);
 		return result;
 	}
@@ -96,7 +79,6 @@ public class ContestController {
 		
 		// 객체생성 및 코드별 문자열 변환후 세팅
 		ContestVO contest = service.getContest(cVo.getcNo());
-
 		
 		LikesVO likeCheck = new LikesVO();
 		likeCheck.setTargetNo(cVo.getcNo());
@@ -137,13 +119,11 @@ public class ContestController {
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
-
 			// 전체데이터 받기
 			List<ContestVO> contests = service.myContestList(vo, paging);
 			model.addAttribute("contestList", contests);// 모델에 담기.
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
-
 		// 등록인경우 결제 후 공모전상세페이지 이동.
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
