@@ -21,8 +21,6 @@
           </div>
         </section>		
 		
-		<div style="min-height: 1600px">
-		
 		<div class="contestContainer">
 			<textarea rows="20" cols="90">
 [공모전 유의사항]
@@ -46,13 +44,13 @@
 						
 						
 					<!-- 임시저장값 hidden -->
-					<li><input type="hidden" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
+					<li><label>공모번호</label><input type="text" id="cNo" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
-					<li><label>제  목</label><input type="text" name="ttl" required="required"><br /></li>
+					<li><label>제  목</label><input type="text" id="ttl" name="ttl" required="required"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
-					<li><label>스타일</label> <select name="style" >
-							<option value="none">=== 선호스타일 ===</option>
+					<li><label>스타일</label> <select id="style" name="style" >
+							<option value="">=== 선호스타일 ===</option>
 							<option value="DS1">고전적인</option>
 							<option value="DS2">화사한</option>
 							<option value="DS3">분위기있는</option>
@@ -74,7 +72,7 @@
 					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
 				
-				<input type="checkbox" name="save" value="Y"><lable>임시저장</lable><br>
+				<input type="checkbox" name="save" value="Y">임시저장<br>
 					
 					<div class="col-md-12">
 						<div class="form-group">
@@ -87,20 +85,17 @@
 							</div>
 						</div>
 					</div>
-				
-					
-				
 					
 			<button type="reset">초기화</button>
+			<button type="button" id="saveFile" >불러오기</button>
+			<button type="button" id="insertBtn">등록(->결제)</button>
+			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button><br>
 			<button type="submit" id="insertForm">등록</button>
-			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
-			<button id="insertBtn">등록(->결제)</button>
 			</form>
 			
 			
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
-
 				<!-- Modal content -->
 				<div class="modal-content">
 					<span class="close">&times;</span>
@@ -113,6 +108,14 @@
 					</div>
 				</div>
 			</div>
+			
+			<!-- 임시저장 모달 -->
+			<div id="saveContest" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h2>임시저장 공모전 리스트</h2>
+					<div id="button_box"> </div>
+				</div>
 			</div>
 
 			<script>
@@ -142,31 +145,40 @@
 			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 			document.getElementById('dtCls').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
 		
-			// Get the modal
-			var modal = document.getElementById("myModal");
 			
-			// Get the button that opens the modal
-			var btn = document.getElementById("insertBtn");
+			// Get the modal-----------------------------------------------------------------
+			var modal = document.getElementById("myModal");
+			var saveModal = document.getElementById("saveContest");
 			
 			// Get the <span> element that closes the modal
-			var span = document.getElementsByClassName("close")[0];
+			var paySpan = document.getElementsByClassName("close")[0];
+			var saveSpan = document.getElementsByClassName("close")[1];
 			
-			// When the user clicks the button, open the modal 
-			btn.onclick = function() {
-			  modal.style.display = "block";
-			}
-			
-			// When the user clicks on <span> (x), close the modal
-			span.onclick = function() {
+			// <span> (x), close the modal
+			paySpan.onclick = function() {
 			  modal.style.display = "none";
+			}
+			saveSpan.onclick = function() {
+			  saveModal.style.display = "none";
 			}
 			
 			// When the user clicks anywhere outside of the modal, close it
 			window.onclick = function(event) {
 			  if (event.target == modal) {
 			    modal.style.display = "none";
+			    saveModal.style.display = "none";
 			  }
 			}
+			// When the user clicks the button, open the modal 
+			$('#insertBtn').on('click', function () {
+			 	 modal.style.display = "block";
+			});
+			
+			$('#saveFile').on('click', function () {
+				saveModal.style.display = "block";
+			});
+			
+			//modal--------------------------------------------------------------------
 			
 			
 			//등록버튼 누를시
@@ -297,6 +309,83 @@
 		    	//file영역에 있던 값 삭제
 		    	$("#imgInp").val('');
 		    })
+		    
+		    
+		    
+		  //수정진행중 ------------------------------------------------------------------------------
+		  //불러오기
+		 $('#saveFile').on('click', function() {
+			let userId = '[[${session.member.userId}]]';
+			
+			//게시글 불러오기
+			$.ajax({
+				url : "/contest/cSave",
+				method : 'post',
+				data : {writer:userId, save:'Y'},
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					$("#button_box").empty();
+					//임시저장된 게시글이 없을 경우
+					if(data == 0){
+						alert('임시저장된 게시글이 없습니다.');
+					}else {
+						for(contest of data){
+							$("#button_box").append(choiceCotest(contest));
+						}
+					} 
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+		})
+		
+		function choiceCotest(contest) {
+	    	let span = `<span id="modal_choice_btn">[${contest.cNo}] ${contest.ttl}</span><button type="button" onclick=checkFile('${contest.cNo}')>불러오기</button><br>`;
+	    	return span;
+	    }
+		    
+		    //임시저장된 게시글 중 한건 가져오기
+		    function checkFile(cNo) {
+		    	$("#saveContest").hide();
+		    	
+		    	//게시글 불러오기
+				$.ajax({
+					url : "/contest/saveSelect",
+					method : 'POST',
+					data : {cNo},
+		   			beforeSend : function(xhr)
+		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+		            },
+					success : function(contest) {
+						console.log(contest);
+						console.log(contest.styleCode);
+								$("#cNo").val(contest.cNo);
+								$("#ttl").val(contest.ttl);
+								$("#dtCls").val(contest.dtCls);
+								oEditors.getById["cntn"].exec("PASTE_HTML", [contest.cntn]);
+								$("#contestfrm").attr("action", "/contest/update");
+								$("input:radio[name='category']:radio[value='"+contest.categoryCode+"']").attr('checked', true);
+								if(contest.styleCode != null){
+									$("#style").val(contest.styleCode).attr("selected", true);
+								}
+								
+								$("#contestfrm").attr("action", "/contest/update");
+					
+					},
+					fail : function(result) {
+						alert('필수항목을 입력해주세요')
+					}
+		    })
+		    }
+		    
+		    
+		 
+		
 		
 		</script>
 		</div>

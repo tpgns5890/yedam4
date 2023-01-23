@@ -1,12 +1,9 @@
 package com.eventi.left.contest.service;
 
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
-import com.eventi.left.files.service.FilesVO;
 
 public interface ContestService {
 
@@ -23,5 +20,7 @@ public interface ContestService {
 	public String getSequence(); // 시퀀스 맥시멈번호 찾기.
 
 	public int insertContest(ContestVO vo, WinnerVO wvo); // 공모전,우승상금 등록
+	
+	public List<ContestVO> cSave(ContestVO vo); //임시저장 리스트.
 	
 }

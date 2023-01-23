@@ -9,16 +9,29 @@
 			AND USER_ID = #{userId}
 		</if>
 	</sql>
+	
 
 	<!-- 좋아요 전체 조회 -->
 	<!-- join map으로 받을경우, 컬럼명 대문자 인식!! -->
 	<select id="userlikeList" resultType="map">
-		SELECT l.*,c.*,f.sev_nm IMG
-      	FROM likes l JOIN CONTEST c
-                       ON C.C_NO = L.TARGET_NO
-                     JOIN FILES F
-                       ON L.TARGET_NO = F.TARGET_ID
-		and l.USER_ID = #{userId}
+	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,inq,rprt
+                ,dDay
+                ,code_select(style) style
+                ,code_select(category) category
+		      	,(select count(*) from likes where target_no = c_no) AS likes
+		      	,(select sev_nm from files where target_Id = c_no) AS img
+	 FROM ( select ROWNUM RN, A.*
+			        FROM(
+				             SELECT c.c_no,c.writer,c.ttl,c.cntn,c.pay,c.inq,c.rprt,c.dt_reg,c.dt_cls,c.dt_extns,c.style,c.category
+				                    , CASE WHEN c.dt_extns IS NOT NULL THEN (TO_DATE (c.dt_extns, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD')) 
+				                                                ELSE (TO_DATE (c.dt_cls, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD'))
+				                                                END AS dDay
+						  	 FROM likes l JOIN CONTEST c
+							              		 ON C.C_NO = L.TARGET_NO
+							 and l.USER_ID = #{userId}
+	<![CDATA[
+	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+	]]>
 	</select>
 
 	<select id="likeList" resultType="LikesVO">
@@ -49,9 +62,27 @@
 
 	<!-- 로그인회원의 좋아요 취소 -->
 	<delete id="likeDelete">
-		DELETE FROM LIKESㄴ
+		DELETE FROM LIKES
 		WHERE TARGET_NO = #{targetNo}
 		AND CATEGORY = #{category}
 		<include refid="userIdSelect" />
 	</delete>
+	
+	<!-- 게시글에 대한 로그인회원의 좋아요 확인 -->
+	<select id="userlikecheck" resultType="int">
+		select count(*)
+		from likes
+		where user_id = #{userId}
+		and target_No = #{targetNo}
+		and category = #{category}
+	</select>
+	
+	<!-- 게시글에 대한 로그인회원의 좋아요 확인 -->
+	<select id="setTotalRecord" resultType="int">
+		select count(*)
+		from likes
+		where user_id = #{userId}
+		and category = #{category}
+	</select>
+	
 </mapper>

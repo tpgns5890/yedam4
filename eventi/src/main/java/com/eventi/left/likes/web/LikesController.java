@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 
+import groovy.util.logging.Log4j;
+
 @Controller
 @RequestMapping("/likes")
+@Log4j
 public class LikesController {
 
 	@Autowired

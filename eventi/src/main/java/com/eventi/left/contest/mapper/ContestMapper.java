@@ -19,8 +19,6 @@ public interface ContestMapper {
 		
 		public int selectUpdate(String cVo); // 상세조회 조회수 업데이트.
 		
-		public int selectLikes(ContestVO contestVO); //공모전 좋아요수 조회.
-
 		public int insertContest(ContestVO contestVO); // 추가
 
 		public int updateContest(ContestVO contestVO); // 제목,내용 수정
@@ -30,6 +28,8 @@ public interface ContestMapper {
 		public int deleteContest(ContestVO contestVO); // 삭제
 		
 		public String getSequence(); //시퀀스 맥시멈번호 찾기.
+		
+		public List<ContestVO> cSave(ContestVO vo); //임시저장 리스트.
 		
 		
 }

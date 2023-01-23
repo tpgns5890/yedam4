@@ -64,8 +64,7 @@ footer {
 								alt="Colorlib Template"></a>
 						</div>
 					</div>
-					<div
-						class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+					<div class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 						<div id="show"></div>
 						<span th:text=${contest.cNo} id="cNo"></span>
 						<p th:text=${contest.category}></p>
@@ -92,13 +91,25 @@ footer {
 									</div>
 								</th:block>
 
-								<!-- 회원 하트버튼 -->
+								<!-- 회원 좋아요 하트버튼 -->
 								<th:block sec:authorize="isAuthenticated()">
-									<div class="stage" style="float: right;">
-										<div id="love" class="stage heart" onclick="loveCheck(this)">
-											<span th:text=${contest.likes}></span>
+									<!-- 관심공모전인경우 -->
+									<div th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
+										<div class="stage" style="float: right;">
+											<div id="love" class="stage heart active" onclick="loveCheck(this)">
+												<span th:text=${contest.likes}></span>
+											</div>
 										</div>
 									</div>
+									<!-- 관심공모전이 아닌경우 -->
+									<div th:if="${likeCheck} == null">
+										<div class="stage" style="float: right;">
+											<div id="love" class="stage heart" onclick="loveCheck(this)">
+												<span th:text=${contest.likes}></span>
+											</div>
+										</div>
+									</div>
+									
 								</th:block>
 
 								<!-- 신고수 -->
@@ -346,7 +357,7 @@ footer {
 		//요청사항 출력
 		function contentSelect(){
 			$.ajax({
-	            url:'../contest/select',
+	            url:'/contest/cntnSelect',
 	            method:"post",
 	            data : {cNo,userId},
 	            beforeSend : function(xhr)
@@ -708,6 +719,8 @@ footer {
 				}).then(res => {
 					if(res > 0){
 						alert('관심공모전 추가완료!')
+						location.href='/contest/select?cNo='+cNo;
+						
 					}else{
 						alert('관심공모전 추가실패!')
 					}
@@ -726,37 +739,13 @@ footer {
 					}).then(res => {
 						if(res > 0){
 							alert('관심공모전 취소완료!')
+							location.href='/contest/select?cNo='+cNo;
 						}else{
 							alert('관심공모전 취소실패!')
 						}
 					})
 				}
 		}
-		
-		//좋아요 확인-----------------------------------------------------------
-		myLoveCheck();
-		
-		function myLoveCheck() {
-			let targetNo = $('#cNo').text();
-			$.ajax({
-				url: '../contest/ajaxlike',
-				method: 'post',
-				data: {targetNo},
-				beforeSend: function (xhr) {
-					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-					xhr.setRequestHeader(header, token);
-				},
-			}).then(res => {
-				//현재 공모전이 좋아요등록 상태이면..
-				for(contest of res.contest){
-					/* console.log(contest.C_NO == targetNo); */
-					if(contest.C_NO == targetNo){
-						$('#love').toggleClass("active");
-					}
-				}
-			})
-		}
-		
 		
 		// 페이징 만들기
 		function makePageing(page) {

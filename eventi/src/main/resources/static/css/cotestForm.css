@@ -8,8 +8,10 @@ h3 {
 }
 
 .contestContainer {
-	width:600px;
+	padding-top:30px;
+	width:800px;
 	margin: 0 auto;
+	min-height: 1600px
 }
 
 ul {
@@ -18,7 +20,7 @@ ul {
 }
 
 input[type=text], select, input[type=number], input[type=date] {
-	width: 30%;
+	width: 50%;
 	padding: 12px;
 	margin: 10px;
 	border: 1px solid #ccc;
