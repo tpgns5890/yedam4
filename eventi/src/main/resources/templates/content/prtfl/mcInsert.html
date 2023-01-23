@@ -1,0 +1,429 @@
+﻿OCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+
+<head>
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+<style>
+	.label {
+		color : black;
+	}
+	
+	#check{
+		min-height : 1500px;
+	}
+	
+	.fileShow{
+			display : none !important;
+	}
+	
+	ul {
+  		padding: 16px 0;
+	}
+	
+	ul li {
+	  display: inline-block;
+	  margin: 0 5px;
+	  font-size: 14px;
+	  letter-spacing: -.5px;
+	}
+	
+	form {
+	  padding-top: 16px;
+	}
+	
+	ul li.tag-item {
+	  padding: 4px 8px;
+	  border-radius : 10px;
+	  background-color: pink;
+	  color: #000;
+	}
+	
+	.tag-item:hover {
+	  background-color: #262626;
+	  color: #fff;
+	}
+	
+	.del-btn {
+	  font-size: 12px;
+	  font-weight: bold;
+	  cursor: pointer;
+	  margin-left: 8px;
+	}
+		
+</style>
+</head>
+
+<div layout:fragment="content">
+   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+     <div class="container">
+       <div class="row">
+         <div class="col-sm-6 col-sm-offset-3">
+           <h2 class="module-title font-alt">사회자 포트폴리오 등록</h2>
+           <div class="module-subtitle font-serif">사회자 포트폴리오 등록</div>
+         </div>
+       </div>
+     </div>
+   </section>
+   
+   <form action="/prtfl/mcInsert" method="POST" id="mcForm" name="mcForm" class="contactForm" enctype="multipart/form-data">
+   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+   <div id="check">
+   <div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="imgInp">대표이미지</label> 
+			<input type="file" id="imgInp" name="uploadFile"/>
+			<div class="fileShow">
+				<img id="blah" src="#" alt = "your image" width="250px" />
+				<button type="button" id="cancel" class="btn btn-warning cancel">
+	              <span>Cancel</span>
+	          	</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="userId">이름</label> 
+			<input type="text" class="form-control" name="userId" id="userId">
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="oneIntro">한줄소개</label> 
+			<input type="text" class="form-control" name="oneIntro" id="oneIntro" placeholder="나를 한줄로 표현해보세요.">
+		</div>
+	</div>
+	
+	<div class="col-md-6">
+		<div class="form-group">
+			<label class="label" for="carrYear">경력</label> 
+			<input type="number" class="form-control" name="carrYear" id="carrYear">
+		</div>
+	</div>
+	
+	<div class="col-md-6">
+		<div class="form-group">
+			<label class="label" for="castingPrice">섭외비</label> 
+			<input type="number" class="form-control" name="castingPrice" id="castingPrice">
+		</div>
+	</div>
+	
+	<div class="col-md-6">
+		<div class="form-group">
+			<label class="label" for="cNm">자격증</label> 
+			<input type="type" class="form-control" name="cNm" id="cNm" th:value="레크리에이션지도자1급" readonly>
+		</div>
+	</div><br/>
+	
+	<!-- option 사회가능지역 -->
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="mcAreaList">사회지역</label> 
+			<select id="mcAreaList" name="mcAreaList" onchange="mcAreaFun(this)">
+				<option value="">-- 사회가능지역 선택 --</option>
+				<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+			</select>
+			<input type="hidden" value="" name="mcArea" id="mcArea" />
+             <ul id="mcAreaL"></ul>
+		</div>
+	</div>
+	
+	<!-- option 세부분야 -->
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="mcTypeList">행사가능분야</label> 
+			<select id="mcTypeList" name="mcTypeList" onchange="mcTypeFun(this)">
+				<option value="">-- 행사가능분야 선택 --</option>
+				<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
+			</select>
+			
+			<input type="hidden" value="" name="mcType" id="mcType" />
+            <ul id="mcTypeL"></ul>
+		</div>
+	</div>
+	
+	<!-- option 진행스타일 -->
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="progStyleList">진행스타일</label> 
+			<select id="progStyleList" name="progStyleList" onchange="progStyleFun(this)">
+				<option value="">-- 진행스타일 선택 --</option>
+				<option th:each="style : ${mcStyles}" th:value="${style?.codeId}" th:text="${style?.codeName}"></option>
+			</select>
+			
+			<input type="hidden" value="" name="progStyle" id="progStyle" />
+            <ul id="progStyleL"></ul>
+		</div>
+	</div>
+	
+	<!-- option 사회가능지역 -->
+	<div class="col-md-6">
+		<div class="form-group">
+			<label class="label" for="qna">질문</label> 
+			<select id="qna" name="qna">
+				<option selected>질문을 골라주세요.</option>
+				<option value="Q1">Q.나를 섭외해야되는 이유는?</option>
+				<option value="Q2">Q.나의노하우는?</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="selfIntro">자기소개</label>
+			<textarea name="selfIntro" class="form-control" id="selfIntro" cols="30" rows="4"></textarea>
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="career">경력사항</label>
+			<textarea name="career" class="form-control" id="career" cols="30" rows="4"></textarea>
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="label" for="movie">동영상등록</label><br>
+			<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
+			<!-- <div id="addMove">
+			<input type="text" class="form-control" name="uploadFile" multiple="multiple" placeholder="https://"/><span><button type="button" class="cancel">-</button></span>
+			</div> -->
+			<input type="file" id="imgInp" name="uploadFile"/>
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<input type="button" id="movieInsert" value="동영상추가" class="btn btn-primary">
+		</div>
+	</div>
+	
+	<div class="col-md-12">
+		<div class="form-group">
+			<input type="submit" id="insert" value="등록" class="btn btn-primary">
+		</div>
+	</div>	
+	</div>
+	</form>
+	
+	<script>
+	//csrf 설정
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	//네이버스마트에디터 실행
+	let oEditors = []
+
+	smartEditor = function() {
+		console.log("Naver SmartEditor")
+		nhn.husky.EZCreator.createInIFrame({
+			oAppRef : oEditors,
+			elPlaceHolder : "selfIntro", //적용하고자하는 textarae태그 영역과 동일한 id 이름 입력
+			sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+			fCreator : "createSEditor2"
+		})
+	}
+	
+	smartEditor2 = function() {
+		console.log("Naver SmartEditor")
+		nhn.husky.EZCreator.createInIFrame({
+			oAppRef : oEditors,
+			elPlaceHolder : "career", //적용하고자하는 textarae태그 영역과 동일한 id 이름 입력
+			sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+			fCreator : "createSEditor2"
+		})
+	}
+	
+	$(document).ready(function() {
+		smartEditor()
+		smartEditor2()
+	})
+     
+    //파일 업로드 이미지 미리보기
+    //파일 INPUT창에 변화가 있을 경우 실행
+    $("#imgInp").on('change', function() {
+    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
+    	$(this).toggleClass("fileShow");
+    	$(this).next().toggleClass("fileShow");
+		readURL(this);
+	});
+	
+    //이미지 미리보기 처리
+	function readURL(input){
+		if(input.files && input.files[0]){
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$("#blah").attr('src', e.target.result);
+			}
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+    
+	//파일 삭제
+    $("#cancel").on('click', function() {
+    	//파일을 지우고 싶을때 삭제버튼을 누르면 이미지는 사라지고 input type=file 입력폼이 다시 나타난다.
+    	$(this).parent().prev().toggleClass("fileShow");
+    	$(this).parent().toggleClass("fileShow");
+    	//file영역에 있던 값 삭제
+    	$("#img").val('');
+    })
+    
+    //등록버튼을 눌렀을 경우 아래와 설정을 해주지 않을 경우 태그 속성이 저장되지 않는다.
+	$('#insert').on('click', function insert() {
+		oEditors.getById["selfIntro"].exec("UPDATE_CONTENTS_FIELD", [])
+		let selfIntro = document.getElementById("selfIntro").value;
+		
+		oEditors.getById["career"].exec("UPDATE_CONTENTS_FIELD", [])
+		let career = document.getElementById("career").value;
+		
+		//지역
+		var mcArea = areaTag(); // return array
+        $("#mcArea").val(mcArea);
+		
+		//행사유형
+		var mcType = typeTag(); // return array
+        $("#mcType").val(mcType);
+		
+		//사회자스타일
+        var progStyle = styleTag(); // return array
+        $("#progStyle").val(progStyle);
+	})
+	
+	//질문을 선택했을 경우
+    $("#qna").on('change', function() {
+    	let qna = $("#qna option:selected").text();
+    	let tag = `<p><span style="font-size: 14pt; color: rgb(255, 108, 0);"><b><span style="font-size: 12pt;">﻿</span><span style="font-size: 12pt;">&lt;${qna}&gt;</span></b><span style="background-color: rgb(119, 119, 119);"><b>﻿​</b></span></span>&nbsp;</p>`
+    	oEditors.getById["selfIntro"].exec("PASTE_HTML", [tag]);
+    })
+    
+    //동영상추가버튼
+    $("#movieInsert").on('click', function() {
+    	let tag = `<div><input type="text" class="form-control" name="uploadFile" multiple="multiple" placeholder="https://"/><span><button type="button" class="cancel">-</button></span></div>`
+    	$("#addMove").append(tag);
+    })
+    
+    //동영상삭제
+    $(document).on('click', '.cancel', function() {
+    	console.log($(this));
+    	$(this).parent().parent('div').remove();
+    })
+    
+    function mcAreaFun(e) {
+		let tagValue = e.options[e.selectedIndex].text;
+		// 값이 없으면 동작 안합니다.
+        if (tagValue !== "") {
+
+          // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+          var result = Object.values(areatag).filter(function (word) {
+              return word === tagValue;
+            })
+
+          // 태그 중복 검사
+          if (result.length == 0) {
+            $("#mcAreaL")
+              .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+            addTag(tagValue);
+          } else {
+            alert("태그값이 중복됩니다.");
+          }
+        }
+        //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
+      };
+      
+      function mcTypeFun(e) {
+    	 let tagValue = e.options[e.selectedIndex].text;
+    	 
+    	// 값이 없으면 동작 안합니다.
+         if (tagValue !== "") {
+
+           // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+           var result = Object.values(typetag).filter(function (word) {
+               return word === tagValue;
+             })
+
+           // 태그 중복 검사
+           if (result.length == 0) {
+             $("#mcTypeL")
+               .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+             addTag(tagValue);
+           } else {
+             alert("태그값이 중복됩니다.");
+           }
+         }
+         //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
+      }
+      
+      function progStyleFun(e){
+    	  let tagValue = e.options[e.selectedIndex].text;
+     	 
+      	// 값이 없으면 동작 안합니다.
+           if (tagValue !== "") {
+
+             // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+             var result = Object.values(styletag).filter(function (word) {
+                 return word === tagValue;
+               })
+
+             // 태그 중복 검사
+             if (result.length == 0) {
+               $("#progStyleL")
+                 .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+               addTag(tagValue);
+             } else {
+               alert("태그값이 중복됩니다.");
+             }
+           }
+           //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
+      }
+	
+		//해시태그테스트
+    	var areatag = {};
+		var typetag = {};
+		var styletag = {};
+        var counter = 0;
+
+        // 입력한 값을 태그로 생성한다.
+        function addTag (value) {
+            tag[counter] = value;
+            counter++; // del-btn 의 고유 id 가 된다.
+        }
+        
+        //사회지역값 서버로 보내기
+        function areaTag () {
+            return Object.values(areatag).filter(function (word) {
+                return word !== "";
+            });
+        }
+        
+        function typeTag(){
+        	return Object.values(typetag).filter(function (word) {
+                return word !== "";
+            });
+        }
+        
+        function styleTag(){
+        	return Object.values(styletag).filter(function (word) {
+                return word !== "";
+            });
+        }
+        
+        
+
+        // 삭제 버튼 
+        // 인덱스 검사 후 삭제
+        $(document).on("click", ".del-btn", function (e) {
+            var index = $(this).attr("idx");
+            tag[index] = "";
+            $(this).parent().remove();
+        });
+	</script>
+</div>
+</html>

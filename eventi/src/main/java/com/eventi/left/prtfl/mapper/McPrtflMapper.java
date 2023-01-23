@@ -20,4 +20,7 @@ public interface McPrtflMapper {
 	
 	//사회자 정보 입력
 	public int mcInsert(McPrtflVO mcPrtflVO);
+	
+	//사회자 수정
+	public int mcUpdate(McPrtflVO mcPrtlVo);
 }
