@@ -5,11 +5,144 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+<link rel="stylesheet" href="/assets/css/adminSideBar.css">
 
+<style>
+#admin-container{
+	height: 100vh;
+}
+.footer, .divider-d, .module-small{
+	margin-left:15% !important;
+}
+#admin-contents{
+	height:100%;
+	padding-left:16%;
+	padding-top:50px;
+	background:#eeeeee;
+}
+#head-btn{
+	height: 60px;
+    display: flex;
+}
+.top-button{
+	cursor: pointer;
+	width: 250px;
+    display: flex;
+    height: 100%;
+    border: 1px solid black;
+    margin-right: 10px;
+    background: white;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    align-items: center;
+}
+.icon-area{
+	width: 50px;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+#icon-area-m{
+	background:blue;
+}
+#icon-area-p{
+	background:yellow;
+}
+#icon-area-b{
+	background:red;
+}
+.images{
+	height:35px;
+}
+.number-sec{
+	display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-left:10px;
+}
+
+#list-area{
+	position:inherit;
+	width: 98.9%;
+    height: 83.5%;
+	margin-top:10px;
+	background:white;
+	padding:10px;
+}
+#list-head{
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#selArea{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-right:5px;
+}
+
+#list-head-right{
+	display:flex;
+	align-items: center;
+}
+</style>
 </head>
 <body>
-<div layout:fragment="content">
-	<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
-</div>
+	<div layout:fragment="content">
+		<div id="admin-container">
+			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
+			<div id="admin-contents">
+				<h3><b>전체회원관리</b></h3>
+				<div id="head-btn">
+					<div id="topbtn-member" class="top-button">
+						<div class='icon-area' id="icon-area-m">
+						<img src="/assets/images/user.png" class="images">
+						</div>
+						<div class="number-sec">
+						<span>전체회원</span>
+						<span style="font-size:1.5em;">7598</span>
+						</div>
+					</div>
+					<div id="topbtn-punish" class="top-button">
+						<div class='icon-area' id="icon-area-p">
+						<img src="/assets/images/user.png" class="images">
+						</div>
+					<div class="number-sec">
+						<span>활동제한회원</span>
+						<span style="font-size:1.5em;">186</span>
+						</div>
+					</div>
+					<div id="topbtn-ban" class="top-button">
+						<div class='icon-area' id="icon-area-b">
+						<img src="/assets/images/user.png" class="images">
+						</div>
+					<div class="number-sec">
+						<span>영구제명회원</span>
+						<span style="font-size:1.5em;">13</span>
+						</div>
+					</div>
+				</div>
+				
+				<div id="list-area">
+					<div id="list-head">
+					<span>회원리스트</span>
+					<div id="list-head-right">
+						<div id="selArea">
+							전체회원<input type="radio" name="selGrade" value="all">
+							일반회원<input type="radio" name="selGrade" value="norm">
+							업체회원<input type="radio" name="selGrade" value="busi">
+						</div>
+						<div id="searchArea">
+							<input type="text">
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
