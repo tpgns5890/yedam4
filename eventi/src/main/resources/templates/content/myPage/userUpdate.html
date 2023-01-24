@@ -8,6 +8,13 @@
 <link rel="stylesheet" href="/css/myPageSide.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+#user {
+	padding-top: 70px;
+	width: 800px;
+	margin: 0 auto;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
@@ -26,8 +33,103 @@
 		<div style="min-height: 700px">
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+			
+			
+			<div id="user">
+			<ul>
+				<li><span th:text="|아이디: ${user.userId}|"></span>
+				<li><label>이메일:</lable><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
+				<li><label>성 명:</lable><input id="name" name="name" type="text" th:value="${user.name}"></li>
+				<li><label>연락처:</lable><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
+				
+				<!-- 수신여부 -->
+				<li>
+					<input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S1" >수신거부</label>
+					<input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S2">메일</label>
+					<input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S3">휴대폰</label>
+					<input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S4">메일,휴대폰</label>
+				</li>
+				
+				<!-- 회원등급 -->
+				<li th:if="${user.auth} == 'ROLE_ADMIN'" th:text="|회원등급: 관리자|"></li>
+				<li th:if="${user.auth} == 'ROLE_MEM'" th:text="|회원등급: 회원?|"></li>
+				<li th:if="${user.auth} == 'ROLE_MEMBER'" th:text="|회원등급: 회원|"></li>
+				<li th:if="${user.auth} == 'ROLE_BUSI'" th:text="|회원등급: 업체|"></li>
+
+				<!-- 회원계좌번호 -->
+				<li th:if="${user.depotr} != null">
+					<label>예금주:</lable><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
+				</li>
+				<li th:if="${user.depotr} != null">
+					<label>은행사:</lable><input id="bank" name="bank" type="text" th:value="${user.bank}">
+				</li>
+				<li th:if="${user.depotr} != null">
+					<label>계좌번호:</lable><input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
+				</li>
+				
+				
+				<li th:if="${user.depotr} == null">
+					<label>예금주:</lable><input id="depotr" name="depotr"  type="text" >
+				</li>
+				<li th:if="${user.depotr} == null">
+					<label>은행사:</lable><input id="bank" name="bank" type="text" >
+				</li>
+				<li th:if="${user.depotr} == null">
+					<label>계좌번호:</lable><input id="accnt" name="accnt" type="text">
+				</li>
+				
+
+				<li th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></li>
+			</ul>
+
+				
+
+				<button type="button" id="update">회원정보 수정</button>
+			</div>
+		<script>
+		//수정하기 버튼 누를시
+		$('#update').on("click", function() {
+			alert('정보수정');
+			let userEmail = $('#userEmail').val();
+			let name = $('#name').val();
+			let phone = $('#userPhone').val();
+			let messaging = $('input[name="userMessaging"]:checked').val(); //:checked').value;
+			let depotr = $('#depotr').val();
+			let bank = $('#bank').val();
+			let accnt =$('#accnt').val();
+			
+			console.log(userEmail)
+			console.log(name)
+			console.log(phone)
+			console.log(messaging)
+			console.log(depotr)
+			console.log(bank)
+			console.log(accnt)
+			
+			//비밀번호 체크(ajax 추가하기!!!)
+				//$.ajax({
+ 	   		//	url : '/members/update',
+ 	   		//	method : 'post',
+ 	   		//	data : {userEmail,name,phone,messaging,depotr,bank,accnt},
+ 	   		//	beforeSend : function(xhr)
+ 	        //    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+ 			//		xhr.setRequestHeader(header, token);
+ 	        //    },
+			//	success : function(result){
+			//		console.log(result);
+			//      if(result > 0){
+			//			alert('수정완료')
+			//     }else {
+			//			alert('수정실패')	
+			//     }
+			//	 },
+		    //    fail: function () {
+		    //       }
+			//	})
+		})
 		
-					
+			
+		</script>
 		
 		
 		</div>

@@ -5,10 +5,10 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<link rel="stylesheet" href="/css/model.css">
 <!-- 모달 스타일 -->
-<link rel="stylesheet" href="/css/heart.css">
+<link rel="stylesheet" href="/css/model.css">
 <!-- 좋아요 스타일 -->
+<link rel="stylesheet" href="/css/heart.css">
 <meta charset="UTF-8">
 <title>공모전 상세조회</title>
 <style>
@@ -169,7 +169,7 @@ footer {
 					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
 						<div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-							<ul class="nav nav-tabs font-alt" role="tablist" >
+							<ul class="nav nav-tabs font-alt" role="tablist">
 								<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
 								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">문의사항</span></a></li>
 								<li id="lientry"><a href="#reviews" data-toggle="tab"><span class="icon-tools-2">참여작</span></a></li>
@@ -207,10 +207,10 @@ footer {
 					<button id="extension" class="modelBtn1" style="width: 50px;" type="button">연장하기</button>
 				</div>
 			</div>
-			
-			<!-- 페이지처리를 위한 히든인풋. -->
-		<input type="hidden" name="designPage" value="1">
 		</div>
+		
+		<!-- 페이지처리를 위한 히든인풋. -->
+		<input type="hidden" name="designPage" value="1">
 
 
 		<script>
@@ -238,7 +238,6 @@ footer {
 		$('#updateDate').on("click", function(){ 
 		  
 		let dtExtns = '[[${contest.dtExtns}]]';
-		console.log(dtExtns);
 		
 		if(dtExtns == '' || null || undefined || 0 || NaN){
 			  modal.style.display = "block";

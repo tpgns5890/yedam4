@@ -58,7 +58,9 @@ public class ContestVO {
 	//D-day
 	private int dDay;
 	
+	
 	private int wPay;
+	private String categoryCode;
 	
 	
 	public String getcNo() {

@@ -98,6 +98,7 @@
 	<!-- 공모전 1건 상세조회 -->
 	<select id="getContest" resultType="ContestVO">
 		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+			,category categoryCode
 	        ,code_select(category) category
 	        ,code_select(style) style
 	      	,(select count(*) from likes where target_no = c_no) AS likes

@@ -27,10 +27,74 @@
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
+			<div id="signIn-right">
+					<input type="radio" class="inputRadio" name="certType" value="MC"><label class="labelRadio">사회자</label>
+					<input type="radio" class="inputRadio" name="certType" value="DESIGNER"><label class="labelRadio">디자이너</label> <br>
+					<label for="name">자격증 발급번호</label><input type="text" id="inputQno">
+					<button type='button' id="qPlus">추가</button>
+					<br><br>
+					<ul id="qList">
+						<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
+							<button type="button" class="quDelBtn">X</button></li>
+							
+						<!-- <li class="qualLi"><span
+								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
+								정보처리기능사, 자격증발급번호: 12345678901A</span>
+							<button type="button" class="quDelBtn">X</button></li>
+						<li class="qualLi"><span
+								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
+								정보처리기능사, 자격증발급번호: 12345678901A</span>
+							<button type="button" class="quDelBtn">X</button></li>
+						<li class="qualLi"><span
+								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
+								정보처리기능사, 자격증발급번호: 12345678901A</span>
+							<button type="button" class="quDelBtn">X</button></li>
+						<li class="qualLi"><span
+								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
+								정보처리기능사, 자격증발급번호: 12345678901A</span>
+							<button type="button" class="quDelBtn">X</button></li> -->
+					</ul>
+				</div>
 					
 		
 		
 		</div>
+	<script >
+	/* 자격증추가 */
+	/* 자격증 진위확인 api사용 */
+	$("#qPlus").click(function () {
+		var name = $("#inputName").val();
+		var qNo = $("#inputQno").val();
+		var certType = $('input[name="certType"]:checked').val(); //:checked').value;
+		var qName = "";
+		$.ajax({
+			url: `qualCheck?no=${qNo}&name=${name}`,
+			dataType: "json",
+			success: function (result) {
+				if (result.result == true) {
+					qName = result.certificateName;
+					/* li 만들고 append */
+					$("#qList").append($("<li/>").attr('class', 'qualLi').append(
+						$("<span/>").attr('data-value', '{certName:' + qName + ',certName:' +
+							qNo + ',certType:' + certType + '}').text("자격증 명: " + qName +
+							", 자격증발급번호: " + qNo),
+						$("<button/>").attr({
+							type: "button",
+							class: "qDel"
+						}).text("X").on('click', function () {
+							$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
+						})
+					))
+				} else {
+					alert('확인되지 않는 자격증입니다.')
+				}
+			},
+			error: function () {
+				alert("서버 요청 실패");
+			}
+		})
+	});
+	</script>
 	</div>
 </body>
 </html>

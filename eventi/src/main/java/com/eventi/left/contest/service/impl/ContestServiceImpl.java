@@ -21,6 +21,7 @@ import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.likes.mapper.LikesMapper;
+import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
 
 @Service
@@ -193,6 +194,9 @@ public class ContestServiceImpl implements ContestService {
 		}
 		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
 		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
+		LikesVO like = new LikesVO();
+		like.setTargetNo(vo.getcNo());
+		likeMapper.likeDelete(like);
 
 		return mapper.deleteContest(vo);
 	}

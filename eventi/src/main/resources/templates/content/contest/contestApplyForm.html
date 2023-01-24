@@ -38,9 +38,9 @@
 5. 이벤티는 실제 상업적으로 사용될 디자인을 위뢰하는 경우 전문 디자이너 플랫폼입니다.
    동일 디자이너의 사연에 대해 의뢰자의 불만이 지속적으로 발생 시, 이벤티 내부 검수를 통해 참여가 제한될 수 있습니다.
 </textarea>
-			<br> <input type="checkbox" id="contestCheck">약관에 전부
-			동의합니다..<br>
-
+			<br> <input type="checkbox" id="contestCheck">약관에 전부 동의합니다..<br>
+		
+		
 			<!-- 공모전등록 입력폼 -->
 			<form action="/design/designInsert" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
@@ -49,7 +49,8 @@
 					<!-- 임시저장값 hidden -->
 					<li><input type="hidden" name="dNo" th:value="${dNo}" readonly="readonly"><br /></li>
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly="readonly"></li>
-					<li><label>카테고리</label><input type="text" name="caregory" th:value="${contest.category}" readonly="readonly"></li>
+					<li><input type="hidden" name="caregory" th:value="${contest.categoryCode}"></li>
+					<li><label>카테고리</label><input type="text" th:value="${contest.category}" readonly="readonly"></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly></li>
 					<li><label>제목</label><input type="text" name="name" required="required"></li>
