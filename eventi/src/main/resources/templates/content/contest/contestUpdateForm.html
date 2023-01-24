@@ -43,7 +43,7 @@ ul{
 					
 					<li><input hidden="hidden" type="text" name="cNo" th:value="${contest.cNo}"><br /></li> <li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
-					<textarea th:utext="${contest.cntn}" name="cntn" class="form-control" id="cntn" cols="30" rows="4"></textarea>
+					<textarea th:utext="${contest.cntn}" id="cntn" name="cntn" class="form-control"  cols="30" rows="4"></textarea>
 				</ul>
 				
 					
@@ -62,17 +62,9 @@ ul{
                         </div>
                      </div>
                   </div>
-                 <!-- 임시저장일경우 등록및 결제처리.. -->
-				<th:block th:if="${contest.save} == 'Y'">
-					<button type="submit" id="insertForm">등록</button>
-					<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
-				</th:block>
-				
-				 <!-- 등록된경우 등록및 결제처리.. -->
-				<th:block th:if="${contest.save} == 'N'">
+
 					<button type="submit" id="updateBtn">수정</button>
 					<button type="button" id="cancleBtn" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
-				</th:block>
 			</form>
 		</div>
 	<script>
@@ -86,13 +78,21 @@ ul{
 			oAppRef : oEditors,
 			elPlaceHolder : "cntn",
 			sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
-			fCreator : "createSEditor2"
+			fCreator : "createSEditor2",
+			htParams: { fOnBeforeUnload : function(){}}
 		})
 	}
 
 	$(document).ready(function() {
 		smartEditor()
 	})
+	
+	//수정버튼 누를시
+	$('#updateBtn').on('click', function () {
+				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+				let cntn = document.getElementById("cntn").value;
+			
+	});
 
 		
 		//파일 업로드 이미지 미리보기

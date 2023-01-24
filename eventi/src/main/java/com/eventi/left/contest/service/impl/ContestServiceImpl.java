@@ -114,13 +114,16 @@ public class ContestServiceImpl implements ContestService {
 			e.printStackTrace();
 		}
 
+		int result = mapper.insertContest(vo);
+
+		if (result > 0) {
 		// 메일동의 회원에게 발송.---------------------------------------------------
 //		String toMail = "dry3997@gmail.com";
 //		String title = vo.getTtl() + "공모전 업로드";
 //		String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
 //		mailing(toMail, title, content);
-//
-//		return mapper.insertContest(vo);
+		}
+		return result;
 	}
 
 	// 공모전 수정
@@ -145,14 +148,19 @@ public class ContestServiceImpl implements ContestService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
+
+		int result = mapper.updateContest(vo);
+
+		if (result > 0) {
 		// 메일동의 회원에게 발송.---------------------------------------------------
 //		String toMail = "dry3997@gmail.com"; //메일회원 리스트만큼 반복추가
 //		String title = vo.getTtl() + "공모전 수정";
 //		String content = "공모전이 수정되었습니다 참고 부탁드립니다!.";
 //		mailing(toMail, title, content);
-		
-		return mapper.updateContest(vo);
+		}
+
+		return result;
 	}
 
 	// 공모전 임시저장 불러오기 수정
@@ -196,7 +204,7 @@ public class ContestServiceImpl implements ContestService {
 		vo.setPay(hap);
 
 		// 1. 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
-		int r = mapper.saveUpdateContest(vo);
+		int result = mapper.saveUpdateContest(vo);
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
 			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
@@ -204,13 +212,14 @@ public class ContestServiceImpl implements ContestService {
 			e.printStackTrace();
 		}
 
+		if (result > 0) {
 		// 메일동의 회원에게 발송.---------------------------------------------------
-//		String toMail = "dry3997@gmail.com"; //메일회원 리스트만큼 반복추가
+//		String toMail = "dry3997@gmail.com";
 //		String title = vo.getTtl() + "공모전 업로드";
 //		String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
 //		mailing(toMail, title, content);
-
-		return r;
+		}
+		return result;
 	}
 
 	// 공모전,우승상금 삭제
@@ -265,7 +274,7 @@ public class ContestServiceImpl implements ContestService {
 		return mapper.saveGetContest(contestVO);
 	}
 
-	/* 이메일 보내기 */
+	// 이메일 발송 ----------------------------------------------------------------------------
 	public void mailing(String email, String setTitle, String setContent) {
 		String setFrom = "yedam4eventi@gmail.com";
 		String toMail = email;

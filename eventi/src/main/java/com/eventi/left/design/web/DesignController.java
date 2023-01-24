@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.contest.service.ContestService;
+import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
@@ -59,6 +61,8 @@ public class DesignController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setUserId(sessionId);
+		
+		System.out.println(vo);
 
 		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
 		service.insert(vo, filesVO, uploadFile);
@@ -120,5 +124,27 @@ public class DesignController {
 
 		return design;
 	}
+	
+	// 임시저장된 게시글 전체들고오기
+	@PostMapping("/dSave")
+	@ResponseBody
+	public List<DesignVO> dSave(DesignVO vo) {
+		return service.dSave(vo);
+	}
+
+	// 임시저장된 게시글 상세들고오기
+	@PostMapping("/saveSelect")
+	@ResponseBody
+	public List<DesignVO> saveGetDesign(DesignVO vo) {
+		return service.saveGetDesign(vo);
+	}
+	
+	// 임시저장 불러오기 수정처리
+	@PostMapping("/saveUpdate")
+	public String saveUpdateContest(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
+		service.saveUpdateDesign(vo, filesVO,uploadFile);
+		return "redirect:/design/designMypage";
+	}
+
 
 }

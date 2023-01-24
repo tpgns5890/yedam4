@@ -42,24 +42,25 @@
 		
 		
 			<!-- 공모전등록 입력폼 -->
-			<form action="/design/designInsert" enctype="multipart/form-data" name="contestfrm" method="post" onsubmit="return check();">
+			<form action="/design/designInsert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post" onsubmit="return check();">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
 					th:value="${_csrf.token}" />
 				<ul>
 					<!-- 임시저장값 hidden -->
-					<li><input type="hidden" name="dNo" th:value="${dNo}" readonly="readonly"><br /></li>
+					<li><label>디자인번호</label><input type="text" id="dgnNo" name="dgnNo" th:value="${dNo}" readonly="readonly"><br /></li>
 					<li><label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly="readonly"></li>
 					<li><input type="hidden" name="caregory" th:value="${contest.categoryCode}"></li>
 					<li><label>카테고리</label><input type="text" th:value="${contest.category}" readonly="readonly"></li>
-					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
+					<li><label>작성자</label><input type="text" name="userId" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly></li>
-					<li><label>제목</label><input type="text" name="name" required="required"></li>
+					<li><label>제목</label><input type="text" id="name" name="name" required="required"></li>
 					<li><textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
 
 				<div class="col-md-12">
 					<div class="form-group">
 						<div><input type="checkbox" name="pubcYn" value="Y">비공개</div>
+						<div><input type="checkbox" name="save" value="Y">임시저장<br></div>
 						<input id="imgInp" type="file" name="uploadFile" multiple="multiple" required="required">
 						<div class="fileDown">
 							<img id="blah" src="#" alt="your image" width="250px" />
@@ -70,10 +71,22 @@
 					</div>
 				</div>
 				<button type="reset">초기화</button>
+				<button type="button" id="saveFile" >불러오기</button>
 				<button type="submit" id="insertForm">등록</button>
 				<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 			</form>
 		</div>
+		
+		<!-- 임시저장 모달 -->
+		<div id="saveDesign" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h2>임시저장 디자인 리스트</h2>
+				<div id="button_box"> </div>
+			</div>
+		</div>
+		
+		
 		<script>
 			//csrf설정
 			var token = $("meta[name='_csrf']").attr("content");
@@ -93,6 +106,32 @@
 			$(document).ready(function() {
 				smartEditor()
 			})
+			
+			// Get the modal-----------------------------------------------------------------
+			var saveModal = document.getElementById("saveDesign");
+			
+			// Get the <span> element that closes the modal
+			var span = document.getElementsByClassName("close")[0];
+			
+			// <span> (x), close the modal
+			span.onclick = function() {
+			  saveModal.style.display = "none";
+			}
+			
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+			  if (event.target == modal) {
+			    saveModal.style.display = "none";
+			  }
+			}
+			
+			$('#saveFile').on('click', function () {
+				saveModal.style.display = "block";
+			});
+			
+			//modal--------------------------------------------------------------------
+			
+			
 
 			//등록버튼 누를시
 			$('#insertForm').on('click', function() {
@@ -109,18 +148,32 @@
 				if (!check) {
 					alert('약관에 동의하세요.');
 					return false;
-					//임시저장 확인
-				}else if ($('input[name="pubcYn"]').is(":checked") == true) {
-					if (!confirm('비공개로 응모하시겠습니까?')) {
+					
+				}//임시저장 확인
+				else if ($('input[name="save"]').is(":checked") == true) {
+					console.log($(this));
+					if (!confirm('임시저장 하시겠습니까?')) {
 						return false;
+					}else{
+						return true;
 					}
-				
-				}// 등록 확인
-				if (!confirm('디자인 응모시겠습니까?')) {
+				}	
+				//비공개 확인
+				else if ($('input[name="pubcYn"]').is(":checked") == true) {
+					if (!confirm('비공개로 디자인 응모하시겠습니까?')) {
+						return false;
+					}else{
+						return true;
+					}
+				//공개 응모확인.	
+				}else if (!confirm('공개로 디자인 응모시겠습니까?')) {
 					return false;
 				}
 				return true;
 			}
+			
+			console.log(($('input[name="save"]').is(":checked")));
+			
 			//파일 업로드 이미지 미리보기
 			//파일 INPUT창에 변화가 있을 경우 실행
 			$("#imgInp").on('change', function() {
@@ -151,6 +204,82 @@
 				//file영역에 있던 값 삭제
 				$("#imgInp").val('');
 			})
+			
+			
+		//임시저장 불러오기-----------------------------------------------------
+		 $('#saveFile').on('click', function() {
+			let userId = '[[${session.member.userId}]]';
+			let cNo = '[[${contest.cNo}]]';
+			
+			//게시글 불러오기
+			$.ajax({
+				url : "/design/dSave",
+				method : 'post',
+				data : {cNo,userId},
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					$("#button_box").empty();
+					//임시저장된 게시글이 없을 경우
+					if(data == 0){
+						alert('임시저장된 디자인이 없습니다.');
+					}else {
+						for(design of data){
+							$("#button_box").append(choiceDesign(design));
+						}
+					} 
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+		})
+		
+		function choiceDesign(design) {
+	    	let span = `<span id="modal_choice_btn">[${design.dgnNo}] ${design.name}</span><button type="button" onclick=checkFile('${design.dgnNo}')>불러오기</button><br>`;
+	    	return span;
+	    }
+		    
+		    //임시저장된 디자인 1건 가져오기
+		    function checkFile(dgnNo) {
+		    	$("#saveDesign").hide();
+		    	
+		    	//게시글 불러오기
+				$.ajax({
+					url : "/design/saveSelect",
+					method : 'POST',
+					data : {dgnNo},
+		   			beforeSend : function(xhr)
+		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+		            },
+					success : function(data) {
+						console.log(data);
+								 $("#dgnNo").val(data[0].dgnNo);
+								$("#name").val(data[0].name);
+								oEditors.getById["cntn"].exec("PASTE_HTML", [data[0].cntn]);
+								
+								if(data[0].sevNm != null){
+							    	imgReader(data[0].sevNm);
+								}
+								//from 업데이트로 변경.
+								$("#contestfrm").attr("action", "/design/saveUpdate");
+					
+					},
+					fail : function(result) {
+						alert('필수항목을 입력해주세요')
+					}
+		    })
+		    }
+		    
+		    //이미지 미리보기 처리
+			function imgReader(img){
+				$("#imgInp").toggleClass("fileDown"); //input파일
+				$("#imgInp").next().toggleClass("fileDown"); //div
+				$("#blah").attr('src', '/fileView/'+img);
+			}
 		</script>
 	</div>
 </body>

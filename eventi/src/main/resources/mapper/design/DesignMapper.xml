@@ -44,6 +44,7 @@
                           		 on f.target_id = d.dgn_no
 			and c.c_no = #{cNo}
 			and d.center_img = f.f_nm
+			and d.save = 'N'
 			order by dt DESC
 		<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
@@ -60,6 +61,7 @@
                          on d.c_no = c.c_no
 		and USER_ID = #{userId}
 		and d.center_img = f.f_nm
+		and d.save = 'N'
 		<include refid="search" /> 
 		order by dt DESC
 	<![CDATA[
@@ -78,7 +80,7 @@
 			SELECT 'DE'||(MAX(TO_NUMBER(SUBSTR(DGN_NO,3)))+1) dgnNo
 			FROM DESIGN
 		</selectKey>
-		INSERT INTO DESIGN(DGN_NO,USER_ID,C_NO,NAME,CAREGORY,CNTN,DT,CENTER_IMG,PUBC_YN)
+		INSERT INTO DESIGN(DGN_NO,USER_ID,C_NO,NAME,CAREGORY,CNTN,DT,CENTER_IMG,PUBC_YN,SAVE)
 		VALUES( #{dgnNo},
 				#{userId},
 				#{cNo},
@@ -87,7 +89,8 @@
 				#{cntn},
 				current_date,
 				#{centerImg},
-				#{pubcYn})  
+				#{pubcYn},
+				#{save})  
 	</insert>
 	
 	<update id="update">
@@ -95,7 +98,8 @@
 		set name = #{name},
 		    cntn = #{cntn},
 		    center_img = #{centerImg},
-		    pubc_yn = #{pubcYn}
+		    pubc_yn = #{pubcYn},
+		    save = #{save}
 		where dgn_no = #{dgnNo}
 		and user_id = #{userId}
 	</update>
@@ -115,6 +119,23 @@
 		select count(*)
 		from design
 		where c_no =#{cNo}
+	</select>
+	
+	<select id="saveGetdesign" resultType="DesignVO">
+		SELECT d.*,f.sev_nm sevNm
+		FROM CONTEST c join design d
+                        on c.c_no = d.c_no
+                        join files f
+                        on d.dgn_no = f.target_id
+		and d.save = 'Y'
+	</select>
+	
+	<select id="dSave" resultType="DesignVO">
+		select * 
+		FROM design
+		WHERE user_id = #{userId}
+        AND SAVE = 'Y'
+        and c_no = #{cNo}
 	</select>
 	
 </mapper>
