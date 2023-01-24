@@ -28,7 +28,10 @@ import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.questions.service.QuestionsService;
+import com.eventi.left.questions.service.QuestionsVO;
 
 import groovy.util.logging.Log4j;
 
@@ -49,7 +52,10 @@ public class ContestController {
 	CodeService codeService;
 	@Autowired
 	LikesService likeService;
-
+	@Autowired
+	QuestionsService qService;
+	
+	
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
 	public String contestList(Model model, ContestVO vo, PagingVO paging) {
@@ -123,6 +129,8 @@ public class ContestController {
 			model.addAttribute("contestList", contests);// 모델에 담기.
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
+		
+		
 		// 등록인경우 결제 후 공모전상세페이지 이동.
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
@@ -246,11 +254,11 @@ public class ContestController {
 		return service.saveGetContest(vo);
 	}
 
-	// --------------------------------------------------------------------------
 	// 공모전 나의 문의리스트 페이지이동(추가해야함)
-	@GetMapping("/QnaList")
-	public String ContestQnaList() {
-		return "content/myPage/myContestQnaList";
+	@GetMapping("/qnaList")
+	public String ContestQnaList(Model model) {//, QuestionsVO vo, PagingVO paging
+		//model.addAttribute("qnaList", qService.qnaList(vo, paging));
+		return "content/myPage/mytQnaList";
 	}
 
 }

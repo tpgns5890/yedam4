@@ -3,8 +3,12 @@ package com.eventi.left.contest.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +26,7 @@ import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.likes.mapper.LikesMapper;
 import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.member.mapper.MemberMapper;
 import com.eventi.left.member.service.MemberVO;
 
 @Service
@@ -41,6 +46,10 @@ public class ContestServiceImpl implements ContestService {
 	UploadFileMethod newUp; // 파일업로드 메소드
 	@Autowired
 	LikesMapper likeMapper;
+	@Autowired
+	private JavaMailSender mailSender;
+	@Autowired
+	MemberMapper memberMapper;
 
 	@Value("${spring.servlet.multipart.location}")
 	String filePath;
@@ -96,7 +105,7 @@ public class ContestServiceImpl implements ContestService {
 			}
 		}
 		vo.setPay(hap); // 총 상금합계.
-		
+
 		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
@@ -104,8 +113,14 @@ public class ContestServiceImpl implements ContestService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return mapper.insertContest(vo);
+
+		// 메일동의 회원에게 발송.---------------------------------------------------
+//		String toMail = "dry3997@gmail.com";
+//		String title = vo.getTtl() + "공모전 업로드";
+//		String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
+//		mailing(toMail, title, content);
+//
+//		return mapper.insertContest(vo);
 	}
 
 	// 공모전 수정
@@ -130,6 +145,13 @@ public class ContestServiceImpl implements ContestService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// 메일동의 회원에게 발송.---------------------------------------------------
+//		String toMail = "dry3997@gmail.com"; //메일회원 리스트만큼 반복추가
+//		String title = vo.getTtl() + "공모전 수정";
+//		String content = "공모전이 수정되었습니다 참고 부탁드립니다!.";
+//		mailing(toMail, title, content);
+		
 		return mapper.updateContest(vo);
 	}
 
@@ -156,14 +178,14 @@ public class ContestServiceImpl implements ContestService {
 					wMapper.insertWinner(wvo);
 				}
 			}
-		// 공모전 등록된 우승등수,금액이 있다면 수정
+			// 공모전 등록된 우승등수,금액이 있다면 수정
 		} else {
 			for (int i = 0; i < array.length; i++) {
 				if (array[i] != null && !array[i].equals("")) {
 					wvo.setGrade(i + 1); // 등수
 					wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
 					hap += Integer.parseInt(array[i]); // 합계계산
-					if(wMapper.updateSaveWinner(wvo) == 0) {
+					if (wMapper.updateSaveWinner(wvo) == 0) {
 						wMapper.insertWinner(wvo);
 					}
 				}
@@ -181,6 +203,12 @@ public class ContestServiceImpl implements ContestService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// 메일동의 회원에게 발송.---------------------------------------------------
+//		String toMail = "dry3997@gmail.com"; //메일회원 리스트만큼 반복추가
+//		String title = vo.getTtl() + "공모전 업로드";
+//		String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
+//		mailing(toMail, title, content);
 
 		return r;
 	}
@@ -230,11 +258,30 @@ public class ContestServiceImpl implements ContestService {
 	public List<ContestVO> cSave(ContestVO vo) {
 		return mapper.cSave(vo);
 	}
-	
-	//공모전 임시저장 1건 조회.
+
+	// 공모전 임시저장 1건 조회.
 	@Override
 	public List<ContestVO> saveGetContest(ContestVO contestVO) {
 		return mapper.saveGetContest(contestVO);
+	}
+
+	/* 이메일 보내기 */
+	public void mailing(String email, String setTitle, String setContent) {
+		String setFrom = "yedam4eventi@gmail.com";
+		String toMail = email;
+		String title = setTitle;
+		String content = setContent;
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+			helper.setFrom(setFrom);
+			helper.setTo(toMail);
+			helper.setSubject(title);
+			helper.setText(content, true);
+			mailSender.send(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
