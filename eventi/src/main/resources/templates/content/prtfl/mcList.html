@@ -4,46 +4,181 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
 
+<head>
+<style>
+.heart {
+  width: 100px;
+  height: 100px;
+  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  transition: background-position 1s steps(28);
+  transition-duration: 0s;
+  }
+  
+  .module .heart{
+  	  position: absolute;
+	  top : -15px;
+	  left : 290px;
+  }
+  
+  .active {
+    transition-duration: 1s;
+    background-position: -2800px 0;
+  }
+</style>
+</head>
+
 <div layout:fragment="content">
-   <section class="hero-wrap hero-wrap-2"
-      style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-      data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-         <div
-            class="row no-gutters slider-text align-items-end justify-content-center">
-            <div
-               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">사회자 포트폴리오</h2>
-            </div>
+   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+     <div class="container">
+       <div class="row">
+         <div class="col-sm-6 col-sm-offset-3">
+           <h2 class="module-title font-alt">사회자포트폴리오</h2>
+           <div class="module-subtitle font-serif">사회자포트폴리오</div>
          </div>
-      </div>
+       </div>
+     </div>
    </section>
    
+   <!-- 포트폴리오 등록 -->
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{mcInsert}'|">포트폴리오 등록하기</button>
    
-    <table>
-      <thead>
-         <tr>
-            <th>사용자ID</th>   
-            <th>한줄소개</th>   
-            <th>경력</th>   
-         </tr>
-      </thead>
-      <tbody>
-         <tr th:each="mc : ${mcList}" th:id="${mc.userId}" th:onclick="mcSelect(this.getAttribute('id'))">
-            <td th:text=${mc.userId}></td>
-            <td th:text=${mc.oneIntro}></td>
-            <td th:text=${mc.carrYear}></td>
-         </tr>
-      </tbody>
-   </table>
+   <!-- 정렬순 -->
+   <select id="order" name="order">
+   		<option value="">==========</option>
+		<option value="dt" th:selected="${mcPrtflVO.order=='dt'}">작성일순</option>
+		<option value="inq" th:selected="${mcPrtflVO.order=='inq'}">조회순</option>
+		<option value="cnt" th:selected="${mcPrtflVO.order=='cnt'}">좋아요순</option>
+	</select>
+	
+	<!-- 좋아요 -->
+	<div class="stage">
+  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active"></div>
+   	</div>
    
-   <script>
-   	function mcSelect(id){
-   		location.href = "/prtfl/mcSelect?userId="+id;
-   	}
-   </script>
-</div>
+   <section class="module">
+	 <div class="container">
+   		<div class="row multi-columns-row post-columns">
+	        <div class="col-sm-6 col-md-4 col-lg-4" th:each="mc : ${mcList}">
+	          <div class="post">
+	          	<div th:each="file : ${mc.Files}" th:if="${#strings.containsIgnoreCase(file,'.jpg')}">
+	            <div class="post-thumbnail"><a th:href="|/prtfl/mcSelect?userId=${mc.userId}|">
+	            <img th:src="|/fileView/${file.sevNm}|" alt="Blog-post Thumbnail"></a>
+	            </div>
+	            </div>
+	            <div class="post-header font-alt">
+	              <h2 class="post-title" th:text=${mc.userId}><a href="#"></a></h2>
+	              <div class="stage">
+			  		<div class="stage heart" th:id="${mc.userId}" th:classappend="${mc.userLike} == 1 ? active"></div>
+			   	  </div>
+	              <div class="post-meta"><a th:href="|/prtfl/mcSelect?userId=${mc.userId}|" th:text="${mc.carrYear} + '년 &nbsp;| ' + ${mc.mcArea} +' | 좋아요 ' + ${mc.cnt} + '건 | 조회수 ' + ${mc.inq}"></a>
+	              </div>
+	            </div>
+	            <div class="post-entry">
+	              <p th:text=${mc.oneIntro}></p>
+	            </div>
+	            <div class="post-more"><a class="more-link" th:href="|/prtfl/mcSelect?userId=${mc.userId}|">Read more</a></div>
+	          </div>
+	        </div>   
+		</div>
+		
+      </div>
+    </section>
 
+   <!-- 페이징 처리 -->
+		<div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+            </div>
+          </div>
+        </div>
+	
+	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		function gopage(i) {
+			location.href='/prtfl/mcList?page=' + i;
+		}
+		
+		 $(".heart").on("click", function() {
+			 $(this).toggleClass("active");
+			 let userId = '[[${session.member.userId}]]';
+			 let targetNo = $(this).attr('id');
+			 let category = 'T06';
+			 
+			 //좋아요를 추가했을 경우
+		     if($(this).hasClass("active")){
+		    	 //총 좋아요수 처리
+		    	 let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) + 1);
+		    	 
+		    	 //post방식으로 좋아요 등록하기
+		    	 $.ajax({
+						url : "/likes/lInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
+		    	 //총 좋아요수 처리
+		    	 let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) - 1);
+		    	 
+		    	//post방식으로 좋아요 취소하기
+		    	 $.ajax({
+						url : "/likes/lDelete",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							//alert('좋아요 취소 완료');
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     }
+		 })
+		 
+		 $("#love").on("click", function() {
+			 range();
+		 })
+		 
+		 $('#order').change(function() {
+ 			range();
+ 		 });
+		 
+		//정렬 리스트 불러오는 함수
+	  	function range() {
+	 		//정렬 기준
+	 		let userId = '[[${session.member.userId}]]'; 
+			let lclsf = $("input[name=lclsf]:checked").val();
+			let type = 'T06';
+			let order = $("#order option:selected").val();
+			
+			//get방식으로 보내기	
+			if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
+				location.href=`/prtfl/mcList?order=${order}&userId=${userId}`
+			} else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
+				location.href=`/prtfl/mcList?order=${order}`
+			}
+	  	} 
+	</script>
+</div>
 </html>

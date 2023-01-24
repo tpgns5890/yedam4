@@ -15,7 +15,7 @@
 	}
 	
 	#check{
-		min-height : 1500px;
+		min-height : 3000px;
 	}
 	
 	.fileShow{
@@ -49,7 +49,7 @@
 	  color: #fff;
 	}
 	
-	.del-btn {
+	.area-del-btn, .type-del-btn, .style-del-btn {
 	  font-size: 12px;
 	  font-weight: bold;
 	  cursor: pointer;
@@ -197,6 +197,8 @@
 			<input type="text" class="form-control" name="uploadFile" multiple="multiple" placeholder="https://"/><span><button type="button" class="cancel">-</button></span>
 			</div> -->
 			<input type="file" id="imgInp" name="uploadFile"/>
+			<div id="addMove">
+			</div>
 		</div>
 	</div>
 	
@@ -306,7 +308,7 @@
     
     //동영상추가버튼
     $("#movieInsert").on('click', function() {
-    	let tag = `<div><input type="text" class="form-control" name="uploadFile" multiple="multiple" placeholder="https://"/><span><button type="button" class="cancel">-</button></span></div>`
+    	let tag = `<div><input type="file" id="imgInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
     	$("#addMove").append(tag);
     })
     
@@ -318,6 +320,7 @@
     
     function mcAreaFun(e) {
 		let tagValue = e.options[e.selectedIndex].text;
+		
 		// 값이 없으면 동작 안합니다.
         if (tagValue !== "") {
 
@@ -325,12 +328,11 @@
           var result = Object.values(areatag).filter(function (word) {
               return word === tagValue;
             })
-
           // 태그 중복 검사
           if (result.length == 0) {
-            $("#mcAreaL")
-              .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
-            addTag(tagValue);
+            $("#mcAreaL").append("<li class='tag-item'>" + tagValue + "<span class='area-del-btn' idx='" + areaCounter + "'>x</span></li>");
+            console.log(tagValue);  
+            areaAddTag(tagValue);
           } else {
             alert("태그값이 중복됩니다.");
           }
@@ -352,8 +354,8 @@
            // 태그 중복 검사
            if (result.length == 0) {
              $("#mcTypeL")
-               .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
-             addTag(tagValue);
+               .append("<li class='tag-item'>" + tagValue + "<span class='type-del-btn' idx='" + typeCounter + "'>x</span></li>");
+             typeAddTag(tagValue);
            } else {
              alert("태그값이 중복됩니다.");
            }
@@ -375,8 +377,8 @@
              // 태그 중복 검사
              if (result.length == 0) {
                $("#progStyleL")
-                 .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
-               addTag(tagValue);
+                 .append("<li class='tag-item'>" + tagValue + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
+               styleAddTag(tagValue);
              } else {
                alert("태그값이 중복됩니다.");
              }
@@ -388,12 +390,24 @@
     	var areatag = {};
 		var typetag = {};
 		var styletag = {};
-        var counter = 0;
+        var areaCounter = 0;
+        var typeCounter = 0;
+        var styletagCounter = 0;
 
         // 입력한 값을 태그로 생성한다.
-        function addTag (value) {
-            tag[counter] = value;
-            counter++; // del-btn 의 고유 id 가 된다.
+        function areaAddTag (value) {
+        	areatag[areaCounter] = value;
+        	areaCounter++;  // del-btn 의 고유 id 가 된다.
+        }
+        
+        function typeAddTag (value) {
+        	typetag[typeCounter] = value;
+        	typeCounter++;  // del-btn 의 고유 id 가 된다.
+        }
+        
+        function styleAddTag (value) {
+        	styletag[styletagCounter] = value;
+        	styletagCounter++;  // del-btn 의 고유 id 가 된다.
         }
         
         //사회지역값 서버로 보내기
@@ -415,13 +429,23 @@
             });
         }
         
-        
-
         // 삭제 버튼 
         // 인덱스 검사 후 삭제
-        $(document).on("click", ".del-btn", function (e) {
+        $(document).on("click", ".area-del-btn", function (e) {
             var index = $(this).attr("idx");
-            tag[index] = "";
+            areatag[index] = "";
+            $(this).parent().remove();
+        });
+        
+        $(document).on("click", ".type-del-btn", function (e) {
+            var index = $(this).attr("idx");
+            typetag[index] = "";
+            $(this).parent().remove();
+        });
+        
+        $(document).on("click", ".style-del-btn", function (e) {
+            var index = $(this).attr("idx");
+            styletag[index] = "";
             $(this).parent().remove();
         });
 	</script>
