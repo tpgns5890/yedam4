@@ -47,7 +47,45 @@
 			</tr>
 		</tbody>
 	</table>
-
+	
+<section class="module" id="news">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">구직자 한눈에 보기</h2>
+            	<input type="checkBox" value="채용" class="hire" id="allHire">
+                <div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을 누르세요.</div>
+              </div>
+            </div>
+            <div class="row multi-columns-row post-columns">
+              <div class="col-sm-6 col-md-4 col-lg-4" th:each="res : ${resumeList}">
+              <th:block th:if="${res.hire} == 'Y'" >
+				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()" checked></td> 
+				</th:block>
+				
+				<th:block th:if ="${res.hire} == 'N'">
+				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()"></td> 
+				</th:block>
+                <div class="post mb-20">
+                  <div class="post-thumbnail"><a href="#"><img src="assets/images/work-1.jpg" alt="Blog-post Thumbnail"></a></div>
+                  <div class="post-header font-alt">
+                    <h2 class="post-title"><a href="#" th:text=${res.jobNo}> Our trip to the Alps</a></h2>
+                    <div class="post-meta" th:text=${res.seekerId}>By&nbsp;<a href="#">Mark Stone</a>&nbsp;| 23 November | 3 Comments
+                    </div>
+                  </div>
+                  <div class="post-entry" th:text=${res.seekerCntn}>
+                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
+                  </div>
+                  <div class="post-more"><a class="more-link" href="#" >Read more</a></div>
+                  <button class="btn btn-border-d btn-round" type="submit"><i class="fa fa-child" id="hireBtn"></i>채용</button>
+                  <button class="btn btn-border-d btn-round" type="submit"><i class="fa fa-child" id="unHireBtn"></i> 미채용</button>
+             
+                </div>
+              </div>
+      
+            </div>
+          </div>
+        </section>
 
 <script>
 var token = $("meta[name='_csrf']").attr("content");
@@ -65,7 +103,7 @@ allHire.addEventListener('change', function(){
 //구직자 채용
 document.querySelector('#hireBtn').addEventListener('click', hireSeeker);
 function hireSeeker(hireCheck){
-	let trs = document.querySelectorAll('table>tbody>tr');
+	let trs = document.querySelectorAll('#team-role');
 	
 	if(!confirm('채용하시겠습니까?')){
 		return false;

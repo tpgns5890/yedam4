@@ -23,33 +23,75 @@
         </section>
  
 
-<form method="post">
+<!--<form method="post">
 
 
-<!--<ul id="ul">
+		<input type="text" title="검색">
+		<input type="submit" value="검색">
+
+<ul id="ul">
 <th:block  th:each="faq : ${faqList}">
 				<li><label th:text=${faq.faqNo}></label> 
 				  	<label th:text=${faq.faqTtl} class="ttl"></label>
 				  	<textarea cols="30" rows="5" th:text=${faq.faqAns} class="ans"  ></textarea>
 				 </li>		
 </th:block>
-</ul>-->
+</ul>
+</form>-->
 
-<!-- 게시글 검색 -->
-	<input type="text" name="search">
-	<input type="button" id="find" value="찾기"><span></span></input>
-	
-          <div class="container">
-            <div class="row" >
-              <div class="col-sm-6">
-                <h4 class="font-alt mb-30">자주 묻는 질문</h4>
-                <div class="panel-group" id="accordion" th:each="faq : ${faqList}">
-                  <div class="panel panel-default">
-                    <div class="panel-heading" >  
-                      <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#support1" th:text=${faq.faqTtl}>Support Question 1</a></h4>
+		<div class="container">
+            <div class="row mb-60">
+              <div class="col-sm-8 col-sm-offset-2">
+                
+                  <div class="search-box">
+                    <input class="form-control" type="text" placeholder="Search...">
+                    <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+                  </div>
+                
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <div role="tabpanel">
+                  <ul class="nav nav-tabs font-alt" role="tablist">
+                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-tools-2"></span>support</a></li>
+                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-tools-2"></span>sales</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="support" th:each="faq : ${faqList}">
+                      <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#support1" class="" aria-expanded="true" th:text=${faq.faqTtl}>Support Question 1</a></h4>
+                          </div>
+                          <div class="panel-collapse collapse in" id="support1">
+                            <div class="panel-body" th:text=${faq.faqAns}>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                            </div>
+                          </div>
+                        </div>
+                       
+                      </div>
                     </div>
-                    <div class="panel-collapse collapse in" id="support1">
-                      <div class="panel-body" th:text=${faq.faqAns} >
+                    <div class="tab-pane" id="sales">
+                      <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#sales1">Sales Question 1</a></h4>
+                          </div>
+                          <div class="panel-collapse collapse in" id="sales1">
+                            <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title font-alt"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#sales2">Sales Question 2</a></h4>
+                          </div>
+                          <div class="panel-collapse collapse" id="sales2">
+                            <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -57,60 +99,12 @@
               </div>
             </div>
           </div>
-</form>
-		
 <script>
-	const accordion = document.querySelector('#accordion');
-	panel-heading.addEventListener('click', function (ev){
-		ev.target.nextElementSibling.classList.toggle("panel-body")
+	const ul = document.querySelector('#ul');
+	ul.addEventListener('click', function (ev){
+		ev.target.nextElementSibling.classList.toggle("ans")
 	});
 	
-//csrf 설정
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
-
-
-	//검색 기능
-	$('#find').click(function() {
-		//입력한 값 가져오기
-		let search = $("input[name=search]").val();
-		
-		//post방식으로 리스트 불러오기
-	$.ajax({
-		url : '/faqList',
-		method : 'post',
-		data : {ttl:search}, //title = search(title변수안에 data)
-		beforeSend : function(xhr)
-        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-			xhr.setRequestHeader(header, token);
-        }
-	}).then(res => {
-		//tbody밑에 있는 데이터 지우기
-		
-		$("#check").empty();
-		
-		//tbody에 들어갈 tr 생성
-		for(r of res){ //제목, 내용 검색 시
-			//if(r.title.includes(search) || r.jobCntn.includes(search)){
-				//alert(r.loc)
-				$("#check").append(makeTr(r));
-   			//}
-		}
-	})
-		
-	$("input[name=search]").val('');
-	})
-	
-	//tr 생성 함수
-	<!--function makeTr(r){
-	console.log(r)
-	let tr = `<tr onclick="location.href='/jobDetail?jobNo=${r.jobNo}'">
-					<td>${r.jobNo}</td>
-					<td>${r.title}</td>
-		 			<td>${r.etype}</td> 
-					<td>${r.userId}</td>
-			  </tr>`
-	return tr;-->
 	
 </script>
 </div>
