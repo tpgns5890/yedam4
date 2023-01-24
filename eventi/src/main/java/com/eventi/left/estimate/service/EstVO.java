@@ -22,4 +22,7 @@ public class EstVO {
 	private String adoptionYn; //제안서 채택유무
 	
 	private PropVO propVO;  //PropVO Join 컬럼
+	
+	Integer first =1; //첫 페이지
+	Integer last = 4; //마지막 페이지
 }

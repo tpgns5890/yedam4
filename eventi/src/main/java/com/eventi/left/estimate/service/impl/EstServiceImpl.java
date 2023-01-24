@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.estimate.mapper.EstMapper;
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
@@ -25,8 +26,8 @@ public class EstServiceImpl implements EstService {
 	}
 	//견적요청서 전체조회
 	@Override
-	public List<EstVO> getEstList(EstVO estVO) {
-		return estMapper.getEstList(estVO);
+	public List<EstVO> getEstList(EstVO estVO,PagingVO paging) {
+		return estMapper.getEstList(estVO, paging);
 	}
 	//견적요청서 등록
 	@Override
