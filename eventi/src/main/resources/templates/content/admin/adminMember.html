@@ -1,116 +1,118 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}"
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
-<link rel="stylesheet" href="/assets/css/adminSideBar.css">
+	<link rel="stylesheet" href="/assets/css/adminSideBar.css">
 
-<style>
-#admin-container {
-	height: 100vh;
-}
+	<style>
+		#admin-container {
+			height: 100vh;
+		}
 
-.footer, .divider-d, .module-small {
-	margin-left: 15% !important;
-}
+		.footer,
+		.divider-d,
+		.module-small {
+			margin-left: 15% !important;
+		}
 
-#admin-contents {
-	height: 100%;
-	padding-left: 16%;
-	padding-top: 50px;
-	background: #eeeeee;
-}
+		#admin-contents {
+			height: 100%;
+			padding-left: 16%;
+			padding-top: 50px;
+			background: #eeeeee;
+		}
 
-#head-btn {
-	height: 60px;
-	display: flex;
-}
+		#head-btn {
+			height: 60px;
+			display: flex;
+		}
 
-.top-button {
-	cursor: pointer;
-	width: 250px;
-	display: flex;
-	height: 100%;
-	border: 1px solid black;
-	margin-right: 10px;
-	background: white;
-	box-shadow: 0 4px 8px 0 rgb(0 0 0/ 20%);
-	align-items: center;
-}
+		.top-button {
+			cursor: pointer;
+			width: 250px;
+			display: flex;
+			height: 100%;
+			border: 1px solid black;
+			margin-right: 10px;
+			background: white;
+			box-shadow: 0 4px 8px 0 rgb(0 0 0/ 20%);
+			align-items: center;
+		}
 
-.icon-area {
-	width: 50px;
-	height: 100%;
-	display: flex;
-	text-align: center;
-	justify-content: center;
-	align-content: center;
-	flex-wrap: wrap;
-}
+		.icon-area {
+			width: 50px;
+			height: 100%;
+			display: flex;
+			text-align: center;
+			justify-content: center;
+			align-content: center;
+			flex-wrap: wrap;
+		}
 
-#icon-area-m {
-	background: blue;
-}
+		#icon-area-m {
+			background: blue;
+		}
 
-#icon-area-p {
-	background: yellow;
-}
+		#icon-area-p {
+			background: yellow;
+		}
 
-#icon-area-b {
-	background: red;
-}
+		#icon-area-b {
+			background: red;
+		}
 
-.images {
-	height: 35px;
-}
+		.images {
+			height: 35px;
+		}
 
-.number-sec {
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: column;
-	margin-left: 10px;
-}
+		.number-sec {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+			margin-left: 10px;
+		}
 
-#list-area {
-	position: inherit;
-	width: 98.9%;
-	height: 83.5%;
-	margin-top: 10px;
-	background: white;
-	padding: 10px;
-}
+		#list-area {
+			position: inherit;
+			width: 98.9%;
+			height: 83.5%;
+			margin-top: 10px;
+			background: white;
+			padding: 10px;
+		}
 
-#list-head {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+		#list-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
-#selArea {
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: row;
-	align-items: flex-start;
-	margin-right: 5px;
-}
+		#selArea {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: flex-start;
+			margin-right: 5px;
+		}
 
-#list-head-right {
-	display: flex;
-	align-items: center;
-}
+		#list-head-right {
+			display: flex;
+			align-items: center;
+		}
 
-#member-table {
-	margin-top: 10px;
-	width: 100%;
-	text-align-last: center;
-}
-</style>
-<!-- csrf 설정 -->
-<meta name="_csrf" th:content="${_csrf.token}" />
-<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+		#member-table {
+			margin-top: 10px;
+			width: 100%;
+			text-align-last: center;
+		}
+	</style>
+	<!-- csrf 설정 -->
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
+
 <body>
 	<div layout:fragment="content">
 		<div id="admin-container">
@@ -175,7 +177,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						<tr th:each="m: ${mList}">
+							<!-- <tr th:each="m: ${mList}">
 							<td th:text=${m.userId}></td>
 							<td th:text=${m.userEmail}></td>
 							<td th:text=${m.name}></td>
@@ -185,39 +187,138 @@
 							<td th:text=${m.rprt}></td>
 							<td th:text=${m.userRegDate}></td>
 							<td th:text=${m.userState}></td>
-						</tr></tbody>
+						</tr></tbody> -->
 					</table>
 					<!-- 페이징 처리 -->
 					<!-- //페이징 경로 :: 문자 -->
-					<div class="row mt-5">
+					<div class="row mt-5" id="paging">
 						<div class="col text-center">
-							<div class="block-27">
-								<th:block
-									th:replace="fragments/paging :: component(${paging},'gopage')">
-							</div>
+							<div class="block-27" id="returnPaging"></div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<input type="hidden" name="page" value="1">
 		</div>
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
+			ajaxList();
 
 			function gopage(i) {
-				location.href=`/admin/MemberList?page=`+i;
+				let page = $('input[name="page"]').val(i);
+				//정렬 리스트 불러오는 함수
+				ajaxList();
 			}
-			
-			$("#topbtn-member").on('click', function(){
+
+			$("#topbtn-member").on('click', function () {
+				let State = "Normal";
+				ajaxList(State);
+			});
+
+			$("#topbtn-punish").on('click', function () {
+				let State = "Punish";
+				ajaxList(State);
+			});
+
+			$("#topbtn-ban").on('click', function () {
+				let State = "Ban";
+				ajaxList(State);
+			});
+
+			//비동기 통신
+			function ajaxList(State) {
+				let userState = State;
+				let page = $('input[name="page"]').val();
 				$.ajax({
-					url:"/admin/memberList",
-					type:"get",
-					success:function(){
-						
+					url: "/admin/memberListAjax",
+					method: 'post',
+					data: {
+						userState,
+						page
+					},
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (result) {
+						//기존 tr 삭제 ->tr생성 붙여넣기
+						$('tbody').empty();
+						for (member of result.mListAjax) {
+							$('tbody').append(makeTr(member));
+						}
+						//기존 페이징 삭제 -> 다시붙여넣기
+						$('#returnPaging').empty();
+						$('#returnPaging').append(makePaging(result.paging));
 					}
 				})
-			})
+			}
+
+			//tr만들기
+			function makeTr(member) {
+				let p = `
+				<tr>
+					<td>${member.userId}</td>
+					<td>${member.userEmail}</td>
+					<td>${member.name}</td>
+					<td>${member.userPhone}</td>
+					<td>${member.userMessaging}</td>
+					<td>${member.auth}</td>
+					<td>${member.rprt}</td>
+					<td>${member.userRegDate}</td>
+					<td>${member.userState}</td>
+				</tr>`;
+				return p;
+			}
+
+			// 페이징 만들기
+			function makePaging(page) {
+				if (page.totalRecord == 0) {
+
+					return;
+				}
+				let pagination = $("<div/>")
+				let ul = $("<ul/>").attr("class", "pagination");
+				if (page.startPage > 1) {
+					$(ul).append($("<li/>").html("&laquo;")
+						.css("font-size", "30px")
+						.attr("class", "page-item")
+						.on("click", function () {
+							gopage(page.startPage - page.pageSize)
+						}));
+				}
+
+				//페이지 버튼 생성.
+				for (let i = page.startPage; i <= page.endPage; i++) {
+					if (page.page == i) {
+						ul.append($("<li/>").text(i).css("font-size", "20px")
+							.css("padding", "10px")
+							.css("border-radius", " 10% / 50% ")
+							.css("background", "#dce3fd")
+							.attr("class", "page-link active")
+						);
+					} else {
+						ul.append($("<li/>").text(i).css("font-size", "20px")
+							.css("padding", "10px")
+							.attr("class", "page-link")
+							.on("click", function () {
+								gopage($(this).text());
+							})); //페이지이동 함수
+					}
+				}
+				if (page.endPage < page.lastPage) {
+					ul.append($("<li/>").html("&raquo;")
+						.css("font-size", "30px")
+						.attr("class", "page-item")
+						.on("click", function () {
+							gopage(page.startPage + page.pageSize)
+						}));
+				}
+				pagination.append(ul);
+				return pagination;
+			}
 		</script>
 	</div>
 </body>
+
 </html>

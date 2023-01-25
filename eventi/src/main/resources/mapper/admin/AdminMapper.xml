@@ -17,7 +17,7 @@
 		</if>
 		
 		<!-- 계정상태 정렬 -->
-		<if test="userState !=null and userState != ''">
+		<if test="userState != '' and userState != null and userState != 'Normal'">
 			AND USER_STATE = #{userState}
 		</if>
 		</where>

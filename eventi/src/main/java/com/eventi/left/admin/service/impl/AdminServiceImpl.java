@@ -18,7 +18,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<MemberVO> memberList(MemberVO memberVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.count(memberVO));
-		paging.setPageUnit(10);
+		paging.setPageUnit(15);
 		memberVO.setFirst(paging.getFirst());
 		memberVO.setLast(paging.getLast());
 		
