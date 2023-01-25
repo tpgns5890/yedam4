@@ -46,12 +46,13 @@
 					<tr>
 						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
 						<th>no</th>
-						<th>분류별</th>
 						<th>작성자</th>
+						<th>분류별</th>
 						<th>제목</th>
 						<th>진행기간</th>
-						<th>진행현황</th>
-						<th>등록현황</th>
+						<th>진행</th>
+						<th>등록</th>
+						<th>조회/우승자등록</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -184,13 +185,6 @@
 				}
 			}
 		}
-		
-		//검색 기능
-   		$('#find').click(function() {
-   			//입력한 값 가져오기
-   			let search = $("input[name=search]").val();
-   			location.href="/content/mySelect?search=" +search;
-   		})
 		
 	</script>
 	</div>

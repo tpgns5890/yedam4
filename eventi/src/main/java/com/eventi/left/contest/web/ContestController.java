@@ -243,9 +243,15 @@ public class ContestController {
 
 	// 공모전 나의 문의리스트 페이지이동(추가해야함)
 	@GetMapping("/qnaList")
-	public String ContestQnaList(Model model) {// , QuestionsVO vo, PagingVO paging
-		// model.addAttribute("qnaList", qService.qnaList(vo, paging));
-		return "content/myPage/mytQnaList";
+	public String ContestQnaList(Model model, QuestionsVO vo, PagingVO paging) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		vo.setUserId(user.getUserId());
+		model.addAttribute("qnaList", qService.qnaList(vo, paging));
+		model.addAttribute("paging", paging);
+		return "content/myPage/myQnaList";
 	}
+	
+			
+			
 
 }

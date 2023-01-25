@@ -11,31 +11,6 @@
 <link rel="stylesheet" href="/css/heart.css">
 <meta charset="UTF-8">
 <title>공모전 상세조회</title>
-<style>
-ul {
-	list-style: none;
-}
-
-.cotestCntn {
-	width: 100px;
-	height: 70px;
-	margin: 5px;
-	padding: 0;
-	text-align: center;
-}
-
-#wrapper {
-	height: auto;
-	min-height: 100%;
-	padding-bottom: (footer높이);
-}
-
-footer {
-	height: (footer높이);
-	position: relative;
-	transform: translateY(-100%);
-}
-</style>
 </head>
 
 <body>
@@ -113,7 +88,7 @@ footer {
 								</th:block>
 
 								<!-- 신고수 -->
-								<span style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+								<span id="modalUp" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
 								
 								<!-- 조회수 -->
 								 <span style='font-size: 30px;'>&#128065;</span><span th:text=${contest.inq}></span>
@@ -195,8 +170,8 @@ footer {
 		</section>
 
 
-		<!-- The Modal -->
-		<div id="myModal" class="modal">
+		<!--마감기한 연장 모달 폼 -->
+		<div id="extensionModal" class="modal">
 
 			<!-- Modal content -->
 			<div class="modal-content">
@@ -207,6 +182,24 @@ footer {
 					<button id="extension" class="modelBtn1" style="width: 50px;" type="button">연장하기</button>
 				</div>
 			</div>
+		</div>
+		
+		<!-- 신고 등록 폼 -->
+	    <div id="rprtModal" class="modal">
+				<div class="modal_content">
+					<h2>신고</h2>
+					<div id="box">
+						<label>신고게시글</label>
+						<input type="text" id="targetId" name="targetId" th:value="${contest.cNo}" readonly><br>
+						<label>신고자</label>
+						<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+						<label>신고사유</label>
+						<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+						<button type="button" id="cancel">취소</button>
+						<button type="button" id="punish">신고</button>
+					</div>
+				</div>
+			<div class="modal_layer"></div>
 		</div>
 		
 		<!-- 페이지처리를 위한 히든인풋. -->
@@ -228,10 +221,12 @@ footer {
 		
 		//모달창-----------------------------------------------------------
 		// Get the modal
-		var modal = document.getElementById("myModal");
+		var extensionModal = document.getElementById("extensionModal");
+		var rprtModal = document.getElementById("rprtModal");
 		
 		// Get the <span> element that closes the modal
 		var span = document.getElementsByClassName("close")[0];
+		var rprtSpan = document.getElementsByClassName("close")[1];
 		
 		// 모달창 띄우기.
 		// 마감연장일이 이미 지정된 경우 모달창 띄우지 않도록.
@@ -240,7 +235,7 @@ footer {
 		let dtExtns = '[[${contest.dtExtns}]]';
 		
 		if(dtExtns == '' || null || undefined || 0 || NaN){
-			  modal.style.display = "block";
+			extensionModal.style.display = "block";
 		}else{
 				alert('마감연장 1회만 가능합니다.')
 				return false;
@@ -249,13 +244,16 @@ footer {
 		
 		// When the user clicks on <span> (x), close the modal
 		span.onclick = function() {
-		  modal.style.display = "none";
+			extensionModal.style.display = "none";
 		}
 		
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
-		  if (event.target == modal) {
-		    modal.style.display = "none";
+		  if (event.target == extensionModal) {
+			  extensionModal.style.display = "none";
+		  }
+		  else if(event.target == rprtModal){
+		   	rprtModal.style.display = "none";
 		  }
 		}
 		
@@ -278,10 +276,11 @@ footer {
 		$('#extension').on('click', function () {
 			
 			let date = $(this).parent().parent().find($('input[type="date"]')).val();
-			let dtCls = '[[${#dates.format(contest.dtCls,'yyyy/MM/dd')}]]';
+			let dtCls = '[[${#dates.format(contest.dtCls,'yyyy-MM-dd')}]]';
 			
 			if(date <= dtCls){
 				alert(dtCls + '이전날짜는 불가능합니다.')
+				console.log(date);
 				console.log(dtCls);
 				return false;
 			}
@@ -800,6 +799,43 @@ footer {
 			pagination.append(ul);
 			return pagination;
 		}
+		
+		//신고부분=========================================================
+		   //신고 모달창 띄우기
+		   $('#modalUp').on('click', function() {
+			   console.log('클릭');
+			   console.log($("#rprtModal"))
+			   $("#rprtModal").show();
+		   })
+		   
+		   //모달창에서 취소를 눌렀을 경우
+		   $("#cancel").on('click', function() {
+				$("#rprtModal").hide();
+			});
+		   
+		   //모달창에서 신고를 눌렀을 경우
+		   $("#punish").on('click', function() {
+			   let targetId = $("#targetId").val();
+			   let banCntn = $("#banCntn").val();
+			   
+			    $.ajax({
+						url : "/punishInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetId:cNo, banCntn:banCntn, targetCat:"T01"},
+						beforeSend : function(xhr)
+		                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							alert('신고되었습니다.');
+							$("#rprtModal").hide();
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		   })
 
 		
 	</script>

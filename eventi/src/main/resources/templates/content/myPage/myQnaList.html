@@ -33,44 +33,45 @@
 
 			<!-- 게시글 검색 -->
 			<form name="searchFrm">
-				제목<input type="text" name="ttl" value=""> 내용<input
-					type="text" name="cntn" value=""> <input type="hidden"
-					name="page" value="1">
-				<button type="submit">검색</button>
+				<input type="hidden" name="page" value="1">
 			</form>
 
-			<!-- 테이블 -->
-			<div id="table">
-				<button type="button" id="deleteBtn">상세보기</button>
-				<table border="1" id="myTable">
-					<thead>
-						<tr>
-							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
-							<th>공모no</th>
-							<th>문의no</th>
-							<th>분류별</th>
-							<th>제목</th>
-							<th>진행기간</th>
-							<th>문의등록일</th>
-							<th>답변현황</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<!-- <tr th:each="contest : ${contestList} ">
-							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
-							<td th:text=${contest.cNo} th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|"></td>
-							<td th:text=${contest.writer}></td>
-							<td th:text=${contest.category}></td>
-							<td th:text=${contest.ttl}></td>
-							<th:block th:if="${contest.dtExtns} == null">
-						</tr> -->
-					</tbody>
-				</table>
+			
+		 	<!-- 문의내역이 없을경우 -->
+		 	<div th:if="${#lists.isEmpty(qnaList)}">
+				<h3>문의내역이 없습니다.</h3>
+			</div>	
+		 	
+		 	<!-- 문의내역이 있을경우 -->
+		 	<div th:if="${!#lists.isEmpty(qnaList)}">
+				<!-- 테이블 -->
+				<div id="table">
+					<table border="1" id="myTable">
+						<thead>
+							<tr>
+								<th>문의사항번호</th>
+								<th>문의사항제목</th>
+								<th>작성일자</th>
+								<th>답변유무</th>
+								<th>조회</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- 답변이아닌 문의내용만 출력할것.. -->
+							<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo},category=${q.category}, targetId=${q.targetId})}'|">
+								<td th:text=${q.qNo}></td>
+								<td th:text=${q.targetId}></td>
+								<td th:text=${q.ttl}></td>
+								<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
+								<td th:text=${q.ans}></td>
+								<td><button type="button">조회</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
-
-			<!-- 페이징처리 -->
-			<!-- <h3 th:text="${paging}"></h3>
+			
+			<!-- 페이징처리  <h3 th:text="${paging}"></h3> -->
 			<div class="row mt-5">
 				<div class="col text-center">
 					<div class="block-27">
@@ -78,16 +79,20 @@
 							th:replace="fragments/paging :: component(${paging},'gopage')">
 					</div>
 				</div>
-			</div> -->
-
-
-
+			</div>
 
 
 		</div>
-
 		<script>
-			
+		//csrf 설정
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		//페이징 
+		function gopage(i) {
+			searchFrm.page.value = i;
+			searchFrm.submit();
+		}
 		</script>
 	</div>
 </body>
