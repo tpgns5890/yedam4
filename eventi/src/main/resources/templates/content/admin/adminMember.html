@@ -207,6 +207,16 @@
 			function gopage(i) {
 				location.href=`/admin/MemberList?page=`+i;
 			}
+			
+			$("#topbtn-member").on('click', function(){
+				$.ajax({
+					url:"/admin/memberList",
+					type:"get",
+					success:function(){
+						
+					}
+				})
+			})
 		</script>
 	</div>
 </body>
