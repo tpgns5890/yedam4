@@ -28,7 +28,10 @@ import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.questions.service.QuestionsService;
+import com.eventi.left.questions.service.QuestionsVO;
 
 import groovy.util.logging.Log4j;
 
@@ -49,7 +52,10 @@ public class ContestController {
 	CodeService codeService;
 	@Autowired
 	LikesService likeService;
-
+	@Autowired
+	QuestionsService qService;
+	
+	
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
 	public String contestList(Model model, ContestVO vo, PagingVO paging) {
@@ -75,21 +81,21 @@ public class ContestController {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		String sessionId = user.getUserId();
+		Map<String, Object> result = new HashMap<String, Object>();
 
-		// 객체생성 및 코드별 문자열 변환후 세팅
-		ContestVO contest = service.getContest(cVo.getcNo());
+		if (user != null) {
+			String sessionId = user.getUserId();
+			// 상세리스트 1건의 회원의 좋아요 체크 확인을 위한 정보세팅.
+			LikesVO likeCheck = new LikesVO();
+			likeCheck.setTargetNo(cVo.getcNo());
+			likeCheck.setUserId(sessionId);
+			// 모델 넘겨주기.
+			model.addAttribute("likeCheck", likeService.getLike(likeCheck));
+		}
 
-		// 상세리스트 1건의 회원의 좋아요 체크 확인을 위한 정보세팅.
-		LikesVO likeCheck = new LikesVO();
-		likeCheck.setTargetNo(cVo.getcNo());
-		likeCheck.setUserId(sessionId);
-
-		// 모델 넘겨주기.
-		model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
-		model.addAttribute("contest", contest); // 모델 넘겨주기.
+		model.addAttribute("contest", service.getContest(cVo.getcNo()));
 
 		return "content/contest/contest";
 	}
@@ -111,9 +117,10 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging) {
+	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging,
+			MultipartFile[] uploadFile) {
 
-		service.insertContest(vo, wvo);
+		service.insertContest(vo, wvo, uploadFile);
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
@@ -122,6 +129,8 @@ public class ContestController {
 			model.addAttribute("contestList", contests);// 모델에 담기.
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
+		
+		
 		// 등록인경우 결제 후 공모전상세페이지 이동.
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
@@ -138,7 +147,15 @@ public class ContestController {
 	// 수정처리
 	@PostMapping("/update")
 	public String contestupdateForm(ContestVO vo, MultipartFile[] uploadFile) {
+		System.out.println(vo);
 		service.updateContest(vo, uploadFile);
+		return "redirect:/contest/select?cNo=" + vo.getcNo();
+	}
+
+	// 임시저장 불러오기 수정처리
+	@PostMapping("/saveUpdate")
+	public String saveUpdateContest(ContestVO vo, MultipartFile[] uploadFile, WinnerVO wvo) {
+		service.saveUpdateContest(vo, uploadFile, wvo);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
@@ -223,13 +240,6 @@ public class ContestController {
 		return result; // 디자인리스트+파일리스트 반환.
 	}
 
-	// --------------------------------------------------------------------------
-	// 공모전 나의 문의리스트 페이지이동(추가해야함)
-	@GetMapping("/QnaList")
-	public String ContestQnaList() {
-		return "content/myPage/myContestQnaList";
-	}
-
 	// 임시저장된 게시글 전체들고오기
 	@PostMapping("/cSave")
 	@ResponseBody
@@ -240,8 +250,15 @@ public class ContestController {
 	// 임시저장된 게시글 상세들고오기
 	@PostMapping("/saveSelect")
 	@ResponseBody
-	public ContestVO saveSelect(ContestVO vo) {
-		return service.getContest(vo.getcNo());
+	public List<ContestVO> saveSelect(ContestVO vo) {
+		return service.saveGetContest(vo);
+	}
+
+	// 공모전 나의 문의리스트 페이지이동(추가해야함)
+	@GetMapping("/qnaList")
+	public String ContestQnaList(Model model) {//, QuestionsVO vo, PagingVO paging
+		//model.addAttribute("qnaList", qService.qnaList(vo, paging));
+		return "content/myPage/mytQnaList";
 	}
 
 }

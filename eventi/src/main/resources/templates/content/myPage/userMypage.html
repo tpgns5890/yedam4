@@ -8,29 +8,245 @@
 <link rel="stylesheet" href="/css/myPageSide.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="/css/model.css"><!-- 모달 스타일 -->
+<style>
+#user {
+	padding-top: 70px;
+	width: 800px;
+	margin: 0 auto;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif">회원정보 조회</div>
-              </div>
-            </div>
-          </div>
-        </section>
-		
-		
+		<section class="module bg-dark-60 gallery-page-header parallax-bg"
+			data-background="/assets/images/gallery_bg.jpg"
+			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h2 class="module-title font-alt">마이페이지</h2>
+						<div class="module-subtitle font-serif">회원정보 조회</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
 		<div style="min-height: 700px">
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+
+			<div id="user">
+				<p th:text="|아이디: ${user.userId}|"></p>
+				<p th:text="|이메일:${user.userEmail}|"></p>
+				<p th:text="|성 명:${user.name}|"></p>
+				<p th:text="|연락처:${user.userPhone}|"></p>
+
+				<!-- 수신여부 -->
+				<div th:if="${user.userMessaging} == 'S0'">
+					<p th:text="|수신여부: 받지않음|"></p>
+				</div>
+				<div th:if="${user.userMessaging} == 'S1'">
+					<p th:text="|수신여부: 메일|"></p>
+				</div>
+				<div th:if="${user.userMessaging} == 'S2'">
+					<p th:text="|수신여부: 휴대폰|"></p>
+				</div>
+				<div th:if="${user.userMessaging} == 'S3'">
+					<p th:text="|수신여부: 메일,휴대폰|"></p>
+				</div>
+
+				<!-- 회원등급 -->
+				<div th:if="${user.auth} == 'ROLE_ADMIN'">
+					<p th:text="|회원등급: 관리자|"></p>
+				</div>
+				<div th:if="${user.auth} == 'ROLE_MEM'">
+					<p th:text="|회원등급: 회원?|"></p>
+				</div>
+				<div th:if="${user.auth} == 'ROLE_MEMBER'">
+					<p th:text="|회원등급: 회원|"></p>
+				</div>
+				<div th:if="${user.auth} == 'ROLE_BUSI'">
+					<p th:text="|회원등급: 업체|"></p>
+				</div>
+
+
+				<div th:if="${user.depotr} != null">
+					<p th:text="|예금주:${user.depotr}|"></p>
+					<p th:text="|은행사:${user.bank}|"></p>
+					<p th:text="|계좌번호:${user.accnt}|"></p>
+				</div>
+
+				<p
+					th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></p>
+
+				<button type="button" id="update">수정</button>
+				<button type="button" id="delete">탈퇴</button>
+			</div>
+		</div>
+
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h3>비밀번호 확인</h3>
+				<label>비밀번호</label><input type="text" id="password" name="userPassword" required="required"><br>
+				<label>비밀번호확인</label><input type="text" id="passwordchk" name="passwordchk" required="required"><br>
+				<font id="pw_feedback" size="2" value="1"></font>
+				<div id="checkDiv">
+					<button id="check" class="modelBtn1" style="width: 50px;" type="button">확인</button>
+				</div>
+			</div>
+		</div>
+
+
+		<script>
+			var password = $("#pw_feedback").attr('value');
+			var passwordchk = $("#pw_feedback").attr('value');
+			//모달창-----------------------------------------------------------
+			// Get the modal
+			var modal = document.getElementById("myModal");
+
+			// Get the <span> element that closes the modal
+			var span = document.getElementsByClassName("close")[0];
+
+			// When the user clicks on <span> (x), close the modal
+			span.onclick = function() {
+				modal.style.display = "none";
+			}
+
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+				if (event.target == modal) {
+					modal.style.display = "none";
+				}
+			}
+
+			//수정하기 버튼 누를시
+			$('#update').on("click", function() {
+				if (!confirm('회원정보를 수정하시겠습니까?')) {
+					return false;
+				}
+				else {
+					$('#checkDiv').children('#check').attr('id' , "update")
+					// 모달창 띄우기.
+					modal.style.display = "block";
+					
+					//비번 중복체크
+					$('#passwordchk').keyup(function () {
+						let password = $('#password').val();
+						let passwordChk =  $('#passwordchk').val();
+						if (password == passwordChk) {
+							$("#pw_feedback").html('비밀번호가 일치합니다.');
+							$("#pw_feedback").attr('color', '#2fb380');
+							$("#pw_feedback").attr('value', '0');
+							
+							$('#checkDiv').children('#update').on("click", updateForm);
+						} else {
+							$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
+							$("#pw_feedback").attr('color', '#dc3545');
+							$("#pw_feedback").attr('value', '1');
+						}
+					})
+					
+				}
+			})
+			
+			function updateForm() {
+				$('#checkDiv').children('#update').attr('id' , "check")
+				alert('정보수정');
+				$('#password').val('');
+				$('#passwordchk').val('');
+				modal.style.display = "none";
+				
+				//임시
+				location.href='/myPage/userUpdate';
+				
+				//비밀번호 체크(ajax 추가하기!!!)
+					//$.ajax({
+	 	   		//	url : '/members/passwordCheck',
+	 	   		//	method : 'post',
+	 	   		//	data : {password},
+	 	   		//	beforeSend : function(xhr)
+	 	        //    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 			//		xhr.setRequestHeader(header, token);
+	 	        //    },
+				//	success : function(result){
+				//		console.log(result);
+				//		location.href='/myPage/userUpdate';
+				//		
+				//	 },
+			    //    fail: function () {
+			    //       }
+				//	})
+			}
+			
+			//탈퇴누를경우 update 권한수정
+			$('#delete').on("click", function() {
+				if (!confirm('탈퇴하시겠습니까?')) {
+					return false;
+				}
+				else {
+					$('#checkDiv').children('#check').attr('id' , "delete")
+					// 모달창 띄우기.
+					modal.style.display = "block";
+					
+					//비번 중복체크
+					$('#passwordchk').keyup(function () {
+						let password = $('#password').val();
+						let passwordChk =  $('#passwordchk').val();
+						if (password == passwordChk) {
+							$("#pw_feedback").html('비밀번호가 일치합니다.');
+							$("#pw_feedback").attr('color', '#2fb380');
+							$("#pw_feedback").attr('value', '0');
+							
+							$('#checkDiv').children('#delete').on("click",userdelete);
+						} else {
+							$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
+							$("#pw_feedback").attr('color', '#dc3545');
+							$("#pw_feedback").attr('value', '1');
+						}
+					})
+					
+				}
+			})
+			
+			function userdelete(){
+				$('#checkDiv').children('#delete').attr('id' , "check")
+				alert('탈퇴')
+				$('#password').val('');
+				$('#passwordchk').val('');
+				modal.style.display = "none";
+				
+			// 회원권한 update
+			//$.ajax({
+ 	   		//	url : '/members/delete',
+ 	   		//	method : 'post',
+ 	   		//	data : {password},
+ 	   		//	beforeSend : function(xhr)
+ 	        //    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+ 			//		xhr.setRequestHeader(header, token);
+ 	        //    },
+			//	success : function(result){
+			//		console.log(result);
+			//      if(result > 0){
+			//			alert('회원탈퇴 완료')
+			//     }else {
+			//			alert('회원탈퇴 실패')	
+			//     }
+			//	 },
+		    //    fail: function () {
+		    //       }
+			//	})
+			}
+			
 		
 					
 		
-		
-		</div>
+		</script>
 	</div>
 </body>
 </html>

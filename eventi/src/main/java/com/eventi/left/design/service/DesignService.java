@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.files.service.FilesVO;
 
 public interface DesignService {
@@ -23,5 +25,11 @@ public interface DesignService {
 	public int delete(DesignVO vo); // 삭제
 
 	public String getSequence(); // 시퀀스 맥시멈번호 찾기.
+	
+	public List<DesignVO> saveGetDesign(DesignVO DesignVO); // 임시저장 1건,디자인파일 여러건조회
 
+	public List<DesignVO> dSave(DesignVO DesignVO); //임시저장 리스트.
+	
+	public int saveUpdateDesign(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) ;//임시저장 수정
+	
 }

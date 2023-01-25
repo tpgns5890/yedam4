@@ -63,9 +63,9 @@
 							<td th:text=${contest.cNo} th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|"></td>
 						</th:block>
 						
-						<!-- 임시저장된 게시글 누를시 수정폼이동 -->
+						<!-- 임시저장된 게시글 누를시 등록폼이동 -->
 						<th:block th:if="${contest.save} == 'Y'">
-							<td th:text=${contest.cNo} th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|"></td>
+							<td th:text=${contest.cNo} th:onclick="|location.href='@{insert}'|"></td>
 						</th:block>
 							
 						<td th:text=${contest.writer}></td>
@@ -87,7 +87,7 @@
 						
 						<th:block th:if="${contest.save} == 'Y'">
 							<td th:text="임시저장"></td>
-							<td><button type="button" id="selete" th:onclick="|location.href='@{update(cNo=${contest.cNo})}'|">공모전등록</button></td>
+							<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
 						</th:block>
 						
 						

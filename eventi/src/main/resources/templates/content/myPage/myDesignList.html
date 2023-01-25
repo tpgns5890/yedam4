@@ -61,40 +61,47 @@
             </div>
           </div>
         </section>
+		
 	
 		<div style="min-height: 1200px">
-		<h2 class="mb-0 bread">공모전 응모관리</h2>
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
-		
-		<!-- 게시글 검색 -->
-		<form name="searchFrm">
-			디자인명<input type="text" name="name" value="">
-			<input type="hidden" name="page" value="1">
-			<button type="submit">검색</button>
-		</form>		
-		
+		<!-- 리스트 값이 없을경우 -->
+		<div th:if="${#lists.isEmpty(design)}">
+			<h3>응모한 디자인이 없습니다.</h3>
+		</div>	
 			
-			<div th:each="d: ${design} ">
-				<div class="col-sm-6 col-md-4 col-lg-4 design">
-					<div class="shop-item">
-						<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px" class="img-fluid">
-						    <div class="shop-item-detail">
-								<div>
-							   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
-							   			<h3 class="content-box-title font-serif dNo" th:text="${d.dgnNo}"></h3>
-							   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
-						        </div>
-						        <div class="btn btn-round btn-b">
-						              <span class="select">상세보기</span>
-					             </div>
+		<!-- 게시글 검색 -->
+			<form name="searchFrm">
+				<div th:if="${!#lists.isEmpty(design)}">
+					디자인명<input type="text" name="name" value="">
+					<input type="hidden" name="page" value="1">
+					<button type="submit">검색</button>
+				</div>
+			</form>		
+			
+			
+				
+				<div th:each="d: ${design} " >
+					<div class="col-sm-6 col-md-4 col-lg-4 design">
+						<div class="shop-item">
+							<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px" class="img-fluid">
+							    <div class="shop-item-detail">
+									<div>
+								   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
+								   			<h3 class="content-box-title font-serif dNo" th:text="${d.dgnNo}"></h3>
+								   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
+							        </div>
+							        <div class="btn btn-round btn-b">
+							              <span class="select">상세보기</span>
+						             </div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 		
 		<!-- The Modal -->
 			<div id="myModal" class="modal">
@@ -108,11 +115,13 @@
 			</div>
 			
 		<!-- 페이징처리 -->
-		<div class="row mt-5">
-			<div class="col text-center">
-				<div class="block-27">
-					<th:block
-						th:replace="fragments/paging :: component(${paging},'gopage')">
+		<div th:if="${!#lists.isEmpty(design)}">
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
+					</div>
 				</div>
 			</div>
 		</div>

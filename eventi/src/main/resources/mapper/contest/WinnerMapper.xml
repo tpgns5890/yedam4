@@ -31,12 +31,20 @@
 		#{grade},
 		#{wPay})
 	</insert>
+	
 	<update id="updateWinner">
 		update WINNER
 		set d_no = #{dNo},
 		    user_id = #{userId}
 		where grade = #{grade}
 		and CO_NO=#{coNo}
+	</update>
+	
+	<update id="updateSaveWinner">
+		update WINNER
+		set w_pay = #{wPay}
+		where CO_NO= #{coNo}
+		and grade = #{grade}
 	</update>
 
 	<delete id="deleteWinner">
