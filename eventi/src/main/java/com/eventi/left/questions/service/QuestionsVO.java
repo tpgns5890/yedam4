@@ -2,6 +2,8 @@ package com.eventi.left.questions.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -15,7 +17,7 @@ public class QuestionsVO {
 	private String targetId;	//대상자ID or 게시글유형
 	private String Ttl;		//문의제목
 	private String Cntn;		//문의내용
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date writingDt;		//작성일자
 	private String secretYn = "N";	//비밀글 유무
 	private String category;	//대상구분

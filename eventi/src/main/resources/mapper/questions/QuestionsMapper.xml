@@ -57,7 +57,7 @@
 				#{targetId},
 				#{Ttl},
 				#{Cntn},
-				current_date,
+				sysdate,
 				#{secretYn},
 				#{category},
 				#{rerepTgt}

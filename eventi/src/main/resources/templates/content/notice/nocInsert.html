@@ -28,6 +28,7 @@
 				<h3 class="mb-4">공지사항 작성</h3>
 				<form action="/nocInsert" method="POST" id="nocInsert" name="nocInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
