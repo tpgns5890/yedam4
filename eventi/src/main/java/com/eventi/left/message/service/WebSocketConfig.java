@@ -11,7 +11,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-	    config.enableSimpleBroker("/topic");
+	    //구독
+		config.enableSimpleBroker("/topic");
+		//채팅방에서 메시지를 보낼때 링크이름으로 보내야지 무조건 받아옴
 	    config.setApplicationDestinationPrefixes("/app");
 	  }
 	

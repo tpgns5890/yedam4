@@ -10,6 +10,19 @@
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <link href="/css/star.css" rel="stylesheet">
 
+	<!-- 채팅방 관련 -->
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/main.css" rel="stylesheet">
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script>
+		let userId = '[[${session.member.userId}]]';
+	</script>
+	<!-- <script src="/app.js"></script> -->
+	<link href="/css/chat.css" rel="stylesheet">
+	<!-- 채팅방 관련 끝 -->
+
 <style>
 	footer {
 		display: none;
@@ -20,7 +33,7 @@
 	}
 	
 	#check{
-		min-height : 1500px;
+		min-height : 2000px;
 	}
 
 	#left {
@@ -134,11 +147,14 @@
   			<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
    		</div>
    		<hr>
-  	
+  		
+  		<label class="label" id="userId" th:text="${mcSelect.userId}"></label>
+  		<hr>
+  		
   		<label class="label" th:text="${mcSelect.oneIntro}"></label>
   		<hr>
   		
-  		<button id="btn" type="button" class="btn btn-primary" th:onclick="|#|">1:1대화</button>
+  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
   		<button id="btn" type="button" class="btn btn-g btn-round" th:onclick="|#|">의뢰하기</button>
   		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
   		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
@@ -197,7 +213,23 @@
 						    </form>
                     	</div>
                     </div>
-                    <div class="tab-pane" id="sales">To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.
+                    
+                    <!-- 후기카테고리 -->
+                    <div class="tab-pane" id="sales">
+                    	<div class="tab-pane active" id="reviews">
+		                    <div class="comments reviews" th:each="re : ${reviews}">
+		                      <div class="comment clearfix">
+		                        <div class="comment-content clearfix">
+		                          <div class="comment-author font-alt" th:text="${re.userId}"></div>
+		                          <div class="comment-body">
+		                            <p th:text="${re.reviewCntn}">The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The European languages are members of the same family. Their separate existence is a myth.</p>
+		                          </div>
+		                          <div class="comment-meta font-alt">Today, 14:55 -<span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star-off"></i></span>
+		                          </div>
+		                        </div>
+		                      </div>
+	                    	</div>
+	                  	</div>
                     </div>
                   </div>
                 </div>
@@ -205,7 +237,7 @@
 </section>
 	
 	<!-- 신고 폼 -->
-	<div id="punish" class="modal">
+	<div id="punishFrm" class="modal">
 			<div class="modal_content">
 				<h2>신고</h2>
 				<div id="box">
@@ -223,8 +255,15 @@
 	</div>
     
     <!-- 후기 폼 -->
-    <div id="review" class="modal">
+    <div id="reviewFrm" class="modal">
 			<div class="modal_content">
+				<label>대상</label>
+				<input type="text" id="reviewTgt" name="reviewTgt" th:value="${mcSelect.userId}" readonly><br>
+				
+				<label>의뢰자</label>
+				<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
+				
+				<label>별점</label>
 				<div class="starpoint_wrap">
 				  <div class="starpoint_box">
 				    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
@@ -250,19 +289,193 @@
 				    <span class="starpoint_bg"></span>
 				  </div>
 				</div>
+				<br>
+				
+				<label>후기</label>
+				<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
+				<button type="button" id="cancel">취소</button>
+				<button type="button" id="review">후기등록</button>
 			</div>
 		<div class="modal_layer"></div>
 	</div>
-   
+
+	<!-- 화면 하단 채팅 버튼 -->
+	<div class="chat">
+		<div class="background"></div>
+		<svg class="chat-bubble" width="80" height="80" viewBox="0 0 100 100">
+			<g class="bubble">
+				<path class="line line1" d="M 30.7873,85.113394 30.7873,46.556405 C 30.7873,41.101961
+          36.826342,35.342 40.898074,35.342 H 59.113981 C 63.73287,35.342
+          69.29995,40.103201 69.29995,46.784744" />
+				<path class="line line2" d="M 13.461999,65.039335 H 58.028684 C
+            63.483128,65.039335
+            69.243089,59.000293 69.243089,54.928561 V 45.605853 C
+            69.243089,40.986964 65.02087,35.419884 58.339327,35.419884" />
+			</g>
+			<circle class="circle circle1" r="1.9" cy="50.7" cx="42.5" />
+			<circle class="circle circle2" cx="49.9" cy="50.7" r="1.9" />
+			<circle class="circle circle3" r="1.9" cy="50.7" cx="57.3" />
+		</svg>
+	</div>
+
+	<!-- 채팅버튼 클릭시 나타날 채팅창 -->
+	<div class="chat-popup">
+		<div class="chat-windows">
+			<div class="chat-window-one">
+				<noscript>
+					<h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on
+						Javascript being
+						enabled. Please enable
+						Javascript and reload this page!</h2>
+				</noscript>
+				<!--채팅연결, Connect를 눌러줘야된다.-->
+				<div id="main-content" class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<form class="form-inline">
+								<div class="form-group">
+									<label for="connect">WebSocket connection:</label>
+									<button id="connect" class="btn btn-default" type="submit">Connect</button>
+									<button id="disconnect" class="btn btn-default" type="submit"
+										disabled="disabled">Disconnect
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- 채팅 popup -->
+				<section class="message-area">
+					<div class="container">
+						<div class="row">
+							<div class="col-12">
+								<div class="chat-area">
+									<!-- 채팅방 -->
+									<div class="chatlist">
+										<div class="modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="chat-header">
+													<ul class="nav nav-tabs" id="myTab" role="tablist">
+														<li class="nav-item" role="presentation">
+															<button class="nav-link active" id="Open-tab"
+																data-bs-toggle="tab" data-bs-target="#Open"
+																type="button" role="tab" aria-controls="Open"
+																aria-selected="true">Open</button>
+														</li>
+													</ul>
+												</div>
+
+												<div class="modal-body">
+													<!-- 채팅방 나타나는 곳 -->
+													<div class="chat-lists">
+														<div class="tab-content" id="myTabContent">
+															<!-- 채팅방 리스트 -->
+															<div class="chat-list">
+																<a href="#" class="d-flex align-items-center">
+																	<div class="flex-grow-1 ms-3">
+																		<h3>Mehedi Hasan</h3>
+																		<p>front end developer</p>
+																	</div>
+																</a>
+															</div>
+															<!-- 채팅방 리스트 end -->
+														</div>
+													</div>
+													<!-- 채팅방 나타나는 곳 end -->
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 채팅방 end -->
+
+									<!-- 채팅공간 -->
+									<div class="chatbox">
+										<div class="modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="msg-head">
+													<div class="row">
+														<div class="col-8">
+															<!--누구랑 채팅하는지 나타냄-->
+															<div class="d-flex align-items-center">
+																<div class="flex-grow-1 ms-3">
+																	<h3>Mehedi Hasan</h3>
+																	<p>front end developer</p>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<!--채팅내용-->
+												<div class="modal-body">
+													<div class="msg-body">
+														<ul id="greetings">
+															<li class="sender">
+																<p> Hey, Are you there? </p>
+																<span class="time">10:06 am</span>
+															</li>
+															<li class="repaly">
+																<p> Last Minute Festive Packages From Superbreak</p>
+																<span class="time">10:20 am</span>
+															</li>
+															<li>
+																<div class="divider">
+																	<h6>Today</h6>
+																</div>
+															</li>
+
+															<li class="repaly">
+																<p> Last Minute Festive Packages From Superbreak</p>
+																<span class="time">10:36 am</span>
+															</li>
+														</ul>
+													</div>
+												</div>
+
+												<!-- 채팅 보내는 공간 -->
+												<div class="send-box">
+													<form action="#">
+														<input type="text" id="name" class="form-control"
+															aria-label="message…" placeholder="Write message…">
+
+														<button type="button" id="send" class="btn btn-default"><i
+																class="fa fa-paper-plane" aria-hidden="true"></i>
+															Send</button>
+													</form>
+
+													<!--첨부파일 기능-->
+													<div class="send-btns">
+														<div class="attach">
+															<div class="button-wrapper">
+																<span class="label">
+																	<img class="img-fluid"
+																		src="https://mehedihtml.com/chatbox/assets/img/upload.svg"
+																		alt="image title"> attached file
+																</span><input type="file" name="upload" id="upload"
+																	class="upload-box" placeholder="Upload File"
+																	aria-label="Upload File">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	
+	
    <script>
    		//csrf 설정
    		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		
-		//별점
-		$(".label_star").on("click", function(){
-			console.log($(this).text());
-		})
    		
 		//해당 포트폴리오 작성자에 대한 댓글을 가져오기 위해 replyTag에 작성자ID를 구해준다.
    		let replyTgt = '[[${mcSelect.userId}]]';
@@ -522,14 +735,7 @@
 	   //신고 모달창 띄우기
 	   $('.punishModalUp').on('click', function() {
 		   console.log('클릭');
-		   $("#punish").show();
-	   })
-	   
-	   //후기부분
-	   //후기 모달창 띄우기
-	   $('.reviewModalUp').on('click', function() {
-		   console.log('클릭');
-		   $("#review").show();
+		   $("#punishFrm").show();
 	   })
 	   
 	   //모달창에서 취소를 눌렀을 경우
@@ -555,15 +761,174 @@
 	                },
 					success : function(data) {
 						alert('신고되었습니다.');
-						$("#modal").hide();
+						$("#punishFrm").hide();
 					},
 					fail : function(result) {
-						alert('필수항목을 입력해주세요')
+						console.log(result)
 					}
 				})
 	   })
+	   
+	   //후기부분
+	   //후기 모달창 띄우기
+	   $('.reviewModalUp').on('click', function() {
+		   console.log('클릭');
+		   $("#reviewFrm").show();
+	   })
+	   
+	   //클릭한 별점 수 저장
+	   let stars = 0;
+	   $(".label_star").on('click', function() {
+		   stars = $(this).text();		   
+	   })
+
+	   //모달창에서 후기등록 버튼을 눌렀을 경우
+	   $("#review").on('click', function() {
+		   let reviewTgt = $("#reviewTgt").val();
+		   let category = 'T06';
+		   let reviewCntn = $("#reviewCntn").val();
+		   let userId = '[[${session.member.userId}]]';
+		   let star = stars;
+		   
+		    $.ajax({
+					url : "/review/reviewInsert",
+					method : 'post',
+					contentType : 'application/x-www-form-urlencoded',
+					data : {userId:userId, reviewTgt:reviewTgt, star:star, reviewCntn:reviewCntn, category:category},
+					beforeSend : function(xhr)
+	                {  
+	    				xhr.setRequestHeader(header, token);
+	                },
+					success : function(data) {
+						alert('후기가 등록되었습니다.');
+						$("#reviewFrm").hide();
+					},
+					fail : function(result) {
+						console.log(result)
+					}
+				})
+	   })
+	   
+	   let cId = '';
+	   let fromId = '[[${session.member.userId}]]';
+	   let stompClient = null;
+	   //채팅버튼을 눌렀을 때
+		$(".chattingUp").on("click", function () {
+			$(".chat").toggleClass("active");
+			
+			let toId = $('#left').children().children('#userId').text();
+			
+			//채팅방 구독 생성
+			function createChatRoom() {
+				let chatroomDataList = new Array();
+				let chatroomData1 = {
+						toId : toId,
+						fromId : fromId
+				};
+				chatroomDataList.push(chatroomData1);
+				let chatroomData2 = {
+						toId : fromId,
+						fromId : toId
+				};
+				chatroomDataList.push(chatroomData2);
+				
+				console.log(JSON.stringify(chatroomDataList));
+				
+				$.ajax({
+		   			url : '/chatInsert',
+		   			method : 'post',
+		   			data : JSON.stringify(chatroomDataList),
+		   			contentType : "application/json; charset=UTF-8",
+		   			beforeSend : function(xhr)
+		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+		            }
+		   		}).then(res => {
+		   			cId = res;
+		   			console.log("cid", cId);
+					connect();
+		   		})
+			}
+		   		
+		   	function connect() {
+		   			//구독
+		   			var socket = new SockJS('/gs-guide-websocket');
+		            stompClient = Stomp.over(socket);
+		            stompClient.connect({}, function (frame) {
+		            console.log('Connected: ' + frame);
+					
+		            //방 구독하기
+		            stompClient.subscribe('/topic/chat/' + cId, function (chat) {  
+		            var content = JSON.parse(chat.body);
+		            console.log(content);
+		            //키값
+		            let tag = `<li class="repaly">
+                        <p>content.msgCntn</p>
+                        //<span class="time">${userId}</span>
+                      </li>`;
+                     
+		            $("#greetings").append(tag);
+		           })
+		       })
+			}
+				
+			function makeList(r){
+				console.log('리스트만들기')
+				let list = `<a href="#" class="d-flex align-items-center">
+								<div class="flex-grow-1 ms-3">
+									<h3>${r.toId}</h3>
+									<p>front end developer</p>
+								</div>
+							 </a>`;
+				return list;
+			}
+			
+			//채팅화면이 나타난다.
+			if ($(".chat").hasClass("active")) {
+				console.log(fromId);
+				$.ajax({
+					url : '/chatSelect',
+					method : 'post',
+		   			data : JSON.stringify({fromId:fromId}),
+		   			contentType : "application/json; charset=UTF-8",
+		   			beforeSend : function(xhr)
+		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+		            }
+		   		}).then(res => {
+		   			console.log(res);
+		   			console.log(res.length);
+		   			if(res.length >= 1){
+		   				for(r of res){
+		   					console.log('r' + r);
+		   					$(".chat-list").append(makeList(r));
+		   				}
+		   			} else {
+		   				createChatRoom();
+		   			}
+		   		})
+				
+				//createChatRoom();
+				$(".chat-popup").show();
+
+			}
+
+			//채팅화면이 사라진다.
+			if (!$(".chat").hasClass("active")) {
+				$(".chat-popup").hide();
+			}
+			});
+	   
+	   $("#send").click(function sendMessage() {
+			stompClient.send("/app/chat", {}, JSON.stringify({
+				 chaId : cId,
+				 fromId : fromId,
+				 msgCntn : $("#name").val()
+			}));
+			
+			$("name").val("");
+
+		});
    </script>
-
 </div>
-
 </html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eventi.left.chattings.mapper.ChattingsMapper">
+	<!-- 채팅한 방 가져오기 -->
+	<select id="chatRoom" resultType="com.eventi.left.chattings.service.ChattingsVO">
+		SELECT *
+		FROM CHATTINGS
+		WHERE FROM_ID = #{fromId}
+	</select>
+	
+	<!-- 채팅방 번호 가져오기 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'CH' || NVL((MAX(TO_NUMBER(SUBSTR(C_ID,3)))+1),1) C_ID
+		FROM CHATTINGS
+	</select>
+	
+	<!--채팅방 추가-->
+	<insert id="chatRoomInsert">
+		INSERT INTO CHATTINGS
+		VALUES (#{cId}, #{toId}, #{fromId})
+	</insert>
+</mapper>
