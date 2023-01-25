@@ -86,9 +86,15 @@
 									</div>
 									
 								</th:block>
-
+	
 								<!-- 신고수 -->
-								<span id="modalUp" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+								<th:block sec:authorize="!isAuthenticated()">
+									<span onclick="login()" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+								</th:block>
+								
+								<th:block sec:authorize="isAuthenticated()">
+									<span id="modalUp" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+								</th:block>
 								
 								<!-- 조회수 -->
 								 <span style='font-size: 30px;'>&#128065;</span><span th:text=${contest.inq}></span>
@@ -129,8 +135,7 @@
 							</div>
 
 							<!-- 공모전 작성자만 -->
-							<div
-								th:if="|${session.member.getUserId()}| == ${contest.writer} ">
+							<div th:if="|${session.member.getUserId()}| == ${contest.writer} ">
 									<button id="contestUpdate" type="button" class="btn btn-g btn-round btn-lg" >수정</button>
 									<button id="delBtn" type="button"  class="btn btn-g btn-round btn-lg5">삭제</button>
 									<button id="updateDate" type="button" class="btn btn-g btn-round btn-lg">마감연장</button>
@@ -192,7 +197,7 @@
 						<label>신고게시글</label>
 						<input type="text" id="targetId" name="targetId" th:value="${contest.cNo}" readonly><br>
 						<label>신고자</label>
-						<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+						<input type="text" id="userId" name="userId" th:value="${sessionId}"><br>
 						<label>신고사유</label>
 						<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
 						<button type="button" id="cancel">취소</button>

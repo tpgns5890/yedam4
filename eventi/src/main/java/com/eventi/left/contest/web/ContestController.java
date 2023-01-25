@@ -82,14 +82,13 @@ public class ContestController {
 
 		// 로그인된 경우
 		if (user != null) {
-			String sessionId = user.getUserId();
 			// 상세리스트 1건의 회원의 좋아요 체크확인
 			LikesVO likeCheck = new LikesVO();
 			likeCheck.setTargetNo(cVo.getcNo());
-			likeCheck.setUserId(sessionId);
+			likeCheck.setUserId(user.getUserId());
+			model.addAttribute("sessionId", user.getUserId());
 			model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		}
-
 		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
 		model.addAttribute("contest", service.getContest(cVo.getcNo()));

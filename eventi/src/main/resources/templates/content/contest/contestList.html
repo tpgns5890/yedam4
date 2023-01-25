@@ -148,7 +148,6 @@
 						$('#returnPaging').append(makePageing(res.paging));
 					})
 
-
 					//정렬기준 변경 ex)조회순
 					$('#order').on("change", function () {
 						let order = $(this).val();
@@ -156,7 +155,6 @@
 						checkSelect();
 
 					});
-
 
 
 					//분류별 조회 선택 ex)현수막
@@ -231,7 +229,7 @@
 					let p = ` 
 								<div class="col-sm-6 col-md-4 col-lg-4">
 					                <div id="${contest.cNo}" class="shop-item">
-					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 665px; height: 700px">
+					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 500px; height: 500px">
 					                    <div class="shop-item-detail">
 					                    	<div class="stage" >
 							  					<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)"></div>
@@ -355,7 +353,7 @@
 					let p = ` 
 						<div class="col-sm-6 col-md-4 col-lg-4">
 			                <div id="${contest.C_NO}" class="shop-item">
-			                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 665px; height: 750px">
+			                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px">
 			                    <div class="shop-item-detail">
 			                    	<div class="stage" >
 					  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
