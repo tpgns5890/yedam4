@@ -7,10 +7,12 @@
 	<sql id="mSelect">
 		<where>
 	 	<!-- 회원등급별 정렬 -->
-		<if test="auth != null and auth != ''">
-			AND USER_GRADE = #{auth}
+		<if test='auth eq "1".toString()'>
+			AND USER_GRADE != 'ROLE_BUSI'
 		</if>
-
+		<if test='auth eq "2".toString()'>
+			AND USER_GRADE = 'ROLE_BUSI'
+		</if>
 		<!-- 회원아이디 검색처리 -->
 		<if test="userId != null and userId != ''">
 			AND USER_ID LIKE '%'||#{userId}||'%'
