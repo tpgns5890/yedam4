@@ -68,8 +68,17 @@
 	
 	<!-- 구인게시글 단건조회 -->
 	<select id="getJob" resultType="com.eventi.left.job.service.JobBoardVO">
-		SELECT *
-		FROM JOB_BOARD
+		SELECT j.*
+			  ,CLOSE_DT - SYSDATE AS remain
+			  
+			  ,(select count(*)
+	              from likes l
+	             where l.category = 'T03'
+	              and l.target_No = #{jobNo}) as cnt
+	          ,(select count(*)
+	              from resume_board r
+	             where r.job_No = #{jobNo}) as re_Count   
+		FROM JOB_BOARD j
 		WHERE JOB_NO  = #{jobNo}
 	</select>
 	
@@ -91,11 +100,17 @@
 		WHERE JOB_NO=#{jobNo}
 	</update>
 	
+	
+	
 	<!-- 게시글 등록 -->
 	<insert id="jobInsert">
+		<selectKey keyProperty="jobNo" resultType="String" order="BEFORE">
+		SELECT 'JB'|| JOB_BOARD_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	
 		INSERT INTO JOB_BOARD
 		(JOB_NO, TITLE, JOB_CNTN, PAY, LOC, E_TYPE, W_SDAY, W_EDAY, W_HOUR, QUALIFICATION, PREFERENCE, IMG, USER_ID, DT, CLOSE_DT ) <!-- DB -->
-		VALUES('JB'|| JOB_BOARD_SEQ.NEXTVAL, #{title}, #{jobCntn}, 
+		VALUES(#{jobNo}, #{title}, #{jobCntn}, 
 				#{pay}, #{loc}, #{eType}, #{wSday}, #{wEday}, #{wHour}, #{qualification}, #{preference}, #{img}, #{userId}, sysdate, #{closeDt}) <!-- VO -->
 	</insert>
 	

@@ -35,8 +35,8 @@ public class JobBoardVO {
 	Integer last = 4; //마지막 페이지
 	//좋아요 수 
 	Integer cnt;
-	//구직신청한 수 
+	//지원자 수 
 	Integer reCount;
-	//마감 남은 일수
+	//마감일 수
 	private Integer remain;
 }

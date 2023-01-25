@@ -1,5 +1,6 @@
 package com.eventi.left.job.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
+import com.eventi.left.files.service.FilesService;
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.promotion.service.PromotionVO;
 
 @Controller
 public class JobBoardController {
@@ -27,12 +31,32 @@ public class JobBoardController {
 	JobService jobService;
 	//좋아요 service
 	@Autowired LikesService likeService;
+	//파일 service
+	@Autowired FilesService filesService;
 	
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
 	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
+		
+		List<JobBoardVO> imgs = jobService.getJobList(jobBoardVO, paging);
 		model.addAttribute("jobList", jobService.getJobList(jobBoardVO, paging ));
 		model.addAttribute("paging", paging);
+		
+		//사진파일
+		List<FilesVO> files = new ArrayList<>();
+		for(JobBoardVO img : imgs) {
+			files = filesService.fileList(img.getJobNo());
+					
+			//파일리스트 저장된 파일정보가 홍보번호와 같다면 이미지셋팅.
+			for(FilesVO file : files) {
+				if(file.getTargetId().equals(img.getJobNo())) {
+					img.setImg(file.getSevNm());
+				}
+			}
+		}
+		model.addAttribute("jobList", imgs);
+		//이미지
+		model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
 		return "content/job/jobList";
 	}
 	
@@ -53,8 +77,8 @@ public class JobBoardController {
 	//게시글 등록
 		@PostMapping("/jobInsert")
 		 //form으로 보냄
-		public String JobInsertForm(JobBoardVO jobBoardVO, MultipartFile uploadFile) {
-			jobService.jobInsert(jobBoardVO, uploadFile ); //값이 vo자동으로 저장
+		public String JobInsertForm(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+			jobService.jobInsert(jobBoardVO, filesVO, uploadFile); //값이 vo자동으로 저장
 			return "redirect:/jobList";
 			//rttr.addFlashAttribute("result", "게시글 등록 완료!"); //데이터전달
 	}
@@ -68,9 +92,10 @@ public class JobBoardController {
 		likesVO.setTargetNo(jobBoardVO.getJobNo());
 		likesVO.setCategory("T03");
 		model.addAttribute("like", likeService.getLike(likesVO));
-		//해당 게시글 좋아요 수
-		//model.addAttribute("likeCount", likeService.countLike(likesVO));
+		//상세내용
 		model.addAttribute("job", jobService.getJob(jobBoardVO));
+		//이미지
+		model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
 		return "content/job/jobDetailBoard";
 	}
 	
@@ -78,14 +103,16 @@ public class JobBoardController {
 	@RequestMapping(value = "/jobUpdate", method=RequestMethod.GET) 
 	public String jobUpdate(Model model, JobBoardVO jobBoardVO) {
 		model.addAttribute("update", jobService.getJob(jobBoardVO));
+		//이미지
+		model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
 		return "content/job/jobUpdateForm";
 	}
 	
 	//게시글 수정
 		@PostMapping("/jobUpdate")
 		@ResponseBody //ajax방식
-		public int jobUpdate(JobBoardVO jobBoardVO) {
-			return jobService.getJobUpdate(jobBoardVO);
+		public int jobUpdate(JobBoardVO jobBoardVO, MultipartFile[] uploadFile) {
+			return jobService.getJobUpdate(jobBoardVO, uploadFile);
 			//rttr.addFlashAttribute("result", "게시글 수정 완료!");
 		}
 	

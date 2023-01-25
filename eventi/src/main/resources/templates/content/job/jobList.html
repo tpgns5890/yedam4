@@ -46,6 +46,17 @@
 		<option value="E03" th:selected="${jobBoardVO.eType=='E03'}" >개인행사</option>
 		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
 		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
+		<option value="E06" th:selected="${jobBoardVO.eType=='E06'}" >기념식</option>
+		<option value="E07" th:selected="${jobBoardVO.eType=='E07'}" >가요제</option>
+		<option value="E08" th:selected="${jobBoardVO.eType=='E08'}" >플리마켓</option>
+		<option value="E09" th:selected="${jobBoardVO.eType=='E09'}" >체육대회</option>
+		<option value="E10" th:selected="${jobBoardVO.eType=='E10'}" >단합행사</option>
+		<option value="E11" th:selected="${jobBoardVO.eType=='E11'}" >세미나</option>
+		<option value="E12" th:selected="${jobBoardVO.eType=='E12'}" >포럼</option>
+		<option value="E13" th:selected="${jobBoardVO.eType=='E13'}" >워크샵</option>
+		<option value="E14" th:selected="${jobBoardVO.eType=='E14'}" >전시회</option>
+		<option value="E15" th:selected="${jobBoardVO.eType=='E15'}" >박람회</option>
+		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
 	</select> 
 	
 <!-- 게시글 정렬기준 -->
@@ -75,7 +86,7 @@
 				<th>행사유형</th>
 				<th>회원ID</th>
 				<th>좋아요수</th>
-				<th>신청자수</th>
+				<th>지원자수</th>
 				<th>작성날짜</th>
 				<th>마감일</th>
 				<th>남은 마감일</th>
@@ -100,12 +111,19 @@
 		</tbody>
 	</table>
 	<div class="row mt-5">
-		          <div class="col text-center">
-		            <div class="block-27">
-		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
-		            </div>
-		          </div>
-		        </div>
+		 <div class="col text-center">
+			<div class="block-27">
+				<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+		    </div>
+		 </div>
+	</div>
+		        
+	<!-- 이미지 나타내기 -->	
+	<div th:each="f : ${file}">
+	<!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
+		<img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+	</div>	
+	        
 <script>
 function gopage(i) {
     console.log(i);

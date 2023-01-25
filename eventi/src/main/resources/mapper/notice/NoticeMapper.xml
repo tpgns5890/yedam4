@@ -4,19 +4,22 @@
 <mapper namespace="com.eventi.left.notice.mapper.NoticeMapper">
 <sql id="nSelect">
 	<!-- 검색창 입력 시 -->
+	<where>
 		<if test="ttl !=null and ttl != ''">
 			AND ( TTL LIKE '%${ttl}%' OR NOTICE_CNTN LIKE '%${ttl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
+	</where>
 </sql>	
 	<!-- 게시글 전체조회 -->
 	<select id="noticeList" resultType="com.eventi.left.notice.service.NoticeVO">
 		SELECT NOTICE_NO, TTL, DT, SEE
-		FROM NOTICE
+		FROM (SELECT ROWNUM RN, A.* 
+				FROM(SELECT * FROM NOTICE
 		<include refid="nSelect" />
-		<!--	<![CDATA[
+			<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}
-		]]>-->
+		]]>
 	</select>
 	
 	<!-- 게시글 개수 -->
@@ -33,14 +36,14 @@
 	
 	<!-- 게시글 등록 -->
 	<insert id="nocInsert">
-	<selectKey keyProperty="proNo" resultType="String" order="BEFORE">
-			SELECT 'NO' || (MAX(TO_NUMBER(SUBSTR(NOTICE_NO,3)))+1) NOTICE_NO
-		FROM NOTICE
-	</selectKey>
+		<selectKey keyProperty="noticeNo" resultType="String" order="BEFORE">
+				SELECT 'NO' || (MAX(TO_NUMBER(SUBSTR(NOTICE_NO,3)))+1) NOTICE_NO
+			FROM NOTICE
+		</selectKey>
 		
 		INSERT INTO NOTICE
 		(NOTICE_NO, TTL, NOTICE_CNTN, DT, IMG, USER_ID) <!-- DB -->
-		VALUES('NO'|| NOTICE_SEQ.NEXTVAL, #{ttl}, #{noticeCntn}, #{dt}, #{img}, #{userId}) <!-- VO -->
+		VALUES(#{noticeNo}, #{ttl}, #{noticeCntn}, #{dt}, #{img}, #{userId}) <!-- VO -->
 	</insert>
 	
 	<!-- 게시판 조회수 -->
