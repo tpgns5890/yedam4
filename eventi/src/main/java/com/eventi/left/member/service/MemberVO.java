@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,8 +38,6 @@ public class MemberVO implements UserDetails {
 	private String userState;
 	private List<CrtfVO> crtfs;
 	private BusiVO busi;
-
-	private String userState;
 	
 	private String busiNum;
 	private String busiTitle;
