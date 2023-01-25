@@ -15,7 +15,7 @@ public interface NoticeService {
 	public String getSeq();
 	
 	//게시글 등록
-	public int nocInsert(NoticeVO noticeVO, MultipartFile uploadFile);
+	public int nocInsert(NoticeVO noticeVO);
 	
 	//게시물 상세조회
 	public NoticeVO nocDetail(NoticeVO noticeVO);

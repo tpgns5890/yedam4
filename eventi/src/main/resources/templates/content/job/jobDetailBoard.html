@@ -110,15 +110,45 @@
   		<div id="love" class="stage heart active"></div>
 </div>
 </th:block>	
+          <div class="container">
+            <div class="row multi-columns-row">
+              <div class="col-sm-6 col-md-3 col-lg-3">
+                <div class="count-item mb-sm-40">
+                  <div class="count-icon"><span class="icon-wallet"></span></div>
+                  <h3 class="count-to font-alt" th:data-countto="${job.pay}" th:text="${job.pay}"></h3>
+                  <h5 class="count-title font-serif">수당</h5>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3 col-lg-3">
+                <div class="count-item mb-sm-40">
+                  <div class="count-icon"><span class="icon-profile-male"></span></div>
+                  <h3 class="count-to font-alt" th:data-countto="${job.reCount}" th:text="${job.reCount}"></h3>
+                  <h5 class="count-title font-serif">지원자수</h5>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3 col-lg-3">
+                <div class="count-item mb-sm-40">
+                  <div class="count-icon"><span class="icon-calendar"></span></div>
+                  <h3 class="count-to font-alt" th:data-countto="${job.remain}" th:text="|${job.remain} 일전|"></h3>
+                  <h5 class="count-title font-serif">마감일</h5>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3 col-lg-3">
+                <div class="count-item mb-sm-40">
+                  <div class="count-icon"><span class="icon-heart"></span></div>
+                  <h3 class="count-to font-alt" th:data-countto="${job.cnt}"  th:text=${job.cnt}></h3>
+                  <h5 class="count-title font-serif">좋아요수</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
 	<table class="table mb-3" >
 	<thead class="thead-dark">
-	
-	
          <tr>   
             <th>구인게시글번호</th>
             	<th>제목</th>
 				<th>내용</th>
-				<th>수당</th>
 				<th>위치</th>
 				<th>행사유형</th>
 				<th>근무시작일</th>
@@ -128,7 +158,6 @@
 				<th>우대사항</th>
 				<th>이미지</th>
 				<th>회원ID</th>
-				<th>좋아요수</th>
 				<th>작성날짜</th>  
          </tr>
       </thead>
@@ -137,7 +166,6 @@
          		<td th:text=${job.title}></td>
 				<td th:text=${job.jobNo}></td>
 				<td th:text=${job.jobCntn}></td>
-				<td th:text=${job.pay}></td>
 				<td th:text=${job.loc}></td>
 				<td th:text=${job.eType}></td>
 				<td th:text=${job.wSday}></td>
@@ -147,32 +175,25 @@
 				<td th:text=${job.preference}></td>
 				<td th:text=${job.img}></td>
 				<td th:text=${job.userId}></td>
-				<td th:text=${job.cnt}></td>
 				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 			</tr>
       </tbody>
+      
    </table>
-<!--   <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts">
-                    <li class="clearfix" th:each=>
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta">${other.job}</div>
-                      </div>
-                    </li>
-                    
-                  </ul>
-                </div>-->
    <div id="modal">
-				<div class="modal_content">
-					<h1>등록완료!</h1>
-					<div id="button_box">
-					<button type="button" id="modal_close_btn">닫기</button>
-					</div>
-				</div> 
-				<div class="modal_layer"></div>
+		<div class="modal_content">
+			<h1>등록완료!</h1>
+			<div id="button_box">
+				<button type="button" id="modal_close_btn">닫기</button>
+			</div>
+		</div> 
+		<div class="modal_layer"></div>
+	</div>
+	
+	<!-- 이미지 나타내기 -->	
+			<div th:each="f : ${file}">
+				 <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
+				 <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 			</div>
 <script>
 //script에서 th값 가져올때는 <!--/*[[]]*/*/-->대괄호 쓰기!

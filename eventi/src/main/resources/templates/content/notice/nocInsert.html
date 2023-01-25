@@ -3,9 +3,13 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
-
-
-
+<head>
+	<style>
+		.label{
+			color: black;
+		}
+	</style>
+</head>
 <div layout:fragment="content">
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
           <div class="container">
@@ -24,7 +28,6 @@
 				<h3 class="mb-4">공지사항 작성</h3>
 				<form action="/nocInsert" method="POST" id="nocInsert" name="nocInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
-					
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -74,6 +77,10 @@
 	</div>
 
 <script>
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
 let oEditors = []
 
 smartEditor = function() {

@@ -40,6 +40,7 @@ public class PromotionController {
 	public String proList(Model model, PromotionVO promotionVO, PagingVO paging) {
 		//전체리스트 조회
 		List<PromotionVO> contents = proService.proList(promotionVO, paging);
+		model.addAttribute("proList", proService.proList(promotionVO, paging));
 		model.addAttribute("paging", paging);
 		
 		//사진파일
@@ -106,7 +107,7 @@ public class PromotionController {
 	//게시글 수정
 		@PostMapping("/proUpdate")
 		public String proUpdate(PromotionVO promotionVO, MultipartFile uploadFile) {
-			proService.proUpdate(promotionVO,uploadFile );
+			proService.proUpdate(promotionVO, uploadFile );
 			return "redirect:/proList";
 		}
 

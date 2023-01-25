@@ -5,20 +5,22 @@
 <sql id="pSelect">
 	
 		<!-- 검색창 입력 시 -->
+		<where>
 		<if test="eName !=null and eName != ''">
-			AND ( ENAME LIKE '%${eName}%' OR INTRO LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			AND (E_NAME LIKE '%${eName}%' OR INTRO LIKE '%${eName}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
 		<!-- option 선택 시-->
 		<if test="eType !=null and eType != ''">
 			AND E_TYPE = #{eType}
 		</if>
-		
+		</where>
 </sql>	
 		
 	<!-- 홍보게시판 메인 -->
 	<select id="proList" resultType="com.eventi.left.promotion.service.PromotionVO">
 		SELECT PRO_NO, USER_ID, E_NAME, code_select(E_TYPE) E_TYPE, IMG, SEE
-		 FROM (SELECT ROWNUM RN, A.* FROM( PROMOTION_BOARD
+		 FROM (SELECT ROWNUM RN, A.* 
+		        FROM(SELECT * FROM PROMOTION_BOARD
 		<include refid="pSelect" />
 	<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 

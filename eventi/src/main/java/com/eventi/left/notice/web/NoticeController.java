@@ -48,12 +48,11 @@ public class NoticeController {
 	//게시글 등록
 	@PostMapping("/nocInsert")
 	//form으로 보냄
-	public String nocInsert(NoticeVO noticeVO, MultipartFile uploadFile) {
-		nocService.nocInsert(noticeVO, uploadFile);
+	public String nocInsert(NoticeVO noticeVO) {
+		nocService.nocInsert(noticeVO);
 		return "redirect:/nocList";
 	}
 		
-	
 	//게시글수정페이지로이동
 	@RequestMapping(value = "/nocUpdate", method=RequestMethod.GET) 
 	public String nocUpdate(Model model, NoticeVO noticeVO) {

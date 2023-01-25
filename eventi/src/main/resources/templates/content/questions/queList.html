@@ -16,10 +16,9 @@
           </div>
         </section>
         
-    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-	<th:block th:if="${session.member.userId} == ${queList.userId}">
-	</th:block>
-	
+  
+	 
+	   
 	<button type="button" class="btn btn-outline-primary" 
 	th:onclick="|location.href='@{queInsert}'|">문의등록</button>
 	

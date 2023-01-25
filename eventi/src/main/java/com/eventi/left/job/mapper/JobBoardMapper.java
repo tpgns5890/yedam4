@@ -3,7 +3,6 @@ package com.eventi.left.job.mapper;
 import java.util.List;
 
 import com.eventi.left.job.service.JobBoardVO;
-import com.eventi.left.notice.service.NoticeVO;
 
 public interface JobBoardMapper {
 	
