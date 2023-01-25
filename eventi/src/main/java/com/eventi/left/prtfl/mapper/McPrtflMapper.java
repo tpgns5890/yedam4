@@ -12,11 +12,14 @@ public interface McPrtflMapper {
 	//사회자 단건조회
 	public McPrtflVO mcSelect(McPrtflVO mcPrtflVO);
 	
+	//전체 건수
+	public int count(McPrtflVO mcPrtflVO);
+	
 	//사회자별 댓글 조회
 	public List<ReplyVO> mcReply(ReplyVO replyVO);
 	
 	//조회수 +1
-	public int getSeq(McPrtflVO mcPrtflVO);
+	public int inqUpdate(McPrtflVO mcPrtflVO);
 	
 	//사회자 정보 입력
 	public int mcInsert(McPrtflVO mcPrtflVO);

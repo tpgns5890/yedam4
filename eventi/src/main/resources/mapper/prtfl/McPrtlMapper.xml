@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.prtfl.mapper.McPrtflMapper">
+	<!-- 전체 리스트에서 좋아요 정렬 -->
+	<sql id="likeSelect">
+			<if test="userId != null and userId != ''">
+				AND l.user_id = #{userId}
+			</if>
+	</sql>
+	
 	<!-- 사회자 전체조회 -->
 	<select id="mcAll" resultType="com.eventi.left.prtfl.service.McPrtflVO">
-		SELECT *
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT m.*, (select count(*) from likes where target_no = m.user_id) AS cnt
+		FROM MC_PRTFL m, likes l
+		WHERE m.user_id = l.target_no(+)
+		<include refid="likeSelect" />
+		ORDER BY ${order} DESC
+		<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<!-- 사회자포트폴리오 총 건수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
 		FROM MC_PRTFL
 	</select>
 	
 	<!-- 사회자 단건조회 -->
 	<select id="mcSelect" resultType="com.eventi.left.prtfl.service.McPrtflVO">
-		SELECT *
-		FROM MC_PRTFL
-		WHERE USER_ID = #{userId}
+		SELECT m.*, (select count(*) from likes where target_no = m.user_id) AS cnt
+		FROM MC_PRTFL m, LIKES l
+		WHERE M.USER_ID = L.TARGET_NO(+)
+		AND m.USER_ID = #{userId}
 	</select>
 	
 	<!-- 사회자별 리플 -->
@@ -23,11 +44,11 @@
 	</select>
 	
 	<!-- 조회수 +1 -->
-	<select id="getSeq" resultType="String">
+	<update id="inqUpdate">
 		UPDATE MC_PRTFL
 		SET INQ = INQ+1
 		WHERE USER_ID = #{userId}
-	</select>
+	</update>
 	
 	<!-- 사회자 입력 -->
 	<insert id="mcInsert">

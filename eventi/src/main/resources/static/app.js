@@ -42,10 +42,14 @@ function showGreeting(message) {
 
 function make(message){
 	
-	let tag = `<div class="anotherMsg">
+	/*let tag = `<div class="anotherMsg">
                     <span class="anotherName">${userId}</span>
                     <span class="msg">${message}</span>
-                </div>`
+                </div>`*/
+    let tag = `<li class="repaly">
+                        <p> ${message}</p>
+                        <span class="time">${userId}</span>
+                      </li>`;           
     return tag;   
 }
 

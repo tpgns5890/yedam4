@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
@@ -26,14 +27,26 @@ public class McPrtflServiceImpl implements McPrtflService{
 		
 	//전체조회
 	@Override
-	public List<McPrtflVO> mcAll(McPrtflVO McPrtfVO) {
+	public List<McPrtflVO> mcAll(McPrtflVO McPrtfVO, PagingVO paging) {
+		paging.setTotalRecord(mcPrtflMapper.count(McPrtfVO));
+		paging.setPageUnit(6);
+		McPrtfVO.setFirst(paging.getFirst());
+		McPrtfVO.setLast(paging.getLast());
+		
 		return mcPrtflMapper.mcAll(McPrtfVO);
 	}
 	
 	//건별조회
 	@Override
 	public McPrtflVO mcSelect(McPrtflVO mcPrtflVO) {
+		mcPrtflMapper.inqUpdate(mcPrtflVO);
 		return mcPrtflMapper.mcSelect(mcPrtflVO);
+	}
+	
+	//전체 건수
+	@Override
+	public int count(McPrtflVO mcPrtflVO) {
+		return mcPrtflMapper.count(mcPrtflVO);
 	}
 
 	//댓글 전체조회
@@ -51,7 +64,7 @@ public class McPrtflServiceImpl implements McPrtflService{
 		List<FileDto> list= new ArrayList<FileDto>();
 	      //파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
 	      try {
-			list = newUp.uploadFiles(uploadFile, user.getUserId(), "T06");
+			list = newUp.uploadFiles(uploadFile, mcPrtflVO.getUserId(), "T06");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,8 +74,8 @@ public class McPrtflServiceImpl implements McPrtflService{
 	
 	//조회수 +1
 	@Override
-	public int getSeq(McPrtflVO mcPrtflVO) {
-		return mcPrtflMapper.getSeq(mcPrtflVO);
+	public int inqUpdate(McPrtflVO mcPrtflVO) {
+		return mcPrtflMapper.inqUpdate(mcPrtflVO);
 	}
 
 	//사회자 수정

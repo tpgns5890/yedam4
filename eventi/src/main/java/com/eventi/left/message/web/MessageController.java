@@ -20,8 +20,8 @@ public class MessageController {
 	
 	@GetMapping("/msgList")
 	public String msgList(Model model, MessageVO messageVO) {
-		model.addAttribute("msgs", messageService.msgList(messageVO));
-		return "content/chatting/message";
+		//model.addAttribute("msgs", messageService.msgList(messageVO));
+		return "content/chatting/messageTest2";
 	}
 	
 	@GetMapping("/msgInsert")

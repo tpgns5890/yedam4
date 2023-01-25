@@ -1,194 +1,406 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:th="http://www.thymeleaf.org"
-   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
 <head>
+	<!-- 채팅방 관련 -->
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/main.css" rel="stylesheet">
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script>
+		let userId = '[[${session.member.userId}]]';
+	</script>
+	<script src="/app.js"></script>
+	<link href="/css/chat.css" rel="stylesheet">
+	<!-- 채팅방 관련 끝 -->
+
 	<style>
-	.heart {
-	  width: 100px;
-	  height: 100px;
-	  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
-	  background-position: 0 0;
-	  cursor: pointer;
-	  transition: background-position 1s steps(28);
-	  transition-duration: 0s;
-	  }
-	  
-	  .active {
-	    transition-duration: 1s;
-	    background-position: -2800px 0;
-	  }
+		.heart {
+			width: 100px;
+			height: 100px;
+			background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+			background-position: 0 0;
+			cursor: pointer;
+			transition: background-position 1s steps(28);
+			transition-duration: 0s;
+		}
+
+		.active {
+			transition-duration: 1s;
+			background-position: -2800px 0;
+		}
 	</style>
-	
+
 	<!-- csrf 설정 -->
-	<meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <div layout:fragment="content">
-   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-     <div class="container">
-       <div class="row">
-         <div class="col-sm-6 col-sm-offset-3">
-           <h2 class="module-title font-alt">자유게시글</h2>
-           <div class="module-subtitle font-serif">자유게시글</div>
-         </div>
-       </div>
-     </div>
-   </section>
-   	
-   	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글 등록하기</button>
+	<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg"
+		style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<h2 class="module-title font-alt">자유게시글</h2>
+					<div class="module-subtitle font-serif">자유게시글</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-   	<!-- 라디오 버튼 게시글별 정렬 -->
-   	<th:block th:if="${type =='T04'}">
+	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글
+		등록하기</button>
+
+	<!-- 라디오 버튼 게시글별 정렬 -->
+	<th:block th:if="${type =='T04'}">
 		<input type="radio" name="lclsf" value="all" checked>전체
-   		<input type="radio" name="lclsf" value="genrl" th:checked="${bboardVO.lclsf=='genrl'}">일반
-   		<input type="radio" name="lclsf" value="reply" th:checked="${bboardVO.lclsf=='reply'}">후기
+		<input type="radio" name="lclsf" value="genrl" th:checked="${bboardVO.lclsf=='genrl'}">일반
+		<input type="radio" name="lclsf" value="reply" th:checked="${bboardVO.lclsf=='reply'}">후기
 	</th:block>
 	<th:block th:if="${type =='T05'}">
 		<input type="radio" name="lclsf" value="all" checked>전체
-   		<input type="radio" name="lclsf" value="mc" th:checked="${bboardVO.lclsf=='mc'}">사회자
-   		<input type="radio" name="lclsf" value="dgner" th:checked="${bboardVO.lclsf=='dgner'}">디자이너
+		<input type="radio" name="lclsf" value="mc" th:checked="${bboardVO.lclsf=='mc'}">사회자
+		<input type="radio" name="lclsf" value="dgner" th:checked="${bboardVO.lclsf=='dgner'}">디자이너
 	</th:block>
-   	
-   	<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
+
+	<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
 	<select id="order" name="order">
 		<option value="dt" th:selected="${bboardVO.order=='dt'}">작성일순</option>
 		<option value="inq" th:selected="${bboardVO.order=='inq'}">조회순</option>
 		<option value="cnt" th:selected="${bboardVO.order=='cnt'}">좋아요순</option>
 	</select>
-	
+
 	<!-- 게시글 검색 -->
 	<input type="text" name="search">
 	<input type="button" id="find" value="찾기">
-   	
-   	<!-- 좋아요 기능 -->
-   	<div class="stage">
-  		<div id="love" class="stage heart" th:classappend="${param.writer} !=null ? active"></div>
-   	</div>
-   	
-   	<!-- 게시글 리스트 -->
-    <table class="table mb-3">
-	      <thead class="thead-dark">
-	         <tr>
-	            <th>게시판번호</th>
-	            <th>분류</th>   
-	            <th>작성자</th>   
-	            <th>제목</th>
-	            <th>조회수</th>
-	            <th>작성일자</th>
-	            <th>타입</th>
-	            <th>좋아요수</th>   
-	         </tr>
-	      </thead>
-	      <tbody id = "check">
-	         <tr th:each="b : ${bList}" th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|">
-	            <td th:text=${b.bBoardNo}></td>
-	            <!-- 대분류별 if문 처리 -->
-	            <td th:if="${b.lclsf} == 'genrl'" th:text="일반"></td>
-	            <td th:if="${b.lclsf} == 'reply'" th:text="후기"></td>
-	            <td th:if="${b.lclsf} == 'mc'" th:text="사회자"></td>
-	            <td th:if="${b.lclsf} == 'dgner'" th:text="디자이너"></td>
-	          	<!-- 중분류별 if문 처리 -->
-	          	<td th:if="${b.mclsf} == 'contract'" th:text="계약"></td>
-	          	<td th:if="${b.mclsf} == 'freelancer'" th:text="프리랜서"></td>
-	          	<td th:if="${b.mclsf} == 'style'" th:text="스타일"></td>
-	          	<td th:if="${b.mclsf} == 'advice'" th:text="조언"></td>
-	          	<td th:if="${b.mclsf} == 'etc'" th:text="기타"></td>
-	          	<!-- 익명일 경우 처리 -->
-	            <td th:if="${b.ano} == 'N'" th:text=${b.writer}></td>
-	            <td th:if="${b.ano} == 'Y'" th:text=${b.checkano}></td>
-	            <td th:text=${b.ttl}></td>
-	            <td th:text=${b.inq}></td>
-	            <td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
-	            <td id = type th:text=${b.type}></td>
-	            <td th:text=${b.cnt}></td>
-	         </tr>
-	      </tbody>
-	   </table>
-	   
+
+	<!-- 좋아요 기능 -->
+	<div class="stage">
+		<div id="love" class="stage heart" th:classappend="${param.writer} !=null ? active"></div>
+	</div>
+
+	<!-- 게시글 리스트 -->
+	<table class="table mb-3">
+		<thead class="thead-dark">
+			<tr>
+				<th>게시판번호</th>
+				<th>분류</th>
+				<th>작성자</th>
+				<th>제목</th>
+				<th>조회수</th>
+				<th>작성일자</th>
+				<th>타입</th>
+				<th>좋아요수</th>
+			</tr>
+		</thead>
+		<tbody id="check">
+			<tr th:each="b : ${bList}" th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|">
+				<td th:text=${b.bBoardNo}></td>
+				<!-- 대분류별 if문 처리 -->
+				<td th:if="${b.lclsf} == 'genrl'" th:text="일반"></td>
+				<td th:if="${b.lclsf} == 'reply'" th:text="후기"></td>
+				<td th:if="${b.lclsf} == 'mc'" th:text="사회자"></td>
+				<td th:if="${b.lclsf} == 'dgner'" th:text="디자이너"></td>
+				<!-- 중분류별 if문 처리 -->
+				<td th:if="${b.mclsf} == 'contract'" th:text="계약"></td>
+				<td th:if="${b.mclsf} == 'freelancer'" th:text="프리랜서"></td>
+				<td th:if="${b.mclsf} == 'style'" th:text="스타일"></td>
+				<td th:if="${b.mclsf} == 'advice'" th:text="조언"></td>
+				<td th:if="${b.mclsf} == 'etc'" th:text="기타"></td>
+				<!-- 익명일 경우 처리 -->
+				<td th:if="${b.ano} == 'N'" th:text=${b.writer}></td>
+				<td th:if="${b.ano} == 'Y'" th:text=${b.checkano}></td>
+				<td th:text=${b.ttl}></td>
+				<td th:text=${b.inq}></td>
+				<td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
+				<td id=type th:text=${b.type}></td>
+				<td th:text=${b.cnt}></td>
+			</tr>
+		</tbody>
+	</table>
+
 	<!-- 페이징 처리 -->
-		<div class="row mt-5">
-          <div class="col text-center">
-            <div class="block-27">
-               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
-            </div>
-          </div>
-        </div>
-		        
-   <script>
-    //csrf 설정
-    var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	
-	//페이지이동
-	function gopage(i) {
-		let userId = '[[${session.member.userId}]]'; 
-		let lclsf = $("input[name=lclsf]:checked").val();
-		let type = '[[${type}]]';
-		let order = $("#order option:selected").val();
-	    //location.href = '/bboard/bList?type=T04&page=' + i;
-	    if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
-			location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}&writer=${userId}&page=` + i;
-	    } else if (!$("#love").hasClass("active")){
-	    	location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}&page=` + i;
-	    }
-	 }
-	
- 	//라디오 버튼 정렬 클릭시
- 	$("input:radio[name=lclsf]").click(function(){
- 		range();
- 	})
- 		
- 	//옵션 정렬 클릭시
- 	$('#order').change(function() {
- 		range();
- 	});
- 		
- 	//하트를 클릭했을 경우 발생하는 이벤트
-   	$(".heart").on("click", function() {
-   		//active 클래스가 없을 경우 생성, 있을 경우 삭제
-   	    $(this).toggleClass("active");
-   		//하트 기준으로 리스트 정렬 함수
-   	    range();
-   	});
-   		
-   	//검색 기능
-   	$('#find').click(function() {
-   		//정렬 기준
-  		let userId = '[[${session.member.userId}]]';
-  		let lclsf = $("input[name=lclsf]:checked").val();
-  		let search = $("input[name=search]").val();
-  		let order = $("#order option:selected").val();
-  		let type = '[[${type}]]';
-  		
-  		//get방식으로 보내기	
-  		if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
-  			location.href=`/bboard/bList?type=${type}&ttl=${search}&lclsf=${lclsf}&order=${order}&writer=${userId}`
-  		} else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
-  			location.href=`/bboard/bList?type=${type}&lclsf=${lclsf}&order=${order}&ttl=${search}`
-  		}
-  			
-		$("input[name=search]").val('');
-   	})
-   		
-  	//정렬 리스트 불러오는 함수
-  	function range() {
- 		//정렬 기준
- 		let userId = '[[${session.member.userId}]]'; 
-		let lclsf = $("input[name=lclsf]:checked").val();
-		let type = '[[${type}]]';
-		let order = $("#order option:selected").val();
-		
-		//get방식으로 보내기	
-		if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
-			location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}&writer=${userId}`
-		} else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
-			location.href=`/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}`
+	<div class="row mt-5">
+		<div class="col text-center">
+			<div class="block-27">
+				<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+			</div>
+		</div>
+	</div>
+
+	<!-- 화면 하단 채팅 버튼 -->
+	<div class="chat">
+		<div class="background"></div>
+		<svg class="chat-bubble" width="80" height="80" viewBox="0 0 100 100">
+			<g class="bubble">
+				<path class="line line1" d="M 30.7873,85.113394 30.7873,46.556405 C 30.7873,41.101961
+          36.826342,35.342 40.898074,35.342 H 59.113981 C 63.73287,35.342
+          69.29995,40.103201 69.29995,46.784744" />
+				<path class="line line2" d="M 13.461999,65.039335 H 58.028684 C
+            63.483128,65.039335
+            69.243089,59.000293 69.243089,54.928561 V 45.605853 C
+            69.243089,40.986964 65.02087,35.419884 58.339327,35.419884" />
+			</g>
+			<circle class="circle circle1" r="1.9" cy="50.7" cx="42.5" />
+			<circle class="circle circle2" cx="49.9" cy="50.7" r="1.9" />
+			<circle class="circle circle3" r="1.9" cy="50.7" cx="57.3" />
+		</svg>
+	</div>
+
+	<!-- 채팅버튼 클릭시 나타날 채팅창 -->
+	<div class="chat-popup">
+		<div class="chat-windows">
+			<div class="chat-window-one">
+				<noscript>
+					<h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on
+						Javascript being
+						enabled. Please enable
+						Javascript and reload this page!</h2>
+				</noscript>
+				<!--채팅연결, Connect를 눌러줘야된다.-->
+				<div id="main-content" class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<form class="form-inline">
+								<div class="form-group">
+									<label for="connect">WebSocket connection:</label>
+									<button id="connect" class="btn btn-default" type="submit">Connect</button>
+									<button id="disconnect" class="btn btn-default" type="submit"
+										disabled="disabled">Disconnect
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- 채팅 popup -->
+				<section class="message-area">
+					<div class="container">
+						<div class="row">
+							<div class="col-12">
+								<div class="chat-area">
+									<!-- 채팅방 -->
+									<div class="chatlist">
+										<div class="modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="chat-header">
+													<ul class="nav nav-tabs" id="myTab" role="tablist">
+														<li class="nav-item" role="presentation">
+															<button class="nav-link active" id="Open-tab"
+																data-bs-toggle="tab" data-bs-target="#Open"
+																type="button" role="tab" aria-controls="Open"
+																aria-selected="true">Open</button>
+														</li>
+													</ul>
+												</div>
+
+												<div class="modal-body">
+													<!-- 채팅방 나타나는 곳 -->
+													<div class="chat-lists">
+														<div class="tab-content" id="myTabContent">
+															<!-- 채팅방 리스트 -->
+															<div class="chat-list">
+																<a href="#" class="d-flex align-items-center">
+																	<div class="flex-grow-1 ms-3">
+																		<h3>Mehedi Hasan</h3>
+																		<p>front end developer</p>
+																	</div>
+																</a>
+															</div>
+															<!-- 채팅방 리스트 end -->
+														</div>
+													</div>
+													<!-- 채팅방 나타나는 곳 end -->
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 채팅방 end -->
+
+									<!-- 채팅공간 -->
+									<div class="chatbox">
+										<div class="modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="msg-head">
+													<div class="row">
+														<div class="col-8">
+															<!--누구랑 채팅하는지 나타냄-->
+															<div class="d-flex align-items-center">
+																<div class="flex-grow-1 ms-3">
+																	<h3>Mehedi Hasan</h3>
+																	<p>front end developer</p>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<!--채팅내용-->
+												<div class="modal-body">
+													<div class="msg-body">
+														<ul id="greetings">
+															<li class="sender">
+																<p> Hey, Are you there? </p>
+																<span class="time">10:06 am</span>
+															</li>
+															<li class="repaly">
+																<p> Last Minute Festive Packages From Superbreak</p>
+																<span class="time">10:20 am</span>
+															</li>
+															<li>
+																<div class="divider">
+																	<h6>Today</h6>
+																</div>
+															</li>
+
+															<li class="repaly">
+																<p> Last Minute Festive Packages From Superbreak</p>
+																<span class="time">10:36 am</span>
+															</li>
+														</ul>
+													</div>
+												</div>
+
+												<!-- 채팅 보내는 공간 -->
+												<div class="send-box">
+													<form action="chatForm">
+														<input type="text" id="name" class="form-control"
+															aria-label="message…" placeholder="Write message…">
+
+														<button type="submit" id="send" class="btn btn-default"><i
+																class="fa fa-paper-plane" aria-hidden="true"></i>
+															Send</button>
+													</form>
+
+													<!--첨부파일 기능-->
+													<div class="send-btns">
+														<div class="attach">
+															<div class="button-wrapper">
+																<span class="label">
+																	<img class="img-fluid"
+																		src="https://mehedihtml.com/chatbox/assets/img/upload.svg"
+																		alt="image title"> attached file
+																</span><input type="file" name="upload" id="upload"
+																	class="upload-box" placeholder="Upload File"
+																	aria-label="Upload File">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		//csrf 설정
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		//페이지이동
+		function gopage(i) {
+			let userId = '[[${session.member.userId}]]';
+			let lclsf = $("input[name=lclsf]:checked").val();
+			let type = '[[${type}]]';
+			let order = $("#order option:selected").val();
+			//location.href = '/bboard/bList?type=T04&page=' + i;
+			if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
+				location.href = `/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}&writer=${userId}&page=` + i;
+			} else if (!$("#love").hasClass("active")) {
+				location.href = `/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}&page=` + i;
+			}
 		}
-  	} 
-   </script>
+
+		//라디오 버튼 정렬 클릭시
+		$("input:radio[name=lclsf]").click(function () {
+			range();
+		})
+
+		//옵션 정렬 클릭시
+		$('#order').change(function () {
+			range();
+		});
+
+		//하트를 클릭했을 경우 발생하는 이벤트
+		$(".heart").on("click", function () {
+			//active 클래스가 없을 경우 생성, 있을 경우 삭제
+			$(this).toggleClass("active");
+			//하트 기준으로 리스트 정렬 함수
+			range();
+		});
+
+		//검색 기능
+		$('#find').click(function () {
+			//정렬 기준
+			let userId = '[[${session.member.userId}]]';
+			let lclsf = $("input[name=lclsf]:checked").val();
+			let search = $("input[name=search]").val();
+			let order = $("#order option:selected").val();
+			let type = '[[${type}]]';
+
+			//get방식으로 보내기	
+			if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
+				location.href = `/bboard/bList?type=${type}&ttl=${search}&lclsf=${lclsf}&order=${order}&writer=${userId}`
+			} else if (!$("#love").hasClass("active")) { //하트가 눌리지 않았을 경우 실행
+				location.href = `/bboard/bList?type=${type}&lclsf=${lclsf}&order=${order}&ttl=${search}`
+			}
+
+			$("input[name=search]").val('');
+		})
+
+		//정렬 리스트 불러오는 함수
+		function range() {
+			//정렬 기준
+			let userId = '[[${session.member.userId}]]';
+			let lclsf = $("input[name=lclsf]:checked").val();
+			let type = '[[${type}]]';
+			let order = $("#order option:selected").val();
+
+			//get방식으로 보내기	
+			if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
+				location.href = `/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}&writer=${userId}`
+			} else if (!$("#love").hasClass("active")) { //하트가 눌리지 않았을 경우 실행
+				location.href = `/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}`
+			}
+		}
+
+		//채팅버튼을 눌렀을 때
+		$(".chat").on("click", function () {
+			$(this).toggleClass("active");
+
+			//채팅화면이 나타난다.
+			if ($(this).hasClass("active")) {
+				$(".chat-popup").show();
+			}
+
+			//채팅화면이 사라진다.
+			if (!$(this).hasClass("active")) {
+				$(".chat-popup").hide();
+			}
+		})
+
+		//채팅방 관련 - 아직 구현 안함
+		$(document).ready(function () {
+			$(".chat-list a").click(function () {
+				$(".chatbox").addClass("showbox");
+				return false;
+			});
+
+			$(".chat-icon").click(function () {
+				$(".chatbox").removeClass("showbox");
+			});
+		});
+	</script>
 </div>
 </html>
