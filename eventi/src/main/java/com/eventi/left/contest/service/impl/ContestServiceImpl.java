@@ -72,15 +72,13 @@ public class ContestServiceImpl implements ContestService {
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
-		List<ContestVO> list = mapper.contestList(vo); // 전체리스트 조회
-		return list;
+		return mapper.contestList(vo);
 	}
 
-	// 공모전 1건
+	// 공모전 1건 상세조회
 	@Override
 	public ContestVO getContest(String vo) {
-		// 상세조회시 조회수 업데이트
-		mapper.selectUpdate(vo);
+		mapper.selectUpdate(vo); // 조회수 업데이트
 		return mapper.getContest(vo);
 	}
 
@@ -104,30 +102,18 @@ public class ContestServiceImpl implements ContestService {
 				wMapper.insertWinner(wvo);
 			}
 		}
-		vo.setPay(hap); // 총 상금합계.
+		// 총 상금합계.
+		vo.setPay(hap);
 
-		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
-		List<FileDto> list = new ArrayList<FileDto>();
-		try {
-			list = newUp.uploadFiles(uploadFile, vo.getcNo(), "T01");
-			fMapper.deleteFile(vo.getcNo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		// 파일업로드,공모전등록
+		uploadFiles(uploadFile, vo);
 		int result = mapper.insertContest(vo);
 
-		// 공모전 등록시 메일동의 회원에게 발송
-		List<MemberVO> emailList = memberMapper.memberEmail();
-		if (result > 0) {
-			for (MemberVO email : emailList) {
-				String toMail = email.getUserEmail();
-				String title = vo.getTtl() + "공모전 업로드";
-				String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
-				mailing(toMail, title, content);
-			}
-		// 결제API연결후 입급내역 insert 추가.
-			
+		// 임시저장이 아닌경우만 이메일발송.
+		if (vo.getSave().equals("N")) {
+			membersSendMail(vo, result, 0); // vo,insert,update
+
+			// 결제API연결후 입급내역 insert 추가예정
 		}
 
 		return result;
@@ -138,37 +124,26 @@ public class ContestServiceImpl implements ContestService {
 	public int updateContest(ContestVO vo, MultipartFile[] uploadFile) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setWriter(user.getUserId());
+		int result = 0;
 
-		// 마감연장 할경우
+		// 마감기한 연장신청
 		if (vo.getDtExtns() != null) {
 			ContestVO contest = mapper.getContest(vo.getcNo());
+			//1회만 연장(null인경우만)
 			if (contest.getDtExtns() == null) {
-				return mapper.updateExtension(vo);
+				result = mapper.updateExtension(vo);
 			} else {
 				return 0;
 			}
-		}
-		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
-		List<FileDto> list = new ArrayList<FileDto>();
-		try {
-			list = newUp.uploadFiles(uploadFile, vo.getcNo(), "T01");
-			fMapper.deleteFile(vo.getcNo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			
+		//제목,내용 수정할경우(그 외 공모전민감자료 수정불가)
+		} else {
+			// 파일업로드,공모전 수정
+			uploadFiles(uploadFile, vo);
+			result = mapper.updateContest(vo);
 
-		int result = mapper.updateContest(vo);
-		// 공모전 수정 메일동의 회원에게 발송
-		List<MemberVO> emailList = memberMapper.memberEmail();
-		if (result > 0) {
-			for (MemberVO email : emailList) {
-				String toMail = email.getUserEmail();
-				String title = vo.getTtl() + "공모전 수정";
-				String content = "공모전이 수정되었습니다 참고 부탁드립니다!.";
-				mailing(toMail, title, content);
-			}
+			membersSendMail(vo, 0, result);// vo,insert,update
 		}
-
 		return result;
 	}
 
@@ -185,54 +160,29 @@ public class ContestServiceImpl implements ContestService {
 		String[] array = wvo.getWinnerPay();
 		wvo.setCoNo(vo.getcNo());
 
-		// 공모전 등록된 우승등수,금액이 없다면 추가
-		if (wMapper.winnerList(vo.getcNo()).size() == 0) {
-			for (int i = 0; i < array.length; i++) {
-				if (array[i] != null && !array[i].equals("")) {
-					wvo.setGrade(i + 1); // 등수
-					wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
-					hap += Integer.parseInt(array[i]); // 합계계산
-					wMapper.insertWinner(wvo);
-				}
+		// 공모전 등록된 우승등수,금액 삭제 후 재등록.
+		wMapper.deleteWinner(vo.getcNo());
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != null && !array[i].equals("")) {
+				wvo.setGrade(i + 1); // 등수
+				wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
+				hap += Integer.parseInt(array[i]); // 합계계산
+				wMapper.insertWinner(wvo);
 			}
-			// 공모전 등록된 우승등수,금액이 있다면 수정
-		} else {
-			for (int i = 0; i < array.length; i++) {
-				if (array[i] != null && !array[i].equals("")) {
-					wvo.setGrade(i + 1); // 등수
-					wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
-					hap += Integer.parseInt(array[i]); // 합계계산
-					if (wMapper.updateSaveWinner(wvo) == 0) {
-						wMapper.insertWinner(wvo);
-					}
-				}
-			}
-
 		}
-		// 총 상금합계. + 등록비도 추가할것..
+		// 총 상금합계
 		vo.setPay(hap);
 
-		// 1. 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+		// 파일업로드,공모전 수정
 		int result = mapper.saveUpdateContest(vo);
-		List<FileDto> list = new ArrayList<FileDto>();
-		try {
-			list = newUp.uploadFiles(uploadFile, vo.getcNo(), "T01");
-			fMapper.deleteFile(vo.getcNo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		uploadFiles(uploadFile, vo);
+		
+		// 임시저장이 아닌경우만 이메일발송.
+		if (vo.getSave().equals("N")) {
+			membersSendMail(vo, result, 0); // vo,insert,update
 
-		// 공모전 등록시 메일동의 회원에게 발송
-		List<MemberVO> emailList = memberMapper.memberEmail();
-		if (result > 0) {
-			for (MemberVO email : emailList) {
-				String toMail = email.getUserEmail();
-				String title = vo.getTtl() + "공모전 업로드";
-				String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
-				mailing(toMail, title, content);
-			}
+		// 결제API연결후 입급내역 insert 추가예정
 		}
-		// 결제API연결후 입급내역 insert 추가.
 
 		return result;
 	}
@@ -240,15 +190,16 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전,우승상금 삭제
 	@Override
 	public int deleteContest(ContestVO vo) {
+		
 		// 응모한 디자인이 있으면 삭제불가.
 		if (dMapper.entryDesign(vo.getcNo()) > 0) {
 			return 0;
 		}
-		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
-		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
 		LikesVO like = new LikesVO();
 		like.setTargetNo(vo.getcNo());
 		likeMapper.likeDelete(like);// 공모전 좋아요 삭제
+		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
+		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
 
 		// 정산요청 insert 추가할것.
 
@@ -291,8 +242,43 @@ public class ContestServiceImpl implements ContestService {
 		return mapper.saveGetContest(contestVO);
 	}
 
+	// 메소드--------------------------------------------------------------------
+	// 공모전 파일 업로드하는 메소드
+	public void uploadFiles(MultipartFile[] uploadfile, ContestVO vo) {
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.uploadFiles(uploadfile, vo.getcNo(), "T01"); //대상구분 공모전
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	// 공모전 등록,수정시 수신동의한 회원들에게 이메일발송
+	public void membersSendMail(ContestVO vo, int insert, int update) {
+
+		// 수신동의한 멤버리스트.
+		List<MemberVO> emailList = memberMapper.memberEmail();
+
+		// 처리된결과가 있으면
+		if (insert > 0) {
+			for (MemberVO email : emailList) {
+				String toMail = email.getUserEmail();
+				String title = "[" + vo.getcNo() + "]" + "공모전 업로드";
+				String content = vo.getTtl() + "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
+				mailing(toMail, title, content);
+			}
+		} else if (update > 0) {
+			for (MemberVO email : emailList) {
+				String toMail = email.getUserEmail();
+				String title = "[" + vo.getcNo() + "]"  + "공모전 수정";
+				String content = vo.getTtl() + "공모전이 수정되었습니다.";
+				mailing(toMail, title, content);
+			}
+		}
+	}
+
 	// 이메일 발송
-	// ----------------------------------------------------------------------------
 	public void mailing(String email, String setTitle, String setContent) {
 		String setFrom = "yedam4eventi@gmail.com";
 		String toMail = email;

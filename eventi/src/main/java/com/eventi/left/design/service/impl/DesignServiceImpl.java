@@ -53,17 +53,13 @@ public class DesignServiceImpl implements DesignService {
 
 	@Override
 	public int insert(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
-
-		vo.setCenterImg(uploadFile[0].getOriginalFilename()); // 대표사진세팅.
-		int r = mapper.insert(vo);
-		List<FileDto> list = new ArrayList<FileDto>();
-		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
-		try {
-			list = newUp.uploadFiles(uploadFile, vo.getDgnNo(), vo.getCaregory());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return r;
+		
+		// 대표사진세팅.
+		vo.setCenterImg(uploadFile[0].getOriginalFilename()); 
+		
+		// 파일업로드,디자인등록
+		uploadFiles(uploadFile, vo);
+		return mapper.insert(vo);
 	}
 
 	@Override
@@ -109,20 +105,28 @@ public class DesignServiceImpl implements DesignService {
 	// 공모전 임시저장 불러오기 수정
 	@Override
 	public int saveUpdateDesign(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
+		
+		//로그인회원아이디
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setUserId(user.getUserId());
-		vo.setCenterImg(uploadFile[0].getOriginalFilename()); // 대표사진세팅.
 		
-		// 1. 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
-		int result = mapper.update(vo);
+		// 1번째 사진 대표사진세팅.
+		vo.setCenterImg(uploadFile[0].getOriginalFilename()); 
+		
+		// 파일업로드,디자인등록
+		uploadFiles(uploadFile, vo);
+		return mapper.update(vo);
+	}
+	
+	// 디자인 파일 업로드하는 메소드
+	public void uploadFiles(MultipartFile[] uploadfile, DesignVO vo) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadFile, vo.getDgnNo(), vo.getCaregory());
-			filesMapper.deleteFile(vo.getDgnNo());
+			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");//대상구분 디자인
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+
 	}
 
 }

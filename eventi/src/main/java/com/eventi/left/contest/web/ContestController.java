@@ -54,12 +54,10 @@ public class ContestController {
 	LikesService likeService;
 	@Autowired
 	QuestionsService qService;
-	
-	
+
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
-	public String contestList(Model model, ContestVO vo, PagingVO paging) {
-		model.addAttribute("contestList", service.contestList(vo, paging));
+	public String contestList() {
 		return "content/contest/contestList";
 	}
 
@@ -67,7 +65,6 @@ public class ContestController {
 	@PostMapping("/List")
 	@ResponseBody
 	public Map<String, Object> changeList(ContestVO vo, PagingVO paging) {
-
 		// 리턴할 최종Map(contest,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("contest", service.contestList(vo, paging));
@@ -83,13 +80,13 @@ public class ContestController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		Map<String, Object> result = new HashMap<String, Object>();
 
+		// 로그인된 경우
 		if (user != null) {
 			String sessionId = user.getUserId();
-			// 상세리스트 1건의 회원의 좋아요 체크 확인을 위한 정보세팅.
+			// 상세리스트 1건의 회원의 좋아요 체크확인
 			LikesVO likeCheck = new LikesVO();
 			likeCheck.setTargetNo(cVo.getcNo());
 			likeCheck.setUserId(sessionId);
-			// 모델 넘겨주기.
 			model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		}
 
@@ -100,12 +97,12 @@ public class ContestController {
 		return "content/contest/contest";
 	}
 
-	// 2.공모전 상세리스트(요청사항ajax)
+	// 2.공모전상세리스트(요청사항ajax)
 	@PostMapping("/cntnSelect")
 	@ResponseBody
 	public ContestVO contestSelect(ContestVO vo) {
 		ContestVO contest = service.getContest(vo.getcNo());
-		return contest;// 리스트 1건 반환.
+		return contest;
 	}
 
 	// 등록화면이동
@@ -117,20 +114,14 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging,
-			MultipartFile[] uploadFile) {
+	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging, MultipartFile[] uploadFile) {
 
 		service.insertContest(vo, wvo, uploadFile);
 
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
-			// 전체데이터 받기
-			List<ContestVO> contests = service.myContestList(vo, paging);
-			model.addAttribute("contestList", contests);// 모델에 담기.
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
-		
-		
 		// 등록인경우 결제 후 공모전상세페이지 이동.
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
@@ -172,34 +163,43 @@ public class ContestController {
 	public int contestDelete(ContestVO vo) {
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		String sessionId = user.getUserId();
-		vo.setWriter(sessionId);
-
+		vo.setWriter(user.getUserId());
 		return service.deleteContest(vo);
 	}
 
-	// 공모전 좋아요리스트 페이지이동
+	// 임시저장된 게시글 전체들고오기
+	@PostMapping("/cSave")
+	@ResponseBody
+	public List<ContestVO> cSave(ContestVO vo) {
+		return service.cSave(vo);
+	}
+
+	// 임시저장된 게시글 상세들고오기
+	@PostMapping("/saveSelect")
+	@ResponseBody
+	public List<ContestVO> saveSelect(ContestVO vo) {
+		return service.saveGetContest(vo);
+	}
+
+	// 마이페이지----------------------------------------------------------------------------
+
+	// 1.공모전 좋아요리스트 페이지이동
 	@GetMapping("/like")
-	public String likeList() { // 로그인 회원정보
+	public String likeList() {
 		return "content/myPage/myContestLike";
 	}
 
-	// 로그인회원의 전체 좋아요리스트
+	// 2.로그인회원의 전체 좋아요리스트
 	@PostMapping("/ajaxlike")
 	@ResponseBody
 	public Map<String, Object> userlikeList(LikesVO vo, PagingVO paging) {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		vo.setUserId(user.getUserId());
+
+		// 리턴할 최종Map
 		Map<String, Object> result = new HashMap<String, Object>();
-
-		if (user == null) {
-			return result;
-		}
-		String sessionId = user.getUserId();
-		vo.setUserId(sessionId);
-
-		// 리턴할 최종Map(contest,paging VO)
 		result.put("contest", likeService.userlikeList(vo, paging));
 		result.put("paging", paging);
 
@@ -223,41 +223,28 @@ public class ContestController {
 	}
 
 	// 1.나의공모전 -> 응모디자인조회
-	// 2.공모전 -> 상세정보
+	// 2.공모전리 -> 상세정보 참여작조회
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
 	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		// 1건의 공모전에 접수된 디자인리스트
 		DesignVO dVo = new DesignVO();
 		dVo.setcNo(cNo);
-		// 1건의 공모전에 접수된 디자인리스트
 		List<DesignVO> designs = dService.contestDesignList(dVo, paging);
 
+		// 리턴할 최종Map
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("design", designs);
 		result.put("paging", paging);
 
 		return result; // 디자인리스트+파일리스트 반환.
 	}
 
-	// 임시저장된 게시글 전체들고오기
-	@PostMapping("/cSave")
-	@ResponseBody
-	public List<ContestVO> cSave(ContestVO vo) {
-		return service.cSave(vo);
-	}
-
-	// 임시저장된 게시글 상세들고오기
-	@PostMapping("/saveSelect")
-	@ResponseBody
-	public List<ContestVO> saveSelect(ContestVO vo) {
-		return service.saveGetContest(vo);
-	}
-
 	// 공모전 나의 문의리스트 페이지이동(추가해야함)
 	@GetMapping("/qnaList")
-	public String ContestQnaList(Model model) {//, QuestionsVO vo, PagingVO paging
-		//model.addAttribute("qnaList", qService.qnaList(vo, paging));
+	public String ContestQnaList(Model model) {// , QuestionsVO vo, PagingVO paging
+		// model.addAttribute("qnaList", qService.qnaList(vo, paging));
 		return "content/myPage/mytQnaList";
 	}
 
