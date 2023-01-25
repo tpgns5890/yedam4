@@ -2,12 +2,13 @@
 
 .admin_side_nav {
 	height: 100%;
-	width: 160px;
+	width: 15%;
 	position: fixed;
 	z-index: 1;
 	top: 0;
 	left: 0;
-	background-color: #111;
+	margin-top:50px;	
+	background-color: rgba(10, 10, 10, 0.9);
 	overflow-x: hidden;
 	padding-top: 20px;
 }
@@ -15,7 +16,7 @@
 .admin_side_nav a {
 	padding: 6px 8px 6px 16px;
 	text-decoration: none;
-	font-size: 1em;
+	font-size: 1.5em;
 	color: #818181;
 	display: block;
 }
