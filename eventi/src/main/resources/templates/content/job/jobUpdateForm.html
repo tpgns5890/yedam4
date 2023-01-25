@@ -4,6 +4,13 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
 
+<head>
+	<style>
+		.label{
+			color: black;
+		}
+	</style>
+</head>
 
 <div layout:fragment="content">
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -70,6 +77,16 @@
 									<option value="E03">개인행사</option>
 									<option value="E04">기업행사</option>
 									<option value="E05">각종축제</option>
+									<option value="E06">기념식</option>
+									<option value="E07">가요제</option>
+									<option value="E08">플리마켓</option>
+									<option value="E09">체육대회</option>
+									<option value="E10">단합행사</option>
+									<option value="E11">세미나</option>
+									<option value="E12">포럼</option>
+									<option value="E13">워크샵</option>
+									<option value="E14">전시회</option>
+									<option value="E15">박람회</option>
 									<option value="E00">기타</option>
 								</select>
 							</div>
@@ -92,7 +109,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">근무시간</label>
-								<input type="number" name="wHour" id="wHour" th:value=${update.wHour}>
+								<input type="text" name="wHour" id="wHour" th:value=${update.wHour}>
 							</div>
 						</div>
 						
@@ -118,8 +135,17 @@
 						</div>
 						
 						<div class="col-md-12">
-							<div class="form-group">
-								<input type="file" name="img" th:value=${update.img}>
+							<div class="form-group" id="fileInsert">
+								<!-- 이미지가 있을 경우와 없을 경우 if문으로 처리 -->
+								<input type="file" id="imgInp" name="uploadFile" th:if="|${file == null}|"/>
+								<div th:each="f : ${file}">
+									<div th:if="|/fileView/${f.sevNm} != null}|">
+										<img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
+										<button type="button" id="cancel" class="btn btn-warning cancel">
+							              <span>Cancel</span>
+							          	</button>
+									</div>
+								</div>
 							</div>
 						</div>
 						
@@ -189,6 +215,90 @@ $('#update').on('click', function update() {
 		}
 	})
 })
+
+	//파일 업로드 이미지 미리보기
+	    //파일 INPUT창에 변화가 있을 경우 실행
+	    $(document).on("change", "#imgInp", function() {
+			$("#imgInp").toggleClass("fileDown");
+	    	//파일을 다시 등록하는 과정에서 이미지 미리보기 부분이 사라지지 않아서 삭제처리
+	    	//#imgInp의 바로 밑의 형제 삭제
+	    	$("#imgInp").next().remove();
+	    	
+	    	//이미지 미리보기 생성
+	    	let fileForm = `
+				<div>
+				<img id="blah" src="#" alt = "your image" width="250px" />
+				<button type="button" id="cancel" class="btn btn-warning cancel">
+	              <span>Cancel</span>
+	          	</button>
+			</div>`
+	    	
+	    	$("#fileInsert").append(fileForm);
+	    	
+			readURL(this);
+		});
+		
+	    //이미지 미리보기 처리
+		function readURL(input){
+			if(input.files && input.files[0]){
+				var reader = new FileReader();
+				
+				reader.onload = function(e) {
+					$("#blah").attr('src', e.target.result);
+				}
+				
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+	    
+		//파일 삭제
+	    $(document).on('click', "#cancel", function() {
+	    	//파일 등록부분 모두 삭제 후 다시 생성
+	    	$("#fileInsert").empty();
+	    	
+	    	let fileForm = `<input type="file" id="imgInp" name="uploadFile" />
+				<div class="fileDown">
+				<img id="blah" src="#" alt = "your image" width="250px" />
+				<button type="button" id="cancel" class="btn btn-warning cancel">
+	              <span>Cancel</span>
+	          	</button>
+			</div>`
+	    	
+	    	$("#fileInsert").append(fileForm);
+	    })
+	    
+	    //파일 업로드
+	    function check() {
+	    	var formData = new FormData();
+            var inputFile = $("input[name='uploadFile']");
+            var files = inputFile[0].files;
+          
+            ///데이터 넘길값 세팅
+            if(files.length == 0){
+               return false;
+            }
+            
+            for(var i=0; i<files.length; i++) {
+                formData.append("uploadFile", files[i]);
+            }
+                formData.append("targetId", $("input[name='proNo']").val());
+                //formData.append("category", "[[${type}]]");
+            
+            $.ajax({
+                url: '/filesUpload',
+                type: 'POST',
+                enctype: 'multipart/form-data',  
+                data: formData,
+                contentType: false,
+                processData : false,
+                beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+             },
+                success: function() {
+                }
+            });
+            	return true;
+	    }
 </script>
 </div>
 </html>

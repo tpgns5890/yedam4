@@ -19,8 +19,10 @@
 	th:onclick="|location.href='@{nocInsert}'|">공지사항등록</button>
 	
 	<!-- 게시글 검색 -->
-	<input type="text" name="search">
-	<input type="button" id="find" value="찾기">
+	<form action="/nocList">
+	<input type="text" name="ttl">
+	<input type="submit" id="find" value="찾기">
+	</form>
 	
 	<table class="table mb-3" >
 	<thead class="thead-dark">

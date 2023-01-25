@@ -2,6 +2,8 @@ package com.eventi.left.questions.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.questions.service.QuestionsVO;
 

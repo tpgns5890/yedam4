@@ -32,7 +32,7 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
 		if(exception instanceof BadCredentialsException) {
 			errorMessage = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해주세요.";
 		} else if (exception instanceof InternalAuthenticationServiceException) {
-			errorMessage = "존재하지 않는 계정입니다. 회원가입 후 로그인해주세요.";
+			errorMessage = "내부 오류입니다.";
 		} else if (exception instanceof UsernameNotFoundException) {
 			errorMessage = "존재하지 않는 계정입니다. 회원가입 후 로그인해주세요.";
 		} else if (exception instanceof AuthenticationCredentialsNotFoundException) {

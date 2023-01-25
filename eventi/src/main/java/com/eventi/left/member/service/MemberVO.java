@@ -10,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,10 +34,12 @@ public class MemberVO implements UserDetails {
 	private String depotr;
 	private String bank;
 	private int accnt;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy/MM/dd")
 	private Date userRegDate;
+	private String userState;
 	private List<CrtfVO> crtfs;
 	private BusiVO busi;
+
 	private String userState;
 	
 	private String busiNum;
@@ -43,8 +47,10 @@ public class MemberVO implements UserDetails {
 	private String busiType;
 	private String busiArea;
 	private String busiStyle;
-	
-	
+
+	Integer first; //첫페이지
+	Integer last; //마지막페이지
+
 	@Override
 	public String getUsername() {
 		return getUserId();

@@ -23,13 +23,7 @@ public class MessageServiceImpl implements MessageService{
 
 	@Override
 	public int msgInsert(MessageVO messageVO) {
-		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		System.out.println(user);
-	    String sessionId = user.getUserId();
-		messageVO.setChaId("CH01");
-		messageVO.setToId("test03");
-		messageVO.setFromId(sessionId);
-		
+		System.out.println("호출");
 		return mapper.msgInsert(messageVO);
 	}
 

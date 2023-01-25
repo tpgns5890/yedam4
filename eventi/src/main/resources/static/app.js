@@ -37,10 +37,10 @@ function sendName() {
 }
 
 function showGreeting(message) {
-    $("#greetings").append(make(message));
+    $("#greetings").append(makeChat(message));
 }
 
-function make(message){
+function makeChat(message){
 	
 	/*let tag = `<div class="anotherMsg">
                     <span class="anotherName">${userId}</span>

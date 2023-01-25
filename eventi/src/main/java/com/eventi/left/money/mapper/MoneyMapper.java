@@ -1,5 +1,6 @@
 package com.eventi.left.money.mapper;
 
+
 import java.util.List;
 
 import com.eventi.left.money.service.MoneyVO;
@@ -17,6 +18,4 @@ public interface MoneyMapper {
 	public int updateMoney(MoneyVO vo); //수정(출금 확인여부 업데이트)
 	
 	
-	
-
 }

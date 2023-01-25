@@ -34,21 +34,7 @@ public class NoticeServiceImpl implements NoticeService{
 	
 	//게시글등록
 	@Override
-	public int nocInsert(NoticeVO noticeVO, MultipartFile uploadFile) {
-	// TODO Auto-generated method stub
-		//사진등록
-		String realFolder = "/files/noc";
-		File dir = new File(realFolder);
-		if(!dir.isDirectory()) {
-			dir.mkdirs();
-		}
-			
-		//파일 이름 저장
-		String img = uploadFile.getOriginalFilename();
-			
-		//VO에 IMG 부분에 파일 이름 저장
-		noticeVO.setImg(img);
-			
+	public int nocInsert(NoticeVO noticeVO) {
 		return nocmapper.nocInsert(noticeVO);
 		}
 	

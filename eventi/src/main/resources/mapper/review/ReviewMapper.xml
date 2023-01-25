@@ -3,12 +3,45 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.review.mapper.ReviewMapper">
-
+	<!-- 내가 작성한 후기 전체 조회 -->
 	<select id="reviewList" resultType="ReviewVO">
-		SELECT * FROM Review
+		SELECT * 
+		FROM REVIEW
+		WHERE USER_ID = #{userId}
 	</select>
-
+	
+	<!-- 타겟별 후기 조회 -->
 	<select id="getReview" resultType="ReviewVO">
+		SELECT *
+		FROM REVIEW
+		WHERE REVIEW_TGT = #{reviewTgt}
+		AND CATEGORY = #{category}
 	</select>
-
+	
+	<!-- 별점 평균, 후기 개수 -->
+	<select id="getReviewAvg" resultType="com.eventi.left.review.service.ReviewVO">
+		SELECT REVIEW_TGT, AVG(STAR) REAGE, COUNT(REVIEW_NO) RECOUNT
+		FROM REVIEW
+		WHERE REVIEW_TGT = #{reviewTgt}
+		GROUP BY review_tgt
+	</select>
+	
+	<!-- 후기 등록 -->
+	<insert id="reviewInsert">
+		INSERT INTO REVIEW(REVIEW_NO, USER_ID, REVIEW_TGT, STAR, REVIEW_CNTN, WRITING_DT, CATEGORY)
+		VALUES('RV' || REVIEWNO_SEQ.NEXTVAL, #{userId}, #{reviewTgt}, #{star}, #{reviewCntn}, SYSDATE, #{category})
+	</insert>
+	
+	<!-- 후기 수정 -->
+	<update id="reviewUpdate">
+		UPDATE REVIEW
+		SET REVIEW_CNTN = #{reviewCntn}
+		WHERE REVIEW_NO = #{reviewNo}
+	</update>
+	
+	<!-- 후기 삭제 -->
+	<delete id="reviewDelete">
+		DELETE FROM REVIEW
+		WHERE REVIEW_NO = #{reviewNo}
+	</delete>
 </mapper>
