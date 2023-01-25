@@ -17,7 +17,7 @@ public class MoneyVO {
 	private int moPrice;  //금액
 	private String userId;  //유저 ID
 	private String payNo;	//결제번호
-	private String settYN;	//승인여부
+	private String settYN = "N";//승인여부
 	private String targetId;	//해당 게시글Id
 
 }

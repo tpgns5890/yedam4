@@ -28,6 +28,8 @@ import com.eventi.left.likes.mapper.LikesMapper;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.mapper.MemberMapper;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.service.MoneyService;
+import com.eventi.left.money.service.MoneyVO;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -50,6 +52,8 @@ public class ContestServiceImpl implements ContestService {
 	private JavaMailSender mailSender;
 	@Autowired
 	MemberMapper memberMapper;
+	@Autowired
+	MoneyService moneyMapper;
 
 	@Value("${spring.servlet.multipart.location}")
 	String filePath;
@@ -111,11 +115,11 @@ public class ContestServiceImpl implements ContestService {
 
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-			membersSendMail(vo, result, 0); // vo,insert,update
+			//membersSendMail(vo, result, 0); // vo,insert,update
 
-			// 결제API연결후 입급내역 insert 추가예정
+			//입금정보 추가(API연결예정)
+			contestMoneyInsert(result, 0, vo); // insert,delete,vo
 		}
-
 		return result;
 	}
 
@@ -129,14 +133,14 @@ public class ContestServiceImpl implements ContestService {
 		// 마감기한 연장신청
 		if (vo.getDtExtns() != null) {
 			ContestVO contest = mapper.getContest(vo.getcNo());
-			//1회만 연장(null인경우만)
+			// 1회만 연장(null인경우만)
 			if (contest.getDtExtns() == null) {
 				result = mapper.updateExtension(vo);
 			} else {
 				return 0;
 			}
-			
-		//제목,내용 수정할경우(그 외 공모전민감자료 수정불가)
+
+			// 제목,내용 수정할경우(그 외 공모전민감자료 수정불가)
 		} else {
 			// 파일업로드,공모전 수정
 			uploadFiles(uploadFile, vo);
@@ -176,12 +180,13 @@ public class ContestServiceImpl implements ContestService {
 		// 파일업로드,공모전 수정
 		int result = mapper.saveUpdateContest(vo);
 		uploadFiles(uploadFile, vo);
-		
+
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-			membersSendMail(vo, result, 0); // vo,insert,update
+			//membersSendMail(vo, result, 0); // vo,insert,update
 
-		// 결제API연결후 입급내역 insert 추가예정
+			// 입금정보 추가(API연결예정)
+			contestMoneyInsert(result, 0, vo); // insert,delete,vo
 		}
 
 		return result;
@@ -190,7 +195,7 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전,우승상금 삭제
 	@Override
 	public int deleteContest(ContestVO vo) {
-		
+
 		// 응모한 디자인이 있으면 삭제불가.
 		if (dMapper.entryDesign(vo.getcNo()) > 0) {
 			return 0;
@@ -201,9 +206,14 @@ public class ContestServiceImpl implements ContestService {
 		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
 		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
 
-		// 정산요청 insert 추가할것.
-
-		return mapper.deleteContest(vo);
+		//공모전 삭제전 금액 출금요청정보 넘기기위해 조회저장.
+		vo = mapper.getContest(vo.getcNo()); 
+		int result = mapper.deleteContest(vo);
+		if(result > 0) {
+			//출금요청정보 추가(API연결예정)
+			contestMoneyInsert(0, result, vo); // insert,delete,vo
+		}
+		return result;
 	}
 
 	// 공모전 시퀀스정보
@@ -247,7 +257,7 @@ public class ContestServiceImpl implements ContestService {
 	public void uploadFiles(MultipartFile[] uploadfile, ContestVO vo) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, vo.getcNo(), "T01"); //대상구분 공모전
+			list = newUp.uploadFiles(uploadfile, vo.getcNo(), "T01"); // 대상구분 공모전
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -271,7 +281,7 @@ public class ContestServiceImpl implements ContestService {
 		} else if (update > 0) {
 			for (MemberVO email : emailList) {
 				String toMail = email.getUserEmail();
-				String title = "[" + vo.getcNo() + "]"  + "공모전 수정";
+				String title = "[" + vo.getcNo() + "]" + "공모전 수정";
 				String content = vo.getTtl() + "공모전이 수정되었습니다.";
 				mailing(toMail, title, content);
 			}
@@ -294,6 +304,30 @@ public class ContestServiceImpl implements ContestService {
 			mailSender.send(message);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	// 입금내역 추가
+	public void contestMoneyInsert(int insert, int delete, ContestVO vo) {
+		// 등록된 정보조회(입금자명,은행코드,계좌번호)
+		MemberVO user = memberMapper.getMember(vo.getWriter());
+		MoneyVO money = new MoneyVO();
+
+		// 공통정보 세팅
+		money.setBankName(user.getBank()); // 은행정보
+		money.setBankAccount(user.getAccnt()); // 계좌번호
+		money.setMoPrice(vo.getPay());
+		money.setUserId(vo.getWriter());
+		money.setTargetId(vo.getcNo());
+		money.setPayNo("임시결제코드"); // 결제코드 추가하기
+
+		if (insert > 0) {
+			money.setMoType("M1"); // 입금코드
+			moneyMapper.insertMoney(money);
+		}
+		if (delete > 0) {
+			money.setMoType("M2"); // 출금코드
+			moneyMapper.insertMoney(money);
 		}
 	}
 

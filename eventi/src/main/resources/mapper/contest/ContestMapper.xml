@@ -72,7 +72,7 @@
          FROM CONTEST c
          WHERE writer = #{writer}
          <include refid="search" />
-         order by c_no DESC
+         order by dt_reg DESC
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
