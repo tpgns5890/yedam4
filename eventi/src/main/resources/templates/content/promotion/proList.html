@@ -14,14 +14,14 @@
             class="row no-gutters slider-text align-items-end justify-content-center">
             <div
                class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">홍보게시판 메인</h2>
+               <h2 class="mb-0 bread"></h2>
             </div>
          </div>
       </div>
    </section>
 
 <!-- 게시글 검색 -->
-	<input type="text" name="search">
+	<!--<input type="text" name="search">
 	<input type="button" id="find" value="찾기"><span></span></input>
 
 
@@ -33,11 +33,11 @@
 		<option value="E03" th:selected="${promotionVO.eType=='E03'}" >개인행사</option>
 		<option value="E04" th:selected="${promotionVO.eType=='E04'}" >기업행사</option>
 		<option value="E05" th:selected="${promotionVO.eType=='E05'}" >각종축제</option>
-	</select> 
+	</select> -->
 	
-   <section class="ftco-section" >
+ <!--   <section class="ftco-section" >
 <button type="button" class="btn btn-outline-primary" onclick="proInsert()">게시글등록</button>
-      <div class="container">
+      <div class="col-sm-6 col-md-4 col-lg-4">
         <div class="row d-flex" id="check">
           <div class="col-lg-6 d-flex align-items-stretch ftco-animate"  th:each="pro : ${proList}">
           	<div class="blog-entry d-md-flex" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|">
@@ -56,7 +56,53 @@
             </div>
           </div>
         </div>
-        <div class="row mt-5">
+
+      </div>-->
+    
+  <section class="module" id="team">
+  <!-- 게시글 검색 -->
+	<input type="text" name="search">
+	<input type="button" id="find" value="찾기"><span></span></input>
+
+
+<select id="etype" name="etype"  onchange="order()">
+		<option value="" selected>------</option>
+		<option value="E00" th:selected="${promotionVO.eType=='E00'}" >기타</option>
+		<option value="E01" th:selected="${promotionVO.eType=='E01'}" >결혼식</option>
+		<option value="E02" th:selected="${promotionVO.eType=='E02'}" >돌잔치</option>
+		<option value="E03" th:selected="${promotionVO.eType=='E03'}" >개인행사</option>
+		<option value="E04" th:selected="${promotionVO.eType=='E04'}" >기업행사</option>
+		<option value="E05" th:selected="${promotionVO.eType=='E05'}" >각종축제</option>
+	</select> 
+  <button class="btn btn-d btn-circle" type="submit"><i class="fa fa-heart" onclick="proInsert()"></i> 게시글등록</button>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt" id="check">홍보게시판</h2>
+                <div class="module-subtitle font-serif">원하는 유형의 글을 조회하고 참여해보세요.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="team-item" id="check"  th:each="pro : ${proList}"> 
+                  <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|"><img src="assets/images/team-1.jpg" alt="Member Photo">
+                    <div class="team-detail">
+                      <h5 class="font-alt" th:text=${pro.proNo}>Hi all</h5>
+                      <p class="font-serif" th:text=${pro.eType}></p>
+                      <div class="team-social"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a></div>
+                    </div>
+                  </div>
+                  <div class="team-descr font-alt">
+                    <div class="team-role" th:text=${pro.eName}>Art Director</div>
+                    <div class="team-name" th:text=${pro.see}>조회수</div>
+                  </div>
+                </div>
+              </div>
+             
+            </div>
+          </div>
+          
+          <div class="row mt-5">
 		          <div class="col text-center">
 		            <div class="block-27">
 		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
@@ -69,9 +115,9 @@
 				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
 				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 				   	</div>
-
-      </div>
-    </section>	
+          
+        </section>
+    <!--</section>-->
 <script>
 //정렬
 function order(){

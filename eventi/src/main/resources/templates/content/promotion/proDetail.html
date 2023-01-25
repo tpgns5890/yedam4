@@ -12,8 +12,8 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3">
-					<h2 class="module-title font-alt">상세조회</h2>
-					<div class="module-subtitle font-serif">Small Title</div>
+					<h2 class="module-title font-alt"></h2>
+					<div class="module-subtitle font-serif"></div>
 				</div>
 			</div>
 		</div>
@@ -22,10 +22,8 @@
 	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
 	<th:block th:if="${session.member.userId} == ${proDetail.userId}">
 	</th:block>
-
-
 	
-	<section class="ftco-section ftco-degree-bg">
+	<!--<section class="ftco-section ftco-degree-bg">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 ftco-animate">
@@ -51,19 +49,14 @@
 						</div>
 					</div>
 					
-					<!-- 이미지 나타내기 -->	
-					<div th:each="f : ${file}">
-				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
-				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-				   	</div>
    	
-					<!-- 댓글 -->
+					
 					<div class="pt-5 mt-5">
 						<h3 class="mb-5">댓글</h3>
 						<ul class="comment-list" id=reply>
 						</ul>
 					</div>
-					<!-- 댓글 작성 -->
+				
 					<form action="replyInsert">
 						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
 						<button type="button" id="replyInsertBtn">댓글작성</button>
@@ -72,6 +65,67 @@
 			</div>
 		</div>
 	</section>
+	-->
+	<section class="module-small">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-1">
+                <div class="post">
+                  <div class="post-thumbnail"><img src="assets/images/post-4.jpg" alt="Blog Featured Image"></div>
+                  <p th:text=${proDetail.img}></p>
+                  <div class="post-header font-alt">
+                    <h1 class="post-title" th:text=${proDetail.eName}>Our trip to the Alps</h1>
+                    <div class="post-meta" th:text=${proDetail.proNo} id="proNo"  >By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Photography, </a><a href="#">Web Design</a>
+                    </div>
+                  </div>
+                  <div class="post-entry" >
+                    <p th:text=${proDetail.userId}> The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                    <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
+                    <blockquote>
+                      <p th:text=${proDetail.intro}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    </blockquote>
+                    <p>If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental.</p>
+                    <ul>
+                      <li th:text=${proDetail.eSday}>The European languages are members of the same family.</li>
+                      <li th:text=${proDetail.eEday}>Their separate existence is a myth.</li>
+                      <li th:text=${proDetail.loc}>For science, music, sport, etc, Europe uses the same vocabulary.</li>
+                      <li th:text=${proDetail.entrance}>Their separate existence is a myth.</li>
+                      <li th:text=${proDetail.accommodate}>Their separate existence is a myth.</li>
+                    </ul>
+                    <p th:text=${proDetail.see}>The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                    <div class="tag-widget post-tag-container mb-5 mt-5">
+						<div class="tagcloud">
+							<a href="#" class="tag-cloud-link"
+								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
+							<a href="#" class="tag-cloud-link"
+								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
+						</div>
+					</div>
+                  </div>
+                </div>
+                <div class="comments"  id=reply>
+                  <h4 class="comment-title font-alt">There are comments</h4>
+                  <div class="comment clearfix">
+                    <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
+                    <div class="comment-content clearfix">
+                      <div class="comment-author font-alt"><a href="#">John Doe</a></div>
+                      <form action="replyInsert">
+						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
+						<button type="button" id="replyInsertBtn">댓글작성</button>
+                      Today, 14:55 - 
+                    	</form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- 이미지 나타내기 -->	
+					<div th:each="f : ${file}">
+				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
+				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+				   	</div>
+       </section>
 	<script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
