@@ -53,7 +53,6 @@
 
 		.formInput {
 			width: 300px;
-
 		}
 
 		#inputEmailChk {
@@ -103,7 +102,6 @@
 			height: 100%;
 			z-index: 1;
 			width: 100%;
-
 		}
 
 		#modal h2 {
@@ -151,16 +149,19 @@
 
 <body>
 	<div layout:fragment="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">업체회원 회원가입</h2>
-                <div class="module-subtitle font-serif">Business Member SignIn</div>
-              </div>
-            </div>
-          </div>
-        </section>
+		<section class="module bg-dark-60 gallery-page-header parallax-bg"
+			data-background="assets/images/gallery_bg.jpg"
+			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h2 class="module-title font-alt">업체회원 회원가입</h2>
+						<div class="module-subtitle font-serif">Business Member
+							SignIn</div>
+					</div>
+				</div>
+			</div>
+		</section>
 		<div id="container">
 			<div id="signInBox">
 				<form id="signIn" name="signIn">
@@ -182,53 +183,54 @@
 							<font id="pw_feedback" size="2" value="1"></font>
 						</div>
 						<label for="name" class="formLabel">성명</label><input type="text" class="formInput" name="name"
-							id="inputName"><br>
-						<label for="userEmail" class="formLabel">이메일주소</label><input type="text" class="formInput"
-							name="userEmail" id="inputEmail">
-						<button type='button' id="sendEmail">인증번호전송</button><br>
-						<span class="mail_input_box_warn"></span> <input id="inputEmailChk" type="text">
+							id="inputName"><br> <label for="userEmail" class="formLabel">이메일주소</label><input type="text"
+							class="formInput" name="userEmail" id="inputEmail">
+						<button type='button' id="sendEmail">인증번호전송</button>
+						<br> <span class="mail_input_box_warn"></span> <input id="inputEmailChk" type="text">
 						<div>
 							<font id="email_feedback" size="2" value="1"></font>
 						</div>
-						<div class="busiTypeR">메일 알림수신
-							<label class="labelRadio"><input type="radio" name="userMessaging" value="S1"
-									checked>수신동의</label>
-							<label class="labelRadio"><input type="radio" name="userMessaging" value="S0">수신거부</label>
+						<div class="busiTypeR">
+							메일 알림수신 <label class="labelRadio"><input type="radio" name="userMessaging" value="S1"
+									checked>수신동의</label> <label class="labelRadio"><input type="radio"
+									name="userMessaging" value="S0">수신거부</label>
 						</div>
 					</div>
 
 					<div id="signIn-right">
 						<h3 class="mb-4 billing-heading">사업자정보</h3>
 						<div class="busiTypeR">
-							업체유형
-							<input type="radio" name="busiType" value="U1" checked><label>기획업체</label>
+							업체유형 <input type="radio" name="busiType" value="U1" checked><label>기획업체</label>
 							<input type="radio" name="busiType" value="U2"><label>렌탈업체</label>
 						</div>
 						<label for="b_nm" class="formLabel">상호명</label><input type="text" name="busiTitle"
 							class="formInput" id="busiTitle"><br>
 						<label for="BNo" class="formLabel">사업자등록번호</label><input type="text" name="busiNum"
 							class="formInput" id="inputBno">
-						<button type='button' id="busiChk">사업자인증</button><br>
+						<button type='button' id="busiChk">사업자인증</button>
+						<br>
 						<div>
 							<font id="busi_feedback" size="2" value="1"></font>
 						</div>
 						<br>
 						<div id="chkArea">
-							<div>행사가능지역
+							<div>
+								행사가능지역
 								<div class="chkArea">
 									<div th:each="area : ${busiArea}">
 										<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}"
-											name="busiArea">
-										<label th:text="${area.codeName}" th:for="${area.codeId}"></label>
+											name="busiArea"> <label th:text="${area.codeName}"
+											th:for="${area.codeId}"></label>
 									</div>
 								</div>
 							</div>
-							<div>행사유형
+							<div>
+								행사유형
 								<div class="chkArea">
 									<div th:each="type : ${busiStyle}">
 										<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}"
-											name="busiStyle">
-										<label th:text="${type.codeName}" th:for="${type.codeId}"></label>
+											name="busiStyle"> <label th:text="${type.codeName}"
+											th:for="${type.codeId}"></label>
 									</div>
 								</div>
 							</div>
@@ -411,21 +413,21 @@
 				var busiType = $('input:radio[name="busiType"]:checked').val();
 				var areaChecked = $('input:checkbox[name="busiArea"]:checked');
 				var styleChecked = $('input:checkbox[name="busiStyle"]:checked');
-				for(var i = 0; i<areaChecked.length;i++){
+				for (var i = 0; i < areaChecked.length; i++) {
 					busiAreaArr.push(areaChecked.eq(i).val())
 				}
-				for(var i = 0; i<styleChecked.length;i++){
+				for (var i = 0; i < styleChecked.length; i++) {
 					busiStyleArr.push(styleChecked.eq(i).val())
 				}
 				var busiArea = busiAreaArr.toString();
 				var busiStyle = busiStyleArr.toString();
 				var busi = {
-					"userId":id,
-					"busiNum":busiNum,
-					"busiTitle":busiTitle,
-					"busiType":busiType,
-					"busiArea":busiArea,
-					"busiStyle":busiStyle,
+					"userId": id,
+					"busiNum": busiNum,
+					"busiTitle": busiTitle,
+					"busiType": busiType,
+					"busiArea": busiArea,
+					"busiStyle": busiStyle,
 				};
 				var data = $('form[name="signIn"]').serializeObject();
 				data.busi = busi
@@ -445,37 +447,46 @@
 					}
 				})
 			}
-			
+
 			//사업자인증
-			$('#busiChk').click(function () {
-				var bno = $('#inputBno').val();
-				var busiResult = $("#busi_feedback");
-				var data = {
-					"b_no": [bno]
-				}
-				$.ajax({
-					url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D", // serviceKey 값을 xxxxxx에 입력
-					type: "POST",
-					data: JSON.stringify(data), // json 을 string으로 변환하여 전송
-					dataType: "JSON",
-					contentType: "application/json",
-					accept: "application/json",
-					success: function (result) {
-						if (result.match_cnt == 1) { // 진위확인 완료할 경우
-							busiResult.html("사업자 인증완료!");
-							busiResult.attr('color', '#2fb380');
-							busiResult.attr('value', '0');
-						} else { // 실패
-							busiResult.html("사업자 인증실패!");
-							busiResult.attr('color', '#dc3545');
-							busiResult.attr('value', '1');
+			$('#busiChk')
+				.click(
+					function () {
+						var bno = $('#inputBno').val();
+						var busiResult = $("#busi_feedback");
+						var data = {
+							"b_no": [bno]
 						}
-					},
-					error: function (result) {
-						alert(result.responseText);
-					}
-				})
-			})
+						$
+							.ajax({
+								url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D", // serviceKey 값을 xxxxxx에 입력
+								type: "POST",
+								data: JSON.stringify(data), // json 을 string으로 변환하여 전송
+								dataType: "JSON",
+								contentType: "application/json",
+								accept: "application/json",
+								success: function (result) {
+									if (result.match_cnt == 1) { // 진위확인 완료할 경우
+										busiResult
+											.html("사업자 인증완료!");
+										busiResult.attr('color',
+											'#2fb380');
+										busiResult.attr('value',
+											'0');
+									} else { // 실패
+										busiResult
+											.html("사업자 인증실패!");
+										busiResult.attr('color',
+											'#dc3545');
+										busiResult.attr('value',
+											'1');
+									}
+								},
+								error: function (result) {
+									alert(result.responseText);
+								}
+							})
+					})
 		</script>
 	</div>
 </body>

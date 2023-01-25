@@ -18,33 +18,32 @@ import com.eventi.left.member.service.MemberVO;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
+
 	@Autowired
 	AdminService service;
-	
+
+	// 전체회원리스트 이동 및 회원 수 가져오기
 	@GetMapping("/memberList")
-	public String MemberList(Model model, MemberVO memberVO, PagingVO paging) {
-		//상단에 표시할 회원 count 모델에 먼저 저장
+	public String MemberList(Model model, MemberVO memberVO) {
+		// 상단에 표시할 회원 수 모델에 저장
 		model.addAttribute("countall", service.count(memberVO));
 		memberVO.setUserState("Punish");
 		model.addAttribute("countpunish", service.count(memberVO));
 		memberVO.setUserState("Ban");
 		model.addAttribute("countban", service.count(memberVO));
 		memberVO.setUserState(null);
-		model.addAttribute("mList", service.memberList(memberVO, paging));
-		//model.addAttribute("paging", paging);
 		return "content/admin/adminMember";
 	}
-	
-	// 공모전 전체리스트(ajax)
-		@PostMapping("/memberListAjax")
-		@ResponseBody
-		public Map<String, Object> memberListAjax(MemberVO vo, PagingVO paging) {
-			// 리턴할 최종Map(Member,paging VO)
-			Map<String, Object> result = new HashMap<String, Object>();
-			result.put("mListAjax", service.memberList(vo, paging));
-			result.put("paging", paging);
-			return result;
-		}
-	
+
+	// 전체회원 리스트(ajax)
+	@PostMapping("/memberListAjax")
+	@ResponseBody
+	public Map<String, Object> memberListAjax(MemberVO vo, PagingVO paging) {
+		// 리턴할 최종Map(Member,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("mListAjax", service.memberList(vo, paging));
+		result.put("paging", paging);
+		return result;
+	}
+
 }

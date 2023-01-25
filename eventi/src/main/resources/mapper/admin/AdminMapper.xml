@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
- <mapper namespace="com.eventi.left.admin.mapper.AdminMapper">
- 
+
+<mapper namespace="com.eventi.left.admin.mapper.AdminMapper">
+
 	<sql id="mSelect">
 		<where>
-	 	<!-- 회원등급별 정렬 -->
-		<if test='auth eq "1".toString()'>
-			AND USER_GRADE != 'ROLE_BUSI'
-		</if>
-		<if test='auth eq "2".toString()'>
-			AND USER_GRADE = 'ROLE_BUSI'
-		</if>
-		<!-- 회원아이디 검색처리 -->
-		<if test="userId != null and userId != ''">
-			AND USER_ID LIKE '%'||#{userId}||'%'
-		</if>
-		
-		<!-- 계정상태 정렬 -->
-		<if test="userState != '' and userState != null and userState != 'Normal'">
-			AND USER_STATE = #{userState}
-		</if>
+			<!-- 회원등급별 정렬 -->
+			<if test='auth eq "1".toString()'>
+				AND USER_GRADE != 'ROLE_BUSI'
+			</if>
+			<if test='auth eq "2".toString()'>
+				AND USER_GRADE = 'ROLE_BUSI'
+			</if>
+
+			<!-- 회원아이디 검색처리 -->
+			<if test="userId != null and userId != ''">
+				AND USER_ID LIKE '%'||#{userId}||'%'
+			</if>
+
+			<!-- 계정상태 정렬 -->
+			<if
+				test="userState != '' and userState != null and userState != 'Normal'">
+				AND USER_STATE = #{userState}
+			</if>
 		</where>
 	</sql>
 
@@ -40,20 +42,23 @@
 				ACCNT,
 				USER_REGDATE,
 				USER_STATE
-		FROM 	(SELECT ROWNUM RN, A.*
-        	  	FROM(SELECT * FROM MEMBERS 
-			  	<include refid="mSelect" />
-       		  	order by user_regdate desc
+		FROM   (SELECT ROWNUM RN, A.*
+				FROM(SELECT * 
+				 	 FROM MEMBERS
+					<include refid="mSelect" />
+					 ORDER BY USER_REGDATE DESC
 			  	<![CDATA[
-			  		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+			  		) A 
+			  	WHERE ROWNUM <= #{last}) 
+		WHERE RN >= #{first}
 			  	]]>
 	</select>
-	
+
 	<!-- 조건별 회원정보 총 개수 -->
 	<select id="count" resultType="int">
-		select count(*)
-		from members
+		SELECT COUNT(*)
+		FROM MEMBERS
 		<include refid="mSelect" />
 	</select>
-	
- </mapper>
+
+</mapper>

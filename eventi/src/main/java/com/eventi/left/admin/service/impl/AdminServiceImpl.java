@@ -25,6 +25,7 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.memberList(memberVO);
 	}
 
+	//카운트
 	@Override
 	public int count(MemberVO memberVO) {
 		return adminMapper.count(memberVO);

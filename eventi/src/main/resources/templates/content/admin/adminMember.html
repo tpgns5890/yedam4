@@ -187,7 +187,8 @@
 							<td th:text=${m.rprt}></td>
 							<td th:text=${m.userRegDate}></td>
 							<td th:text=${m.userState}></td>
-						</tr></tbody> -->
+							</tr> -->
+						</tbody>
 					</table>
 					<!-- 페이징 처리 -->
 					<!-- //페이징 경로 :: 문자 -->
@@ -227,12 +228,12 @@
 				let State = "Ban";
 				ajaxList(State);
 			});
-			
-			$("input[name=auth]").on('change',function(){
+
+			$("input[name=auth]").on('change', function () {
 				ajaxList();
 			})
-			
-			$("input[name=userId]").on('change',function(){
+
+			$("input[name=userId]").on('change', function () {
 				ajaxList();
 			})
 			//비동기 통신
@@ -240,7 +241,7 @@
 				let userState = State;
 				let auth = $('input[name=auth]:checked').val();
 				let page = $('input[name="page"]').val();
-				let userId= $('input[name="userId"]').val();
+				let userId = $('input[name="userId"]').val();
 				console.log(auth);
 				$.ajax({
 					url: "/admin/memberListAjax",
