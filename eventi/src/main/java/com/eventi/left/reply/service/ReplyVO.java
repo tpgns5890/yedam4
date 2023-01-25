@@ -20,4 +20,6 @@ public class ReplyVO {
 	private Date writingDt;	//작성일자
 	private String boardCat;	//게시글유형(대상유형)
 	private String rerepTgt;	//대댓글대상(댓글번호. 댓글일시 null)
+	
+	private String gp; //댓글 그룹
 }
