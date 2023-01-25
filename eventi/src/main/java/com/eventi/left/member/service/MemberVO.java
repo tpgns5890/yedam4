@@ -25,7 +25,7 @@ public class MemberVO implements UserDetails {
 	private String userPassword;
 	private String userEmail;
 	private String name;
-	private int userPhone;
+	private String userPhone;
 	private String userMessaging;
 	private String auth;
 	private int rprt;
@@ -36,7 +36,15 @@ public class MemberVO implements UserDetails {
 	private Date userRegDate;
 	private List<CrtfVO> crtfs;
 	private BusiVO busi;
-
+	private String userState;
+	
+	private String busiNum;
+	private String busiTitle;
+	private String busiType;
+	private String busiArea;
+	private String busiStyle;
+	
+	
 	@Override
 	public String getUsername() {
 		return getUserId();

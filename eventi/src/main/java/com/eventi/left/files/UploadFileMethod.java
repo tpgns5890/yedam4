@@ -55,43 +55,43 @@ public class UploadFileMethod {
 	}
 	
 	// 첨부파일 수정시.
-		public List<FileDto> updateFiles(MultipartFile[] uploadfile, String targetId, String category) throws IllegalStateException, IOException {
-			
-			List<FileDto> list = new ArrayList<>();
-			List<FilesVO> filesChecklist = new ArrayList<>();
-			FilesVO fileVO = new FilesVO();
-			
-			// 파일이 없다면. insert
-			if(service.fileList(targetId).size() == 0) {
-				uploadFiles(uploadfile,targetId, category);
-			}
-			
-			// 파일 경로위치에 물리적으로 저장하기
-			for (MultipartFile file : uploadfile) {
-				if (!file.isEmpty()) {
-					FileDto dto = new FileDto(UUID.randomUUID().toString(), file.getOriginalFilename(), file.getContentType());
-					list.add(dto);
-
-					File newFileName = new File(dto.getUuid() + "_" + dto.getFileName());
-
-					file.transferTo(newFileName);
-					System.out.println(newFileName);
-				}
-			}
-			filesChecklist = service.fileList(targetId);
-			
-			// 저장한 파일 DB 저장하기
-			for (int i = 0; i < list.size(); i++) {
-				fileVO.setfNo(filesChecklist.get(i).getfNo()); //여러건수정
-				fileVO.setfNm(list.get(i).getFileName()); //원본파일명
-				fileVO.setSevNm(list.get(i).getUuid() + "_" + list.get(i).getFileName());//서버파일명.
-				fileVO.setTargetId(targetId); // 공고번호
-				fileVO.setCategory(category); // 카테고리(공모전)
-				fileVO.setSaveAddr(filePath); // 저장경로
-				service.updateFile(fileVO);
-			}
-			return list;
-		}
+//		public List<FileDto> updateFiles(MultipartFile[] uploadfile, String targetId, String category) throws IllegalStateException, IOException {
+//			
+//			List<FileDto> list = new ArrayList<>();
+//			List<FilesVO> filesChecklist = new ArrayList<>();
+//			FilesVO fileVO = new FilesVO();
+//			
+//			// 파일이 없다면. insert
+//			if(service.fileList(targetId).size() == 0) {
+//				uploadFiles(uploadfile,targetId, category);
+//			}
+//			
+//			// 파일 경로위치에 물리적으로 저장하기
+//			for (MultipartFile file : uploadfile) {
+//				if (!file.isEmpty()) {
+//					FileDto dto = new FileDto(UUID.randomUUID().toString(), file.getOriginalFilename(), file.getContentType());
+//					list.add(dto);
+//
+//					File newFileName = new File(dto.getUuid() + "_" + dto.getFileName());
+//
+//					file.transferTo(newFileName);
+//					System.out.println(newFileName);
+//				}
+//			}
+//			filesChecklist = service.fileList(targetId);
+//			
+//			// 저장한 파일 DB 저장하기
+//			for (int i = 0; i < list.size(); i++) {
+//				fileVO.setfNo(filesChecklist.get(i).getfNo()); //여러건수정
+//				fileVO.setfNm(list.get(i).getFileName()); //원본파일명
+//				fileVO.setSevNm(list.get(i).getUuid() + "_" + list.get(i).getFileName());//서버파일명.
+//				fileVO.setTargetId(targetId); // 공고번호
+//				fileVO.setCategory(category); // 카테고리(공모전)
+//				fileVO.setSaveAddr(filePath); // 저장경로
+//				service.updateFile(fileVO);
+//			}
+//			return list;
+//		}
 	
 
 	

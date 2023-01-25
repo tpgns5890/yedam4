@@ -14,8 +14,8 @@ public interface FilesMapper {
 
 	public int updateFile(FilesVO vo); // 파일 1건 수정
 
-	public int deleteFile(String No); // 파일 1건 삭제
-	
-	public int oneDeleteFile(String No); // 파일1건 여러건 삭제
+	public int deleteFile(String No); /// 파일1건 여러건 삭제 
+	 
+	public int oneDeleteFile(String No); // 파일 1건 삭제
 
 }

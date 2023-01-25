@@ -109,20 +109,27 @@ public class ContestServiceImpl implements ContestService {
 		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
+			list = newUp.uploadFiles(uploadFile, vo.getcNo(), "T01");
+			fMapper.deleteFile(vo.getcNo());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		int result = mapper.insertContest(vo);
 
+		// 공모전 등록시 메일동의 회원에게 발송
+		List<MemberVO> emailList = memberMapper.memberEmail();
 		if (result > 0) {
-		// 메일동의 회원에게 발송.---------------------------------------------------
-//		String toMail = "dry3997@gmail.com";
-//		String title = vo.getTtl() + "공모전 업로드";
-//		String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
-//		mailing(toMail, title, content);
+			for (MemberVO email : emailList) {
+				String toMail = email.getUserEmail();
+				String title = vo.getTtl() + "공모전 업로드";
+				String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
+				mailing(toMail, title, content);
+			}
+		// 결제API연결후 입급내역 insert 추가.
+			
 		}
+
 		return result;
 	}
 
@@ -144,20 +151,22 @@ public class ContestServiceImpl implements ContestService {
 		// 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
+			list = newUp.uploadFiles(uploadFile, vo.getcNo(), "T01");
+			fMapper.deleteFile(vo.getcNo());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-
 		int result = mapper.updateContest(vo);
-
+		// 공모전 수정 메일동의 회원에게 발송
+		List<MemberVO> emailList = memberMapper.memberEmail();
 		if (result > 0) {
-		// 메일동의 회원에게 발송.---------------------------------------------------
-//		String toMail = "dry3997@gmail.com"; //메일회원 리스트만큼 반복추가
-//		String title = vo.getTtl() + "공모전 수정";
-//		String content = "공모전이 수정되었습니다 참고 부탁드립니다!.";
-//		mailing(toMail, title, content);
+			for (MemberVO email : emailList) {
+				String toMail = email.getUserEmail();
+				String title = vo.getTtl() + "공모전 수정";
+				String content = "공모전이 수정되었습니다 참고 부탁드립니다!.";
+				mailing(toMail, title, content);
+			}
 		}
 
 		return result;
@@ -200,25 +209,31 @@ public class ContestServiceImpl implements ContestService {
 			}
 
 		}
-		// 총 상금합계.
+		// 총 상금합계. + 등록비도 추가할것..
 		vo.setPay(hap);
 
 		// 1. 파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
 		int result = mapper.saveUpdateContest(vo);
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.updateFiles(uploadFile, vo.getcNo(), "T01");
+			list = newUp.uploadFiles(uploadFile, vo.getcNo(), "T01");
+			fMapper.deleteFile(vo.getcNo());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		// 공모전 등록시 메일동의 회원에게 발송
+		List<MemberVO> emailList = memberMapper.memberEmail();
 		if (result > 0) {
-		// 메일동의 회원에게 발송.---------------------------------------------------
-//		String toMail = "dry3997@gmail.com";
-//		String title = vo.getTtl() + "공모전 업로드";
-//		String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
-//		mailing(toMail, title, content);
+			for (MemberVO email : emailList) {
+				String toMail = email.getUserEmail();
+				String title = vo.getTtl() + "공모전 업로드";
+				String content = "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
+				mailing(toMail, title, content);
+			}
 		}
+		// 결제API연결후 입급내역 insert 추가.
+
 		return result;
 	}
 
@@ -233,7 +248,9 @@ public class ContestServiceImpl implements ContestService {
 		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
 		LikesVO like = new LikesVO();
 		like.setTargetNo(vo.getcNo());
-		likeMapper.likeDelete(like);
+		likeMapper.likeDelete(like);// 공모전 좋아요 삭제
+
+		// 정산요청 insert 추가할것.
 
 		return mapper.deleteContest(vo);
 	}
@@ -274,7 +291,8 @@ public class ContestServiceImpl implements ContestService {
 		return mapper.saveGetContest(contestVO);
 	}
 
-	// 이메일 발송 ----------------------------------------------------------------------------
+	// 이메일 발송
+	// ----------------------------------------------------------------------------
 	public void mailing(String email, String setTitle, String setContent) {
 		String setFrom = "yedam4eventi@gmail.com";
 		String toMail = email;

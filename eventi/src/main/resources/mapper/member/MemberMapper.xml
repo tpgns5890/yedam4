@@ -109,4 +109,40 @@
 	FROM MNCODE 
 	WHERE CL_ID = 'E'
 	</select>
+	
+	<!-- 수신동의 회원의 이메일리스트 -->
+	<select id="memberEmail"  resultType="MemberVO">
+	  SELECT USER_ID,user_email
+      FROM MEMBERS
+      where user_messaging = 'S1'
+        or  user_messaging = 'S3'
+	</select>
+	
+	<!-- 회원권한 변경 -->
+	<update id="userStateUpdate">
+		UPDATE MEMBERS
+		SET user_state = #{userState}
+		WHERE USER_ID = #{userId}
+	</update> 
+	
+	<!-- 회원정보 수정 -->
+	<update id="userUpdate">
+		UPDATE MEMBERS
+		SET USER_EMAIL = #{userEmail},
+            USER_NAME = #{name},
+            USER_PHONE=#{userPhone},
+            USER_MESSAGING=#{userMessaging},
+            DEPOTR =#{depotr},
+            bank = #{bank},
+            ACCNT = #{accnt}
+		WHERE USER_ID = #{userId}
+	</update> 
+	
+	<select id="busiSelect" resultType="MemberVO">
+		SELECT b.busi_num,b.busi_title,b.busi_type,b.busi_area,b.busi_style,m.*
+		FROM MEMBERS m join busi_member b
+		                on m.user_id = b.user_id
+		and m.USER_ID =  #{userId}
+	</select>
+	
 </mapper>

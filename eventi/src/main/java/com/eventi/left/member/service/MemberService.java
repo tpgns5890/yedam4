@@ -32,6 +32,13 @@ public interface MemberService{
 	public List<CodeVO> getType();
 
 	public int insertBusiMember(MemberVO memberVO);
+	
+	public boolean memberPwCheck(MemberVO memberVO); //회원정보 수정,탈퇴를 위한 비밀번호체크.
 
+	public int userStateUpdate(MemberVO memberVO); //회원권한 변경.
+	
+	public int userUpdate(MemberVO memberVO); //회원정보 변경.
+	
+	public MemberVO busiSelect(String userId); //업체회원 조회
 
 }
