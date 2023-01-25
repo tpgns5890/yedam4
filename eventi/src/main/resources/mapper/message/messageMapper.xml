@@ -8,7 +8,7 @@
 	</select>
 	
 	<insert id="msgInsert">
-		INSERT INTO NESSAGE(MSG_ID, CHA_ID, TO_ID, FROM_ID, MSG_CNTN)
-		VALUES('ME'||MSG_SEQ.NEXTVAL, #{chaId}, #{toId}, #{fromId}, #{msgCntn})
+		INSERT INTO MESSAGE(MSG_ID, CHA_ID, FROM_ID, MSG_CNTN)
+		VALUES('ME'||MSG_SEQ.NEXTVAL, #{chaId}, #{fromId}, #{msgCntn})
 	</insert>
 </mapper>

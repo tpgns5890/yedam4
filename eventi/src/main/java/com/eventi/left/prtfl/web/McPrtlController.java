@@ -25,6 +25,8 @@ import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.prtfl.service.McPrtflService;
 import com.eventi.left.prtfl.service.McPrtflVO;
 import com.eventi.left.reply.service.ReplyVO;
+import com.eventi.left.review.service.ReviewService;
+import com.eventi.left.review.service.ReviewVO;
 
 @Controller
 @RequestMapping("/prtfl")
@@ -33,6 +35,7 @@ public class McPrtlController {
 	@Autowired CodeService codeService;
 	@Autowired FilesService filesService;
 	@Autowired LikesMapper likesMapper;
+	@Autowired ReviewService reviewService;
 	
 	//사회자 전체 조회
 	@GetMapping("/mcList")
@@ -64,7 +67,7 @@ public class McPrtlController {
 	
 	//사회자 단건 조회
 	@GetMapping("/mcSelect")
-	public String mcSelect(Model model, McPrtflVO mcPrtflVO, ReplyVO replyVO, LikesVO likesVO) {
+	public String mcSelect(Model model, McPrtflVO mcPrtflVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
 		model.addAttribute("mcSelect", mcPrtflService.mcSelect(mcPrtflVO));
@@ -78,6 +81,14 @@ public class McPrtlController {
 		likesVO.setTargetNo(mcPrtflVO.getUserId());
 		likesVO.setCategory("T06");
 		model.addAttribute("like", likesMapper.getLike(likesVO));
+		
+		//후기 관련
+		reviewVO.setReviewTgt(mcPrtflVO.getUserId());
+		reviewVO.setCategory("T06");
+		model.addAttribute("reviews", reviewService.getReview(reviewVO));
+		
+		//후기 평균 별점, 전체건수
+		model.addAttribute("recount", reviewService.getReviewAvg(reviewVO));
 		
 		return "content/prtfl/mcSelect";
 	}
