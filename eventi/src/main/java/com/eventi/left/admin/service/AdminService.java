@@ -1,5 +1,12 @@
 package com.eventi.left.admin.service;
 
-public interface AdminService {
+import java.util.List;
 
+import com.eventi.left.common.PagingVO;
+import com.eventi.left.member.service.MemberVO;
+
+public interface AdminService {
+	public List<MemberVO> memberList(MemberVO memberVO, PagingVO paging);
+
+	public int count(MemberVO memberVO);
 }

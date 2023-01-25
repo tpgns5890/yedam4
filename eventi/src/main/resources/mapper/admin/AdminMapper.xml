@@ -4,22 +4,54 @@
  
  <mapper namespace="com.eventi.left.admin.mapper.AdminMapper">
  
- 	<!-- 회원등급별 정렬 -->
-	<sql id="user_grade">
-		<if test="user_grade != null and user_grade != ''">
-			and user_grade = #{auth}
+	<sql id="mSelect">
+		<where>
+	 	<!-- 회원등급별 정렬 -->
+		<if test="auth != null and auth != ''">
+			AND USER_GRADE = #{auth}
 		</if>
-	</sql>
-	
-	<!-- 회원아이디 검색처리 -->
-	<sql id="search">
-		<if test="user_id != null and user_id != ''">
-			and user_id LIKE '%'||#{userId}||'%' 
+
+		<!-- 회원아이디 검색처리 -->
+		<if test="userId != null and userId != ''">
+			AND USER_ID LIKE '%'||#{userId}||'%'
 		</if>
+		
+		<!-- 계정상태 정렬 -->
+		<if test="userState !=null and userState != ''">
+			AND USER_STATE = #{userState}
+		</if>
+		</where>
 	</sql>
+
+	<!-- 전체 회원 조회 -->
+	<select id="memberList" resultType="MemberVO">
+		SELECT 	USER_ID,
+				USER_PASSWORD,
+				USER_EMAIL,
+				USER_NAME NAME,
+				USER_PHONE,
+				USER_MESSAGING,
+				USER_GRADE AUTH,
+				RPRT,
+				DEPOTR,
+				BANK,
+				ACCNT,
+				USER_REGDATE,
+				USER_STATE
+		FROM 	(SELECT ROWNUM RN, A.*
+        	  	FROM(SELECT * FROM MEMBERS 
+			  	<include refid="mSelect" />
+       		  	order by user_regdate desc
+			  	<![CDATA[
+			  		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+			  	]]>
+	</select>
 	
-	<!-- <select id="memberList" resultType="ContestVO">
-	
-	</select> -->
+	<!-- 조건별 회원정보 총 개수 -->
+	<select id="count" resultType="int">
+		select count(*)
+		from members
+		<include refid="mSelect" />
+	</select>
 	
  </mapper>

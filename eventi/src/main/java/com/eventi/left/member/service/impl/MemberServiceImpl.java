@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -113,8 +114,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	// userdetails
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws AuthenticationException {
 		MemberVO vo = mapper.getMember(username);
+		if(vo==null) {
+			throw new UsernameNotFoundException("x");
+		}
 		return vo;
 	}
 

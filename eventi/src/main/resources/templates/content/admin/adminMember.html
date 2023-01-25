@@ -8,141 +8,206 @@
 <link rel="stylesheet" href="/assets/css/adminSideBar.css">
 
 <style>
-#admin-container{
+#admin-container {
 	height: 100vh;
 }
-.footer, .divider-d, .module-small{
-	margin-left:15% !important;
+
+.footer, .divider-d, .module-small {
+	margin-left: 15% !important;
 }
-#admin-contents{
-	height:100%;
-	padding-left:16%;
-	padding-top:50px;
-	background:#eeeeee;
+
+#admin-contents {
+	height: 100%;
+	padding-left: 16%;
+	padding-top: 50px;
+	background: #eeeeee;
 }
-#head-btn{
+
+#head-btn {
 	height: 60px;
-    display: flex;
+	display: flex;
 }
-.top-button{
+
+.top-button {
 	cursor: pointer;
 	width: 250px;
-    display: flex;
-    height: 100%;
-    border: 1px solid black;
-    margin-right: 10px;
-    background: white;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
-    align-items: center;
-}
-.icon-area{
-	width: 50px;
-    height: 100%;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-content: center;
-    flex-wrap: wrap;
-}
-#icon-area-m{
-	background:blue;
-}
-#icon-area-p{
-	background:yellow;
-}
-#icon-area-b{
-	background:red;
-}
-.images{
-	height:35px;
-}
-.number-sec{
 	display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    margin-left:10px;
-}
-
-#list-area{
-	position:inherit;
-	width: 98.9%;
-    height: 83.5%;
-	margin-top:10px;
-	background:white;
-	padding:10px;
-}
-#list-head{
-	display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-#selArea{
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: flex-start;
-    margin-right:5px;
-}
-
-#list-head-right{
-	display:flex;
+	height: 100%;
+	border: 1px solid black;
+	margin-right: 10px;
+	background: white;
+	box-shadow: 0 4px 8px 0 rgb(0 0 0/ 20%);
 	align-items: center;
 }
+
+.icon-area {
+	width: 50px;
+	height: 100%;
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	align-content: center;
+	flex-wrap: wrap;
+}
+
+#icon-area-m {
+	background: blue;
+}
+
+#icon-area-p {
+	background: yellow;
+}
+
+#icon-area-b {
+	background: red;
+}
+
+.images {
+	height: 35px;
+}
+
+.number-sec {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+#list-area {
+	position: inherit;
+	width: 98.9%;
+	height: 83.5%;
+	margin-top: 10px;
+	background: white;
+	padding: 10px;
+}
+
+#list-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#selArea {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: flex-start;
+	margin-right: 5px;
+}
+
+#list-head-right {
+	display: flex;
+	align-items: center;
+}
+
+#member-table {
+	margin-top: 10px;
+	width: 100%;
+	text-align-last: center;
+}
 </style>
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 <body>
 	<div layout:fragment="content">
 		<div id="admin-container">
 			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
 			<div id="admin-contents">
-				<h3><b>전체회원관리</b></h3>
+				<h3>
+					<b>전체회원관리</b>
+				</h3>
 				<div id="head-btn">
 					<div id="topbtn-member" class="top-button">
 						<div class='icon-area' id="icon-area-m">
-						<img src="/assets/images/user.png" class="images">
+							<img src="/assets/images/user.png" class="images">
 						</div>
 						<div class="number-sec">
-						<span>전체회원</span>
-						<span style="font-size:1.5em;">7598</span>
+							<span>전체회원</span> <span style="font-size: 1.5em;" th:text=${countall}></span>
 						</div>
 					</div>
 					<div id="topbtn-punish" class="top-button">
 						<div class='icon-area' id="icon-area-p">
-						<img src="/assets/images/user.png" class="images">
+							<img src="/assets/images/user.png" class="images">
 						</div>
-					<div class="number-sec">
-						<span>활동제한회원</span>
-						<span style="font-size:1.5em;">186</span>
+						<div class="number-sec">
+							<span>활동제한회원</span> <span style="font-size: 1.5em;" th:text=${countpunish}>186</span>
 						</div>
 					</div>
 					<div id="topbtn-ban" class="top-button">
 						<div class='icon-area' id="icon-area-b">
-						<img src="/assets/images/user.png" class="images">
+							<img src="/assets/images/user.png" class="images">
 						</div>
-					<div class="number-sec">
-						<span>영구제명회원</span>
-						<span style="font-size:1.5em;">13</span>
+						<div class="number-sec">
+							<span>영구제명회원</span> <span style="font-size: 1.5em;" th:text=${countban}>13</span>
 						</div>
 					</div>
 				</div>
-				
+
 				<div id="list-area">
 					<div id="list-head">
-					<span>회원리스트</span>
-					<div id="list-head-right">
-						<div id="selArea">
-							전체회원<input type="radio" name="selGrade" value="all">
-							일반회원<input type="radio" name="selGrade" value="norm">
-							업체회원<input type="radio" name="selGrade" value="busi">
-						</div>
-						<div id="searchArea">
-							<input type="text">
+						<span>회원리스트</span>
+						<div id="list-head-right">
+							<div id="selArea">
+								전체회원<input type="radio" name="selGrade" value="all">
+								일반회원<input type="radio" name="selGrade" value="norm">
+								업체회원<input type="radio" name="selGrade" value="busi">
+							</div>
+							<div id="searchArea">
+								<input type="text">
+							</div>
 						</div>
 					</div>
+					<table id="member-table">
+						<thead>
+							<tr>
+								<th>아이디</th>
+								<th>이메일주소</th>
+								<th>이름</th>
+								<th>전화번호</th>
+								<th>수신여부</th>
+								<th>회원유형</th>
+								<th>신고수</th>
+								<th>가입일</th>
+								<th>계정상태</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr th:each="m: ${mList}">
+							<td th:text=${m.userId}></td>
+							<td th:text=${m.userEmail}></td>
+							<td th:text=${m.name}></td>
+							<td th:text=${m.userPhone}></td>
+							<td th:text=${m.userMessaging}></td>
+							<td th:text=${m.auth}></td>
+							<td th:text=${m.rprt}></td>
+							<td th:text=${m.userRegDate}></td>
+							<td th:text=${m.userState}></td>
+						</tr></tbody>
+					</table>
+					<!-- 페이징 처리 -->
+					<!-- //페이징 경로 :: 문자 -->
+					<div class="row mt-5">
+						<div class="col text-center">
+							<div class="block-27">
+								<th:block
+									th:replace="fragments/paging :: component(${paging},'gopage')">
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script>
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			function gopage(i) {
+				location.href=`/admin/MemberList?page=`+i;
+			}
+		</script>
 	</div>
 </body>
 </html>
