@@ -25,7 +25,7 @@
 			</tr>
 		</thead>
 		<tbody id="check">
-			<tr th:each="est : ${estList}" th:onclick="location.href='@{estDetail(eno=${est.eno}'">
+			<tr th:each="est : ${estList}" th:onclick="location.href='@{estDetail(eno=${est.eno})}'">
 				<td th:text=${est.eno}></td> 
 				<td th:text=${est.eventType}></td>
 				<td th:text=${est.writingDate}></td>
@@ -33,6 +33,20 @@
 			</tr>
 		</tbody>
 	</table>
+	<!-- 페이징 처리 -->
+		<div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+            </div>
+          </div>
+        </div>
 </div>
-
+<script>
+//페이지 이동 
+function gopage(i) {
+    console.log(i);
+    location.href = '/estList?page=' + i;
+}
+</script>
 </html>

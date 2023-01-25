@@ -8,9 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.estimate.service.EstService;
 import com.eventi.left.estimate.service.EstVO;
@@ -28,8 +29,9 @@ public class EstController {
 	
 	//견적요청서 전체조회
 	@RequestMapping(value = "/estList")
-	public String estList(Model model) {
-		model.addAttribute("estList", estService.getEstList(null));
+	public String estList(Model model, PagingVO paging) {
+		model.addAttribute("estList", estService.getEstList(null, paging));
+		model.addAttribute("paging", paging);
 		return "content/estimate/estList";
 	}
 	//견적요청서 작성페이지
@@ -41,10 +43,10 @@ public class EstController {
 	@RequestMapping(value = "/estDetail")
 	public String estDetail(Model model, @RequestParam String eno) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");	
-		if(user == null) {
+		String sessionId = user.getUserId();
+		if(sessionId == null) {
 			return null;
 		}
-		String sessionId = user.getUserId();
 		model.addAttribute("est", estService.getEst(eno));
 		model.addAttribute("propList", estService.getPropList(eno));
 		model.addAttribute("count", estService.getCount(eno, sessionId));

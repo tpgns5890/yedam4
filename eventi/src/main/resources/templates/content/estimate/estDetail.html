@@ -217,14 +217,14 @@ button {
   </div>
 </div><!--  end of Modal -->
  </div>
- <input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}">
+<!--  <input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}"> -->
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
 //해당업체의 등록된물품 조회
- $(function() {
+/*  $(function() {
 	 
 var userId = $('input[name="sessionId"]').val();
 var data = {"userId" : userId};
@@ -274,7 +274,7 @@ var data = {"userId" : userId};
 		}
 		total = goodsSum + etcSum;
 		 $('#total').append("총금액: "+total+"원");
- });
+ }); */
  
  //제안서버튼 누를시 기존에 작성된 기타목록 제거
  $('#prop').on('click', function() {
@@ -332,7 +332,7 @@ var data = {"userId" : userId};
 	 });
  });
  //제안서 등록
- $('#insertBtn').on("click", function(){
+/*  $('#insertBtn').on("click", function(){
 	 //행사운영비 금액
 	 var inputVal = parseInt($('#etcList input').val());
 	 if(inputVal == 0){
@@ -373,7 +373,7 @@ var data = {"userId" : userId};
  				alert("서버 요청 실패");
  			}
 	 });  
- });
+ }); */
  //제안서 상세보기
  $('#getProp').on('click', function() {
 	 $('#companyInt').html("");

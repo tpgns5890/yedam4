@@ -110,6 +110,40 @@ h1 {
   border: 1px solid #ccc;
   overflow: hidden;
 }
+/* 상태바 */
+.progressbar{
+  width: 400px;
+  height: 15px;
+  border-radius: 10px;
+  overflow:hidden;
+  background: #ccc;
+  position:relative;
+  margin: 10px auto;
+}
+.progressbar::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  height: 15px;
+  width:0;
+  background:blue;
+  animation: progress 2s ease forwards;
+}
+@keyframes progress{
+  0%{width: 0px}
+  100%{width: 14%;}
+}
+.progress{
+  position: absolute;
+  top:0;
+  right:0;
+  z-index:99;
+}
+.progress::after{
+  content: '%';
+  
+}
 </style>
 </head>
 <body>
@@ -126,6 +160,9 @@ h1 {
  <!-- 행사유형 선택 -->
  <form id="insertFrm" name="insertFrm">
 <div id="bodyContents">
+<div class="progressbar">
+<!--   <span class="progress">0</span> -->
+</div>
 <h1>어떤 행사를 기획중이신가요?</h1>
 <table id="customers">
   <tr>
@@ -515,6 +552,18 @@ $('.submit').click(function() {
 function login(){
 	 $("#header_modal").show();
 }
+
+//상태바
+$({ val : 0 }).animate({ val : 30 }, {
+   duration: 5000,
+  step: function() {
+    $(".progress").text(Math.floor(this.val));
+  } ,
+  complete: function() {
+    $(".progress").text(Math.floor(this.val));
+    $(".progress").css("color","#fff");
+  } 
+});
 </script>
 </div>
 </body>
