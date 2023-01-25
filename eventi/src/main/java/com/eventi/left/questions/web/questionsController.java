@@ -45,7 +45,7 @@ public class questionsController {
 	@PostMapping("/insert")
 	public String qestionsInsert(QuestionsVO vo) {
 		qService.questionsInsert(vo); // 등록처리
-		return "redirect:/questions/qList";
+		return "redirect:/questions/myqnaList";
 	}
 
 	// 나의 문의내역 전체조회
