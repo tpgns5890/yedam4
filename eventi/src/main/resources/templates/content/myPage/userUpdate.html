@@ -34,7 +34,6 @@
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
-			
 			<div id="user">
 			<ul>
 				<li><span th:text="|아이디: ${user.userId}|"></span>
@@ -44,10 +43,10 @@
 				
 				<!-- 수신여부 -->
 				<li>
-					<input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S1" >수신거부</label>
-					<input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S2">메일</label>
-					<input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S3">휴대폰</label>
-					<input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S4">메일,휴대폰</label>
+					<input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</label>
+					<input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</label>
+					<input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</label>
+					<input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S3">메일,휴대폰</label>
 				</li>
 				
 				<!-- 회원등급 -->
@@ -87,45 +86,51 @@
 				<button type="button" id="update">회원정보 수정</button>
 			</div>
 		<script>
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
 		//수정하기 버튼 누를시
 		$('#update').on("click", function() {
 			alert('정보수정');
 			let userEmail = $('#userEmail').val();
 			let name = $('#name').val();
-			let phone = $('#userPhone').val();
-			let messaging = $('input[name="userMessaging"]:checked').val(); //:checked').value;
+			let userPhone = $('#userPhone').val();
+			let userMessaging = $('input[name="userMessaging"]:checked').val(); //:checked').value;
 			let depotr = $('#depotr').val();
 			let bank = $('#bank').val();
 			let accnt =$('#accnt').val();
 			
 			console.log(userEmail)
 			console.log(name)
-			console.log(phone)
-			console.log(messaging)
+			console.log(userPhone)
+			console.log(userMessaging)
 			console.log(depotr)
 			console.log(bank)
 			console.log(accnt)
 			
-			//비밀번호 체크(ajax 추가하기!!!)
-				//$.ajax({
- 	   		//	url : '/members/update',
- 	   		//	method : 'post',
- 	   		//	data : {userEmail,name,phone,messaging,depotr,bank,accnt},
- 	   		//	beforeSend : function(xhr)
- 	        //    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
- 			//		xhr.setRequestHeader(header, token);
- 	        //    },
-			//	success : function(result){
-			//		console.log(result);
-			//      if(result > 0){
-			//			alert('수정완료')
-			//     }else {
-			//			alert('수정실패')	
-			//     }
-			//	 },
-		    //    fail: function () {
-		    //       }
-			//	})
+		$.ajax({
+ 	   			url : '/myPage/userUpdate',
+ 	   			method : 'post',
+ 	   			dataType: "json",
+	            data: JSON.stringify({userId,userEmail,name,userPhone,userMessaging,depotr,bank,accnt}),
+	            contentType : "application/json",
+ 	   			beforeSend : function(xhr)
+ 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+ 					xhr.setRequestHeader(header, token);
+ 	            },
+				success : function(result){
+					console.log(result);
+			      if(result > 0){
+						alert('수정완료')
+						location.href='/myPage/userMypage'; 
+			     }else {
+						alert('수정실패')	
+			     }
+				 },
+		        fail: function () {
+		           }
+				})
 		})
 		
 			

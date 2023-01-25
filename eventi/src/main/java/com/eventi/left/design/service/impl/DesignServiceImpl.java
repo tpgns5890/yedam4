@@ -117,7 +117,8 @@ public class DesignServiceImpl implements DesignService {
 		int result = mapper.update(vo);
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.updateFiles(uploadFile, vo.getDgnNo(), vo.getCaregory());
+			list = newUp.uploadFiles(uploadFile, vo.getDgnNo(), vo.getCaregory());
+			filesMapper.deleteFile(vo.getDgnNo());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.eventi.left.common.CodeVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.member.mapper.MemberMapper;
 import com.eventi.left.member.service.BusiVO;
 import com.eventi.left.member.service.CrtfVO;
@@ -63,6 +64,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		return i;
 	}
+
 	// 업체회원 회원가입
 	@Override
 	public int insertBusiMember(MemberVO memberVO) {
@@ -166,15 +168,45 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 	}
 
-	//행사지역 불러오기
+	// 행사지역 불러오기
 	@Override
 	public List<CodeVO> getCountry() {
 		return mapper.getCountry();
 	}
 
-	//행사유형 불러오기
+	// 행사유형 불러오기
 	@Override
 	public List<CodeVO> getType() {
 		return mapper.getType();
 	}
+
+	// 회원정보 수정,탈퇴를 위한 비밀번호체크.
+	@Override
+	public boolean memberPwCheck(MemberVO vo) {
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String userPassword = user.getUserPassword();
+
+		//입력값,기존 암호화된DB 매칭 boolean값 반환
+		return passwordEncoder.matches(vo.getUserPassword(),userPassword);
+	}
+
+	//회원권한 변경.
+	@Override
+	public int userStateUpdate(MemberVO memberVO) {
+		return mapper.userStateUpdate(memberVO);
+	}
+
+	//회원정보 수정.
+	@Override
+	public int userUpdate(MemberVO memberVO) {
+		return mapper.userUpdate(memberVO);
+	}
+
+	//업체회원 정보 조회
+	@Override
+	public MemberVO busiSelect(String userId) {
+		return mapper.busiSelect(userId);
+	}
+	
 }

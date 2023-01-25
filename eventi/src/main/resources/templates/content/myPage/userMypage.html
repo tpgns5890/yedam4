@@ -32,7 +32,6 @@
 			</div>
 		</section>
 
-
 		<div style="min-height: 700px">
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
@@ -78,9 +77,23 @@
 					<p th:text="|은행사:${user.bank}|"></p>
 					<p th:text="|계좌번호:${user.accnt}|"></p>
 				</div>
-
-				<p
-					th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></p>
+				
+				<div th:if="${user.depotr} == null">
+					<p>예금주:</p>
+					<p>은행사:</p>
+					<p>계좌번호:</p>
+				</div>
+				
+				
+				<p th:text="|사업자번호 : ${user.busiNum}|"></p>
+				<p th:text="|상호명: ${user.busiTitle}|"></p>
+				<p th:text="|${user.busiType}|"></p>
+				<p th:text="|${user.busiArea}|"></p>
+				<p th:text="|${user.busiStyle}|"></p>
+				
+				
+				
+				<p th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></p>
 
 				<button type="button" id="update">수정</button>
 				<button type="button" id="delete">탈퇴</button>
@@ -104,6 +117,10 @@
 
 
 		<script>
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+		
 			var password = $("#pw_feedback").attr('value');
 			var passwordchk = $("#pw_feedback").attr('value');
 			//모달창-----------------------------------------------------------
@@ -124,6 +141,7 @@
 					modal.style.display = "none";
 				}
 			}
+			
 
 			//수정하기 버튼 누를시
 			$('#update').on("click", function() {
@@ -144,44 +162,43 @@
 							$("#pw_feedback").attr('color', '#2fb380');
 							$("#pw_feedback").attr('value', '0');
 							
-							$('#checkDiv').children('#update').on("click", updateForm);
 						} else {
 							$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
 							$("#pw_feedback").attr('color', '#dc3545');
 							$("#pw_feedback").attr('value', '1');
 						}
 					})
-					
+				 $('#checkDiv').children('#update').on("click", updateForm);
 				}
 			})
+
 			
 			function updateForm() {
 				$('#checkDiv').children('#update').attr('id' , "check")
-				alert('정보수정');
-				$('#password').val('');
-				$('#passwordchk').val('');
 				modal.style.display = "none";
 				
-				//임시
-				location.href='/myPage/userUpdate';
+				alert('정보수정');
+				let password = $('#password').val();
 				
-				//비밀번호 체크(ajax 추가하기!!!)
-					//$.ajax({
-	 	   		//	url : '/members/passwordCheck',
-	 	   		//	method : 'post',
-	 	   		//	data : {password},
-	 	   		//	beforeSend : function(xhr)
-	 	        //    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-	 			//		xhr.setRequestHeader(header, token);
-	 	        //    },
-				//	success : function(result){
-				//		console.log(result);
-				//		location.href='/myPage/userUpdate';
-				//		
-				//	 },
-			    //    fail: function () {
-			    //       }
-				//	})
+				$.ajax({
+	 	   			url : '/myPage/userPwCheck',
+	 	   			method : 'post',
+	 	   			data : {userId,userPassword:password},
+	 	   			beforeSend : function(xhr)
+	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 					xhr.setRequestHeader(header, token);
+	 	            }
+	 	   			,success : function(result){
+	 	   			      if(result == true){
+	 	   			    	location.href='/myPage/userUpdateForm'; 
+	 	   			     }else {
+	 	   						alert('비밀번호가 일치하지 않습니다.')	
+	 	   			     }
+	 	   			}
+	 	   			,fail: function () {
+	 	   					alert('요청실패')	
+	 	   		         }
+	 	   			})
 			}
 			
 			//탈퇴누를경우 update 권한수정
@@ -203,49 +220,42 @@
 							$("#pw_feedback").attr('color', '#2fb380');
 							$("#pw_feedback").attr('value', '0');
 							
-							$('#checkDiv').children('#delete').on("click",userdelete);
 						} else {
 							$("#pw_feedback").html('비밀번호가 일치하지 않습니다.');
 							$("#pw_feedback").attr('color', '#dc3545');
 							$("#pw_feedback").attr('value', '1');
 						}
 					})
-					
+				$('#checkDiv').children('#delete').on("click",userdelete);
 				}
 			})
 			
 			function userdelete(){
 				$('#checkDiv').children('#delete').attr('id' , "check")
-				alert('탈퇴')
 				$('#password').val('');
 				$('#passwordchk').val('');
 				modal.style.display = "none";
 				
-			// 회원권한 update
-			//$.ajax({
- 	   		//	url : '/members/delete',
- 	   		//	method : 'post',
- 	   		//	data : {password},
- 	   		//	beforeSend : function(xhr)
- 	        //    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
- 			//		xhr.setRequestHeader(header, token);
- 	        //    },
-			//	success : function(result){
-			//		console.log(result);
-			//      if(result > 0){
-			//			alert('회원탈퇴 완료')
-			//     }else {
-			//			alert('회원탈퇴 실패')	
-			//     }
-			//	 },
-		    //    fail: function () {
-		    //       }
-			//	})
+			$.ajax({
+ 	   			url : '/myPage/userStateUpdate',
+ 	   			method : 'post',
+ 	   			data : {userId,userState:'leave'},
+ 	   			beforeSend : function(xhr)
+ 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+ 					xhr.setRequestHeader(header, token);
+ 	            },
+				success : function(result){
+				      if(result > 0){
+							alert('회원탈퇴 완료')
+							$('.nav').children('li:eq(11)').children('form').submit();
+				     }else {
+							alert('회원탈퇴 실패')	
+				     }
+				 },
+		        fail: function () {
+		           }
+				})
 			}
-			
-		
-					
-		
 		</script>
 	</div>
 </body>

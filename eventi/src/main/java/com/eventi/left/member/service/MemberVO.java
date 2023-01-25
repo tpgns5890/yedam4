@@ -39,6 +39,15 @@ public class MemberVO implements UserDetails {
 	private String userState;
 	private List<CrtfVO> crtfs;
 	private BusiVO busi;
+
+	private String userState;
+	
+	private String busiNum;
+	private String busiTitle;
+	private String busiType;
+	private String busiArea;
+	private String busiStyle;
+
 	Integer first; //첫페이지
 	Integer last; //마지막페이지
 

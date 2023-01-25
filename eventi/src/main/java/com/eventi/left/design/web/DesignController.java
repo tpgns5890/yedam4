@@ -23,6 +23,7 @@ import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
 
 @Controller
@@ -34,6 +35,8 @@ public class DesignController {
 	ContestService cService;
 	@Autowired
 	FilesService fService;
+	@Autowired
+	MemberService memberService;
 
 	// 전체 디자인 리스트 조회
 	@RequestMapping("/designList")
@@ -47,7 +50,12 @@ public class DesignController {
 	// 회원의 디자인 응모하기 폼 이동.
 	@GetMapping("/designInsertForm")
 	public String designInsert(Model model, DesignVO vo) {
+		
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
 
+		model.addAttribute("user", memberService.getMember(sessionId));
 		model.addAttribute("contest", cService.getContest(vo.getcNo()));
 		model.addAttribute("dNo", service.getSequence());
 		return "content/contest/contestApplyForm";
@@ -61,7 +69,7 @@ public class DesignController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setUserId(sessionId);
-		
+
 		System.out.println(vo);
 
 		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
@@ -110,7 +118,7 @@ public class DesignController {
 		return "content/myPage/design";
 	}
 
-	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회 
+	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회
 	@PostMapping("/ajaxSelect")
 	@ResponseBody
 	public DesignVO designSelect(String dgnNo) {
@@ -124,7 +132,7 @@ public class DesignController {
 
 		return design;
 	}
-	
+
 	// 임시저장된 게시글 전체들고오기
 	@PostMapping("/dSave")
 	@ResponseBody
@@ -138,13 +146,12 @@ public class DesignController {
 	public List<DesignVO> saveGetDesign(DesignVO vo) {
 		return service.saveGetDesign(vo);
 	}
-	
+
 	// 임시저장 불러오기 수정처리
 	@PostMapping("/saveUpdate")
 	public String saveUpdateContest(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
-		service.saveUpdateDesign(vo, filesVO,uploadFile);
+		service.saveUpdateDesign(vo, filesVO, uploadFile);
 		return "redirect:/design/designMypage";
 	}
-
 
 }

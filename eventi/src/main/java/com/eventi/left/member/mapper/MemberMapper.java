@@ -28,6 +28,16 @@ public interface MemberMapper {
 	public List<CodeVO> getType();
 	
 	public int insertBusi(BusiVO busiVO);
+	
+	public List<MemberVO> memberEmail(); //수신동의 멤버의 이메일리스트
+
+	public int userStateUpdate(MemberVO memberVO); //회원권한 변경.
+	
+	public int userUpdate(MemberVO memberVO); //회원정보 변경.
+	
+	public MemberVO busiSelect(String userId); //업체회원 조회
+	
+
 
 
 }

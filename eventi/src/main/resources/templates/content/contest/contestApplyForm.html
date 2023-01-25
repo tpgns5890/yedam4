@@ -55,6 +55,9 @@
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly></li>
 					<li><label>제목</label><input type="text" id="name" name="name" required="required"></li>
 					<li><textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
+					<li><label>예금주 : </label><input type="text" th:value="${user.depotr}" disabled="disabled"></li>
+					<li><label>은행명 : </label><input type="text" th:value="${user.bank}" disabled="disabled"></li>
+					<li><label>계좌번호: </label><input type="text" th:value="${user.accnt}" disabled="disabled"></li>
 				</ul>
 
 				<div class="col-md-12">
