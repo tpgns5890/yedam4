@@ -40,5 +40,5 @@ public class JobBoardVO {
 	//마감일 수
 	private Integer remain;
 	//정렬
-	String orderCol  ;
+	String orderCol;
 }

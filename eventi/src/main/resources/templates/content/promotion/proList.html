@@ -61,11 +61,11 @@
     
   <section class="module" id="team">
   <!-- 게시글 검색 -->
-  <form action="/proList">
+  <form action="/proList" id="searchForm">
 	<input type="text" name="eName" >
 	<input type="submit" id="find" value="찾기">
 
-
+<label>행사유형</label>
 <select id="etype" name="eType"  onchange="order()">
 		<option value="" selected>------</option>
 		<option value="E00" th:selected="${promotionVO.eType=='E00'}" >기타</option>
@@ -86,7 +86,14 @@
 		<option value="E15" th:selected="${promotionVO.eType=='E15'}" >박람회</option>
 		<option value="E00" th:selected="${promotionVO.eType=='E00'}" >기타</option>
 	</select> 
-	
+
+<!-- 게시글 정렬기준 -->
+<label>정렬기준</label>
+	<select id="see" name="orderCol" onchange="order()">
+		<option value="" selected>------</option>
+		<option value="dt">작성순</option>
+		<option value="see">조회수</option>
+	</select>	
 	</form>
   <button class="btn btn-d btn-circle" type="button" onclick="proInsert()"><i class="fa fa-heart" ></i> 게시글등록</button>
   
@@ -99,8 +106,8 @@
               </div>
             </div>
             <div class="row">
-              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
-                <div class="team-item" id="check"  th:each="pro : ${proList}"> 
+              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" th:each="pro : ${proList}" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="team-item" id="check" > 
                   <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|"> <img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
                     <div class="team-detail" > 										
                       <h5 class="font-alt" th:text=${pro.proNo}>Hi all</h5>
@@ -154,6 +161,13 @@ function gopage(i) {
     console.log(i);
     location.href = '/proList?page=' + i;
 }
+//정렬
+	function order(){
+		//let etype = $("#etype").val(); //공통으로 씀
+		let param = $("#searchForm").serialize()
+		location.href=`/proList?${param}`
+	}
+
 //검색기능
 
 	$('#find').click(function() {
