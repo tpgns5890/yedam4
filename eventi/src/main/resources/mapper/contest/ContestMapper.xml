@@ -43,13 +43,14 @@
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(
 			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt,style
-                            , CASE WHEN dt_extns IS NOT NULL THEN (TO_DATE (dt_extns, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD')) 
-                                                ELSE (TO_DATE (dt_cls, 'YY/MM/DD')) - (TO_DATE (sysdate, 'YY/MM/DD'))
-                                                END AS dDay
-                            ,(select count(*) from likes where target_no = c_no) AS likes
-			            FROM CONTEST
+                              ,CASE WHEN dt_extns IS NOT NULL 
+                                    THEN  trunc(dt_extns) - trunc(sysdate) 
+                                    ELSE  trunc(dt_cls) - trunc(sysdate)
+                               END AS dDay
+                              ,(select count(*) from likes where target_no = c_no) AS likes
+			             FROM CONTEST
 			            WHERE SAVE = 'N'
-			            AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
+			              AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
 						<include refid="category" />
 						order by ${order} 
 	<![CDATA[
@@ -59,22 +60,32 @@
 	
 	<!-- 나의 공모전 전체목록 조회 -->
 	<select id="myContestList" resultType="ContestVO">
-		SELECT * 
-		FROM ( select ROWNUM RN, 
-		        A.*FROM(
-		                     SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt,
-		                            code_select(category) category,
-		                            code_select(style) style,
-		                            (select count(*) from winner where co_no = c_no and d_no is not null) AS winnerCheck,
-		                             CASE WHEN dt_extns IS NOT NULL THEN CASE WHEN TO_DATE(dt_extns,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
-		                                                                 ELSE '마감'
-		                                                            END
-		                            WHEN dt_extns IS NULL THEN CASE WHEN TO_DATE(dt_cls,'YYYY/MM/DD') >= TO_DATE(SYSDATE, 'YYYY/MM/DD') THEN '진행중'
-		                                                                ELSE '마감'
-		                                                            END
-		                            END AS ing
-		                     FROM CONTEST c
-         					 WHERE writer = #{writer}
+		SELECT * FROM ( select ROWNUM RN,  A.*FROM(
+              SELECT c_no,
+                     writer,
+                     ttl,
+                     cntn,
+                     dt_reg,
+                     dt_cls,
+                     dt_extns,
+                     pay,
+                     save,
+                     inq,
+                     rprt,
+                     code_select(category) category,
+                     code_select(style) style,
+                     (select count(*) from winner where co_no = c_no and d_no is not null) AS winnerCheck,
+                      CASE WHEN dt_extns IS NOT NULL  THEN 
+	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
+	                                ELSE '마감'
+	                           END
+                          WHEN dt_extns IS NULL THEN 
+                               CASE WHEN trunc(dt_cls) >= trunc(SYSDATE) THEN '진행중'
+                                    ELSE '마감'
+                               END
+                      END AS ing
+              FROM CONTEST c
+					 WHERE writer = #{writer}
          <include refid="search" />
          order by dt_reg DESC
 		<![CDATA[
@@ -93,8 +104,9 @@
 	
 	<!-- 나의 공모전 총 등록개수 조회/검색결과만큼 개수반환 -->
 	<select id="myContest" resultType="int">
-		select count(*) from contest
-		where writer = #{writer}
+		select count(*) 
+	      from contest
+		 where writer = #{writer}
 		 <include refid="search" /> 
 	</select>
 	
@@ -106,17 +118,29 @@
 	        ,code_select(category) category
 	        ,code_select(style) style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
-		FROM CONTEST
-		WHERE
-		C_NO = #{cNo}
+		 FROM CONTEST
+		WHERE  C_NO = #{cNo}
 	</select>
 	
 	<!-- 공모전 1건 상세조회 -->
 	<select id="saveGetContest" resultType="ContestVO">
-		SELECT c.c_no,c.writer,c.ttl,c.cntn,c.dt_reg,c.dt_cls,c.pay,c.save,c.category,c.style,w.grade,w.w_pay wPay
-			   ,(select sev_nm from files where target_Id = c_no) AS img
-		FROM CONTEST c join winner w
-                        on c.c_no = w.co_no
+		SELECT c.c_no,
+		       c.writer,
+		       c.ttl,
+		       c.cntn,
+		       c.dt_reg,
+		       c.dt_cls,
+		       c.pay,
+		       c.save,
+		       c.category,
+		       c.style,
+		       w.grade,
+		       w.w_pay wPay,
+		       (select sev_nm from files where target_Id = c_no) AS img
+
+		FROM CONTEST c 
+		join winner w   on c.c_no = w.co_no
+
 		and c.C_NO = #{cNo}
 		and c.save = 'Y'
 	</select>
@@ -138,7 +162,16 @@
 		</selectKey>
 		
 		insert into
-		CONTEST(C_NO,WRITER,TTL,CNTN,CATEGORY,DT_REG,DT_CLS,PAY,SAVE,STYLE)
+		CONTEST(C_NO,
+		        WRITER,
+		        TTL,
+		        CNTN,
+		        CATEGORY,
+		        DT_REG,
+		        DT_CLS,
+		        PAY,
+		        SAVE,
+		        STYLE)
 		values( #{cNo},
 				#{writer},
 				#{ttl},
@@ -155,7 +188,7 @@
 	<update id="updateContest">
 		update CONTEST
 		set TTL = #{ttl},
-		CNTN = #{cntn}
+			CNTN = #{cntn}
 		where c_no = #{cNo}
 		and writer = #{writer}
 	</update>
@@ -178,7 +211,7 @@
 	<!-- 공모전 마감연장일 업데이트 -->
 	<update id="updateExtension">
 		update CONTEST
-		set DT_EXTNS = #{dtExtns}
+			set DT_EXTNS = #{dtExtns}
 		where c_no = #{cNo}
 		and writer = #{writer}
 	</update>
@@ -200,8 +233,8 @@
 	<!-- 임시저장한 게시글 불러오기 -->
 	<select id="cSave" resultType="ContestVO">
 		select * 
-		FROM contest
-		WHERE WRITER =  #{writer}
+		 FROM contest
+		 WHERE WRITER =  #{writer}
 		AND SAVE = 'Y'
 	</select>
 	

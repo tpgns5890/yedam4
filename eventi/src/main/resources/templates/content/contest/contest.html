@@ -207,8 +207,11 @@
 			<div class="modal_layer"></div>
 		</div>
 		
-		<!-- 페이지처리를 위한 히든인풋. -->
+		<!-- 참여작 페이지처리를 위한 히든인풋. -->
 		<input type="hidden" name="designPage" value="1">
+		
+		<!-- 참여작 페이지처리를 위한 히든인풋. -->
+		<input type="hidden" name="questionsPage" value="1"> 
 
 
 		<script>
@@ -361,8 +364,12 @@
 		//페이지 이동 함수
 		function gopage(i) {
 			console.log(i)
+			
 			$('input[name="designPage"]').val(i); //페이징처리를 위한 input값 변경.
-			contest(); //찾을수없음..??
+			contest(); 
+			
+			//$('input[name="questionsPage"]').val(i); //페이징처리를 위한 input값 변경.
+			//questions();
 		}
 		//-------------------------------------------------------------
 		
@@ -415,33 +422,35 @@
 			
 			 //회원아이디에 따라 다르게 표시됌.(수정,삭제,답변등록)
 			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
-			 console.log(writer)
 			if(question.secretYn == 'Y' && question.userId != userId &&  writer != userId){
-				p =`<li class="comment">
+				p =`<ul class="children" style="list-style: none">
+						<li class="comment">
+						<div class="comment-body" id="${question.qNo}">
+							<h3>비공개 문의</h3>
+				            <div class="meta">${question.writingDt}</div>
+				            <p>비공개내용입니다.</p>
+				            ${delBtn} ${upBtn}
+				            ${repInsert}
+						</div>
+						</li>
+					</ul>`
+			}
+			else { //공개인경우
+			p =`<ul class="children" style="list-style: none">
+					<li class="comment">
 					<div class="comment-body" id="${question.qNo}">
-						<h3>비공개 문의</h3>
+						<h3>${question.userId} : ${question.ttl}</h3>
 			            <div class="meta">${question.writingDt}</div>
-			            <p>비공개내용입니다.</p>
+			            <p>${question.cntn}</p>
 			            ${delBtn} ${upBtn}
 			            ${repInsert}
 					</div>
-					</li>`
-			}
-			else { //공개인경우
-			p =`<li class="comment">
-				<div class="comment-body" id="${question.qNo}">
-					<h3>${question.userId} : ${question.ttl}</h3>
-		            <div class="meta">${question.writingDt}</div>
-		            <p>${question.cntn}</p>
-		            ${delBtn} ${upBtn}
-		            ${repInsert}
-				</div>
-				</li>`
+					</li>
+				</ul>`
 			}
    			return p;
    		}
 		//답변생성
-		//답변이 있으면 id확인하고 있으면 답변등록 없애기..
 		 function makeRe(questionRep){
 			 let delBtn = '';
 			 let upBtn = '';
@@ -457,30 +466,33 @@
 				}
 			 
    			let p = `<ul class="children" style="list-style: none">
-                <li class="comment" >
-                <div class="comment-body" id="${questionRep.qNo}">
-                <h3>${questionRep.userId}</h3>
-                <div class="meta">작성일:${questionRep.writingDt} </div>
-                  <p>${questionRep.cntn}</p>
-                  ${delBtn} ${upBtn}
-                </div>
-              </li>
-            </ul>`
+		                <li class="comment" >
+		                <div class="comment-body" id="${questionRep.qNo}">
+		                <h3>${questionRep.userId}</h3>
+		                <div class="meta">작성일:${questionRep.writingDt} </div>
+		                  <p>${questionRep.cntn}</p>
+		                  ${delBtn} ${upBtn}
+		                </div>
+		              </li>
+		            </ul>`
             
             return p;
    		}
 		
 		//문의 및 문의답변 출력-----------------------------------------------------------
 		function questions(){
+			let page = $('input[name="questionsPage"]').val();
+			
 			$.ajax({
-	            url:"../questions/qList",
+	            url:"/questions/qList",
 	            method:"post",
-	            data : {targetId:cNo, category:'T01'},
+	            data : {targetId:cNo, category:'T01',page},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
+				console.log(res.paging);
 				//기존 박스 지우기
 				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
@@ -490,11 +502,11 @@
 					$("#cotestCntn").append(questionBox());
 				}
 				//리턴값 문의사항이 없으면 출력
-				if(res == 0){
+				if(res.questions == 0){
 					$("#cotestCntn").append($('<p>').append("문의사항이 없습니다."))
 				}
 				//문의사항이 있다면
-				for(data of res){
+				for(data of res.questions){
 					if(data.rerepTgt == null){ 
 						//문의사항
 						$("#cotestCntn").append(make(data));
@@ -504,6 +516,9 @@
 						$("#" + data.rerepTgt).append(makeRe(data));
 					} 
 				}
+				//기존 페이징 삭제후 붙이기
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging)); 
 	        })
 		}
 		
@@ -521,7 +536,8 @@
  			let targetId = cNo;
  			let category = 'T01';
  			
- 			console.log(Cntn,Ttl)
+ 			console.log(Cntn)
+ 			console.log(Ttl)
  			
  			if(userId == ''){
  				login() //로그인모달창.
@@ -531,7 +547,7 @@
  			//문의사항 등록처리
  			}else{
  				$.ajax({
- 	 	   			url : '/questions/insert',
+ 	 	   			url : '/questions/insertAjax',
  	 	   			method : 'post',
  	 	   			data : {userId, Ttl, Cntn, targetId,category,secretYn},
  	 	   			beforeSend : function(xhr)
@@ -540,6 +556,7 @@
  	 	            }
  	 	   		}).then(res => {
  	 	   			//문의 부분에 등록하기
+ 	 	   			console.log(res);
  	 	   			alert('문의등록 완료')
  	 	   			$("#cotestCntn").append(make(res));
  	 	   		})
@@ -690,7 +707,7 @@
 		
 		//참여작 생성(공개)
 		function makeDesignNo(design){
-   			let div = `<ul>
+   			let div = `<ul style="list-style: none">
 		                  <li class="comment">
 		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
 		                    <img src="/fileView/${design.sevNm}" style="width: 300px; height: 300px"></a>
@@ -701,7 +718,7 @@
    		}
 		//참여작 생성(비공개)   
 		function makeDesignYes(design){
-   			let div = `<ul> 
+   			let div = `<ul style="list-style: none"> 
 		                  <li class="comment">
 		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
 		                  	  <img src="/images/public.jpg" class=" icon-lock" style="width: 300px; height: 300px"></a>

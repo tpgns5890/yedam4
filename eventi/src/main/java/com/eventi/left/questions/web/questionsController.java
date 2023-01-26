@@ -1,6 +1,8 @@
 package com.eventi.left.questions.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.member.service.MemberVO;
-import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
-import com.eventi.left.reply.service.ReplyVO;
 
 @Controller
 @RequestMapping("/questions")
@@ -30,17 +30,21 @@ public class questionsController {
 	// 공모전글에 대한 문의사항리스트
 	@PostMapping("/qList")
 	@ResponseBody
-	public List<QuestionsVO> qestionsList(QuestionsVO vo) {
-		return qService.questionsList(vo);
+	public Map<String, Object> qestionsList(QuestionsVO vo, PagingVO paging) {
+		// 리턴할 최종Map(contest,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("questions", qService.questionsList(vo, paging));
+		result.put("paging", paging);
+		return result;
 	}
-	
-	//게시글등록폼이동
-	@RequestMapping(value = "/queInsert", method=RequestMethod.GET) 
+
+	// 게시글등록폼이동
+	@RequestMapping(value = "/queInsert", method = RequestMethod.GET)
 	public String proInsert(Model model) {
 		model.addAttribute("nextNo", qService.getSeq());
 		return "content/questions/queInsert";
 	}
-			
+
 	// 등록처리
 	@PostMapping("/insert")
 	public String qestionsInsert(QuestionsVO vo) {
@@ -48,6 +52,14 @@ public class questionsController {
 		return "redirect:/questions/myqnaList";
 	}
 
+	// 공모전 문의 등록처리
+	@PostMapping("/insertAjax")
+	@ResponseBody
+	public QuestionsVO qestionsContestInsert(QuestionsVO vo) {
+		qService.questionsInsert(vo); // 등록처리
+		return qService.getQuestions(vo);
+	}
+	
 	// 나의 문의내역 전체조회
 	@GetMapping("/myqnaList")
 	public String qnaList(Model model, QuestionsVO vo, PagingVO paging) {
@@ -58,21 +70,22 @@ public class questionsController {
 		model.addAttribute("paging", paging);
 		return "content/questions/queList";
 	}
-	//게시글상세조회
-	@RequestMapping(value = "/queDetail", method=RequestMethod.GET) 
+
+	// 게시글상세조회
+	@RequestMapping(value = "/queDetail", method = RequestMethod.GET)
 	public String proDetail(Model model, QuestionsVO vo) {
-		//MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		//상세내용
+		// MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		// 상세내용
 		model.addAttribute("queDetail", qService.getQuestions(vo));
 		return "content/questions/queDetail";
 	}
-			
+
 	// 댓글 수정
 	@PostMapping("/update")
 	@ResponseBody
 	public QuestionsVO replyUpdate(QuestionsVO vo) {
-		 qService.questionsUpdate(vo);
-		 return qService.getQuestions(vo);
+		qService.questionsUpdate(vo);
+		return qService.getQuestions(vo);
 	}
 
 	// 댓글 삭제

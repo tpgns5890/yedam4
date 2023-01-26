@@ -28,6 +28,7 @@ import com.eventi.left.likes.mapper.LikesMapper;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.mapper.MemberMapper;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.mapper.MoneyMapper;
 import com.eventi.left.money.service.MoneyService;
 import com.eventi.left.money.service.MoneyVO;
 
@@ -53,7 +54,7 @@ public class ContestServiceImpl implements ContestService {
 	@Autowired
 	MemberMapper memberMapper;
 	@Autowired
-	MoneyService moneyMapper;
+	MoneyMapper moneyMapper;
 
 	@Value("${spring.servlet.multipart.location}")
 	String filePath;
@@ -110,13 +111,16 @@ public class ContestServiceImpl implements ContestService {
 		vo.setPay(hap);
 
 		// 파일업로드,공모전등록
-		uploadFiles(uploadFile, vo);
 		int result = mapper.insertContest(vo);
+		uploadFiles(uploadFile, vo);
 
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-			//membersSendMail(vo, result, 0); // vo,insert,update
 
+			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			Thread thread = new Thread( new MembersSendMail(vo, result, 0));
+			thread.start();
+			
 			//입금정보 추가(API연결예정)
 			contestMoneyInsert(result, 0, vo); // insert,delete,vo
 		}
@@ -145,8 +149,10 @@ public class ContestServiceImpl implements ContestService {
 			// 파일업로드,공모전 수정
 			uploadFiles(uploadFile, vo);
 			result = mapper.updateContest(vo);
-
-			membersSendMail(vo, 0, result);// vo,insert,update
+			
+			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
+			thread.start();
 		}
 		return result;
 	}
@@ -183,7 +189,10 @@ public class ContestServiceImpl implements ContestService {
 
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-			//membersSendMail(vo, result, 0); // vo,insert,update
+			
+			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			Thread thread = new Thread( new MembersSendMail(vo, result, 0)); // vo,insert,update
+			thread.start();
 
 			// 입금정보 추가(API연결예정)
 			contestMoneyInsert(result, 0, vo); // insert,delete,vo
@@ -210,6 +219,7 @@ public class ContestServiceImpl implements ContestService {
 		vo = mapper.getContest(vo.getcNo()); 
 		int result = mapper.deleteContest(vo);
 		if(result > 0) {
+			
 			//출금요청정보 추가(API연결예정)
 			contestMoneyInsert(0, result, vo); // insert,delete,vo
 		}
@@ -264,48 +274,7 @@ public class ContestServiceImpl implements ContestService {
 
 	}
 
-	// 공모전 등록,수정시 수신동의한 회원들에게 이메일발송
-	public void membersSendMail(ContestVO vo, int insert, int update) {
 
-		// 수신동의한 멤버리스트.
-		List<MemberVO> emailList = memberMapper.memberEmail();
-
-		// 처리된결과가 있으면
-		if (insert > 0) {
-			for (MemberVO email : emailList) {
-				String toMail = email.getUserEmail();
-				String title = "[" + vo.getcNo() + "]" + "공모전 업로드";
-				String content = vo.getTtl() + "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
-				mailing(toMail, title, content);
-			}
-		} else if (update > 0) {
-			for (MemberVO email : emailList) {
-				String toMail = email.getUserEmail();
-				String title = "[" + vo.getcNo() + "]" + "공모전 수정";
-				String content = vo.getTtl() + "공모전이 수정되었습니다.";
-				mailing(toMail, title, content);
-			}
-		}
-	}
-
-	// 이메일 발송
-	public void mailing(String email, String setTitle, String setContent) {
-		String setFrom = "yedam4eventi@gmail.com";
-		String toMail = email;
-		String title = setTitle;
-		String content = setContent;
-		try {
-			MimeMessage message = mailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-			helper.setFrom(setFrom);
-			helper.setTo(toMail);
-			helper.setSubject(title);
-			helper.setText(content, true);
-			mailSender.send(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	// 입금내역 추가
 	public void contestMoneyInsert(int insert, int delete, ContestVO vo) {
@@ -323,12 +292,77 @@ public class ContestServiceImpl implements ContestService {
 
 		if (insert > 0) {
 			money.setMoType("M1"); // 입금코드
-			moneyMapper.insertMoney(money);
 		}
 		if (delete > 0) {
 			money.setMoType("M2"); // 출금코드
-			moneyMapper.insertMoney(money);
+		}
+		moneyMapper.insertMoney(money);
+	}
+	
+
+	/**
+	 * 
+	 * @author 배수빈
+	 * 메일발송을 위한 내부클래스 선언.
+	 *
+	 */
+	class MembersSendMail implements Runnable {
+		
+		//필드선언
+		ContestVO vo;
+		int insert;
+		int update;
+		
+		//생성자 선언
+		public MembersSendMail(ContestVO vo, int insert, int update) {
+			super();
+			this.vo = vo;
+			this.insert = insert;
+			this.update = update;
+		}
+
+		// 이메일 발송
+		public void mailing(String email, String setTitle, String setContent) {
+			String setFrom = "yedam4eventi@gmail.com";
+			String toMail = email;
+			String title = setTitle;
+			String content = setContent;
+			try {
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+				helper.setFrom(setFrom);
+				helper.setTo(toMail);
+				helper.setSubject(title);
+				helper.setText(content, true);
+				mailSender.send(message);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
+		// 실행할 메소드 : 공모전 등록,수정시 수신동의한 회원들에게 이메일발송 
+		@Override
+		public void run() {
+			// 수신동의한 멤버리스트.
+			List<MemberVO> emailList = memberMapper.memberEmail();
+	
+			// 처리된결과가 있으면
+			if (insert > 0) {
+				for (MemberVO email : emailList) {
+					String toMail = email.getUserEmail();
+					String title = "[" + vo.getcNo() + "]" + "공모전 업로드";
+					String content = vo.getTtl() + "공모전이 업로드되었습니다 많은 참가 부탁드립니다!.";
+					mailing(toMail, title, content);
+				}
+			} else if (update > 0) {
+				for (MemberVO email : emailList) {
+					String toMail = email.getUserEmail();
+					String title = "[" + vo.getcNo() + "]" + "공모전 수정";
+					String content = vo.getTtl() + "공모전이 수정되었습니다.";
+					mailing(toMail, title, content);
+				}
+			}
+			
 		}
 	}
-
 }
