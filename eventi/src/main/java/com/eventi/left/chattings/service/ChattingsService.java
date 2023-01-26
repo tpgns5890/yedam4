@@ -8,4 +8,7 @@ public interface ChattingsService {
 	
 	//채팅방 추가
 	public String chatRoomInsert(List<ChattingsVO> chattingsVO);
+	
+	//채팅방 확인
+	public int checkRoom(ChattingsVO chattingsVO);
 }
