@@ -11,7 +11,58 @@
 .label{
 color: black;
 }
+#modal {
+			display: none;
+			position: fixed;
+			top: 25em;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			width: 100%;
 
+		}
+
+		#modal h2 {
+			margin: 0;
+		}
+
+		#modal button {
+			display: inline-block;
+			width: 100px;
+			border: 0.2px solid black;
+			border-radius: 5px;
+		}
+
+		#modal .modal_content {
+			width: 350px;
+			min-height: 200px;
+			margin: 0 auto;
+			padding: 20px;
+			background: #fff;
+			border: 0.5px solid #666;
+			border-radius: 15px;
+		}
+
+		#modal .modal_layer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+
+		#modal_login_btn {
+			background: #2fb380;
+		}
+
+		#button_box {
+			display: flex;
+			margin-top: 40px;
+			justify-content: flex-end;
+		}
 </style>
 
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -32,6 +83,7 @@ color: black;
 				<form action="/jobInsert" method="POST" id="jobInsert" name="jobInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+					<input type="button" id="saveFile" value="불러오기" class="btn btn-primary">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -144,6 +196,7 @@ color: black;
 							<div class="form-group">
 								<label class="label" for="#">회원ID</label>
 								<input type="text" name="userId" id="userId">
+								<input type="text" class="form-control" name="writer" id="writer" th:value="${session.member.userId}" readonly>
 							</div>
 						</div>
 
@@ -151,6 +204,7 @@ color: black;
 							<div class="form-group">
 								<input type="submit" id="insert" value="등록"
 									class="btn btn-primary">
+									<input type="checkbox" id="save" name="save" th:value="N" class="btn btn-primary">임시저장
 								<div class="submitting"></div>
 							</div>
 						</div>
@@ -159,12 +213,23 @@ color: black;
 			</div>
 		</div>
 	</div>
-
+	
+	<div id="modal">
+			<div class="modal_content">
+				<h2>임시저장된 게시글입니다.</h2>
+				<p>불러올 게시글을 선택해 주세요.</p>
+				<div id="button_box">
+					<!-- <button type="button" id="modal_login_btn" th:onclick="|location.href='@{loginPage}'|">로그인</button>
+					<button type="button" id="modal_main_btn" th:onclick="|location.href='/'|">홈으로</button> -->
+				</div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-
+//네이버 
 let oEditors = []
 
 smartEditor = function() {
@@ -184,26 +249,6 @@ $(document).ready(function() {
 $('#insert').on('click', function insert() {
 			 oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
 			let jobCntn = document.getElementById("jobCntn").value //태그 생성 
-			//alert(jobCntn);
-			 <!--var data = $('form[name="jobInsert"]').serializeArray();
-			//구직테이블 입력처리
-			$.ajax({
-				url : "/jobInsert", //controller 링크
-				method : 'post',
-				contentType : 'application/x-www-form-urlencoded',
-				data : data,
-				success : function(data) {
-					if (data == 1){
-					alert('등록완료!');
-					location.href = '/jobList';
-					}else 
-						alert('등록실패')
-				},
-				fail : function(result) {
-					alert('필수항목을 입력해주세요')
-				}
-			}) -->
-			
 		})
 		
 	//파일 업로드 이미지 미리보기
@@ -236,7 +281,92 @@ $('#insert').on('click', function insert() {
 	    	$(this).parent().toggleClass("fileDown");
 	    	//file영역에 있던 값 삭제
 	    	$("#imgInp").val('');
-	    })				
+	    })
+	    
+	    //임시저장 체크박스를 클릭했을 경우
+	    $('#save').click(function(){
+	    	if($('#save').is(':checked')){
+				$('#save').val('Y');
+			};
+	    })
+	    
+	    //임시저장 체크박스를 클릭했을 경우
+	    $('#ano').click(function(){
+	    	if($('#ano').is(':checked')){
+				$('#ano').val('Y');
+			};
+	    })
+	    
+	    //불러오기
+		 $('#saveFile').on('click', function() {
+			let userId = '[[${session.member.userId}]]';
+			
+			//게시글 불러오기
+			$.ajax({
+				url : "/jSave",
+				method : 'post',
+				data : JSON.stringify({writer:userId, save:'Y'}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					console.log(data);
+					//임시저장된 게시글이 없을 경우
+					if(data == 0){
+						alert('임시저장된 게시글이 없습니다.');
+					} else {
+						for(r of data){
+							$("#modal").show();
+							$("#button_box").append(a(r));
+						}
+					}
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+		})
+		
+		function a(r) {
+	    	let p = `<button type="button" id="modal_login_btn" onclick=checkFile('${r.jobNo}')>${r.jobNo}</button>`;
+	    	return p;
+	    }
+	    
+	    //임시저장된 게시글 중 한건 가져오기
+	    function checkFile(no) {
+	    	$("#modal").hide();
+	    	
+	    	let jobNo = no;
+
+	    	//게시글 불러오기
+			$.ajax({
+				url : "/jSelect",
+				method : 'POST',
+				data : JSON.stringify({jobNo:jobNo}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            },
+				success : function(data) {
+					console.log(data);
+							$("#jobNo").val(data.jobNo);
+							$("#ttl").val(data.ttl);
+							
+							if(data.eType != null){
+								$("#eType").val(data.eType).attr("selected", true);
+							}
+							oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
+							
+							$("#jobInsert").attr("action", "/job/jobUpdate");
+						},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+	    })
+	    }
 	</script>
 </div>
 </html>

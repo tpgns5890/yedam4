@@ -85,6 +85,14 @@
 		WHERE JOB_NO  = #{jobNo}
 	</select>
 	
+	<!-- 임시저장한 게시글 불러오기 -->
+	<select id="jSave" resultType="com.eventi.left.bboard.service.BboardVO">
+		SELECT *
+		FROM JOB_BOARD
+		WHERE USER_ID = #{user_Id}
+		AND SAVE = 'Y'
+	</select>
+	
 	<!-- 게시글 수정 jobno, userid, interest 제외-->
 	<update id="getJobUpdate" parameterType="com.eventi.left.job.service.JobBoardVO">
 		UPDATE JOB_BOARD

@@ -8,11 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.bboard.service.BboardVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesService;
@@ -99,6 +101,20 @@ public class JobBoardController {
 		return "content/job/jobDetailBoard";
 	}
 	
+	//임시저장된 게시글 전체들고오기
+	@PostMapping("/jSave")
+	@ResponseBody
+	public List<JobBoardVO> jSave(@RequestBody JobBoardVO jobBoardVO) {
+		return jobService.jSave(jobBoardVO);
+	}
+		
+	//임시저장된 게시글 상세들고오기
+	@PostMapping("/jSelect")
+	@ResponseBody
+	public JobBoardVO jSaveSelect(@RequestBody JobBoardVO jobBoardVO) {
+		return jobService.getJob(jobBoardVO);
+	}
+		
 	//게시글수정페이지로이동
 	@RequestMapping(value = "/jobUpdate", method=RequestMethod.GET) 
 	public String jobUpdate(Model model, JobBoardVO jobBoardVO) {

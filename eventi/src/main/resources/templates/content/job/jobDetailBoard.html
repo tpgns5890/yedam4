@@ -74,7 +74,6 @@
 
 </style>
 </head>
-<body>
 <div layout:fragment="content">
 
 <<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -99,6 +98,9 @@
 <button type="button" class="btn btn-outline-primary" 
 		th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
 
+<!-- 신고하기 -->
+   <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
+   
 <th:block th:if ="${like == null}">		
 <div class="stage">
   		<div id="love" class="stage heart"></div>
@@ -195,6 +197,25 @@
 				 <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
 				 <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 			</div>
+			
+	<!-- 신고 등록 폼 -->
+    <div id="modal">
+			<div class="modal_content">
+				<h2>신고</h2>
+				<div id="box">
+					<label>신고게시글</label>
+					<input type="text" id="targetId" name="targetId" th:value="${jSelect.jobNo}" readonly><br>
+					<label>신고자</label>
+					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+					<label>신고사유</label>
+					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+					<button type="button" id="cancel">취소</button>
+					<button type="button" id="punish">신고</button>
+				</div>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+			
 <script>
 //script에서 th값 가져올때는 <!--/*[[]]*/*/-->대괄호 쓰기!
 
@@ -269,8 +290,43 @@ var header = $("meta[name='_csrf_header']").attr("content");
 						})
 			     }
 			   });
-			
+			 //신고부분
+			   //신고 모달창 띄우기
+			   $('#modalUp').on('click', function() {
+				   console.log('클릭');
+				   $("#modal").show();
+			   })
+			   
+			   //모달창에서 취소를 눌렀을 경우
+			   $("#cancel").on('click', function() {
+					$("#modal").hide();
+				});
+			   
+			   //모달창에서 신고를 눌렀을 경우
+			   $("#punish").on('click', function() {
+				   let targetId = $("#targetId").val();
+				   let banCntn = $("#banCntn").val();
+				   console.log(userId, targetId, banCntn, type);
+				   
+				    $.ajax({
+							url : "/punishInsert",
+							method : 'post',
+							contentType : 'application/x-www-form-urlencoded',
+							data : {userId:userId, targetId:jobNo, banCntn:banCntn, targetCat:type},
+							beforeSend : function(xhr)
+			                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			    				xhr.setRequestHeader(header, token);
+			                },
+							success : function(data) {
+								alert('신고되었습니다.');
+								$("#modal").hide();
+							},
+							fail : function(result) {
+								alert('필수항목을 입력해주세요')
+							}
+						})
+			   })
+		 });					
 </script>
 </div>
-</body>
 </html>
