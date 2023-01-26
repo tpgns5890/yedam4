@@ -270,11 +270,12 @@
     
     //채팅방
        let cId = '';
-	   let fromId = '[[${session.member.userId}]]';
+    	
 	   
 	   let stompClient = null;
 	   //채팅버튼을 눌렀을 때
 		$(".chat").on("click", function () {
+			console.log('hey')
 			$(".chat").toggleClass("active");
 		
 		   	function connect() {
@@ -291,7 +292,7 @@
 		            //키값
 		            let tag = `<li class="repaly">
 	                    <p>content.msgCntn</p>
-	                    <span class="time">${userId}</span>
+	                    //<span class="time">${userId}</span>
 	                  </li>`;
 	                 
 		            $("#greetings").append(tag);
