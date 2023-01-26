@@ -195,11 +195,10 @@
    			for(reply of res){
    				//댓글일 경우
    				if(reply.rerepTgt == null){
-   					console.log(reply)
    					$("#reply").append(make(reply));
-   				} else { //대댓글일 경우, 대댓글의 경우 rerepTgt컬럼에 대댓글을 단 댓글 번호가 적혀있다.
+   				} else {
+   					//대댓글일 경우, 대댓글의 경우 rerepTgt컬럼에 대댓글을 단 댓글 번호가 적혀있다.
    					//대댓글은 연관있는 댓글 바로 밑에 들어가야되기 때문에 댓글 생성시 id를 부여하여 rerepTgt이 댓글ID와 같은 번호가 적힌 댓글 밑으로 append한다.
-   					console.log(reply)
    					$("#" + reply.rerepTgt).append(makeRe(reply));
    				}
    			}
