@@ -65,7 +65,7 @@
                           <div class="panel-heading">
                             <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#support1" class="title" aria-expanded="true" th:text=${faq.faqTtl}>Support Question 1</a></h4>
                           </div>
-                          <div class="panel-collapse collapse " id="support1">
+                          <div class="panel-collapse collapse in" id="support1">
                             <div class="panel-body" th:text=${faq.faqAns} id="ans">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
                             </div>
                           </div>
@@ -73,11 +73,7 @@
                       </div>
                     </div>
                     
-                    
-                    
-                    
-                    
-                    <div class="tab-pane" id="sales">
+           <!--          <div class="tab-pane" id="sales">
                       <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
                           <div class="panel-heading">
@@ -98,15 +94,14 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
             </div>
           </div>
 <script>
-	const ul = document.querySelector('.title');
-	ul.addEventListener('click', function (ev){
+	$('.panel-heading').on('click', function (ev){
 		ev.target.nextElementSibling.classList.toggle("ans")
 	});
 	
