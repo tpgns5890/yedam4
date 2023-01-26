@@ -45,28 +45,40 @@ public class MyPageController {
 
 	// 회원정보 수정폼
 	@GetMapping("/userUpdateForm")
-	public String userUpdate(Model model, MemberVO vo) {
+	public String userUpdate(Model model) {
+
+		// 양식코드 모델
+		model.addAttribute("busiArea", service.getCountry());
+		model.addAttribute("busiStyle", service.getType());
+
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String userId = user.getUserId();
 
-		// 회원등급이 업체인경우
+		// 권한이 업체인경우
 		if (user.getAuth().equals("ROLE_BUSI")) {
-			System.out.println("======================");
-			System.out.println(service.busiSelect(user.getUserId()));
-			System.out.println("======================");
-			model.addAttribute("user", service.busiSelect(user.getUserId()));
-		}else {
-			model.addAttribute("user", service.getMember(user.getUserId()));
+			model.addAttribute("user", service.busiSelect(userId));
+			// 권한이 일반회원인경우
+		} else {
+			model.addAttribute("user", service.getMember(userId));
 		}
 
 		return "content/myPage/userUpdate";
 	}
 
-	// 회원정보 수정처리
+	// 회원정보 수정처리(일반 및 업체)
 	@PostMapping("/userUpdate")
 	@ResponseBody
 	public int userUpdate(@RequestBody MemberVO vo) {
 		return service.userUpdate(vo);
+	}
+
+	// 회원 계좌정보 변경
+	@PostMapping("/bankUpdate")
+	@ResponseBody
+	public MemberVO bankUpdate(MemberVO vo) {
+		service.bankUpdate(vo);
+		return service.getMember(vo.getUserId());
 	}
 
 	// 회원비밀번호 확인

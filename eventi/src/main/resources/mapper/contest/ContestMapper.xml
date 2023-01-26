@@ -37,7 +37,9 @@
 		        ,code_select(style) style
 	            ,dDay
 		      	,likes
-	            ,(select sev_nm from files where target_Id = c_no) AS img
+	            ,(select sev_nm 
+	            	from files 
+	                where target_Id = c_no) AS img
 	            <include refid="loginLikeCheck" />
 	      
 	 FROM ( select ROWNUM RN, A.*
@@ -47,7 +49,9 @@
                                     THEN  trunc(dt_extns) - trunc(sysdate) 
                                     ELSE  trunc(dt_cls) - trunc(sysdate)
                                END AS dDay
-                              ,(select count(*) from likes where target_no = c_no) AS likes
+                              ,(select count(*)
+                              	 from likes 
+                              	 where target_no = c_no) AS likes
 			             FROM CONTEST
 			            WHERE SAVE = 'N'
 			              AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
@@ -74,7 +78,10 @@
                      rprt,
                      code_select(category) category,
                      code_select(style) style,
-                     (select count(*) from winner where co_no = c_no and d_no is not null) AS winnerCheck,
+                     (select count(*)
+                     	 from winner 
+                     	 where co_no = c_no 
+                     	 and d_no is not null) AS winnerCheck,
                       CASE WHEN dt_extns IS NOT NULL  THEN 
 	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
 	                                ELSE '마감'
@@ -136,7 +143,9 @@
 		       c.style,
 		       w.grade,
 		       w.w_pay wPay,
-		       (select sev_nm from files where target_Id = c_no) AS img
+		       (select sev_nm
+		         from files
+		         where target_Id = c_no) AS img
 
 		FROM CONTEST c 
 		join winner w   on c.c_no = w.co_no

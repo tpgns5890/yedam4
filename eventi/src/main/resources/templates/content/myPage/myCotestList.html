@@ -25,11 +25,17 @@
             </div>
           </div>
         </section>
-
+		
+		<div style="min-height: 700px">
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
-
+		<!-- 리스트 값이 없을경우 -->
+		<div th:if="${#lists.isEmpty(contestList)}">	
+			<h3>등록한 공모전이 없습니다.</h3>
+		</div>
+		
+		<div th:if="${!#lists.isEmpty(contestList)}">	
 		<!-- 게시글 검색 -->
 			<form name="searchFrm">
 				제목<input type="text" name="ttl" value="">
@@ -39,88 +45,92 @@
 				<button type="button" id="deleteBtn">공모전삭제</button>
 			</form>
 			
-		<!-- 테이블 -->
-		<div id="table">
-			<table border="1" id="myTable">
-				<thead>
-					<tr>
-						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
-						<th>no</th>
-						<th>작성자</th>
-						<th>분류별</th>
-						<th>제목</th>
-						<th>진행기간</th>
-						<th>진행</th>
-						<th>등록</th>
-						<th>조회/우승자등록</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="contest : ${contestList} ">
-						<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
-						
-						<!-- 등록된 게시글로 이동 -->
-						<th:block th:if="${contest.save} == 'N'">
-							<td th:text=${contest.cNo} th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|"></td>
-						</th:block>
-						
-						<!-- 임시저장된 게시글 누를시 등록폼이동 -->
-						<th:block th:if="${contest.save} == 'Y'">
-							<td th:text=${contest.cNo} th:onclick="|location.href='@{insert}'|"></td>
-						</th:block>
+			
+			<!-- 테이블 -->
+			<div id="table">
+				<table border="1" id="myTable">
+					<thead>
+						<tr>
+							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+							<th>no</th>
+							<th>작성자</th>
+							<th>분류별</th>
+							<th>제목</th>
+							<th>진행기간</th>
+							<th>진행</th>
+							<th>등록</th>
+							<th>조회/우승자등록</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="contest : ${contestList} ">
+							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
 							
-						<td th:text=${contest.writer}></td>
-						<td th:text=${contest.category}></td>
-						<td th:text=${contest.ttl}></td>
-						
-						<!-- 마감기한만 있을경우 -->
-						<th:block th:if="${contest.dtExtns} == null">
-							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}"></td>
-						</th:block>
-						
-						<!-- 마감연장 1회 한경우 -->
-						<th:block th:if="${contest.dtExtns} != null">
-							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}"></td>
-						</th:block>
-						
-						<td th:text="${contest.ing}"></td>
-						
-						
-						<th:block th:if="${contest.save} == 'Y'">
-							<td th:text="임시저장"></td>
-							<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
-						</th:block>
-						
-						
-						
-						<th:block th:if="${contest.save} == 'N'and ${contest.ing} == '진행중'">
-							<td th:text="등록완료"></td>
-							<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
-						</th:block>
-						
-						<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} == 0">
-							<td th:text="등록완료"></td>
-							<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
-						</th:block>
-						
-						<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} > 0">
-							<td th:text="우승자선정완료"></td>
-						</th:block>
-						
-						
-					</tr>
-				</tbody>
-			</table>
-		</div>
+							<!-- 등록된 게시글로 이동 -->
+							<th:block th:if="${contest.save} == 'N'">
+								<td th:text=${contest.cNo} th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|"></td>
+							</th:block>
+							
+							<!-- 임시저장된 게시글 누를시 등록폼이동 -->
+							<th:block th:if="${contest.save} == 'Y'">
+								<td th:text=${contest.cNo} th:onclick="|location.href='@{insert}'|"></td>
+							</th:block>
+								
+							<td th:text=${contest.writer}></td>
+							<td th:text=${contest.category}></td>
+							<td th:text=${contest.ttl}></td>
+							
+							<!-- 마감기한만 있을경우 -->
+							<th:block th:if="${contest.dtExtns} == null">
+								<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}"></td>
+							</th:block>
+							
+							<!-- 마감연장 1회 한경우 -->
+							<th:block th:if="${contest.dtExtns} != null">
+								<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}"></td>
+							</th:block>
+							
+							<td th:text="${contest.ing}"></td>
+							
+							
+							<th:block th:if="${contest.save} == 'Y'">
+								<td th:text="임시저장"></td>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
+							</th:block>
+							
+							
+							
+							<th:block th:if="${contest.save} == 'N'and ${contest.ing} == '진행중'">
+								<td th:text="등록완료"></td>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+							</th:block>
+							
+							<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} == 0">
+								<td th:text="등록완료"></td>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
+							</th:block>
+							
+							<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} > 0">
+								<td th:text="우승자선정완료"></td>
+							</th:block>
+							
+							
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		
-		<!-- 페이징처리 -->
-		<div class="row mt-5">
-			<div class="col text-center">
-				<div class="block-27">
-					<th:block
-						th:replace="fragments/paging :: component(${paging},'gopage')">
+			<!-- 페이징처리 -->
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
+					</div>
 				</div>
 			</div>
+		</div>
+		
 		</div>
 
 

@@ -47,6 +47,7 @@ public class MemberVO implements UserDetails {
 
 	Integer first; //첫페이지
 	Integer last; //마지막페이지
+	
 
 	@Override
 	public String getUsername() {

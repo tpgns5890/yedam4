@@ -99,8 +99,7 @@
 						</div>
 						<div th:each="w : ${winnerList}">
 							<p class="price">
-								<span
-									th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
+								<span th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
 							</p>
 						</div>
 
@@ -137,7 +136,6 @@
 									<button id="contestUpdate" type="button" class="btn btn-g btn-round btn-lg" >수정</button>
 									<button id="delBtn" type="button"  class="btn btn-g btn-round btn-lg5">삭제</button>
 									<button id="updateDate" type="button" class="btn btn-g btn-round btn-lg">마감연장</button>
-									<button id="winnerInsert" type="button" class="btn btn-g btn-round btn-lg">결과등록</button>
 							</div>
 						</th:block>
 					</div>

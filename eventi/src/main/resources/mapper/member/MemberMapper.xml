@@ -67,7 +67,7 @@
 				USER_GRADE auth,
 				RPRT,
 				DEPOTR,
-				BANK,
+				code_select(BANK) BANK,
 				ACCNT,
 				USER_REGDATE 
 		FROM MEMBERS 
@@ -138,15 +138,44 @@
 		WHERE USER_ID = #{userId}
 	</update> 
 	
+	<!-- 업체 회원정보 수정 -->
+	<update id="busiUpdate">
+		UPDATE busi_member
+		SET busi_title = #{busiTitle},
+            busi_type = #{busiType},
+            busi_area = #{busiArea},
+            busi_style=#{busiStyle}
+		WHERE USER_ID = #{userId}
+	</update> 
+	
+	<!-- 회원 계좌번호 변경 -->
+	<update id="bankUpdate">
+		UPDATE MEMBERS
+		SET DEPOTR =#{depotr},
+            bank = #{bank},
+            ACCNT = #{accnt}
+		WHERE USER_ID = #{userId}
+	</update>
+	
 	<!-- 업체회원 조회 -->
 	<select id="busiSelect" resultType="MemberVO">
-		SELECT b.busi_num,
-				b.busi_title,
-				b.busi_title,
-				codeArr_select(b.busi_area) busi_area,
+		SELECT  m.USER_ID,
+		        m.USER_PASSWORD,
+		        m.USER_EMAIL,
+		        m.USER_NAME name,
+		        m.USER_PHONE,
+		        m.USER_MESSAGING,
+		        m.USER_GRADE auth,
+		        m.RPRT,
+		        m.DEPOTR,
+		        code_select(m.BANK) BANK,
+		        m.ACCNT,
+		        m.USER_REGDATE,
+		        b.busi_num,
+		        b.busi_title,
+		        codeArr_select(b.busi_area) busi_area,
 		        codeArr_select(b.busi_style) busi_style,
-		        codeArr_select(b.busi_type) busi_type,
-				m.*
+		        codeArr_select(b.busi_type) busi_type
 		FROM MEMBERS m join busi_member b
 		                on m.user_id = b.user_id
 		and m.USER_ID =  #{userId}

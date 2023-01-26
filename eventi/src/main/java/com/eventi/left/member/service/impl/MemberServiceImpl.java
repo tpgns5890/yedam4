@@ -118,7 +118,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws AuthenticationException {
 		MemberVO vo = mapper.getMember(username);
-		if(vo==null) {
+		if (vo == null) {
 			throw new UsernameNotFoundException("x");
 		}
 		return vo;
@@ -187,26 +187,40 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String userPassword = user.getUserPassword();
 
-		//입력값,기존 암호화된DB 매칭 boolean값 반환
-		return passwordEncoder.matches(vo.getUserPassword(),userPassword);
+		// 입력값,기존 암호화된DB 매칭 boolean값 반환
+		return passwordEncoder.matches(vo.getUserPassword(), userPassword);
 	}
 
-	//회원권한 변경.
+	// 회원권한 변경.
 	@Override
 	public int userStateUpdate(MemberVO memberVO) {
 		return mapper.userStateUpdate(memberVO);
 	}
 
-	//회원정보 수정.
+	// 회원정보 수정.
 	@Override
-	public int userUpdate(MemberVO memberVO) {
-		return mapper.userUpdate(memberVO);
+	public int userUpdate(MemberVO vo) {
+		
+		//멤버기본정보 업데이트
+		int result = mapper.userUpdate(vo);
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		// 권한이 업체인경우 추가업데이트
+		if (user.getAuth().equals("ROLE_BUSI")) {
+			BusiVO busiVO = vo.getBusi();
+			result = mapper.busiUpdate(busiVO);
+		}
+		return result;
 	}
 
-	//업체회원 정보 조회
+	// 업체회원 정보 조회
 	@Override
 	public MemberVO busiSelect(String userId) {
 		return mapper.busiSelect(userId);
 	}
-	
+
+	@Override
+	public int bankUpdate(MemberVO memberVO) {
+		return mapper.bankUpdate(memberVO);
+	}
+
 }

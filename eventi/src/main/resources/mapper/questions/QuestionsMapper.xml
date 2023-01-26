@@ -136,7 +136,7 @@
 		WHERE USER_ID = #{userId}
 	</select>
 	
-	<!-- 게시1건의 대한 문의 개수 -->
+	<!-- 회원의 마이페이지 문의게시글에 대한 개수 -->
 	<select id="targetCount" resultType="int">
 		SELECT count(*)
 		FROM Questions Q

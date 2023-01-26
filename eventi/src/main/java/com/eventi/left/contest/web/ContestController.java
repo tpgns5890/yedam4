@@ -242,7 +242,7 @@ public class ContestController {
 		return result; // 디자인리스트+파일리스트 반환.
 	}
 
-	// 공모전 나의 문의리스트 페이지이동(추가해야함)
+	// 공모전 나의 문의리스트 페이지이동(마이페이지)
 	@GetMapping("/qnaList")
 	public String ContestQnaList(Model model, QuestionsVO vo, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
