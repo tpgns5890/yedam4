@@ -37,11 +37,17 @@
 	<!-- 공모전1건에 대한 디자인리스트중에서 1번째 대표이미지와 같은 파일명가져오기. -->
 	<select id="contestDesignList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-			select c.c_no, d.dgn_no, d.user_id user_id, d.name, d.cntn, d.dt, d.center_img, d.pubc_yn, f.sev_nm sevNm
-			from contest c join design d
-			               		 on c.c_no = d.c_no
-                           join files f
-                          		 on f.target_id = d.dgn_no
+			select c.c_no,
+				   d.dgn_no,
+				   d.user_id user_id,
+				   d.name, d.cntn,
+				   d.dt, d.center_img,
+				   d.pubc_yn,
+				   f.sev_nm sevNm
+			
+			from contest c join design d on c.c_no = d.c_no
+                           join files f on f.target_id = d.dgn_no
+			
 			and c.c_no = #{cNo}
 			and d.center_img = f.f_nm
 			and d.save = 'N'
@@ -55,10 +61,10 @@
 	<select id="userDesignList" resultType="DesignVO">
 	SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
 		SELECT d.*,f.sev_nm sevNm,c.ttl contestTtl 
-		FROM DESIGN d join files f
-		                on f.target_id = d.dgn_no
-		              join contest c
-                         on d.c_no = c.c_no
+		
+		FROM DESIGN d join files f on f.target_id = d.dgn_no
+		              join contest c  on d.c_no = c.c_no
+		              
 		and USER_ID = #{userId}
 		and d.center_img = f.f_nm
 		and d.save = 'N'
@@ -71,7 +77,7 @@
 	
 	<select id="getDesign" resultType="DesignVO">
 		SELECT * FROM DESIGN
-		WHERE dgn_no = #{dgnNo}
+		  WHERE dgn_no = #{dgnNo}
 		order by dt DESC
 	</select>
 	
@@ -80,7 +86,15 @@
 			SELECT 'DE'||(MAX(TO_NUMBER(SUBSTR(DGN_NO,3)))+1) dgnNo
 			FROM DESIGN
 		</selectKey>
-		INSERT INTO DESIGN(DGN_NO,USER_ID,C_NO,NAME,CAREGORY,CNTN,DT,CENTER_IMG,PUBC_YN,SAVE)
+		INSERT INTO DESIGN(DGN_NO,
+							USER_ID,
+							C_NO,NAME,
+							CAREGORY,
+							CNTN,
+							DT,
+							CENTER_IMG,
+							PUBC_YN,
+							SAVE)
 		VALUES( #{dgnNo},
 				#{userId},
 				#{cNo},
@@ -117,25 +131,24 @@
 	
 	<select id="entryDesign" resultType="int">
 		select count(*)
-		from design
+		  from design
 		where c_no =#{cNo}
 	</select>
 	
 	<select id="saveGetdesign" resultType="DesignVO">
 		SELECT d.*,f.sev_nm sevNm
-		FROM CONTEST c join design d
-                        on c.c_no = d.c_no
-                        join files f
-                        on d.dgn_no = f.target_id
+		
+		FROM CONTEST c join design d on c.c_no = d.c_no
+                        join files f on d.dgn_no = f.target_id
 		and d.save = 'Y'
 		and d.dgn_no = #{dgnNo}
 	</select>
 	
 	<select id="dSave" resultType="DesignVO">
 		select * 
-		FROM design
-		WHERE user_id = #{userId}
-        AND SAVE = 'Y'
+		  FROM design
+		  WHERE user_id = #{userId}
+          AND SAVE = 'Y'
         and c_no = #{cNo}
 	</select>
 	

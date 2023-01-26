@@ -4,11 +4,43 @@
 
 <mapper namespace="com.eventi.left.questions.mapper.QuestionsMapper">
 
+	<!-- 공모전1건에 대한 문의+답변 리스트-->
 	<select id="questionsList" resultType="QuestionsVO">
-		select *
-		from Questions 
-		where target_id =#{targetId}
-		and category = #{category}
+		SELECT * 
+		FROM ( select ROWNUM RN, 
+		        A.*FROM(
+							SELECT Q.*, NVL(REREP_TGT, Q_NO) GP 
+									FROM Questions Q
+									WHERE target_id = #{targetId} 
+									AND category = #{category}
+							ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+		<![CDATA[
+		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+		]]>
+	</select>
+	
+	<!-- 나의 공모전 대한 문의리스트 : 문의만 출력-->
+	<select id="myQuestionsList" resultType="QuestionsVO">
+		SELECT  B.*, 
+				CASE WHEN Q_NO IN (SELECT Q.Q_NO
+									FROM QUESTIONS Q, QUESTIONS A
+									WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
+		        ELSE '미답변'
+		        END AS ANS
+		FROM ( select ROWNUM RN, 
+		        A.*FROM(
+							SELECT Q.*, NVL(target_id, Q_NO) GP 
+									FROM Questions Q
+									WHERE category = #{category}
+                            and rerep_tgt is null
+							ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+                        
+		 <![CDATA[
+			        ) A 
+			    WHERE ROWNUM <= #{last}
+			 ) B
+	    WHERE RN >= #{first}
+			]]>
 	</select>
 	
 	<!-- 문의사항 전체조회 -->
@@ -79,9 +111,17 @@
 		and user_id = #{userId}
 	</delete>
 	
-	<!-- 게시글 개수 -->
+	<!-- 전체 게시글 문의개수 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM QUESTIONS
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 게시1건의 대한 문의 개수 -->
+	<select id="targetCount" resultType="int">
+		SELECT COUNT(*)
+		FROM QUESTIONS
+		where target_id = #{targetId}
 	</select>
 </mapper>

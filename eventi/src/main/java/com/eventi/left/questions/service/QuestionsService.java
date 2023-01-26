@@ -10,7 +10,9 @@ import com.eventi.left.promotion.service.PromotionVO;
 public interface QuestionsService {
 
 	// 문의사항
-	public List<QuestionsVO> questionsList(QuestionsVO vo); // 전체조회
+	public List<QuestionsVO> questionsList(QuestionsVO vo, PagingVO paging); // 게시글1건에 대한 전체조회
+	
+	public List<QuestionsVO> myQuestionsList(QuestionsVO vo, PagingVO paging); // 나의 공모전 문의사항리스트
 	
 	public QuestionsVO getQuestions(QuestionsVO vo); // 1건 조회
 

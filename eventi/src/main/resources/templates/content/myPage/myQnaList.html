@@ -50,6 +50,8 @@
 						<thead>
 							<tr>
 								<th>문의사항번호</th>
+								<th>타겟아이디</th>
+								<th>분류</th>
 								<th>문의사항제목</th>
 								<th>작성일자</th>
 								<th>답변유무</th>
@@ -58,13 +60,14 @@
 						</thead>
 						<tbody>
 							<!-- 답변이아닌 문의내용만 출력할것.. -->
-							<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo},category=${q.category}, targetId=${q.targetId})}'|">
+							<tr th:each="q : ${qnaList}" >
 								<td th:text=${q.qNo}></td>
 								<td th:text=${q.targetId}></td>
+								<td th:text=${q.category}></td>
 								<td th:text=${q.ttl}></td>
 								<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
 								<td th:text=${q.ans}></td>
-								<td><button type="button">조회</button></td>
+								<td><button type="button" class="select">조회</button></td>
 							</tr>
 						</tbody>
 					</table>
@@ -93,6 +96,18 @@
 			searchFrm.page.value = i;
 			searchFrm.submit();
 		}
+		
+		$('.select').on("click", function(){
+			let qNo = $(this).parent().parent().children('td:eq(0)').text();
+			let category = $(this).parent().parent().children('td:eq(2)').text();
+			let targetId = $(this).parent().parent().children('td:eq(1)').text();
+			console.log(qNo);
+			console.log(category);
+			console.log(targetId);
+			
+			location.href='/questions/queDetail?qNo='+qNo +'&category=' + category + '&targetId=' +targetId;
+		});
+			
 		</script>
 	</div>
 </body>
