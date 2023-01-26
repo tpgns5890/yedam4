@@ -14,7 +14,9 @@ public interface QuestionsMapper {
 	
 	public List<QuestionsVO> myQuestionsList(QuestionsVO vo); // 나의 공모전 문의사항리스트
 
-	public QuestionsVO getQuestions(QuestionsVO vo); // 1건 조회
+	public QuestionsVO getQuestions(QuestionsVO vo); // 문의 1건 조회
+	
+	public List<QuestionsVO> getQuestionsList(String qNo); // 문의 + 답변 1건 조회
 
 	public int questionsInsert(QuestionsVO vo); // 등록
 

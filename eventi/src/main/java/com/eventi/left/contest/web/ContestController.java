@@ -247,7 +247,8 @@ public class ContestController {
 	public String ContestQnaList(Model model, QuestionsVO vo, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setUserId(user.getUserId());
-		model.addAttribute("qnaList", qService.qnaList(vo, paging));
+		vo.setCategory("T01");
+		model.addAttribute("qnaList", qService.myQuestionsList(vo, paging));
 		model.addAttribute("paging", paging);
 		return "content/myPage/myQnaList";
 	}

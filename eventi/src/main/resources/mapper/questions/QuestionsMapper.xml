@@ -9,7 +9,15 @@
 		SELECT * 
 		FROM ( select ROWNUM RN, 
 		        A.*FROM(
-							SELECT Q.*, NVL(REREP_TGT, Q_NO) GP 
+							SELECT Q.q_no,
+									Q.USER_ID,
+									Q.TARGET_ID,
+									Q.TTL,
+									Q.CNTN,
+									Q.WRITING_DT,
+									Q.CATEGORY,
+									Q.REREP_TGT,
+									NVL(REREP_TGT, Q_NO) GP 
 									FROM Questions Q
 									WHERE target_id = #{targetId} 
 									AND category = #{category}
@@ -29,10 +37,11 @@
 		        END AS ANS
 		FROM ( select ROWNUM RN, 
 		        A.*FROM(
-							SELECT Q.*, NVL(target_id, Q_NO) GP 
+							SELECT Q.*, NVL(rerep_tgt, Q_NO) GP 
 									FROM Questions Q
 									WHERE category = #{category}
                             and rerep_tgt is null
+                            and  USER_ID = #{userId}
 							ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
                         
 		 <![CDATA[
@@ -63,12 +72,21 @@
 		]]> 
 	</select>
 	
+	<!-- 문의글 1건조회 -->
 	<select id="getQuestions" resultType="QuestionsVO">
 		select * 
 		from Questions
 		where category = #{category}
 		and target_id = #{targetId}
 		and q_no = #{qNo}
+	</select>
+	
+	<!-- 문의글 1건과 답변1건 조회 -->
+	<select id="getQuestionsList" resultType="QuestionsVO">
+		SELECT *
+		FROM Questions
+		where q_no = #{qNo}
+		or rerep_tgt = #{rerepTgt}
 	</select>
 	
 	<!-- 게시글 시퀀스번호 찾기 -->
@@ -120,8 +138,10 @@
 	
 	<!-- 게시1건의 대한 문의 개수 -->
 	<select id="targetCount" resultType="int">
-		SELECT COUNT(*)
-		FROM QUESTIONS
-		where target_id = #{targetId}
+		SELECT count(*)
+		FROM Questions Q
+		WHERE category = #{category}
+		and user_id = #{userId}
+		and rerep_tgt is null
 	</select>
 </mapper>

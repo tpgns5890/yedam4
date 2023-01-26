@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ import com.eventi.left.common.SessionUtil;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
+
+import groovyjarjarantlr4.v4.runtime.RuleVersion;
 
 @Controller
 @RequestMapping("/questions")
@@ -71,7 +74,7 @@ public class questionsController {
 		return "content/questions/queList";
 	}
 
-	// 게시글상세조회
+	// 문의 1건 상세조회
 	@RequestMapping(value = "/queDetail", method = RequestMethod.GET)
 	public String proDetail(Model model, QuestionsVO vo) {
 		// MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
@@ -86,6 +89,12 @@ public class questionsController {
 	public QuestionsVO replyUpdate(QuestionsVO vo) {
 		qService.questionsUpdate(vo);
 		return qService.getQuestions(vo);
+	}
+	
+	@PostMapping("queDetailAjax")
+	@ResponseBody
+	public List<QuestionsVO> getQuestionsList(String qNo){
+		return qService.getQuestionsList(qNo);
 	}
 
 	// 댓글 삭제

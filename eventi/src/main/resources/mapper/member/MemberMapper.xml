@@ -140,7 +140,13 @@
 	
 	<!-- 업체회원 조회 -->
 	<select id="busiSelect" resultType="MemberVO">
-		SELECT b.busi_num,b.busi_title,b.busi_type,b.busi_area,b.busi_style,m.*
+		SELECT b.busi_num,
+				b.busi_title,
+				b.busi_title,
+				codeArr_select(b.busi_area) busi_area,
+		        codeArr_select(b.busi_style) busi_style,
+		        codeArr_select(b.busi_type) busi_type,
+				m.*
 		FROM MEMBERS m join busi_member b
 		                on m.user_id = b.user_id
 		and m.USER_ID =  #{userId}

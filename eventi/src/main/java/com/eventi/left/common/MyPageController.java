@@ -28,18 +28,18 @@ public class MyPageController {
 	// 회원정보 조회
 	@GetMapping("/userMypage")
 	public String userMypage(Model model) {
-		
+
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String userId = user.getUserId();
-		//권한이 업체인경우
-		if(user.getAuth().equals("ROLE_BUSI")) {
+		// 권한이 업체인경우
+		if (user.getAuth().equals("ROLE_BUSI")) {
 			model.addAttribute("user", service.busiSelect(userId));
-		//권한이 일반회원인경우
-		}else {
+			// 권한이 일반회원인경우
+		} else {
 			model.addAttribute("user", service.getMember(userId));
 		}
-		
+
 		return "content/myPage/userMypage";
 	}
 
@@ -48,7 +48,17 @@ public class MyPageController {
 	public String userUpdate(Model model, MemberVO vo) {
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		model.addAttribute("user", service.getMember(user.getUserId()));
+
+		// 회원등급이 업체인경우
+		if (user.getAuth().equals("ROLE_BUSI")) {
+			System.out.println("======================");
+			System.out.println(service.busiSelect(user.getUserId()));
+			System.out.println("======================");
+			model.addAttribute("user", service.busiSelect(user.getUserId()));
+		}else {
+			model.addAttribute("user", service.getMember(user.getUserId()));
+		}
+
 		return "content/myPage/userUpdate";
 	}
 
