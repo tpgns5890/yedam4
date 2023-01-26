@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:th="http://www.thymeleaf.org"
-   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
 
 <div layout:fragment="content">
-<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">구직자 리스트</h2>
-                <div class="module-subtitle font-serif">Small Title</div>
-              </div>
-            </div>
-          </div>
-        </section>
-<!-- <button type="button" id="hireBtn">채용</button>
+	<section class="module bg-dark-60 gallery-page-header parallax-bg"
+		data-background="assets/images/gallery_bg.jpg"
+		style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<h2 class="module-title font-alt">구직자 리스트</h2>
+					<div class="module-subtitle font-serif">Small Title</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- <button type="button" id="hireBtn">채용</button>
 <button type="button" id="unHireBtn">미채용</button> -->
-	<table class="table mb-3" >
+	<!-- 	<table class="table mb-3" >
 	<thead class="thead-dark">
 			<tr>
 				<th><input type="checkBox" value="채용" class="hire" id="allHire" 
@@ -41,54 +43,82 @@
 				<td th:text=${res.resumeNo}></td>
 				<td th:text=${res.seekerId}></td>
 				<td th:text=${res.seekerCntn}></td>
-				<td th:text=${res.jobNo}>  [[${res.hire}]]</td>
+				<td th:text=${res.jobNo}>  </td>
 				<td th:if="${res.hire} == 'Y'">채용</td>
 				<td th:unless="${res.hire} == 'Y'">미채용</td>
 			</tr>
 		</tbody>
-	</table>
-	
-<section class="module" id="news">
-            	<input type="checkBox" value="채용" class="hire" id="allHire">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">구직자 한눈에 보기</h2>
-                <div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을 누르세요.</div>
-              </div>
-            </div>
-            <div class="row multi-columns-row post-columns">
-              <div class="col-sm-6 col-md-4 col-lg-4" th:each="res : ${resumeList}">
-              <th:block th:if="${res.hire} == 'Y'" >
-				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()" checked></td> 
-				</th:block>
-				
-				<th:block th:if ="${res.hire} == 'N'">
-				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()"></td> 
-				</th:block>
-				
-                <div class="post mb-20">
-                  <div class="post-thumbnail"><a href="#"><img src="assets/images/work-1.jpg" alt="Blog-post Thumbnail"></a></div>
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#" th:text=${res.jobNo}> Our trip to the Alps</a></h2>
-                    <div class="post-meta" th:text=${res.seekerId}>By&nbsp;<a href="#">Mark Stone</a>&nbsp;| 23 November | 3 Comments
-                    </div>
-                  </div>
-                  <div class="post-entry" th:text=${res.seekerCntn}>
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#" >Read more</a></div>
-                  <button class="btn btn-border-d btn-round" type="button"><i class="fa fa-child" id="hireBtn"></i>채용</button>
-                  <button class="btn btn-border-d btn-round" type="button"><i class="fa fa-child" id="unHireBtn"></i> 미채용</button>
-             
-                </div>
-              </div>
-      
-            </div>
-          </div>
-        </section>
+	</table> -->
 
-<script>
+	<section class="module" id="news">
+		<input type="checkBox" value="채용" class="hire" id="allHire">
+		<button class="btn btn-g btn-round allHire" type="button">
+			<i class="fa fa-cog fa-spin"></i>모두채용
+		</button>
+		<button class="btn btn-g btn-round unAllHire" type="button">
+			<i class="fa fa-cog fa-spin"></i>채용취소
+		</button>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<h2 class="module-title font-alt">구직자 한눈에 보기</h2>
+					<div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을
+						누르세요.</div>
+				</div>
+			</div>
+			<div class="row multi-columns-row post-columns" id="check">
+				<div class="col-sm-6 col-md-4 col-lg-4"
+					th:each="res : ${resumeList}">
+					<th:block th:if="${res.hire} == 'Y'">
+						<td><input class="hire" type="checkBox" value="hire"
+							onkeyup="hire()" checked></td>
+					</th:block>
+
+					<th:block th:if="${res.hire} == 'N'">
+						<td><input class="hire" type="checkBox" value="hire"
+							onkeyup="hire()"></td>
+					</th:block>
+
+					<div class="post mb-20">
+						<div class="post-thumbnail">
+							<a href="#"><img src="assets/images/work-1.jpg"
+								alt="Blog-post Thumbnail"></a>
+						</div>
+						<div class="post-header font-alt">
+							<h2 class="post-title">
+								<a href="#" th:text=${res.jobNo}> Our trip to the Alps</a>
+							</h2>
+							<div class="post-meta" th:text=${res.seekerId}>
+								By&nbsp;<a href="#">Mark Stone</a>&nbsp;| 23 November | 3
+								Comments
+							</div>
+						</div>
+						<div class="post-entry" th:text=${res.seekerCntn}>
+							<p>A wonderful serenity has taken possession of my entire
+								soul, like these sweet mornings of spring which I enjoy with my
+								whole heart.</p>
+						</div>
+						<div class="post-more">
+							<a class="more-link" href="#">Read more</a>
+						</div>
+						<div th:if="${res.hire} == 'Y'">채용</div>
+						<div th:unless="${res.hire} == 'Y'">미채용</div>
+						<button class="btn btn-border-d btn-round hireBtn" type="button"
+							id="hireBtn" th:data-resumeno='${res.resumeNo}'>
+							<i class="fa fa-child"></i>채용
+						</button>
+						<button class="btn btn-border-d btn-round unHireBtn" type="button"
+							id="unHireBtn" th:data-resumeno='${res.resumeNo}'>
+							<i class="fa fa-child"></i> 미채용
+						</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -102,72 +132,101 @@ allHire.addEventListener('change', function(){
 	})
 })
 //구직자 채용
-document.querySelector('#hireBtn').addEventListener('click', hireSeeker);
-function hireSeeker(hireCheck){
-	let trs = document.querySelectorAll('#team-role');
+$('.hireBtn').on('click', function (e){
+	console.log("클릭")
+	
+	let checks = [];
+	$("['name='allHire']:checked").e
 	
 	if(!confirm('채용하시겠습니까?')){
 		return false;
 	}else{
-		for (let i = 0; i < trs.length; i++) {
-			if (trs[i].children[0].children[0].checked) {
-				let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
-
-				//업데이트처리 ajax
-  				$.ajax({
-					url: '/hireUpdate',
-					method: "post",
-					data: {resumeNo},
-					beforeSend: function (xhr) {
-						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-						xhr.setRequestHeader(header, token);
-					},
-				}).then(res => {
-					if (res == 1) {
-						location.href=`/resumeList`
-						alert('채용 완료');
-					} else {
-						alert('채용이 불가능합니다.');
+		let resumeNo = $(e.target).data('resumeno'); //체크된 공모번호
+		console.log(resumeNo)
+		//업데이트처리 ajax
+		$.ajax({
+			url: '/hireUpdate',
+			method: "post",
+			data: {resumeNo},
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			if (res == 1) {
+				alert('채용 완료');
+				location.href=`/resumeList`
+			} else {
+				alert('채용이 불가능합니다.');
+			}
+		})  
+	}
+});
+//구직자 모두채용
+$('.allHire').on('click', function (e){
+	console.log($('.hire').is(":checked").data('resumeno'))
+	let trs = []
+	
+	/* for
+	trs.push
+	 */
+	$('.hire').prop("checked").data('resumeno');
+	if(!confirm('채용하시겠습니까?')){
+		return false;
+	}else{
+			for (let i = 0; i < trs.length; i++) {
+				if (trs[i].children[0].children[0].checked) {
+			//업데이트처리 ajax
+			$.ajax({
+				url: '/hireUpdate',
+				method: "post",
+				data: {resumeNo},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				if (res == 1) {
+					alert('채용 완료');
+					location.href=`/resumeList`
+				} else {
+					alert('채용이 불가능합니다.');
 					}
-				})   
+				})
 			}
 		}
 	}
-}
+});
 //구직자 미채용
-document.querySelector('#unHireBtn').addEventListener('click', unHireSeeker);
-function unHireSeeker(hireCheck){
-	let trs = document.querySelectorAll('table>tbody>tr');
+$('.unHireBtn').on('click', function (e){
+	let trs = document.querySelectorAll('.post-columns');
 	
 	if(!confirm('채용을 취소하시겠습니까?')){
 		return false;
 	}else{
-		for (let i = 0; i < trs.length; i++) {
-			if (trs[i].children[0].children[0].checked) {
-				//alert(trs[i].children[0])
-				let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
-
-				//업데이트처리 ajax
-  				$.ajax({
-					url: '/unHireUpdate',
-					method: "post",
-					data: {resumeNo},
-					beforeSend: function (xhr) {
-						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-						xhr.setRequestHeader(header, token);
-					},
-				}).then(res => {
-					if (res == 1) {
-						location.href=`/resumeList`
-						alert('채용취소완료');
-					} else {
-						alert('채용취소가 불가능합니다.');
-					}
-				})   
+		let resumeNo = $(e.target).data('resumeno'); //체크된 공모번호
+		//업데이트처리 ajax
+		$.ajax({
+			url: '/unHireUpdate',
+			method: "post",
+			data: {resumeNo},
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			if (res == 1) {
+				location.href=`/resumeList`
+				alert('채용취소완료');
+			} else {
+				alert('채용취소가 불가능합니다.');
 			}
-		}
+		})   
+
+
 	}
-}
+});
+
 </script>
 </div>
 </html>

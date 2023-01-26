@@ -22,6 +22,9 @@
 		 FROM (SELECT ROWNUM RN, A.* 
 		        FROM(SELECT * FROM PROMOTION_BOARD
 		<include refid="pSelect" />
+			 <if test="orderCol !=null and orderCol != ''">
+                ORDER BY ${orderCol} desc
+                </if>
 	<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}

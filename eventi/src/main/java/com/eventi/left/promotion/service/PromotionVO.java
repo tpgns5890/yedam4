@@ -29,4 +29,7 @@ public class PromotionVO {
 	
 	Integer first =1; //첫 페이지
 	Integer last = 4; //마지막 페이지
+	
+	//정렬
+	String orderCol;
 }

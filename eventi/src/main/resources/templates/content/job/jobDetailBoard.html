@@ -168,8 +168,8 @@
 				<td th:text=${job.jobCntn}></td>
 				<td th:text=${job.loc}></td>
 				<td th:text=${job.eType}></td>
-				<td th:text=${job.wSday}></td>
-				<td th:text=${job.wEday}></td>
+				<td th:text="${#dates.format(job.wSday, 'yyyy-MM-dd')}">
+				<td th:text="${#dates.format(job.wEday, 'yyyy-MM-dd')}">
 				<td th:text=${job.wHour}></td>
 				<td th:text=${job.qualification}></td>
 				<td th:text=${job.preference}></td>
