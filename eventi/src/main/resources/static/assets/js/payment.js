@@ -24,14 +24,13 @@ function requestPay() {
 		pg: 'kicc',
 		pay_method: 'card',
 		merchant_uid: "evt" + makeMerchantUid, //상점에서 생성한 고유 주문번호
-		name: '주문명:결제테스트',
-		amount: 1,
-		buyer_email: 'tpgns5890@naver.com',
-		buyer_name: '천세훈',
-		buyer_tel: '010-3670-5890',
-		buyer_addr: '대구동구동호동',
-		buyer_postcode: '123-456',
-		m_redirect_url: '/payTest' // 예: https://www.my-service.com/payments/complete/mobile
+		name: payname,  //'주문명:결제테스트',
+		amount: amount,  // 가격1,
+		buyer_email: buyer_email,	//'tpgns5890@naver.com',
+		buyer_name: buyer_name,	//'천세훈',
+		buyer_tel: buyer_tel,	//'010-3670-5890'
+		buyer_addr: buyer_addr,	//'대구동구동호동',
+		buyer_postcode: buyer_postcode	//'123-456',
 	}, function(rsp) {
 		if (rsp.success) {
 			// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
@@ -52,3 +51,28 @@ function requestPay() {
 		}
 	});
 }
+
+// IMP.certification(param, callback) 호출
+function requestcert(){
+  IMP.certification({ // param
+    // 주문 번호
+    pg:'PG사코드.{CPID}',//본인인증 설정이 2개이상 되어 있는 경우 필
+    merchant_uid: "ORD20180131-0000011", 
+    // 모바일환경에서 popup:false(기본값) 인 경우 필수
+    m_redirect_url : "{리디렉션 될 URL}", 
+    // PC환경에서는 popup 파라메터가 무시되고 항상 true 로 적용됨
+    popup : false 
+  }, function (rsp) { // callback
+    if (rsp.success) { // 인증 성공 시
+      // jQuery로 HTTP 요청
+      jQuery.ajax({
+        url: "{서버의 인증 정보를 받는 endpoint}", 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: { imp_uid: rsp.imp_uid }
+      });
+    } else {
+      alert("인증에 실패하였습니다. 에러 내용: " +  rsp.error_msg);
+    }
+  });
+ }
