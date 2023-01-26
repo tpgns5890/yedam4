@@ -28,5 +28,7 @@ public interface ResumeService {
 	public int hireUpdate(ResumeBoardVO resumeBoardVO);
 	
 	//구직자 미채용 
-	public int unHireUpdate(ResumeBoardVO resumeBoardVO); 
+	public int unHireUpdate(ResumeBoardVO resumeBoardVO);
+
+	public int hireUpdates(List<ResumeBoardVO> resumeBoardVO); 
 }
