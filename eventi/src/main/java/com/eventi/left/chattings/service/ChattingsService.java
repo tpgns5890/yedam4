@@ -10,5 +10,5 @@ public interface ChattingsService {
 	public String chatRoomInsert(List<ChattingsVO> chattingsVO);
 	
 	//채팅방 확인
-	public int checkRoom(ChattingsVO chattingsVO);
+	public ChattingsVO checkRoom(ChattingsVO chattingsVO);
 }

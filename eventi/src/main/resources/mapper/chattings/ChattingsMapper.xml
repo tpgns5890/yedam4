@@ -15,10 +15,11 @@
 	</select>
 	
 	<!-- 채탕방 확인 -->
-	<select id="checkRoom" resultType="int">
-		SELECT COUNT(*)
+	<select id="checkRoom" resultType="com.eventi.left.chattings.service.ChattingsVO">
+		SELECT *
 		FROM CHATTINGS
 		WHERE TO_ID = #{toId}
+		AND FROM_ID = #{fromId}
 	</select>
 	
 	<!--채팅방 추가-->
