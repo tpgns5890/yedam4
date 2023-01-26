@@ -1,34 +1,35 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
+
 <head>
-<style>
-.module{
-	padding:0 !important
-}
-.module-title{
-	margin-top: 100px;
-}
-</style>
+	<style>
+		.module {
+			padding: 0 !important
+		}
+
+		.module-title {
+			margin-top: 100px;
+		}
+	</style>
 </head>
 <div layout:fragment="content">
-	<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;/assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">사이트 이용약관</h2>
-                <div class="module-subtitle font-serif">Qualification</div>
-              </div>
-            </div>
-          </div>
-        </section>
+	<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg"
+		style="background-image: url(&quot;/assets/images/gallery_bg.jpg&quot;);">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<h2 class="module-title font-alt">사이트 이용약관</h2>
+					<div class="module-subtitle font-serif">Qualification</div>
+				</div>
+			</div>
+		</div>
+	</section>
 	<div align="center" style="width:60%;margin:0 auto;">
 		<br>
 		<h2>이용약관</h2>
 		<form class="form">
-		<textarea rows="20" cols="100">
+			<textarea rows="20" cols="100">
 < 남겨진 자들 >('www.eventi.com'이하 '이벤티')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
 
 ○ 이 개인정보처리방침은 2023년 1월 1부터 적용됩니다.
@@ -145,7 +146,7 @@
 		<br><br><br><br>
 		<h2>개인정보 수집 및 이용</h2>
 		<form class="form">
-		<textarea rows="20" cols="100">
+			<textarea rows="20" cols="100">
 	< 남겨진 자들 >('www.eventi.com'이하 '이벤티')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
 
 ○ 이 개인정보처리방침은 2023년 1월 1부터 적용됩니다.
@@ -268,7 +269,7 @@
 	</div>
 	<script>
 		/* 일반회원 회원가입 폼으로 이동 */
-		$('#normalSignUp').on('click', function() {
+		$('#normalSignUp').on('click', function () {
 			var q1 = $('#qual1').is(':checked');
 			var q2 = $('#qual2').is(':checked');
 			if (q1 == true && q2 == true) { //약관동의 체크 확인
@@ -278,7 +279,7 @@
 			}
 		})
 		/* 업체회원 회원가입 폼으로 이동 */
-		$('#busiSignUp').on('click', function() {
+		$('#busiSignUp').on('click', function () {
 			var q1 = $('#qual1').is(':checked');
 			var q2 = $('#qual2').is(':checked');
 			if (q1 == true && q2 == true) {
@@ -289,4 +290,5 @@
 		})
 	</script>
 </div>
+
 </html>

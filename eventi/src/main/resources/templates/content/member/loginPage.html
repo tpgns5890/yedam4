@@ -1,63 +1,61 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}"
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<style>
-#container {
-	width: 20%;
-	margin: 0 auto;
-	min-height: 800px;
-}
+	<style>
+		#container {
+			width: 20%;
+			margin: 0 auto;
+			min-height: 800px;
+		}
 
-#container form {
-	position: relative;
-	margin-top: 100px;
-	background: none;
-}
+		#container form {
+			position: relative;
+			margin-top: 100px;
+			background: none;
+		}
 
-#form_area {
-	width: 25%;
-	height: 300px;
-	margin: 0 auto;
-	padding: 30px;
-	color: gray;
-	background: rgba(255, 255, 255, 0.8);
-	border-radius: 15px;
-}
-.bg-dark a:hover{
-	color: black !important;
-}
-</style>
+		#form_area {
+			width: 25%;
+			height: 300px;
+			margin: 0 auto;
+			padding: 30px;
+			color: gray;
+			background: rgba(255, 255, 255, 0.8);
+			border-radius: 15px;
+		}
+
+		.bg-dark a:hover {
+			color: black !important;
+		}
+	</style>
 
 </head>
+
 <body>
 	<div layout:fragment="content">
-		<section class="home-section home-full-height bg-dark bg-gradient"
-			id="home" data-background="/assets/images/section-11.jpg"
+		<section class="home-section home-full-height bg-dark bg-gradient" id="home"
+			data-background="/assets/images/section-11.jpg"
 			style="height: 937px; background-image: url(&quot;/assets/images/section-11.jpg&quot;);">
 			<div class="titan-caption">
 				<div class="caption-content">
 					<div class="font-alt mb-40 titan-title-size-4">"Sign In"</div>
 					<div id="form_area">
-						<form class="form" action="/login" method="post"
-							style="text-align: left;">
-							아이디<input type="text" class="form-control" name="userid"
-								placeholder="UserId"><br>비밀번호<input type="password"
-								class="form-control" name="password" placeholder="Password">
-							<input th:name="${_csrf.parameterName}" type="hidden"
-								th:value="${_csrf.token}" />
-	   							<font th:if="error" id="valid" style="color: red; font-size:12px;"><a th:text="${exception}"></a></font>
+						<form class="form" action="/login" method="post" style="text-align: left;">
+							아이디<input type="text" class="form-control" name="userid" placeholder="UserId"><br>비밀번호<input
+								type="password" class="form-control" name="password" placeholder="Password">
+							<input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
+							<font th:if="error" id="valid" style="color: red; font-size: 12px;"><a
+									th:text="${exception}"></a></font>
 							<p>
 								<input type="checkbox" name="remember-me"> 자동로그인
 							</p>
 							<div style="float: right;">
-								<input style="width:100%;" class="btn btn-round btn-b" name="submit" type="submit"
-									value="로그인"> <br> <a th:href="@{findIdPage}">아이디
-									찾기</a> <span>|</span> <a th:href="@{findPwPage}">비밀번호 찾기</a>
+								<input style="width: 100%;" class="btn btn-round btn-b" name="submit" type="submit"
+									value="로그인"> <br> <a th:href="@{findIdPage}">아이디 찾기</a> <span>|</span> <a
+									th:href="@{findPwPage}">비밀번호 찾기</a>
 							</div>
 						</form>
 					</div>
@@ -65,13 +63,14 @@
 			</div>
 		</section>
 		<script>
-		$(function(){
-			var session = '[[${session.member != null? session.member.userId:""}]]';
-			if(session!=''){
-				window.location.href='/'
-			}
-		})
+			$(function () {
+				var session = '[[${session.member != null? session.member.userId:""}]]';
+				if (session != '') {
+					window.location.href = '/'
+				}
+			})
 		</script>
 	</div>
 </body>
+
 </html>
