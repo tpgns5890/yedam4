@@ -5,10 +5,8 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<!-- 모달 스타일 -->
-<link rel="stylesheet" href="/css/model.css">
-<!-- 좋아요 스타일 -->
-<link rel="stylesheet" href="/css/heart.css">
+<link rel="stylesheet" href="/css/model.css"><!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/heart.css"><!-- 좋아요 스타일 -->
 <meta charset="UTF-8">
 <title>공모전 상세조회</title>
 </head>
@@ -654,7 +652,7 @@
  			//문의사항 등록처리
  			}else{
  				$.ajax({
- 	 	   			url : '/questions/insert',
+ 	 	   			url : '/questions/insertAjax',
  	 	   			method : 'post',
  	 	   			data : {userId, Cntn, rerepTgt:qNo,category:'T01',targetId:cNo},
  	 	   			beforeSend : function(xhr)

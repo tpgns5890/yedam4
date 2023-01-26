@@ -29,7 +29,6 @@
           </div>
         </section>
 		
-		
 		<div style="min-height: 700px">
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
@@ -59,10 +58,10 @@
 				<li th:if="${user.depotr} != null">
 					<label>예금주:</lable><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
 				</li>
-				<li th:if="${user.depotr} != null">
+				<li th:if="${user.bank} != null">
 					<label>은행사:</lable><input id="bank" name="bank" type="text" th:value="${user.bank}">
 				</li>
-				<li th:if="${user.depotr} != null">
+				<li th:if="${user.accnt} != null">
 					<label>계좌번호:</lable><input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
 				</li>
 				
@@ -70,17 +69,47 @@
 				<li th:if="${user.depotr} == null">
 					<label>예금주:</lable><input id="depotr" name="depotr"  type="text" >
 				</li>
-				<li th:if="${user.depotr} == null">
+				<li th:if="${user.bank} == null">
 					<label>은행사:</lable><input id="bank" name="bank" type="text" >
 				</li>
-				<li th:if="${user.depotr} == null">
+				<li th:if="${user.accnt} == null">
 					<label>계좌번호:</lable><input id="accnt" name="accnt" type="text">
 				</li>
 				
-
-				<li th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></li>
+				<th:block th:if="${user.busiNum} != null">
+					<li><label>사업자번호:</lable><input id="" name="" type="text" th:value="${user.busiNum}|"></li>
+					<li><label>사업자명:</lable><input id="" name="" type="text" th:value="${user.busiTitle}|"></li>
+					<li><label>업종:</lable><input id="" name="" type="text" th:value="|${user.busiType}|"></li>
+					<li><label>행사지역:</lable><input id="" name="" type="text" th:value="|${user.busiArea}|"></li>
+					<li><label>행사정보:</lable><input id="" name="" type="text" th:value="|${user.busiStyle}|"></li>
+				</th:block>
 			</ul>
-
+				
+				<p th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></p>
+					
+					
+				<!-- 적용해야됌 -->
+				<!-- <div>
+								행사가능지역
+								<div class="chkArea">
+									<div th:each="area : ${busiArea}">
+										<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}"
+											name="busiArea"> <label th:text="${area.codeName}"
+											th:for="${area.codeId}"></label>
+									</div>
+								</div>
+							</div>
+							<div>
+								행사유형
+								<div class="chkArea">
+									<div th:each="type : ${busiStyle}">
+										<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}"
+											name="busiStyle"> <label th:text="${type.codeName}"
+											th:for="${type.codeId}"></label>
+									</div>
+								</div>
+							</div>
+						</div> -->
 				
 
 				<button type="button" id="update">회원정보 수정</button>

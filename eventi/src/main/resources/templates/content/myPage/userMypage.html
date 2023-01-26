@@ -72,7 +72,7 @@
 				</div>
 
 
-				<div th:if="${user.depotr} != null">
+				<div th:if="${user.accnt} != null">
 					<p th:text="|예금주:${user.depotr}|"></p>
 					<p th:text="|은행사:${user.bank}|"></p>
 					<p th:text="|계좌번호:${user.accnt}|"></p>
@@ -84,12 +84,13 @@
 					<p>계좌번호:</p>
 				</div>
 				
-				
-				<p th:text="|사업자번호 : ${user.busiNum}|"></p>
-				<p th:text="|상호명: ${user.busiTitle}|"></p>
-				<p th:text="|${user.busiType}|"></p>
-				<p th:text="|${user.busiArea}|"></p>
-				<p th:text="|${user.busiStyle}|"></p>
+				<div th:if="${user.busiNum} != null">
+					<p th:text="|사업자번호 : ${user.busiNum}|"></p>
+					<p th:text="|상호명: ${user.busiTitle}|"></p>
+					<p th:text="|업종:${user.busiType}|"></p>
+					<p th:text="|행사지역:${user.busiArea}|"></p>
+					<p th:text="|행사유형:${user.busiStyle}|"></p>
+				</div>
 				
 				
 				

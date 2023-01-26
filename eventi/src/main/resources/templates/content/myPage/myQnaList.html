@@ -6,6 +6,8 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/model.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -49,9 +51,8 @@
 					<table border="1" id="myTable">
 						<thead>
 							<tr>
-								<th>문의사항번호</th>
-								<th>타겟아이디</th>
-								<th>분류</th>
+								<th>문의No</th>
+								<th>게시글No</th>
 								<th>문의사항제목</th>
 								<th>작성일자</th>
 								<th>답변유무</th>
@@ -63,7 +64,6 @@
 							<tr th:each="q : ${qnaList}" >
 								<td th:text=${q.qNo}></td>
 								<td th:text=${q.targetId}></td>
-								<td th:text=${q.category}></td>
 								<td th:text=${q.ttl}></td>
 								<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
 								<td th:text=${q.ans}></td>
@@ -74,7 +74,7 @@
 				</div>
 			</div>
 			
-			<!-- 페이징처리  <h3 th:text="${paging}"></h3> -->
+			<!-- 페이징처리  -->
 			<div class="row mt-5">
 				<div class="col text-center">
 					<div class="block-27">
@@ -83,8 +83,19 @@
 					</div>
 				</div>
 			</div>
-
-
+			
+		<!--문의내역 상세보기 -->
+		<div id="qnaModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h3 style="text-align: center;">문의내역</h3>
+				<div id="qna"></div>
+				<div id="qnaRep"></div>
+			</div>
+		</div>
+			
+			
 		</div>
 		<script>
 		//csrf 설정
@@ -97,16 +108,77 @@
 			searchFrm.submit();
 		}
 		
+		//모달창-----------------------------------------------------------
+		// Get the modal
+		var qnaModal = document.getElementById("qnaModal");
+
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+		
+		// 모달창 띄우기.
+		// 마감연장일이 이미 지정된 경우 모달창 띄우지 않도록.
+		$('.select').on("click", function(){ 
+			qnaModal.style.display = "block";
+		})
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+			qnaModal.style.display = "none";
+		}
+		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == qnaModal) {
+			  qnaModal.style.display = "none";
+		  }
+		}
+		
 		$('.select').on("click", function(){
 			let qNo = $(this).parent().parent().children('td:eq(0)').text();
-			let category = $(this).parent().parent().children('td:eq(2)').text();
-			let targetId = $(this).parent().parent().children('td:eq(1)').text();
-			console.log(qNo);
-			console.log(category);
-			console.log(targetId);
 			
-			location.href='/questions/queDetail?qNo='+qNo +'&category=' + category + '&targetId=' +targetId;
-		});
+			$.ajax({
+	            url:"/questions/queDetailAjax",
+	            method:"post",
+	            data : {qNo},
+	            beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    				xhr.setRequestHeader(header, token);
+                },
+			}).then(res => {
+				console.log(res);
+				$('#qna').empty();
+				$('#qnaRep').empty();
+				
+				$('#qna').append(make(res[0]));
+					if(res[1] !=null && res[1].rerepTgt != null){ 
+						$('#qnaRep').append(makeRep(res[1]));
+					}					
+				})
+	        })
+			
+		
+		//문의사항 생성
+		function make(data){
+			let ul = `  <h4>${data.ttl}</h4>
+						<ul>
+								<li>${data.cntn}</li>
+								<li></li>
+						</ul>
+					`;
+			return ul;
+		} 
+		
+		//문의답변 생성
+		function makeRep(data){
+			let ul = `  <h4>답변내용</h4>
+						<ul>
+								<li>${data.cntn}</li>
+								<li></li>
+						</ul>
+					`;
+			return ul;
+		} 
+		
+		//답변이있다면
 			
 		</script>
 	</div>

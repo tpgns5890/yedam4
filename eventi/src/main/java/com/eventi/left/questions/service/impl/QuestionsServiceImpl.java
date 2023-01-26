@@ -66,13 +66,20 @@ public class QuestionsServiceImpl implements QuestionsService{
 		vo.setUserId(sessionId);
 		return mapper.count(vo);
 	}
+	//공모전에 대한 나의문의내역리스트
 	@Override
 	public List<QuestionsVO> myQuestionsList(QuestionsVO vo, PagingVO paging) {
-		paging.setTotalRecord(mapper.count(vo)); //문의개수 수정해야함.
+		System.out.println(vo);
+		paging.setTotalRecord(mapper.targetCount(vo));  
 		paging.setPageUnit(10);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 		return mapper.myQuestionsList(vo);
+	}
+	//문의+답변의 1건 리스트 조회
+	@Override
+	public List<QuestionsVO> getQuestionsList(String qNo) {
+		return mapper.getQuestionsList(qNo);
 	}
 
 

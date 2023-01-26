@@ -11,10 +11,12 @@ public interface QuestionsService {
 
 	// 문의사항
 	public List<QuestionsVO> questionsList(QuestionsVO vo, PagingVO paging); // 게시글1건에 대한 전체조회
-	
+
 	public List<QuestionsVO> myQuestionsList(QuestionsVO vo, PagingVO paging); // 나의 공모전 문의사항리스트
-	
-	public QuestionsVO getQuestions(QuestionsVO vo); // 1건 조회
+
+	public QuestionsVO getQuestions(QuestionsVO vo); // 문의 1건 조회
+
+	public List<QuestionsVO> getQuestionsList(String qNo); // 문의 + 답변 1건 조회
 
 	public int questionsInsert(QuestionsVO vo); // 등록
 
@@ -22,13 +24,13 @@ public interface QuestionsService {
 
 	public int questionsDelete(QuestionsVO questionsVO); // 삭제
 
-	//Q&A 전체조회
+	// Q&A 전체조회
 	public List<QuestionsVO> qnaList(QuestionsVO vo, PagingVO paging);
-	
-	//시퀀스 값 찾기
+
+	// 시퀀스 값 찾기
 	public String getSeq();
-	
-	//게시글 개수
+
+	// 게시글 개수
 	public int count(QuestionsVO questionsVO);
 
 }
