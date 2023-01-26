@@ -15,8 +15,8 @@
             </div>
           </div>
         </section>
-<button type="button" id="hireBtn">채용</button>
-<button type="button" id="unHireBtn">미채용</button>
+<!-- <button type="button" id="hireBtn">채용</button>
+<button type="button" id="unHireBtn">미채용</button> -->
 	<table class="table mb-3" >
 	<thead class="thead-dark">
 			<tr>
@@ -49,11 +49,11 @@
 	</table>
 	
 <section class="module" id="news">
+            	<input type="checkBox" value="채용" class="hire" id="allHire">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">구직자 한눈에 보기</h2>
-            	<input type="checkBox" value="채용" class="hire" id="allHire">
                 <div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을 누르세요.</div>
               </div>
             </div>
@@ -66,6 +66,7 @@
 				<th:block th:if ="${res.hire} == 'N'">
 				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()"></td> 
 				</th:block>
+				
                 <div class="post mb-20">
                   <div class="post-thumbnail"><a href="#"><img src="assets/images/work-1.jpg" alt="Blog-post Thumbnail"></a></div>
                   <div class="post-header font-alt">
@@ -77,8 +78,8 @@
                     <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
                   </div>
                   <div class="post-more"><a class="more-link" href="#" >Read more</a></div>
-                  <button class="btn btn-border-d btn-round" type="submit"><i class="fa fa-child" id="hireBtn"></i>채용</button>
-                  <button class="btn btn-border-d btn-round" type="submit"><i class="fa fa-child" id="unHireBtn"></i> 미채용</button>
+                  <button class="btn btn-border-d btn-round" type="button"><i class="fa fa-child" id="hireBtn"></i>채용</button>
+                  <button class="btn btn-border-d btn-round" type="button"><i class="fa fa-child" id="unHireBtn"></i> 미채용</button>
              
                 </div>
               </div>
@@ -110,7 +111,6 @@ function hireSeeker(hireCheck){
 	}else{
 		for (let i = 0; i < trs.length; i++) {
 			if (trs[i].children[0].children[0].checked) {
-				//alert(trs[i].children[0])
 				let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
 
 				//업데이트처리 ajax

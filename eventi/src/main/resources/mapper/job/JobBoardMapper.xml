@@ -51,9 +51,12 @@
 		            FROM JOB_BOARD J, LIKES L, RESUME_BOARD R
 		           WHERE J.JOB_NO = L.TARGET_NO(+)
 		             AND J.JOB_NO = R.JOB_NO(+)
-                
+		  
 			<include refid="jSelect" />
 			<include refid="likeSelect" />
+			     <if test="orderCol !=null and orderCol != ''">
+                ORDER BY ${orderCol} desc
+                </if>
 	  	<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}
