@@ -6,8 +6,8 @@
 <sql id="fSelect">
 	<where>
 		<!-- 검색창 입력 시 -->
-		<if test="ttl !=null and ttl != ''">
-			AND ( FAQ_TTL LIKE '%${ttl}%' OR FAQ_ANS LIKE '%${ttl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+		<if test="faqTtl !=null and faqTtl != ''">
+			AND ( FAQ_TTL LIKE '%${faqTtl}%' OR FAQ_ANS LIKE '%${faqTtl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
 	</where>	
 </sql>		
