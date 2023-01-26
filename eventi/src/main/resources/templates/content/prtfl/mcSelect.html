@@ -520,7 +520,7 @@
                       <h3>${reply.userId}</h3>
                       <div class="meta">${reply.writingDt}</div>
                       <p>${reply.replyCntn}</p>
-                      <p><a href="#" class="reply">Reply</a></p>
+                      <button type="button" class="reply">Reply</button>
                       ${delBtn} ${upBtn}
                     </div>
                    </li>
@@ -864,7 +864,7 @@
 		            //키값
 		            let tag = `<li class="repaly">
                         <p>content.msgCntn</p>
-                        //<span class="time">${userId}</span>
+                        <span class="time">${userId}</span>
                       </li>`;
                      
 		            $("#greetings").append(tag);
