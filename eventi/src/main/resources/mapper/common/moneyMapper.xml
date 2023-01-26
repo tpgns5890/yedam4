@@ -46,11 +46,8 @@
 	
 	<update id="updateMoney">
 		update money
-		set bank_name =  #{bankName},
-		    bank_account = #{bankAccount},
-		    mo_type = #{moType},
-		    mo_price = #{moPrice}
-		where target_id = #{targetId}
+		set sett_yn =  #{settYN}
+		where MO_NUM = #{moNum}
 	</update>
 	
 </mapper>

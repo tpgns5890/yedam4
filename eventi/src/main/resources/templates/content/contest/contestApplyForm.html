@@ -123,7 +123,7 @@
 			
 			// When the user clicks anywhere outside of the modal, close it
 			window.onclick = function(event) {
-			  if (event.target == modal) {
+			  if (event.target == saveModal) {
 			    saveModal.style.display = "none";
 			  }
 			}
@@ -259,8 +259,9 @@
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
+						console.log($('#dgnNo'))
 						console.log(data);
-								 $("#dgnNo").val(data[0].dgnNo);
+								$("#dgnNo").val(data[0].dgnNo);
 								$("#name").val(data[0].name);
 								oEditors.getById["cntn"].exec("PASTE_HTML", [data[0].cntn]);
 								

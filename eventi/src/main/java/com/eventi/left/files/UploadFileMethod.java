@@ -26,7 +26,14 @@ public class UploadFileMethod {
 
 	// 첨부파일 테이블 사용시 쓰이는 메소드
 	public List<FileDto> uploadFiles(MultipartFile[] uploadfile, String targetId, String category) throws IllegalStateException, IOException {
+		
 		List<FileDto> list = new ArrayList<FileDto>();
+		
+		//해당하는 타겟의 파일이 이미있을경우, 삭제후 insert
+		List<FilesVO>fileCheck = service.fileList(targetId);
+		if(fileCheck.size() > 0) {
+			service.deleteFile(targetId);
+		}
 
 		// 파일 경로위치에 물리적으로 저장하기
 		for (MultipartFile file : uploadfile) {

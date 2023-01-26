@@ -138,6 +138,7 @@
 		WHERE USER_ID = #{userId}
 	</update> 
 	
+	<!-- 업체회원 조회 -->
 	<select id="busiSelect" resultType="MemberVO">
 		SELECT b.busi_num,b.busi_title,b.busi_type,b.busi_area,b.busi_style,m.*
 		FROM MEMBERS m join busi_member b
