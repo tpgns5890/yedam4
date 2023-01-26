@@ -5,7 +5,7 @@ import java.util.List;
 import com.eventi.left.faq.service.FaqVO;
 
 public interface FaqMapper {
-	//public FaqVO getFaq(FaqVO faqVO); 
+	
+	//전체조회 
 	public List<FaqVO> getFaqList(FaqVO faqVO); 
-	//public void faqInsert(FaqVO faqVO);
 }

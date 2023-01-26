@@ -39,4 +39,6 @@ public class JobBoardVO {
 	Integer reCount;
 	//마감일 수
 	private Integer remain;
+	//정렬
+	String orderCol  ;
 }

@@ -27,6 +27,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		HttpSession session = request.getSession();
 		System.out.println(request.getHeaderNames());
 		session.setAttribute("member", service.getMember(authentication.getName())); // 로그인한 사용자VO 세션에 저장
+		session.setAttribute("sessionId", authentication.getName()); // 로그인한 사용자ID 세션에 저장
 		Back(response, -1);
 	}
 

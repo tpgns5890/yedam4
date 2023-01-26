@@ -25,7 +25,12 @@ import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
-
+/**
+ * 
+ * @author 배수빈
+ * 디자인에 대한 컨트롤러
+ *
+ */
 @Controller
 @RequestMapping("/design")
 public class DesignController {
@@ -38,12 +43,18 @@ public class DesignController {
 	@Autowired
 	MemberService memberService;
 
-	// 전체 디자인 리스트 조회
+	/**
+	 * 
+	 * @param model 
+	 * @param vo
+	 * @param paging
+	 * @return
+	 * 전체 디자인 리스트 조회
+	 */
 	@RequestMapping("/designList")
 	public String bfList(Model model, DesignVO vo, PagingVO paging) {
 		model.addAttribute("designList", service.designList(vo, paging));
 		model.addAttribute("paging", paging);
-		System.out.println(paging);
 		return "content/design/designList";
 	}
 
@@ -69,8 +80,6 @@ public class DesignController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
 		vo.setUserId(sessionId);
-
-		System.out.println(vo);
 
 		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
 		service.insert(vo, filesVO, uploadFile);
@@ -98,7 +107,6 @@ public class DesignController {
 	@PostMapping("/delete")
 	@ResponseBody
 	public int designDelete(DesignVO vo) {
-
 		return service.delete(vo);
 	}
 

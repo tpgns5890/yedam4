@@ -14,6 +14,13 @@
 		FROM CHATTINGS
 	</select>
 	
+	<!-- 채탕방 확인 -->
+	<select id="checkRoom" resultType="int">
+		SELECT COUNT(*)
+		FROM CHATTINGS
+		WHERE TO_ID = #{toId}
+	</select>
+	
 	<!--채팅방 추가-->
 	<insert id="chatRoomInsert">
 		INSERT INTO CHATTINGS

@@ -18,6 +18,12 @@ public class ChattingsServiceImpl implements ChattingsService{
 	public List<ChattingsVO> chatRoom(ChattingsVO chattingsVO) {
 		return chattingsMapper.chatRoom(chattingsVO);
 	}
+	
+	//채팅방 찾기
+	@Override
+	public int checkRoom(ChattingsVO chattingsVO) {
+		return chattingsMapper.checkRoom(chattingsVO);
+	}
 
 	//채팅방 추가
 	@Override
@@ -32,6 +38,5 @@ public class ChattingsServiceImpl implements ChattingsService{
 		}
 		
 		return cId;
-	}
-	
+	}	
 }

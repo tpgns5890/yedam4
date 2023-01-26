@@ -36,8 +36,10 @@
           </div>
         </section>
    
-<div class="dropdown">
+<div >
+<form id="searchForm">
 <!-- option 게시글별 조회수, 작성일순 정렬기준 -->
+<label>행사유형</label>
 	<select id="etype" name="etype"  onchange="order()">
 		<option value="" selected>------</option>
 		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
@@ -60,20 +62,23 @@
 	</select> 
 	
 <!-- 게시글 정렬기준 -->
-	<select id="see" name="see">
+<label>정렬기준</label>
+	<select id="see" name="orderCol" onchange="order()">
 		<option value="" selected>------</option>
 		<option value="dt">작성순</option>
-		<option value="look">조회수</option>
-		<option value="like">좋아요순</option>
+		<option value="see">조회수</option>
+		<option value="cnt">좋아요순</option>
 	</select>
-	
+	<!-- 게시글 검색 -->
+	<input type="text" name="search">
+	<input type="button" id="find" value="찾기" onclick="order()">
+</form>
 </div>
+
 <button type="button" class="btn btn-outline-primary" onclick="jobInsert()" >구인등록</button>
 <button type="button" class="btn btn-outline-primary" onclick="resumeList()">신청자조회</button>
 
-<!-- 게시글 검색 -->
-	<input type="text" name="search">
-	<input type="button" id="find" value="찾기"><span></span></input>
+
 <!-- 좋아요 -->	
 <div class="stage">
   		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active"  ></div>
@@ -150,8 +155,9 @@ var header = $("meta[name='_csrf_header']").attr("content");
 
 	//정렬
 	function order(){
-	let etype = $("#etype").val(); //공통으로 씀 
-		location.href=`/jobList?eType=${etype}`
+		//let etype = $("#etype").val(); //공통으로 씀
+		let param = $("#searchForm").serialize()
+		location.href=`/jobList?${param}`
 	}
 	
 	//검색 기능

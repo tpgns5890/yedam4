@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+'<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -20,9 +20,9 @@
 	</section>
 
 	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-	<th:block th:if="${session.member.userId} == ${queDetail.userId}">
+	<!-- <th:block th:if="${session.member.userId} == ${queDetail.userId}">
 	</th:block>
-
+ -->
 
 	
 	<section class="ftco-section ftco-degree-bg">
@@ -48,14 +48,26 @@
 						</div>
 					</div>-->
 					
-					
-   	
-		
+		 <div class="comments"  id=reply>
+                  <h4 class="comment-title font-alt">There are comments</h4>
+                  <div class="comment clearfix">
+                    <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
+                    <div class="comment-content clearfix">
+                      <div class="comment-author font-alt"><a href="#">관리자</a></div>
+                      <form action="replyInsert">
+						<textarea name="replyCntn" id="replyCntn" rows="3" cols="90"></textarea>
+						<button type="button" id="replyInsertBtn">댓글작성</button>
+                      Today, 14:55 - 
+                    	</form>
+                      </div>
+                    </div>
+                  </div>		
+                  			
 				</div>
 			</div>
 		</div>
 	</section>
-	<script>
+<script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");

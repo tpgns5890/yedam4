@@ -17,7 +17,6 @@ import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
-import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;

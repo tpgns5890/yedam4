@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.questions.mapper.QuestionsMapper;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
@@ -16,7 +17,11 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Autowired QuestionsMapper mapper;
 	
 	@Override
-	public List<QuestionsVO> questionsList(QuestionsVO vo) {
+	public List<QuestionsVO> questionsList(QuestionsVO vo, PagingVO paging) {
+		paging.setTotalRecord(mapper.targetCount(vo));
+		paging.setPageUnit(5);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
 		return mapper.questionsList(vo);
 	}
 	//문의등록 
@@ -52,13 +57,22 @@ public class QuestionsServiceImpl implements QuestionsService{
 	//시퀀스 찾기
 	@Override
 	public String getSeq() {
-		// TODO Auto-generated method stub
 		return mapper.getSeq();
 	}
+	//회원아이디의 문의내역리스트 개수.
 	@Override
-	public int count(QuestionsVO questionsVO) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int count(QuestionsVO vo) {
+		String sessionId = (String) SessionUtil.getSession().getAttribute("sessionId");
+		vo.setUserId(sessionId);
+		return mapper.count(vo);
+	}
+	@Override
+	public List<QuestionsVO> myQuestionsList(QuestionsVO vo, PagingVO paging) {
+		paging.setTotalRecord(mapper.count(vo)); //문의개수 수정해야함.
+		paging.setPageUnit(10);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
+		return mapper.myQuestionsList(vo);
 	}
 
 

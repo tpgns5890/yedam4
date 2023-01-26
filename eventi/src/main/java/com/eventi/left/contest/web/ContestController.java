@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.eventi.left.bboard.service.BboardVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.common.service.CodeService;
@@ -28,13 +28,18 @@ import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
-import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 
 import groovy.util.logging.Log4j;
 
+/**
+ * 
+ * @author 배수빈
+ * 공모전에 대한 컨트롤러
+ *
+ */
 @Controller
 @RequestMapping("/contest")
 @Log4j
@@ -78,7 +83,6 @@ public class ContestController {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		Map<String, Object> result = new HashMap<String, Object>();
 
 		// 로그인된 경우
 		if (user != null) {
@@ -113,7 +117,7 @@ public class ContestController {
 
 	// 등록처리
 	@PostMapping("/insert")
-	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, PagingVO paging, MultipartFile[] uploadFile) {
+	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, MultipartFile[] uploadFile) {
 
 		service.insertContest(vo, wvo, uploadFile);
 
@@ -137,7 +141,6 @@ public class ContestController {
 	// 수정처리
 	@PostMapping("/update")
 	public String contestupdateForm(ContestVO vo, MultipartFile[] uploadFile) {
-		System.out.println(vo);
 		service.updateContest(vo, uploadFile);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
@@ -207,9 +210,8 @@ public class ContestController {
 
 	// 나의 공모전게시글관리
 	@GetMapping("/mySelect")
-	public String mySelect(Model model, ContestVO vo, PagingVO paging) {
+	public String mySelect(Model model, ContestVO vo, @ModelAttribute("paging")PagingVO paging) {
 		model.addAttribute("contestList", service.myContestList(vo, paging));
-		model.addAttribute("paging", paging);
 		return "content/myPage/myCotestList";
 	}
 

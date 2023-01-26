@@ -82,7 +82,7 @@
                     <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
                       <p th:utext=${proDetail.intro}>Lorem </p>
                     <ul>
-                      <li th:text=${proDetail.eSday}>The European languages are members of the same family.</li>
+                      <li th:text="${#dates.format(proDetail.eSday, 'yyyy-MM-dd')}">The European languages are members of the same family.</li>
                       <li th:text=${proDetail.eEday}>Their separate existence is a myth.</li>
                       <li th:text=${proDetail.loc}>For science, music, sport, etc, Europe uses the same vocabulary.</li>
                       <li th:text=${proDetail.entrance}>Their separate existence is a myth.</li>
