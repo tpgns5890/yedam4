@@ -16,11 +16,13 @@ public class MessageServiceImpl implements MessageService{
 	
 	@Autowired MessageMapper mapper;
 	
+	//채팅방별 전체대화 조회
 	@Override
 	public List<MessageVO> msgList(MessageVO messageVO) {
 		return mapper.msgList(messageVO);
 	}
 
+	//대화 입력
 	@Override
 	public int msgInsert(MessageVO messageVO) {
 		System.out.println("호출");

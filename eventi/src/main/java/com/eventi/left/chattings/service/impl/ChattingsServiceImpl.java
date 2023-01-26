@@ -21,7 +21,7 @@ public class ChattingsServiceImpl implements ChattingsService{
 	
 	//채팅방 찾기
 	@Override
-	public int checkRoom(ChattingsVO chattingsVO) {
+	public ChattingsVO checkRoom(ChattingsVO chattingsVO) {
 		return chattingsMapper.checkRoom(chattingsVO);
 	}
 

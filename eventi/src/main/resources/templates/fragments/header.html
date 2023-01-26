@@ -185,32 +185,7 @@
 												<div class="modal-body">
 													<div class="msg-body">
 														<ul id="greetings">
-															<li class="sender">
-																<p> Hey, Are you there? </p>
-																<span class="time">10:06 am</span>
-															</li>
-															<li class="repaly">
-																<p> Last Minute Festive Packages From Superbreak</p>
-																<span class="time">10:20 am</span>
-															</li>
-															<li>
-																<div class="divider">
-																	<h6>Today</h6>
-																</div>
-															</li>
-
-															<li class="repaly">
-																<p> Last Minute Festive Packages From Superbreak</p>
-																<span class="time">10:36 am</span>
-															</li>
-															<li class="sender">
-																<p> Hey, Are you there? </p>
-																<span class="time">10:06 am</span>
-															</li>
-															<li class="sender">
-																<p> Hey, Are you there? </p>
-																<span class="time">10:06 am</span>
-															</li>
+														
 														</ul>
 													</div>
 												</div>
@@ -269,59 +244,42 @@
     });
     
     //채팅방
-       let cId = '';
-    	
-	   
-	   let stompClient = null;
-	   //채팅버튼을 눌렀을 때
-		$(".chat").on("click", function () {
-			console.log('hey')
-			$(".chat").toggleClass("active");
+    let cId = '';
+    let fromId = '[[${session.member != null ? session.member.userId :''}]]';
+       
+    if(fromId != ''){
+    	$(".chat").show();
+    }
+       
+	let stompClient = null;
+	//채팅버튼을 눌렀을 때
+	$(".chat").on("click", function () {
+		$(".chat").toggleClass("active");
 		
-		   	function connect() {
-		   			//구독
-		   			var socket = new SockJS('/gs-guide-websocket');
-		            stompClient = Stomp.over(socket);
-		            stompClient.connect({}, function (frame) {
-		            console.log('Connected: ' + frame);
-					
-		            //방 구독하기
-		            stompClient.subscribe('/topic/chat/' + cId, function (chat) {  
-		            var content = JSON.parse(chat.body);
-		            console.log(content);
-		            //키값
-		            let tag = `<li class="repaly">
-	                    <p>content.msgCntn</p>
-	                    //<span class="time">${userId}</span>
-	                  </li>`;
-	                 
-		            $("#greetings").append(tag);
-		           })
-		       })
-			}
-	
-			function makeList(r){
-				let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
-								<div class="flex-grow-1 ms-3">
-									<h3>${r.toId}</h3>
-									<p>front end developer</p>
-								</div>
-							 </a>`;
-				return list;
-			}
+		
+		function makeList(r){
+			let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+							<div class="flex-grow-1 ms-3">
+								<h3>${r.toId}</h3>
+								<p>front end developer</p>
+							</div>
+						</a>`;
+						
+			return list;
+		}
+
+		//채팅화면이 나타난다.
+		if ($(".chat").hasClass("active")) {
 				
-			//채팅화면이 나타난다.
-			if ($(".chat").hasClass("active")) {
-				
-				$.ajax({
-					url : '/chatSelect',
-					method : 'post',
-		   			data : JSON.stringify({fromId:fromId}),
-		   			contentType : "application/json; charset=UTF-8",
-		   			beforeSend : function(xhr)
-		            {   
+			$.ajax({
+				url : '/chatSelect',
+				method : 'post',
+		   		data : JSON.stringify({fromId:fromId}),
+		   		contentType : "application/json; charset=UTF-8",
+		   		beforeSend : function(xhr)
+			         {   
 						xhr.setRequestHeader(header, token);
-		            }
+			         }
 		   		}).then(res => {
 		   			if(res.length >= 1){
 		   				$(".chat-list").empty();
@@ -331,16 +289,48 @@
 		   				}
 		   			}
 		   		})
-				$(".chat-popup").show();
-			}
+		   		
+			  $(".chat-popup").show();
+		}
 	
-			//채팅화면이 사라진다.
-			if (!$(".chat").hasClass("active")) {
-				$(".chat-popup").hide();
-				$(".chatbox").hide();
-			}
-		});
-	   
+		//채팅화면이 사라진다.
+		if (!$(".chat").hasClass("active")) {
+			$(".chat-popup").hide();
+			$(".chatbox").hide();
+		}
+	});
+	
+	function connect(chaId) {
+		console.log("chaId:********" + chaId);
+		
+	   	//구독
+	   	var socket = new SockJS('/gs-guide-websocket');
+	    stompClient = Stomp.over(socket);
+	    stompClient.connect({}, function (frame) {
+	    console.log('Connected: ' + frame);
+	    //방번호 설정
+	    cId = chaId;	
+	    //방 구독하기
+	    stompClient.subscribe('/topic/chat/' + cId, function (chat) {  
+	    
+	    //채팅내용 화면출력
+	    var content = JSON.parse(chat.body);
+	    let tag;
+	    if(content.fromId == fromId){
+		    tag = `<li class="repaly">
+				          <p>${content.msgCntn}</p>
+				       </li>`;
+	    } else {
+	    	 tag = `<li class="sender">
+			          <p>${content.msgCntn}</p>
+			        </li>`;
+	    }
+                 
+	    $("#greetings").append(tag);
+	    })
+	 	})
+	}
+
 	   //메시지 보내기
 	   $("#send").click(function sendMessage() {
 			stompClient.send("/app/chat", {}, JSON.stringify({
@@ -352,11 +342,56 @@
 			$("name").val("");
 		});
 	   
-	   function message(cId){
-		   console.log(cId);
-		   $("#toName").text('사회자3');
-		   $(".chatbox").show();
-	   }
+	 //채팅방리스트에서 채팅방을 눌렀을 경우 채팅 내역 불러오기
+		function message(cId){
+			$("#greetings").empty();
+			chaId = cId;
+			$.ajax({
+				url : '/msgList',
+				method : 'post',
+		   		data : JSON.stringify({chaId:cId}),
+		   		contentType : "application/json; charset=UTF-8",
+		   		beforeSend : function(xhr)
+			         {   
+						xhr.setRequestHeader(header, token);
+			         }
+		   		}).then(res => {
+					if(res.length > 0){
+			   			for(r of res){
+			   				if(r.fromId == fromId){
+			   				 	$("#greetings").append(fromTag(r));
+			   				} else {
+			   					$("#greetings").append(toTag(r));
+			   				}
+			   			}
+					}
+		   		})
+			
+		   	connect(chaId);
+			$(".chatbox").show();
+		}
+		
+		//내가 보낸 메시지
+		function fromTag(r){
+			let from = `<li class="repaly">
+					        <p>${r.msgCntn}</p>
+					        <span class="time">${r.sendDt}</span>
+					      </li>`
+			
+			return from;
+		}
+		
+		//상대방이 보낸 메시지
+		function toTag(r){
+			let to = `<li class="sender">
+						<p>${r.msgCntn}</p>
+						<span class="time">${r.sendDt}</span>
+					  </li>`
+			
+			return to;
+		}
+				
+	   
   </script>
 </div>
 

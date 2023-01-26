@@ -24,6 +24,14 @@ public class ChattingsController {
 		return list;
 	}
 	
+	//채팅방 검색
+	@PostMapping("/checkChat")
+	@ResponseBody
+	public ChattingsVO checkRoom(@RequestBody ChattingsVO chattingsVO) {
+		System.out.println(chattingsVO);
+		return chattingsService.checkRoom(chattingsVO);
+	}
+	
 	//채팅방추가
 	@PostMapping("/chatInsert")
 	@ResponseBody

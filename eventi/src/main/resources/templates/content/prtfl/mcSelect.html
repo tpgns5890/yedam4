@@ -655,33 +655,34 @@
 						xhr.setRequestHeader(header, token);
 		            }
 		   		}).then(res => {
+		   			chattingList()
 		   			cId = res;
-		   			console.log("cid", cId);
-					connect();
+		   			console.log("cid:=======", cId);
+					connect(cId);
 		   		})
 			}
-		
-		   	function connect() {
-		   			//구독
-		   			var socket = new SockJS('/gs-guide-websocket');
-		            stompClient = Stomp.over(socket);
-		            stompClient.connect({}, function (frame) {
-		            console.log('Connected: ' + frame);
-					
-		            //방 구독하기
-		            stompClient.subscribe('/topic/chat/' + cId, function (chat) {  
-		            var content = JSON.parse(chat.body);
-		            console.log(content);
-		            //키값
-		            let tag = `<li class="repaly">
-	                    <p>content.msgCntn</p>
-	                    <span class="time">${userId}</span>
-	                  </li>`;
-	                 
-		            $("#greetings").append(tag);
-		           })
-		       })
-			}
+		   	
+		   	function chattingList(cId){
+		   		console.log('chattingList:', cId);
+		   		$.ajax({
+					url : '/chatSelect',
+					method : 'post',
+		   			data : JSON.stringify({toId:toId, fromId:fromId}),
+		   			contentType : "application/json; charset=UTF-8",
+		   			beforeSend : function(xhr)
+		            {   
+						xhr.setRequestHeader(header, token);
+		            }
+		   		}).then(res => {
+		   			$(".chat-list").empty();
+		   			for(r of res){
+		   				$(".chat-list").append(makeList(r));
+		   			}
+		   			message(cId);
+		   		})
+		   		
+		   		$(".chat-popup").show();
+		   	}
 	
 			function makeList(r){
 				let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
@@ -695,41 +696,32 @@
 				
 			//채팅화면이 나타난다.
 			if ($(".chat").hasClass("active")) {
-
 				$.ajax({
-					url : '/chatSelect',
+					url : '/checkChat',
 					method : 'post',
-		   			data : JSON.stringify({fromId:fromId}),
+		   			data : JSON.stringify({toId:toId, fromId:fromId}),
 		   			contentType : "application/json; charset=UTF-8",
 		   			beforeSend : function(xhr)
 		            {   
 						xhr.setRequestHeader(header, token);
 		            }
 		   		}).then(res => {
-		   			console.log(res);
-		   			console.log(res.length);
-		   			if(res.length >= 1){
-		   				$(".chat-list").empty();
-
-		   				for(r of res){
-		   					if(r.toId == toId){
-			   					$(".chat-list").append(makeList(r));	   					
-		   					}else {
-		   						createChatRoom();
-		   					}
-		   				}
+		   			console.log('res:',res);
+		   			if(res != ''){
+		   				console.log('res.cId:', res.cid);
+		   				chattingList(res.cid);
 		   			} else {
 		   				createChatRoom();
 		   			}
 		   		})
 				$(".chat-popup").show();
-				$(".chatbox").show();
+				//$(".chatbox").show();
 			}
 	
 			//채팅화면이 사라진다.
 			if (!$(".chat").hasClass("active")) {
 				$(".chat-popup").hide();
-				//$(".chatbox").hide();
+				$(".chatbox").hide();
 			}
 		});
    </script>

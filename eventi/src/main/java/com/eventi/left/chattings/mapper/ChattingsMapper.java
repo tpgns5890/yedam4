@@ -12,7 +12,7 @@ public interface ChattingsMapper {
 	public int chatRoomInsert(ChattingsVO chattingsVO);
 	
 	//채팅방 확인
-	public int checkRoom(ChattingsVO chattingsVO);
+	public ChattingsVO checkRoom(ChattingsVO chattingsVO);
 	
 	//다음 채팅방 번호가져오기
 	public String getSeq();
