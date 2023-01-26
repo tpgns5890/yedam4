@@ -28,6 +28,7 @@
 				<h3 class="mb-4">홍보게시글 수정</h3>
 				<form action="/nocUpdate" method="POST" id="nocUpdate" name="nocUpdate"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<div class="row">
 					 	<div class="col-md-12">
 							<div class="form-group">

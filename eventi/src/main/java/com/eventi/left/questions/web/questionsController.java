@@ -43,10 +43,9 @@ public class questionsController {
 			
 	// 등록처리
 	@PostMapping("/insert")
-	@ResponseBody
-	public QuestionsVO qestionsInsert(QuestionsVO vo) {
+	public String qestionsInsert(QuestionsVO vo) {
 		qService.questionsInsert(vo); // 등록처리
-		return qService.getQuestions(vo);
+		return "redirect:/questions/myqnaList";
 	}
 
 	// 나의 문의내역 전체조회

@@ -4,7 +4,13 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-
+<head>
+	<style>
+		.label{
+			color: black;
+		}
+	</style>
+</head>
 
 <div layout:fragment="content">
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -22,7 +28,7 @@
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
 				<h3 class="mb-4">문의사항 작성</h3>
-				<form action="/insert" method="POST" id="/insert" name="/insert"
+				<form action="/questions/insert" method="POST" id="insert" name="/insert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">	
 					<div class="row">
@@ -30,14 +36,14 @@
 
 							<div class="form-group">
 								<label class="label" for="#">회원ID</label>
-								<input type="text" name="userId" id="userId">
+								<input type="text" name="userId" id="userId" th:value="${session.member.userId}" readonly>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">대상자ID</label>
-								<input type="text" name="targetId" id="targetId">
+								<input type="text" name="targetId" id="targetId" >
 							</div>
 						</div>
 						
@@ -66,7 +72,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">비밀글유무</label>
-								<input type="text" name="secretYn" id="secretYn">
+								<input type="checkbox" id="secretYn" name="secretYn" th:value="N" class="btn btn-primary">Y
 							</div>
 						</div>
 						
@@ -77,13 +83,6 @@
 							</div>
 						</div>
 						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">카테고리</label>
-								<input type="text" name="category" id="category">
-							</div>
-						</div>
-											
 <!--						<div class="col-md-12">
 							<div class="form-group">
 								<input type="file" name="uploadFile">
@@ -128,7 +127,14 @@ $(document).ready(function() {
 $('#insert').on('click', function insert() {
 			 oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", []) 
 			let cntn = document.getElementById("cntn").value 
-		})	
+		})
+		
+	//비밀글 체크박스를 클릭했을 경우
+	    $('#secretYn').click(function(){
+	    	if($('#secretYn').is(':checked')){
+				$('#secretYn').val('Y');
+			};
+	    })		
 	</script>
 </div>
 </html>
