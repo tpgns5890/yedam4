@@ -19,4 +19,10 @@ public class CastingServiceImpl implements CastingService{
 		return mapper.castingList(castingVO);
 	}
 	
+	//섭외 요청 추가
+	@Override
+	public int castingInsert(CastingVO castingVO) {
+		return mapper.castingInsert(castingVO);
+	}
+	
 }

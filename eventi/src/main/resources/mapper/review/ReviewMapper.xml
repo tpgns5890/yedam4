@@ -12,18 +12,17 @@
 	
 	<!-- 타겟별 후기 조회 -->
 	<select id="getReview" resultType="ReviewVO">
-		SELECT *
-		FROM REVIEW
+		SELECT R.*, TRUNC(STAR) FULLSTAR,  STAR - TRUNC(STAR) HALFSTAR, 5-ROUND(STAR) LASTSTAR 
+		FROM REVIEW R
 		WHERE REVIEW_TGT = #{reviewTgt}
 		AND CATEGORY = #{category}
 	</select>
 	
 	<!-- 별점 평균, 후기 개수 -->
 	<select id="getReviewAvg" resultType="com.eventi.left.review.service.ReviewVO">
-		SELECT REVIEW_TGT, AVG(STAR) REAGE, COUNT(REVIEW_NO) RECOUNT
+		SELECT AVG(STAR) REAVG, COUNT(REVIEW_NO) RECOUNT, TRUNC(AVG(STAR)) FULLSTAR,  AVG(STAR) - TRUNC(AVG(STAR)) HALFSTAR, 5-CEIL(AVG(STAR)) LASTSTAR
 		FROM REVIEW
 		WHERE REVIEW_TGT = #{reviewTgt}
-		GROUP BY review_tgt
 	</select>
 	
 	<!-- 후기 등록 -->

@@ -125,6 +125,12 @@
      </div>
    </section>
    
+   <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+   <th:block th:if="${session.member.userId} == ${mcSelect.userId}">
+	   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
+	   <button type="button" class="btn btn-primary" th:onclick="">글 삭제하기</button>
+   </th:block>
+   
     <section id="check">
   <nav id="left">
   	<div class="border">
@@ -142,7 +148,7 @@
   		<hr>
   		
   		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
-  		<button id="btn" type="button" class="btn btn-g btn-round" th:onclick="|#|">의뢰하기</button>
+  		<button id="btn" type="button" class="btn btn-g btn-round castingUp">의뢰하기</button>
   		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
   		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
 		<hr>
@@ -204,18 +210,41 @@
                     <!-- 후기카테고리 -->
                     <div class="tab-pane" id="sales">
                     	<div class="tab-pane active" id="reviews">
+	                    
+	                    <th:block th:if="${recount.reavg} != null">
+	                    <div class="border">
+	                    	<h3>총 평점</h3>
+	                    	<span th:each="num: ${#numbers.sequence(1, recount.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${recount.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${recount.laststar == 1}"><i class="fa fa-star-o star"></i></span>
+	                    	<p th:text="|${recount.reavg} / 5|"><p>
+	                    	
+	                    	<h3>전체 후기수</h3>
+	                    	<i class="fa  fa-group"></i>
+	                    	<p th:text="|${recount.recount}개|"><p>
+	                    </div>
+	                    
+                    	<div class="border">
 		                    <div class="comments reviews" th:each="re : ${reviews}">
 		                      <div class="comment clearfix">
 		                        <div class="comment-content clearfix">
 		                          <div class="comment-author font-alt" th:text="${re.userId}"></div>
 		                          <div class="comment-body">
-		                            <p th:text="${re.reviewCntn}">The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The European languages are members of the same family. Their separate existence is a myth.</p>
+		                            <p th:text="${re.reviewCntn}"></p>
 		                          </div>
-		                          <div class="comment-meta font-alt">Today, 14:55 -<span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star-off"></i></span>
+		                          <div class="comment-meta font-alt"><span  th:text="${#dates.format(re.writingDt, 'yyyy/MM/dd')}"></span>-
+		                          		<!--별점처리-->
+		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${re.laststar == 1}"><i class="fa fa-star-o star"></i></span>
 		                          </div>
 		                        </div>
 		                      </div>
 	                    	</div>
+	                    </div>
+	                    </th:block>
+	                    
+	                    <th:block th:if="${recount.reavg} == null">
+	                    	<div class="border">
+	                    		<h3>후기가 없습니다.</h3>
+	                    	</div>
+	                    </th:block>
 	                  	</div>
                     </div>
                   </div>
@@ -282,6 +311,38 @@
 				<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
 				<button type="button" id="cancel">취소</button>
 				<button type="button" id="review">후기등록</button>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+	
+	<!-- 의뢰하기 폼 -->
+	<div id="castingFrm" class="modal">
+			<div class="modal_content">
+				<form id="castingCntn">
+					<h2>의뢰</h2>
+					<div id="box">
+						<label>사회자</label>
+						<input type="text" id="userId" name="userId" th:value="${mcSelect.userId}" readonly><br>
+						<label>의뢰자</label>
+						<input type="text" id="clientId" name="clientId" th:value="${session.member.userId}"><br>
+						<label>행사분야</label>
+						<select id="eType" name="eType">
+							<option value="">-- 행사분야 선택 --</option>
+							<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
+						</select><br>
+						<label>행사소개</label>
+						<textarea rows="5" cols="30" id="eIntro" name="eIntro" placeholder="행사에 대해 작성해주세요."></textarea><br>
+						<label>행사날짜</label>
+						<input type="date" id="eSdt" name="eSdt">-<input type="date" id="eLdt" name="eLdt"><br>
+						<label>행사시간</label>
+						<input type="time" id="eStime" name="eStime">-<input type="time" id="eLtime" name="eLtime"><br>
+						<label>섭외비</label>
+						<input type="number" id="castingPrice" name="castingPrice">원
+						
+						<button type="button" id="cancel">취소</button>
+						<button type="button" id="casting">의뢰하기</button>
+					</div>
+				</form>
 			</div>
 		<div class="modal_layer"></div>
 	</div>
@@ -623,6 +684,35 @@
 				})
 	   })
 	   
+	   //의뢰 모달창 띄위기
+	    $('.castingUp').on('click', function() {
+		   $("#castingFrm").show();
+	   })
+	   
+	   //모달창에서 의뢰요청을 눌렀을 경우
+	   $("#casting").on('click', function() {
+		   let parm = $("#castingCntn").serialize();
+		   
+		   $.ajax({
+				url : "/casting/castingInsert",
+				method : 'post',
+				contentType : 'application/x-www-form-urlencoded',
+				data : parm,
+				beforeSend : function(xhr)
+               {  
+   				xhr.setRequestHeader(header, token);
+               },
+				success : function(data) {
+					alert('의뢰가 등록되었습니다.');
+					$("#castingFrm").hide();
+				},
+				fail : function(result) {
+					console.log(result)
+				}
+			})
+		    
+	   })
+	   
 	   //채팅버튼을 눌렀을 때
 		$(".chattingUp").on("click", function () {
 			$(".chat").toggleClass("active");
@@ -631,6 +721,7 @@
 			
 			//채팅방 구독 생성
 			function createChatRoom() {
+				console.log("1 채팅방 생성");
 				let chatroomDataList = new Array();
 				let chatroomData1 = {
 						toId : toId,
@@ -655,10 +746,9 @@
 						xhr.setRequestHeader(header, token);
 		            }
 		   		}).then(res => {
-		   			chattingList()
+		   			console.log("2 채팅방 생성 번호: " + cId);
 		   			cId = res;
-		   			console.log("cid:=======", cId);
-					connect(cId);
+		   			chattingList(cId)
 		   		})
 			}
 		   	
@@ -706,7 +796,6 @@
 						xhr.setRequestHeader(header, token);
 		            }
 		   		}).then(res => {
-		   			console.log('res:',res);
 		   			if(res != ''){
 		   				console.log('res.cId:', res.cid);
 		   				chattingList(res.cid);
@@ -715,7 +804,7 @@
 		   			}
 		   		})
 				$(".chat-popup").show();
-				//$(".chatbox").show();
+				$(".chatbox").show();
 			}
 	
 			//채팅화면이 사라진다.

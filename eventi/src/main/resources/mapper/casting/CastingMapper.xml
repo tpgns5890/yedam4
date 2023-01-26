@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.casting.mapper.CastingMapper">
+	<!-- 의뢰 전체 조회 -->
 	<select id="castingList" resultType="com.eventi.left.casting.service.CastingVO">
 		SELECT *
 		FROM CASTING
 	</select>
+	
+	<!-- 의뢰 추가 -->
+	<insert id="castingInsert">
+		INSERT INTO CASTING
+		VALUES('CA'||CAST_SEQ.NEXTVAL, #{userId}, #{clientId}, #{eType}, #{eIntro}, #{eSdt}, #{eLdt}, #{eStime}, #{eLtime}, #{castingPrice}, SYSDATE)
+	</insert>
 </mapper>

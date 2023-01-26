@@ -61,15 +61,19 @@
 }
 
 .chat-popup{
-	display: none;
+	/* display: none;
 	position: fixed;
 	top: 60px;
 	left: 700px;
 	width: 700px;
-	height: 500px;
-	z-index: 1;
-	float: right;
+	height: 500px; */
+	z-index: 9000;
 	background: white;
+	position:fixed;
+	bottom:50px;
+	right:110px;
+	z-index:9000;
+	display:none;
 
 }
 

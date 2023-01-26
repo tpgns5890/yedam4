@@ -52,8 +52,8 @@
 	
 	<!-- 사회자 입력 -->
 	<insert id="mcInsert">
-		INSERT INTO MC_PRTFL(USER_ID, ONE_INTRO, CARR_YEAR, CASTING_PRICE, MC_AREA, MC_TYPE, PROG_STYLE, SELF_INTRO, CAREER, DT)
-		VALUES(#{userId}, #{oneIntro}, #{carrYear}, #{castingPrice}, #{mcArea}, #{mcType}, #{progStyle}, #{selfIntro}, #{career}, SYSDATE)
+		INSERT INTO MC_PRTFL(USER_ID, USER_NAME, ONE_INTRO, CARR_YEAR, CASTING_PRICE, MC_AREA, MC_TYPE, PROG_STYLE, SELF_INTRO, CAREER, DT)
+		VALUES(#{userId}, #{userName}, #{oneIntro}, #{carrYear}, #{castingPrice}, #{mcArea}, #{mcType}, #{progStyle}, #{selfIntro}, #{career}, SYSDATE)
 	</insert>
 	
 	<!-- 사회자 수정 -->
