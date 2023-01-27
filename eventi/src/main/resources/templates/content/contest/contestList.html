@@ -278,7 +278,7 @@
 					}
 
 					//페이지 버튼 생성.
-					for (let i = page.startPage; i <= page.endPage; i++) {
+					for (let i = page.startPage; i < page.endPage; i++) {
 						if (page.page == i) {
 							$(ul).append($("<li/>") .text(i).css("font-size", "20px")
 													.css("padding", "10px")

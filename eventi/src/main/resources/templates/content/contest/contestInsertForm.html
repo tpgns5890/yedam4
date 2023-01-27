@@ -32,7 +32,7 @@
 			<br> <input type="checkbox" id="contestCheck">확인하였습니다.<br>
 
 			<!-- 공모전등록 입력폼 -->
-			<form action="/contest/insert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post" onsubmit="return check();">
+			<form action="/contest/insert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
 					<li>
@@ -69,6 +69,7 @@
 				<li><label>1 등</label><input id="wPay1" class="wPay" type="number" name="winnerPay[]" required="required" ><br /></li>
 				<li><label>2 등</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
 				<li><label>3 등</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
+				<li><label>등록비</label><input type="number" id="pay" name="pay" value="1" readonly="readonly"><br /></li>
 					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
 				
@@ -88,9 +89,8 @@
 					
 			<button type="reset">초기화</button>
 			<button type="button" id="saveFile" >불러오기</button>
-			<button type="button" id="insertBtn">등록(->결제)</button>
 			<button type="button" id="cancleBtn" onclick="location.href='/contest/List'">취소</button><br>
-			<button type="submit" id="insertForm">등록</button>
+			<button type="button" id="insertForm" onclick="check()">등록</button>
 			</form>
 			
 			
@@ -104,7 +104,6 @@
 					</ul>
 					<div id="modelBtn">
 						<button id="Payment" class="modelBtn1" style="width:50px;"  type="button" >결제</button>
-						<button id="cancle" class="modelBtn1"style="width:50px;" type="button">취소</button>
 					</div>
 				</div>
 			</div>
@@ -169,77 +168,134 @@
 			    saveModal.style.display = "none";
 			  }
 			}
-			// When the user clicks the button, open the modal 
-			$('#insertBtn').on('click', function () {
-			 	 modal.style.display = "block";
-			});
-			
 			//modal--------------------------------------------------------------------
 			
-			
-			//등록버튼 누를시
+			//등록버튼 누를시 네이버에디터
 			$('#insertForm').on('click', function () {
 				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
 				let cntn = document.getElementById("cntn").value;
 			
 			 });
-				
-			//폼 등록버튼 전송전 체크함수.
+	
+			
+			console.log($('#contestfrm').removeAttr());
+			
+			
+			//폼 등록버튼 -> 유의사항/임시저장/등록 및 불러오기수정(결제) 함수
 			function check(){
 					let check = $('input[type="checkbox"]').is(":checked");
 
 					if (check == false) {//유의사항 체크확인
 						alert('유의사항을 확인하세요.');
-						return false;
 					}
 					//임시저장 확인
 					else if ($('input[name="save"]').is(":checked") == true) {
-						console.log($(this));
-						if (!confirm('임시저장 하시겠습니까?')) {
-							return false;
+						if (confirm('임시저장 하시겠습니까?')) {
+							$('#contestfrm').submit(); //insert 실행
 						}
 					} 
 					else{//등록확인
-						if (!confirm('공모전을 등록하시겠습니까?')) {
-							return false;
+						if (confirm('공모전을 등록하시겠습니까?')) {
+							requestPay(); //결제함수실행.
 						}
-						return true;
 					}
 				}
+			// 결제함수
+			function requestPay(){
+				//등록시 모달창을 띄워서 결제정보를 확인.
+				 modal.style.display = "block";
+					
+					//입력한 값 변수저장
+					let ttl = $('input[name="ttl"]').val();
+					let date = $('input[name="dtReg"]').val();
+					let wpay1 =   parseInt($('input[id="wPay1"]').val());
+					let wpay2 =   parseInt($('input[id="wPay2"]').val());
+					let wpay3 =   parseInt($('input[id="wPay3"]').val());
+					let insertPay =   parseInt($('input[id="pay"]').val());
+					let total = (wpay1 + wpay2 + wpay1);
+					let payment = insertPay + total;
+					
+					//문자열 변경후 3자리 콤마지정.
+					total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					insertPay = insertPay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					payment = payment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					
+					
+					$('#contestPay').empty();
+					//li태그 생성후 모달창 붙여넣기
+					let li = ` <li> <span></span></li>
+								<li>제 목 : ${ttl} </li>
+								<li>등록일 : ${date} </li>
+								<li>총상금 : ${total} </li>
+								<li>등록비 : ${insertPay}</li>
+								<hr>
+								<li>총합계 : ${payment}</li>
+							`
+					$('#contestPay').append(li);
+				
+			$('#Payment').on("click" , function(){
+					const IMP = window.IMP; // 생략 가능
+					IMP.init("imp42430553"); // 예: imp00000000a
+					var today = new Date();
+					var hours = today.getHours(); // 시
+					var minutes = today.getMinutes();  // 분
+					var seconds = today.getSeconds();  // 초
+					var milliseconds = today.getMilliseconds();
+					var makeMerchantUid = hours + minutes + seconds + milliseconds;
+					//회원정보
+					let userId = '[[${session.member.userId}]]';
+					let userEmail = '[[${session.member.userEmail}]]';
+					let userName = '[[${session.member.name}]]';
+					let userPhone = '[[${session.member.userPhone}]]';
 			
-			//등록누를시 결제통해서 가도록.. 변경하기
-			$('#insertBtn').on("click", function(){
+					//결제창 실행코드.
+					IMP.request_pay({
+						pg: 'kicc', //고정코드
+						pay_method: 'card', //고정코드
+						merchant_uid: "evt" + makeMerchantUid, //상점에서 생성한 고유 주문번호
+						name: ttl,  // 공고제목,
+						amount: payment,  // 가격
+						buyer_email: userEmail,	
+						buyer_name: userName,	
+						buyer_tel: userPhone	
+					}, 
+					// callback
+					function(rsp){ 
+						if (rsp.success) {
+							// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+							// jQuery로 HTTP 요청
+							$.ajax({
+								url: "/contest/requestPay",
+								method: "POST",
+								contentType: "application/json",
+								data: JSON.stringify({
+							        moType:'M1',
+							        moPrice:payment,
+							        userId,
+									payNo: rsp.imp_uid, // 결제 고유번호
+							   }),
+							   beforeSend : function(xhr){
+				                    xhr.setRequestHeader(header, token);
+				               },
+				               success: function(res){
+				            	   console.log($('#contestfrm'));
+				                  $('#contestfrm').submit(); ///공모전 등록
+				                  alert("공모전이 등록되었습니다.");
+				                  
+				               },
+				               error: function(err){
+				                  console.log(err)
+				               }
+			             })
+						} else {
+							alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+						}
+					})//callback 끝
+				})//click event 끝
 				
-				//입력한 값 변수저장
-				let ttl = $('input[name="ttl"]').val();
-				let date = $('input[name="dtReg"]').val();
-				let wpay1 =   parseInt($('input[id="wPay1"]').val());
-				let wpay2 =   parseInt($('input[id="wPay2"]').val());
-				let wpay3 =   parseInt($('input[id="wPay3"]').val());
-				let total = (wpay1 + wpay2 + wpay1);
-				let insertPay = parseInt(30000);
-				let Payment = insertPay + total;
-				
-				//문자열 변경후 3자리 콤마지정.
-				total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				insertPay = insertPay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				Payment = Payment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				
-				
-				$('#contestPay').empty();
-				//li태그 생성후 모달창 붙여넣기
-				let li = ` <li> <span></span></li>
-							<li>제 목 : ${ttl} </li>
-							<li>등록일 : ${date} </li>
-							<li>총상금 : ${total} </li>
-							<li>등록비 : ${insertPay}</li>
-							<hr>
-							<li>총합계 : ${Payment}</li>
-						`
-				$('#contestPay').append(li);
-				
-				
-			}); 
+			}
+			
+			//-------------------------------------------------------------------
 			
 			 //파일 업로드 이미지 미리보기
 		    //파일 INPUT창에 변화가 있을 경우 실행
@@ -334,11 +390,11 @@
 									$("#style").val(data[0].style).attr("selected", true);
 								}
 								//등록된 상금내역 불러오기
-								$('input[name="winnerPay[]"]').each(function (i) {
+							 	$('input[name="winnerPay[]"]').each(function (i) {
 									if(data[i].wpay != null){
 										$(this).val(data[i].wpay);
 									}
-								})
+								}) 
 								
 								console.log(data[0].img)
 								if(data[0].img != null){

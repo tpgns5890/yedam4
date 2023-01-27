@@ -28,7 +28,10 @@ import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
+import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.service.MoneyService;
+import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 
@@ -36,8 +39,7 @@ import groovy.util.logging.Log4j;
 
 /**
  * 
- * @author 배수빈
- * 공모전에 대한 컨트롤러
+ * @author 배수빈 공모전에 대한 컨트롤러
  *
  */
 @Controller
@@ -59,6 +61,10 @@ public class ContestController {
 	LikesService likeService;
 	@Autowired
 	QuestionsService qService;
+	@Autowired
+	MemberService memberService;
+	@Autowired
+	MoneyService moneyService;
 
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
@@ -210,7 +216,7 @@ public class ContestController {
 
 	// 나의 공모전게시글관리
 	@GetMapping("/mySelect")
-	public String mySelect(Model model, ContestVO vo, @ModelAttribute("paging")PagingVO paging) {
+	public String mySelect(Model model, ContestVO vo, @ModelAttribute("paging") PagingVO paging) {
 		model.addAttribute("contestList", service.myContestList(vo, paging));
 		return "content/myPage/myCotestList";
 	}
@@ -252,8 +258,24 @@ public class ContestController {
 		model.addAttribute("paging", paging);
 		return "content/myPage/myQnaList";
 	}
-	
-			
-			
+
+	// 공모전등록시 결제 완료후 -> insert 
+	@PostMapping("requestPay")
+	@ResponseBody
+	public MoneyVO ContestRequestPay(@RequestBody MoneyVO vo) {
+
+		// 등록된 정보조회(입금자명,은행코드,계좌번호)
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		user = memberService.getMember(vo.getUserId());
+
+		// 공통정보 세팅
+		vo.setBankName(user.getBank()); // 은행정보
+		vo.setBankAccount(user.getAccnt()); // 계좌번호
+		vo.setTargetId(service.getSequence()); //공모전 결제후 입금(맥시멈 시퀀스값 설정)
+		
+		moneyService.insertMoney(vo);
+		return vo;
+	}
 
 }
