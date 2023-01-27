@@ -13,7 +13,7 @@ public interface EstMapper {
 	// 견적요청서
 	public EstVO getEst(String eno); // 1건조회
 
-	public List<EstVO> getEstList(EstVO estVO, PagingVO paging); // 전체조회
+	public List<EstVO> getEstList(EstVO estVO); // 전체조회
 
 	public int insertEst(EstVO estVO); // 견적요청서 등록
 
@@ -35,4 +35,6 @@ public interface EstMapper {
 	public List<PropGdVO> getPropGdList(PropGdVO propGdVO); //제안서에 등록된 물품 조회
 	
 	public int chooesProp(PropVO propVO); //제안서 채택
+	
+	public int count(EstVO estVO); //전체 개수 count
 }

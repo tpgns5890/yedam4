@@ -28,7 +28,7 @@
   text-align: left;
 }
 /* The container */
-.container {
+.checkList {
   display: block;
   position: relative;
   padding-left: 35px;
@@ -42,7 +42,7 @@
 }
 
 /* Hide the browser's default radio button */
-.container input {
+.checkList input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -60,12 +60,12 @@
 }
 
 /* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
+.checkList:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
-.container input:checked ~ .checkmark {
+.checkList input:checked ~ .checkmark {
   background-color: #2196F3;
 }
 
@@ -77,12 +77,12 @@
 }
 
 /* Show the indicator (dot/circle) when checked */
-.container input:checked ~ .checkmark:after {
+.checkList input:checked ~ .checkmark:after {
   display: block;
 }
 
 /* Style the indicator (dot/circle) */
-.container .checkmark:after {
+.checkList .checkmark:after {
  	top: 9px;
 	left: 9px;
 	width: 8px;
@@ -160,43 +160,45 @@ h1 {
  <!-- 행사유형 선택 -->
  <form id="insertFrm" name="insertFrm">
 <div id="bodyContents">
+
+<!-- 상태바 -->
 <div class="progressbar">
 <!--   <span class="progress">0</span> -->
 </div>
 <h1>어떤 행사를 기획중이신가요?</h1>
 <table id="customers">
   <tr>
-    <td><label class="container">기념식
+    <td><label class="checkList">기념식
   <input type="radio" name="eventType" value="기념식">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">축제/가요제/플리마켓
+   <td><label class="checkList">축제/가요제/플리마켓
   <input type="radio" name="eventType" value="축제/가요제/플리마켓">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">체육대회/단합행사
+   <td><label class="checkList">체육대회/단합행사
   <input type="radio" name="eventType" value="체육대회/단합행사">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">세미나/포럼/워크샵
+   <td><label class="checkList">세미나/포럼/워크샵
   <input type="radio" name="eventType" value="세미나/포럼/워크샵">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">전시회/박람회
+   <td><label class="checkList">전시회/박람회
   <input type="radio" name="eventType" value="전시회/박람회">
   <span class="checkmark"></span>
 </label></td>
   </tr>
     <tr>
-   <td><label class="container">신년회/송년회
+   <td><label class="checkList">신년회/송년회
   <input type="radio" name="eventType" value="신년회/송년회">
   <span class="checkmark"></span>
 </label></td>
@@ -207,52 +209,53 @@ h1 {
 
  <!-- 행사장소 선택 -->
 <div id="bodyContents" class="hidden">
+<div class="progressbar"></div>
 <h1>행사 예정 장소는 어디인가요?</h1>
 <table id="customers">
   <tr>
-    <td><label class="container">호텔
+    <td><label class="checkList">호텔
   <input type="radio"  name="expectedPl" value="호텔">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">이벤트/컨벤션홀
+   <td><label class="checkList">이벤트/컨벤션홀
   <input type="radio"  name="expectedPl" value="이벤트/컨벤션홀">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">주거 공간(주택,빌라 등)
+   <td><label class="checkList">주거 공간(주택,빌라 등)
   <input type="radio"  name="expectedPl" value="주거 공간">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">사내 공간(강당, 사무실, 로비 등)
+   <td><label class="checkList">사내 공간(강당, 사무실, 로비 등)
   <input type="radio"  name="expectedPl" value="사내 공간">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">기타 실내(극장, 공연장, 클럽 등)
+   <td><label class="checkList">기타 실내(극장, 공연장, 클럽 등)
   <input type="radio"  name="expectedPl" value="기타 실내">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">기타 야외(체육관, 공원, 캠핌장 등)
+   <td><label class="checkList">기타 야외(체육관, 공원, 캠핌장 등)
   <input type="radio"  name="expectedPl" value="기타 야외">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">미정
+   <td><label class="checkList">미정
    <input type="radio" name="expectedPl" value="미정">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td class="etc"><label class="container" >기타
+   <td class="etc"><label class="checkList" >기타
   <input type="radio" name="expectedPl" id="expectedPlEtc">
   <span class="checkmark"></span>
 </label></td>
@@ -264,40 +267,41 @@ h1 {
 
  <!-- 행사규모 선택 -->
 <div id="bodyContents" class="hidden">
+<div class="progressbar"></div>
 <h1>행사 규모는 어느정도인가요?</h1>
 <table id="customers">
   <tr>
-    <td><label class="container">30명 미만
+    <td><label class="checkList">30명 미만
   <input type="radio" name="pats" value="30">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">50명 미만
+   <td><label class="checkList">50명 미만
   <input type="radio" name="pats" value="50">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">100명 미만
+   <td><label class="checkList">100명 미만
   <input type="radio" name="pats" value="100">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">200명 미만
+   <td><label class="checkList">200명 미만
   <input type="radio" name="pats" value="200">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">300명 미만
+   <td><label class="checkList">300명 미만
   <input type="radio" name="pats" value="300">
   <span class="checkmark"></span>
 </label></td>
   </tr>
     <tr class="etc">
-   <td><label class="container">400명 이상
+   <td><label class="checkList">400명 이상
   <input type="radio" name="pats" value="400">
   <span class="checkmark"></span>
 </label></td>
@@ -309,6 +313,7 @@ h1 {
 
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
+ <div class="progressbar"></div>
 <h1>행사 날짜를 선택해주세요.</h1>
 <input type="date" name="eventDate" value=""><br>
  <input type="button" value="이전" class="prev">
@@ -317,16 +322,17 @@ h1 {
 
  <!-- 행사시작시간 선택 -->
 <div id="bodyContents" class="hidden">
+ <div class="progressbar"></div>
 <h1>행사 시작 시간은 언제인가요?</h1>
 <table id="customers">
   <tr>
-    <td><label class="container">오전
+    <td><label class="checkList">오전
   <input type="radio"  name="eventTime" value="am">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">오후
+   <td><label class="checkList">오후
   <input type="radio"  name="eventTime" value="pm">
   <span class="checkmark"></span>
 </label></td>
@@ -342,40 +348,41 @@ h1 {
 
  <!-- 행사소요시간 선택 -->
 <div id="bodyContents" class="hidden">
+ <div class="progressbar"></div>
 <h1>행사 예상 소요시간을 선택해주세요</h1>
 <table id="customers">
   <tr>
-    <td><label class="container">1시간
+    <td><label class="checkList">1시간
   <input type="radio"  name="eventDuration" value="1">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">2시간
+   <td><label class="checkList">2시간
   <input type="radio"  name="eventDuration" value="2">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">3시간
+   <td><label class="checkList">3시간
   <input type="radio"  name="eventDuration" value="3">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
-   <td><label class="container">4시간
+   <td><label class="checkList">4시간
   <input type="radio"  name="eventDuration" value="4">
   <span class="checkmark"></span>
 </label></td>
   </tr>
    <tr>
-   <td><label class="container">하루 이상
+   <td><label class="checkList">하루 이상
   <input type="radio"  name="eventDuration" value="24">
   <span class="checkmark"></span>
 </label></td>
   </tr>
    <tr>
-   <td><label class="container">기타
+   <td><label class="checkList">기타
   <input type="radio"  name="eventDuration" class="etc" id="eventDurationEtc">
   <span class="checkmark"></span>
 </label></td>
@@ -387,6 +394,7 @@ h1 {
  
   <!-- 행사지역 선택 -->
  <div id="bodyContents" class="hidden">
+   <div class="progressbar"></div>
 <h1>행사 예상 지역을 선택해주세요.</h1>
 <select name="expectedLocal" >
 	<option value="A00">==지역선택==</option>
@@ -410,6 +418,7 @@ h1 {
 
  <!-- 행사 희망사항 입력 -->
 <div id="bodyContents" class="hidden">
+ <div class="progressbar"></div>
 <h1>행사 관련 희망사항을 알려주세요.</h1>
 <input name="wishes" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
  <input type="button" value="이전" class="prev">
@@ -422,7 +431,7 @@ h1 {
 <th:block sec:authorize="isAuthenticated()">
 <input type="button" value="견적서 보내기" class="submit">
 </th:block> 
-<!--  <input type="hidden" th:value="${session.member.userId}" name="userId" />  -->
+<!-- <input type="hidden" th:value="${session.member.userId}" name="userId" /> -->
 </div>
 <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 </form>
@@ -456,8 +465,9 @@ $('input:radio').click(function() {
 	
 //다음 버튼 클릭 시
 $('.next').click(function() {
+	
 	var name = $(this).attr('id');
-	//console.log(!$('input:radio[id='+name+'etcVal]').val())
+
 	
 	//선택항목 별 선택여부 체크
 	switch(name){
@@ -521,14 +531,23 @@ var timeOff = new Date().getTimezoneOffset()*60000;
 var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 document.getElementById('eventDate').setAttribute("min", today);
 
-//견적서 보내기 버튼 클릭 시
+//견적요청서 등록
 $('.submit').click(function() {
+	var userId = "${session.member.userId}";
+	console.log(usreId)
+	if(userId == null){
+		alert("로그인 후 이용해주세요.")
+		console.log('비회원 견적등록 시도')
+		login();
+		return false;
+	}
 	checkUnload = false; //페이지 벗어날 때 alert 제한
 	//csrf 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 	
 	var data = $("form[name=insertFrm]").serializeObject();
+	console.log(data)
   	//견적요청서 등록
  	$.ajax({
 		url: "/insertEst",

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.rent.service.RentGdVO;
 
 public interface EstService {
@@ -32,5 +33,7 @@ public interface EstService {
 	public List<PropGdVO> getPropGdList(PropGdVO propGdVO); //제안서에 등록된 물품 조회
 	
 	public int chooesProp(PropVO propVO); //제안서 채택
+	
+	public int count(EstVO estVO); //전체 개수 count
 	
 }

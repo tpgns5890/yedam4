@@ -27,7 +27,11 @@ public class EstServiceImpl implements EstService {
 	//견적요청서 전체조회
 	@Override
 	public List<EstVO> getEstList(EstVO estVO,PagingVO paging) {
-		return estMapper.getEstList(estVO, paging);
+		paging.setTotalRecord(estMapper.count(estVO));
+		paging.setPageUnit(10);
+		estVO.setFirst(paging.getFirst());
+		estVO.setLast(paging.getLast());
+		return estMapper.getEstList(estVO);
 	}
 	//견적요청서 등록
 	@Override
@@ -85,5 +89,11 @@ public class EstServiceImpl implements EstService {
 	@Override
 	public int chooesProp(PropVO propVO) {
 		return estMapper.chooesProp(propVO);
+	}
+	
+	//전체 개수 count
+	@Override
+	public int count(EstVO estVO) {
+		return estMapper.count(estVO);
 	}
 }

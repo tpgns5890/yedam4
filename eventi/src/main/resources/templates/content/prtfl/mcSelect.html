@@ -718,7 +718,8 @@
 			$(".chat").toggleClass("active");
 			
 			let toId = $('#left').children().children('#userId').text();
-			
+			console.log("로그인된 아이디== "+fromId)
+			console.log("메세지받을 아이디== "+toId)
 			//채팅방 구독 생성
 			function createChatRoom() {
 				console.log("1 채팅방 생성");
