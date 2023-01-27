@@ -92,6 +92,8 @@ public class McPrtflServiceImpl implements McPrtflService{
 	    uploadFiles(uploadFile, mcPrtflVO);
 	    
 		return r;
+		
+		
 	}
 	
 	//파일 업로드
