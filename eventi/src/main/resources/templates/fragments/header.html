@@ -52,7 +52,9 @@
               <li class="dropdown"><a class="dropdown" href="/faqList">FAQ</a></li>
             </ul>
           </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()"><a href="/myPage/userMypage" class="nav-link">My</a>
+          <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a href="/admin/adminMain" class="nav-link">사이트관리</a>
+          </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()"><a href="/myPage/userMypage" class="nav-link" th:text="${session.member.userId}"></a>
           </li>
           <li class="nav-item">
             <button class="btn btn-border-w btn-round btn-xs" th:onclick="|location.href='@{/memQualification}'|"
