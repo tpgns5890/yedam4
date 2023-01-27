@@ -92,7 +92,7 @@ public class McPrtlController {
 		//후기 평균 별점, 전체건수
 		model.addAttribute("recount", reviewService.getReviewAvg(reviewVO));
 		
-		//의뢰폼 행사 유형
+		//의뢰폼 행사 유형으로 사용
 		model.addAttribute("types", codeService.getType());
 		
 		return "content/prtfl/mcSelect";
@@ -109,6 +109,7 @@ public class McPrtlController {
 	//사회자입력폼으로 이동
 	@GetMapping("/mcInsert")
 	public String mcInsert(Model model, McPrtflVO mcPrtlVo) {
+		//option 코드 가져오기
 		model.addAttribute("areas", codeService.getCountry());
 		model.addAttribute("types", codeService.getType());
 		model.addAttribute("mcStyles", codeService.getMcStyle());
@@ -124,14 +125,29 @@ public class McPrtlController {
 		return "redirect:/prtfl/mcList";
 	}
 	
-	//사회자입력폼으로 이동
+	//사회자수정폼으로 이동
 	@GetMapping("/mcUpdate")
-	public String mcUpdate(Model model, McPrtflVO mcPrtlVo) {
+	public String mcUpdate(Model model, McPrtflVO mcPrtflVo) {
+		//option 코드 가져오기
 		model.addAttribute("areas", codeService.getCountry());
 		model.addAttribute("types", codeService.getType());
 		model.addAttribute("mcStyles", codeService.getMcStyle());
 		
+		//사회자 정보 가져오기
+		model.addAttribute("mcSelect", mcPrtflService.mcSelect(mcPrtflVo));
+		//사진 및 동영상
+		List<FilesVO> files = new ArrayList<>();
+		files = filesService.fileList(mcPrtflVo.getUserId());
+		model.addAttribute("files", files);
+		
 		return "content/prtfl/mcUpdate";
+	}
+	
+	//사회자 정보 수정
+	@PostMapping("/mcUpdate")
+	public String mcUpdateFrm(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		mcPrtflService.mcUpdate(mcPrtflVO, filesVO, uploadFile);
+		return "redirect:/prtfl/mcSelect?userId=" + mcPrtflVO.getUserId();
 	}
 	
 }

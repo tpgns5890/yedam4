@@ -68,47 +68,66 @@
 	    background-position: -2800px 0;
 	  }
 	  
-	   .modal {
-			display: none;
-			position: fixed;
-			top: 25em;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 1;
-			width: 100%;
-		}
+	  #love{
+	  	float: right;
+	  }
+	  
+   .modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
+	}
 
-		.modal h2 {
-			margin: 0;
-		}
+	.modal h2 {
+		margin: 0;
+	}
 
-		.modal button {
-			display: inline-block;
-			width: 100px;
-			border: 0.2px solid black;
-			border-radius: 5px;
-		}
+	.modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
 
-		.modal .modal_content {
-			width: 350px;
-			min-height: 200px;
-			margin: 0 auto;
-			padding: 20px;
-			background: #fff;
-			border: 0.5px solid #666;
-			border-radius: 15px;
-		}
+	.modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
 
-		.modal .modal_layer {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.5);
-			z-index: -1;
-		}
+	.modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.box {
+	    width: 150px;
+	    height: 150px; 
+	    border-radius: 100%;
+	    overflow: hidden;
+	    text-align: center !important;
+	    margin:0 auto;
+	}
+	
+	.profile {
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover;
+	}
 </style>
 </head>
 
@@ -135,13 +154,18 @@
   <nav id="left">
   	<div class="border">
   		<label class="label" th:text="'조회수' + ${mcSelect.inq}"></label>
+  		<label class="label" th:text="'좋아요수' + ${mcSelect.cnt}"></label>
+  		<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
+  		<hr>
+  		<br><br>
   		
-  		<div class="stage">
-  			<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
-   		</div>
-   		<hr>
+  		<div class="box">
+		<img class="profile" th:src="|/fileView/${mcSelect.img}|">
+  		</div>
   		
-  		<label class="label" id="userId" th:text="${mcSelect.userId}"></label>
+  		<label style="display:none;"class="label" id="userId" th:text="${mcSelect.userId}"></label><br>
+  		<label class="label" id="userName" th:text="${mcSelect.userName}"></label><br>
+  		<label class="label" id="mcArea" th:text="${mcSelect.mcArea}"></label>
   		<hr>
   		
   		<label class="label" th:text="${mcSelect.oneIntro}"></label>

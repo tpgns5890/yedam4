@@ -28,5 +28,5 @@ public interface McPrtflService {
 	public List<ReplyVO> mcReply(ReplyVO replyVO);
 	
 	//사회자 수정
-	public int mcUpdate(McPrtflVO mcPrtlVo);
+	public int mcUpdate(McPrtflVO mcPrtlVO, FilesVO filesVO, MultipartFile[] uploadFile);
 }

@@ -25,5 +25,5 @@ public interface McPrtflMapper {
 	public int mcInsert(McPrtflVO mcPrtflVO);
 	
 	//사회자 수정
-	public int mcUpdate(McPrtflVO mcPrtlVo);
+	public int mcUpdate(McPrtflVO mcPrtlVO);
 }

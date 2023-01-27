@@ -313,6 +313,7 @@
 							$("#bBoardForm").attr("action", "/bboard/bUpdate");
 						}
 					} else {
+						$("#button_box").empty();
 						for(r of data){
 							$("#modal").show();
 							$("#button_box").append(a(r));
@@ -348,6 +349,7 @@
 	            },
 				success : function(data) {
 					console.log(data);
+							$("#bBoardNo").val("");
 							$("#bBoardNo").val(data.bboardNo);
 							$("#ttl").val(data.ttl);
 							$("input:radio[name='lclsf']:radio[value='"+data.lclsf+"']").attr('checked', true);

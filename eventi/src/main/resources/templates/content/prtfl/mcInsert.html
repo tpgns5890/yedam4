@@ -171,8 +171,8 @@
 			<label class="label" for="qna">질문</label> 
 			<select id="qna" name="qna">
 				<option selected>질문을 골라주세요.</option>
-				<option value="Q1">Q.나를 섭외해야되는 이유는?</option>
-				<option value="Q2">Q.나의노하우는?</option>
+				<option value="Q1">나를 섭외해야되는 이유는?</option>
+				<option value="Q2">나의노하우는?</option>
 			</select>
 		</div>
 	</div>
@@ -321,7 +321,8 @@
     })
     
     function mcAreaFun(e) {
-		let tagValue = e.options[e.selectedIndex].text;
+		let tagText = e.options[e.selectedIndex].text;
+		let tagValue = e.options[e.selectedIndex].value;
 		
 		// 값이 없으면 동작 안합니다.
         if (tagValue !== "") {
@@ -332,8 +333,7 @@
             })
           // 태그 중복 검사
           if (result.length == 0) {
-            $("#mcAreaL").append("<li class='tag-item'>" + tagValue + "<span class='area-del-btn' idx='" + areaCounter + "'>x</span></li>");
-            console.log(tagValue);  
+            $("#mcAreaL").append("<li class='tag-item'>" + tagText + "<span class='area-del-btn' idx='" + areaCounter + "'>x</span></li>");  
             areaAddTag(tagValue);
           } else {
             alert("태그값이 중복됩니다.");
@@ -343,7 +343,8 @@
       };
       
       function mcTypeFun(e) {
-    	 let tagValue = e.options[e.selectedIndex].text;
+    	  let tagText = e.options[e.selectedIndex].text;
+  		  let tagValue = e.options[e.selectedIndex].value;
     	 
     	// 값이 없으면 동작 안합니다.
          if (tagValue !== "") {
@@ -356,7 +357,7 @@
            // 태그 중복 검사
            if (result.length == 0) {
              $("#mcTypeL")
-               .append("<li class='tag-item'>" + tagValue + "<span class='type-del-btn' idx='" + typeCounter + "'>x</span></li>");
+               .append("<li class='tag-item'>" + tagText + "<span class='type-del-btn' idx='" + typeCounter + "'>x</span></li>");
              typeAddTag(tagValue);
            } else {
              alert("태그값이 중복됩니다.");
@@ -366,7 +367,8 @@
       }
       
       function progStyleFun(e){
-    	  let tagValue = e.options[e.selectedIndex].text;
+    	  let tagText = e.options[e.selectedIndex].text;
+  		  let tagValue = e.options[e.selectedIndex].value;
      	 
       	// 값이 없으면 동작 안합니다.
            if (tagValue !== "") {
@@ -379,7 +381,7 @@
              // 태그 중복 검사
              if (result.length == 0) {
                $("#progStyleL")
-                 .append("<li class='tag-item'>" + tagValue + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
+                 .append("<li class='tag-item'>" + tagText + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
                styleAddTag(tagValue);
              } else {
                alert("태그값이 중복됩니다.");
