@@ -6,7 +6,7 @@
 
 
 
-<div layout:fragment="content">
+<head>
 <style>
 .label{
 color: black;
@@ -64,7 +64,8 @@ color: black;
 			justify-content: flex-end;
 		}
 </style>
-
+</head>
+<div layout:fragment="content">
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
           <div class="container">
             <div class="row">
@@ -118,22 +119,7 @@ color: black;
 								<label class="label" for="#">행사유형</label> 
 								<select id="eType" name="eType">
 									<option value="">행사유형을 선택해 주세요.</option>
-									<option value="E01">결혼식</option>
-									<option value="E02">돌잔치</option>
-									<option value="E03">개인행사</option>
-									<option value="E04">기업행사</option>
-									<option value="E05">각종축제</option>
-									<option value="E06">기념식</option>
-									<option value="E07">가요제</option>
-									<option value="E08">플리마켓</option>
-									<option value="E09">체육대회</option>
-									<option value="E10">단합행사</option>
-									<option value="E11">세미나</option>
-									<option value="E12">포럼</option>
-									<option value="E13">워크샵</option>
-									<option value="E14">전시회</option>
-									<option value="E15">박람회</option>
-									<option value="E00">기타</option>
+									<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 								</select>
 							</div>
 						</div>
@@ -162,7 +148,7 @@ color: black;
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">자격</label>
-								<textarea name="preference" class="form-control" id="preference" cols="30" rows="4" ></textarea>
+								<textarea name="qualification" class="form-control" id="qualification" cols="30" rows="4" ></textarea>
 							</div>
 						</div>
 						
@@ -194,9 +180,8 @@ color: black;
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">회원ID</label>
-								<input type="text" name="userId" id="userId">
-								<input type="text" class="form-control" name="writer" id="writer" th:value="${session.member.userId}" readonly>
+								<label class="label" for="userId">회원ID</label>
+								<input type="text" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>
 							</div>
 						</div>
 
@@ -305,18 +290,19 @@ $('#insert').on('click', function insert() {
 			$.ajax({
 				url : "/jSave",
 				method : 'post',
-				data : JSON.stringify({writer:userId, save:'Y'}),
+				data : JSON.stringify({userId:userId, save:'Y'}),
 	   			contentType : "application/json",
 	   			beforeSend : function(xhr)
 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 					xhr.setRequestHeader(header, token);
 	            },
 				success : function(data) {
-					console.log(data);
+					console.log("=======",data);
 					//임시저장된 게시글이 없을 경우
 					if(data == 0){
 						alert('임시저장된 게시글이 없습니다.');
 					} else {
+						$("#button_box").empty();
 						for(r of data){
 							$("#modal").show();
 							$("#button_box").append(a(r));
@@ -352,14 +338,24 @@ $('#insert').on('click', function insert() {
 	            },
 				success : function(data) {
 					console.log(data);
+							//번호
 							$("#jobNo").val(data.jobNo);
-							$("#ttl").val(data.ttl);
+							//제목
+							$("#title").val(data.title);
+							//수당
+						 	$("#pay").val(data.pay);
+						 	//위치
+							$("#loc").val(data.loc);
+							//근무시간
+							$("#wHour").val(data.wHour);
+							//자격
+							$("#qualification").val(data.qualification);
+							//우대사항
+							$("#preference").val(data.preference);
+							///행사유형
+	    					$("#eType").val(data.etype).prop("selected", true);
 							
-							if(data.eType != null){
-								$("#eType").val(data.eType).attr("selected", true);
-							}
-							oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
-							
+							oEditors.getById["jobCntn"].exec("PASTE_HTML", [data.jobCntn]);
 							$("#jobInsert").attr("action", "/job/jobUpdate");
 						},
 				fail : function(result) {

@@ -48,16 +48,14 @@
 	<!-- 구직자 채용 -->
 	<update id="hireUpdate" parameterType="com.eventi.left.resume.service.ResumeBoardVO">
 		UPDATE RESUME_BOARD
-		SET
-		HIRE = 'Y'
+		SET   HIRE = 'Y'
 		WHERE RESUME_NO = #{resumeNo}
 	</update>
 	
 	<!-- 구직자 미채용 -->
 	<update id="unHireUpdate" parameterType="com.eventi.left.resume.service.ResumeBoardVO">
 		UPDATE RESUME_BOARD
-		SET
-		HIRE = 'N'
+		SET HIRE = 'N'
 		WHERE RESUME_NO = #{resumeNo}
 	</update>
 </mapper>

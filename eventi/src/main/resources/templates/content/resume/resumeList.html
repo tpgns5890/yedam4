@@ -51,7 +51,7 @@
 	</table> -->
 
 	<section class="module" id="news">
-		<input type="checkBox" value="채용" class="hire" id="allHire">
+		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
 		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
 		<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
 		<div class="container">
@@ -66,13 +66,13 @@
 				<div class="col-sm-6 col-md-4 col-lg-4"
 					th:each="res : ${resumeList}">
 					<th:block th:if="${res.hire} == 'Y'">
-						<td><input class="hire" type="checkBox" value="Y"
-							onkeyup="hire()" th:id=${res.resumeNo} name="allHire" checked></td>
+						<td><input class="hire" type="checkBox" th:value="${res.resumeNo}" 
+							onkeyup="hire()" name="allHire" checked></td>
 					</th:block>
 
 					<th:block th:if="${res.hire} == 'N'">
 						<td><input class="hire" type="checkBox" value="N"
-							onkeyup="hire()" th:id=${res.resumeNo} name="allHire" ></td>
+							onkeyup="hire()" th:value="${res.resumeNo}" name="allHire" ></td>
 					</th:block>
 
 					<div class="post mb-20">
@@ -126,9 +126,9 @@ allHire.addEventListener('change', function(){
 $('.allHire').on('click', function (e){
 	console.log("클릭")
 	let checks = [];
-	let obj ={}
+ 	
 	 $("[name='allHire']:checked").each(function(i, checkbox){
-		 obj["resumeNo"] = checkbox.eq(i).id;
+		 let obj ={resumeNo:checkbox.value};
 		 checks.push(obj);
 	})
 	console.log(checks)
@@ -139,6 +139,7 @@ $('.allHire').on('click', function (e){
 		$.ajax({
 			url: '/hireUpdates',
 			method: "post",
+			contentType: "application/json",
 			data: JSON.stringify(checks),
 			beforeSend: function (xhr) {
 				xhr.setRequestHeader(header, token);
@@ -208,7 +209,36 @@ $('.unHireBtn').on('click', function (e){
 
 	}
 });
-
+//구직자 부분취소
+$('.unAllHire').on('click', function (e){
+	console.log("클릭")
+	let checks = [];
+ 	
+	 $("[name='allHire']:checked").each(function(i, checkbox){
+		 let obj ={resumeNo:checkbox.value};
+		 checks.push(obj);
+	})
+	console.log(checks)
+	if(!confirm('채용을 취소하시겠습니까?')){
+		return false;
+	}else{
+		//업데이트처리 ajax
+		$.ajax({
+			url: '/unHireUpdates',
+			method: "post",
+			contentType: "application/json",
+			data: JSON.stringify(checks),
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			
+				alert(res+'/'+checks.length+'명 채용 취소완료');
+				location.href=`/resumeList`
+			
+		})  
+	} 
+});
 </script>
 </div>
 </html>

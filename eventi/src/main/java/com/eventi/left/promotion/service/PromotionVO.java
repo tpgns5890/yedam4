@@ -1,8 +1,11 @@
 package com.eventi.left.promotion.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.eventi.left.files.service.FilesVO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +26,7 @@ public class PromotionVO {
 	private String entrance; //입장료유무
 	private String accommodate; //수용인원
 	private String img; //첨부파일
-	private Integer see; //관심수
+	private Integer see; //조회수
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date dt; //작성날짜
 	
@@ -32,4 +35,7 @@ public class PromotionVO {
 	
 	//정렬
 	String orderCol;
+	
+	//파일리스트
+	private List<FilesVO> files;  
 }

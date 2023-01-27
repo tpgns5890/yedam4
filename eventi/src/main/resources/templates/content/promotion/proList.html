@@ -20,45 +20,6 @@
       </div>
    </section>
 
-<!-- 게시글 검색 -->
-	<!--<input type="text" name="search">
-	<input type="button" id="find" value="찾기"><span></span></input>
-
-
-<select id="etype" name="etype"  onchange="order()">
-		<option value="" selected>------</option>
-		<option value="E00" th:selected="${promotionVO.eType=='E00'}" >기타</option>
-		<option value="E01" th:selected="${promotionVO.eType=='E01'}" >결혼식</option>
-		<option value="E02" th:selected="${promotionVO.eType=='E02'}" >돌잔치</option>
-		<option value="E03" th:selected="${promotionVO.eType=='E03'}" >개인행사</option>
-		<option value="E04" th:selected="${promotionVO.eType=='E04'}" >기업행사</option>
-		<option value="E05" th:selected="${promotionVO.eType=='E05'}" >각종축제</option>
-	</select> -->
-	
- <!--   <section class="ftco-section" >
-<button type="button" class="btn btn-outline-primary" onclick="proInsert()">게시글등록</button>
-      <div class="col-sm-6 col-md-4 col-lg-4">
-        <div class="row d-flex" id="check">
-          <div class="col-lg-6 d-flex align-items-stretch ftco-animate"  th:each="pro : ${proList}">
-          	<div class="blog-entry d-md-flex" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|">
-              <div class="text p-4 bg-light">
-               <img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-              	<div class="meta">
-              		<p><span th:text=${pro.proNo}></span></p> 
-              		<p><span th:text=${pro.see}></span></p>
-              	</div>
-                <h3 class="heading mb-3" th:text=${pro.eName}></h3>
-                 <img th:src="${pro.img}" />
-                 <p th:text=${pro.eType}></p> 작성자:<p th:text=${pro.userId}></p>
-                <a href="#" class="btn-custom">Continue <span class="fa fa-long-arrow-right"></span></a>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>-->
-    
   <section class="module" id="team">
   <!-- 게시글 검색 -->
   <form action="/proList" id="searchForm">

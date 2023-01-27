@@ -1,10 +1,16 @@
 package com.eventi.left.resume.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.files.FileDto;
+import com.eventi.left.files.UploadFileMethod;
+import com.eventi.left.files.mapper.FilesMapper;
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.resume.mapper.ResumeBoardMapper;
 import com.eventi.left.resume.service.ResumeBoardVO;
@@ -15,6 +21,8 @@ public class ResumeServiceImpl implements ResumeService{
 
 	@Autowired 
 	ResumeBoardMapper resumeMapper;
+	@Autowired FilesMapper filesMapper;
+	@Autowired UploadFileMethod newUp;
 	
 	//구직자 전체조회(메인구인게시판)
 	@Override
@@ -46,9 +54,15 @@ public class ResumeServiceImpl implements ResumeService{
 	
 	//구직신청폼 등록
 	@Override
-	public int ApplyInsert(ResumeBoardVO resumeBoardVO) {
-		// TODO Auto-generated method stub
-		return resumeMapper.ApplyInsert(resumeBoardVO);
+	public int ApplyInsert(ResumeBoardVO resumeBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		int r = resumeMapper.ApplyInsert(resumeBoardVO);
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.uploadFiles(uploadFile, resumeBoardVO.getResumeNo(), "T13");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r;
 	}
 	//구직자 채용 
 	@Override
@@ -62,17 +76,26 @@ public class ResumeServiceImpl implements ResumeService{
 		// TODO Auto-generated method stub
 		return resumeMapper.unHireUpdate(resumeBoardVO);
 	}
-
+	
+	//구직자 부분채용
 	@Override
-	public int hireUpdates(List<ResumeBoardVO> resumeBoardVO) {
+	public int hireUpdates(List<ResumeBoardVO> resumeList) {
 		int i=0;
-		for(ResumeBoardVO vo : resumeBoardVO) {
-		resumeMapper.hireUpdate(vo);
-		i++;
+		for(ResumeBoardVO vo : resumeList) {
+			resumeMapper.hireUpdate(vo);
+			i++;
 		}
 		return i;
 	}
+	//구직자 부분미채용
 
-
-	
+	@Override
+	public int unHireUpdates(List<ResumeBoardVO> resumeCancel) {
+		int i=0;
+		for(ResumeBoardVO vo : resumeCancel) {
+			resumeMapper.unHireUpdate(vo);
+			i++;
+		}
+		return i;
+	}
 }

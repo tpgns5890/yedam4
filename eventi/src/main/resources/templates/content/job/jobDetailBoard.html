@@ -6,7 +6,7 @@
    
    <head>
 <style>
-#modal {
+.modal {
 	display: none;
 	position: fixed;
 	top: 25em;
@@ -17,18 +17,18 @@
 	
 }
 
-#modal h2 {
+.modal h2 {
 	margin: 0;
 }
 
-#modal button {
+.modal button {
 	display: inline-block;
 	width: 100px;
 	border: 0.2px solid black;
 	border-radius:5px;
 }
 
-#modal .modal_content {
+.modal .modal_content {
 	width: 350px;
     min-height: 200px;
 	margin: 0 auto;
@@ -38,7 +38,7 @@
     border-radius: 15px;
 }
 
-#modal .modal_layer {
+.modal .modal_layer {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -48,10 +48,11 @@
 	z-index: -1;
 }
 
-#modal_login_btn{
+
+.modal_login_btn{
 	background:#2fb380;
 }
-#button_box{
+.button_box{
 	display:flex;
 	margin-top: 40px;
 	justify-content: flex-end;
@@ -74,9 +75,9 @@
 
 </style>
 </head>
-<div layout:fragment="content">
 
-<<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+<div layout:fragment="content">
+<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
@@ -86,31 +87,35 @@
             </div>
           </div>
         </section>
-<button type="button" class="btn btn-outline-primary" 
-		th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
-		
-<button type="button" class="btn btn-outline-primary" 
-		th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
-		 
-<button type="button" class="btn btn-outline-primary" 
-		th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
-		
-<button type="button" class="btn btn-outline-primary" 
-		th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-
+        <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+	<th:block th:if="${session.member.userId} == ${job.userId}">
+	<button type="button" class="btn btn-outline-primary" 
+			th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
+			
+	<button type="button" class="btn btn-outline-primary" 
+			th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
+			 
+	<button type="button" class="btn btn-outline-primary" 
+			th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
+			
+	<button type="button" class="btn btn-outline-primary" 
+			th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
+	</th:block>
 <!-- 신고하기 -->
    <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
-   
-<th:block th:if ="${like == null}">		
-<div class="stage">
-  		<div id="love" class="stage heart"></div>
-</div>
-</th:block>
 
-<th:block th:if ="${like != null}">		
-<div class="stage">
-  		<div id="love" class="stage heart active"></div>
-</div>
+<!-- 해당 게시글에 좋아요를 눌렀을 경우에는 채워진 하트가 나타남 -->   
+	<th:block th:if ="${like == null}">		
+	<div class="stage">
+	  		<div id="love" class="stage heart"></div>
+	</div>
+	</th:block>
+
+	<th:block th:if ="${like != null}">		
+	<div class="stage">
+	  		<div id="love" class="stage heart active"></div>
+	</div>
+	
 </th:block>	
           <div class="container">
             <div class="row multi-columns-row">
@@ -166,7 +171,7 @@
       <tbody>
          <tr>
          		<td th:text=${job.title}></td>
-				<td th:text=${job.jobNo}></td>
+				<td id="jobNo" th:text=${job.jobNo}></td>
 				<td th:text=${job.jobCntn}></td>
 				<td th:text=${job.loc}></td>
 				<td th:text=${job.eType}></td>
@@ -176,13 +181,13 @@
 				<td th:text=${job.qualification}></td>
 				<td th:text=${job.preference}></td>
 				<td th:text=${job.img}></td>
-				<td th:text=${job.userId}></td>
 				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 			</tr>
       </tbody>
       
    </table>
-   <div id="modal">
+   <!-- 등록 폼 -->
+   <div id="modal" class="modal">
 		<div class="modal_content">
 			<h1>등록완료!</h1>
 			<div id="button_box">
@@ -199,12 +204,12 @@
 			</div>
 			
 	<!-- 신고 등록 폼 -->
-    <div id="modal">
+    <div id="ban" class="modal">
 			<div class="modal_content">
 				<h2>신고</h2>
 				<div id="box">
 					<label>신고게시글</label>
-					<input type="text" id="targetId" name="targetId" th:value="${jSelect.jobNo}" readonly><br>
+					<input type="text" id="targetId" name="targetId" th:value="${job.jobNo}" readonly><br>
 					<label>신고자</label>
 					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
 					<label>신고사유</label>
@@ -220,9 +225,13 @@
 //script에서 th값 가져올때는 <!--/*[[]]*/*/-->대괄호 쓰기!
 
 //csrf 설정
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 
+	let userId = '[[${session.member.userId}]]';
+	let jobNo = '[[${job.jobNo}]]';
+	let type = 'T03';
+	
  $(function(){
 	let result = '[[${result}]]' 
 	if(result !="") {
@@ -294,19 +303,19 @@ var header = $("meta[name='_csrf_header']").attr("content");
 			   //신고 모달창 띄우기
 			   $('#modalUp').on('click', function() {
 				   console.log('클릭');
-				   $("#modal").show();
+				   $("#ban").show();
 			   })
 			   
 			   //모달창에서 취소를 눌렀을 경우
 			   $("#cancel").on('click', function() {
-					$("#modal").hide();
+					$("#ban").hide();
 				});
 			   
 			   //모달창에서 신고를 눌렀을 경우
 			   $("#punish").on('click', function() {
 				   let targetId = $("#targetId").val();
 				   let banCntn = $("#banCntn").val();
-				   console.log(userId, targetId, banCntn, type);
+				  
 				   
 				    $.ajax({
 							url : "/punishInsert",
@@ -319,14 +328,13 @@ var header = $("meta[name='_csrf_header']").attr("content");
 			                },
 							success : function(data) {
 								alert('신고되었습니다.');
-								$("#modal").hide();
+								$("#ban").hide();
 							},
 							fail : function(result) {
 								alert('필수항목을 입력해주세요')
 							}
-						})
-			   })
-		 });					
+					})
+			   });
 </script>
 </div>
 </html>

@@ -40,13 +40,13 @@
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<input type="hidden" id="proNo" name="proNo" th:value="${nextNo}">
 					<div class="row">
-					 	<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">회원ID</label>
-								<input type="text" name="userId" id="userId">
-							</div>
+					
+						<div class="col-md-12">
+								<div class="form-group">
+									<label class="label" for="userId">회원ID</label>
+									<input type="text" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>
+								</div>
 						</div>
-						 
 						
 						<div class="col-md-12">
 							<div class="form-group">
@@ -88,22 +88,7 @@
 								<label class="label" for="#">행사유형</label> 
 								<select id="eType" name="eType">
 									<option value="">행사유형을 선택해 주세요.</option>
-									<option value="E01">결혼식</option>
-									<option value="E02">돌잔치</option>
-									<option value="E03">개인행사</option>
-									<option value="E04">기업행사</option>
-									<option value="E05">각종축제</option>
-									<option value="E06">기념식</option>
-									<option value="E07">가요제</option>
-									<option value="E08">플리마켓</option>
-									<option value="E09">체육대회</option>
-									<option value="E10">단합행사</option>
-									<option value="E11">세미나</option>
-									<option value="E12">포럼</option>
-									<option value="E13">워크샵</option>
-									<option value="E14">전시회</option>
-									<option value="E15">박람회</option>
-									<option value="E00">기타</option>
+									<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 								</select>
 							</div>
 						</div>

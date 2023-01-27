@@ -51,27 +51,26 @@
                 </form>
               </div> 
             </div>
-            <div class="row">
-              <div class="col-sm-8 col-sm-offset-2">
-                <div role="tabpanel">
+            <div class="row" >
+              <div class="col-sm-8 col-sm-offset-2" >
+                <div role="tabpanel" >
                   <ul class="nav nav-tabs font-alt" role="tablist">
-                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-tools-2"></span>support</a></li>
+                    <li class="active"><a href="#support" data-toggle="tab"><span class="icon-tools-2"></span>support</a></li>
                   </ul>
-                  <div class="tab-content">
-                    <div class="tab-pane active" id="support" th:each="faq : ${faqList}">
+                  <div class="tab-content" >
+                    <div class="tab-pane active" id="support">
                       <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
+                        <div class="panel panel-default" th:each="faq, number : ${faqList}">
                           <div class="panel-heading">
-                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#support1" class="title" aria-expanded="true" th:text=${faq.faqTtl}>Support Question 1</a></h4>
+                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" th:href="|#support${number.count}|" aria-expanded="true" class="" th:text=${faq.faqTtl}>Support Question 1</a></h4>
                           </div>
-                          <div class="panel-collapse collapse in" id="support1">
-                            <div class="panel-body" th:text=${faq.faqAns} id="ans">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                          <div class="panel-collapse collapse " th:id="|support${number.count}|" aria-expanded="true" style="">
+                            <div class="panel-body" th:text=${faq.faqAns} id="ans">.
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -82,6 +81,7 @@
 	$('.heading').on('click', function (ev){
 		ev.target.nextElementSibling.classList.toggle("ans")
 	});
+	
 	//검색기능
 
 	$('#find').click(function() {

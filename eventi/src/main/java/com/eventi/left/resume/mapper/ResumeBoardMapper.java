@@ -27,5 +27,6 @@ public interface ResumeBoardMapper {
 	
 	//구직자 미채용 
 	public int unHireUpdate(ResumeBoardVO resumeBoardVO); 
+	
 }
                                      
