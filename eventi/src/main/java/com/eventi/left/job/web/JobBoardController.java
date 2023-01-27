@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.bboard.service.BboardVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
+import com.eventi.left.common.service.CodeService;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.job.service.JobBoardVO;
@@ -35,13 +36,14 @@ public class JobBoardController {
 	@Autowired LikesService likeService;
 	//파일 service
 	@Autowired FilesService filesService;
+	@Autowired CodeService codeService;
 	
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
 	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
 		
 		List<JobBoardVO> imgs = jobService.getJobList(jobBoardVO, paging);
-		model.addAttribute("jobList", jobService.getJobList(jobBoardVO, paging ));
+		model.addAttribute("jobList", imgs);
 		model.addAttribute("paging", paging);
 		
 		//사진파일
@@ -56,7 +58,6 @@ public class JobBoardController {
 				}
 			}
 		}
-		model.addAttribute("jobList", imgs);
 		//이미지
 		model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
 		return "content/job/jobList";
@@ -72,7 +73,8 @@ public class JobBoardController {
 	
 	//구인등록폼이동
 	@RequestMapping(value = "/jobInsert", method=RequestMethod.GET) 
-	public String jobUpload() {
+	public String jobUpload(Model model, JobBoardVO jobBoardVO) {
+		model.addAttribute("types", codeService.getType());
 		return "content/job/jobInsertForm";
 	}
 	
@@ -139,13 +141,4 @@ public class JobBoardController {
 			return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
 			
 		}
-	//정렬 조회
-	/*
-	 * @PostMapping("/jobList")
-	 * 
-	 * @ResponseBody public List<JobBoardVO> bSelectList(Model model, JobBoardVO
-	 * jobBoardVO) { model.addAttribute("type", jobBoardVO.getType()); //정렬 조건이 포함된
-	 * 전체리스트 조회 후 list에 담아서 보내기 List<JobBoardVO> list =
-	 * jobService.getJobList(jobBoardVO); return list; }
-	 */
 }

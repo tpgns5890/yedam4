@@ -3,7 +3,9 @@ package com.eventi.left.resume.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
 
 @Service
@@ -22,13 +24,17 @@ public interface ResumeService {
 	public ResumeBoardVO getApplyForm(MemberVO memberVO); 
 		
 	//구직신청폼 등록
-	public int ApplyInsert(ResumeBoardVO resumeBoardVO);
+	public int ApplyInsert(ResumeBoardVO resumeBoardVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//구직자 채용
 	public int hireUpdate(ResumeBoardVO resumeBoardVO);
 	
 	//구직자 미채용 
 	public int unHireUpdate(ResumeBoardVO resumeBoardVO);
-
+	
+	//구직자 부분채용
 	public int hireUpdates(List<ResumeBoardVO> resumeBoardVO); 
+	
+	//구직자 부분미채용 
+	public int unHireUpdates(List<ResumeBoardVO> resumeBoardVO);
 }

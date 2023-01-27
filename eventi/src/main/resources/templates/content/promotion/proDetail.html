@@ -22,49 +22,7 @@
 	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
 	<th:block th:if="${session.member.userId} == ${proDetail.userId}">
 	</th:block>
-	
-	<!--<section class="ftco-section ftco-degree-bg">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 ftco-animate">
-					<h2 class="mb-3 mt-5" th:text=${proDetail.proNo} id="proNo"></h2>
-					<h2 class="mb-3" th:text=${proDetail.eName}></h2>
-					<p th:text=${proDetail.userId}></p>
-					<p th:text=${proDetail.eSday}></p>
-					<p th:text=${proDetail.eEday}></p>
-					<p th:text=${proDetail.loc}></p>
-					<p th:text=${proDetail.intro}></p>
-					<p th:text=${proDetail.eType}></p>
-					<p th:text=${proDetail.entrance}></p>
-					<p th:text=${proDetail.accommodate}></p>
-					<p th:text=${proDetail.img}></p>
-					<p th:text=${proDetail.see}></p>
-
-					<div class="tag-widget post-tag-container mb-5 mt-5">
-						<div class="tagcloud">
-							<a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
-							<a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
-						</div>
-					</div>
-					
-					<div class="pt-5 mt-5">
-						<h3 class="mb-5">댓글</h3>
-						<ul class="comment-list" id=reply>
-						</ul>
-					</div>
-				
-					<form action="replyInsert">
-						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
-						<button type="button" id="replyInsertBtn">댓글작성</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</section>
-	-->
-	<section class="module-small">
+ 	<!-- <section class="module-small">
           <div class="container">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-1">
@@ -77,6 +35,7 @@
                     <div class="post-meta" th:text=${proDetail.proNo} id="proNo"  >By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Photography, </a><a href="#">Web Design</a>
                     </div>
                   </div>
+                  
                   <div class="post-entry" >
                     <p th:text=${proDetail.userId}> The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
                     <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
@@ -98,6 +57,7 @@
 						</div>
 					</div>
                   </div>
+                  
                 </div>
                 <div class="comments"  id=reply>
                   <h4 class="comment-title font-alt">There are comments</h4>
@@ -113,12 +73,155 @@
                       </div>
                     </div>
                   </div>
+                  
                 </div>
               </div>
             </div>
-          <!-- 이미지 나타내기 -->	
-		
-       </section>
+       </section>  -->
+       
+       <section class="module">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="post">
+                  <div class="post-thumbnail"><div th:each="f : ${file}">
+				 <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></div></div>
+				 
+                  <div class="post-header font-alt">
+                    <h1 class="post-title" th:text=${proDetail.eName}>Our trip to the Alps</h1>
+                    <div class="post-meta" th:text=${proDetail.proNo} id="proNo"  >By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Photography, </a><a href="#">Web Design</a>
+                    </div>
+                  </div>
+                   <div class="post-entry" >
+                    <p th:text=${proDetail.userId}> The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                    <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
+                      <p th:utext=${proDetail.intro}>Lorem </p>
+                    <ul>
+                      <li th:text="${#dates.format(proDetail.eSday, 'yyyy-MM-dd')}">The European languages are members of the same family.</li>
+                      <li th:text="${#dates.format(proDetail.eEday, 'yyyy-MM-dd')}">Their separate existence is a myth.</li>
+                      <li th:text=${proDetail.loc}>For science, music, sport, etc, Europe uses the same vocabulary.</li>
+                      <li th:text=${proDetail.entrance}>Their separate existence is a myth.</li>
+                      <li th:text=${proDetail.accommodate}>Their separate existence is a myth.</li>
+                    </ul>
+                    <p th:text=${proDetail.see}>The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                    <div class="tag-widget post-tag-container mb-5 mt-5">
+						<div class="tagcloud">
+							<a href="#" class="tag-cloud-link"
+								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
+							<a href="#" class="tag-cloud-link"
+								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
+						</div>
+					</div>
+                  </div>
+                </div>
+                
+                <div class="post #">
+                  <div class="post-header font-alt">
+                    <h2 class="post-title"><a href="Post with text only">Mark Stone</a></h2>
+                    <div class="post-meta">By&nbsp;<a href="#">| 23 November | 3 Comments | </a>Marketing, ,Web Design<a href="#">A</a><a href="#"> </a><a href="#">w</a><a href="#">o</a><a href="#">n</a><a href="#">d</a><a href="#">e</a><a href="#">r</a><a href="#">f</a><a href="#">u</a><a href="#">l</a><a href="#"> </a><a href="#">s</a><a href="#">e</a><a href="#">r</a><a href="#">e</a><a href="#">n</a><a href="#">i</a><a href="#">t</a><a href="#">y</a><a href="#"> </a><a href="#">h</a><a href="#">a</a><a href="#">s</a><a href="#"> </a><a href="#">t</a><a href="#">a</a><a href="#">k</a><a href="#">e</a><a href="#">n</a><a href="#"> </a><a href="#">p</a><a href="#">o</a><a href="#">s</a><a href="#">s</a><a href="#">e</a><a href="#">s</a><a href="#">s</a><a href="#">i</a><a href="#">o</a><a href="#">n</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">m</a><a href="#">y</a><a href="#"> </a><a href="#">e</a><a href="#">n</a><a href="#">t</a><a href="#">i</a><a href="#">r</a><a href="#">e</a><a href="#"> </a><a href="#">s</a><a href="#">o</a><a href="#">u</a><a href="#">l</a><a href="#">,</a><a href="#"> </a><a href="#">l</a><a href="#">i</a><a href="#">k</a><a href="#">e</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">e</a><a href="#">s</a><a href="#">e</a><a href="#"> </a><a href="#">s</a><a href="#">w</a><a href="#">e</a><a href="#">e</a><a href="#">t</a><a href="#"> </a><a href="#">m</a><a href="#">o</a><a href="#">r</a><a href="#">n</a><a href="#">i</a><a href="#">n</a><a href="#">g</a><a href="#">s</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">s</a><a href="#">p</a><a href="#">r</a><a href="#">i</a><a href="#">n</a><a href="#">g</a><a href="#"> </a><a href="#">w</a><a href="#">h</a><a href="#">i</a><a href="#">c</a><a href="#">h</a><a href="#"> </a><a href="#">I</a><a href="#"> </a><a href="#">e</a><a href="#">n</a><a href="#">j</a><a href="#">o</a><a href="#">y</a><a href="#"> </a><a href="#">w</a><a href="#">i</a><a href="#">t</a><a href="#">h</a><a href="#"> </a><a href="#">m</a><a href="#">y</a><a href="#"> </a><a href="#">w</a><a href="#">h</a><a href="#">o</a><a href="#">l</a><a href="#">e</a><a href="#"> </a><a href="#">h</a><a href="#">e</a><a href="#">a</a><a href="#">r</a><a href="#">t</a><a href="#">.</a><a href="#"> </a><a href="#">I</a><a href="#"> </a><a href="#">a</a><a href="#">m</a><a href="#"> </a><a href="#">a</a><a href="#">l</a><a href="#">o</a><a href="#">n</a><a href="#">e</a><a href="#">,</a><a href="#"> </a><a href="#">a</a><a href="#">n</a><a href="#">d</a><a href="#"> </a><a href="#">f</a><a href="#">e</a><a href="#">e</a><a href="#">l</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">e</a><a href="#"> </a><a href="#">c</a><a href="#">h</a><a href="#">a</a><a href="#">r</a><a href="#">m</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">e</a><a href="#">x</a><a href="#">i</a><a href="#">s</a><a href="#">t</a><a href="#">e</a><a href="#">n</a><a href="#">c</a><a href="#">e</a><a href="#"> </a><a href="#">i</a><a href="#">n</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">i</a><a href="#">s</a><a href="#"> </a><a href="#">s</a><a href="#">p</a><a href="#">o</a><a href="#">t</a><a href="#">,</a><a href="#"> </a><a href="#">w</a><a href="#">h</a><a href="#">i</a><a href="#">c</a><a href="#">h</a><a href="#"> </a><a href="#">w</a><a href="#">a</a><a href="#">s</a><a href="#"> </a><a href="#">c</a><a href="#">r</a><a href="#">e</a><a href="#">a</a><a href="#">t</a><a href="#">e</a><a href="#">d</a><a href="#"> </a><a href="#">f</a><a href="#">o</a><a href="#">r</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">e</a><a href="#"> </a><a href="#">b</a><a href="#">l</a><a href="#">i</a><a href="#">s</a><a href="#">s</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">s</a><a href="#">o</a><a href="#">u</a><a href="#">l</a><a href="#">s</a><a href="#"> </a><a href="#">l</a><a href="#">i</a><a href="#">k</a><a href="#">e</a><a href="#"> </a><a href="#">m</a><a href="#">i</a><a href="#">n</a><a href="#">e</a><a href="#">.</a>
+                    </div>
+                  </div>
+                  <div class="post-entry">
+                    <p></p>
+                  </div>
+                  <div class="post-more"><a class="more-link" href="Post with text only">Read more</a></div>
+                </div>
+                <div class="post">
+                  <div class="post-quote">
+                    <blockquote class="font-serif">
+                      <p>" The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. "</p>
+                      <p class="font-inc font-uppercase">- Thomas Anderson</p>
+                    </blockquote>
+                  </div>
+                </div>
+                <div class="post">
+                  <div class="post-video embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/Jkk0VHiCnKY" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                  </div>
+                  <div class="post-header font-alt">
+                    <h2 class="post-title"><a href="#">Post with video</a></h2>
+                    <div class="post-meta">By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Marketing, </a><a href="#">Web Design</a>
+                    </div>
+                  </div>
+                  <div class="post-entry">
+                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine.</p>
+                  </div>
+                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
+                </div>
+                
+                <!-- 댓글 -->
+                 <div class="comments"  id=reply>
+                  <h4 class="comment-title font-alt">There are comments</h4>
+                  <div class="comment clearfix">
+                    <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
+                    <div class="comment-content clearfix">
+                      <div class="comment-author font-alt"><a href="#">John Doe</a></div>
+                      <form action="replyInsert">
+						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
+						<button type="button" id="replyInsertBtn">댓글작성</button>
+                      Today, 14:55 - 
+                    	</form>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              
+              <!-- 사이드바 -->
+              <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
+                <div class="widget">
+                  <form role="form">
+                    <div class="search-box">
+                      <input class="form-control" type="text" placeholder="Search...">
+                      <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                  </form>
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Blog Categories</h5>
+                  <ul class="icon-list">
+                    <li><a href="#">Photography - 7</a></li>
+                    <li><a href="#">Web Design - 3</a></li>
+                    <li><a href="#">Illustration - 12</a></li>
+                    <li><a href="#">Marketing - 1</a></li>
+                    <li><a href="#">Wordpress - 16</a></li>
+                  </ul>
+                </div>
+                
+                <!-- 인기게시물 조회 -->
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Popular Posts</h5>
+                  <ul class="widget-posts" th:each="post : ${contents}">
+                    <li class="clearfix">
+                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"></a></div>
+                      <div class="widget-posts-body">
+                        <div class="widget-posts-title" th:text=${post.eName}><a href="#">Designer Desk Essentials</a></div>
+                        <div class="widget-posts-meta" th:text=${post.see}>23 january</div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Tag</h5>
+                  <div class="tags font-serif"><a href="#" rel="tag">Blog</a><a href="#" rel="tag">Photo</a><a href="#" rel="tag">Video</a><a href="#" rel="tag">Image</a><a href="#" rel="tag">Minimal</a><a href="#" rel="tag">Post</a><a href="#" rel="tag">Theme</a><a href="#" rel="tag">Ideas</a><a href="#" rel="tag">Tags</a><a href="#" rel="tag">Bootstrap</a><a href="#" rel="tag">Popular</a><a href="#" rel="tag">English</a>
+                  </div>
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Text</h5>The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators.
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Recent Comments</h5>
+                  <ul class="icon-list">
+                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
+                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
+                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
+                    <li>Jack on <a href="#">Bottle Mockup</a></li>
+                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 	<script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");

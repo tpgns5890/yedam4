@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
+import com.eventi.left.common.service.CodeService;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
@@ -33,13 +34,17 @@ public class PromotionController {
 	ReplyService service;
 	//파일 service
 	@Autowired FilesService filesService;
+	@Autowired CodeService codeService;
 	
 	//홍보게시물 전체조회
 	@RequestMapping(value = "/proList", method=RequestMethod.GET)
 	public String proList(Model model, PromotionVO promotionVO, PagingVO paging) {
+		
+		//paging.setPageSize(4);
+		//promotionVO.setOrderCol("see");
+		
 		//전체리스트 조회
 		List<PromotionVO> contents = proService.proList(promotionVO, paging);
-		model.addAttribute("proList", proService.proList(promotionVO, paging));
 		model.addAttribute("paging", paging);
 		
 		//사진파일
@@ -68,22 +73,31 @@ public class PromotionController {
 		return list;
 	}
 	//게시글상세조회
-		@RequestMapping(value = "/proDetail", method=RequestMethod.GET) 
-		public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO) {
-			//조회수
-			proService.seeUp(promotionVO);
-			MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-			//상세내용
-			model.addAttribute("proDetail", proService.proDetail(promotionVO));
-			//이미지
-			model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
-			return "content/promotion/proDetail";
-		}
+	@RequestMapping(value = "/proDetail", method=RequestMethod.GET) 
+	public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO, PagingVO paging) {
+		
+		promotionVO.setLast(4);
+		promotionVO.setFirst(1);
+		promotionVO.setOrderCol("see");
+		
+		List<PromotionVO> contents = proService.proList(promotionVO, paging);
+
+		model.addAttribute("contents", contents);
+		//조회수
+		proService.seeUp(promotionVO);
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		//상세내용
+		model.addAttribute("proDetail", proService.proDetail(promotionVO));
+		//이미지
+		model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
+		return "content/promotion/proDetail";
+	}
 		
 	//게시글등록폼이동
 		@RequestMapping(value = "/proInsert", method=RequestMethod.GET) 
-		public String proInsert(Model model) {
+		public String proInsert(Model model, PromotionVO promotionVO) {
 			model.addAttribute("nextNo", proService.getSeq());
+			model.addAttribute("types", codeService.getType());
 			return "content/promotion/proInsert";
 		}
 	

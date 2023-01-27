@@ -140,9 +140,9 @@ function jobInsert(){
 	location.href = link1;
 }
 
-link2 = 'resumeList?userId='; //신청자전체조회
+link2 = 'resumeList?userId=[[${session.member.userId}]]'; //신청자전체조회
 function resumeList(userId){
-	location.href = link2+userId;
+	location.href = link2;
 }
 link3 = 'jobDetail?jobNo='; //게시글 상세조회
 function jobDetail(jobNo){

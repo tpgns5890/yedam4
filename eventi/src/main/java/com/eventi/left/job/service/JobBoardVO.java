@@ -43,4 +43,6 @@ public class JobBoardVO {
 	String orderCol;
 	//신고건수
 	private Integer rprt;
+	//임시저장
+	private String save = "N";
 }
