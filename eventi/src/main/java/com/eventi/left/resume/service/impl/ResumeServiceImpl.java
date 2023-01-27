@@ -63,6 +63,16 @@ public class ResumeServiceImpl implements ResumeService{
 		return resumeMapper.unHireUpdate(resumeBoardVO);
 	}
 
+	@Override
+	public int hireUpdates(List<ResumeBoardVO> resumeBoardVO) {
+		int i=0;
+		for(ResumeBoardVO vo : resumeBoardVO) {
+		resumeMapper.hireUpdate(vo);
+		i++;
+		}
+		return i;
+	}
+
 
 	
 }

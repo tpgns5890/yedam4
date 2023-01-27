@@ -1,5 +1,7 @@
 package com.eventi.left.resume.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,6 +76,14 @@ public class ResumeController {
 	public int hireUpdate(ResumeBoardVO resumeBoardVO) {
 		return resumeService.hireUpdate(resumeBoardVO);
 			}
+	
+	//채용하기 
+		@PostMapping("/hireUpdates")
+		@ResponseBody //ajax방식
+		public int hireUpdate(List<ResumeBoardVO> resumeBoardVO) {
+			System.out.println(resumeBoardVO);
+			return resumeService.hireUpdates(resumeBoardVO);
+				}
 	
 	//채용취소하기 
 		@PostMapping("/unHireUpdate")

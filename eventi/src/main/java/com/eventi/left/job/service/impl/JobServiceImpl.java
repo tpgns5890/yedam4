@@ -79,5 +79,12 @@ public class JobServiceImpl implements JobService{
 		return jobmapper.jobDelete(jobBoardVO);
 	}
 	
+	//임시저장된 게시글 가져오기 
+	@Override
+	public List<JobBoardVO> jSave(JobBoardVO jobBoardVO) {
+		// TODO Auto-generated method stub
+		return jobmapper.jSave(jobBoardVO);
+	}
+	
 
 }

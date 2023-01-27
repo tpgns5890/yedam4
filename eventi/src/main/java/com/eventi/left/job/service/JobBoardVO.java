@@ -41,4 +41,6 @@ public class JobBoardVO {
 	private Integer remain;
 	//정렬
 	String orderCol;
+	//신고건수
+	private Integer rprt;
 }

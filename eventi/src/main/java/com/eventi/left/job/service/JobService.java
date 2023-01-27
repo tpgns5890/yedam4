@@ -15,6 +15,9 @@ public interface JobService {
 	//게시물 상세조회
 	public JobBoardVO getJob(JobBoardVO jobBoardVO); 
 	
+	//임시저장된 게시글 조회
+	public List<JobBoardVO> jSave(JobBoardVO jobBoardVO);
+	
 	//게시글 등록
 	public int jobInsert(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile); 
 	

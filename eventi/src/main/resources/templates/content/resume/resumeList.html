@@ -52,12 +52,8 @@
 
 	<section class="module" id="news">
 		<input type="checkBox" value="채용" class="hire" id="allHire">
-		<button class="btn btn-g btn-round allHire" type="button">
-			<i class="fa fa-cog fa-spin"></i>모두채용
-		</button>
-		<button class="btn btn-g btn-round unAllHire" type="button">
-			<i class="fa fa-cog fa-spin"></i>채용취소
-		</button>
+		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
+		<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3">
@@ -70,13 +66,13 @@
 				<div class="col-sm-6 col-md-4 col-lg-4"
 					th:each="res : ${resumeList}">
 					<th:block th:if="${res.hire} == 'Y'">
-						<td><input class="hire" type="checkBox" value="hire"
-							onkeyup="hire()" checked></td>
+						<td><input class="hire" type="checkBox" value="Y"
+							onkeyup="hire()" th:id=${res.resumeNo} name="allHire" checked></td>
 					</th:block>
 
 					<th:block th:if="${res.hire} == 'N'">
-						<td><input class="hire" type="checkBox" value="hire"
-							onkeyup="hire()"></td>
+						<td><input class="hire" type="checkBox" value="N"
+							onkeyup="hire()" th:id=${res.resumeNo} name="allHire" ></td>
 					</th:block>
 
 					<div class="post mb-20">
@@ -86,23 +82,18 @@
 						</div>
 						<div class="post-header font-alt">
 							<h2 class="post-title">
-								<a href="#" th:text=${res.jobNo}> Our trip to the Alps</a>
+								<a href="#" th:text=${res.jobNo}> </a>
 							</h2>
-							<div class="post-meta" th:text=${res.seekerId}>
-								By&nbsp;<a href="#">Mark Stone</a>&nbsp;| 23 November | 3
-								Comments
-							</div>
+							<div class="post-meta" th:text=${res.seekerId}><a href="#"></a></div>
 						</div>
 						<div class="post-entry" th:text=${res.seekerCntn}>
-							<p>A wonderful serenity has taken possession of my entire
-								soul, like these sweet mornings of spring which I enjoy with my
-								whole heart.</p>
 						</div>
 						<div class="post-more">
 							<a class="more-link" href="#">Read more</a>
 						</div>
 						<div th:if="${res.hire} == 'Y'">채용</div>
 						<div th:unless="${res.hire} == 'Y'">미채용</div>
+						
 						<button class="btn btn-border-d btn-round hireBtn" type="button"
 							id="hireBtn" th:data-resumeno='${res.resumeNo}'>
 							<i class="fa fa-child"></i>채용
@@ -127,17 +118,42 @@ let allHire = document.querySelector("#allHire")
 let hireCheck = document.querySelector(".hire")
 allHire.addEventListener('change', function(){
 	//forEach 반복문 사용
-	document.querySelectorAll('input[value="hire"]').forEach(function(hireCheck){
+	document.querySelectorAll('input[class="hire"]').forEach(function(hireCheck){
 		hireCheck.checked = allHire.checked;
 	})
 })
+//구직자 선택채용
+$('.allHire').on('click', function (e){
+	console.log("클릭")
+	let checks = [];
+	let obj ={}
+	 $("[name='allHire']:checked").each(function(i, checkbox){
+		 obj["resumeNo"] = checkbox.eq(i).id;
+		 checks.push(obj);
+	})
+	console.log(checks)
+	if(!confirm('채용하시겠습니까?')){
+		return false;
+	}else{
+		//업데이트처리 ajax
+		$.ajax({
+			url: '/hireUpdates',
+			method: "post",
+			data: JSON.stringify(checks),
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			
+				alert(res+'/'+checks.length+'명 채용 완료');
+				location.href=`/resumeList`
+			
+		})  
+	} 
+});
 //구직자 채용
 $('.hireBtn').on('click', function (e){
 	console.log("클릭")
-	
-	let checks = [];
-	$("['name='allHire']:checked").e
-	
 	if(!confirm('채용하시겠습니까?')){
 		return false;
 	}else{
@@ -162,41 +178,7 @@ $('.hireBtn').on('click', function (e){
 		})  
 	}
 });
-//구직자 모두채용
-$('.allHire').on('click', function (e){
-	console.log($('.hire').is(":checked").data('resumeno'))
-	let trs = []
-	
-	/* for
-	trs.push
-	 */
-	$('.hire').prop("checked").data('resumeno');
-	if(!confirm('채용하시겠습니까?')){
-		return false;
-	}else{
-			for (let i = 0; i < trs.length; i++) {
-				if (trs[i].children[0].children[0].checked) {
-			//업데이트처리 ajax
-			$.ajax({
-				url: '/hireUpdate',
-				method: "post",
-				data: {resumeNo},
-				beforeSend: function (xhr) {
-					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-					xhr.setRequestHeader(header, token);
-				},
-			}).then(res => {
-				if (res == 1) {
-					alert('채용 완료');
-					location.href=`/resumeList`
-				} else {
-					alert('채용이 불가능합니다.');
-					}
-				})
-			}
-		}
-	}
-});
+
 //구직자 미채용
 $('.unHireBtn').on('click', function (e){
 	let trs = document.querySelectorAll('.post-columns');
