@@ -34,10 +34,9 @@
 			width: 250px;
 			display: flex;
 			height: 100%;
-			border: 1px solid black;
 			margin-right: 10px;
 			background: white;
-			box-shadow: 0 4px 8px 0 rgb(0 0 0/ 20%);
+			box-shadow: 0 2px 2px 0 rgb(0 0 0/ 20%);
 			align-items: center;
 		}
 
@@ -52,15 +51,15 @@
 		}
 
 		#icon-area-m {
-			background: blue;
+			background: #55dbc2;
 		}
 
 		#icon-area-p {
-			background: yellow;
+			background: #f1e254;
 		}
 
 		#icon-area-b {
-			background: red;
+			background: #d94844;
 		}
 
 		.images {
@@ -96,7 +95,10 @@
 			align-items: flex-start;
 			margin-right: 5px;
 		}
-
+		
+		#selArea input{
+			margin-right:5px;
+		}
 		#list-head-right {
 			display: flex;
 			align-items: center;
@@ -106,6 +108,21 @@
 			margin-top: 10px;
 			width: 100%;
 			text-align-last: center;
+			border-collapse: collapse;
+		}
+		#member-table thead{
+			background-color: #ddd;
+		}
+		#member-table tbody tr:hover{
+      	background-color: #eee;
+  		}
+		#table-div{
+			height:590px;
+		}
+		
+		#member-table th,td{
+			padding: 17px;
+			background-color: rgba(255,255,255,0.2);
 		}
 	</style>
 	<!-- csrf 설정 -->
@@ -119,7 +136,7 @@
 			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
 			<div id="admin-contents">
 				<h3>
-					<b>전체회원관리</b>
+					<b>회원관리</b>
 				</h3>
 				<div id="head-btn">
 					<div id="topbtn-member" class="top-button">
@@ -162,6 +179,7 @@
 							</div>
 						</div>
 					</div>
+					<div id="table-div">
 					<table id="member-table">
 						<thead>
 							<tr>
@@ -176,22 +194,10 @@
 								<th>계정상태</th>
 							</tr>
 						</thead>
-						<tbody>
-							<!-- <tr th:each="m: ${mList}">
-							<td th:text=${m.userId}></td>
-							<td th:text=${m.userEmail}></td>
-							<td th:text=${m.name}></td>
-							<td th:text=${m.userPhone}></td>
-							<td th:text=${m.userMessaging}></td>
-							<td th:text=${m.auth}></td>
-							<td th:text=${m.rprt}></td>
-							<td th:text=${m.userRegDate}></td>
-							<td th:text=${m.userState}></td>
-							</tr> -->
-						</tbody>
+						<tbody></tbody>
 					</table>
+					</div>
 					<!-- 페이징 처리 -->
-					<!-- //페이징 경로 :: 문자 -->
 					<div class="row mt-5" id="paging">
 						<div class="col text-center">
 							<div class="block-27" id="returnPaging"></div>
@@ -209,40 +215,44 @@
 			ajaxList();
 
 			function gopage(i) {
-				let page = $('input[name="page"]').val(i);
+				let thispage = $('input[name="page"]').val(i);
 				//정렬 리스트 불러오는 함수
-				ajaxList();
+				ajaxList(thispage);
 			}
 
 			$("#topbtn-member").on('click', function () {
+				let thispage = $('input[name="page"]').val("1");
 				let State = "Normal";
-				ajaxList(State);
+				ajaxList(thispage, State);
 			});
 
 			$("#topbtn-punish").on('click', function () {
+				let thispage = $('input[name="page"]').val("1");
 				let State = "Punish";
-				ajaxList(State);
+				ajaxList(thispage, State);
 			});
 
 			$("#topbtn-ban").on('click', function () {
+				let thispage = $('input[name="page"]').val("1");
 				let State = "Ban";
-				ajaxList(State);
+				ajaxList(thispage, State);
 			});
 
 			$("input[name=auth]").on('change', function () {
-				ajaxList();
+				let thispage = $('input[name="page"]').val("1");
+				ajaxList(thispage);
 			})
 
 			$("input[name=userId]").on('change', function () {
-				ajaxList();
+				let thispage = $('input[name="page"]').val("1");
+				ajaxList(thispage);
 			})
 			//비동기 통신
-			function ajaxList(State) {
+			function ajaxList(thispage,State) {
 				let userState = State;
 				let auth = $('input[name=auth]:checked').val();
 				let page = $('input[name="page"]').val();
 				let userId = $('input[name="userId"]').val();
-				console.log(auth);
 				$.ajax({
 					url: "/admin/memberListAjax",
 					method: 'post',

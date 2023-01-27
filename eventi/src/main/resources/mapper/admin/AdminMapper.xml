@@ -26,6 +26,33 @@
 			</if>
 		</where>
 	</sql>
+	<sql id="cSelectw">
+		<where>
+			<!-- 승급유형별 정렬 -->
+			<if test="crtfType != null and crtfType != ''">
+				AND CRTF_TYPE = #{crtfType}
+			</if>
+
+			<!-- 회원아이디 검색처리 -->
+			<if test="userId != null and userId != ''">
+				AND USER_ID LIKE '%'||#{userId}||'%'
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="cSelect">
+
+			<!-- 승급유형별 정렬 -->
+			<if test="crtfType != null and crtfType != ''">
+				AND CRTF_TYPE = #{crtfType}
+			</if>
+
+			<!-- 회원아이디 검색처리 -->
+			<if test="userId != null and userId != ''">
+				AND USER_ID LIKE '%'||#{userId}||'%'
+			</if>
+
+	</sql>
 
 	<!-- 전체 회원 조회 -->
 	<select id="memberList" resultType="MemberVO">
@@ -42,15 +69,15 @@
 				ACCNT,
 				USER_REGDATE,
 				USER_STATE
-		FROM   (SELECT ROWNUM RN, A.*
-				FROM(SELECT * 
-				 	 FROM MEMBERS
-					<include refid="mSelect" />
-					 ORDER BY USER_REGDATE DESC
+		FROM 	(SELECT ROWNUM RN, A.*
+				FROM 	(SELECT *
+						FROM MEMBERS
+						<include refid="mSelect" />
+						ORDER BY USER_REGDATE DESC
 			  	<![CDATA[
-			  		) A 
+			  			) A 
 			  	WHERE ROWNUM <= #{last}) 
-		WHERE RN >= #{first}
+		WHERE 	RN >= #{first}
 			  	]]>
 	</select>
 
@@ -59,6 +86,32 @@
 		SELECT COUNT(*)
 		FROM MEMBERS
 		<include refid="mSelect" />
+	</select>
+
+	<select id="certList" resultType="CrtfVO">
+		SELECT 	CRTF_ID,
+				USER_ID,
+				CRTF_NAME,
+				CRTF_NUM,
+				ACCP_YN,
+				CRTF_TYPE,
+				ACCP_DATE,
+				REQ_DATE
+		FROM 	(SELECT ROWNUM RN, A.*
+				FROM	(SELECT *
+						FROM CERTIFICATE
+						WHERE ACCP_YN = #{accpYN}
+						<include refid="cSelect" />
+						ORDER BY REQ_DATE DESC
+			   <![CDATA[) A 
+			  	WHERE ROWNUM <= #{last}) 
+		WHERE RN >= #{first}]]>
+	</select>
+
+	<select id="certCount" resultType="int">
+		SELECT COUNT(*)
+		FROM CERTIFICATE
+		<include refid="cSelectw" />
 	</select>
 
 </mapper>

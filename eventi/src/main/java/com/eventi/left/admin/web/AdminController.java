@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.admin.service.AdminService;
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
 
 @Controller
@@ -21,6 +22,18 @@ public class AdminController {
 
 	@Autowired
 	AdminService service;
+
+	// 관리자페이지 이동
+	@RequestMapping(value = "/adminMain")
+	public String adminMain() {
+		return "content/admin/adminMain";
+	}
+	
+	// 자격증승인페이지 이동
+	@RequestMapping(value = "/certList")
+	public String certList() {
+		return "content/admin/adminCert";
+	}
 
 	// 전체회원리스트 이동 및 회원 수 가져오기
 	@GetMapping("/memberList")
@@ -42,6 +55,16 @@ public class AdminController {
 		// 리턴할 최종Map(Member,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("mListAjax", service.memberList(vo, paging));
+		result.put("paging", paging);
+		return result;
+	}
+	
+	@PostMapping("/certListAjax")
+	@ResponseBody
+	public Map<String, Object> certListAjax(CrtfVO vo, PagingVO paging) {
+		// 리턴할 최종Map(Member,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("certList", service.certList(vo, paging));
 		result.put("paging", paging);
 		return result;
 	}

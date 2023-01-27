@@ -24,13 +24,13 @@ function requestPay() {
 		pg: 'kicc',
 		pay_method: 'card',
 		merchant_uid: "evt" + makeMerchantUid, //상점에서 생성한 고유 주문번호
-		name: payname,  //'주문명:결제테스트',
-		amount: amount,  // 가격1,
-		buyer_email: buyer_email,	//'tpgns5890@naver.com',
-		buyer_name: buyer_name,	//'천세훈',
-		buyer_tel: buyer_tel,	//'010-3670-5890'
-		buyer_addr: buyer_addr,	//'대구동구동호동',
-		buyer_postcode: buyer_postcode	//'123-456',
+		name: '당근',  //'주문명:결제테스트',
+		amount: 10,  // 가격1,
+		buyer_email: 'buyer_email',	//'tpgns5890@naver.com',
+		buyer_name: 'buyer_name',	//'천세훈',
+		buyer_tel: 'buyer_tel',	//'010-3670-5890'
+		buyer_addr: 'buyer_addr',	//'대구동구동호동',
+		buyer_postcode: 'buyer_postcode'	//'123-456',
 	}, function(rsp) {
 		if (rsp.success) {
 			// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우

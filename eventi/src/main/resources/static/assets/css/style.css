@@ -1243,7 +1243,8 @@ General Styles - Owlcarousel
   z-index: 1000;
   text-transform: uppercase;
   letter-spacing: 3px;
-  font-size: 11px;
+  font-size: 14px;
+  font-weight:bold;
   transition: background, padding 0.4s ease-in-out 0s;
 }
 

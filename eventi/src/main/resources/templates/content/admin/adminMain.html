@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<link rel="stylesheet" href="/assets/css/adminSideBar.css">
+	<style>
+		#admin-container {
+			height: 100vh;
+		}
+
+		.footer,
+		.divider-d,
+		.module-small {
+			margin-left: 15% !important;
+		}
+
+		#admin-contents {
+			height: 100%;
+			padding-left: 16%;
+			padding-top: 50px;
+			background: #eeeeee;
+		}
+	</style>
+	<!-- csrf 설정 -->
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div id="admin-container">
+			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
+			<div id="admin-contents">
+			관리자페이지 메인
+			</div>
+		</div>
+		</div>
+</body>
+
+</html>
