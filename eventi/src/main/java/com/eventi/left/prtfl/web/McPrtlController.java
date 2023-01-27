@@ -87,8 +87,13 @@ public class McPrtlController {
 		reviewVO.setCategory("T06");
 		model.addAttribute("reviews", reviewService.getReview(reviewVO));
 		
+		System.out.println("-=====reviews:" + reviewService.getReview(reviewVO));
+		
 		//후기 평균 별점, 전체건수
 		model.addAttribute("recount", reviewService.getReviewAvg(reviewVO));
+		
+		//의뢰폼 행사 유형
+		model.addAttribute("types", codeService.getType());
 		
 		return "content/prtfl/mcSelect";
 	}
@@ -117,6 +122,16 @@ public class McPrtlController {
 		mcPrtflService.mcInsert(mcPrtflVO, filesVO, uploadFile);
 		String userId = mcPrtflVO.getUserId();
 		return "redirect:/prtfl/mcList";
+	}
+	
+	//사회자입력폼으로 이동
+	@GetMapping("/mcUpdate")
+	public String mcUpdate(Model model, McPrtflVO mcPrtlVo) {
+		model.addAttribute("areas", codeService.getCountry());
+		model.addAttribute("types", codeService.getType());
+		model.addAttribute("mcStyles", codeService.getMcStyle());
+		
+		return "content/prtfl/mcUpdate";
 	}
 	
 }

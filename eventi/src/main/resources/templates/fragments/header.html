@@ -260,7 +260,7 @@
 		function makeList(r){
 			let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
 							<div class="flex-grow-1 ms-3">
-								<h3>${r.toId}</h3>
+								<h3 id=${r.cid}>${r.toId}</h3>
 								<p>front end developer</p>
 							</div>
 						</a>`;
@@ -301,7 +301,7 @@
 	});
 	
 	function connect(chaId) {
-		console.log("chaId:********" + chaId);
+		console.log("3 채팅방 연결: " + chaId);
 		
 	   	//구독
 	   	var socket = new SockJS('/gs-guide-websocket');
@@ -339,13 +339,14 @@
 				 msgCntn : $("#name").val()
 			}));
 			
-			$("name").val("");
+			$("#name").val("");
 		});
 	   
 	 //채팅방리스트에서 채팅방을 눌렀을 경우 채팅 내역 불러오기
 		function message(cId){
 			$("#greetings").empty();
 			chaId = cId;
+			$('#toName').text($("#"+chaId).text());
 			$.ajax({
 				url : '/msgList',
 				method : 'post',
