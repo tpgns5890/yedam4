@@ -1,6 +1,9 @@
 /*--------------------------------------------------------------
 	Common
 --------------------------------------------------------------*/
+
+
+
 html {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -9,8 +12,7 @@ html {
 
 body {
   background: #fff;
-  font: 400 12px/1.8 "Open Sans", sans-serif;
-  color: #666;
+  font-family: 'IBM Plex Sans KR', sans-serif !important;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -648,7 +650,6 @@ a,
 --------------------------------------------------------------*/
 .btn {
   border-radius: 0;
-  font-family: "Roboto Condensed", sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 11px;
@@ -812,7 +813,6 @@ a,
 
 /* Forms common style */
 .form-control {
-  font-family: "Roboto Condensed", sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 11px;
@@ -888,13 +888,11 @@ blockquote {
 }
 
 .font-alt {
-  font-family: "Roboto Condensed", sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
 .font-serif {
-  font-family: Volkhov, "Times New Roman", sans-serif;
   font-style: italic;
 }
 
@@ -1243,7 +1241,6 @@ General Styles - Owlcarousel
   border: 0;
   border-radius: 0;
   z-index: 1000;
-  font-family: "Roboto Condensed", sans-serif;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-size: 11px;
@@ -2296,7 +2293,6 @@ Google map
   content: "\f106";
   top: 50%;
   right: 0px;
-  font-family: "FontAwesome";
   line-height: 1;
   font-size: 14px;
   margin-top: -7px;

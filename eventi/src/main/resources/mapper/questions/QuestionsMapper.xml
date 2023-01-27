@@ -2,47 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.eventi.left.questions.mapper.QuestionsMapper">
+<mapper
+	namespace="com.eventi.left.questions.mapper.QuestionsMapper">
 
-	<!-- 공모전1건에 대한 문의+답변 리스트-->
+	<sql id="checkId">
+		<where>
+		<if test="userId != null and userId != ''">
+			and userId = #{userId}
+		</if>
+		<if test="targetId != null and targetId != ''">
+			and targetId = #{targetId}
+		</if>
+		</where>
+	</sql>
+
+
+	<!-- 공모전1건에 대한 문의+답변 리스트 -->
 	<select id="questionsList" resultType="QuestionsVO">
-		SELECT * 
-		FROM ( select ROWNUM RN, 
-		        A.*FROM(
-							SELECT Q.q_no,
-									Q.USER_ID,
-									Q.TARGET_ID,
-									Q.TTL,
-									Q.CNTN,
-									Q.WRITING_DT,
-									Q.CATEGORY,
-									Q.REREP_TGT,
-									NVL(REREP_TGT, Q_NO) GP 
-									FROM Questions Q
-									WHERE target_id = #{targetId} 
-									AND category = #{category}
-							ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+		SELECT *
+		FROM ( select ROWNUM RN,
+		A.*FROM(
+		SELECT Q.q_no,
+		Q.USER_ID,
+		Q.TARGET_ID,
+		Q.TTL,
+		Q.CNTN,
+		Q.WRITING_DT,
+		Q.CATEGORY,
+		Q.REREP_TGT,
+		NVL(REREP_TGT, Q_NO) GP
+		FROM Questions Q
+		WHERE target_id = #{targetId}
+		AND category = #{category}
+		ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
 	</select>
-	
-	<!-- 나의 공모전 대한 문의리스트 : 문의만 출력-->
+
+	<!-- 나의 공모전 대한 문의리스트 : 문의만 출력 -->
 	<select id="myQuestionsList" resultType="QuestionsVO">
-		SELECT  B.*, 
-				CASE WHEN Q_NO IN (SELECT Q.Q_NO
-									FROM QUESTIONS Q, QUESTIONS A
-									WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
-		        ELSE '미답변'
-		        END AS ANS
-		FROM ( select ROWNUM RN, 
-		        A.*FROM(
-							SELECT Q.*, NVL(rerep_tgt, Q_NO) GP 
-									FROM Questions Q
-									WHERE category = #{category}
-                            and rerep_tgt is null
-                            and  USER_ID = #{userId}
-							ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+		SELECT B.*,
+		CASE WHEN Q_NO IN (SELECT Q.Q_NO
+		FROM QUESTIONS Q, QUESTIONS A
+		WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
+		ELSE '미답변'
+		END AS ANS
+		FROM ( select ROWNUM RN,
+		A.*FROM(
+		SELECT Q.*, NVL(rerep_tgt, Q_NO) GP
+		FROM Questions Q
+		WHERE category = #{category}
+		and rerep_tgt is null
+		and USER_ID = #{userId}
+		ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
                         
 		 <![CDATA[
 			        ) A 
@@ -51,36 +64,37 @@
 	    WHERE RN >= #{first}
 			]]>
 	</select>
-	
+
 	<!-- 문의사항 전체조회 -->
 	<select id="qnaList" resultType="QuestionsVO">
-		SELECT  B.*, 
-				CASE WHEN Q_NO IN (SELECT Q.Q_NO
-									FROM QUESTIONS Q, QUESTIONS A
-									WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
-		        ELSE '미답변'
-		        END AS ANS
-		 FROM  (SELECT ROWNUM RN, A.* 
-		         FROM ( SELECT * 
-				          FROM QUESTIONS QU
-		                 WHERE USER_ID = #{vo.userId}
+		SELECT B.*,
+		CASE WHEN Q_NO IN (SELECT Q.Q_NO
+		FROM QUESTIONS Q, QUESTIONS A
+		WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
+		ELSE '미답변'
+		END AS ANS
+		FROM (SELECT ROWNUM RN, A.*
+		FROM ( SELECT *
+		FROM QUESTIONS QU
+		WHERE USER_ID = #{vo.userId}
 	    <![CDATA[
 			        ) A 
 			    WHERE ROWNUM <= #{paging.last}
 			 ) B
 	    WHERE RN >= #{paging.first}
-		]]> 
+		]]>
 	</select>
-	
+
 	<!-- 문의글 1건조회 -->
 	<select id="getQuestions" resultType="QuestionsVO">
-		select * 
+		select *
 		from Questions
 		where category = #{category}
 		and target_id = #{targetId}
-		and q_no = #{qNo}
+		and
+		q_no = #{qNo}
 	</select>
-	
+
 	<!-- 문의글 1건과 답변1건 조회 -->
 	<select id="getQuestionsList" resultType="QuestionsVO">
 		SELECT *
@@ -88,60 +102,67 @@
 		where q_no = #{qNo}
 		or rerep_tgt = #{rerepTgt}
 	</select>
-	
+
 	<!-- 게시글 시퀀스번호 찾기 -->
 	<select id="getSeq" resultType="String">
-		SELECT 'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
-			FROM Questions
+		SELECT
+		'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
+		FROM Questions
 	</select>
-	
+
 	<insert id="questionsInsert">
-		<selectKey keyProperty="qNo" resultType="String" order="BEFORE">
+		<selectKey keyProperty="qNo" resultType="String"
+			order="BEFORE">
 			SELECT 'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
-			FROM Questions
+			FROM
+			Questions
 		</selectKey>
-	
-		insert into QUESTIONS(Q_NO,USER_ID,TARGET_ID,TTL,CNTN,WRITING_DT,SECRET_YN,CATEGORY,REREP_TGT)
-		values(	#{qNo},
-				#{userId},
-				#{targetId},
-				#{Ttl},
-				#{Cntn},
-				sysdate,
-				#{secretYn},
-				#{category},
-				#{rerepTgt}
-				)
+
+		insert into
+		QUESTIONS(Q_NO,USER_ID,TARGET_ID,TTL,CNTN,WRITING_DT,SECRET_YN,CATEGORY,REREP_TGT)
+		values( #{qNo},
+		#{userId},
+		#{targetId},
+		#{Ttl},
+		#{Cntn},
+		sysdate,
+		#{secretYn},
+		#{category},
+		#{rerepTgt}
+		)
 	</insert>
-	
+
 	<update id="questionsUpdate">
 		update QUESTIONS
 		set CNTN= #{Cntn},
-			WRITING_DT = current_date,
-			SECRET_YN = #{secretYn}
+		WRITING_DT = current_date,
+		SECRET_YN = #{secretYn}
 		where q_no = #{qNo}
 		and user_id = #{userId}
 	</update>
-	
+
 	<delete id="questionsDelete">
 		delete questions
 		where q_no = #{qNo}
-		and user_id = #{userId}
+		and user_id =
+		#{userId}
 	</delete>
-	
+
 	<!-- 전체 게시글 문의개수 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM QUESTIONS
-		WHERE USER_ID = #{userId}
+		<include refid="checkId" />
 	</select>
-	
+
 	<!-- 회원의 마이페이지 문의게시글에 대한 개수 -->
 	<select id="targetCount" resultType="int">
 		SELECT count(*)
-		FROM Questions Q
+		FROM
+		Questions Q
 		WHERE category = #{category}
 		and user_id = #{userId}
-		and rerep_tgt is null
+		and
+		rerep_tgt is null
 	</select>
 </mapper>
