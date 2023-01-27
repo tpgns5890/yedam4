@@ -11,7 +11,7 @@ public interface MoneyMapper {
 	
 	public List<MoneyVO> userMoneyList(String userId); //특정회원 리스트 조회
 	
-	public MoneyVO oneMoneySelect(String moNum); //입출금내역 1건 조회
+	public MoneyVO oneMoneySelect(String Id); //입출금내역 1건 조회
 	
 	public int insertMoney(MoneyVO vo); //추가(입금, 출금요청)
 	

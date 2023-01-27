@@ -44,7 +44,6 @@ public class DesignServiceImpl implements DesignService {
 	public List<DesignVO> contestDesignList(DesignVO vo, PagingVO paging) {
 		paging.setTotalRecord(mapper.entryDesign(vo.getcNo()));
 		paging.setPageUnit(6); // 4개 출력 (default 10)
-		System.out.println(paging);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 

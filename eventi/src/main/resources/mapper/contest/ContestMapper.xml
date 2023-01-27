@@ -82,6 +82,11 @@
                      	 from winner 
                      	 where co_no = c_no 
                      	 and d_no is not null) AS winnerCheck,
+                     (select count(*) 
+                        from design d
+                        where d.c_no = c.c_no
+                        and save = 'N')designCount,
+                        
                       CASE WHEN dt_extns IS NOT NULL  THEN 
 	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
 	                                ELSE '마감'
@@ -91,13 +96,16 @@
                                     ELSE '마감'
                                END
                       END AS ing
+                      
               FROM CONTEST c
-					 WHERE writer = #{writer}
-         <include refid="search" />
-         order by dt_reg DESC
+			    WHERE writer = #{writer}
+				<include refid="search" />
+         	  order by dt_reg DESC
+         
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
+		
 	</select>
 
 	<!-- 공모전 등록처리된 개수(임시저장/마감일 지난경우 제외) -->

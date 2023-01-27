@@ -8,10 +8,10 @@
 	<sql id="checkId">
 		<where>
 		<if test="userId != null and userId != ''">
-			and userId = #{userId}
+			and user_Id = #{userId}
 		</if>
 		<if test="targetId != null and targetId != ''">
-			and targetId = #{targetId}
+			and target_id = #{targetId}
 		</if>
 		</where>
 	</sql>

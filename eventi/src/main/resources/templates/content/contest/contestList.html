@@ -39,6 +39,7 @@
               	<!-- 분류별 기준 뽑아오기 -->
               	 <div class="col-sm-3 mb-sm-20">
 	                <div>
+	                		<input type="checkbox" name="category" value="" onclick="doOpenCheck(this);">전체
 	                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막
 							<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너
 							<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고
@@ -152,6 +153,7 @@
 					$('#order').on("change", function () {
 						let order = $(this).val();
 						$('input[name=orderSelect]').val(order);
+						$('input[name=page]').val(1);
 						checkSelect();
 
 					});
@@ -162,6 +164,7 @@
 						$(this).change(function () {
 							if (this.checked) {
 								$('input[name=categorySelect]').val($(this).val());
+								$('input[name=page]').val(1);
 							}
 							checkSelect();
 						});
@@ -275,7 +278,7 @@
 					}
 
 					//페이지 버튼 생성.
-					for (let i = page.startPage; i <= page.endPage; i++) {
+					for (let i = page.startPage; i < page.endPage; i++) {
 						if (page.page == i) {
 							$(ul).append($("<li/>") .text(i).css("font-size", "20px")
 													.css("padding", "10px")

@@ -133,6 +133,7 @@
 		select count(*)
 		  from design
 		where c_no =#{cNo}
+		AND SAVE = 'Y'
 	</select>
 	
 	<select id="saveGetdesign" resultType="DesignVO">

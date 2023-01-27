@@ -18,7 +18,7 @@
 	<select id="oneMoneySelect" resultType="MoneyVO">
 		SELECT MO_NUM,BANK_NAME,BANK_ACCOUNT,MO_TYPE,MO_PRICE,USER_ID,PAY_NO,SETT_YN,TARGET_ID
 		FROM MONEY
-		where mo_num = #{moNum}
+		where target_id = #{targetId}
 	</select>
 	
 	<insert id="insertMoney">

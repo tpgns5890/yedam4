@@ -116,13 +116,9 @@ public class ContestServiceImpl implements ContestService {
 
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-
-			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
-			Thread thread = new Thread( new MembersSendMail(vo, result, 0));
+			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			Thread thread = new Thread(new MembersSendMail(vo, result, 0));
 			thread.start();
-			
-			//입금정보 추가(API연결예정)
-			contestMoneyInsert(result, 0, vo); // insert,delete,vo
 		}
 		return result;
 	}
@@ -147,10 +143,10 @@ public class ContestServiceImpl implements ContestService {
 			// 제목,내용 수정할경우(그 외 공모전민감자료 수정불가)
 		} else {
 			// 파일업로드,공모전 수정
-			uploadFiles(uploadFile, vo);
 			result = mapper.updateContest(vo);
-			
-			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			uploadFiles(uploadFile, vo);
+
+			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
 			Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
 			thread.start();
 		}
@@ -166,7 +162,8 @@ public class ContestServiceImpl implements ContestService {
 		// 공모전 우승금액
 		// 1.index 기준으로 등수설정
 		// 2.from입력값이 있다면 insert 및 합계계산후 총상금 지정.
-		int hap = 0;
+		System.out.println(vo.getPay());
+		int hap = vo.getPay();
 		String[] array = wvo.getWinnerPay();
 		wvo.setCoNo(vo.getcNo());
 
@@ -180,7 +177,6 @@ public class ContestServiceImpl implements ContestService {
 				wMapper.insertWinner(wvo);
 			}
 		}
-		// 총 상금합계
 		vo.setPay(hap);
 
 		// 파일업로드,공모전 수정
@@ -189,21 +185,21 @@ public class ContestServiceImpl implements ContestService {
 
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-			
-			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
-			Thread thread = new Thread( new MembersSendMail(vo, result, 0)); // vo,insert,update
+			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			Thread thread = new Thread(new MembersSendMail(vo, result, 0)); // vo,insert,update
 			thread.start();
-
-			// 입금정보 추가(API연결예정)
-			contestMoneyInsert(result, 0, vo); // insert,delete,vo
 		}
 
 		return result;
 	}
 
-	// 공모전,우승상금 삭제
+	// 공모전 우승금액,파일 삭제(공모전 고유번호)
 	@Override
 	public int deleteContest(ContestVO vo) {
+
+		// 작성자정보, 공모전 정보.
+		MemberVO user = memberMapper.getMember(vo.getWriter());
+		ContestVO contest = mapper.getContest(vo.getcNo());
 
 		// 응모한 디자인이 있으면 삭제불가.
 		if (dMapper.entryDesign(vo.getcNo()) > 0) {
@@ -215,15 +211,20 @@ public class ContestServiceImpl implements ContestService {
 		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
 		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
 
-		//공모전 삭제전 금액 출금요청정보 넘기기위해 조회저장.
-		vo = mapper.getContest(vo.getcNo()); 
-		int result = mapper.deleteContest(vo);
-		if(result > 0) {
-			
-			//출금요청정보 추가(API연결예정)
-			contestMoneyInsert(0, result, vo); // insert,delete,vo
+		//출금요청 insert
+		if (moneyMapper.oneMoneySelect(vo.getcNo()) != null) {
+			MoneyVO money = new MoneyVO();
+			money.setBankName(user.getBank()); // 은행정보
+			money.setBankAccount(user.getAccnt()); // 계좌번호
+			money.setMoPrice(contest.getPay());
+			money.setUserId(contest.getWriter());
+			money.setTargetId(contest.getcNo());
+			money.setPayNo(moneyMapper.oneMoneySelect(vo.getcNo()).getPayNo()); // 결제코드 추가하기
+			money.setMoType("M2"); // 출금코드
+			moneyMapper.insertMoney(money); 
 		}
-		return result;
+
+		return mapper.deleteContest(vo);
 	}
 
 	// 공모전 시퀀스정보
@@ -274,46 +275,19 @@ public class ContestServiceImpl implements ContestService {
 
 	}
 
-
-
-	// 입금내역 추가
-	public void contestMoneyInsert(int insert, int delete, ContestVO vo) {
-		// 등록된 정보조회(입금자명,은행코드,계좌번호)
-		MemberVO user = memberMapper.getMember(vo.getWriter());
-		MoneyVO money = new MoneyVO();
-
-		// 공통정보 세팅
-		money.setBankName(user.getBank()); // 은행정보
-		money.setBankAccount(user.getAccnt()); // 계좌번호
-		money.setMoPrice(vo.getPay());
-		money.setUserId(vo.getWriter());
-		money.setTargetId(vo.getcNo());
-		money.setPayNo("임시결제코드"); // 결제코드 추가하기
-
-		if (insert > 0) {
-			money.setMoType("M1"); // 입금코드
-		}
-		if (delete > 0) {
-			money.setMoType("M2"); // 출금코드
-		}
-		moneyMapper.insertMoney(money);
-	}
-	
-
 	/**
 	 * 
-	 * @author 배수빈
-	 * 메일발송을 위한 내부클래스 선언.
+	 * @author 배수빈 메일발송을 위한 내부클래스 선언.
 	 *
 	 */
 	class MembersSendMail implements Runnable {
-		
-		//필드선언
+
+		// 필드선언
 		ContestVO vo;
 		int insert;
 		int update;
-		
-		//생성자 선언
+
+		// 생성자 선언
 		public MembersSendMail(ContestVO vo, int insert, int update) {
 			super();
 			this.vo = vo;
@@ -339,13 +313,13 @@ public class ContestServiceImpl implements ContestService {
 				e.printStackTrace();
 			}
 		}
-	
-		// 실행할 메소드 : 공모전 등록,수정시 수신동의한 회원들에게 이메일발송 
+
+		// 실행할 메소드 : 공모전 등록,수정시 수신동의한 회원들에게 이메일발송
 		@Override
 		public void run() {
 			// 수신동의한 멤버리스트.
 			List<MemberVO> emailList = memberMapper.memberEmail();
-	
+
 			// 처리된결과가 있으면
 			if (insert > 0) {
 				for (MemberVO email : emailList) {
@@ -362,7 +336,8 @@ public class ContestServiceImpl implements ContestService {
 					mailing(toMail, title, content);
 				}
 			}
-			
+
 		}
 	}
+
 }

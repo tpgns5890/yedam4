@@ -58,6 +58,7 @@
 							<th>제목</th>
 							<th>진행기간</th>
 							<th>진행</th>
+							<th>지원수</th>
 							<th>등록</th>
 							<th>조회/우승자등록</th>
 						</tr>
@@ -91,6 +92,8 @@
 							</th:block>
 							
 							<td th:text="${contest.ing}"></td>
+							
+							<td th:text="${contest.designCount}"></td>
 							
 							
 							<th:block th:if="${contest.save} == 'Y'">
