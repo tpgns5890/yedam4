@@ -30,6 +30,7 @@ button {
 }
 </style>
 </head>
+<body>
 <div layout:fragment="content">
    <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
           <div class="container">
@@ -65,7 +66,10 @@ button {
         <label for="title" id="title">행사 관련 희망사항을 알려주세요.</label>
     <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
   </form>
+  <button onclick="location.href='/'">홈으로</button>
+  <button onclick="location.href='/prtfl/mcList'">사회자 보러가기</button>
+  <button onclick="location.href='/jobList'">구인구직 보러가기</button>
 </div>
-</div>
-
+</div><!-- end of layout:fragment -->
+</body>
 </html>

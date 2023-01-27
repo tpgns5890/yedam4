@@ -1,12 +1,22 @@
 package com.eventi.left.estimate.service;
 
 import java.sql.Date;
+import java.util.List;
 
+import com.eventi.left.member.service.BusiVO;
+import com.eventi.left.member.service.CrtfVO;
+import com.eventi.left.member.service.MemberVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor 
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class EstVO {
 	private String eno; //견적요청서 번호
 	private String userId; // 회원ID
@@ -21,8 +31,8 @@ public class EstVO {
 	private Date writingDate; //작성일시
 	private String adoptionYn; //제안서 채택유무
 	
-	private PropVO propVO;  //PropVO Join 컬럼
+	//private PropVO propVO;  //PropVO Join 컬럼
 	
-	Integer first =1; //첫 페이지
-	Integer last = 4; //마지막 페이지
+	Integer first; //첫 페이지
+	Integer last; //마지막 페이지
 }

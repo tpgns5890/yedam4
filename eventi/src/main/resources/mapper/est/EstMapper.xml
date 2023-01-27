@@ -4,7 +4,7 @@
 
 <mapper namespace="com.eventi.left.estimate.mapper.EstMapper">
 	<!-- Join에 자주쓰이는 컬럼설정 -->
-	<resultMap type="PropVO" id="PropVO">
+<!-- 	<resultMap type="PropVO" id="PropVO">
 		<result column="user_id" property="userId" />
 	</resultMap>
 	<resultMap type="EstVO" id="EstVO">
@@ -12,20 +12,26 @@
 		<result column="event_type" property="eventType" />
 		<result column="writing_dt" property="writingDate" />
 		<result column="adoption_yn" property="adoptionYn" />
-		<collection property="propVO" resultMap="PropVO" /> <!-- vo에 추가한 join용 변수 -->
-	</resultMap>
+		<collection property="propVO" resultMap="PropVO" /> vo에 추가한 join용 변수
+	</resultMap> -->
 
 	<!-- 견적요청서 전체조회 -->
-	<select id="getEstList" parameterType="EstVO" resultMap="EstVO">
-		SELECT
-		e.E_NO, e.EVENT_TYPE, e.WRITING_DT, e.ADOPTION_YN, p.USER_ID
-		FROM
-		ESTIMATE e
-		LEFT JOIN
-		proposal p
-		ON e.e_no = p.e_no
+	<select id="getEstList" resultType="EstVO">
+		SELECT E_NO, EVENT_TYPE, WRITING_DT, ADOPTION_YN
+      FROM(select rownum rn, a.*
+          from(select *
+               from ESTIMATE
+       <![CDATA[) A 
+          WHERE ROWNUM <= #{last}) 
+      WHERE RN >= #{first}]]>
 	</select>
 
+	<!-- 견적요청서 총 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
+		FROM ESTIMATE
+	</select>
+	
 	<!-- 견적요청서 단건조회 -->
 	<select id="getEst" resultType="EstVO">
 		SELECT *
@@ -132,4 +138,6 @@
 	set adoption_yn = 'Y'
 	where p_no = #{pno}
 	</update>
+	
+
 </mapper>

@@ -25,7 +25,6 @@ label {
  color: gray;
 }
 button {
- float: right;
  margin-right: 50px;
 }
 #propList {
@@ -80,7 +79,7 @@ button {
         <label for="title" id="title">행사 예정 장소는 어디인가요?</label>
     <input type="text" id="expectedPl" name="expectedPl" th:value="${est.expectedPl}" readonly>
         <label for="title" id="title">행사 날짜를 선택해주세요.</label>
-    <input type="text" id="eventDate" name="eventDate" th:value="${est.eventDate}" readonly>
+    <input type="text" id="eventDate" name="eventDate" th:value="${#temporals.format(est.eventDate, 'yyyy-MM-dd')}" readonly>
         <label for="title" id="title">행사 시작시간은 언제인가요?</label>
     <input type="text" id="eventTime" name="eventTime" th:value="${est.eventTime}" readonly>
         <label for="title" id="title">행사 예상 소요시간을 선택해주세요.</label>
@@ -96,6 +95,10 @@ button {
  	<!-- 비회원 로그인창 띄우기-->		
 <th:block sec:authorize="!isAuthenticated()">			
  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop" onclick="login()">제안서 작성</button>
+ 	</th:block>
+ 	<!-- 로그인된 회원 버튼표시-->	
+<th:block sec:authorize="isAuthenticated()">			
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop">제안서 작성</button>
  	</th:block>
  <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -160,10 +163,11 @@ button {
 	<p th:text="|총금액 : ${prop.totalPrc}원|"></p>
   <input type="hidden" name="pno" id="pno" th:value="${prop.pno}">
     <p th:text="|고용회수 : ${count.adoption}|"></p>	
-    <p th:text="|후기수 : ${count.review}|"></p>
+    <p th:text="|후기수 : ${count.review}|"></p> 
      <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" id="getProp" th:value="${prop.userId}">제안서 보기</button>
+    <button type="button" class="btn btn-primary getProp" data-toggle="modal" data-target="#exampleModal2" id="getProp" th:value="${prop.userId}">제안서 보기</button>
     <button type="button" class="btn btn-primary" id="delProp">제안서 삭제</button>
+     <button type="button" class="btn btn-primary chattingUp" th:id="${prop.userId}"> 채팅하기</button> 
  <!-- Modal -->
 <div class="modal fade" th:id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -177,6 +181,7 @@ button {
       <div class="modal-body">
       <div id="companyInt">
        <label for="companyInt" class="col-form-label">업체소개</label>
+
        </div>
        <label for="gdList" class="col-form-label">물품목록</label>
    		
@@ -217,15 +222,14 @@ button {
   </div>
 </div><!--  end of Modal -->
  </div>
-<!--  <input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}"> -->
+  <input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}"> 
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
 //해당업체의 등록된물품 조회
-/*  $(function() {
-	 
+  $(function() {
 var userId = $('input[name="sessionId"]').val();
 var data = {"userId" : userId};
  	$.ajax({
@@ -274,7 +278,7 @@ var data = {"userId" : userId};
 		}
 		total = goodsSum + etcSum;
 		 $('#total').append("총금액: "+total+"원");
- }); */
+ }); 
  
  //제안서버튼 누를시 기존에 작성된 기타목록 제거
  $('#prop').on('click', function() {
@@ -332,7 +336,7 @@ var data = {"userId" : userId};
 	 });
  });
  //제안서 등록
-/*  $('#insertBtn').on("click", function(){
+  $('#insertBtn').on("click", function(){
 	 //행사운영비 금액
 	 var inputVal = parseInt($('#etcList input').val());
 	 if(inputVal == 0){
@@ -346,7 +350,6 @@ var data = {"userId" : userId};
 	 var companyInt = 'test';
 	 var eventExps = parseInt(inputVal);
 	 var totalPrc = parseInt($('#total').html().substr(5));
-	
 	 var data = {
 			 "eno": eno,
 			 "userId": userId,
@@ -373,12 +376,13 @@ var data = {"userId" : userId};
  				alert("서버 요청 실패");
  			}
 	 });  
- }); */
+ }); 
  //제안서 상세보기
- $('#getProp').on('click', function() {
+ $('.getProp').on('click', function() {
+	 $('#total').text("");
 	 $('#companyInt').html("");
 	 $('#fixedGdList tbody tr').remove();
-	 var pno = $('#pno').val();
+	 var pno = $(this).parent().children('#pno').val();
 	 var data = {"pno": pno};
 	 $.ajax({
 		 url: "/getProp",
@@ -391,9 +395,12 @@ var data = {"userId" : userId};
          },
          success: function(res){ 
         	 var companyInt = res.companyInt;
+        	 var eventExps = res.eventExps;
+        	 var totalPrc = res.totalPrc;
         	$('#companyInt').append(companyInt);
+            $('#fixedEtcList tbody td').eq(1).text(eventExps);
+            $('#total').text("총금액: "+totalPrc+"원");
         	//제안서 물품조회
-        	console.log(data)
         	$.ajax({
         		url: "/propGdList",
         		method: "POST",
@@ -405,14 +412,13 @@ var data = {"userId" : userId};
                 xhr.setRequestHeader(header, token);
                 },
         		success: function (data) {
-        			console.log(data)
         			$.each(data, function(idx, goods){
         				var tr = $("<tr />")
         				var goodsNm = $("<td />").append(goods.goodsNm);
         				var unitPrc = $("<td class='prc'/>").append(goods.unitPrc);
         				var count = $("<td class='stock'/>").append(goods.count);
         				tr.append(goodsNm, unitPrc, count)
-        				$('#fixedGdList>tbody').append(tr);
+        				$('#fixedGdList tbody').append(tr);
         			})
                  },
                  error: function () {
@@ -488,7 +494,107 @@ var data = {"userId" : userId};
  //비회원 로그인창 띄우기
  function login(){
 					 $("#header_modal").show();
-				}
+				};
+			 	//채팅버튼을 눌렀을 때
+				$(".chattingUp").on("click", function () {
+					$(".chat").toggleClass("active");
+					alert("메세지받을대상은: "+$(this).attr('id'))
+					let toId = $(this).attr('id');
+					let From = $('#sessionId').val();
+					//채팅방 구독 생성
+					function createChatRoom() {
+						console.log("1 채팅방 생성");
+						let chatroomDataList = new Array();
+						let chatroomData1 = {
+								toId : toId,
+								fromId : fromId
+						};
+						chatroomDataList.push(chatroomData1);
+						let chatroomData2 = {
+								toId : fromId,
+								fromId : toId
+						};
+						chatroomDataList.push(chatroomData2);
+						
+						console.log(JSON.stringify(chatroomDataList));
+						
+						$.ajax({
+				   			url : '/chatInsert',
+				   			method : 'post',
+				   			data : JSON.stringify(chatroomDataList),
+				   			contentType : "application/json; charset=UTF-8",
+				   			beforeSend : function(xhr)
+				            {  
+								xhr.setRequestHeader(header, token);
+				            }
+				   		}).then(res => {
+				   			console.log("2 채팅방 생성 번호: " + cId);
+				   			cId = res;
+				   			chattingList(cId)
+				   		})
+					}
+				   	
+				   	function chattingList(cId){
+				   		console.log('chattingList:', cId);
+				   		$.ajax({
+							url : '/chatSelect',
+							method : 'post',
+				   			data : JSON.stringify({toId:toId, fromId:fromId}),
+				   			contentType : "application/json; charset=UTF-8",
+				   			beforeSend : function(xhr)
+				            {   
+								xhr.setRequestHeader(header, token);
+				            }
+				   		}).then(res => {
+				   			$(".chat-list").empty();
+				   			for(r of res){
+				   				$(".chat-list").append(makeList(r));
+				   			}
+				   			message(cId);
+				   		})
+				   		
+				   		$(".chat-popup").show();
+				   	}
+			
+					function makeList(r){
+						let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+										<div class="flex-grow-1 ms-3">
+											<h3>${r.toId}</h3>
+											<p>front end developer</p>
+										</div>
+									 </a>`;
+						return list;
+					}
+						
+					//채팅화면이 나타난다.
+					if ($(".chat").hasClass("active")) {
+						$.ajax({
+							url : '/checkChat',
+							method : 'post',
+				   			data : JSON.stringify({toId:toId, fromId:fromId}),
+				   			contentType : "application/json; charset=UTF-8",
+				   			beforeSend : function(xhr)
+				            {   
+								xhr.setRequestHeader(header, token);
+				            }
+				   		}).then(res => {
+				   			if(res != ''){
+				   				console.log('res.cId:', res.cid);
+				   				chattingList(res.cid);
+				   			} else {
+				   				createChatRoom();
+				   			}
+				   		})
+						$(".chat-popup").show();
+						$(".chatbox").show();
+					}
+			
+					//채팅화면이 사라진다.
+					if (!$(".chat").hasClass("active")) {
+						$(".chat-popup").hide();
+						$(".chatbox").hide();
+					}
+				}); 
 </script>
 </div><!-- End of layout:fragment -->
 </body>

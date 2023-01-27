@@ -3,50 +3,148 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
-
-<div layout:fragment="content">
-<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Big Title</h2>
-                <div class="module-subtitle font-serif">Small Title</div>
-              </div>
-            </div>
-          </div>
-        </section>
-	<table class="table mb-3">
-		<thead class="thead-dark">
-			<tr>
-				<th>견적서번호</th>
-				<th>행사유형</th>
-				<th>작성일시</th>
-				<th>제안서 채택유무</th>
-			</tr>
-		</thead>
-		<tbody id="check">
-			<tr th:each="est : ${estList}" th:onclick="location.href='@{estDetail(eno=${est.eno})}'">
+<head>
+<style>
+tbody>tr:hover {
+	background-color: #ddd;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg"
+			data-background="/assets/images/gallery_bg.jpg"
+			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h2 class="module-title font-alt">견적요청서 게시판</h2>
+					</div>
+				</div>
+			</div>
+		</section>
+		<table class="table mb-3">
+			<thead class="thead-dark">
+				<tr>
+					<th>견적서번호</th>
+					<th>행사유형</th>
+					<th>작성일시</th>
+					<th>제안서 채택유무</th>
+				</tr>
+			</thead>
+			<tbody id="check">
+				<!-- 	<tr th:each="est : ${estList}" th:onclick="|location.href='@{estDetail(eno=${est.eno})}'|">
 				<td th:text=${est.eno}></td> 
 				<td th:text=${est.eventType}></td>
 				<td th:text=${est.writingDate}></td>
 				<td th:text=${est.adoptionYn}></td>
-			</tr>
-		</tbody>
-	</table>
-	<!-- 페이징 처리 -->
-		<div class="row mt-5">
-          <div class="col text-center">
-            <div class="block-27">
-               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
-            </div>
-          </div>
-        </div>
-</div>
-<script>
-//페이지 이동 
+			</tr> -->
+			</tbody>
+		</table>
+
+		<!-- 페이징 처리 -->
+		<div class="row mt-5" id="paging">
+			<div class="col text-center">
+				<div class="block-27" id="returnPaging"></div>
+			</div>
+		</div>
+		<input type="hidden" name="page" value="1">
+		<script>
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+ajaxList();
+
 function gopage(i) {
-    console.log(i);
-    location.href = '/estList?page=' + i;
+	let page = $('input[name="page"]').val(i);
+	//정렬 리스트 불러오는 함수
+	ajaxList();
+}
+
+//비동기 통신
+function ajaxList() {
+	let page = $('input[name="page"]').val();
+	$.ajax({
+		url: "/estListAjax",
+		method: 'post',
+		data: {
+			page
+		},
+		beforeSend: function (xhr) {
+			/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			xhr.setRequestHeader(header, token);
+		},
+		success: function (result) {
+			//기존 tr 삭제 ->tr생성 붙여넣기
+			$('tbody').empty();
+			for (eList of result.eListAjax) {
+				$('tbody').append(makeTr(eList));
+			}
+			//기존 페이징 삭제 -> 다시붙여넣기
+			$('#returnPaging').empty();
+			$('#returnPaging').append(makePaging(result.paging));
+		}
+	})
+}
+
+//tr만들기
+function makeTr(eList) {
+	let p = `
+	<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
+		<td>${eList.eno}</td> 
+		<td>${eList.eventType}</td>
+		<td>${eList.writingDate}</td>
+		<td>${eList.adoptionYn}</td>
+	</tr>`;
+	return p;
+}
+
+// 페이징 만들기
+function makePaging(page) {
+	if (page.totalRecord == 0) {
+
+		return;
+	}
+	let pagination = $("<div/>")
+	let ul = $("<ul/>").attr("class", "pagination");
+	if (page.startPage > 1) {
+		$(ul).append($("<li/>").html("&laquo;")
+			.css("font-size", "30px")
+			.attr("class", "page-item")
+			.on("click", function () {
+				gopage(page.startPage - page.pageSize)
+			}));
+	}
+
+	//페이지 버튼 생성.
+	for (let i = page.startPage; i <= page.endPage; i++) {
+		if (page.page == i) {
+			ul.append($("<li/>").text(i).css("font-size", "20px")
+				.css("padding", "10px")
+				.css("border-radius", " 10% / 50% ")
+				.css("background", "#dce3fd")
+				.attr("class", "page-link active")
+			);
+		} else {
+			ul.append($("<li/>").text(i).css("font-size", "20px")
+				.css("padding", "10px")
+				.attr("class", "page-link")
+				.on("click", function () {
+					gopage($(this).text());
+				})); //페이지이동 함수
+		}
+	}
+	if (page.endPage < page.lastPage) {
+		ul.append($("<li/>").html("&raquo;")
+			.css("font-size", "30px")
+			.attr("class", "page-item")
+			.on("click", function () {
+				gopage(page.startPage + page.pageSize)
+			}));
+	}
+	pagination.append(ul);
+	return pagination;
 }
 </script>
+	</div>
+</body>
 </html>
