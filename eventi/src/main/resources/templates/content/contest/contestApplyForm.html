@@ -158,10 +158,6 @@
 			  }
 			}
 			
-			$('#saveFile').on('click', function () {
-				saveModal.style.display = "block";
-			});
-			
 			//modal 끝--------------------------------------------------------------------
 			
 			
@@ -305,6 +301,7 @@
 						saveModal.style.display = "none";
 						alert('임시저장된 디자인이 없습니다.');
 					}else {
+						saveModal.style.display = "block";
 						for(design of data){
 							$("#button_box").append(choiceDesign(design));
 						}

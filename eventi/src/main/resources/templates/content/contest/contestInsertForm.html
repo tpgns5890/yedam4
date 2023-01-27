@@ -174,10 +174,6 @@
 			 	 modal.style.display = "block";
 			});
 			
-			$('#saveFile').on('click', function () {
-				saveModal.style.display = "block";
-			});
-			
 			//modal--------------------------------------------------------------------
 			
 			
@@ -297,6 +293,7 @@
 					if(data == 0){
 						alert('임시저장된 게시글이 없습니다.');
 					}else {
+						saveModal.style.display = "block";
 						for(contest of data){
 							$("#button_box").append(choiceCotest(contest));
 						}

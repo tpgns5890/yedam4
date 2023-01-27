@@ -11,7 +11,7 @@
 			and userId = #{userId}
 		</if>
 		<if test="targetId != null and targetId != ''">
-			and targetId = #{targetId}
+			and target_id = #{targetId}
 		</if>
 		</where>
 	</sql>

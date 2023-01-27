@@ -204,10 +204,10 @@
 		</div>
 		
 		<!-- 참여작 페이지처리를 위한 히든인풋. -->
-		<input type="hidden" name="designPage" value="1">
+		<input type="hidden" name="designPage" id="designPage" value="1">
 		
 		<!-- 참여작 페이지처리를 위한 히든인풋. -->
-		<input type="hidden" name="questionsPage" value="1"> 
+		<input type="hidden" name="questionsPage" id="questionsPage" value="1"> 
 
 
 		<script>
@@ -358,14 +358,19 @@
 		$('#lientry').on('click', contest);
 		
 		//페이지 이동 함수
-		function gopage(i) {
-			console.log(i)
+		function gopage(i,id) {
 			
-			$('input[name="designPage"]').val(i); //페이징처리를 위한 input값 변경.
-			contest(); 
-			
-			//$('input[name="questionsPage"]').val(i); //페이징처리를 위한 input값 변경.
-			//questions();
+		//참여작 페이징.
+			if(id == "design"){
+				$('#designPage').val(i); 
+				contest(); 
+			}
+		//문의사항 페이징.
+			if(id == "questions"){
+				$('#questionsPage').val(i);
+				console.log($('#questionsPage').val());
+				questions();
+			}
 		}
 		//-------------------------------------------------------------
 		
@@ -514,7 +519,7 @@
 				}
 				//기존 페이징 삭제후 붙이기
 				$('#returnPaging').empty();
-				$('#returnPaging').append(makePageing(res.paging)); 
+				$('#returnPaging').append(makePageing(res.paging,"questions")); 
 	        })
 		}
 		
@@ -671,16 +676,17 @@
 		//참여작 출력-----------------------------------------------------------
 		function contest(){
 			let page = $('input[name="designPage"]').val();
-			
+			let save="N";
 			$.ajax({
-	            url:'../contest/ajaxDesignRead',
+	            url:'/contest/ajaxDesignRead',
 	            method:"post",
-	            data : {cNo,page},
+	            data : {cNo,page,save},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
+				console.log(res.paging);
 				$("#cotestCntn").empty();
 				if(res.design == 0){
 					let p = '참여작이 없습니다.'
@@ -695,7 +701,7 @@
 				 }		
 					//기존 페이징 삭제후 붙이기
 					$('#returnPaging').empty();
-					$('#returnPaging').append(makePageing(res.paging)); 
+					$('#returnPaging').append(makePageing(res.paging,"design")); 
 					
 					
 			})
@@ -773,7 +779,7 @@
 		}
 		
 		// 페이징 만들기
-		function makePageing(page) {
+		function makePageing(page,id) {
 			if (page.totalRecord == 0) {
 				return;
 			}
@@ -802,7 +808,7 @@
 											.css("padding", "10px")
 											.attr("class", "page-link")
 											.on("click", function () {
-												gopage($(this).text());
+												gopage($(this).text(),id);
 											})); //페이지이동 함수
 				}
 			}

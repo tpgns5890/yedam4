@@ -43,6 +43,9 @@ public class ContestVO {
 	//우승자등록 체크
 	private String winnerCheck;
 	
+	//공모전 접수된 디자인 개수
+	private int designCount; 
+	
 	//공모전 파일
 	private String img;
 	
