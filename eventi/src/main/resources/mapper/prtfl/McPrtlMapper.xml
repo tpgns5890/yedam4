@@ -11,9 +11,13 @@
 	<!-- 사회자 전체조회 -->
 	<select id="mcAll" resultType="com.eventi.left.prtfl.service.McPrtflVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-		SELECT m.*, (select count(*) from likes where target_no = m.user_id) AS cnt
-		FROM MC_PRTFL m, likes l
-		WHERE m.user_id = l.target_no(+)
+		SELECT m.user_id, m.one_intro, m.carr_year,
+       		   m.casting_price, codeArr_select(m.mc_area) mc_area, codeArr_select(m.mc_type) mc_type, 
+       		   codeArr_select(m.prog_style) prog_style, m.self_intro, m.career, m.inq, m.dt, 
+       		   m.user_name, (select count(*) from likes where target_no = m.user_id) AS cnt, f.sev_nm img
+		FROM MC_PRTFL m, LIKES l, FILES F
+		WHERE M.USER_ID = L.TARGET_NO(+)
+        AND M.IMG = F.F_NM(+)
 		<include refid="likeSelect" />
 		ORDER BY ${order} DESC
 		<![CDATA[
@@ -29,9 +33,13 @@
 	
 	<!-- 사회자 단건조회 -->
 	<select id="mcSelect" resultType="com.eventi.left.prtfl.service.McPrtflVO">
-		SELECT m.*, (select count(*) from likes where target_no = m.user_id) AS cnt
-		FROM MC_PRTFL m, LIKES l
+		SELECT m.user_id, m.one_intro, m.carr_year,
+       		   m.casting_price, codeArr_select(m.mc_area) mc_area, codeArr_select(m.mc_type) mc_type, 
+       		   codeArr_select(m.prog_style) prog_style, m.self_intro, m.career, m.inq, m.dt,
+       		   m.user_name, (select count(*) from likes where target_no = m.user_id) AS cnt, F.SEV_NM img
+		FROM MC_PRTFL m, LIKES l, FILES F
 		WHERE M.USER_ID = L.TARGET_NO(+)
+		AND M.IMG = F.F_NM(+)
 		AND m.USER_ID = #{userId}
 	</select>
 	
@@ -52,14 +60,14 @@
 	
 	<!-- 사회자 입력 -->
 	<insert id="mcInsert">
-		INSERT INTO MC_PRTFL(USER_ID, USER_NAME, ONE_INTRO, CARR_YEAR, CASTING_PRICE, MC_AREA, MC_TYPE, PROG_STYLE, SELF_INTRO, CAREER, DT)
-		VALUES(#{userId}, #{userName}, #{oneIntro}, #{carrYear}, #{castingPrice}, #{mcArea}, #{mcType}, #{progStyle}, #{selfIntro}, #{career}, SYSDATE)
+		INSERT INTO MC_PRTFL(USER_ID, USER_NAME, ONE_INTRO, CARR_YEAR, CASTING_PRICE, MC_AREA, MC_TYPE, PROG_STYLE, SELF_INTRO, CAREER, img, DT)
+		VALUES(#{userId}, #{userName}, #{oneIntro}, #{carrYear}, #{castingPrice}, #{mcArea}, #{mcType}, #{progStyle}, #{selfIntro}, #{career}, #{img}, SYSDATE)
 	</insert>
 	
 	<!-- 사회자 수정 -->
 	<update id="mcUpdate">
 		UPDATE MC_PRTFL
-		SET ONE_INTRO = #{oneIntro}, CARR_YEAR = #{carrYear}, CASTING_PRICE = #{castingPrice}, MC_AREA = #{mcArea}, MC_TYPE = #{mcType}, PROG_STYLE = #{progStyle}, CAREER = #{career}
+		SET ONE_INTRO = #{oneIntro}, CARR_YEAR = #{carrYear}, CASTING_PRICE = #{castingPrice}, MC_AREA = #{mcArea}, MC_TYPE = #{mcType}, PROG_STYLE = #{progStyle}, CAREER = #{career}, img = #{img}
 		WHERE USER_ID = #{userId}
 	</update>
 	

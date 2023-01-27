@@ -37,6 +37,7 @@ public class UploadFileMethod {
 
 		// 파일 경로위치에 물리적으로 저장하기
 		for (MultipartFile file : uploadfile) {
+			System.out.println("file: " + file);
 			if (!file.isEmpty()) {
 				FileDto dto = new FileDto(UUID.randomUUID().toString(), file.getOriginalFilename(), file.getContentType());
 				list.add(dto);

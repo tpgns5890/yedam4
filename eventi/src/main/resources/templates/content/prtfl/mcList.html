@@ -62,11 +62,11 @@
    		<div class="row multi-columns-row post-columns">
 	        <div class="col-sm-6 col-md-4 col-lg-4" th:each="mc : ${mcList}">
 	          <div class="post">
-	          	<div th:each="file : ${mc.Files}" th:if="${#strings.containsIgnoreCase(file,'.jpg')}">
+
 	            <div class="post-thumbnail"><a th:href="|/prtfl/mcSelect?userId=${mc.userId}|">
-	            <img th:src="|/fileView/${file.sevNm}|" alt="Blog-post Thumbnail"></a>
+	            <img th:src="|/fileView/${mc.img}|" alt="Blog-post Thumbnail"></a>
 	            </div>
-	            </div>
+
 	            <div class="post-header font-alt">
 	              <h2 class="post-title" th:text=${mc.userId}><a href="#"></a></h2>
 	              <div class="stage">

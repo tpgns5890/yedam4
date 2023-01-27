@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
+import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
@@ -60,6 +61,9 @@ public class McPrtflServiceImpl implements McPrtflService{
 	public int mcInsert(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
+		// 대표사진세팅.
+		mcPrtflVO.setImg(uploadFile[0].getOriginalFilename());
+		
 		int r = mcPrtflMapper.mcInsert(mcPrtflVO);
 		List<FileDto> list= new ArrayList<FileDto>();
 	      //파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
@@ -80,7 +84,24 @@ public class McPrtflServiceImpl implements McPrtflService{
 
 	//사회자 수정
 	@Override
-	public int mcUpdate(McPrtflVO mcPrtlVo) {
-		return mcPrtflMapper.mcUpdate(mcPrtlVo);
+	public int mcUpdate(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		// 대표사진세팅.
+	    mcPrtflVO.setImg(uploadFile[0].getOriginalFilename());
+		
+	    int r = mcPrtflMapper.mcUpdate(mcPrtflVO);
+	    uploadFiles(uploadFile, mcPrtflVO);
+	    
+		return r;
+	}
+	
+	//파일 업로드
+	public void uploadFiles(MultipartFile[] uploadfile, McPrtflVO mcPrtflVO) {
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.uploadFiles(uploadfile, mcPrtflVO.getUserId(), "T06"); // 대상구분 공모전
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
