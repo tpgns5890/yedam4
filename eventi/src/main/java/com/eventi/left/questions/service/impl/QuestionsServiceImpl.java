@@ -18,7 +18,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 	
 	@Override
 	public List<QuestionsVO> questionsList(QuestionsVO vo, PagingVO paging) {
-		paging.setTotalRecord(mapper.targetCount(vo));
+		paging.setTotalRecord(mapper.count(vo));
 		paging.setPageUnit(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());

@@ -46,18 +46,19 @@
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
 					th:value="${_csrf.token}" />
 				<ul>
-					<!-- 임시저장값 hidden -->
-					<li><label>디자인번호</label><input type="text" id="dgnNo" name="dgnNo" th:value="${dNo}" readonly="readonly"><br /></li>
-					<li><label>공모번호</label><input type="text" name="cNo" th:value="${contest.cNo}" readonly="readonly"></li>
+					<li><input type="hidden" id="dgnNo" name="dgnNo" th:value="${dNo}" readonly="readonly"><br /></li>
+					<li><input type="hidden" name="cNo" th:value="${contest.cNo}" readonly="readonly"></li>
 					<li><input type="hidden" name="caregory" th:value="${contest.categoryCode}"></li>
 					<li><label>카테고리</label><input type="text" th:value="${contest.category}" readonly="readonly"></li>
 					<li><label>작성자</label><input type="text" name="userId" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly></li>
 					<li><label>제목</label><input type="text" id="name" name="name" required="required"></li>
 					<li><textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
-					<li><label>예금주 : </label><input type="text" th:value="${user.depotr}" disabled="disabled"></li>
-					<li><label>은행명 : </label><input type="text" th:value="${user.bank}" disabled="disabled"></li>
-					<li><label>계좌번호: </label><input type="text" th:value="${user.accnt}" disabled="disabled"></li>
+				</ul>
+				<ul id="bankUpdate">
+					<li><label>예금주  </label><input id="depotr" type="text" th:value="${user.depotr}" disabled="disabled"></li>
+					<li><label>은행명  </label><input id="bank" type="text" th:value="${user.bank}" disabled="disabled"></li>
+					<li><label>계좌번호 </label><input id="accnt" type="text" th:value="${user.accnt}" disabled="disabled"></li>
 				</ul>
 
 				<div class="col-md-12">
@@ -89,6 +90,31 @@
 			</div>
 		</div>
 		
+		<!-- 계좌번호 변경창. -->
+		<div id="bankModel" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h3>계좌정보 변경</h3>
+				
+				<label>예금주:</label><input id="depotr_change" name="depotr_change"  type="text" th:value="${user.depotr}">
+				<label>은행사:</label>
+				<select id="bank_change" name="bank_change" >
+					<option value="" >=== 은행코드 ====</option>
+					<option value="004" th:checked="${user.bank eq '004'}">국민은행</option>
+					<option value="003" th:checked="${user.bank eq '003'}">기업은행</option>
+					<option value="011" th:checked="${user.bank eq '011'}">농협은행</option>
+					<option value="031" th:checked="${user.bank eq '031'}">대구은행</option>
+				</select>
+				<label>계좌번호:</label>
+					<input id="accnt_change" name="accnt_change" type="text" th:value="${user.accnt}">
+				
+				<div id="checkDiv">
+					<button id="change" class="modelBtn1" style="width: 50px;" type="button">변경</button>
+				</div>
+			</div>
+		</div>
+		
 		
 		<script>
 			//csrf설정
@@ -112,9 +138,11 @@
 			
 			// Get the modal-----------------------------------------------------------------
 			var saveModal = document.getElementById("saveDesign");
+			var bankModel = document.getElementById("bankModel");
 			
 			// Get the <span> element that closes the modal
 			var span = document.getElementsByClassName("close")[0];
+			var bankSpan = document.getElementsByClassName("close")[1];
 			
 			// <span> (x), close the modal
 			span.onclick = function() {
@@ -124,7 +152,9 @@
 			// When the user clicks anywhere outside of the modal, close it
 			window.onclick = function(event) {
 			  if (event.target == saveModal) {
-			    saveModal.style.display = "none";
+			      saveModal.style.display = "none";
+			  }else if(event.target == bankModel){
+				  bankModel.style.display = "none";
 			  }
 			}
 			
@@ -132,8 +162,53 @@
 				saveModal.style.display = "block";
 			});
 			
-			//modal--------------------------------------------------------------------
+			//modal 끝--------------------------------------------------------------------
 			
+			
+			//은행정보 변경 모달창
+			$('#bankUpdate').on("click", function(){
+				
+				if(!confirm('계좌정보를 변경하시겠습니까?')){
+					return false;
+				}
+				else{
+					bankModel.style.display = "block";
+				}
+			})
+			
+			//은행정보 변경처리
+			$('#change').on("click", function(){
+			
+				let userId = '[[${session.member != null ? session.member.userId :''}]]';
+				let depotr = $('#depotr_change').val();
+				let bank = $("select[name=bank_change]").val();
+				let accnt =$('#accnt_change').val();
+				
+				$.ajax({
+	 	   			url : '/myPage/bankUpdate',
+	 	   			method : 'post',
+		            data: {userId,depotr,bank,accnt},
+	 	   			beforeSend : function(xhr)
+	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 					xhr.setRequestHeader(header, token);
+	 	            },
+					success : function(data){
+						console.log(data);
+					      if(data != null){
+								alert('계좌정보 수정완료')
+								bankModel.style.display = "none";
+								$('#depotr').val(data.depotr);
+								$("select[name=bank]").val(data.bank);
+								$('#accnt').val(data.accnt);
+								
+					     }else {
+								alert('계좌정보 수정실패')	
+					     }
+					 },
+			        fail: function () {
+			           }
+					})
+			})	
 			
 
 			//등록버튼 누를시
@@ -227,6 +302,7 @@
 					$("#button_box").empty();
 					//임시저장된 게시글이 없을 경우
 					if(data == 0){
+						saveModal.style.display = "none";
 						alert('임시저장된 디자인이 없습니다.');
 					}else {
 						for(design of data){
@@ -262,7 +338,7 @@
 						console.log($('#dgnNo'))
 						console.log(data);
 								$("#dgnNo").val(data[0].dgnNo);
-								$("#name").val(data[0].name);
+								$('input[name="name"]').val(data[0].name);
 								oEditors.getById["cntn"].exec("PASTE_HTML", [data[0].cntn]);
 								
 								if(data[0].sevNm != null){

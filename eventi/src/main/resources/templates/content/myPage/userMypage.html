@@ -101,7 +101,7 @@
 			</div>
 		</div>
 
-		<!-- The Modal -->
+		<!-- 비밀번호 확인창. -->
 		<div id="myModal" class="modal">
 			<!-- Modal content -->
 			<div class="modal-content">
@@ -134,6 +134,9 @@
 			// When the user clicks on <span> (x), close the modal
 			span.onclick = function() {
 				modal.style.display = "none";
+				$('#password').val('');
+				$('#passwordchk').val('');
+				$("#pw_feedback").html('');
 			}
 
 			// When the user clicks anywhere outside of the modal, close it
@@ -177,8 +180,6 @@
 			function updateForm() {
 				$('#checkDiv').children('#update').attr('id' , "check")
 				modal.style.display = "none";
-				
-				alert('정보수정');
 				let password = $('#password').val();
 				
 				$.ajax({
@@ -233,8 +234,6 @@
 			
 			function userdelete(){
 				$('#checkDiv').children('#delete').attr('id' , "check")
-				$('#password').val('');
-				$('#passwordchk').val('');
 				modal.style.display = "none";
 				
 			$.ajax({

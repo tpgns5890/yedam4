@@ -44,8 +44,7 @@
 					</li> 
 						
 						
-					<!-- 임시저장값 hidden -->
-					<li><label>공모번호</label><input type="text" id="cNo" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
+					<li><label>공모번호</label><input type="hidden" id="cNo" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>제  목</label><input type="text" id="ttl" name="ttl" required="required"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
@@ -77,7 +76,7 @@
 					
 					<div class="col-md-12">
 						<div class="form-group">
-							<input id="imgInp" type="file" name="uploadFile">
+							<input id="imgInp" type="file" name="uploadFile" required="required">
 							<div class="fileDown">
 								<img id="blah" src="#" alt = "your image" width="250px" />
 									<button type="button" id="cancel" class="btn btn-warning cancel">

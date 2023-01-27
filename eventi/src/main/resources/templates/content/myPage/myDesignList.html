@@ -125,59 +125,7 @@
 				</div>
 			</div>
 		</div>
-			
 		
-		
-		<!-- 테이블 -->
-		<!-- <div id="table">
-			게시글 검색 <input type="text" name="search" id="search" onkeyup="myFunction()">
-			<button type="button" id="deleteBtn">응모취소</button>
-			<table border="1" id="myTable">
-				<thead>
-					<tr>
-						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
-						<th>no</th>
-						<th>공모전번호</th>
-						<th>분류</th>
-						<th>제목</th>
-						<th>우승여부</th>
-						<th>등록일</th>
-						<th>대표이미지</th>
-						<th>공개여부</th>
-						<th>상세조회</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="d: ${design} ">
-						<td><input class="check delete" type="checkBox"
-							value="delete" onkeyup="myFunction()"></td>
-						<td th:text=${d.dgnNo}></td>
-						<td th:text=${d.cNo} th:onclick="|location.href='@{/contest/select(cNo=${d.cNo})}'|"></td>
-						<td th:text=${d.caregory}></td>
-						<td th:text=${d.name}></td>
-						<td th:text=${d.winYn}></td>
-						<td th:text="${#dates.format(d.dt, 'yyyy-MM-dd')}"></td>
-						
-						파일리스트가 대표이미지랑 같다면.
-						<th:block th:each="f : ${fileList}">
-							<td th:if="${f.fNm} == ${d.centerImg}"><img th:src="|/fileView/${f.sevNm}|" style="height:300px; width: 300px;"></td>
-						</th:block>
-						
-						공개여부 출력
-						<th:block th:if="${d.pubcYn} == 'N'">
-							<td th:text="공개"></td>
-						</th:block>
-						<th:block th:if="${d.pubcYn} == 'Y'">
-							<td th:text="비공개"></td>
-						</th:block>
-						
-						<td style="width: 100px">
-							<button type="button" th:onclick="|location.href='@{/contest/select(cNo=${d.cNo})}'|">공모전</button>
-							<button type="button" th:onclick="|location.href='@{/design/select(dgnNo=${d.dgnNo})}'|">디자인</button>
-						</td>
-					</tr>
-				</tbody>
-			</table> -->
 		</div>
 				 
 		

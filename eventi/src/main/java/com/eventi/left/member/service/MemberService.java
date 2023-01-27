@@ -39,6 +39,8 @@ public interface MemberService{
 	
 	public int userUpdate(MemberVO memberVO); //회원정보 변경.
 	
+	public int bankUpdate(MemberVO memberVO); // 계좌번호 변경.
+	
 	public MemberVO busiSelect(String userId); //업체회원 조회
 
 }

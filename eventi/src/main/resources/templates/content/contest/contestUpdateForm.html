@@ -36,10 +36,12 @@ ul{
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 					<p style="color: red">*공모전에 중요사항은 참가작품에 영향을 끼칠수 있기때문에 수정에 제한적입니다.</p>
 				<ul>
-					<li><div th:text="|분류별 ${contest.category}|"></div></li>
-					<li><div th:text="|공모번호 ${contest.cNo}|"></div></li>
-					<li><div th:text="|작성자 ${contest.writer}"></div></li>
+					<li><div th:text="|분류 : ${contest.category}|"></div></li>
+					<li><div th:text="|작성자 :  ${contest.writer}"></div></li>
 					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li>
+					  <th:block th:each="w : ${winnerList}">
+					  	<li><div th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></div></li>
+					  </th:block>
 					
 					<li><input hidden="hidden" type="text" name="cNo" th:value="${contest.cNo}"><br /></li> <li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>

@@ -9,10 +9,31 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+
 #user {
 	padding-top: 70px;
 	width: 800px;
 	margin: 0 auto;
+}
+
+.busiArea {
+	width: 30px;
+	margin: 0;
+	display: block;
+}
+
+#chkArea {
+	width: 530px;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.chkArea {
+	width: 115px;
+	height: 200px;
+	overflow: scroll;
+	border: 0.3px solid black;
+	line-height: 1.5em;
 }
 </style>
 </head>
@@ -35,82 +56,95 @@
 			
 			<div id="user">
 			<ul>
-				<li><span th:text="|아이디: ${user.userId}|"></span>
-				<li><label>이메일:</lable><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
-				<li><label>성 명:</lable><input id="name" name="name" type="text" th:value="${user.name}"></li>
-				<li><label>연락처:</lable><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
+				<li th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|"></li>
+				<!-- 회원등급 -->
+				<li th:if="${user.auth} == 'ROLE_ADMIN'" ><label>회원등급:</label><input type="text" disabled="disabled" value="관리자"></li>
+				<li th:if="${user.auth} == 'ROLE_MEM'" ><label>회원등급:</label><input type="text" disabled="disabled" value="회원1"></li>
+				<li th:if="${user.auth} == 'ROLE_MEMBER'" ><label>회원등급:</label><input type="text" disabled="disabled" value="회원2"></li>
+				<li th:if="${user.auth} == 'ROLE_BUSI'" ><label>회원등급:</label><input type="text" disabled="disabled" value="업체"></li>
 				
+				<li><label>아이디:</label><input type="text" readonly="readonly" th:value="${user.userId}"></li>
+				<li><label>이메일:</label><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
+				<li><label>성 명:</label><input type="text" id="userName" name="userName"  th:value="${user.name}"></li>
+				<li><label>연락처:</label><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
+			
 				<!-- 수신여부 -->
 				<li>
-					<input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</label>
-					<input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</label>
-					<input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</label>
-					<input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S3">메일,휴대폰</label>
+					수신여부:
+					<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</span>
+					<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</span>
+					<span><input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</span>
+					<span><input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S3">메일,휴대폰</span>
 				</li>
-				
-				<!-- 회원등급 -->
-				<li th:if="${user.auth} == 'ROLE_ADMIN'" th:text="|회원등급: 관리자|"></li>
-				<li th:if="${user.auth} == 'ROLE_MEM'" th:text="|회원등급: 회원?|"></li>
-				<li th:if="${user.auth} == 'ROLE_MEMBER'" th:text="|회원등급: 회원|"></li>
-				<li th:if="${user.auth} == 'ROLE_BUSI'" th:text="|회원등급: 업체|"></li>
 
 				<!-- 회원계좌번호 -->
-				<li th:if="${user.depotr} != null">
-					<label>예금주:</lable><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
+				<li>
+					<label>예금주:</label><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
 				</li>
-				<li th:if="${user.bank} != null">
-					<label>은행사:</lable><input id="bank" name="bank" type="text" th:value="${user.bank}">
+				<li>
+					<label>은행사:</label>
+							<select id="bank" name="bank" >
+								<option value="" >=== 은행코드 ====</option>
+								<option value="004" th:checked="${user.bank eq '004'}">국민은행</option>
+								<option value="003" th:checked="${user.bank eq '003'}">기업은행</option>
+								<option value="011" th:checked="${user.bank eq '011'}">농협은행</option>
+								<option value="031" th:checked="${user.bank eq '031'}">대구은행</option>
+							</select>
+					
 				</li>
-				<li th:if="${user.accnt} != null">
-					<label>계좌번호:</lable><input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
+				<li>
+					<label>계좌번호:</label>
+					<input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
 				</li>
-				
-				
-				<li th:if="${user.depotr} == null">
-					<label>예금주:</lable><input id="depotr" name="depotr"  type="text" >
-				</li>
-				<li th:if="${user.bank} == null">
-					<label>은행사:</lable><input id="bank" name="bank" type="text" >
-				</li>
-				<li th:if="${user.accnt} == null">
-					<label>계좌번호:</lable><input id="accnt" name="accnt" type="text">
-				</li>
-				
-				<th:block th:if="${user.busiNum} != null">
-					<li><label>사업자번호:</lable><input id="" name="" type="text" th:value="${user.busiNum}|"></li>
-					<li><label>사업자명:</lable><input id="" name="" type="text" th:value="${user.busiTitle}|"></li>
-					<li><label>업종:</lable><input id="" name="" type="text" th:value="|${user.busiType}|"></li>
-					<li><label>행사지역:</lable><input id="" name="" type="text" th:value="|${user.busiArea}|"></li>
-					<li><label>행사정보:</lable><input id="" name="" type="text" th:value="|${user.busiStyle}|"></li>
-				</th:block>
 			</ul>
 				
-				<p th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년MM월dd일')}|"></p>
+				<th:block th:if="${user.busiNum} != null">
+				<ul>
+					<li><label>사업자번호:</label><input id="busiNum" name="busiNum" type="text" th:value="${user.busiNum}|" readonly="readonly"></li>
+					<li><label>사업자명:</label><input id="busiTitle" name="busiTitle" type="text" th:value="${user.busiTitle}|"></li>
+					
+					<li><label>업체유형</label>
+						<input type="radio" name="busiType" value="U1" th:checked="${user.busiType eq '기획'}"><label>기획업체</label> 
+						<input type="radio" name="busiType" value="U2" th:checked="${user.busiType eq '렌탈'}"><label>렌탈업체</label>
+					</li>
+ 					
+ 					<li>
+ 						<label>행사지역:</label><input id="busiArea" name="busiArea" type="text" th:value="|${user.busiArea}|">
+ 						<button type="button" id="areaUpdate" class="updateBtn">변경</button>
+ 					</li>
+ 					
+					<li>
+						<label>행사정보:</label><input id="busiStyle" name="busiStyle" type="text" th:value="|${user.busiStyle}|">
+						<button type="button" id="styleaUpdate" class="updateBtn">변경</button>
+					</li>
+				</ul>
+				</th:block>
+				
 					
 					
 				<!-- 적용해야됌 -->
-				<!-- <div>
-								행사가능지역
-								<div class="chkArea">
-									<div th:each="area : ${busiArea}">
-										<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}"
-											name="busiArea"> <label th:text="${area.codeName}"
-											th:for="${area.codeId}"></label>
-									</div>
-								</div>
+				<div id="chkArea" >
+		 			<div>
+						행사가능지역
+						<div class="chkArea" id="areaCheck">
+							<div th:each="area : ${busiArea}">
+								<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}"
+									name="busiArea"> <label th:text="${area.codeName}"
+									th:for="${area.codeId}"></label>
 							</div>
-							<div>
-								행사유형
-								<div class="chkArea">
-									<div th:each="type : ${busiStyle}">
-										<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}"
-											name="busiStyle"> <label th:text="${type.codeName}"
-											th:for="${type.codeId}"></label>
-									</div>
-								</div>
+						</div>
+					</div>
+					<div>
+						행사유형
+						<div class="chkArea" id="styleCheck">
+							<div th:each="type : ${busiStyle}">
+								<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}"
+									name="busiStyle"> <label th:text="${type.codeName}"
+									th:for="${type.codeId}"></label>
 							</div>
-						</div> -->
-				
+						</div>
+					</div>
+				</div> 
 
 				<button type="button" id="update">회원정보 수정</button>
 			</div>
@@ -119,30 +153,76 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		
+		//숨기기
+		$('#chkArea').hide(); 
+		
+		//보여주기
+		$('.updateBtn').on("click", function(){
+			$('#chkArea').show();
+		});
+		
+		$('#test').on("click", function(){
+		var busiAreaArr = [];
+		var busiStyleArr = [];
+		let areaChecked = $('input:checkbox[name="busiArea"]:checked');
+		let styleChecked = $('input:checkbox[name="busiStyle"]:checked');
+		for (var i = 0; i < areaChecked.length; i++) {
+			busiAreaArr.push(areaChecked.eq(i).val())
+		}
+		for (var i = 0; i < styleChecked.length; i++) {
+			busiStyleArr.push(styleChecked.eq(i).val())
+		}
+		var busiArea = busiAreaArr.toString();
+		var busiStyle = busiStyleArr.toString();
+		
+		})
+		
 		//수정하기 버튼 누를시
 		$('#update').on("click", function() {
-			alert('정보수정');
+
+			//일반회원 정보
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
 			let userEmail = $('#userEmail').val();
-			let name = $('#name').val();
+			let name = $('#userName').val();
 			let userPhone = $('#userPhone').val();
-			let userMessaging = $('input[name="userMessaging"]:checked').val(); //:checked').value;
+			let userMessaging = $('input[name="userMessaging"]:checked').val(); 
 			let depotr = $('#depotr').val();
-			let bank = $('#bank').val();
+			let bank = $("select[name=bank]").val();
 			let accnt =$('#accnt').val();
 			
-			console.log(userEmail)
-			console.log(name)
-			console.log(userPhone)
-			console.log(userMessaging)
-			console.log(depotr)
-			console.log(bank)
-			console.log(accnt)
+			//업체 추가정보
+		 	let busiTitle = $('#busiTitle').val();
+			let busiType = $('input:radio[name="busiType"]:checked').val();
+			var busiAreaArr = [];
+			var busiStyleArr = [];
+			let areaChecked = $('input:checkbox[name="busiArea"]:checked');
+			let styleChecked = $('input:checkbox[name="busiStyle"]:checked');
+			for (var i = 0; i < areaChecked.length; i++) {
+				busiAreaArr.push(areaChecked.eq(i).val())
+			}
+			for (var i = 0; i < styleChecked.length; i++) {
+				busiStyleArr.push(styleChecked.eq(i).val())
+			}
+			var busiArea = busiAreaArr.toString();
+			var busiStyle = busiStyleArr.toString();
+			var busi = {
+				"busiTitle": busiTitle,
+				"busiType": busiType,
+				"busiArea": busiArea,
+				"busiStyle": busiStyle,
+				"userId":userId,
+			};
+			console.log(busiTitle)
+			console.log(busiType)
+			console.log(busiAreaArr)
+			console.log(busiStyleArr);
+		
 			
 		$.ajax({
  	   			url : '/myPage/userUpdate',
  	   			method : 'post',
  	   			dataType: "json",
-	            data: JSON.stringify({userId,userEmail,name,userPhone,userMessaging,depotr,bank,accnt}),
+	            data: JSON.stringify({userId,userEmail,name,userPhone,userMessaging,depotr,bank,accnt,busi}),
 	            contentType : "application/json",
  	   			beforeSend : function(xhr)
  	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
