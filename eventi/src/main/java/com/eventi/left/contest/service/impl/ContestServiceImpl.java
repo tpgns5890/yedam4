@@ -94,7 +94,7 @@ public class ContestServiceImpl implements ContestService {
 		// 공모전 우승금액
 		// 1.index 기준으로 등수설정
 		// 2.from입력값이 있다면 insert 및 합계계산후 총상금 지정.
-		int hap = 0;
+		int hap = vo.getPay();
 		String[] array = wvo.getWinnerPay();
 
 		wvo.setCoNo(vo.getcNo()); // 공모전번호
@@ -107,7 +107,7 @@ public class ContestServiceImpl implements ContestService {
 				wMapper.insertWinner(wvo);
 			}
 		}
-		// 총 상금합계.
+		// 총 상금합계+등록비.
 		vo.setPay(hap);
 
 		// 파일업로드,공모전등록
@@ -126,6 +126,7 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전 수정
 	@Override
 	public int updateContest(ContestVO vo, MultipartFile[] uploadFile) {
+		
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setWriter(user.getUserId());
 		int result = 0;
@@ -156,13 +157,13 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전 임시저장 불러오기 수정
 	@Override
 	public int saveUpdateContest(ContestVO vo, MultipartFile[] uploadFile, WinnerVO wvo) {
+		
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setWriter(user.getUserId());
 
 		// 공모전 우승금액
 		// 1.index 기준으로 등수설정
 		// 2.from입력값이 있다면 insert 및 합계계산후 총상금 지정.
-		System.out.println(vo.getPay());
 		int hap = vo.getPay();
 		String[] array = wvo.getWinnerPay();
 		wvo.setCoNo(vo.getcNo());
@@ -177,6 +178,7 @@ public class ContestServiceImpl implements ContestService {
 				wMapper.insertWinner(wvo);
 			}
 		}
+		//공모전 합계+우승금액
 		vo.setPay(hap);
 
 		// 파일업로드,공모전 수정

@@ -44,7 +44,7 @@
 					</li> 
 						
 						
-					<li><label>공모번호</label><input type="hidden" id="cNo" name="cNo" th:value="${cNo}" readonly="readonly"><br /></li>
+					<li><input type="text" id="cNo" name="cNo" readonly="readonly"><br /></li>
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>제  목</label><input type="text" id="ttl" name="ttl" required="required"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
@@ -70,7 +70,7 @@
 				<li><label>2 등</label><input id="wPay2"  class="wPay" type="number" name="winnerPay[]"><br /></li>
 				<li><label>3 등</label><input id="wPay3" class="wPay" type="number" name="winnerPay[]"><br /></li>
 				<li><label>등록비</label><input type="number" id="pay" name="pay" value="1" readonly="readonly"><br /></li>
-					<li><label>요청사항</label> <textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
+					<li><label>요청사항</label> <textarea id="cntn" name="cntn" class="form-control" cols="30" rows="4" placeholder="내용을 입력해주세요." required="required"></textarea></li>
 				</ul>
 				
 				<input type="checkbox" name="save" value="Y">임시저장<br>
@@ -191,6 +191,7 @@
 					//임시저장 확인
 					else if ($('input[name="save"]').is(":checked") == true) {
 						if (confirm('임시저장 하시겠습니까?')) {
+							console.log($('#cntn'));
 							$('#contestfrm').submit(); //insert 실행
 						}
 					} 
@@ -206,17 +207,16 @@
 				 modal.style.display = "block";
 					
 					//입력한 값 변수저장
+					let cNo = $('input[name="cNo"]').val();
 					let ttl = $('input[name="ttl"]').val();
 					let date = $('input[name="dtReg"]').val();
-					let wpay1 =   parseInt($('input[id="wPay1"]').val());
-					let wpay2 =   parseInt($('input[id="wPay2"]').val());
-					let wpay3 =   parseInt($('input[id="wPay3"]').val());
-					let insertPay =   parseInt($('input[id="pay"]').val());
-					let total = (wpay1 + wpay2 + wpay1);
-					let payment = insertPay + total;
+					wpay1 =   Number($('input[id="wPay1"]').val());
+					wpay2 =   Number($('input[id="wPay2"]').val());
+					wpay3 =   Number($('input[id="wPay3"]').val());
+					insertPay =   Number($('input[id="pay"]').val());
+					payment = wpay1 + wpay2 + wpay3  + insertPay;
 					
 					//문자열 변경후 3자리 콤마지정.
-					total = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 					insertPay = insertPay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 					payment = payment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 					
@@ -226,7 +226,9 @@
 					let li = ` <li> <span></span></li>
 								<li>제 목 : ${ttl} </li>
 								<li>등록일 : ${date} </li>
-								<li>총상금 : ${total} </li>
+								<li>1등 : ${wpay1} </li>
+								<li>2등 : ${wpay2} </li>
+								<li>3등 : ${wpay3} </li>
 								<li>등록비 : ${insertPay}</li>
 								<hr>
 								<li>총합계 : ${payment}</li>
@@ -268,7 +270,9 @@
 								url: "/contest/requestPay",
 								method: "POST",
 								contentType: "application/json",
+								dataType: "json",
 								data: JSON.stringify({
+									targetId:cNo,
 							        moType:'M1',
 							        moPrice:payment,
 							        userId,
@@ -278,7 +282,12 @@
 				                    xhr.setRequestHeader(header, token);
 				               },
 				               success: function(res){
-				            	   console.log($('#contestfrm'));
+				            	   //임시저장 불러온 값이 없는경우
+				            	   //console.log(res.targetId);
+				            	   if($('input[name="cNo"]').val() == null || $('input[name="cNo"]').val() ==""){
+				            		   $('input[name="cNo"]').val(res.targetId);
+				            	   }
+				            	   
 				                  $('#contestfrm').submit(); ///공모전 등록
 				                  alert("공모전이 등록되었습니다.");
 				                  
@@ -380,6 +389,7 @@
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
+								$('input[name="cntn"]').text("");
 								$("#cNo").val(data[0].cNo);
 								$("#ttl").val(data[0].ttl);
 								$("input:radio[name='category']:radio[value='"+data[0].category+"']").attr('checked', true);
@@ -396,7 +406,6 @@
 									}
 								}) 
 								
-								console.log(data[0].img)
 								if(data[0].img != null){
 							    	imgReader(data[0].img);
 								}
