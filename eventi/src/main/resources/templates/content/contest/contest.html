@@ -693,7 +693,11 @@
 					$("#cotestCntn").append(p); 
 				}
 				for(design of res.design){
-					if(design.pubcYn == 'N') {//공개여부가 Yes이면
+					
+					if(writer == userId){
+						$("#cotestCntn").append(makeDesignNo(design)); 
+					}
+					else if(design.pubcYn == 'N') {//공개여부가 Yes이면
 					 	$("#cotestCntn").append(makeDesignNo(design)); 
 					}else{//공개여부가 No이면
 						$("#cotestCntn").append(makeDesignYes(design)); 

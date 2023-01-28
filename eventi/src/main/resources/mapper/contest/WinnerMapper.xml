@@ -4,8 +4,7 @@
 
 <mapper namespace="com.eventi.left.contest.mapper.WinnerMapper">
 	<select id="winnerList" resultType="WinnerVO">
-		SELECT
-		a.*,b.w_no,b.grade,b.w_pay,b.d_no,b.user_id
+		SELECT a.*,b.w_no,b.grade,b.w_pay,b.d_no,b.user_id
 		FROM CONTEST a join winner b
 		on a.c_no = b.co_no
 		WHERE a.C_NO = #{coNo}
