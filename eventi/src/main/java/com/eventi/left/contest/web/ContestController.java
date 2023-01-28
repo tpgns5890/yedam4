@@ -118,6 +118,7 @@ public class ContestController {
 	@GetMapping("/insert")
 	public String contestInsert(Model model) {
 		model.addAttribute("cNo", service.getSequence()); // 입력할 공모전번호
+		model.addAttribute("styles", codeService.getContestStyle()); //공모전 스타일
 		return "content/contest/contestInsertForm";
 	}
 

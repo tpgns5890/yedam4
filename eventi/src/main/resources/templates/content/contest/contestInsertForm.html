@@ -49,7 +49,14 @@
 					<li><label>제  목</label><input type="text" id="ttl" name="ttl" required="required"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
 					<li><label>마감일</label><input type="date" id="dtCls"  name="dtCls" required="required"><br /></li>
-					<li><label>스타일</label> <select id="style" name="style" >
+					
+					<li><label>스타일</label> 
+						
+						<select id="contestStyl" name="contestStyl" onchange="contestStyleFun(this)">
+							<option value="">-- 선호스타일 선택 --</option>
+							<option th:each="style : ${styles}" th:value="${style?.codeId}" th:text="${style?.codeName}"></option>
+						</select>
+						<!-- <select id="style" name="style" >
 							<option value="">=== 선호스타일 ===</option>
 							<option value="DS1">고전적인</option>
 							<option value="DS2">화사한</option>
@@ -61,8 +68,10 @@
 							<option value="DS8">귀여운</option>
 							<option value="DS9">단순한</option>
 							<option value="DS0">기타</option>
-					</select>
-						<button>추가</button></li>
+						</select> -->
+					
+					<input type="hidden" value="" name="style" id="style" />
+         			<ul id="styleName"></ul>
 	
 	
 				<li style="color: red">*상금액 1등필수, 2,3등 선택사항입니다.</li>
@@ -169,36 +178,87 @@
 			  }
 			}
 			//modal--------------------------------------------------------------------
-			
-			//등록버튼 누를시 네이버에디터
-			$('#insertForm').on('click', function () {
-				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
-				let cntn = document.getElementById("cntn").value;
-			
-			 });
+			//해시태그테스트
+			var styletag = {};
+	        var styletagCounter = 0;
 	
-			
-			console.log($('#contestfrm').removeAttr());
-			
+	        // 입력한 값을 태그로 생성한다.
+	        function styleAddTag (value) {
+	        	styletag[styletagCounter] = value;
+	        	styletagCounter++;  // del-btn 의 고유 id 가 된다.
+	        }
+	        
+	        function styleTag(){
+	        	return Object.values(styletag).filter(function (word) {
+	                return word !== "";
+	            });
+	        }
+	        
+	        // 삭제 버튼 
+	        // 인덱스 검사 후 삭제
+	        $(document).on("click", ".style-del-btn", function (e) {
+	            var index = $(this).attr("idx");
+	            styletag[index] = "";
+	            $(this).parent().remove();
+	        });
+	        
+			//스타일태그
+			  function contestStyleFun(e){
+		    	  let tagText = e.options[e.selectedIndex].text;
+		  		  let tagValue = e.options[e.selectedIndex].value;
+		     	 
+		      	// 값이 없으면 동작 안합니다.
+		           if (tagValue !== "") {
+		
+		             // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+		             var result = Object.values(styletag).filter(function (word) {
+		                 return word === tagValue;
+		               })
+		
+		             // 태그 중복 검사
+		             if (result.length == 0) {
+		               $("#styleName").append("<li class='tag-item'>" + tagText + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
+		               styleAddTag(tagValue);
+		             } else {
+		               alert("태그값이 중복됩니다.");
+		             }
+		           }
+		      }
+	
 			
 			//폼 등록버튼 -> 유의사항/임시저장/등록 및 불러오기수정(결제) 함수
 			function check(){
+					//네이버 에디터
+					oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+					let cntn = document.getElementById("cntn").value;
 					let check = $('input[type="checkbox"]').is(":checked");
+					
+					//공모전 스타일
+			        var contestStyle = styleTag(); // return array
+			        $("#style").val(contestStyle);
+			        console.log( $("#style").val())
 
 					if (check == false) {//유의사항 체크확인
 						alert('유의사항을 확인하세요.');
-					}else if($('input[id="wPay1"]').val() == "" || $('input[id="wPay1"]').val() == null){
+					
+					}else if($('input[name="ttl"]').val() == "" || $('input[name="ttl"]').val() == null){
+						alert('제목을 입력해주세요.')
+					}else if(cntn == "<p>&nbsp;</p>"){
+						alert('요청사항을 입력해주세요.')
+					}else if($('input[name="dtCls"]').val() == null || $('input[name="dtCls"]').val() == ""){ 
+						alert('마감일을 입력해주세요.')
+					}
+					else if($('input[id="wPay1"]').val() == "" || $('input[id="wPay1"]').val() == null){
 						alert('1등 금액은 필수입니다.')
 						
-					}
-					//임시저장 확인
+					}//임시저장 확인
 					else if ($('input[name="save"]').is(":checked") == true) {
 						if (confirm('임시저장 하시겠습니까?')) {
 							console.log($('#cntn'));
 							$('#contestfrm').submit(); //insert 실행
 						}
-					} 
-					else{//등록확인
+					}//등록확인
+					else{
 						if (confirm('공모전을 등록하시겠습니까?')) {
 							requestPay(); //결제함수실행.
 						}
@@ -400,7 +460,21 @@
 								
 								//등록된 스타일이 있을경우
 								if(data[0].style != null){
-									$("#style").val(data[0].style).attr("selected", true);
+									
+							        //태그생성.
+							        let style = data[0].style;
+							        styletag = style.split(",");
+							        styletagCounter = styletag.length;
+							        for(let i=0; i<styletagCounter; i++){
+							        	
+							        	//옵션에 있는 전체값과 기존스타일과 비교해서 값이 같으면 텍스트값 태그 생성.
+							        	$('#contestStyl').find('option').map(function() {
+									       if($(this).val() == styletag[i]){
+									    	   $("#styleName").append("<li class='tag-item'>" + $(this).text() + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
+									        }
+										})
+							        }
+									
 								}
 								//등록된 상금내역 불러오기
 							 	$('input[name="winnerPay[]"]').each(function (i) {

@@ -16,4 +16,7 @@ public interface CodeMapper {
 		
 	//mc스타일
 	public List<CodeVO> getMcStyle();
+	
+	//공모전 스타일
+	public List<CodeVO> getContestStyle();
 }

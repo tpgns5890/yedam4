@@ -8,8 +8,8 @@ h3 {
 }
 
 .contestContainer {
-	padding-top:30px;
-	width:800px;
+	padding-top: 30px;
+	width: 800px;
 	margin: 0 auto;
 	min-height: 1600px
 }
@@ -31,4 +31,27 @@ input[type=text], select, input[type=number], input[type=date] {
 label {
 	padding: 10px 80px 12px 0;
 	display: inline-block;
+}
+
+ul li.tag-item {
+	display: inline-block;
+	margin: 0 5px;
+	font-size: 14px;
+	letter-spacing: -.5px;
+	padding: 4px 8px;
+	border-radius: 10px;
+	background-color: pink;
+	color: #000;
+}
+
+.tag-item:hover {
+	background-color: #262626;
+	color: #fff;
+}
+
+.area-del-btn, .type-del-btn, .style-del-btn {
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-left: 8px;
 }

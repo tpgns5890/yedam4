@@ -852,8 +852,12 @@
 		    				xhr.setRequestHeader(header, token);
 		                },
 						success : function(data) {
-							alert('신고되었습니다.');
-							$("#rprtModal").hide();
+							if(data == 0){
+								alert('이미 신고된 게시글 입니다.');
+							}else{
+								alert('신고되었습니다.');
+								$("#rprtModal").hide();
+							}
 						},
 						fail : function(result) {
 							alert('필수항목을 입력해주세요')

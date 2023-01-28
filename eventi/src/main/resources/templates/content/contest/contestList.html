@@ -29,6 +29,7 @@
               <div class="col-sm-3 mb-sm-20">
                 <select id="order" name="order" class="form-control">
 					<option value="inq DESC" selected="selected">조회수</option>
+					<option value="likes DESC">좋아요순</option>
 					<option value="pay DESC">금액순</option>
 					<option value="dDay">마감일 빠른순</option>
 					<option value="dDay DESC">마감 느린순</option>
@@ -248,7 +249,7 @@
 												   <span>#${contest.style}</span>
 													신고<span id="rprt">${contest.rprt}</span>
 													조회<span id="inq">${contest.inq}</span>
-													관심<span id="likes">${contest.likes}</span>
+													좋아요<span id="likes">${contest.likes}</span>
 											   </p>
 											</div>
 					                    	<a href="../contest/select?cNo=${contest.cNo}" class="btn btn-round btn-b">
@@ -372,7 +373,7 @@
 										   <span>#${contest.STYLE}</span>
 											신고<span id="rprt">${contest.RPRT}</span>
 											조회<span id="inq">${contest.INQ}</span>
-											관심<span id="likes">${contest.LIKES}</span>
+											좋아요<span id="likes">${contest.LIKES}</span>
 									   </p>
 									</div>
 			                    	<a href="/contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
@@ -409,7 +410,7 @@
 							},
 						}).then(res => {
 							if(res > 0){
-								alert('관심공모전 추가완료!')
+								alert('관심 공모전 추가완료!')
 									//전체하트가 눌려진 상태로 재실행
 									if ($("#love").hasClass("active")) { 
 										loveClick();
@@ -419,7 +420,7 @@
 									}
 								
 							}else{
-								alert('관심공모전 추가실패!')
+								alert('관심 공모전 추가실패!')
 							}
 						})
 
@@ -436,7 +437,7 @@
 								},
 							}).then(res => {
 								if(res > 0){
-									alert('관심공모전 취소완료!')
+									alert('관심 공모전 취소완료!')
 
 									//전체하트가 눌려진 상태로 재실행
 									if ($("#love").hasClass("active")) { 
@@ -448,7 +449,7 @@
 									}
 									
 								}else{
-									alert('관심공모전 취소실패!')
+									alert('관심 공모전 취소실패!')
 								}
 							})
 						}

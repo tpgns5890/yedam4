@@ -31,7 +31,7 @@ public class ContestVO {
 	private String save = "N";	 //임시저장여부(Y:임시저장)
 	private int inq; 	 //조회수
 	private int rprt; 	 //신고수
-	private String style; 	 //선호하는태그(최대 3개)
+	private String style; 	 //선호하는태그
 	
 	//정렬,검색
 	private String order = "inq DESC"; //기본 정렬기준
