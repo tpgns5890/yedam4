@@ -7,6 +7,11 @@
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
 <link rel="stylesheet" href="/css/heart.css">
+<style type="text/css">
+#boxList{
+	margin-top: 40px;
+}
+</style>
 </head>
 <body>
 
@@ -93,7 +98,7 @@
 		let p = ` 
 			<div class="col-sm-6 col-md-4 col-lg-4">
                <div id="${contest.C_NO}" class="shop-item">
-                 <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 665px; height: 750px">
+                 <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 400px; height: 400px">
                    <div class="shop-item-detail">
                    	<div class="stage" >
 		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>

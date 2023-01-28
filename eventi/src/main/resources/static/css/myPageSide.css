@@ -3,12 +3,13 @@ a {
 }
 
 li {
-	list-style: none
+	list-style: none;
 }
 
 a {
 	text-decoration: none;
-	font-size: 14px
+	font-size: 18px;
+	font-weight: bolder;
 }
 
 .sideMenu {
@@ -16,13 +17,12 @@ a {
 	height: 1000px;
 	overflow: hidden;
 	margin-top: 50px;
-	margin-right: 20px;
 	float: left;
 	margin-right: 20px;
 }
 
 .sideMenu>li {
-	text-align: center;
+	text-align: left;
 	line-height: 50px;
 }
 
@@ -34,9 +34,8 @@ a {
 	height: 0; /*ul의 높이를 안보이게 처리*/
 	overflow: hidden;
 }
-
 .sideMenu>li:hover {
-	background-color: #94a9ff;
+	background-color: rgb(255, 255, 255);
 	transition-duration: 0.5s;
 }
 
@@ -50,9 +49,6 @@ table {
 	table-layout: fixed;
 }
 
-tr:hover {
-	background-color: #94a9ff;
-}
 
 th {
 	padding: 20px 15px;

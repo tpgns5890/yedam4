@@ -22,6 +22,8 @@
 	width: 40%;
 	height: 60%;
 	text-align: left;
+	max-height: calc(100vh - 200px);
+    overflow-y: auto;
 }
 
 /* The Close Button */
@@ -48,18 +50,6 @@
 }
 
 <!--신고모달-->
-#rprtModal,
- #extensionModal {
-	display: none;
-	position: fixed;
-	top: 25em;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 1;
-	width: 100%;
-}
-
 #rprtModal h2,
  #extensionModal h2 {
 	margin: 0;
@@ -73,8 +63,7 @@
 	border-radius: 5px;
 }
 
-#rprtModal .modal_content,
- #extensionModal .modal_content {
+.modal_content {
 	width: 350px;
 	min-height: 200px;
 	margin: 0 auto;
@@ -92,4 +81,8 @@
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: -1;
+}
+img {
+	margin-top: 50px;
+	margin-right: 20px;
 }

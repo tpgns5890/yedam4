@@ -4,8 +4,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 <head>
-<link rel="stylesheet" href="/css/model.css">
-<link rel="stylesheet" href="/css/cotestForm.css">
+<link rel="stylesheet" href="/css/contest/model.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
 </head>
 <body>
 	<div layout:fragment="content" class="content">
@@ -90,7 +90,7 @@
 							<div class="fileDown">
 								<img id="blah" src="#" alt = "your image" width="250px" />
 									<button type="button" id="cancel" class="btn btn-warning cancel">
-										<span>Cancel</span>
+										<span>X</span>
 							       </button>
 							</div>
 						</div>
@@ -106,7 +106,7 @@
 			<!-- 결제정보 모달 -->
 			<div id="myModal" class="modal">
 				<!-- Modal content -->
-				<div class="modal-content">
+				<div class="modal_content">
 					<span class="close">&times;</span>
 					<h3>공모전 결제정보</h3>
 					<ul id="contestPay">
@@ -119,7 +119,7 @@
 			
 			<!-- 임시저장 모달 -->
 			<div id="saveContest" class="modal">
-				<div class="modal-content">
+				<div class="modal_content">
 					<span class="close">&times;</span>
 					<h2>임시저장 공모전 리스트</h2>
 					<div id="button_box"> </div>
@@ -434,7 +434,7 @@
 		})
 		
 		function choiceCotest(contest) {
-	    	let span = `<span id="modal_choice_btn">[${contest.cNo}] ${contest.ttl}</span><button type="button" onclick=checkFile('${contest.cNo}')>불러오기</button><br>`;
+	    	let span = `<span id="modal_choice_btn">[${contest.cNo}] ${contest.ttl}</span><button type="button" onclick=checkFile('${contest.cNo}')>선택</button><br>`;
 	    	return span;
 	    }
 		    

@@ -6,9 +6,8 @@
 <head>
 <link rel="stylesheet" href="/css/model.css">
 <link rel="stylesheet" href="/css/heart.css">
+<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 </head>
-<style>
-</style>
 <body>
 	<div layout:fragment="content" class="content">
 		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -57,7 +56,6 @@
 	              	<!-- 분류별 기준 뽑아오기 -->
 	              	 <div class="col-sm-3 mb-sm-20" style="width: 300px; line-height: 40px; text-align:center;">
 		                <div>
-		                		<input type="checkbox" name="category" value="" onclick="doOpenCheck(this);">전체
 		                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막
 								<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너
 								<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고
@@ -69,13 +67,13 @@
 	              <div class="col-sm-3">
 	              	<!-- 비회원 공모전작성버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
-						<button class="btn btn-block btn-round btn-g" onclick="login()">공모전 작성</button></a>
+						<button style="position:relative; top:-20px; right: -350px" class="w-btn w-btn-gra1" onclick="login()" >공모전 작성</button></a>
 					</th:block>
 					
 					<!-- 일반회원 공모전작성버튼-->
 					<th:block sec:authorize="isAuthenticated()">
 						<a href="./insert">
-							<button style="width: 150px" class="btn btn-block btn-round btn-g">공모전 작성</button>
+							<button style="position:relative; top:-20px; right: -350px" class="w-btn w-btn-gra1">공모전 작성</button>
 						</a>
 					</th:block>
 	              </div>
@@ -241,11 +239,9 @@
 					let p = ` 
 								<div class="col-sm-6 col-md-4 col-lg-4">
 					                <div id="${contest.cNo}" class="shop-item">
-					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 500px; height: 500px">
+							  		<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
+					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 500px; height: 500px; ">
 					                    <div class="shop-item-detail">
-					                    	<div class="stage" >
-							  					<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)"></div>
-							   				</div>
 							   				<div>
 							   				  <h3 class="content-box-title font-serif">[${contest.category}] D-${contest.dDay}</h3>
 							   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
@@ -366,11 +362,9 @@
 					let p = ` 
 						<div class="col-sm-6 col-md-4 col-lg-4">
 			                <div id="${contest.C_NO}" class="shop-item">
-			                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px">
+		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
+			                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px;">
 			                    <div class="shop-item-detail">
-			                    	<div class="stage" >
-					  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
-					   				</div>
 					   				<div>
 					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] D-${contest.DDAY}</h3>
 					   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>

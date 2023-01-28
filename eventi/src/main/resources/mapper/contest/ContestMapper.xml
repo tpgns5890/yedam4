@@ -37,7 +37,7 @@
                                     REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
                                 ), '^,','') AS payComma
 	 			,code_select(category) category
-		        ,REPLACE(codeArr_select(style), ',', '#') style
+		        ,REPLACE(codeArr_select(style), ',', ' #') style
 	            ,dDay
 		      	,likes
 	            ,(select sev_nm 
@@ -140,7 +140,7 @@
                 where target_Id = c_no)AS rprt
 			,category categoryCode
 	        ,code_select(category) category
-	        ,codeArr_select(style) style
+	        ,REPLACE(codeArr_select(style), ',', ' #') style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
 	      	,CASE WHEN dt_extns IS NOT NULL  THEN 
 	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
