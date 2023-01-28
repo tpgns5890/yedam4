@@ -37,6 +37,9 @@ public class ContestVO {
 	private String order = "inq DESC"; //기본 정렬기준
 	private String search;
 	
+	//가격 콤마변환
+	private String payComma;
+	
 	//진행,마감체크
 	private String ing; 
 	

@@ -16,10 +16,13 @@
 	<select id="userlikeList" resultType="map">
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,inq,rprt
                 ,dDay
-                ,code_select(style) style
+                ,REPLACE(codeArr_select(style), ',', '#') style
                 ,code_select(category) category
 		      	,(select count(*) from likes where target_no = c_no) AS likes
 		      	,(select sev_nm from files where target_Id = c_no) AS img
+		      	,REGEXP_REPLACE(REVERSE(
+                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
+                                ), '^,','') AS PAYCOMMA
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(
 				             SELECT c.c_no,c.writer,c.ttl,c.cntn,c.pay,c.inq,c.rprt,c.dt_reg,c.dt_cls,c.dt_extns,c.style,c.category

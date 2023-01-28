@@ -115,14 +115,20 @@
 							
 							<!-- 등록완료후 마감된경우 -->
 							<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감'">
-								<td th:text="등록완료"></td>
 								
-								<th:block th:if="${contest.winnerCheck} == 0">
+								<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} == 0">
+									<td th:text="등록완료"></td>
+									<td></td>
+								</th:block>
+								
+								<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
+									<td th:text="등록완료"></td>
 									<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
 								</th:block>
 								
 								<th:block th:if="${contest.winnerCheck} > 0">
 									<td th:text="우승자선정완료"></td>
+									<td></td>
 								</th:block>
 								
 							</th:block>

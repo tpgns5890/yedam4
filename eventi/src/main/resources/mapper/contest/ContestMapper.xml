@@ -33,8 +33,11 @@
 	<select id="contestList" resultType="ContestVO">
 
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+	 			,REGEXP_REPLACE(REVERSE(
+                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
+                                ), '^,','') AS payComma
 	 			,code_select(category) category
-		        ,codeArr_select(style) style
+		        ,REPLACE(codeArr_select(style), ',', '#') style
 	            ,dDay
 		      	,likes
 	            ,(select sev_nm 
@@ -56,8 +59,8 @@
                               	 from likes 
                               	 where target_no = c_no) AS likes
 			             FROM CONTEST
-			            WHERE SAVE = 'N'
-			              AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
+			             WHERE SAVE = 'N'
+			             AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
 						<include refid="category" />
 						order by ${order} 
 	<![CDATA[
