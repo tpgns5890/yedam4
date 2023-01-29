@@ -52,8 +52,10 @@
 			   #{userId}, 
 			   #{certName}, 
 			   #{certNum},
-			   'N',
-			   #{certType})
+			   'R',
+			   #{certType},
+			   null,
+			   sysdate)
 	</insert>
 
 	<!-- 회원 단건 조회 -->
