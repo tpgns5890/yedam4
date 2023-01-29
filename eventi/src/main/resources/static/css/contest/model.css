@@ -12,6 +12,20 @@
 	background-color: rgb(0, 0, 0); /* Fallback color */
 	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
+/* design Modal Content */
+.img_modal_content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 40%;
+	height: 70%;
+	text-align: left;
+	
+	/* 이미지 스크롤*/
+	max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
 /* The Close Button */
 .close {
 	color: #aaaaaa;
@@ -67,8 +81,4 @@
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: -1;
-}
-img {
-	margin-top: 50px;
-	margin-right: 20px;
 }

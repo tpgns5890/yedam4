@@ -56,11 +56,11 @@
 	              	<!-- 분류별 기준 뽑아오기 -->
 	              	 <div class="col-sm-3 mb-sm-20" style="width: 300px; line-height: 40px; text-align:center;">
 		                <div>
-		                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막
-								<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너
-								<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고
-								<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);">포스터
-								<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);">기타
+		                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);"><label>현수막</label>
+								<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);"><label>배너</label>
+								<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);"><label>로고</label>
+								<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);"><label>포스터</label>
+								<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);"><label>기타</label>
 						</div>
 	                </div>
 	              
@@ -238,13 +238,13 @@
 						active = 'active';
 					}
 					if(contest.img == null){
-						img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">`
+						img =  `<img src="/images/public.jpg" class="icon-lock" style="width: 500px; height: 500px; ">`
 					}else{
 						img = `<img src="/fileView/${contest.img}" style="width: 500px; height: 500px; ">`
 					}
 					let p = ` 
-								<div class="col-sm-6 col-md-4 col-lg-4">
-					                <div id="${contest.cNo}" class="shop-item">
+								<div class="col-sm-6 col-md-4 col-lg-4" >
+					                <div id="${contest.cNo}" class="shop-item" >
 							  		<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
 					                  <div class="shop-item-image">${img}
 					                    <div class="shop-item-detail">

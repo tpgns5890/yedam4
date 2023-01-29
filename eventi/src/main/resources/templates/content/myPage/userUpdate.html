@@ -9,35 +9,11 @@
 <link rel="stylesheet" href="/css/contest/cotestForm.css">
 <link rel="stylesheet" href="/css/contest/button.css">
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <style>
 
-#user {
-	padding-top: 70px;
-	width: 800px;
-	margin: 0 auto;
-	margin-bottom: 60px;
-}
 
-.busiArea {
-	width: 30px;
-	margin: 0;
-	display: block;
-}
 
-#chkArea {
-	width: 530px;
-	display: flex;
-	justify-content: space-evenly;
-}
 
-.chkArea {
-	width: 115px;
-	height: 200px;
-	overflow: scroll;
-	border: 0.3px solid black;
-	line-height: 1.5em;
-}
 </style>
 </head>
 <body>
@@ -88,10 +64,10 @@
 					<label>은행사</label>
 							<select id="bank" name="bank" >
 								<option value="" >=== 은행코드 ====</option>
-								<option value="004" th:checked="${user.bank eq '004'}">국민은행</option>
-								<option value="003" th:checked="${user.bank eq '003'}">기업은행</option>
-								<option value="011" th:checked="${user.bank eq '011'}">농협은행</option>
-								<option value="031" th:checked="${user.bank eq '031'}">대구은행</option>
+								<option value="004" th:selected="${user.bank eq '국민은행'}">국민은행</option>
+								<option value="003" th:selected="${user.bank eq '기업은행'}">기업은행</option>
+								<option value="011" th:selected="${user.bank eq '농협은행'}">농협은행</option>
+								<option value="031" th:selected="${user.bank eq '대구은행'}">대구은행</option>
 							</select>
 					
 				</li>
@@ -102,7 +78,7 @@
 			</ul>
 				
 				<th:block th:if="${user.busiNum} != null">
-				<ul>
+				<ul >
 					<li><label>사업자번호</label><input id="busiNum" name="busiNum" type="text" th:value="${user.busiNum}|" readonly="readonly"></li>
 					<li><label>사업자명</label><input id="busiTitle" name="busiTitle" type="text" th:value="${user.busiTitle}|"></li>
 					
@@ -120,29 +96,30 @@
 						<br>
  						
  						<input id="busiAreaInput" name="busiArea" type="hidden">
- 						<ul id="busiArea">
+ 						<ul id="busiArea" class="userUlTag">
  							<li th:each="area, t : ${#strings.arraySplit(user.busiArea, ',')}" class='tag-item'>[[${area}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
  						</ul>
  					</li>
  					
 					<li>
-						<label>행사지역</label> 
+						<label>행사스타일</label> 
 						<select id="busiCheck" name="busiStyle" onchange="busiStyleFun(this)">
-							<option value="">-- 행사가능지역 선택 --</option>
+							<option value="">-- 행사스타일 선택 --</option>
 							<option th:each="area : ${busiStyle}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
 						</select>
 						<br>
 						
 						<input id="busiStyleInput" name="busiStyle" type="hidden">
- 						<ul id="busiStyle">
+ 						<ul id="busiStyle" class="userUlTag">
  							<li th:each="style, t : ${#strings.arraySplit(user.busiStyle, ',')}" class='tag-item'>[[${style}]]<span class='style-del-btn' th:idx="${t.index}">x</span></li>
  						</ul>
 					</li>
 				</ul>
 				</th:block>
-				
-				<button type="button" class="w-btn w-btn-gra1" onclick="location.href='/myPage/userMypage'">취소</button>
-				<button type="button" id="update" class="w-btn w-btn-gra1" >수정</button>
+				<div  style="position:relative; top:20px; left: 135px;">
+					<button type="button" class="w-btn w-btn-gra1" onclick="location.href='/myPage/userMypage'" >취소</button>
+					<button type="button" id="update" class="w-btn w-btn-gra1" >수정</button>
+				</div>
 			</div>
 		<script>
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';

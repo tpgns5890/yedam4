@@ -1,15 +1,12 @@
-a {
-	font-weight: bolder;
+.container {
+	width: 1700px;
+	margin: 0 auto;
+	margin-top: 30px;
 }
 
-li {
-	list-style: none;
-}
-
-a {
-	text-decoration: none;
-	font-size: 18px;
-	font-weight: bolder;
+#boxList {
+	margin-left: 250px;
+	margin-top: 30px;
 }
 
 .sideMenu {
@@ -24,16 +21,23 @@ a {
 .sideMenu>li {
 	text-align: left;
 	line-height: 50px;
+	list-style: none;
+	margin-left: 50px;
 }
 
 .sideMenu a {
 	color: black;
+	font-weight: bolder;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: bolder;
 }
 
 .submenu {
 	height: 0; /*ul의 높이를 안보이게 처리*/
 	overflow: hidden;
 }
+
 .sideMenu>li:hover {
 	background-color: rgb(255, 255, 255);
 	transition-duration: 0.5s;
@@ -43,29 +47,40 @@ a {
 	height: 200px; /*서브메뉴 li한개의 높이 50*5*/
 	transition-duration: 1s;
 }
-
+form[name="designdesignSearchFrm"]{
+	margin-top:15px;
+	margin-left: 270px;
+}
+form[name="searchFrm"]{
+	margin-top:15px;
+	margin-left: 480px;
+}
 table {
+	margin: 0 auto;
+	margin-top: 10px;
 	margin-bottom: 50px;
 	table-layout: fixed;
 }
 
-
-th {
+thead th {
+	text-align: center;
+	background: #b4defd;
 	padding: 20px 15px;
-	text-align: left;
-	font-weight: 500;
-	font-size: 12px;
+	font-weight: border;
+	font-size: 16px;
 	color: black;
 	text-transform: uppercase;
 }
 
-td {
-	padding: 15px;
-	text-align: left;
+tbody td {
+	height: 60px;
+	padding: 10px;
+	text-align: center;
 	vertical-align: middle;
 	font-weight: 300;
-	font-size: 12px;
+	font-size: 14px;
 	color: black;
+	text-align: center
 }
 
 #deleteBtn {
@@ -84,3 +99,39 @@ td {
 	width: 500px;
 }
 
+label {
+	display: inline-block;
+	text-align: center;
+	width: 40px;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+input[type="text"] {
+	width: 270px;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: vertical;
+}
+
+.inputBtn, .delBtn {
+	font-size: 18px;
+	height: 40px;
+}
+
+.btn, #deleteBtn {
+	margin: 0px;
+	margin-right: 10px;
+}
+
+.col text-center {
+	width: 1500px;
+	margin-left: 400px;
+}
+
+#paging {
+	width: 1700px;
+	margin: 0 auto;
+}

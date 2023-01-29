@@ -29,11 +29,6 @@ ul {
 	border-radius: 4px;
 	resize: vertical;
 }
-#styleCheck,
-#areaCheck{
-	width: 140px;
-	margin-bottom: 20px;
-}
   input[type=radio]{
 	margin: 5px;
 }
@@ -66,4 +61,16 @@ ul li.tag-item {
 	font-weight: bold;
 	cursor: pointer;
 	margin-left: 8px;
+}
+.contestTag{
+	margin-left : 110px;
+}
+.userUlTag{
+	margin-left : 110px;
+}
+#user {
+	padding-top: 70px;
+	width: 800px;
+	margin: 0 auto;
+	margin-bottom: 60px;
 }

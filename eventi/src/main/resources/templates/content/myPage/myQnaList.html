@@ -4,12 +4,9 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 <head>
-<!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
-<!-- 모달 스타일 -->
 <link rel="stylesheet" href="/css/contest/model.css">
 <meta charset="UTF-8">
-<title>Insert title here</title>
 </head>
 <body>
 	<!-- 2.레이아웃 content적용 -->
@@ -28,66 +25,67 @@
 			</div>
 		</section>
 
-
-		<div style="min-height: 700px">
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
-			<!-- 게시글 검색 -->
-			<form name="searchFrm">
-				<input type="hidden" name="page" value="1">
-			</form>
 
 			
-		 	<!-- 문의내역이 없을경우 -->
-		 	<div th:if="${#lists.isEmpty(qnaList)}">
-				<h3>문의내역이 없습니다.</h3>
-			</div>	
-		 	
-		 	<!-- 문의내역이 있을경우 -->
-		 	<div th:if="${!#lists.isEmpty(qnaList)}">
-				<!-- 테이블 -->
-				<div id="table">
-					<table border="1" id="myTable">
-						<thead>
-							<tr>
-								<th>문의No</th>
-								<th>게시글No</th>
-								<th>문의사항제목</th>
-								<th>작성일자</th>
-								<th>답변유무</th>
-								<th>조회</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- 답변이아닌 문의내용만 출력할것.. -->
-							<tr th:each="q : ${qnaList}" >
-								<td th:text=${q.qNo}></td>
-								<td th:text=${q.targetId}></td>
-								<td th:text=${q.ttl}></td>
-								<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
-								<td th:text=${q.ans}></td>
-								<td><button type="button" class="select">조회</button></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			
-				<!-- 페이징처리  -->
-				<div class="row mt-5">
-					<div class="col text-center">
-						<div class="block-27">
-							<th:block
-								th:replace="fragments/paging :: component(${paging},'gopage')">
+			<div class="container" >
+			 	<!-- 문의내역이 없을경우 -->
+			 	<div th:if="${#lists.isEmpty(qnaList)}">
+					<h3>문의내역이 없습니다.</h3>
+				</div>	
+			 	
+			 	<!-- 문의내역이 있을경우 -->
+			 	<div th:if="${!#lists.isEmpty(qnaList)}">
+				
+				<!-- 게시글 검색 -->
+				<form name="searchFrm">
+					<label>내용</label><input type="text" id="cntn" name="cntn" value="">
+					<input type="hidden" name="page" value="1">
+					<button type="submit" id="submit" class="btn btn-g btn-round inputBtn">검색</button>
+				</form>
+				
+					<!-- 테이블 -->
+						<table border="1" id="myTable">
+							<thead>
+								<tr>
+									<th>문의No</th>
+									<th>게시글No</th>
+									<th style=" width: 380px;">문의사항제목</th>
+									<th>작성일자</th>
+									<th>답변유무</th>
+									<th>조회</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- 답변이아닌 문의내용만 출력할것.. -->
+								<tr th:each="q : ${qnaList}" >
+									<td th:text=${q.qNo}></td>
+									<td th:text=${q.targetId}></td>
+									<td th:text=${q.ttl}></td>
+									<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
+									<td th:text=${q.ans}></td>
+									<td><button type="button" class="select btn btn-g btn-round">조회</button></td>
+								</tr>
+							</tbody>
+						</table>
+				
+					<!-- 페이징처리  -->
+					<div class="row mt-5">
+						<div class="col text-center">
+							<div class="block-27">
+								<th:block
+									th:replace="fragments/paging :: component(${paging},'gopage')">
+							</div>
 						</div>
 					</div>
-				</div>
 			</div>
 			
 		<!--문의내역 상세보기 -->
 		<div id="qnaModal" class="modal">
 			<!-- Modal content -->
-			<div class="modal-content">
+			<div class="modal_content">
 				<span class="close">&times;</span>
 				<h3 style="text-align: center;">문의내역</h3>
 				<div id="qna"></div>
@@ -159,7 +157,7 @@
 		//문의사항 생성
 		function make(data){
 			let ul = `  <h4>${data.ttl}</h4>
-						<ul>
+						<ul style="list-style: none">
 								<li>${data.cntn}</li>
 								<li></li>
 						</ul>
@@ -170,7 +168,7 @@
 		//문의답변 생성
 		function makeRep(data){
 			let ul = `  <h4>답변내용</h4>
-						<ul>
+						<ul style="list-style: none">
 								<li>${data.cntn}</li>
 								<li></li>
 						</ul>
@@ -178,7 +176,6 @@
 			return ul;
 		} 
 		
-		//답변이있다면
 			
 		</script>
 	</div>
