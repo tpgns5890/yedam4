@@ -36,6 +36,55 @@ public class CodeServiceImpl implements CodeService{
 	public List<CodeVO> getMcStyle() {
 		return CodeMapper.getMcStyle();
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//지은(수정)
+	//디자인 스타일
+	@Override
+	public List<CodeVO> designStyle() {
+		return CodeMapper.designStyle();
+	}
+
+	//디자인 카테고리
+	@Override
+	public List<CodeVO> getdesignCat() {
+		return CodeMapper.getdesignCat();
+	}
+	
+	//렌탈물품 카테고리
+	@Override
+	public List<CodeVO> getRentCat() {
+		return CodeMapper.getRentCat();
+	}
 	
 
 }

@@ -86,9 +86,7 @@ public class McPrtlController {
 		reviewVO.setReviewTgt(mcPrtflVO.getUserId());
 		reviewVO.setCategory("T06");
 		model.addAttribute("reviews", reviewService.getReview(reviewVO));
-		
-		System.out.println("-=====reviews:" + reviewService.getReview(reviewVO));
-		
+				
 		//후기 평균 별점, 전체건수
 		model.addAttribute("recount", reviewService.getReviewAvg(reviewVO));
 		

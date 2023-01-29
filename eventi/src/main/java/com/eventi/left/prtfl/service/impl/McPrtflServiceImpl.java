@@ -1,5 +1,6 @@
 package com.eventi.left.prtfl.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,20 +88,18 @@ public class McPrtflServiceImpl implements McPrtflService{
 	public int mcUpdate(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		// 대표사진세팅.
 	    mcPrtflVO.setImg(uploadFile[0].getOriginalFilename());
-		
+	    
 	    int r = mcPrtflMapper.mcUpdate(mcPrtflVO);
 	    uploadFiles(uploadFile, mcPrtflVO);
 	    
 		return r;
-		
-		
 	}
 	
 	//파일 업로드
 	public void uploadFiles(MultipartFile[] uploadfile, McPrtflVO mcPrtflVO) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, mcPrtflVO.getUserId(), "T06"); // 대상구분 공모전
+			list = newUp.uploadFiles(uploadfile, mcPrtflVO.getUserId(), "T06");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

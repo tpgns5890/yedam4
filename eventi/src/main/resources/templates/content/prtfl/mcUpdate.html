@@ -171,7 +171,7 @@
 		</div>
 	</div>
 	
-	<!-- option 사회가능지역 -->
+	<!-- option 자기소개서 질문 -->
 	<div class="col-md-6">
 		<div class="form-group">
 			<label class="label" for="qna">질문</label> 
@@ -203,7 +203,7 @@
 			<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
 			<th:block th:each="file : ${files}">
 			<div th:if="${#strings.containsIgnoreCase(file,'.mp4')}">
-			<input type="file" id="imgInp" name="uploadFile" th:text="${file.fNm}"/><span><button type="button" class="cancel">-</button></span>
+			<input type="file" id="videoInp" name="uploadFile" th:text="${file.fNm}"/><span><button type="button" class="cancel">-</button></span>
 			</div>
 			</th:block>
 			<div id="addMove">
@@ -219,7 +219,7 @@
 	
 	<div class="col-md-12">
 		<div class="form-group">
-			<input type="submit" id="insert" value="등록" class="btn btn-primary">
+			<input type="submit" id="update" value="수정" class="btn btn-primary">
 		</div>
 	</div>	
 	</div>
@@ -296,7 +296,7 @@
     })
     
     //등록버튼을 눌렀을 경우 아래와 설정을 해주지 않을 경우 태그 속성이 저장되지 않는다.
-	$('#insert').on('click', function insert() {
+	$('#update').on('click', function insert() {
 		oEditors.getById["selfIntro"].exec("UPDATE_CONTENTS_FIELD", [])
 		let selfIntro = document.getElementById("selfIntro").value;
 		
@@ -325,7 +325,7 @@
     
     //동영상추가버튼
     $("#movieInsert").on('click', function() {
-    	let tag = `<div><input type="file" id="imgInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
+    	let tag = `<div><input type="file" id="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
     	$("#addMove").append(tag);
     })
     
@@ -416,6 +416,10 @@
         //기존에 있던 값 배열에 넣기
         //지역
         let area = "[[${mcSelect.mcArea}]]";
+        
+        var values = $("#mcAreaList>option").map(function(){return $(this).val();});
+        console.log(values)
+        
         areatag = area.split(",");
         areaCounter = areatag.length;
         

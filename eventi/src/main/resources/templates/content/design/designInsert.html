@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+	.label {
+		color : black;
+	}
+	
+	#check{
+		min-height : 3000px;
+	}
+	
+	.fileShow{
+			display : none !important;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">디자인</h2>
+                <div class="module-subtitle font-serif">디자인 등록</div>
+              </div>
+            </div>
+          </div>
+        </section>		
+		
+		<form action="/design/myDesignInsert" enctype="multipart/form-data" id="myDesignfrm" name="myDesignfrm" method="post">
+			<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<div id="check">
+			<input type="hidden" id="dgnNo" name="dgnNo" th:value="${dNo}" readonly="readonly"><br />
+			<input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member != null ? session.member.userId :''}">
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="label" for="name">디자인 제목</label> 
+					<input type="text" class="form-control" name="name" id="name">
+				</div>
+			</div>
+			
+			<!-- 디자인 카테고리 -->
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="label" for="designStyleList">주요 디자인 스타일</label> 
+					<select id="caregory" name="caregory">
+						<option value="">-- 디자인 스타일 선택 --</option>
+						<option th:each="cat : ${designCat}" th:value="${cat?.codeId}" th:text="${cat?.codeName}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="label" for="cntn">디자인소개</label>
+					<textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4"></textarea>
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group" id="addDesign">
+					<label class="label" for="imgInp">디자인</label> 
+					<input type="file" class="imgInp" name="uploadFile"/>
+					<div class="fileShow">
+						<img class="blah" src="#" alt = "your image" width="250px" />
+						<button type="button" id="cancel" class="btn btn-warning cancel">
+			              <span>Cancel</span>
+			          	</button>
+			        </div> 	
+
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<input type="button" id="designAdd" value="이미지추가" class="btn btn-primary">
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<input type="submit" id="insert" value="등록" class="btn btn-primary">
+				</div>
+			</div>
+					
+			</div>
+		</form>
+		
+		<script>
+			//csrf설정
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			let oEditors = []
+
+			smartEditor = function() {
+				console.log("Naver SmartEditor")
+				nhn.husky.EZCreator.createInIFrame({
+					oAppRef : oEditors,
+					elPlaceHolder : "cntn",
+					sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+					fCreator : "createSEditor2"
+				})
+			}
+
+			$(document).ready(function() {
+				smartEditor()
+			})
+			
+			//등록버튼 누를시
+			$('#insertForm').on('click', function() {
+				oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", [])
+				let cntn = document.getElementById("cntn").value;
+
+			});
+			
+			//파일 업로드 이미지 미리보기
+		    //파일 INPUT창에 변화가 있을 경우 실행
+		    $(document).on('change', '.imgInp', function(){
+		    	let a = $(this)
+		    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
+		    	$(this).toggleClass("fileShow");
+		    	$(this).next().toggleClass("fileShow");
+
+		    	if(this.files && this.files[0]){
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						a.next('div').children(".blah").attr('src', e.target.result);
+					}
+					reader.readAsDataURL(this.files[0]);
+				}
+			});
+
+			//파일 삭제
+		    $(document).on('click', '.cancel', function() {
+		    	//파일을 지우고 싶을때 삭제버튼을 누르면 삭제된다.
+		    	$(this).parent().prev().remove();
+		    	$(this).parent().remove();
+		    })
+		    
+		    $("#designAdd").on('click', function() {
+		    	let tag = `<input type="file" class="imgInp" name="uploadFile"/>
+								<div class="fileShow">
+								<img class="blah" src="#" alt = "your image" width="250px" />
+								<button type="button" id="cancel" class="btn btn-warning cancel">
+					              <span>Cancel</span>
+					          	</button>
+					         </div>`
+		        $("#addDesign").append(tag);
+		    })
+		    
+		</script>
+	</div>
+</body>
+</html>

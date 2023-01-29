@@ -128,6 +128,11 @@
 	    height: 100%;
 	    object-fit: cover;
 	}
+	
+	/*디자인 정렬*/	
+	.imgArray {
+	    margin: 5%;
+	}
 </style>
 </head>
 
@@ -137,49 +142,48 @@
      <div class="container">
        <div class="row">
          <div class="col-sm-6 col-sm-offset-3">
-           <h2 class="module-title font-alt">사회자포트폴리오</h2>
-           <div class="module-subtitle font-serif">사회자포트폴리오</div>
+           <h2 class="module-title font-alt">디자이너포트폴리오</h2>
+           <div class="module-subtitle font-serif">디자이너포트폴리오</div>
          </div>
        </div>
      </div>
    </section>
    
    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-   <th:block th:if="${session.member.userId} == ${mcSelect.userId}">
-	   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
-	   <button type="button" class="btn btn-primary" th:onclick="">글 삭제하기</button>
-   </th:block>
+   <th:block th:if="${session.member.userId} == ${dgnerSelect.userId}">
+	   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{dgnerUpdate(userId=${dgnerSelect.userId})}'|">글 수정하기</button>
+	  <button type="button" class="btn btn-primary" th:onclick="">글 삭제하기</button>
+	</th:block>
    
     <section id="check">
   <nav id="left">
   	<div class="border">
-  		<label class="label" th:text="'조회수' + ${mcSelect.inq}"></label>
-  		<label class="label" th:text="'좋아요수' + ${mcSelect.cnt}"></label>
+  		<label class="label" th:text="'조회수' + ${dgnerSelect.inq}"></label>
+  		<span class="label" th:text="좋아요수"></span><label class="label" id ="likeCount" th:text="${dgnerSelect.cnt}"></label>
   		<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
   		<hr>
   		<br><br>
   		
   		<div class="box">
-		<img class="profile" th:src="|/fileView/${mcSelect.img}|">
+		<img class="profile" th:src="|/fileView/${dgnerSelect.img}|">
   		</div>
   		
-  		<!-- <label style="display:none;"class="label" id="userId" th:text="${mcSelect.userId}"></label><br> -->
-  		<label class="label" id="userName" th:text="${mcSelect.userName}"></label><br>
-  		<label class="label" id="mcArea" th:text="${mcSelect.mcArea}"></label>
+  		<label style="display:none;"class="label" id="userId" th:text="${dgnerSelect.userId}"></label><br>
+  		<label class="label" id="userName" th:text="${dgnerSelect.userName}"></label><br>
+  		<label class="label" th:text="'경력 ' + ${dgnerSelect.carrYear} + '년'"></label>
   		<hr>
   		
-  		<label class="label" th:text="${mcSelect.oneIntro}"></label>
+  		<label class="label" th:text="${dgnerSelect.oneIntro}"></label>
   		<hr>
   		
-  		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
+  		<th:block th:if="${session.member.userId} != ${dgnerSelect.userId}">
   		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
   		</th:block>
-  		<button id="btn" type="button" class="btn btn-g btn-round castingUp">의뢰하기</button>
   		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
   		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
 		<hr>
 		
-		<label class="label" th:text="${mcSelect.carrYear} + '년'"></label>
+		
   	</div>
   </nav>
   
@@ -192,34 +196,37 @@
                   <div class="tab-content">
                     <div class="tab-pane active" id="support">
                     	<div class="border">
-							<label class="label">세부분야</label> 
-							<label class="label" th:text="${mcSelect.mcType}"></label><br>
-							<label class="label">진행스타일</label> 
-							<label class="label" th:text="${mcSelect.progStyle}"></label><br>
+							<label class="label">작업물분위기</label> 
+							<label class="label" th:text="${dgnerSelect.style}"></label><br>
+							<label class="label">작업기간</label> 
+							<label class="label" th:text="${dgnerSelect.workDt}+'일'"></label> <br>
+							<label class="label">작업비용</label> 
+							<label class="label" th:text="${dgnerSelect.workPrice}+'원'"></label> <br>
 							<label class="label">자격증</label> 
-							<label class="label">레크리에이션지도자1급</label><br>
-							<label class="label">섭외비</label> 
-							<label class="label" th:text="${mcSelect.castingPrice}+'원'"></label> 
-                    	</div>
-                    	
-                    	<br>
-                    	<h5>자기소개</h5>
-                    	<div class="border">
-							<label class="label" th:utext="${mcSelect.selfIntro}"></label><br>
+							<label class="label">포토샵</label>
                     	</div>
                     	
                     	<br>
                     	<h5>경력사항</h5>
                     	<div class="border">
-							<label class="label" th:utext="${mcSelect.career}"></label><br>
+							<label class="label" th:utext="${dgnerSelect.career}"></label><br>
                     	</div>
             			
             			<br>
-                    	<h5>동영상</h5>
+                    	<h5>디자인</h5>
                     	<div class="border">
-							<video th:each="file : ${files}" th:if="${#strings.containsIgnoreCase(file,'.mp4')}" th:src="|/fileView/${file.sevNm}|" width="500px" height="200px" controls></video>
-                    	</div>
-                    	
+                    		<div id="designborder">
+					        </div>
+					        
+				             <!-- //페이징 경로 :: 문자 -->
+							<div class="row mt-5" id="paging">
+								<div class="col text-center">
+									<div class="block-27" id="returnPaging">
+									</div>
+								</div>
+							</div>
+					     </div>
+					       
                     	<br>
                     	<h5>댓글</h5>
                     	<div class="border">
@@ -257,7 +264,7 @@
 		                            <p th:text="${re.reviewCntn}"></p>
 		                          </div>
 		                          <div class="comment-meta font-alt"><span  th:text="${#dates.format(re.writingDt, 'yyyy/MM/dd')}"></span>-
-		                          		<!--별점처리-->
+		                          		<!-- 별점처리 -->
 		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${re.laststar == 1}"><i class="fa fa-star-o star"></i></span>
 		                          </div>
 		                        </div>
@@ -284,7 +291,7 @@
 				<h2>신고</h2>
 				<div id="box">
 					<label>신고대상자</label>
-					<input type="text" id="targetId" name="targetId" th:value="${mcSelect.userId}" readonly><br>
+					<input type="text" id="targetId" name="targetId" th:value="${dgnerSelect.userId}" readonly><br>
 					<label>신고자</label>
 					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
 					<label>신고사유</label>
@@ -300,7 +307,7 @@
     <div id="reviewFrm" class="modal">
 			<div class="modal_content">
 				<label>대상</label>
-				<input type="text" id="reviewTgt" name="reviewTgt" th:value="${mcSelect.userId}" readonly><br>
+				<input type="text" id="reviewTgt" name="reviewTgt" th:value="${dgnerSelect.userId}" readonly><br>
 				
 				<label>의뢰자</label>
 				<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
@@ -341,51 +348,29 @@
 		<div class="modal_layer"></div>
 	</div>
 	
-	<!-- 의뢰하기 폼 -->
-	<div id="castingFrm" class="modal">
-			<div class="modal_content">
-				<form id="castingCntn">
-					<h2>의뢰</h2>
-					<div id="box">
-						<label>사회자</label>
-						<input type="text" id="userId" name="userId" th:value="${mcSelect.userId}" readonly><br>
-						<label>의뢰자</label>
-						<input type="text" id="clientId" name="clientId" th:value="${session.member.userId}"><br>
-						<label>행사분야</label>
-						<select id="eType" name="eType">
-							<option value="">-- 행사분야 선택 --</option>
-							<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
-						</select><br>
-						<label>행사소개</label>
-						<textarea rows="5" cols="30" id="eIntro" name="eIntro" placeholder="행사에 대해 작성해주세요."></textarea><br>
-						<label>행사날짜</label>
-						<input type="date" id="eSdt" name="eSdt">-<input type="date" id="eLdt" name="eLdt"><br>
-						<label>행사시간</label>
-						<input type="time" id="eStime" name="eStime">-<input type="time" id="eLtime" name="eLtime"><br>
-						<label>섭외비</label>
-						<input type="number" id="castingPrice" name="castingPrice">원
-						
-						<button type="button" class="cancel">취소</button>
-						<button type="button" id="casting">의뢰하기</button>
-					</div>
-				</form>
-			</div>
-		<div class="modal_layer"></div>
-	</div>
-	
    <script>
    		//csrf 설정
    		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-   		
+		desginList();
+		
+		//하트 이벤트
+		//하트를 클릭했을 경우 발생하는 이벤트
+		$(".heart").on("click", function () {
+			//active 클래스가 없을 경우 생성, 있을 경우 삭제
+			$(this).toggleClass("active");
+			//하트 기준으로 리스트 정렬 함수
+			//range();
+		});
+		
 		//해당 포트폴리오 작성자에 대한 댓글을 가져오기 위해 replyTag에 작성자ID를 구해준다.
-   		let replyTgt = '[[${mcSelect.userId}]]';
+   		let replyTgt = '[[${dgnerSelect.userId}]]';
 
    		//댓글, 대댓글 불러오는 ajax
    		$.ajax({
    			url : '/replyList',
    			method : 'post',
-   			data : JSON.stringify({replyTgt:replyTgt, boardCat:'T06'}),
+   			data : JSON.stringify({replyTgt:replyTgt, boardCat:'T07'}),
    			contentType : "application/json",
    			beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -467,7 +452,7 @@
 			$.ajax({
 	   			url : '/replyInsert',
 	   			method : 'post',
-	   			data : JSON.stringify({userId:userId, replyTgt:replyTgt, replyCntn:replyCntn, boardCat:'T06'}),
+	   			data : JSON.stringify({userId:userId, replyTgt:replyTgt, replyCntn:replyCntn, boardCat:'T07'}),
 	   			contentType : "application/json",
 	   			beforeSend : function(xhr)
 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -513,7 +498,7 @@
 			$.ajax({
 	   			url : '/replyInsert',
 	   			method : 'post',
-	   			data : JSON.stringify({userId:userId, replyTgt:replyTgt, replyCntn:replyCntn, boardCat:'T06', rerepTgt:rerepTgt}),
+	   			data : JSON.stringify({userId:userId, replyTgt:replyTgt, replyCntn:replyCntn, boardCat:'T07', rerepTgt:rerepTgt}),
 	   			contentType : "application/json",
 	   			beforeSend : function(xhr)
 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -578,268 +563,414 @@
 				}		
 			})
 		});
-   		
-   	 $(".heart").on("click", function() {
-		 $(this).toggleClass("active");
-		 let userId = '[[${session.member.userId}]]';
-		 let targetNo = '[[${mcSelect.userId}]]';
-		 let category = 'T06';
-		 
-		 //좋아요를 추가했을 경우
-	     if($(this).hasClass("active")){
-	    	 //총 좋아요수 처리
-	    	 let likeCount = $('#likeCount').text();
-	    	 $('#likeCount').text(parseInt(likeCount) + 1);
-	    	 
-	    	 //post방식으로 좋아요 등록하기
-	    	 $.ajax({
-					url : "/likes/lInsert",
-					method : 'post',
-					contentType : 'application/x-www-form-urlencoded',
-					data : {userId:userId, targetNo:targetNo, category:category},
-					beforeSend : function(xhr)
-	                {  
-	    				xhr.setRequestHeader(header, token);
-	                },
-					success : function(data) {
-					},
-					fail : function(result) {
-						alert('필수항목을 입력해주세요')
-					}
-				})
-	     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
-	    	 //총 좋아요수 처리
-	    	 let likeCount = $('#likeCount').text();
-	    	 $('#likeCount').text(parseInt(likeCount) - 1);
-	    	 
-	    	//post방식으로 좋아요 취소하기
-	    	 $.ajax({
-					url : "/likes/lDelete",
-					method : 'post',
-					contentType : 'application/x-www-form-urlencoded',
-					data : {userId:userId, targetNo:targetNo, category:category},
-					beforeSend : function(xhr)
-	                {
-	    				xhr.setRequestHeader(header, token);
-	                },
-					success : function(data) {
-						//alert('좋아요 취소 완료');
-					},
-					fail : function(result) {
-						alert('필수항목을 입력해주세요')
-					}
-				})
-	     }
-	 })
-	 
-	   //신고부분
-	   //신고 모달창 띄우기
-	   $('.punishModalUp').on('click', function() {
-		   console.log('클릭');
-		   $("#punishFrm").show();
-	   })
-	   
-	   //모달창에서 취소를 눌렀을 경우
-	   $(".cancel").on('click', function() {
-			$(".modal").hide();
-		});
-	   
-	   //모달창에서 신고를 눌렀을 경우
-	   $("#punish").on('click', function() {
-		   let targetId = '[[${mcSelect.userId}]]';
-		   let targetCat = 'T06';
-		   let banCntn = $("#banCntn").val();
-		   let userId = '[[${session.member.userId}]]';
-		   
-		    $.ajax({
-					url : "/punishInsert",
-					method : 'post',
-					contentType : 'application/x-www-form-urlencoded',
-					data : {userId:userId, targetId:targetId, banCntn:banCntn, targetCat:targetCat},
-					beforeSend : function(xhr)
-	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-	    				xhr.setRequestHeader(header, token);
-	                },
-					success : function(data) {
-						alert('신고되었습니다.');
-						$("#punishFrm").hide();
-					},
-					fail : function(result) {
-						console.log(result)
-					}
-				})
-	   })
-	   
-	   //후기부분
-	   //후기 모달창 띄우기
-	   $('.reviewModalUp').on('click', function() {
-		   console.log('클릭');
-		   $("#reviewFrm").show();
-	   })
-	   
-	   //클릭한 별점 수 저장
-	   let stars = 0;
-	   $(".label_star").on('click', function() {
-		   stars = $(this).text();		   
-	   })
-
-	   //모달창에서 후기등록 버튼을 눌렀을 경우
-	   $("#review").on('click', function() {
-		   let reviewTgt = $("#reviewTgt").val();
-		   let category = 'T06';
-		   let reviewCntn = $("#reviewCntn").val();
-		   let userId = '[[${session.member.userId}]]';
-		   let star = stars;
-		   
-		    $.ajax({
-					url : "/review/reviewInsert",
-					method : 'post',
-					contentType : 'application/x-www-form-urlencoded',
-					data : {userId:userId, reviewTgt:reviewTgt, star:star, reviewCntn:reviewCntn, category:category},
-					beforeSend : function(xhr)
-	                {  
-	    				xhr.setRequestHeader(header, token);
-	                },
-					success : function(data) {
-						alert('후기가 등록되었습니다.');
-						$("#reviewFrm").hide();
-					},
-					fail : function(result) {
-						console.log(result)
-					}
-				})
-	   })
-	   
-	   //의뢰 모달창 띄위기
-	    $('.castingUp').on('click', function() {
-		   $("#castingFrm").show();
-	   })
-	   
-	   //모달창에서 의뢰요청을 눌렀을 경우
-	   $("#casting").on('click', function() {
-		   let parm = $("#castingCntn").serialize();
-		   
-		   $.ajax({
-				url : "/casting/castingInsert",
-				method : 'post',
-				contentType : 'application/x-www-form-urlencoded',
-				data : parm,
-				beforeSend : function(xhr)
-               {  
-   				xhr.setRequestHeader(header, token);
-               },
-				success : function(data) {
-					alert('의뢰가 등록되었습니다.');
-					$("#castingFrm").hide();
+		
+		//디자인 전체 리스트
+		function desginList() {
+			let userId = '[[${dgnerSelect.userId}]]'
+			let loginId = '[[${session.member != null ? session.member.userId :''}]]';
+			$.ajax({
+				url: '/prtfl/desginList',
+				method: 'post',
+				data: {
+					userId:userId, loginId:loginId
 				},
-				fail : function(result) {
-					console.log(result)
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				for(design of res.designs){
+					$('#designborder').append(makeDesgin(design));
 				}
+				$('#returnPaging').append(makePageing(res.paging));
 			})
-		    
-	   })
-	   
-	   //채팅버튼을 눌렀을 때
-		$(".chattingUp").on("click", function () {
-			$(".chat").toggleClass("active");
+		};
+		
+		//디자인 리스트
+		function makeDesgin(design){
+			//로그인 회원의 하트눌려진것만 체크
+			let active = null;
+			if(design.mylike > 0){
+				active = 'active';
+			}
 			
-			let toId = '[[${mcSelect.userId}]]';
-			console.log("로그인된 아이디== "+fromId)
-			console.log("메세지받을 아이디== "+toId)
-			//채팅방 구독 생성
-			function createChatRoom() {
-				console.log("1 채팅방 생성");
-				let chatroomDataList = new Array();
-				let chatroomData1 = {
-						toId : toId,
-						fromId : fromId
-				};
-				chatroomDataList.push(chatroomData1);
-				let chatroomData2 = {
-						toId : fromId,
-						fromId : toId
-				};
-				chatroomDataList.push(chatroomData2);
-				
-				console.log(JSON.stringify(chatroomDataList));
-				
-				$.ajax({
-		   			url : '/chatInsert',
-		   			method : 'post',
-		   			data : JSON.stringify(chatroomDataList),
-		   			contentType : "application/json; charset=UTF-8",
-		   			beforeSend : function(xhr)
-		            {  
-						xhr.setRequestHeader(header, token);
-		            }
-		   		}).then(res => {
-		   			console.log("2 채팅방 생성 번호: " + cId);
-		   			cId = res;
-		   			chattingList(cId)
-		   		})
-			}
-		   	
-		   	function chattingList(cId){
-		   		console.log('chattingList:', cId);
-		   		$.ajax({
-					url : '/chatSelect',
-					method : 'post',
-		   			data : JSON.stringify({toId:toId, fromId:fromId}),
-		   			contentType : "application/json; charset=UTF-8",
-		   			beforeSend : function(xhr)
-		            {   
-						xhr.setRequestHeader(header, token);
-		            }
-		   		}).then(res => {
-		   			$(".chat-list").empty();
-		   			for(r of res){
-		   				$(".chat-list").append(makeList(r));
-		   			}
-		   			message(cId);
-		   		})
-		   		
-		   		$(".chat-popup").show();
-		   	}
+			let tag = `<div class="col-sm-6 col-md-4 col-lg-4">
+			            <div id="${design.dgnNo}" class="shop-item">
+			            <div class="shop-item-image"><img class="imgArray" src="/fileView/${design.centerImg}" style="width: 300px; height: 300px">
+			              
+			              <div class="shop-item-detail">
+			              <div class="stage">
+		  					<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
+		   					</div>
+			              	<a href="#" class="btn btn-round btn-b">
+			              	<span class="icon-magnifying-glass">상세조회</span></a>
+			              </div>
+			            </div>
+			            <p>${design.name}</p>
+			          </div>
+			        </div>`
+			        
+			 return tag;
+		}
 	
-			function makeList(r){
-				let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
-								<div class="flex-grow-1 ms-3">
-									<h3>${r.toId}</h3>
-									<p>front end developer</p>
-								</div>
-							 </a>`;
-				return list;
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
 			}
+			
+			let pagination = $("<div/>")
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
+		
+		function gopage(i) {
+			let userId = '[[${dgnerSelect.userId}]]'
+			let page = i;
+			$.ajax({
+				url: '/prtfl/desginList',
+				method: 'post',
+				data: {
+					userId:userId, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#designborder').empty();
+				for(design of res.designs){
+					$('#designborder').append(makeDesgin(design));
+				}
 				
-			//채팅화면이 나타난다.
-			if ($(".chat").hasClass("active")) {
-				$.ajax({
-					url : '/checkChat',
-					method : 'post',
-		   			data : JSON.stringify({toId:toId, fromId:fromId}),
-		   			contentType : "application/json; charset=UTF-8",
-		   			beforeSend : function(xhr)
-		            {   
-						xhr.setRequestHeader(header, token);
-		            }
-		   		}).then(res => {
-		   			if(res != ''){
-		   				console.log('res.cId:', res.cid);
-		   				chattingList(res.cid);
-		   			} else {
-		   				createChatRoom();
-		   			}
-		   		})
-				$(".chat-popup").show();
-				$(".chatbox").show();
-			}
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging));
+			})
+		}
+		
+		//디자이너 좋아요 처리
+		$(".border #love").on("click", function() {
+			 $(this).toggleClass("active");
+			 let userId = '[[${session.member.userId}]]';
+			 let targetNo = '[[${dgnerSelect.userId}]]';
+			 let category = 'T07';
+			 
+			 //좋아요를 추가했을 경우
+		     if(!$(this).hasClass("active")){
+		    	 $(this).addClass("active");
+		    	 //총 좋아요수 처리
+		    	 let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) + 1);
+		    	 
+		    	 //post방식으로 좋아요 등록하기
+		    	 $.ajax({
+						url : "/likes/lInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     } else if ($(this).hasClass("active")){ //좋아요를 취소했을 경우
+		    	 $(this).removeClass("active");
+		    	 //총 좋아요수 처리
+		    	 let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) - 1);
+		    	 
+		    	//post방식으로 좋아요 취소하기
+		    	 $.ajax({
+						url : "/likes/lDelete",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							//alert('좋아요 취소 완료');
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     }
+	 })
+	   	
+		//디자인별 좋아요 처리
+		 $(document).on('click', '.desgin', function(e){
+			 $(this).toggleClass("active");
+			 let userId = '[[${session.member.userId}]]';
+			 let targetNo = $(this).attr('id');
+			 let category = 'T09';
+			 
+			  //좋아요를 추가했을 경우
+		     if($(this).hasClass("active")){
+		    	 //총 좋아요수 처리
+		    	 /* let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) + 1); */
+		    	 
+		    	 //post방식으로 좋아요 등록하기
+		    	 $.ajax({
+						url : "/likes/lInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
+		    	 //총 좋아요수 처리
+		    	 /* let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) - 1); */
+		    	 
+		    	//post방식으로 좋아요 취소하기
+		    	 $.ajax({
+						url : "/likes/lDelete",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							//alert('좋아요 취소 완료');
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     }
+		 }) 
+		 
+		   //신고부분
+		   //신고 모달창 띄우기
+		   $('.punishModalUp').on('click', function() {
+			   console.log('클릭');
+			   $("#punishFrm").show();
+		   })
+		   
+		   //모달창에서 취소를 눌렀을 경우
+		   $(".cancel").on('click', function() {
+				$(".modal").hide();
+			});
+		   
+		   //모달창에서 신고를 눌렀을 경우
+		   $("#punish").on('click', function() {
+			   let targetId = '[[${dgnerSelect.userId}]]';
+			   let targetCat = 'T07';
+			   let banCntn = $("#banCntn").val();
+			   let userId = '[[${session.member.userId}]]';
+			   
+			    $.ajax({
+						url : "/punishInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetId:targetId, banCntn:banCntn, targetCat:targetCat},
+						beforeSend : function(xhr)
+		                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							alert('신고되었습니다.');
+							$("#punishFrm").hide();
+						},
+						fail : function(result) {
+							console.log(result)
+						}
+					})
+		   })
+		   
+		   //후기부분
+		   //후기 모달창 띄우기
+		   $('.reviewModalUp').on('click', function() {
+			   console.log('클릭');
+			   $("#reviewFrm").show();
+		   })
+		   
+		   //클릭한 별점 수 저장
+		   let stars = 0;
+		   $(".label_star").on('click', function() {
+			   stars = $(this).text();		   
+		   })
 	
-			//채팅화면이 사라진다.
-			if (!$(".chat").hasClass("active")) {
-				$(".chat-popup").hide();
-				$(".chatbox").hide();
-			}
-		});
+		   //모달창에서 후기등록 버튼을 눌렀을 경우
+		   $("#review").on('click', function() {
+			   let reviewTgt = $("#reviewTgt").val();
+			   let category = 'T07';
+			   let reviewCntn = $("#reviewCntn").val();
+			   let userId = '[[${session.member.userId}]]';
+			   let star = stars;
+			   
+			    $.ajax({
+						url : "/review/reviewInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, reviewTgt:reviewTgt, star:star, reviewCntn:reviewCntn, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							alert('후기가 등록되었습니다.');
+							$("#reviewFrm").hide();
+						},
+						fail : function(result) {
+							console.log(result)
+						}
+					})
+		   })
+		   
+		   //채팅버튼을 눌렀을 때
+			$(".chattingUp").on("click", function () {
+				$(".chat").toggleClass("active");
+				
+				let toId = '[[${dgnerSelect.userId}]]';
+				console.log("로그인된 아이디== "+fromId)
+				console.log("메세지받을 아이디== "+toId)
+				//채팅방 구독 생성
+				function createChatRoom() {
+					console.log("1 채팅방 생성");
+					let chatroomDataList = new Array();
+					let chatroomData1 = {
+							toId : toId,
+							fromId : fromId
+					};
+					chatroomDataList.push(chatroomData1);
+					let chatroomData2 = {
+							toId : fromId,
+							fromId : toId
+					};
+					chatroomDataList.push(chatroomData2);
+					
+					console.log(JSON.stringify(chatroomDataList));
+					
+					$.ajax({
+			   			url : '/chatInsert',
+			   			method : 'post',
+			   			data : JSON.stringify(chatroomDataList),
+			   			contentType : "application/json; charset=UTF-8",
+			   			beforeSend : function(xhr)
+			            {  
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			console.log("2 채팅방 생성 번호: " + cId);
+			   			cId = res;
+			   			chattingList(cId)
+			   		})
+				}
+			   	
+			   	function chattingList(cId){
+			   		console.log('chattingList:', cId);
+			   		$.ajax({
+						url : '/chatSelect',
+						method : 'post',
+			   			data : JSON.stringify({toId:toId, fromId:fromId}),
+			   			contentType : "application/json; charset=UTF-8",
+			   			beforeSend : function(xhr)
+			            {   
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			$(".chat-list").empty();
+			   			for(r of res){
+			   				$(".chat-list").append(makeList(r));
+			   			}
+			   			message(cId);
+			   		})
+			   		
+			   		$(".chat-popup").show();
+			   	}
+		
+				function makeList(r){
+					let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+									<div class="flex-grow-1 ms-3">
+										<h3>${r.toId}</h3>
+										<p>front end developer</p>
+									</div>
+								 </a>`;
+					return list;
+				}
+					
+				//채팅화면이 나타난다.
+				if ($(".chat").hasClass("active")) {
+					$.ajax({
+						url : '/checkChat',
+						method : 'post',
+			   			data : JSON.stringify({toId:toId, fromId:fromId}),
+			   			contentType : "application/json; charset=UTF-8",
+			   			beforeSend : function(xhr)
+			            {   
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			if(res != ''){
+			   				console.log('res.cId:', res.cid);
+			   				chattingList(res.cid);
+			   			} else {
+			   				createChatRoom();
+			   			}
+			   		})
+					$(".chat-popup").show();
+					$(".chatbox").show();
+				}
+		
+				//채팅화면이 사라진다.
+				if (!$(".chat").hasClass("active")) {
+					$(".chat-popup").hide();
+					$(".chatbox").hide();
+				}
+			});
    </script>
 </div>
 </html>

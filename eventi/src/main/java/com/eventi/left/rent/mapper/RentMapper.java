@@ -9,5 +9,12 @@ public interface RentMapper {
 	public List<RentGdVO> getRentGdList(RentGdVO rentGdVO); // 전체조회
 	public RentGdVO getRentGd(RentGdVO rentGdVO); // 1건조회
 	
-	//대여내역
+	//물품등록
+	public int rentGdInsert(RentGdVO rentGdVO);
+	
+	//다음 물품 번호 찾기
+	public String getSeq();
+	
+	//업체별 물품 개수
+	public int count(RentGdVO rentGdVO);
 }
