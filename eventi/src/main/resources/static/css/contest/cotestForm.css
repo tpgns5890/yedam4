@@ -18,8 +18,10 @@ ul {
 	padding: 0px;
 	list-style: none;
 }
-
-input[type=text], select, input[type=number], input[type=date] {
+  select,
+  input[type=text],
+  input[type=number],
+  input[type=date] {
 	width: 50%;
 	padding: 12px;
 	margin: 10px;
@@ -27,10 +29,20 @@ input[type=text], select, input[type=number], input[type=date] {
 	border-radius: 4px;
 	resize: vertical;
 }
-
+#styleCheck,
+#areaCheck{
+	width: 140px;
+	margin-bottom: 20px;
+}
+  input[type=radio]{
+	margin: 5px;
+}
 label {
-	padding: 10px 80px 12px 0;
-	display: inline-block;
+	display:inline-block;
+	text-align:left;
+	width:100px;
+	font-weight:bold;
+	font-size: 16px;
 }
 
 ul li.tag-item {

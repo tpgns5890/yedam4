@@ -99,7 +99,6 @@ public class ContestController {
 			model.addAttribute("sessionId", user.getUserId());
 			model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		}
-		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
 		model.addAttribute("contest", service.getContest(cVo.getcNo()));
 

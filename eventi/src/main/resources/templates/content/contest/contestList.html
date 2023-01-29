@@ -230,17 +230,23 @@
 				//공모전 1건의 대한 박스 생성
 				function makeBox(contest) {
 					//로그인 회원의 하트눌려진것만 체크
-					let active = null;
+					let active;
+					let img;
 					if(contest.userLike > 0){
 						//console.log(contest.cNo);
 						//console.log(contest.userLike);
 						active = 'active';
 					}
+					if(contest.img == null){
+						img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">`
+					}else{
+						img = `<img src="/fileView/${contest.img}" style="width: 500px; height: 500px; ">`
+					}
 					let p = ` 
 								<div class="col-sm-6 col-md-4 col-lg-4">
 					                <div id="${contest.cNo}" class="shop-item">
 							  		<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
-					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 500px; height: 500px; ">
+					                  <div class="shop-item-image">${img}
 					                    <div class="shop-item-detail">
 							   				<div>
 							   				  <h3 class="content-box-title font-serif">[${contest.category}] D-${contest.dDay}</h3>
@@ -359,11 +365,18 @@
 
 				//Map : 로그인회원의 좋아요 공모전박스생성
 				 function makeBox_map(contest) {
+					
+					 if(contest.IMG == null){
+							img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">`
+						}else{
+							img = `<img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px; ">`
+						}
+					
 					let p = ` 
 						<div class="col-sm-6 col-md-4 col-lg-4">
 			                <div id="${contest.C_NO}" class="shop-item">
 		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
-			                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px;">
+			                  <div class="shop-item-image">${img}
 			                    <div class="shop-item-detail">
 					   				<div>
 					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] D-${contest.DDAY}</h3>

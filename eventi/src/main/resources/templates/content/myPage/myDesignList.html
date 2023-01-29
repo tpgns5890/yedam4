@@ -75,7 +75,7 @@
 					<div id="modelSelect"></div>
 				</div>
 			</div>
-			
+		<h3 th:text="${paging}"></h3>
 		<!-- 페이징처리 -->
 		<div th:if="${!#lists.isEmpty(design)}">
 			<div class="row mt-5">
@@ -108,8 +108,7 @@
 			//응모된 1건의 디자인
 			// 전체 파일리스트+ 정보출력.
 			$('.select').on("click", function(e){
-				let dNo = $(this).parent().prev().children().eq(1).text()
-				console.log(dNo)
+				let dNo = $(this).parent().prev().children().eq(1).text();
 				
 				$.ajax({
 					url: '/design/ajaxSelect',

@@ -173,7 +173,9 @@
 		        m.USER_REGDATE,
 		        b.busi_num,
 		        b.busi_title,
+		        busi_area busiAreaCode,
 		        codeArr_select(b.busi_area) busi_area,
+		        busi_style busiStyleCode,
 		        codeArr_select(b.busi_style) busi_style,
 		        codeArr_select(b.busi_type) busi_type
 		FROM MEMBERS m join busi_member b

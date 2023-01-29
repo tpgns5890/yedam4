@@ -142,15 +142,9 @@
 	        ,code_select(category) category
 	        ,REPLACE(codeArr_select(style), ',', ' #') style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
-	      	,CASE WHEN dt_extns IS NOT NULL  THEN 
-	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
-	                                ELSE '마감'
-	                           END
-                          WHEN dt_extns IS NULL THEN 
-                               CASE WHEN trunc(dt_cls) >= trunc(SYSDATE) THEN '진행중'
-                                    ELSE '마감'
-                               END
-                      END AS ing
+	      	,(select sev_nm
+		         from files
+		         where target_Id = c_no) AS img
 		 FROM CONTEST
 		WHERE  C_NO = #{cNo}
 	</select>

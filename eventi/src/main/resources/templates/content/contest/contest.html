@@ -37,10 +37,13 @@
 			<div class="container" >
 				<div class="row" style="padding-top: 20px"> 
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
-						<!-- 파일이미지 출력 -->
-						<div th:each="f : ${fileList}">
-								<img th:src="|/fileView/${f.sevNm}|" style="width: 500px; height: 600px; margin:0px;" class="img-fluid" alt="Colorlib Template">
-						</div>
+						<!-- 이미지 출력 -->
+						<div th:if="${contest.img} != null">
+							<img th:src="|/fileView/${contest.img}|" style="width: 500px; height: 600px; margin:0px;">
+						</div>					
+						<div th:if="${contest.img} == null">
+							<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">
+						</div>					
 					</div>
 					<div class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 						<div id="show"></div>
@@ -703,8 +706,11 @@
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
+				console.log(res.design);
 				console.log(res.paging);
 				$("#cotestCntn").empty();
+				$("#designBox").empty();
+				
 				if(res.design == 0){
 					let p = '참여작이 없습니다.'
 					$("#cotestCntn").append(p); 
