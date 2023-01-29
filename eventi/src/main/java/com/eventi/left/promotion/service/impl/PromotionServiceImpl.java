@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.promotion.mapper.PromotionBoardMapper;
 import com.eventi.left.promotion.service.PromotionService;
 import com.eventi.left.promotion.service.PromotionVO;
@@ -23,9 +25,11 @@ public class PromotionServiceImpl implements PromotionService{
 	
 	@Autowired 
 	PromotionBoardMapper proMapper;
-	@Autowired FilesMapper filesMapper;
-	@Autowired UploadFileMethod newUp;
-
+	@Autowired 
+	FilesMapper filesMapper;
+	@Autowired 
+	UploadFileMethod newUp;
+	
 	//홍보게시글 전체조회
 	@Override
 	public List<PromotionVO> proList(PromotionVO promotionVO, PagingVO paging) {
@@ -101,5 +105,21 @@ public class PromotionServiceImpl implements PromotionService{
 	public int seeUp(PromotionVO promotionVO) {
 		// TODO Auto-generated method stub
 		return proMapper.seeUp(promotionVO);
+	}
+	
+	//마이페이지 작성한 홍보게시글 조회
+	@Override
+	public List<PromotionVO> myPromotionList(PromotionVO promotionVO, PagingVO paging) {
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+		promotionVO.setUserId(sessionId);
+		
+		paging.setTotalRecord(proMapper.count(promotionVO));
+		paging.setPageUnit(5);
+		promotionVO.setFirst(paging.getFirst());
+		promotionVO.setLast(paging.getLast());
+		
+		return proMapper.myPromotionList(promotionVO);
 	}
 }
