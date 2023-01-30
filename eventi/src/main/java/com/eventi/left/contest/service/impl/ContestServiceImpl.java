@@ -144,12 +144,12 @@ public class ContestServiceImpl implements ContestService {
 			// 제목,내용 수정할경우(그 외 공모전민감자료 수정불가)
 		} else {
 			// 파일업로드,공모전 수정
-			result = mapper.updateContest(vo);
 			uploadFiles(uploadFile, vo);
+			result = mapper.updateContest(vo);
 
 			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
-			Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
-			thread.start();
+			//Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
+			//thread.start();
 		}
 		return result;
 	}
