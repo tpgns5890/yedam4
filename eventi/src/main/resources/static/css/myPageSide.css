@@ -1,8 +1,8 @@
-.container {
+/* .container {
 	width: 1700px;
 	margin: 0 auto;
 	margin-top: 30px;
-}
+} */
 
 #boxList {
 	margin-left: 250px;
@@ -36,6 +36,15 @@
 .submenu {
 	height: 0; /*ul의 높이를 안보이게 처리*/
 	overflow: hidden;
+}
+
+.submenu li{
+	background: pink;
+}
+
+.submenu li a{
+	margin-left: 20px;
+	font-size: 15px;
 }
 
 .sideMenu>li:hover {
