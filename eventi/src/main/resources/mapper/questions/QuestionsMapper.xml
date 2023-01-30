@@ -29,7 +29,7 @@
 		Q.CNTN,
 		Q.WRITING_DT,
 		Q.CATEGORY,
-		Q.REREP_TGT,
+		Q.REREP_TGT,Q.SECRET_YN,
 		NVL(REREP_TGT, Q_NO) GP
 		FROM Questions Q
 		WHERE target_id = #{targetId}

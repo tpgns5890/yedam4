@@ -5,12 +5,21 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<link rel="stylesheet" href="/css/model.css"><!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 <link rel="stylesheet" href="/css/heart.css"><!-- 좋아요 스타일 -->
 <meta charset="UTF-8">
-<title>공모전 상세조회</title>
+<style>
+	.navbar{
+		margin-top: 30px;
+	}
+	p{
+		font-size: 18px;
+		font-weight: blod;
+		margin-bottom: 30px;
+	}
+</style>
 </head>
-
 <body>
 	<div layout:fragment="content" class="content">
 		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -28,87 +37,76 @@
 			<div class="container" >
 				<div class="row" style="padding-top: 20px"> 
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
-						<!-- 파일이미지 출력 -->
-						<div th:each="f : ${fileList}">
-							<a th:href="|/fileView/${f.sevNm}|"
-								class="image-popup prod-img-bg"> <img
-								th:src="|/fileView/${f.sevNm}|"
-								style="width: 540px; height: 785px" class="img-fluid"
-								alt="Colorlib Template"></a>
-						</div>
+						<!-- 이미지 출력 -->
+						<div th:if="${contest.img} != null">
+							<img th:src="|/fileView/${contest.img}|" style="width: 500px; height: 600px; margin:0px;">
+						</div>					
+						<div th:if="${contest.img} == null">
+							<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">
+						</div>					
 					</div>
 					<div class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 						<div id="show"></div>
-						<span th:text=${contest.cNo} id="cNo"></span>
-						<p th:text=${contest.category}></p>
-						<h1 th:text=${contest.ttl}></h1>
-
+						<h1 th:text="|[${contest.category}] ${contest.ttl}|"></h1>
+						<h4 th:text="|작성자 ${contest.writer}|"></h4>
+						
+						<div th:if="${contest.style} != null or ${contest.style} != ''">
+								<h4 th:text="|#${contest.style}|" style="color: #117bd9"></h4>
+						</div>
+						
+						<!-- 신고수 -->
+						<th:block sec:authorize="!isAuthenticated()">
+							<span onclick="login()" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+						</th:block>
+						
+						<th:block sec:authorize="isAuthenticated()">
+							<span id="modalUp" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+						</th:block>
+						
+						<!-- 조회수 -->
+						 <span style='font-size: 30px;'>&#128065;</span>
+						 <span th:text=${contest.inq}></span>
+						 <!-- 좋아요수 -->
+						 <span th:text=${contest.likes} style="display:inline-block; width: 50px; text-align: right;"></span>
+						 
+				
+						<!-- 비회원 하트버튼 -->
+						<th:block sec:authorize="!isAuthenticated()">
+								<div id="love" class="stage heart" onclick="login()" style="position:relative; top:-70px; right: -65px;">
+								</div>
+						</th:block>
+	
+						<!-- 회원 좋아요 하트버튼 -->
+						<th:block sec:authorize="isAuthenticated()">
+							
+							<div th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
+								<!-- 관심공모전인경우 -->
+								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -65px;">
+								</div>
+							</div>
+							
+							<div th:if="${likeCheck} == null">
+								<!-- 관심공모전이 아닌경우 -->
+								<div id="love" class="stage heart" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -65px;">
+								</div>
+							</div>
+						</th:block>
 						
 						<!-- 마감연장일 있는경우 -->
 						<div th:if="${contest.dtExtns} != null">
-							<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}|"></div>
+							<div><p th:text="|공모기간: ${#dates.format(contest.dtReg, 'yy/MM/dd')} ~ ${#dates.format(contest.dtExtns, 'yy/MM/dd')}|"></p></div>
 						</div>
 
 						<!-- 마감연장일 없는경우 -->
 						<div th:if="${contest.dtExtns} == null">
-							<div th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} - ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div>
+							<div><p th:text="|공모기간: ${#dates.format(contest.dtReg, 'yy/MM/dd')} ~ ${#dates.format(contest.dtCls, 'yy/MM/dd')}|"></p></div>
 						</div>
-
-						<div class="rating d-flex" style="height: 100px; width: 500px">
-								<!-- 비회원 하트버튼 -->
-								<th:block sec:authorize="!isAuthenticated()">
-									<div class="stage" style="float: right; height: 50px;">
-										<div id="love" class="stage heart" onclick="login()">
-												<span th:text=${contest.likes}></span>
-											</div>
-									</div>
-								</th:block>
-
-								<!-- 회원 좋아요 하트버튼 -->
-								<th:block sec:authorize="isAuthenticated()">
-									<!-- 관심공모전인경우 -->
-									<div th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
-										<div class="stage" style="float: right;">
-											<div id="love" class="stage heart active" onclick="loveCheck(this)">
-												<span th:text=${contest.likes}></span>
-											</div>
-										</div>
-									</div>
-									<!-- 관심공모전이 아닌경우 -->
-									<div th:if="${likeCheck} == null">
-										<div class="stage" style="float: right;">
-											<div id="love" class="stage heart" onclick="loveCheck(this)">
-												<span th:text=${contest.likes}></span>
-											</div>
-										</div>
-									</div>
-									
-								</th:block>
 	
-								<!-- 신고수 -->
-								<th:block sec:authorize="!isAuthenticated()">
-									<span onclick="login()" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
-								</th:block>
-								
-								<th:block sec:authorize="isAuthenticated()">
-									<span id="modalUp" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
-								</th:block>
-								
-								<!-- 조회수 -->
-								 <span style='font-size: 30px;'>&#128065;</span><span th:text=${contest.inq}></span>
-						</div>
+						<!-- 우승금액 -->
 						<div th:each="w : ${winnerList}">
-							<p class="price">
-								<span th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></span>
-							</p>
+							<p class="price" th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></p>
 						</div>
 
-
-						<div th:if="${contest.style} != null">
-							<p>
-								<span th:text="|#${contest.style}|"></span>
-							</p>
-						</div>
 						<div class="col-sm-6">
 							<div class="input-group col-md-6 d-flex mb-3"></div>
 							<div class="w-100"></div>
@@ -117,25 +115,25 @@
 
 						<!-- 비회원 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<div>
-								<button type="button" class="btn btn-g btn-round btn-lg">링크복사</button>
-								<button type="button" class="btn btn-g btn-round btn-lg" onclick="login()">응모하기</button>
+							<div class="contestBtn">
+								<button type="button" onclick="clip(); return false;" class="w-btn w-btn-gra1">링크복사</button>
+								<button type="button" onclick="login()" class="w-btn w-btn-gra1" >응모하기</button>
 							</div>
 						</th:block>
 
 						<!-- 공모전 작성자 제외 일반회원 -->
 						<th:block sec:authorize="isAuthenticated()">
-							<div th:if="|${session.member.getUserId()}| != ${contest.writer} ">
-									<button type="button" class="btn btn-primary py-3 px-5 mr-2">링크복사</button>
+							<div class="contestBtn" th:if="|${session.member.getUserId()}| != ${contest.writer} ">
+									<button type="button" onclick="clip(); return false;" class="w-btn w-btn-gra1">링크복사</button>
 									<!-- 공모게시글에 대한 응모하기 버튼 -->
-									<button type="button" class="btn btn-g btn-round btn-lg" th:onclick="|location.href='@{/design/designInsertForm(cNo=${contest.cNo})}'|">응모하기</button> 
+									<button type="button" th:onclick="|location.href='@{/design/designInsertForm(cNo=${contest.cNo})}'|" class="w-btn w-btn-gra1" >응모하기</button> 
 							</div>
 
 							<!-- 공모전 작성자만 -->
-							<div th:if="|${session.member.getUserId()}| == ${contest.writer} ">
-									<button id="contestUpdate" type="button" class="btn btn-g btn-round btn-lg" >수정</button>
-									<button id="delBtn" type="button"  class="btn btn-g btn-round btn-lg5">삭제</button>
-									<button id="updateDate" type="button" class="btn btn-g btn-round btn-lg">마감연장</button>
+							<div class="contestBtn" th:if="|${session.member.getUserId()}| == ${contest.writer} " >
+									<button id="updateDate" type="button" class="w-btn w-btn-gra1">마감연장</button>
+									<button id="contestUpdate" type="button" class="w-btn w-btn-gra1">수정</button>
+									<button id="delBtn" type="button" class="w-btn w-btn-gra1">삭제</button>
 							</div>
 						</th:block>
 					</div>
@@ -145,7 +143,7 @@
 					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
 						<div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-							<ul class="nav nav-tabs font-alt" role="tablist">
+							<ul class="nav nav-tabs font-alt navbar" role="tablist">
 								<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
 								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">문의사항</span></a></li>
 								<li id="lientry"><a href="#reviews" data-toggle="tab"><span class="icon-tools-2">참여작</span></a></li>
@@ -158,6 +156,7 @@
 								<div id="divCntn" class="tab-pane active">
 									<div th:if="${contest.cntn} != null">
 										<div id="cotestCntn" th:utext=${contest.cntn}></div>
+										<div id="designBox"></div>
 									</div>
 								</div>
 							</div>
@@ -173,9 +172,7 @@
 
 		<!--마감기한 연장 모달 폼 -->
 		<div id="extensionModal" class="modal">
-
-			<!-- Modal content -->
-			<div class="modal-content">
+			<div class="modal_content">
 				<span class="close">&times;</span>
 				<h3>공모전 마감기한 연장</h3>
 				<div id=updateModel></div>
@@ -203,6 +200,15 @@
 			<div class="modal_layer"></div>
 		</div>
 		
+		<!-- 디자인 상세보기 모달 -->
+		<div id="designModel" class="modal">
+			<div class="img_modal_content">
+				<span id="designCancel" class="close">&times;</span>
+				<h3 id="title"></h3>
+				<div id="modelSelect"></div>
+			</div>
+		</div>
+		
 		<!-- 참여작 페이지처리를 위한 히든인풋. -->
 		<input type="hidden" name="designPage" id="designPage" value="1">
 		
@@ -213,7 +219,7 @@
 		<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		let cNo = $('#cNo').text();
+		let cNo = '[[${contest.cNo}]]';
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		let writer = '[[${contest.writer}]]';
 		
@@ -222,18 +228,30 @@
 			 $("#header_modal").show();
 		}
 		
+		//링크복사 -------------------------------------------------------
+		function clip(){
+			var url = '';
+			var textarea = document.createElement("textarea");
+			document.body.appendChild(textarea);
+			url = window.document.location.href;
+			textarea.value = url;
+			textarea.select();
+			document.execCommand("copy");
+			document.body.removeChild(textarea);
+			alert("URL이 복사되었습니다.")
+		}
 		
 		//모달창-----------------------------------------------------------
-		// Get the modal
 		var extensionModal = document.getElementById("extensionModal");
 		var rprtModal = document.getElementById("rprtModal");
+		var designModel = document.getElementById("designModel");
 		
-		// Get the <span> element that closes the modal
-		var span = document.getElementsByClassName("close")[0];
-		var rprtSpan = document.getElementsByClassName("close")[1];
+		// <span> (x), close the modal
+		$('.close').on("click", function(){
+			extensionModal.style.display = "none";
+		})
 		
-		// 모달창 띄우기.
-		// 마감연장일이 이미 지정된 경우 모달창 띄우지 않도록.
+		// 모달창 띄우기,마감연장일이 이미 지정된 경우 모달창 띄우지 않도록.
 		$('#updateDate').on("click", function(){ 
 		  
 		let dtExtns = '[[${contest.dtExtns}]]';
@@ -245,22 +263,7 @@
 				return false;
 			}
 		})
-		
-		// When the user clicks on <span> (x), close the modal
-		span.onclick = function() {
-			extensionModal.style.display = "none";
-		}
-		
-		// When the user clicks anywhere outside of the modal, close it
-		window.onclick = function(event) {
-		  if (event.target == extensionModal) {
-			  extensionModal.style.display = "none";
-		  }
-		  else if(event.target == rprtModal){
-		   	rprtModal.style.display = "none";
-		  }
-		}
-		
+
 		//마감연장 모달창 출력.
 		$('#updateDate').on("click", function(){
 			let dtReg = '[[${#dates.format(contest.dtReg,'yyyy/MM/dd')}]]';
@@ -314,7 +317,7 @@
 			
 		})
 		
-		//공모전 수정페이지 이동
+		//공모전 수정페이지 이동--------------------------------------------------
 		$('#contestUpdate').on('click', function(){
 			if (!confirm('공모전을 수정하시겠습니까?')) {
 				return false;
@@ -423,7 +426,7 @@
 			
 			 //회원아이디에 따라 다르게 표시됌.(수정,삭제,답변등록)
 			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
-			if(question.secretYn == 'Y' && question.userId != userId &&  writer != userId){
+			if(question.secretYn == 'Y' && question.userId != userId &&  writer != userId  || question.secretYn == 'Y' && userId == ""){
 				p =`<ul class="children" style="list-style: none">
 						<li class="comment">
 						<div class="comment-body" id="${question.qNo}">
@@ -432,22 +435,25 @@
 				            <p>비공개내용입니다.</p>
 				            ${delBtn} ${upBtn}
 				            ${repInsert}
+							<input type="hidden" value="${question.secretYn}">
 						</div>
 						</li>
 					</ul>`
 			}
 			else { //공개인경우
-			p =`<ul class="children" style="list-style: none">
-					<li class="comment">
-					<div class="comment-body" id="${question.qNo}">
-						<h3>${question.userId} : ${question.ttl}</h3>
-			            <div class="meta">${question.writingDt}</div>
-			            <p>${question.cntn}</p>
-			            ${delBtn} ${upBtn}
-			            ${repInsert}
-					</div>
-					</li>
-				</ul>`
+				console.log('공개')
+				p =`<ul class="children" style="list-style: none">
+						<li class="comment">
+						<div class="comment-body" id="${question.qNo}">
+							<h3>${question.userId} : ${question.ttl}</h3>
+				            <div class="meta">${question.writingDt}</div>
+				            <p>${question.cntn}</p>
+				            ${delBtn} ${upBtn}
+				            ${repInsert}
+							<input type="hidden" value="${question.secretYn}">
+						</div>
+						</li>
+					</ul>`
 			}
    			return p;
    		}
@@ -456,6 +462,7 @@
 			 let delBtn = '';
 			 let upBtn = '';
 			 let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			 let p;
 				
 			//한 문의당 답변은 1개만 가능 답변등록 버튼 삭제
 	   			$("#" + questionRep.rerepTgt).children('button:eq(0)').remove();
@@ -466,17 +473,29 @@
 					upBtn = `<button class='qUpdate'>수정</button>`;
 				}
 			 
-   			let p = `<ul class="children" style="list-style: none">
+				if(questionRep.secretYn == 'Y' && questionRep.userId != userId &&  writer != userId  || questionRep.secretYn == 'Y' && userId == ""){
+	   				p = `<ul class="children" style="list-style: none">
+			                <li class="comment" >
+				                <div class="comment-body" id="${questionRep.qNo}">
+				                <div class="meta">작성일:${questionRep.writingDt} </div>
+				                  <p>비공개 답변</p>
+				                  ${delBtn} ${upBtn}
+				                </div>
+				              </li>
+			             </ul>`;
+				}
+				else{
+					p = `<ul class="children" style="list-style: none">
 		                <li class="comment" >
-		                <div class="comment-body" id="${questionRep.qNo}">
-		                <h3>${questionRep.userId}</h3>
-		                <div class="meta">작성일:${questionRep.writingDt} </div>
-		                  <p>${questionRep.cntn}</p>
-		                  ${delBtn} ${upBtn}
-		                </div>
-		              </li>
-		            </ul>`
-            
+			                <div class="comment-body" id="${questionRep.qNo}">
+			                <h3>${questionRep.userId}</h3>
+			                <div class="meta">작성일:${questionRep.writingDt} </div>
+			                  <p>${questionRep.cntn}</p>
+			                  ${delBtn} ${upBtn}
+			                </div>
+			              </li>
+		             </ul>`;
+				}
             return p;
    		}
 		
@@ -559,7 +578,8 @@
  	 	   			//문의 부분에 등록하기
  	 	   			console.log(res);
  	 	   			alert('문의등록 완료')
- 	 	   			$("#cotestCntn").append(make(res));
+ 	 	   			$("#cotestCntn").children("p").remove();
+ 	 	   			$("#cotestCntn").children("ul").before(make(res)); //문의사항 맨앞에 붙이기.
  	 	   		})
  			}
 		});
@@ -628,11 +648,10 @@
 		//답변등록 입력폼
 		function makeFrm(qTgt) {
 			let form = `<form>
-				<input type="hidden" id="qTgt" name="qTgt" value="${qTgt}">
-	            <textarea class="form-control" id="qCntn" name="qCntn" rows="3"></textarea>
-	            <button type="button" id="qTgt" class="questionRepInsert">답변등록</button>
-	        </form>`
-		    
+							<input type="hidden" id="qTgt" name="qTgt" value="${qTgt}">
+				            <textarea class="form-control" id="qCntn" name="qCntn" rows="3"></textarea>
+				            <button type="button" id="qTgt" class="questionRepInsert">답변등록</button>
+				        </form>`
 		    return form;
 		}
 		
@@ -649,6 +668,7 @@
 			let insertForm = $(this).parent('form');
 			let qNo = $(this).prev().prev().val();
 			let Cntn =$(this).prev().val();
+			let secretYn = insertForm.prev().val();
 			
 			if(Cntn == '' ){
  				alert('답변을 입력해주세요');
@@ -657,7 +677,7 @@
  				$.ajax({
  	 	   			url : '/questions/insertAjax',
  	 	   			method : 'post',
- 	 	   			data : {userId, Cntn, rerepTgt:qNo,category:'T01',targetId:cNo},
+ 	 	   			data : {userId, Cntn, rerepTgt:qNo,category:'T01',targetId:cNo,secretYn},
  	 	   			beforeSend : function(xhr)
  	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
  	 					xhr.setRequestHeader(header, token);
@@ -686,17 +706,24 @@
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
+				console.log(res.design);
 				console.log(res.paging);
 				$("#cotestCntn").empty();
+				$("#designBox").empty();
+				
 				if(res.design == 0){
 					let p = '참여작이 없습니다.'
 					$("#cotestCntn").append(p); 
 				}
 				for(design of res.design){
-					if(design.pubcYn == 'N') {//공개여부가 Yes이면
-					 	$("#cotestCntn").append(makeDesignNo(design)); 
+					
+					if(writer == userId){
+						$("#designBox").append(makeDesignNo(design)); 
+					}
+					else if(design.pubcYn == 'N') {//공개여부가 Yes이면
+					 	$("#designBox").append(makeDesignNo(design)); 
 					}else{//공개여부가 No이면
-						$("#cotestCntn").append(makeDesignYes(design)); 
+						$("#designBox").append(makeDesignYes(design)); 
 					}
 				 }		
 					//기존 페이징 삭제후 붙이기
@@ -709,13 +736,18 @@
 		
 		//참여작 생성(공개)
 		function makeDesignNo(design){
-   			let div = `<ul style="list-style: none">
-		                  <li class="comment">
-		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
-		                    <img src="/fileView/${design.sevNm}" style="width: 300px; height: 300px"></a>
-		                      <div class="meta">${design.dgnNo}</div>
-		                   </li>
-                   		 </ul> `
+   			let div = `<div class="col-sm-6 col-md-4 col-lg-4">
+				           <div id="${design.dgnNo}" class="shop-item">
+				                <div class="shop-item-image">
+				                	<img src="/fileView/${design.sevNm}" style="width: 340px; height: 340px">
+				                </div>
+				                <div class="shop-item-detail">
+				               		 <h3 class="content-box-title font-serif">${design.dgnNo}</h3>
+				                  	<span class="icon-magnifying-glass btn btn-round btn-b">상세조회</span></a>
+				           	    </div>
+				    		</div>
+				    	</div>
+				    	` ;
    			return div;
    		}
 		//참여작 생성(비공개)   
@@ -723,19 +755,70 @@
    			let div = `<ul style="list-style: none"> 
 		                  <li class="comment">
 		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
-		                  	  <img src="/images/public.jpg" class=" icon-lock" style="width: 300px; height: 300px"></a>
+		                  	  <img src="/images/public.jpg" class=" icon-lock" style="width: 340px; height: 340px"></a>
 		                      <div class="meta">${design.dgnNo}</div>
 		                   </li>
                    		 </ul> `
    			return div;
    		}
 		
+		//디자인 공개여부 모달창---------------------------------------------------------------
+		$('#designBox').on("click", function(e){
+			let dNo = $(this).children('div').children('div').attr("id");
+			designModel.style.display = "block";
+			
+			$.ajax({
+				url: '/design/ajaxSelect',
+				method: 'post',
+				data: {dgnNo:dNo},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				console.log(res);
+				let user = res.userId;
+				let title = res.name;
+				let cntn = res.cntn;
+				
+				$('#title').empty();
+				let content = `<h3>${user} 님의 참여작품 </h3>
+								<p>작품명 : ${title} </p>
+								<p>${cntn} </p>
+							  `
+				
+				$('#title').append(content);
+				
+				//모달내용을 지운뒤 붙여넣기.
+				$('#modelSelect').empty();
+				for(file of res.files){
+					makeDesign(file.sevNm,title,dNo);
+				}
+				
+			})
+		})
+		
+		//모달창 :디자인 응모작품 생성.
+		function makeDesign(fileName,dNo){
+			let design = `  <div class="design" id="${dNo}" style="float: left ">
+									<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
+						   </div>
+						  `
+				$('#modelSelect').append(design);
+		}
+		//모달창 숨기기.
+		$("#designCancel").on('click', function() {
+			$("#designModel").hide();
+		});
+		
+		
+		
 		//하트클릭시 DB입력(등록,취소)-----------------------------------------------------------
 		function loveCheck(e) {
 			$(e).toggleClass("active");//css 변경
 			//이벤트객체console.log(this.contest);
 			let category = 'T01';
-			let targetNo = $('#cNo').text();
+			let targetNo = cNo;
 			
 			//하트가 눌렸을 경우 실행
 			if ($(e).hasClass("active")) {
@@ -852,8 +935,12 @@
 		    				xhr.setRequestHeader(header, token);
 		                },
 						success : function(data) {
-							alert('신고되었습니다.');
-							$("#rprtModal").hide();
+							if(data == 0){
+								alert('이미 신고된 게시글 입니다.');
+							}else{
+								alert('신고되었습니다.');
+								$("#rprtModal").hide();
+							}
 						},
 						fail : function(result) {
 							alert('필수항목을 입력해주세요')

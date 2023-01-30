@@ -5,46 +5,8 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<!-- 1.사이드바 css적용 -->
-<link rel="stylesheet" href="/css/myPageSide.css">
-<style>
-/* Modal Content */
-.modal-content {
-	background-color: #fefefe;
-	margin: auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 40%;
-	height: 60%;
-	text-align: left;
-	max-height: calc(100vh - 200px);
-    overflow-y: auto;
-	
-}
-
-/* The Close Button */
-.close {
-	color: #aaaaaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-	text-align: right;
-	
-}
-
-.close:hover, .close:focus {
-	color: #000;
-	text-decoration: none;
-	cursor: pointer;
-	
-}
-#modelBtn{
-	text-align: center;
-}
-.modelBtn1 {
-	display :inline-block;
-}
-</style>
+<link rel="stylesheet" href="/css/myPageSide.css"><!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/contest/model.css"><!-- 디자인모달 -->
 </head>
 <body>
 
@@ -63,18 +25,18 @@
         </section>
 		
 	
-		<div style="min-height: 1200px">
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
+		<div class="container" >
 		<!-- 리스트 값이 없을경우 -->
 		<div th:if="${#lists.isEmpty(design)}">
 			<h3>응모한 디자인이 없습니다.</h3>
 		</div>	
 			
 		<!-- 게시글 검색 -->
-			<form name="searchFrm">
+			<form name="designdesignSearchFrm">
 				<div th:if="${!#lists.isEmpty(design)}">
 					디자인명<input type="text" name="name" value="">
 					<input type="hidden" name="page" value="1">
@@ -83,11 +45,11 @@
 			</form>		
 			
 			
-				
+			<div class="row multi-columns-row" id="boxList">
 				<div th:each="d: ${design} " >
-					<div class="col-sm-6 col-md-4 col-lg-4 design">
+					<div class="col-sm-6 col-md-4 col-lg-4"style="width: 400px; margin-right:5px"> 
 						<div class="shop-item">
-							<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px" class="img-fluid">
+							<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px;"  class="img-fluid">
 							    <div class="shop-item-detail">
 									<div>
 								   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
@@ -102,30 +64,29 @@
 						</div>
 					</div>
 				</div>
+			</div>
 		
-		<!-- The Modal -->
-			<div id="myModal" class="modal">
-	
-				<!-- Modal content -->
-				<div class="modal-content">
+		<!-- 디자인 상세보기 모달 -->
+			<div id="designModel" class="modal">
+				<div class="img_modal_content">
 					<span class="close">&times;</span>
 					<h3 id="title"></h3>
 					<div id="modelSelect"></div>
 				</div>
 			</div>
 			
-		<!-- 페이징처리 -->
-		<div th:if="${!#lists.isEmpty(design)}">
-			<div class="row mt-5">
-				<div class="col text-center">
-					<div class="block-27">
-						<th:block
-							th:replace="fragments/paging :: component(${paging},'gopage')">
+			<!-- 페이징처리 -->
+			<div th:if="${!#lists.isEmpty(design)}">
+				<div class="row mt-5">
+					<div class="col text-center">
+						<div class="block-27">
+							<th:block
+								th:replace="fragments/paging :: component(${paging},'gopage')">
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		
+			
 		</div>
 				 
 		
@@ -137,8 +98,8 @@
 		//페이징개수 변환 myContest 동적쿼리
 		function gopage(i) {
 			$('input[name="name"]').val('');
-			searchFrm.page.value = i;
-			searchFrm.submit();
+			designSearchFrm.page.value = i;
+			designSearchFrm.submit();
 		 }
 		 
 		 
@@ -146,8 +107,7 @@
 			//응모된 1건의 디자인
 			// 전체 파일리스트+ 정보출력.
 			$('.select').on("click", function(e){
-				let dNo = $(this).parent().prev().children().eq(1).text()
-				console.log(dNo)
+				let dNo = $(this).parent().prev().children().eq(1).text();
 				
 				$.ajax({
 					url: '/design/ajaxSelect',
@@ -192,7 +152,7 @@
 			}
 			
 			// Get the modal
-			var modal = document.getElementById("myModal");
+			var modal = document.getElementById("designModel");
 			
 			// Get the <span> element that closes the modal
 			var span = document.getElementsByClassName("close")[0];

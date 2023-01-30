@@ -5,8 +5,8 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<link rel="stylesheet" href="/css/model.css">
-<link rel="stylesheet" href="/css/cotestForm.css">
+<link rel="stylesheet" href="/css/contest/model.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -69,7 +69,7 @@
 						<div class="fileDown">
 							<img id="blah" src="#" alt="your image" width="250px" />
 							<button type="button" id="cancel" class="btn btn-warning cancel">
-								<span>Cancel</span>
+								<span>X</span>
 							</button>
 						</div>
 					</div>
@@ -83,7 +83,7 @@
 		
 		<!-- 임시저장 모달 -->
 		<div id="saveDesign" class="modal">
-			<div class="modal-content">
+			<div class="modal_content">
 				<span class="close">&times;</span>
 				<h2>임시저장 디자인 리스트</h2>
 				<div id="button_box"> </div>
@@ -194,7 +194,7 @@
 								alert('계좌정보 수정완료')
 								bankModel.style.display = "none";
 								$('#depotr').val(data.depotr);
-								$("select[name=bank]").val(data.bank);
+								$("#bank").val(data.bank);
 								$('#accnt').val(data.accnt);
 								
 					     }else {
@@ -223,9 +223,12 @@
 					alert('약관에 동의하세요.');
 					return false;
 					
-				}//임시저장 확인
+				}else if($('input[id="accnt"]').val() == ""){
+					alert('계좌정보를 입력하세요')
+					return false;
+				}
+				//임시저장 확인
 				else if ($('input[name="save"]').is(":checked") == true) {
-					console.log($(this));
 					if (!confirm('임시저장 하시겠습니까?')) {
 						return false;
 					}else{
@@ -314,7 +317,7 @@
 		})
 		
 		function choiceDesign(design) {
-	    	let span = `<span id="modal_choice_btn">[${design.dgnNo}] ${design.name}</span><button type="button" onclick=checkFile('${design.dgnNo}')>불러오기</button><br>`;
+	    	let span = `<span id="modal_choice_btn">[${design.dgnNo}] ${design.name}</span><button type="button" onclick=checkFile('${design.dgnNo}')>선택</button><br>`;
 	    	return span;
 	    }
 		    

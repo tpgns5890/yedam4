@@ -6,9 +6,7 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
-<style>
-
-</style>
+<link rel="stylesheet" href="/css/contest/button.css"> 
 </head>
 <body>
 
@@ -26,10 +24,10 @@
           </div>
         </section>
 		
-		<div style="min-height: 700px">
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
+		<div class="container" >
 		<!-- 리스트 값이 없을경우 -->
 		<div th:if="${#lists.isEmpty(contestList)}">	
 			<h3>등록한 공모전이 없습니다.</h3>
@@ -38,11 +36,11 @@
 		<div th:if="${!#lists.isEmpty(contestList)}">	
 		<!-- 게시글 검색 -->
 			<form name="searchFrm">
-				제목<input type="text" name="ttl" value="">
-				내용<input type="text" name="cntn" value="">
+				<label>제목</label><input type="text" name="ttl" value="">
+				<label>내용</label><input type="text" name="cntn" value="">
 				<input type="hidden" name="page" value="1">
-				<button type="submit">검색</button>
-				<button type="button" id="deleteBtn">공모전삭제</button>
+				<button type="submit" id="submit" class="btn btn-g btn-round inputBtn">검색</button>
+				<button type="button" id="deleteBtn"  class="btn btn-d btn-round delBtn">삭제</button>
 			</form>
 			
 			
@@ -53,7 +51,6 @@
 						<tr>
 							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
 							<th>no</th>
-							<th>작성자</th>
 							<th>분류별</th>
 							<th>제목</th>
 							<th>진행기간</th>
@@ -77,7 +74,6 @@
 								<td th:text=${contest.cNo} th:onclick="|location.href='@{insert}'|"></td>
 							</th:block>
 								
-							<td th:text=${contest.writer}></td>
 							<td th:text=${contest.category}></td>
 							<td th:text=${contest.ttl}></td>
 							
@@ -98,23 +94,39 @@
 							
 							<th:block th:if="${contest.save} == 'Y'">
 								<td th:text="임시저장"></td>
-								<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
 							</th:block>
 							
-							
-							
+							<!-- 등록완료후 진행중인경우 -->
 							<th:block th:if="${contest.save} == 'N'and ${contest.ing} == '진행중'">
 								<td th:text="등록완료"></td>
-								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+								
+								<th:block th:if=" ${contest.designCount} > 0 " >
+									<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+								</th:block>
+								<th:block th:if=" ${contest.designCount} == 0 " >
+									<td></td>
+								</th:block>
 							</th:block>
 							
-							<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} == 0">
-								<td th:text="등록완료"></td>
-								<td><button type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
-							</th:block>
-							
-							<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감' and ${contest.winnerCheck} > 0">
-								<td th:text="우승자선정완료"></td>
+							<!-- 등록완료후 마감된경우 -->
+							<th:block th:if="${contest.save} == 'N' and ${contest.ing} == '마감'">
+								
+								<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} == 0">
+									<td th:text="등록완료"></td>
+									<td></td>
+								</th:block>
+								
+								<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
+									<td th:text="등록완료"></td>
+									<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
+								</th:block>
+								
+								<th:block th:if="${contest.winnerCheck} > 0">
+									<td th:text="우승자선정완료"></td>
+									<td></td>
+								</th:block>
+								
 							</th:block>
 							
 							

@@ -36,6 +36,11 @@ public class CodeServiceImpl implements CodeService{
 	public List<CodeVO> getMcStyle() {
 		return CodeMapper.getMcStyle();
 	}
+
+	@Override
+	public List<CodeVO> getContestStyle() {
+		return CodeMapper.getContestStyle();
+	}
 	
 
 }

@@ -26,4 +26,11 @@
 		FROM MNCODE 
 		WHERE CL_ID = 'ST'
 	</select>
+	
+	<select id="getContestStyle" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'DS'
+	</select>
+	
 </mapper>

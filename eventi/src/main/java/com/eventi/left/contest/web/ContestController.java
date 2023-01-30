@@ -99,7 +99,6 @@ public class ContestController {
 			model.addAttribute("sessionId", user.getUserId());
 			model.addAttribute("likeCheck", likeService.getLike(likeCheck));
 		}
-		model.addAttribute("fileList", fService.fileList(cVo.getcNo()));
 		model.addAttribute("winnerList", wService.winnerList(cVo.getcNo()));
 		model.addAttribute("contest", service.getContest(cVo.getcNo()));
 
@@ -118,6 +117,7 @@ public class ContestController {
 	@GetMapping("/insert")
 	public String contestInsert(Model model) {
 		model.addAttribute("cNo", service.getSequence()); // 입력할 공모전번호
+		model.addAttribute("styles", codeService.getContestStyle()); //공모전 스타일
 		return "content/contest/contestInsertForm";
 	}
 
@@ -125,13 +125,15 @@ public class ContestController {
 	@PostMapping("/insert")
 	public String contestInsertForm(Model model, ContestVO vo, WinnerVO wvo, MultipartFile[] uploadFile) {
 
-		service.insertContest(vo, wvo, uploadFile);
-
 		// 임시저장일 경우 공모전 작성 리스트 이동
 		if (vo.getSave().equals("Y")) {
+			vo.setcNo(service.getSequence());
+			service.insertContest(vo, wvo, uploadFile);
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
-		// 등록인경우 결제 후 공모전상세페이지 이동.
+		
+		// 결제 후 등록인경우 공모전상세페이지 이동.
+		service.insertContest(vo, wvo, uploadFile);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
 	}
 
@@ -272,8 +274,11 @@ public class ContestController {
 		// 공통정보 세팅
 		vo.setBankName(user.getBank()); // 은행정보
 		vo.setBankAccount(user.getAccnt()); // 계좌번호
-		vo.setTargetId(service.getSequence()); //공모전 결제후 입금(맥시멈 시퀀스값 설정)
 		
+		//임시저장한 공모글을 불러오지 않았다면 
+		if(vo.getTargetId() == null || vo.getTargetId() == "") {
+			vo.setTargetId(service.getSequence()); //공모전 결제후 입금(맥시멈 시퀀스값 설정)
+		}
 		moneyService.insertMoney(vo);
 		return vo;
 	}

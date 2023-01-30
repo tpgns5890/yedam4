@@ -14,6 +14,10 @@ public class PunishServiceImpl implements PunishService{
 	//신고하기
 	@Override
 	public int punishInsert(PunishVO punishVO) {
+		//이미 게시글이 신고된 상태라면
+		if(punishMapper.punishCheck(punishVO) > 0) {
+			return 0;
+		}
 		return punishMapper.punishInsert(punishVO);
 	}
 }
