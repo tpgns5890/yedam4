@@ -533,11 +533,9 @@ document.getElementById('eventDate').setAttribute("min", today);
 
 //견적요청서 등록
 $('.submit').click(function() {
-	var userId = "${session.member.userId}";
-	console.log(usreId)
-	if(userId == null){
+	var userId = '[[${session.member != null ? session.member.userId :''}]]';
+	if(userId == ""){
 		alert("로그인 후 이용해주세요.")
-		console.log('비회원 견적등록 시도')
 		login();
 		return false;
 	}
