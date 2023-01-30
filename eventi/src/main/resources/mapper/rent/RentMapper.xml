@@ -3,8 +3,38 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.rent.mapper.RentMapper">
+	<!-- 업체 물품 전체 리스트 -->
 	<select id="getRentGdList" resultType="RentGdVO">
-		SELECT *
-		FROM RENT_GD
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT R.GOODS_NO, R.USER_ID, R.GOODS_NM, R.RENTAL_PRC, R.TOTAL_STOCK, CODEARR_SELECT(R.CAREGORY) AS CAREGORY, F.SEV_NM AS RPST_IMG
+		  FROM RENTAL_GD R, FILES F
+		 WHERE R.GOODS_NO = F.TARGET_ID
+		   AND USER_ID =#{userId}
+		 <![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+	     ]]>
 	</select>
+	
+	<!-- 업체별 물품 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
+		  FROM RENTAL_GD
+		 WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 다음 번호 찾기 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'RE' || NVL((MAX(TO_NUMBER(SUBSTR(GOODS_NO,3)))+1),1) GOODS_NO
+		FROM RENTAL_GD
+	</select>
+	
+	<!-- 물품 등록 -->
+	<insert id="rentGdInsert">
+		<selectKey keyProperty="goodsNo" resultType="String" order="BEFORE">
+			SELECT 'RE' || NVL((MAX(TO_NUMBER(SUBSTR(GOODS_NO,3)))+1),1) GOODS_NO
+			FROM RENTAL_GD
+		</selectKey>
+		INSERT INTO RENTAL_GD(GOODS_NO, USER_ID, GOODS_NM, TOTAL_STOCK, RENTAL_PRC, CAREGORY)
+		VALUES (#{goodsNo}, #{userId}, #{goodsNm}, #{totalStock}, #{rentalPrc}, #{caregory})
+	</insert>
 </mapper>

@@ -91,7 +91,7 @@
 	
 	<div class="col-md-12">
 		<div class="form-group">
-			<label class="label" for="userId">이름</label> 
+			<label class="label" for="userName">이름</label> 
 			<input type="text" class="form-control" name="userName" id="userNmae">
 		</div>
 	</div>
@@ -195,10 +195,7 @@
 		<div class="form-group">
 			<label class="label" for="movie">동영상등록</label><br>
 			<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
-			<!-- <div id="addMove">
-			<input type="text" class="form-control" name="uploadFile" multiple="multiple" placeholder="https://"/><span><button type="button" class="cancel">-</button></span>
-			</div> -->
-			<input type="file" id="imgInp" name="uploadFile"/>
+			<input type="file" id="videoInp" name="uploadFile"/>
 			<div id="addMove">
 			</div>
 		</div>
@@ -310,7 +307,7 @@
     
     //동영상추가버튼
     $("#movieInsert").on('click', function() {
-    	let tag = `<div><input type="file" id="imgInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
+    	let tag = `<div><input type="file" id="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
     	$("#addMove").append(tag);
     })
     

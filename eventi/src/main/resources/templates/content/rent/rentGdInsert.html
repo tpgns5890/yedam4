@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+	.label {
+		color : black;
+	}
+	
+	#check{
+		min-height : 3000px;
+	}
+	
+	.fileShow{
+			display : none !important;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">물품등록</h2>
+                <div class="module-subtitle font-serif">물품등록</div>
+              </div>
+            </div>
+          </div>
+        </section>		
+		
+		<form action="/rent/rentGdInsert" enctype="multipart/form-data" id="myrentGdfrm" name="myrentGdfrm" method="post">
+			<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<div id="check">
+			<input type="hidden" id="goodsNo" name="goodsNo" th:value="${nextNo}" readonly="readonly"><br />
+			<input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member != null ? session.member.userId :''}">
+			
+			<!-- 디자인 카테고리 -->
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="label" for="designStyleList">물품카테고리</label> 
+					<select id="caregory" name="caregory">
+						<option value="">-- 물품 카테고리 선택 --</option>
+						<option th:each="rent : ${rents}" th:value="${rent?.codeId}" th:text="${rent?.codeName}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="label" for="goodsNm">물품이름</label> 
+					<input type="text" class="form-control" name="goodsNm" id="goodsNm">
+				</div>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="label" for="totalStock">보유수량</label> 
+					<input type="number" class="form-control" name="totalStock" id="totalStock">
+				</div>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="label" for="rentalPrc">1일 대여금액</label> 
+					<input type="number" class="form-control" name="rentalPrc" id="rentalPrc">
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group" id="addDesign">
+					<label class="label" for="imgInp">물품이미지</label> 
+					<input type="file" id="imgInp" name="uploadFile"/>
+					<div class="fileShow">
+						<img id="blah" src="#" alt = "your image" width="250px" />
+						<button type="button" id="cancel" class="btn btn-warning cancel">
+			              <span>Cancel</span>
+			          	</button>
+			        </div> 	
+
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<input type="submit" id="insert" value="등록" class="btn btn-primary">
+				</div>
+			</div>
+					
+			</div>
+		</form>
+		
+		<script>
+			//csrf설정
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			//파일 업로드 이미지 미리보기
+		    //파일 INPUT창에 변화가 있을 경우 실행
+		    $("#imgInp").on('change', function() {
+		    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
+		    	console.log('사진변경');
+		    	$(this).toggleClass("fileShow");
+		    	$(this).next().toggleClass("fileShow");
+				readURL(this);
+			});
+			
+		    //이미지 미리보기 처리
+			function readURL(input){
+				if(input.files && input.files[0]){
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						$("#blah").attr('src', e.target.result);
+					}
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+		    
+		    //파일 삭제
+		    $("#cancel").on('click', function() {
+		    	//파일을 지우고 싶을때 삭제버튼을 누르면 이미지는 사라지고 input type=file 입력폼이 다시 나타난다.
+		    	$(this).parent().prev().toggleClass("fileShow");
+		    	$(this).parent().toggleClass("fileShow");
+		    	//file영역에 있던 값 삭제
+		    	$("#imgInp").val('');
+		    })
+		</script>
+	</div>
+</body>
+</html>

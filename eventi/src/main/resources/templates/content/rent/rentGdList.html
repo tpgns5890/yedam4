@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+	.label {
+		color : black;
+	}
+	
+	#check{
+		min-height : 3000px;
+	}
+	
+	.fileShow{
+			display : none !important;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">물품리스트</h2>
+                <div class="module-subtitle font-serif">물품리스트</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- 게시글 리스트 -->
+	<table class="table mb-3">
+		<thead class="thead-dark">
+			<tr>
+			    <th><input type="checkBox"></th>
+				<th>카테고리</th>
+				<th>물품이미지</th>
+				<th>물품이름</th>
+				<th>보유개수</th>
+				<th>1일 대여비</th>
+			</tr>
+		</thead>
+		<tbody id="check">
+		</tbody>
+	</table>
+	
+	 <!-- //페이징 경로 :: 문자 -->
+	<div class="row mt-5" id="paging">
+		<div class="col text-center">
+			<div class="block-27" id="returnPaging">
+			</div>
+		</div>
+	</div>
+					     	
+	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		//물품리스트 불러오기
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		$.ajax({
+			url: '/rent/rentGdList',
+			method: 'post',
+			data: {
+				userId:userId
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			for(gd of res.rentGds){
+				$('#check').append(makeDesgin(gd));
+			}
+			$('#returnPaging').append(makePageing(res.paging));
+		})
+		
+		function makeDesgin(gd){
+			let tag = `<tr id=${gd.goodsNo}>
+							<td><input type="checkBox"></td>
+							<td>${gd.caregory}</td>
+							<td><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
+							<td>${gd.goodsNm}</td>
+							<td>${gd.totalStock}</td>
+							<td>${gd.rentalPrc}</td>
+						</tr>`;
+	        
+		 	return tag;
+		}
+		
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
+			}
+			
+			let pagination = $("<div/>")
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
+		
+		function gopage(i) {
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let page = i;
+			$.ajax({
+				url: '/rent/rentGdList',
+				method: 'post',
+				data: {
+					userId:userId, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#check').empty();
+				for(design of res.designs){
+					$('#check').append(makeDesgin(gd));
+				}
+				
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging));
+			})
+		}
+	</script>
+	</div>
+</body>
+</html>

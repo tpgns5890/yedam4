@@ -52,7 +52,7 @@ public class DesignServiceImpl implements DesignService {
 
 	@Override
 	public int insert(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
-		
+		System.out.println("+++++++++++" + uploadFile[0]);
 		// 대표사진세팅.
 		vo.setCenterImg(uploadFile[0].getOriginalFilename()); 
 		
@@ -121,7 +121,7 @@ public class DesignServiceImpl implements DesignService {
 	public void uploadFiles(MultipartFile[] uploadfile, DesignVO vo) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");//대상구분 디자인
+			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T07");//대상구분 디자인(잠시수정)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

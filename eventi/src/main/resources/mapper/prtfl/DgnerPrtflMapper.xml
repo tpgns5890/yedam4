@@ -1,9 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.prtfl.mapper.DgnerPrtflMapper">
+	
+	<!-- 로그인했을경우, 좋아요 체크확인 -->
+	<sql id="loginLikeCheck">
+		<if test="loginId != null and loginId != ''">
+			,(SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = D.DGN_NO AND USER_ID= #{loginId}) AS MYLIKE
+		</if>
+	</sql>
+	
+	<!-- 디자이너 상세 조회 -->
 	<select id="dgnerSelect" resultType="com.eventi.left.prtfl.service.DgnerPrtflVO">
-		SELECT *
-		FROM DGNER_PRTFL
+		SELECT DISTINCT D.USER_ID, D.USER_NAME, D.ONE_INTRO, 
+			   D.CARR_YEAR, D.WORK_PRICE, D.WORK_DT, 
+			   CODEARR_SELECT(D.STYLE) STYLE, D.CAREER, 
+			   D.INQ, D.DT, F.SEV_NM IMG,
+			   (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = D.USER_ID) AS CNT
+		  FROM DGNER_PRTFL D, LIKES l, FILES F
+		 WHERE d.USER_ID = L.TARGET_NO(+)
+		   AND d.IMG = F.F_NM
+		   AND d.USER_ID = #{userId}
+	</select>
+	
+	<!-- 디자이너별 디자인 리스트 -->
+	<select id="desginList" resultType="com.eventi.left.design.service.DesignVO">
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT DISTINCT D.DGN_NO, D.USER_ID, D.C_NO, 
+		       D.NAME, CODEARR_SELECT(D.CAREGORY) CAREGORY, D.CNTN, 
+		       D.WIN_YN, D.DT, D.PUBC_YN, 
+		       D.SAVE, F.SEV_NM CENTER_IMG,
+		       (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = D.DGN_NO) AS CNT 
+		       <include refid="loginLikeCheck" />
+		  FROM DESIGN D, FILES F, LIKES L
+		 WHERE D.CENTER_IMG = F.F_NM
+		   AND D.DGN_NO = F.TARGET_ID
+		   AND D.USER_ID = L.TARGET_NO
+		   AND D.USER_ID = #{userId}
+		<![CDATA[
+		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+		]]>
+	</select>
+	
+	<!-- 디자이너별 디자인 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
+		FROM DESIGN
 		WHERE USER_ID = #{userId}
 	</select>
+	
+	<!-- 조회수 +1 -->
+	<update id="inqUpdate">
+		UPDATE DGNER_PRTFL
+		   SET INQ = INQ + 1
+		 WHERE USER_ID = #{userId}
+	</update>
+	
+	<!-- 디자이너 정보 입력 -->
+	<insert id="dgnerInsert">
+		INSERT INTO DGNER_PRTFL(user_id, user_name, one_intro, carr_year, work_price, work_dt, style, career, dt, img)
+		VALUES(#{userId}, #{userName}, #{oneIntro}, #{carrYear}, #{workPrice}, #{workDt}, #{style}, #{career}, SYSDATE, #{img})
+	</insert>
 </mapper>

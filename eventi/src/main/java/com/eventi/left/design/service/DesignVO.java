@@ -35,10 +35,20 @@ public class DesignVO {
 	public void setcNo(String cNo) {
 		this.cNo = cNo;
 	}
-	private int first;
-	private int last;
+	Integer first = 1;            //첫페이지
+	Integer last = 3;             //마지막페이지
 	
 	private List<FilesVO> files;
 	
 	
+	
+	
+	
+	
+	
+	
+	//수정(지은)
+	private Integer cnt; //디자인별 좋아요 개수
+	private String loginId; //로그인된 아이디
+	private Integer mylike; //좋아요 구분
 }

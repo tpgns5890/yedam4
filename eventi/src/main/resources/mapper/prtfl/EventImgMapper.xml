@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eventi.left.prtfl.mapper.EventImgMapper">
+	<!-- 업체별 행사 이미지 리스트 -->
+	<select id="getEvent" resultType="com.eventi.left.prtfl.service.EventImgVO">
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT *
+		  FROM EVENT_IMG
+		 WHERE USER_ID = #{userId}
+		 <![CDATA[
+		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+		]]>
+	</select>
+	
+	<!-- 업체별 행사 이미지 개수 -->
+	<select id="count" resultType="int">.
+		SELECT COUNT(*)
+		  FROM EVENT_IMG
+		 WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 이미지 다음 시퀀스 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'EV' || NVL((MAX(TO_NUMBER(SUBSTR(EVENT_NO,3)))+1),1) EVENT_NO
+		FROM EVENT_IMG
+	</select>
+	
+	<!-- 행사이미지 삽입 -->
+	<insert id="eventInsert">
+		<selectKey keyProperty="eventNo" resultType="String" order="BEFORE">
+			SELECT 'EV' || NVL((MAX(TO_NUMBER(SUBSTR(EVENT_NO,3)))+1),1) EVENT_NO
+			FROM EVENT_IMG
+		</selectKey>
+		INSERT INTO EVENT_IMG
+		VALUES(#{eventNo}, #{userId}, #{eventTtl}, #{eventCaregory})
+	</insert>
+
+</mapper>

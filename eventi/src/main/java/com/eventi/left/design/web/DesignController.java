@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
+import com.eventi.left.common.service.CodeService;
 import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerVO;
@@ -160,6 +161,46 @@ public class DesignController {
 	public String saveUpdateContest(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
 		service.saveUpdateDesign(vo, filesVO, uploadFile);
 		return "redirect:/design/designMypage";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//지은(수정)
+	//마이페이제에서 디자인 등록
+	@Autowired CodeService codeService;
+	
+	@GetMapping("/myDesignInsert")
+	public String myDesignInsert(Model model, DesignVO designVO) {
+		
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+
+		model.addAttribute("user", memberService.getMember(sessionId));
+		model.addAttribute("contest", cService.getContest(designVO.getcNo()));
+		model.addAttribute("dNo", service.getSequence());
+		
+		model.addAttribute("designCat", codeService.getdesignCat());
+		return "content/design/designInsert";
+	}
+	
+	@PostMapping("/myDesignInsert")
+	public String myDesignInsert(Model model, DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
+
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+		vo.setUserId(sessionId);
+
+		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
+		service.insert(vo, filesVO, uploadFile);
+		return "redirect:/design/designList";
 	}
 
 }

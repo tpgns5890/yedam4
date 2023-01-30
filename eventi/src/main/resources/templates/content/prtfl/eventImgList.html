@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+	.label {
+		color : black;
+	}
+	
+	#check{
+		min-height : 3000px;
+	}
+	
+	.fileShow{
+			display : none !important;
+	}
+	
+	.modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.modal h2 {
+		margin: 0;
+	}
+
+	.modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
+
+	.modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
+
+	.modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.box {
+	    width: 150px;
+	    height: 150px; 
+	    border-radius: 100%;
+	    overflow: hidden;
+	    text-align: center !important;
+	    margin:0 auto;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">행사사진리스트</h2>
+                <div class="module-subtitle font-serif">행사사진리스트</div>
+              </div>
+            </div>
+          </div>
+        </section>
+    
+    <button class="btn btn-primary btn-round" type="button" id="imgUp">이미지 등록</button> 
+
+	<div class="container">
+
+            <ul class="works-grid works-grid-gut works-grid-3 works-hover-w" id="works-grid" style="position: relative; height: 672.375px;">
+              <li class="work-item illustration webdesign" style="position: absolute; left: 0px; top: 0px;"><a href="portfolio_single_featured_image1.html">
+                  <div class="work-image"><img src="/assets/images/portfolio/grid-portfolio1.jpg" alt="Portfolio Item"></div>
+                  <div class="work-caption font-alt">
+                    <h3 class="work-title">Corporate Identity</h3>
+                    <div class="work-descr">Illustration</div>
+                  </div></a></li>
+            </ul>
+          </div>
+	 <!-- //페이징 경로 :: 문자 -->
+	<div class="row mt-5" id="paging">
+		<div class="col text-center">
+			<div class="block-27" id="returnPaging">
+			</div>
+		</div>
+	</div>
+	
+	<!-- 이미지 등록 폼 -->
+	<div id="imageFrm" class="modal">
+			<div class="modal_content">
+				<form action="/eventImg/eventImgInsert" method="POST" enctype="multipart/form-data" id="event" name="event">
+					<h2>행사이미지 등록</h2>
+					<div id="box">
+						<input type="hidden" id="eventNo" name="eventNo" th:value="${nextNo}" readonly><br>
+						<input type="hidden" id="userId" name="userId" th:value="${session.member != null ? session.member.userId :''}" readonly><br>
+						<label>행사이름</label>
+						<input type="text" id="eventTtl" name="eventTtl"><br>
+						<label class="label" for="eventCaregory">행사유형</label> 
+						<select id="eventCaregory" name="eventCaregory">
+							<option value="">-- 행사유형 선택 --</option>
+							<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
+						</select>
+						<label class="label" for="imgInp">물품이미지</label> 
+						<input type="file" id="imgInp" name="uploadFile"/>
+						<div class="fileShow">
+							<img id="blah" src="#" alt = "your image" width="250px" />
+							<button type="button" id="cancel" class="btn btn-warning cancel">
+				              <span>Cancel</span>
+				          	</button>
+				        </div>
+						<button type="button" id="cancel">취소</button>
+						<button type="submit" id="eventInsert">이미지등록</button>
+					</div>
+				</form>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+					     	
+	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		//물품리스트 불러오기
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		//$.ajax({
+		//	url: '/eventImg/eventImgList',
+		//	method: 'post',
+		//	data: {
+		//		userId:userId
+		//	},
+		//	beforeSend: function (xhr) {
+		//		xhr.setRequestHeader(header, token);
+		//	},
+		//}).then(res => {
+			/* for(gd of res.rentGds){
+				$('#check').append(makeDesgin(gd));
+			}
+			$('#returnPaging').append(makePageing(res.paging)); */
+		//})
+		
+		function makeDesgin(gd){
+			let tag = `<tr id=${gd.goodsNo}>
+							<td><input type="checkBox"></td>
+							<td>${gd.caregory}</td>
+							<td><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
+							<td>${gd.goodsNm}</td>
+							<td>${gd.totalStock}</td>
+							<td>${gd.rentalPrc}</td>
+						</tr>`;
+	        
+		 	return tag;
+		}
+		
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
+			}
+			
+			let pagination = $("<div/>")
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
+		
+		function gopage(i) {
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let page = i;
+			$.ajax({
+				url: '/rent/rentGdList',
+				method: 'post',
+				data: {
+					userId:userId, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#check').empty();
+				for(design of res.designs){
+					$('#check').append(makeDesgin(gd));
+				}
+				
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging));
+			})
+		}
+		
+		//이미지 등록 폼
+		$('#imgUp').on('click', function() {
+		   console.log('클릭');
+		   $("#imageFrm").show();
+	   })
+	   
+	   //모달창에서 취소를 눌렀을 경우
+	   $("#cancel").on('click', function() {
+			$("#imageFrm").hide();
+		});
+	   
+/* 	   //모달창에서 이미지등록을 눌렀을 경우
+	   $("#eventInsert").on('click', function() {
+		   let param = $("#event").serialize();
+		   
+		    $.ajax({
+					url : "/eventImg/eventImgInsert",
+					method : 'post',
+					contentType : 'application/x-www-form-urlencoded',
+					data : {param},
+					beforeSend : function(xhr)
+	                {   
+	    				xhr.setRequestHeader(header, token);
+	                },
+					success : function(data) {
+						alert('등록이 완료되었습니다.');
+						location.href='/eventImg/eventImgList';
+					},
+					fail : function(result) {
+						console.log(result)
+					}
+				})
+	   }) */
+	   
+	   //파일 업로드 이미지 미리보기
+		    //파일 INPUT창에 변화가 있을 경우 실행
+		    $("#imgInp").on('change', function() {
+		    	//파일을 올렸을 경우 input type=file은 사라지고 이미지만 띄어진다.
+		    	console.log('사진변경');
+		    	$(this).toggleClass("fileShow");
+		    	$(this).next().toggleClass("fileShow");
+				readURL(this);
+			});
+			
+		    //이미지 미리보기 처리
+			function readURL(input){
+				if(input.files && input.files[0]){
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						$("#blah").attr('src', e.target.result);
+					}
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+		    
+		    //파일 삭제
+		    $("#cancel").on('click', function() {
+		    	//파일을 지우고 싶을때 삭제버튼을 누르면 이미지는 사라지고 input type=file 입력폼이 다시 나타난다.
+		    	$(this).parent().prev().toggleClass("fileShow");
+		    	$(this).parent().toggleClass("fileShow");
+		    	//file영역에 있던 값 삭제
+		    	$("#imgInp").val('');
+		    })
+	</script>
+	</div>
+</body>
+</html>

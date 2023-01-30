@@ -34,11 +34,12 @@ public class UploadFileMethod {
 		if(fileCheck.size() > 0) {
 			service.deleteFile(targetId);
 		}
-
+		
 		// 파일 경로위치에 물리적으로 저장하기
 		for (MultipartFile file : uploadfile) {
-			System.out.println("file: " + file);
+			System.out.println("==========file: " + file);
 			if (!file.isEmpty()) {
+				System.out.println("==========file222: " + file);
 				FileDto dto = new FileDto(UUID.randomUUID().toString(), file.getOriginalFilename(), file.getContentType());
 				list.add(dto);
 
@@ -61,7 +62,7 @@ public class UploadFileMethod {
 		}
 		return list;
 	}
-	
+
 	// 첨부파일 수정시.
 //		public List<FileDto> updateFiles(MultipartFile[] uploadfile, String targetId, String category) throws IllegalStateException, IOException {
 //			
