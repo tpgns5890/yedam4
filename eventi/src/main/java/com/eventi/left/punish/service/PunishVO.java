@@ -19,4 +19,7 @@ public class PunishVO {
 	private String banType; //신고종류
 	private String banCntn; //신고사유
 	private String banRslt; //처리결과
+	
+	Integer first = 1; //첫페이지
+	Integer last = 5; //마지막페이지
 }

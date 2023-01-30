@@ -6,9 +6,8 @@
 <head>
 <link rel="stylesheet" href="/css/model.css">
 <link rel="stylesheet" href="/css/heart.css">
+<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 </head>
-<style>
-</style>
 <body>
 	<div layout:fragment="content" class="content">
 		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -25,57 +24,61 @@
 
 		<section class="module-small">
           <div class="container">
-              <!-- 공모전 정렬기준 -->
-              <div class="col-sm-3 mb-sm-20">
-                <select id="order" name="order" class="form-control">
-					<option value="inq DESC" selected="selected">조회수</option>
-					<option value="pay DESC">금액순</option>
-					<option value="dDay">마감일 빠른순</option>
-					<option value="dDay DESC">마감 느린순</option>
-                </select>
-              </div>
-              
-              
-              	<!-- 분류별 기준 뽑아오기 -->
-              	 <div class="col-sm-3 mb-sm-20">
-	                <div>
-	                		<input type="checkbox" name="category" value="" onclick="doOpenCheck(this);">전체
-	                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);">현수막
-							<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);">배너
-							<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);">로고
-							<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);">포스터
-							<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);">기타
-					</div>
-                </div>
-              
-              <div class="col-sm-3">
-              	<!-- 비회원 공모전작성버튼-->
-				<th:block sec:authorize="!isAuthenticated()">
-					<button class="btn btn-block btn-round btn-g" onclick="login()">공모전 작성</button></a>
-				</th:block>
-				
-				<!-- 일반회원 공모전작성버튼-->
-				<th:block sec:authorize="isAuthenticated()">
-					<a href="./insert"><button class="btn btn-block btn-round btn-g">공모전 작성</button></a>
-				</th:block>
-              </div>
-              
-              	<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
+          
+          	   <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-33px; width: 100px;">
 					<!-- 비회원 좋아요버튼-->
-				<div class="col-sm-3 mb-sm-20">
 					<th:block sec:authorize="!isAuthenticated()">
-						<div class="stage" style="float: right;">
 							<div id="love" class="stage heart" onclick="login()"></div>
-						</div>
 					</th:block>
 					
 					<!-- 회원 좋아요버튼-->
 					<th:block sec:authorize="isAuthenticated()">
-						<div class="stage" style="float: right;">
-							<div id="love" class="stage heart" onclick="loveClick(this)"></div>
-						</div>
+							<div id="header">
+								<div id="love" class="stage heart" onclick="likeClick(this)"></div>
+							</div>
 					</th:block>
 				</div>
+          
+          	  <div id="cotestHeader" >
+	              <!-- 공모전 정렬기준 -->
+	              <div class="col-sm-3 mb-sm-20"  style="width: 180px;">
+	                <select id="order" name="order" class="form-control">
+						<option value="inq DESC" selected="selected">조회수</option>
+						<option value="likes DESC">좋아요순</option>
+						<option value="pay DESC">금액순</option>
+						<option value="dDay">마감일 빠른순</option>
+						<option value="dDay DESC">마감 느린순</option>
+	                </select>
+	              </div>
+	              
+	              
+	              	<!-- 분류별 기준 뽑아오기 -->
+	              	 <div class="col-sm-3 mb-sm-20" style="width: 300px; line-height: 40px; text-align:center;">
+		                <div>
+		                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);"><label>현수막</label>
+								<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);"><label>배너</label>
+								<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);"><label>로고</label>
+								<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);"><label>포스터</label>
+								<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);"><label>기타</label>
+						</div>
+	                </div>
+	              
+	              <div class="col-sm-3">
+	              	<!-- 비회원 공모전작성버튼-->
+					<th:block sec:authorize="!isAuthenticated()">
+						<button style="position:relative; top:-20px; right: -350px" class="w-btn w-btn-gra1" onclick="login()" >공모전 작성</button></a>
+					</th:block>
+					
+					<!-- 일반회원 공모전작성버튼-->
+					<th:block sec:authorize="isAuthenticated()">
+						<a href="./insert">
+							<button style="position:relative; top:-20px; right: -350px" class="w-btn w-btn-gra1">공모전 작성</button>
+						</a>
+					</th:block>
+	              </div>
+	           </div>
+	           
           </div>
         </section>
            
@@ -115,19 +118,19 @@
 					
 					//하트가 눌렸을 경우 실행
 					if ($("#love").hasClass("active")) { 
-						loveClick()
+						likeSelect();
 					
-					} else { //하트가 눌리지 않았을 경우 실행
+					//하트가 눌리지 않았을 경우 실행
+					} else { 
 						//정렬 리스트 불러오는 함수
 						checkSelect();
 					}
 					
 				}
-
-
-
+				
 				//공모전 기본 전체리스트
 				function contestList() {
+					
 					$.ajax({
 						url: '/contest/List',
 						method: 'post',
@@ -140,45 +143,49 @@
 							xhr.setRequestHeader(header, token);
 						},
 					}).then(res => {
-						//map =>  contest,paging 
-						console.log(res.contest)
 						console.log(res.paging)
+						//map =>  contest,paging 
+						$('#boxList').empty();
 						for (contest of res.contest) {
 							$('#boxList').append(makeBox(contest));
 						}
+						$('#returnPaging').empty();
 						$('#returnPaging').append(makePageing(res.paging));
 					})
-
-					//정렬기준 변경 ex)조회순
-					$('#order').on("change", function () {
-						let order = $(this).val();
-						$('input[name=orderSelect]').val(order);
-						$('input[name=page]').val(1);
-						checkSelect();
-
-					});
-
-
-					//분류별 조회 선택 ex)현수막
-					$('input[type=checkbox][name=category]').each(function (index) {
-						$(this).change(function () {
-							if (this.checked) {
-								$('input[name=categorySelect]').val($(this).val());
-								$('input[name=page]').val(1);
-							}
-							checkSelect();
-						});
-					});
-
 				};
 				//전체리스트 끝
+				
+				//정렬기준 변경 ex)조회순
+				$('#order').on("change", function () {
+					let order = $(this).val();
+					$('input[name=orderSelect]').val(order);
+					$('input[name=page]').val(1);
+					checkSelect();
+
+				});
+
+
+				//분류별 조회 선택 ex)현수막
+				$('input[type=checkbox][name=category]').each(function (index) {
+					$(this).change(function () {
+						if (this.checked) {
+							$('input[name=categorySelect]').val($(this).val());//체크값 조회
+						}else{
+							$('input[name=categorySelect]').val(""); //전체조회
+						}
+							$('input[name=page]').val(1); //1페이지 
+							checkSelect();
+					});
+				});
+				
+				
 
 				//분류,정렬기준 전체확인 => 리스트 출력.
 				function checkSelect() {
 					let category = $('input[name=categorySelect]').val();
 					let order = $('input[name=orderSelect]').val();
 					let page = $('input[name=page]').val();
-
+					
 					$.ajax({
 						url: '/contest/List',
 						method: 'post',
@@ -223,32 +230,33 @@
 				//공모전 1건의 대한 박스 생성
 				function makeBox(contest) {
 					//로그인 회원의 하트눌려진것만 체크
-					let active = null;
+					let active;
+					let img;
 					if(contest.userLike > 0){
-						console.log(contest.cNo);
-						console.log(contest.userLike);
+						//console.log(contest.cNo);
+						//console.log(contest.userLike);
 						active = 'active';
 					}
+					if(contest.img == null){
+						img =  `<img src="/images/public.jpg" class="icon-lock" style="width: 500px; height: 500px; ">`
+					}else{
+						img = `<img src="/fileView/${contest.img}" style="width: 500px; height: 500px; ">`
+					}
 					let p = ` 
-								<div class="col-sm-6 col-md-4 col-lg-4">
-					                <div id="${contest.cNo}" class="shop-item">
-					                  <div class="shop-item-image"><img src="/fileView/${contest.img}" style="width: 500px; height: 500px">
+								<div class="col-sm-6 col-md-4 col-lg-4" >
+					                <div id="${contest.cNo}" class="shop-item" >
+							  		<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
+					                  <div class="shop-item-image">${img}
 					                    <div class="shop-item-detail">
-					                    	<div class="stage" >
-							  					<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)"></div>
-							   				</div>
 							   				<div>
-							   				  <h3 class="content-box-title font-serif">${contest.cNo}</h3>
-							   				  <h3 class="content-box-title font-serif">${contest.writer}</h3>
+							   				  <h3 class="content-box-title font-serif">[${contest.category}] D-${contest.dDay}</h3>
 							   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
-							                  <h3 class="content-box-title font-serif">D-${contest.dDay}</h3>
-							                  <h3 class="content-box-title font-serif">총상금 ${contest.pay} 원</h3>
+							                  <h3 class="content-box-title font-serif">₩${contest.payComma}</h3>
+							                  <span>#${contest.style}</span>
 							                  <p>
-							                  	   <span>${contest.category}</span>
-												   <span>#${contest.style}</span>
 													신고<span id="rprt">${contest.rprt}</span>
 													조회<span id="inq">${contest.inq}</span>
-													관심<span id="likes">${contest.likes}</span>
+													좋아요<span id="likes">${contest.likes}</span>
 											   </p>
 											</div>
 					                    	<a href="../contest/select?cNo=${contest.cNo}" class="btn btn-round btn-b">
@@ -278,7 +286,7 @@
 					}
 
 					//페이지 버튼 생성.
-					for (let i = page.startPage; i < page.endPage; i++) {
+					for (let i = page.startPage; i <= page.endPage; i++) {
 						if (page.page == i) {
 							$(ul).append($("<li/>") .text(i).css("font-size", "20px")
 													.css("padding", "10px")
@@ -308,12 +316,15 @@
 				}
 
 				//공모전 전체하트를 클릭했을 경우 => 나의 좋아요 공모전박스 생성출력.
-				function loveClick(e) {
+				function likeClick(e) {
+					$('input[name=page]').val(1);
+					$(e).toggleClass("active"); 
+					likeSelect();
+				}
+
+				function likeSelect(){
 					let page = $('input[name=page]').val();
 					
-					//active 클래스가 없을 경우 생성, 있을 경우 삭제
-					$(e).toggleClass("active");
-
 					if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
 
 						$.ajax({
@@ -329,8 +340,7 @@
 							console.log(res);
 							
 							$('#boxList').empty();
-							$('#cotestHeader').empty();
-							
+							$('#cotestHeader').hide();
 							
 							//관심 공모전이 없을경우
 							if(res.contest == ''){
@@ -346,6 +356,8 @@
 						})
 					} else if (!$("#love").hasClass("active")) { //하트가 눌리지 않았을 경우 실행
 						//정렬 리스트 불러오는 함수
+						$('#cotestHeader').show();
+						let page = $('input[name=page]').val(1);
 						checkSelect();
 					}
 				}
@@ -353,26 +365,28 @@
 
 				//Map : 로그인회원의 좋아요 공모전박스생성
 				 function makeBox_map(contest) {
+					
+					 if(contest.IMG == null){
+							img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">`
+						}else{
+							img = `<img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px; ">`
+						}
+					
 					let p = ` 
 						<div class="col-sm-6 col-md-4 col-lg-4">
 			                <div id="${contest.C_NO}" class="shop-item">
-			                  <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px">
+		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
+			                  <div class="shop-item-image">${img}
 			                    <div class="shop-item-detail">
-			                    	<div class="stage" >
-					  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
-					   				</div>
 					   				<div>
-					   				 <h3 class="content-box-title font-serif">${contest.C_NO}</h3>
-					   				  <h3 class="content-box-title font-serif">${contest.WRITER}</h3>
+					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] D-${contest.DDAY}</h3>
 					   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
-					   				  <h3 class="content-box-title font-serif">D-${contest.DDAY}</h3>
-					                  <h3 class="content-box-title font-serif">총상금 ${contest.PAY} 원</h3>
+					                  <h3 class="content-box-title font-serif">₩${contest.PAYCOMMA}</h3>
+									   <p>#${contest.STYLE}</p>
 					                  <p>
-					                  	   <span>${contest.CATEGORY}</span>
-										   <span>#${contest.STYLE}</span>
 											신고<span id="rprt">${contest.RPRT}</span>
 											조회<span id="inq">${contest.INQ}</span>
-											관심<span id="likes">${contest.LIKES}</span>
+											좋아요<span id="likes">${contest.LIKES}</span>
 									   </p>
 									</div>
 			                    	<a href="/contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
@@ -409,7 +423,7 @@
 							},
 						}).then(res => {
 							if(res > 0){
-								alert('관심공모전 추가완료!')
+								alert('관심 공모전 추가완료!')
 									//전체하트가 눌려진 상태로 재실행
 									if ($("#love").hasClass("active")) { 
 										loveClick();
@@ -419,7 +433,7 @@
 									}
 								
 							}else{
-								alert('관심공모전 추가실패!')
+								alert('관심 공모전 추가실패!')
 							}
 						})
 
@@ -436,7 +450,7 @@
 								},
 							}).then(res => {
 								if(res > 0){
-									alert('관심공모전 취소완료!')
+									alert('관심 공모전 취소완료!')
 
 									//전체하트가 눌려진 상태로 재실행
 									if ($("#love").hasClass("active")) { 
@@ -448,7 +462,7 @@
 									}
 									
 								}else{
-									alert('관심공모전 취소실패!')
+									alert('관심 공모전 취소실패!')
 								}
 							})
 						}

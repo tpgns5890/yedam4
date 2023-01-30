@@ -6,35 +6,14 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
+<link rel="stylesheet" href="/css/contest/button.css">
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <style>
 
-#user {
-	padding-top: 70px;
-	width: 800px;
-	margin: 0 auto;
-}
 
-.busiArea {
-	width: 30px;
-	margin: 0;
-	display: block;
-}
 
-#chkArea {
-	width: 530px;
-	display: flex;
-	justify-content: space-evenly;
-}
 
-.chkArea {
-	width: 115px;
-	height: 200px;
-	overflow: scroll;
-	border: 0.3px solid black;
-	line-height: 1.5em;
-}
 </style>
 </head>
 <body>
@@ -56,21 +35,21 @@
 			
 			<div id="user">
 			<ul>
-				<li th:text="|가입일: ${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|"></li>
+				<li><label>가입일</label><input type="text" th:value="|${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|" disabled="disabled"></li>
 				<!-- 회원등급 -->
-				<li th:if="${user.auth} == 'ROLE_ADMIN'" ><label>회원등급:</label><input type="text" disabled="disabled" value="관리자"></li>
-				<li th:if="${user.auth} == 'ROLE_MEM'" ><label>회원등급:</label><input type="text" disabled="disabled" value="회원1"></li>
-				<li th:if="${user.auth} == 'ROLE_MEMBER'" ><label>회원등급:</label><input type="text" disabled="disabled" value="회원2"></li>
-				<li th:if="${user.auth} == 'ROLE_BUSI'" ><label>회원등급:</label><input type="text" disabled="disabled" value="업체"></li>
+				<li th:if="${user.auth} == 'ROLE_ADMIN'" ><label>회원등급</label><input type="text" disabled="disabled" value="관리자"></li>
+				<li th:if="${user.auth} == 'ROLE_MEM'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원1"></li>
+				<li th:if="${user.auth} == 'ROLE_MEMBER'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원2"></li>
+				<li th:if="${user.auth} == 'ROLE_BUSI'" ><label>회원등급</label><input type="text" disabled="disabled" value="업체"></li>
 				
-				<li><label>아이디:</label><input type="text" readonly="readonly" th:value="${user.userId}"></li>
-				<li><label>이메일:</label><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
-				<li><label>성 명:</label><input type="text" id="userName" name="userName"  th:value="${user.name}"></li>
-				<li><label>연락처:</label><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
+				<li><label>아이디</label><input type="text" readonly="readonly" th:value="${user.userId}"></li>
+				<li><label>이메일</label><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
+				<li><label>성 명</label><input type="text" id="userName" name="userName"  th:value="${user.name}"></li>
+				<li><label>연락처</label><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
 			
 				<!-- 수신여부 -->
 				<li>
-					수신여부:
+					<label>수신여부</label>
 					<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</span>
 					<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</span>
 					<span><input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</span>
@@ -79,74 +58,68 @@
 
 				<!-- 회원계좌번호 -->
 				<li>
-					<label>예금주:</label><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
+					<label>예금주</label><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
 				</li>
 				<li>
-					<label>은행사:</label>
+					<label>은행사</label>
 							<select id="bank" name="bank" >
 								<option value="" >=== 은행코드 ====</option>
-								<option value="004" th:checked="${user.bank eq '004'}">국민은행</option>
-								<option value="003" th:checked="${user.bank eq '003'}">기업은행</option>
-								<option value="011" th:checked="${user.bank eq '011'}">농협은행</option>
-								<option value="031" th:checked="${user.bank eq '031'}">대구은행</option>
+								<option value="004" th:selected="${user.bank eq '국민은행'}">국민은행</option>
+								<option value="003" th:selected="${user.bank eq '기업은행'}">기업은행</option>
+								<option value="011" th:selected="${user.bank eq '농협은행'}">농협은행</option>
+								<option value="031" th:selected="${user.bank eq '대구은행'}">대구은행</option>
 							</select>
 					
 				</li>
 				<li>
-					<label>계좌번호:</label>
+					<label>계좌번호</label>
 					<input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
 				</li>
 			</ul>
 				
 				<th:block th:if="${user.busiNum} != null">
-				<ul>
-					<li><label>사업자번호:</label><input id="busiNum" name="busiNum" type="text" th:value="${user.busiNum}|" readonly="readonly"></li>
-					<li><label>사업자명:</label><input id="busiTitle" name="busiTitle" type="text" th:value="${user.busiTitle}|"></li>
+				<ul >
+					<li><label>사업자번호</label><input id="busiNum" name="busiNum" type="text" th:value="${user.busiNum}|" readonly="readonly"></li>
+					<li><label>사업자명</label><input id="busiTitle" name="busiTitle" type="text" th:value="${user.busiTitle}|"></li>
 					
 					<li><label>업체유형</label>
-						<input type="radio" name="busiType" value="U1" th:checked="${user.busiType eq '기획'}"><label>기획업체</label> 
-						<input type="radio" name="busiType" value="U2" th:checked="${user.busiType eq '렌탈'}"><label>렌탈업체</label>
+						<input type="radio" name="busiType" value="U1" th:checked="${user.busiType eq '기획'}">기획업체
+						<input type="radio" name="busiType" value="U2" th:checked="${user.busiType eq '렌탈'}">렌탈업체
 					</li>
  					
  					<li>
- 						<label>행사지역:</label><input id="busiArea" name="busiArea" type="text" th:value="|${user.busiArea}|">
- 						<button type="button" id="areaUpdate" class="updateBtn">변경</button>
+						<label>행사지역</label> 
+						<select id="areaCheck" name="busiArea" onchange="busiAreaFun(this)">
+							<option value="">-- 행사가능지역 선택 --</option>
+							<option th:each="area : ${busiArea}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+						</select>
+						<br>
+ 						
+ 						<input id="busiAreaInput" name="busiArea" type="hidden">
+ 						<ul id="busiArea" class="userUlTag">
+ 							<li th:each="area, t : ${#strings.arraySplit(user.busiArea, ',')}" class='tag-item'>[[${area}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
+ 						</ul>
  					</li>
  					
 					<li>
-						<label>행사정보:</label><input id="busiStyle" name="busiStyle" type="text" th:value="|${user.busiStyle}|">
-						<button type="button" id="styleaUpdate" class="updateBtn">변경</button>
+						<label>행사스타일</label> 
+						<select id="busiCheck" name="busiStyle" onchange="busiStyleFun(this)">
+							<option value="">-- 행사스타일 선택 --</option>
+							<option th:each="area : ${busiStyle}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+						</select>
+						<br>
+						
+						<input id="busiStyleInput" name="busiStyle" type="hidden">
+ 						<ul id="busiStyle" class="userUlTag">
+ 							<li th:each="style, t : ${#strings.arraySplit(user.busiStyle, ',')}" class='tag-item'>[[${style}]]<span class='style-del-btn' th:idx="${t.index}">x</span></li>
+ 						</ul>
 					</li>
 				</ul>
 				</th:block>
-				
-					
-					
-				<!-- 적용해야됌 -->
-				<div id="chkArea" >
-		 			<div>
-						행사가능지역
-						<div class="chkArea" id="areaCheck">
-							<div th:each="area : ${busiArea}">
-								<input type="checkbox" th:id="${area.codeId}" th:value="${area.codeId}"
-									name="busiArea"> <label th:text="${area.codeName}"
-									th:for="${area.codeId}"></label>
-							</div>
-						</div>
-					</div>
-					<div>
-						행사유형
-						<div class="chkArea" id="styleCheck">
-							<div th:each="type : ${busiStyle}">
-								<input type="checkbox" th:id="${type.codeId}" th:value="${type.codeId}"
-									name="busiStyle"> <label th:text="${type.codeName}"
-									th:for="${type.codeId}"></label>
-							</div>
-						</div>
-					</div>
-				</div> 
-
-				<button type="button" id="update">회원정보 수정</button>
+				<div  style="position:relative; top:20px; left: 135px;">
+					<button type="button" class="w-btn w-btn-gra1" onclick="location.href='/myPage/userMypage'" >취소</button>
+					<button type="button" id="update" class="w-btn w-btn-gra1" >수정</button>
+				</div>
 			</div>
 		<script>
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
@@ -157,28 +130,18 @@
 		$('#chkArea').hide(); 
 		
 		//보여주기
-		$('.updateBtn').on("click", function(){
+		function updateCheck(){
 			$('#chkArea').show();
-		});
-		
-		$('#test').on("click", function(){
-		var busiAreaArr = [];
-		var busiStyleArr = [];
-		let areaChecked = $('input:checkbox[name="busiArea"]:checked');
-		let styleChecked = $('input:checkbox[name="busiStyle"]:checked');
-		for (var i = 0; i < areaChecked.length; i++) {
-			busiAreaArr.push(areaChecked.eq(i).val())
 		}
-		for (var i = 0; i < styleChecked.length; i++) {
-			busiStyleArr.push(styleChecked.eq(i).val())
-		}
-		var busiArea = busiAreaArr.toString();
-		var busiStyle = busiStyleArr.toString();
-		
-		})
 		
 		//수정하기 버튼 누를시
 		$('#update').on("click", function() {
+			$('input[name="busiArea"]').val(areatag);
+			$('input[name="busiStyle"]').val(styleTag);
+			
+			if(!(confirm('수정하시겠습니까?'))){
+				return false;
+			}
 
 			//일반회원 정보
 			let userId = '[[${session.member != null ? session.member.userId :''}]]';
@@ -193,18 +156,8 @@
 			//업체 추가정보
 		 	let busiTitle = $('#busiTitle').val();
 			let busiType = $('input:radio[name="busiType"]:checked').val();
-			var busiAreaArr = [];
-			var busiStyleArr = [];
-			let areaChecked = $('input:checkbox[name="busiArea"]:checked');
-			let styleChecked = $('input:checkbox[name="busiStyle"]:checked');
-			for (var i = 0; i < areaChecked.length; i++) {
-				busiAreaArr.push(areaChecked.eq(i).val())
-			}
-			for (var i = 0; i < styleChecked.length; i++) {
-				busiStyleArr.push(styleChecked.eq(i).val())
-			}
-			var busiArea = busiAreaArr.toString();
-			var busiStyle = busiStyleArr.toString();
+			let busiArea = $('input[name="busiArea"]').val();
+			let busiStyle = $('input[name="busiStyle"]').val();
 			var busi = {
 				"busiTitle": busiTitle,
 				"busiType": busiType,
@@ -212,10 +165,9 @@
 				"busiStyle": busiStyle,
 				"userId":userId,
 			};
-			console.log(busiTitle)
-			console.log(busiType)
-			console.log(busiAreaArr)
-			console.log(busiStyleArr);
+
+			console.log(busiArea)
+			console.log(busiStyle);
 		
 			
 		$.ajax({
@@ -242,6 +194,112 @@
 				})
 		})
 		
+		//--------------------------적용 중
+	function busiAreaFun(e) {
+		let tagCode = e.options[e.selectedIndex].value;
+		let tagValue = e.options[e.selectedIndex].text;
+		
+		// 값이 없으면 동작 안합니다.
+        if (tagValue !== "") {
+
+          // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+          var result = Object.values(areatag).filter(function (word) {
+              return word === tagCode;
+            })
+              console.log(result);
+          // 태그 중복 검사
+          if (result.length == 0) {
+            $("#busiArea").append("<li class='tag-item'>" + tagValue + "<span class='area-del-btn' idx='" + areaCounter + "'>x</span></li>");
+            console.log(tagValue +  tagCode);  
+            areaAddTag(tagCode);
+          } else {
+            alert("태그값이 중복됩니다.");
+          }
+        }
+        //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
+      };
+      
+      function busiStyleFun(e) {
+    	 let tagCode = e.options[e.selectedIndex].value;
+    	 let tagValue = e.options[e.selectedIndex].text;
+    	 
+    	// 값이 없으면 동작 안합니다.
+         if (tagValue !== "") {
+
+           // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+           var result = Object.values(styleTag).filter(function (word) {
+               return word === tagCode;
+             })
+	             console.log(result);
+
+           // 태그 중복 검사
+           if (result.length == 0) {
+             $("#busiStyle").append("<li class='tag-item'>" + tagValue + "<span class='style-del-btn' idx='" + styleTagCounter + "'>x</span></li>");
+             console.log(tagValue + tagCode); 
+             styleAddTag(tagCode);
+           } else {
+             alert("태그값이 중복됩니다.");
+           }
+         }
+         //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
+      }
+      
+		//해시태그테스트
+		var areatag = {};
+		var styleTag = {};
+        var areaCounter = 0;
+        var styleTagCounter = 0;
+		
+        //기존에 있던 값 배열에 넣기
+        //행사 지역
+        let area = "[[${user.busiAreaCode}]]";
+        areatag = area.split(",");
+        areaCounter = areatag.length;
+        
+        //행사 스타일
+        let style = "[[${user.busiStyleCode}]]";
+        styleTag = style.split(",");
+        styleTagCounter = styleTag.length;
+        
+        // 입력한 값을 태그로 생성한다.
+        function areaAddTag (value) {
+        	areatag[areaCounter] = value;
+        	areaCounter++;  // del-btn 의 고유 id 가 된다.
+        }
+        
+        function styleAddTag (value) {
+        	styleTag[styleTagCounter] = value;
+        	styleTagCounter++;  // del-btn 의 고유 id 가 된다.
+        }
+        
+        //사회지역값 서버로 보내기
+        function areaTag () {
+            return Object.values(areatag).filter(function (word) {
+                return word !== "";
+            });
+        }
+        
+        function styleTag(){
+        	return Object.values(styleTag).filter(function (word) {
+                return word !== "";
+            });
+        }
+        
+        // 삭제 버튼 
+        // 인덱스 검사 후 삭제
+        $(document).on("click", ".area-del-btn", function (e) {
+        	 var idx = $(this).attr("idx");
+        	 console.log(idx)
+           	areatag.splice(idx,1);
+            $(this).parent().remove();
+        });
+        
+        $(document).on("click", ".style-del-btn", function (e) {
+            var idx = $(this).attr("idx");
+            console.log(idx)
+            styleTag.splice(idx,1);
+            $(this).parent().remove();
+        });
 			
 		</script>
 		

@@ -4,7 +4,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 <head>
-<!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
 <link rel="stylesheet" href="/css/heart.css">
 </head>
@@ -28,23 +27,22 @@
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
 		
-		<!-- 공모전 리스트 -->
-			<div class="container">
-				<div class="row multi-columns-row" id="boxList"> </div>
-		<!-- end -->
+		<div class="container">
+			<!-- 공모전 리스트 -->
+			<div class="row multi-columns-row" id="boxList"> </div>
+			<!-- end -->
 
 				<!-- //페이징 경로 :: 문자 -->
 				<div class="row mt-5" id="paging">
 					<div class="col text-center">
-						<div class="block-27" id="returnPaging">
-						</div>
+						<div class="block-27" id="returnPaging"> </div>
 					</div>
 				</div>
 	
-			</div>
 			
 			<!-- 페이징처리 -->
 			<input type="hidden" name="page" value="1">
+		</div>
 
 
 	<script >
@@ -89,38 +87,40 @@
 	}
 
 	//Map : 로그인회원의 좋아요 공모전박스생성
-	 function makeBox_map(contest) {
-		let p = ` 
-			<div class="col-sm-6 col-md-4 col-lg-4">
-               <div id="${contest.C_NO}" class="shop-item">
-                 <div class="shop-item-image"><img src="/fileView/${contest.IMG}" style="width: 665px; height: 750px">
-                   <div class="shop-item-detail">
-                   	<div class="stage" >
-		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)"></div>
-		   				</div>
-		   				<div>
-		   				 <h3 class="content-box-title font-serif">${contest.C_NO}</h3>
-		   				  <h3 class="content-box-title font-serif">${contest.WRITER}</h3>
-		   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
-		   				  <h3 class="content-box-title font-serif">D-${contest.DDAY}</h3>
-		                  <h3 class="content-box-title font-serif">총상금 ${contest.PAY} 원</h3>
-		                  <p>
-		                  	   <span>${contest.CATEGORY}</span>
-							   <span>#${contest.STYLE}</span>
-								신고<span id="rprt">${contest.RPRT}</span>
-								조회<span id="inq">${contest.INQ}</span>
-								관심<span id="likes">${contest.LIKES}</span>
-						   </p>
-						</div>
-                   	<a href="/contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
-                   	<span class="icon-magnifying-glass">상세조회</span></a>
-                   </div>
-                 </div>
-               </div>
-             </div> `;
-		
-		return p;
-	} 
+				 function makeBox_map(contest) {
+					
+					 if(contest.IMG == null){
+							img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 400px; height: 400px; ">`
+						}else{
+							img = `<img src="/fileView/${contest.IMG}" style="width: 400px; height:400px; ">`
+						}
+					
+					let p = ` 
+						<div class="col-sm-6 col-md-4 col-lg-4" style="width: 400px; height: 400px; margin-bottom: 30px" >
+			                <div id="${contest.C_NO}" class="shop-item">
+		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
+			                  <div class="shop-item-image">${img}
+			                    <div class="shop-item-detail">
+					   				<div>
+					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] D-${contest.DDAY}</h3>
+					   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
+					                  <h3 class="content-box-title font-serif">₩${contest.PAYCOMMA}</h3>
+									   <p>#${contest.STYLE}</p>
+					                  <p>
+											신고<span id="rprt">${contest.RPRT}</span>
+											조회<span id="inq">${contest.INQ}</span>
+											좋아요<span id="likes">${contest.LIKES}</span>
+									   </p>
+									</div>
+			                    	<a href="/contest/select?cNo=${contest.C_NO}" class="btn btn-round btn-b">
+			                    	<span class="icon-magnifying-glass">상세조회</span></a>
+			                    </div>
+			                  </div>
+			                </div>
+			              </div> `;
+					
+					return p;
+				} 
 
 			
 	//하트클릭시 DB입력(등록,취소)

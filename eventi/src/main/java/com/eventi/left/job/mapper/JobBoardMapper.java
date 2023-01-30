@@ -30,4 +30,9 @@ public interface JobBoardMapper {
 	//게시물 조회수 
 	public int seeUp(JobBoardVO jobBoardVO);
 	
+	//마이페이지 구인게시글 조회
+	public List<JobBoardVO> myJobList(JobBoardVO jobBoardVO); 
+	
+	//마이페이지 구직신청한 게시글 조회
+	public List<JobBoardVO> myApplyList(JobBoardVO jobBoardVO); 
 }

@@ -37,35 +37,9 @@ public class CodeServiceImpl implements CodeService{
 		return CodeMapper.getMcStyle();
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Override
+	public List<CodeVO> getContestStyle() {
+		return CodeMapper.getContestStyle();
 	
 	//지은(수정)
 	//디자인 스타일
@@ -84,6 +58,8 @@ public class CodeServiceImpl implements CodeService{
 	@Override
 	public List<CodeVO> getRentCat() {
 		return CodeMapper.getRentCat();
+
+
 	}
 	
 

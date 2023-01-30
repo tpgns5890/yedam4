@@ -4,11 +4,9 @@
 	
 	<!-- 회원 아이디가 있다면 -->
 	<sql id="check">
-		<where>
 			<if test="userId != null and userId != ''">
-				user_Id = #{userId}
+				and user_Id = #{userId}
 			</if>
-		</where>
 	</sql>
 	<!-- 검색처리 -->
 	<sql id="search">
@@ -30,6 +28,7 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM DESIGN
+		where SAVE = 'N'
 		<include refid="check" /> 
 		<include refid="search" /> 
 	</select>
@@ -133,7 +132,7 @@
 		select count(*)
 		  from design
 		where c_no =#{cNo}
-		AND SAVE = 'Y'
+		AND SAVE = 'N'
 	</select>
 	
 	<select id="saveGetdesign" resultType="DesignVO">

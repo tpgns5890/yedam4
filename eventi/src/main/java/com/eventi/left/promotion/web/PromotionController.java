@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.common.service.CodeService;
+import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
@@ -129,5 +131,12 @@ public class PromotionController {
 		public String proDelete(PromotionVO promotionVO) {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
+		}
+	//마이페이지------------------------------------
+	//1.나의 홍보게시물관리 페이지이동
+		@GetMapping("/myProList")
+		public String myProList(Model model, PromotionVO promotionVO, @ModelAttribute("paging") PagingVO paging) {
+			model.addAttribute("promotionList", proService.myPromotionList(promotionVO, paging));
+			return "content/myPage/myPromotionList";
 		}
 }

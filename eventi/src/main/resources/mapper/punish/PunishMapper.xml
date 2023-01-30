@@ -5,4 +5,11 @@
 		INSERT INTO PUNISH(PUN_NO, USER_ID, TARGET_ID, TARGET_CAT, DT, BAN_CNTN)
 		VALUES('PU'||PUNISH_SEQ.NEXTVAL, #{userId}, #{targetId}, #{targetCat}, SYSDATE, #{banCntn})
 	</insert>
+	
+	<select id="punishCheck" resultType="int">
+		select count(*) 
+		from PUNISH
+		where user_Id = #{userId}
+		and target_Id = #{targetId}
+	</select>
 </mapper>

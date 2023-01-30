@@ -44,6 +44,9 @@ public class MemberVO implements UserDetails {
 	private String busiType;
 	private String busiArea;
 	private String busiStyle;
+	
+	private String busiAreaCode;
+	private String busiStyleCode;
 
 	Integer first; //첫페이지
 	Integer last; //마지막페이지

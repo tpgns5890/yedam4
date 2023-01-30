@@ -33,8 +33,11 @@
 	<select id="contestList" resultType="ContestVO">
 
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+	 			,REGEXP_REPLACE(REVERSE(
+                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
+                                ), '^,','') AS payComma
 	 			,code_select(category) category
-		        ,code_select(style) style
+		        ,REPLACE(codeArr_select(style), ',', ' #') style
 	            ,dDay
 		      	,likes
 	            ,(select sev_nm 
@@ -44,7 +47,10 @@
 	      
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(
-			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt,style
+			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,style
+			            	  ,(select count(*) 
+				                from PUNISH
+				                where target_Id = c_no)AS rprt
                               ,CASE WHEN dt_extns IS NOT NULL 
                                     THEN  trunc(dt_extns) - trunc(sysdate) 
                                     ELSE  trunc(dt_cls) - trunc(sysdate)
@@ -53,8 +59,8 @@
                               	 from likes 
                               	 where target_no = c_no) AS likes
 			             FROM CONTEST
-			            WHERE SAVE = 'N'
-			              AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
+			             WHERE SAVE = 'N'
+			             AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
 						<include refid="category" />
 						order by ${order} 
 	<![CDATA[
@@ -77,7 +83,7 @@
                      inq,
                      rprt,
                      code_select(category) category,
-                     code_select(style) style,
+                     codeArr_select(style) style,
                      (select count(*)
                      	 from winner 
                      	 where co_no = c_no 
@@ -128,11 +134,17 @@
 	
 	<!-- 공모전 1건 상세조회 -->
 	<select id="getContest" resultType="ContestVO">
-		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
+		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq
+			,(select count(*) 
+                from PUNISH
+                where target_Id = c_no)AS rprt
 			,category categoryCode
 	        ,code_select(category) category
-	        ,code_select(style) style
+	        ,REPLACE(codeArr_select(style), ',', ' #') style
 	      	,(select count(*) from likes where target_no = c_no) AS likes
+	      	,(select sev_nm
+		         from files
+		         where target_Id = c_no) AS img
 		 FROM CONTEST
 		WHERE  C_NO = #{cNo}
 	</select>
@@ -172,11 +184,11 @@
 
 	<!-- 공모전 등록(cno 시퀀스 최대값+1 (문자열->숫자+1->문자열 변경) -->
 	<insert id="insertContest">
-		<selectKey keyProperty="cNo" resultType="String" order="BEFORE">
+		<!-- <selectKey keyProperty="cNo" resultType="String" order="BEFORE">
 			SELECT
 			'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
 			FROM CONTEST
-		</selectKey>
+		</selectKey> -->
 		
 		insert into
 		CONTEST(C_NO,
@@ -240,11 +252,12 @@
 		and writer = #{writer}
 	</delete>
 	
-	<!-- 공모전 시퀀스번호 찾기 -->
+	<!-- 결제후 공모전 등록 시퀀스번호 찾기 -->
 	<select id="getSequence" resultType="String">
 		SELECT
 		'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
-		FROM CONTEST
+		FROM CONTEST C FULL JOIN MONEY M
+                    ON C.C_NO = M.TARGET_ID 
 	</select>
 	
 	<!-- 임시저장한 게시글 불러오기 -->

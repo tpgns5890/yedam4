@@ -26,35 +26,21 @@
 		FROM MNCODE 
 		WHERE CL_ID = 'ST'
 	</select>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	<!-- 수정(지은) -->
 	<!-- 디자인 스타일 -->
 	<select id="designStyle" resultType="CodeVO">
+  		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'DS'
+	</select>
+
+	<select id="getContestStyle" resultType="CodeVO">
 		SELECT CODE_ID, CODE_NAME
 		FROM MNCODE 
 		WHERE CL_ID = 'DS'
 	</select>
-	
+
 	<!-- 디자인 유형 -->
 	<select id="getdesignCat" resultType="CodeVO">
 		SELECT CODE_ID, CODE_NAME
@@ -68,4 +54,5 @@
 		FROM MNCODE 
 		WHERE CL_ID = 'GD'
 	</select>
+
 </mapper>
