@@ -40,7 +40,7 @@
 
 					<div class="col-md-12">
 						<div class="form-group">
-							<input type="hidden" name="seekerId" id="seekerId" th:value="admin">
+							<input type="hidden" name="seekerId" id="seekerId" th:value="${session.member.userId}">
 							<label class="label" for="#">이름</label>
 							<input type="text" name="userName" id="userName" th:value=${session.member.name} readonly>
 							<!--vo와같음 -->

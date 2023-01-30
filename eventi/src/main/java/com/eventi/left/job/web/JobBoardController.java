@@ -140,7 +140,7 @@ public class JobBoardController {
 	
 	//게시글 삭제
 	@GetMapping("/jobDelete") //th:onclick = location
-	public String  jobDelete(JobBoardVO jobBoardVO) {
+	public String jobDelete(JobBoardVO jobBoardVO) {
 		jobService.jobDelete(jobBoardVO);
 		return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
 			
@@ -158,5 +158,11 @@ public class JobBoardController {
 		model.addAttribute("applyList", jobService.myApplyList(jobBoardVO, paging));
 		return "content/myPage/myApplyList";
 	}
-	
+	//2.나의 구인게시글 삭제
+	@GetMapping("/myJobDelete")
+	@ResponseBody
+	public int myJobDelete(JobBoardVO jobBoardVO) {
+		int r = jobService.jobDelete(jobBoardVO);
+		return r; 
+}	
 }

@@ -32,7 +32,7 @@
 			</tr>			
 		</thead>
 		<tbody>
-			<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo},category=${q.category}, targetId=${q.targetId})}'|">
+			<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo})}'|">
 				<td th:text=${q.qNo}></td>
 				<td th:text=${q.ttl}></td>
 				<td th:text="${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>

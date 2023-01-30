@@ -98,7 +98,7 @@
 	<!-- 게시글 삭제 -->
 	<delete id="proDelete">
 		DELETE FROM PROMOTION_BOARD
-		WHERE PRO_NO=#{proNo}
+		WHERE PRO_NO= #{proNo}
 	</delete>
 	
 	<!-- 댓글 조회 -->

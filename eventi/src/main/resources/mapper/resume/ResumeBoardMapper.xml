@@ -85,7 +85,7 @@
 		WHERE RESUME_NO = #{resumeNo}
 	</update>
 	
-	<!-- 내정보 조회 -->
+	<!-- 마이페이지 내정보 조회 -->
 	<select id="seekerInfo" resultType="com.eventi.left.resume.service.ResumeBoardVO">
 		SELECT * 
 		FROM (SELECT ROWNUM RN, A.* 
@@ -97,4 +97,10 @@
 	    WHERE RN >= #{first}
 		]]>
 	</select>
+	
+	<!-- 마이페이지 구직취소(삭제) -->
+	<delete id="applyDelete">
+		DELETE FROM RESUME_BOARD
+		WHERE RESUME_NO= #{resumeNo}
+	</delete>
 </mapper>

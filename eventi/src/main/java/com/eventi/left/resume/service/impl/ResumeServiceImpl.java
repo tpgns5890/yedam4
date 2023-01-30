@@ -119,10 +119,16 @@ public class ResumeServiceImpl implements ResumeService{
 		resumeBoardVO.setLast(paging.getLast());
 		return resumeMapper.seekerInfo(resumeBoardVO);
 	}
-
+	//게시글 개수
 	@Override
 	public int count(ResumeBoardVO resumeBoardVO) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	//마이페이지 구직신청 삭제
+	@Override
+	public int applyDelete(ResumeBoardVO resumeBoardVO) {
+		// TODO Auto-generated method stub
+		return resumeMapper.applyDelete(resumeBoardVO);
 	}
 }

@@ -76,10 +76,9 @@ public class questionsController {
 
 	// 문의 1건 상세조회
 	@RequestMapping(value = "/queDetail", method = RequestMethod.GET)
-	public String proDetail(Model model, QuestionsVO vo) {
-		// MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+	public String queDetail(Model model, String qNo) {
 		// 상세내용
-		model.addAttribute("queDetail", qService.getQuestions(vo));
+		model.addAttribute("queDetail", qService.getQuestionsList(qNo));
 		return "content/questions/queDetail";
 	}
 
