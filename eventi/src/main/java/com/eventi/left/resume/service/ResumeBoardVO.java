@@ -9,9 +9,9 @@ public class ResumeBoardVO {
 	
 	private String resumeNo; //구직신청게시글번호
 	private String seekerId; //구직자ID
-	private	String seekerCntn; //구직게시글내용
+	private	String title; //제목
 	private String jobNo; //구인게시글번호(FK)
-	private String resumeCntn; //자기소개서
+	private String cntn; //자기소개서
 	private String files; //첨부파일
 	
 	private String userName; //회원이름
@@ -19,4 +19,6 @@ public class ResumeBoardVO {
 	private String userPhone; //회원전화번호
 	private String hire; //채용여부
 	
+	Integer first =1; //첫 페이지
+	Integer last = 4; //마지막 페이지
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
@@ -88,7 +90,6 @@ public class ResumeServiceImpl implements ResumeService{
 		return i;
 	}
 	//구직자 부분미채용
-
 	@Override
 	public int unHireUpdates(List<ResumeBoardVO> resumeCancel) {
 		int i=0;
@@ -97,5 +98,31 @@ public class ResumeServiceImpl implements ResumeService{
 			i++;
 		}
 		return i;
+	}
+	//시퀀스 값 찾기
+	@Override
+	public String getSeq() {
+		// TODO Auto-generated method stub
+		return resumeMapper.getSeq();
+	}
+	//구직자 정보조회
+	@Override
+	public List<ResumeBoardVO> seekerInfo(ResumeBoardVO resumeBoardVO, PagingVO paging) {
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+		resumeBoardVO.setSeekerId(sessionId);
+		
+		paging.setTotalRecord(resumeMapper.count(resumeBoardVO));
+		paging.setPageUnit(5);
+		resumeBoardVO.setFirst(paging.getFirst());
+		resumeBoardVO.setLast(paging.getLast());
+		return resumeMapper.seekerInfo(resumeBoardVO);
+	}
+
+	@Override
+	public int count(ResumeBoardVO resumeBoardVO) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

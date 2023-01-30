@@ -20,7 +20,7 @@
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif" th:text="나의구직신청게시글 조회"></div>
+                <div class="module-subtitle font-serif" ></div>
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
 		<!-- 게시글 검색 -->
 			<form name="searchFrm">
 				제목<input type="text" name="title" value="">
-				내용<input type="text" name="jobCntn" value="">
+				내용<input type="text" name="cntn" value="">
 				<input type="hidden" name="page" value="1">
 				<button type="submit">검색</button>
 				<button type="button" id="deleteBtn">구직신청취소</button>
@@ -47,38 +47,33 @@
 						<tr>
 							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
 							<th>no</th>
-							<th>행사유형</th>
 							<th>제목</th>
-							<th>근무시작일</th>
-							<th>근무종료일</th>
-							<th>수당</th>
-							<th>위치</th>
-							<th>마감일</th>
+							<th>신청한게시글번호</th>
+							<th>내용</th>
+							<th>채용여부</th>
 							<th>구직취소</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="apply : ${applyList} ">
+						<tr th:each="info : ${seekerInfo} ">
 							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
 							
 							<!-- 등록된 게시글로 이동 -->
 							<th:block >
-								<td th:text=${apply.jobNo} th:onclick="|location.href='@{jobDetail(jobNo=${apply.jobNo})}'|"></td>
+								<td th:text=${info.resumeNo} th:onclick="|location.href='@{seekerInfo(resumeNo=${info.resumeNo})}'|"></td>
 							</th:block>
 								
-							<td th:text=${apply.eType}></td>
-							<td th:text=${apply.title}></td>
-							<td th:text=${apply.eSday}></td>
-							<td th:text=${apply.eEday}></td>
-							<td th:text=${apply.pay}></td>
-							<td th:text=${apply.loc}></td>
-							<td th:text=${apply.closeDt}></td>
+							<td th:text=${info.resumeNo}></td>
+							<td th:text=${info.title}></td>
+							<td th:text=${info.jobNo}></td>
+							<td th:text=${info.cntn}></td>
+							<td th:text=${info.hire}></td>
 							
-							
+							<!-- 
 							<th:block th:if="${contest.save} == 'Y'">
 								<td th:text="임시저장"></td>
-								<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
-							</th:block>
+								<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">구직취소</button></td>
+							</th:block> -->
 							
 						</tr>
 					</tbody>
@@ -102,7 +97,7 @@
 		function gopage(i) {
 			//내용초기화
 			$('input[name="title"]').val('');
-			$('input[name="jobCntn"]').val('');
+			$('input[name="cntn"]').val('');
 			searchFrm.page.value = i;
 			searchFrm.submit();
 		 }

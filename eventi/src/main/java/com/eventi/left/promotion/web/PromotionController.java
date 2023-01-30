@@ -127,7 +127,7 @@ public class PromotionController {
 		}
 
 	//게시글 삭제
-		@GetMapping("/proDelete") //th:onclick = location
+		@GetMapping("/proDelete") 
 		public String proDelete(PromotionVO promotionVO) {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
