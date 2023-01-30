@@ -98,6 +98,7 @@ public class MemberController {
 	@GetMapping("/qualCheck")
 	public ResponseEntity<JsonNode> crtfCheck(String name, String qNo) {
 		ResponseEntity<JsonNode> responseEntity = service.crtfCheck(name, qNo);
+		System.out.println(responseEntity);
 		return responseEntity;
 	}
 	

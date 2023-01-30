@@ -351,7 +351,7 @@
 			$("#qPlus").click(function () {
 				var name = $("#inputName").val();
 				var qNo = $("#inputQno").val();
-				var certType = $('input:radio[name="certType"]').is(':checked').val();
+				var certType = $('input:radio[name="certType"]:checked').val();
 				var qName = "";
 				$.ajax({
 					url: `qualCheck?no=${qNo}&name=${name}`,
