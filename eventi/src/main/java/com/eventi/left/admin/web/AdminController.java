@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.admin.service.AdminService;
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.punish.service.PunishVO;
 
 @Controller
 @RequestMapping("/admin")
@@ -34,6 +36,27 @@ public class AdminController {
 	public String certList() {
 		return "content/admin/adminCert";
 	}
+	// 자격증승인페이지 이동
+	@RequestMapping(value = "/adminContest")
+	public String adminContest() {
+		return "content/admin/adminContest";
+	}
+	// 자격증승인페이지 이동
+	@RequestMapping(value = "/adminBanMem")
+	public String adminBanMem() {
+		return "content/admin/adminBanMem";
+	}
+	// 자격증승인페이지 이동
+	@RequestMapping(value = "/adminBanBrd")
+	public String adminBanBrd() {
+		return "content/admin/adminBanBrd";
+	}
+	// 자격증승인페이지 이동
+	@RequestMapping(value = "/adminMoney")
+	public String adminMoney() {
+		return "content/admin/adminMoney";
+	}
+	
 
 	// 전체회원리스트 이동 및 회원 수 가져오기
 	@GetMapping("/memberList")
@@ -68,5 +91,32 @@ public class AdminController {
 		result.put("paging", paging);
 		return result;
 	}
-
+	
+	//자격증 업데이트
+	@PostMapping("/crtfUpdate")
+	@ResponseBody
+	public int crtfAccept(CrtfVO vo) {
+		int r = service.crtfUpdate(vo);
+		return r;
+	}
+	
+	@PostMapping("/contestAjax")
+	@ResponseBody
+	public Map<String, Object> contestAjax(ContestVO vo, PagingVO paging) {
+		// 리턴할 최종Map(Member,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("contestList", service.contestList(vo, paging));
+		result.put("paging", paging);
+		return result;
+	}
+	
+	@PostMapping("/punMemAjax")
+	@ResponseBody
+	public Map<String, Object> punMemAjax(PunishVO punishVO, PagingVO paging) {
+		// 리턴할 최종Map(Member,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("punishList", service.punishList(punishVO, paging));
+		result.put("paging", paging);
+		return result;
+	}
 }

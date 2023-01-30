@@ -4,6 +4,7 @@
 
 <mapper namespace="com.eventi.left.admin.mapper.AdminMapper">
 
+	<!-- 회원 검색 조건 -->
 	<sql id="mSelect">
 		<where>
 			<!-- 회원등급별 정렬 -->
@@ -26,6 +27,8 @@
 			</if>
 		</where>
 	</sql>
+	
+	<!-- 자격증 검색 조건 (where) -->
 	<sql id="cSelectw">
 		<where>
 			<!-- 승급유형별 정렬 -->
@@ -40,8 +43,8 @@
 		</where>
 	</sql>
 	
+	<!-- 자격증 검색 조건 -->
 	<sql id="cSelect">
-
 			<!-- 승급유형별 정렬 -->
 			<if test="crtfType != null and crtfType != ''">
 				AND CRTF_TYPE = #{crtfType}
@@ -51,7 +54,6 @@
 			<if test="userId != null and userId != ''">
 				AND USER_ID LIKE '%'||#{userId}||'%'
 			</if>
-
 	</sql>
 
 	<!-- 전체 회원 조회 -->
@@ -88,6 +90,7 @@
 		<include refid="mSelect" />
 	</select>
 
+	<!-- 자격증 list -->
 	<select id="certList" resultType="CrtfVO">
 		SELECT 	CRTF_ID,
 				USER_ID,
@@ -108,10 +111,85 @@
 		WHERE RN >= #{first}]]>
 	</select>
 
+	<!-- 자격증 count -->
 	<select id="certCount" resultType="int">
 		SELECT COUNT(*)
 		FROM CERTIFICATE
 		<include refid="cSelectw" />
 	</select>
+	
+	<!-- 자격증 update -->
+	<update id="crtfUpdate">
+		UPDATE CERTIFICATE
+		SET ACCP_YN = #{accpYN}
+		WHERE CRTF_ID = #{crtfId}
+	</update>
 
+	<!-- 공모전 count -->
+	<select id="contCount" resultType="int">
+		SELECT COUNT(*)
+		FROM CONTEST
+		WHERE (CASE WHEN DT_EXTNS IS NOT NULL THEN DT_EXTNS
+            		ELSE DT_CLS
+               END <![CDATA[) < SYSDATE]]>
+	</select>
+	
+	<!-- 공모전 list -->
+	<select id="contestList" resultType="hashmap">
+		SELECT	C_NO cNo, 
+        		PAY pay, 
+        		WRITER writer, 
+        		TTL ttl, 
+        		TO_CHAR(DT_REG, 'YYYY-mm-dd') dtReg, 
+        		TO_CHAR((CASE 	WHEN DT_EXTNS IS NOT NULL THEN DT_EXTNS
+        				ELSE DT_CLS
+        				END), 'YYYY-mm-dd') dtCls, 
+        		(SELECT USER_ID
+        		FROM WINNER
+        		WHERE CO_NO = C_NO
+        		AND GRADE = 1) AS firstId,
+        		(SELECT USER_ID
+        		FROM WINNER 
+        		WHERE CO_NO = C_NO
+        		AND GRADE = 2) AS secondId, 
+        		(SELECT USER_ID
+        		FROM WINNER w
+        		WHERE CO_NO = C_NO
+        		AND GRADE = 3) AS thirdId
+		FROM	(SELECT ROWNUM RN, A.*
+				FROM	(SELECT *
+						FROM 	CONTEST
+						WHERE 	(CASE WHEN DT_EXTNS IS NOT NULL THEN DT_EXTNS
+            					ELSE DT_CLS
+            					END<![CDATA[) < SYSDATE) A 
+			  	WHERE ROWNUM <= #{last}) 
+		WHERE RN >= #{first}]]>
+	</select>
+	
+	<!-- 신고 count -->
+	<select id="punishCount" resultType="int">
+		SELECT COUNT(*)
+		FROM PUNISH
+		WHERE ban_type = #{banType}
+	</select>
+	
+	<!-- 신고 조회 -->
+	<select id="punishList" resultType="PunishVO">
+	SELECT 	PUN_NO,
+			USER_ID,
+			TARGET_ID,
+			TARGET_CAT,
+			DT,
+			BAN_TYPE,
+			BAN_CNTN,
+			BAN_RSLT
+	FROM 	(SELECT ROWNUM RN, A.*
+			FROM	(SELECT *
+					FROM PUNISH
+					WHERE ban_type = #{banType}
+			<![CDATA[) A 
+			WHERE ROWNUM <= #{last}) 
+		WHERE RN >= #{first}]]>
+	</select>
+	
 </mapper>
