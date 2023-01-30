@@ -28,12 +28,14 @@
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
 			<div id="signIn-right">
-					<input type="radio" class="inputRadio" name="certType" value="MC"><label class="labelRadio">사회자</label>
-					<input type="radio" class="inputRadio" name="certType" value="DESIGNER"><label class="labelRadio">디자이너</label> <br>
-					<label for="name">자격증 발급번호</label><input type="text" id="inputQno">
+					<label style="width: 100px">사회자</label><input type="radio" class="inputRadio" name="certType" value="MC">
+					<label style="width: 100px">디자이너</label><input type="radio" class="inputRadio" name="certType" value="DESIGNER"><br>
+					<label style="width: 150px;">성 명</label> <input type="text" id="inputName" name="inputName"><br>
+					<label style="width: 150px">자격증 발급번호</label> <input type="text" id="inputQno">
+					
 					<button type='button' id="qPlus">추가</button>
-					<br><br>
-					<ul id="qList">
+				</div>
+					<ul id="qList" style="list-style: none;">
 						<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
 							<button type="button" class="quDelBtn">X</button></li>
 							
@@ -54,7 +56,6 @@
 								정보처리기능사, 자격증발급번호: 12345678901A</span>
 							<button type="button" class="quDelBtn">X</button></li> -->
 					</ul>
-				</div>
 					
 		
 		
