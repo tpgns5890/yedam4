@@ -18,6 +18,7 @@
 		FROM MC_PRTFL m, LIKES l, FILES F
 		WHERE M.USER_ID = L.TARGET_NO(+)
         AND M.IMG = F.F_NM(+)
+        AND M.USER_ID = F.TARGET_ID(+)
 		<include refid="likeSelect" />
 		ORDER BY ${order} DESC
 		<![CDATA[
@@ -67,7 +68,7 @@
 	<!-- 사회자 수정 -->
 	<update id="mcUpdate">
 		UPDATE MC_PRTFL
-		SET ONE_INTRO = #{oneIntro}, CARR_YEAR = #{carrYear}, CASTING_PRICE = #{castingPrice}, MC_AREA = #{mcArea}, MC_TYPE = #{mcType}, PROG_STYLE = #{progStyle}, CAREER = #{career}, img = #{img}
+		SET ONE_INTRO = #{oneIntro}, SELF_INTRO = #{selfIntro}, CARR_YEAR = #{carrYear}, CASTING_PRICE = #{castingPrice}, MC_AREA = #{mcArea}, MC_TYPE = #{mcType}, PROG_STYLE = #{progStyle}, CAREER = #{career}, img = #{img}
 		WHERE USER_ID = #{userId}
 	</update>
 	

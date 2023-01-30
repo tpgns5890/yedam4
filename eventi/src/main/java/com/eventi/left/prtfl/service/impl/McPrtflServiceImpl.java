@@ -86,20 +86,25 @@ public class McPrtflServiceImpl implements McPrtflService{
 	//사회자 수정
 	@Override
 	public int mcUpdate(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		System.out.println(mcPrtflVO.getImg() + "+++++++++++++++++" + uploadFile[0].getOriginalFilename());
+		System.out.println(uploadFile[0].getOriginalFilename() != "");
 		// 대표사진세팅.
-	    mcPrtflVO.setImg(uploadFile[0].getOriginalFilename());
-	    
-	    int r = mcPrtflMapper.mcUpdate(mcPrtflVO);
+		 if(uploadFile[0].getOriginalFilename() != "") {
+			 mcPrtflVO.setImg(uploadFile[0].getOriginalFilename());
+		  }
+		
 	    uploadFiles(uploadFile, mcPrtflVO);
+	    int r = mcPrtflMapper.mcUpdate(mcPrtflVO);
+	    
 	    
 		return r;
 	}
 	
 	//파일 업로드
-	public void uploadFiles(MultipartFile[] uploadfile, McPrtflVO mcPrtflVO) {
+	public void uploadFiles(MultipartFile[] uploadFile, McPrtflVO mcPrtflVO) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, mcPrtflVO.getUserId(), "T06");
+			list = newUp.uploadFiles(uploadFile, mcPrtflVO.getUserId(), "T06");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

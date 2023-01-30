@@ -92,12 +92,7 @@
 	<div class="container">
 
             <ul class="works-grid works-grid-gut works-grid-3 works-hover-w" id="works-grid" style="position: relative; height: 672.375px;">
-              <li class="work-item illustration webdesign" style="position: absolute; left: 0px; top: 0px;"><a href="portfolio_single_featured_image1.html">
-                  <div class="work-image"><img src="/assets/images/portfolio/grid-portfolio1.jpg" alt="Portfolio Item"></div>
-                  <div class="work-caption font-alt">
-                    <h3 class="work-title">Corporate Identity</h3>
-                    <div class="work-descr">Illustration</div>
-                  </div></a></li>
+              
             </ul>
           </div>
 	 <!-- //페이징 경로 :: 문자 -->
@@ -156,21 +151,23 @@
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			 for(gd of res.rentGds){
-				$('#check').append(makeDesgin(gd));
+			console.log(res.imgs)
+			 for(img of res.imgs){
+				$('#works-grid').append(makeDesgin(img));
 			}
 			$('#returnPaging').append(makePageing(res.paging)); 
 		})
 		
-		function makeDesgin(gd){
-			let tag = `<tr id=${gd.goodsNo}>
-							<td><input type="checkBox"></td>
-							<td>${gd.caregory}</td>
-							<td><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
-							<td>${gd.goodsNm}</td>
-							<td>${gd.totalStock}</td>
-							<td>${gd.rentalPrc}</td>
-						</tr>`;
+		function makeDesgin(img){
+			let tag = `<li class="work-item illustration webdesign" style="position: absolute; left: 0px; top: 0px;">
+							<a href="portfolio_single_featured_image1.html">
+				                <div class="work-image"><img src="/fileView/${img.img}" alt="Portfolio Item"></div>
+				                <div class="work-caption font-alt">
+				                  <h3 class="work-title">Corporate Identity</h3>
+				                  <div class="work-descr">Illustration</div>
+				                </div>
+				             </a>
+				        </li>`;
 	        
 		 	return tag;
 		}

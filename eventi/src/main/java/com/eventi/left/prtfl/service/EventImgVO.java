@@ -11,6 +11,8 @@ public class EventImgVO {
 	private String eventTtl;      //제목
 	private String eventCaregory; //행사유형
 	
+	private String img;           //이미지
+	
 	Integer first = 1;            //첫페이지
 	Integer last = 3;             //마지막페이지
 }
