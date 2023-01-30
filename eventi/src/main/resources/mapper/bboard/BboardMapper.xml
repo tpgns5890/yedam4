@@ -95,7 +95,7 @@
 	<!-- 게시글 수정 -->
 	<update id="bboardUpdate">
 		UPDATE B_BOARD
-		SET WRITER=#{writer}, TTL=#{ttl}, LCLSF=#{lclsf}, MCLSF=#{mclsf}, CNTN=#{cntn}, IMG=#{img}, SAVE=#{save}
+		SET WRITER=#{writer}, TTL=#{ttl}, LCLSF=#{lclsf}, MCLSF=#{mclsf}, CNTN=#{cntn}, SAVE=#{save}
 		WHERE B_BOARD_NO = #{bBoardNo}
 	</update>
 	

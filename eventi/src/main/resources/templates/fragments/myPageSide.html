@@ -31,7 +31,8 @@
 			</ul></li>
 		<li><a href="#">의뢰내역</a>
 			<ul class="submenu">
-				<li><a th:href="|/casting/mcCastingList?userId=${session.member.userId}|">의뢰내역</a></li>
+				<li><a th:href="|/casting/mcCastingList?userId=${session.member.userId}|">사회요청내역</a></li>
+				<li><a th:href="|/casting/mcCastingList?clientId=${session.member.userId}|">의뢰내역</a></li>
 			</ul></li>
 		<li><a href="#">구인구직</a>
 			<ul class="submenu">
