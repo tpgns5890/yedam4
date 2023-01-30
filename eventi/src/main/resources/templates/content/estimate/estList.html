@@ -41,7 +41,6 @@ tbody>tr:hover {
 			</tr> -->
 			</tbody>
 		</table>
-		<button onclick="test()">테스트</button>
 		<!-- 페이징 처리 -->
 		<div class="row mt-5" id="paging">
 			<div class="col text-center">
@@ -53,12 +52,6 @@ tbody>tr:hover {
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 ajaxList();
-
-function test() {
-	if(window.sessionStroage.getItem("member")== null){
-		alert("로그인해주세요.")
-	}
-}
 
 function gopage(i) {
 	let page = $('input[name="page"]').val(i);
@@ -94,8 +87,10 @@ function ajaxList() {
 
 //tr만들기
 function makeTr(eList) {
+	
 	let p = "";
 	var member = '[[${session.member != null ? session.member.userId :''}]]';
+	//비회원 클릭시 로그인 창 띄우기
 	if(member == ""){
 		p = `
 			<tr onclick="alert('로그인 후 이용해주세요.');login();">
@@ -106,7 +101,6 @@ function makeTr(eList) {
 			</tr>`;
 		return p;
 	}
-	console.log("로그인아이디"+member)
 	 p = `
 	<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
 		<td>${eList.eno}</td> 
@@ -163,6 +157,7 @@ function makePaging(page) {
 	pagination.append(ul);
 	return pagination;
 }
+
 //로그인 창 띄우기
 function login(){
 	 $("#header_modal").show();

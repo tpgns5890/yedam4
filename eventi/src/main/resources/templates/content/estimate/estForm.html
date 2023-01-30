@@ -430,8 +430,9 @@ h1 {
 <!-- 로그인 회원 버튼표시 -->
 <th:block sec:authorize="isAuthenticated()">
 <input type="button" value="견적서 보내기" class="submit">
+<input type="hidden" th:value="${session.member.userId}" name="userId" /> 
 </th:block> 
-<!-- <input type="hidden" th:value="${session.member.userId}" name="userId" /> -->
+
 </div>
 <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 </form>
@@ -534,6 +535,7 @@ document.getElementById('eventDate').setAttribute("min", today);
 //견적요청서 등록
 $('.submit').click(function() {
 	var userId = '[[${session.member != null ? session.member.userId :''}]]';
+	console.log(userId)
 	if(userId == ""){
 		alert("로그인 후 이용해주세요.")
 		login();
