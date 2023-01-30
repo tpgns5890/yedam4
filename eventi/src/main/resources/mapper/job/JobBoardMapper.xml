@@ -165,6 +165,7 @@
 				USER_ID,
 				DT,
 				CLOSE_DT,
+				SAVE,
 				CLOSE_DT - SYSDATE AS remain,
                 CNT,
                 RECOUNT,

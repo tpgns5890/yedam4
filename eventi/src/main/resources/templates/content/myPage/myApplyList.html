@@ -51,7 +51,7 @@
 							<th>신청한게시글번호</th>
 							<th>내용</th>
 							<th>채용여부</th>
-							<th>구직취소</th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -63,17 +63,10 @@
 								<td th:text=${info.resumeNo} th:onclick="|location.href='@{seekerInfo(resumeNo=${info.resumeNo})}'|"></td>
 							</th:block>
 								
-							<td th:text=${info.resumeNo}></td>
 							<td th:text=${info.title}></td>
 							<td th:text=${info.jobNo}></td>
 							<td th:text=${info.cntn}></td>
 							<td th:text=${info.hire}></td>
-							
-							<!-- 
-							<th:block th:if="${contest.save} == 'Y'">
-								<td th:text="임시저장"></td>
-								<td><button type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">구직취소</button></td>
-							</th:block> -->
 							
 						</tr>
 					</tbody>
@@ -128,23 +121,19 @@
 				for (let i = 0; i < trs.length; i++) {
 					if (trs[i].children[0].children[0].checked) {
 						
-						let cNo = trs[i].children[1].textContent; //체크된 공모번호
+						let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
 
 						//삭제처리 ajax
 						$.ajax({
-							url: '/contest/delete',
-							method: "post",
-							data: {cNo},
-							beforeSend: function (xhr) {
-								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-								xhr.setRequestHeader(header, token);
-							},
+							url: '/applyDelete',
+							method: "get",
+							data: {resumeNo}
 						}).then(res => {
 							if (res == 1) {
 								trs[i].remove(); // tr 화면동적 삭제
 								alert('삭제 완료');
 							} else {
-								alert('응모작품이 있어 삭제 불가능합니다.');
+								alert('삭제 불가능합니다.');
 							}
 						})
 					}

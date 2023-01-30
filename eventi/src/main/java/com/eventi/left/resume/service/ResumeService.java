@@ -42,9 +42,12 @@ public interface ResumeService {
 	//시퀀스 값 찾기
 	public String getSeq();
 	
+	//게시글 개수
+	public int count(ResumeBoardVO resumeBoardVO);
+	
 	//마이페이지 구직자정보 조회
 	public List<ResumeBoardVO> seekerInfo(ResumeBoardVO resumeBoardVO, PagingVO paging);
 	
-	//게시글 개수
-	public int count(ResumeBoardVO resumeBoardVO);
+	//마이페이지 구직신청 삭제
+	public int applyDelete(ResumeBoardVO resumeBoardVO);
 }

@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.common.service.CodeService;
-import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
@@ -127,7 +126,7 @@ public class PromotionController {
 		}
 
 	//게시글 삭제
-		@GetMapping("/proDelete") 
+		@GetMapping("/proDelete")
 		public String proDelete(PromotionVO promotionVO) {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
@@ -139,4 +138,12 @@ public class PromotionController {
 			model.addAttribute("promotionList", proService.myPromotionList(promotionVO, paging));
 			return "content/myPage/myPromotionList";
 		}
+	//2.나의 홍보게시글 삭제
+		@GetMapping("/proDeleteAjax")
+		@ResponseBody
+		public int proDeleteAjax(PromotionVO promotionVO) {
+			int r = proService.proDelete(promotionVO);
+			return r; 
+	}	
+		
 }

@@ -29,15 +29,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 ftco-animate">
-					<h2 class="mb-3 mt-5" th:text=${queDetail.qNo} id="qNo"></h2>
-					<h2 class="mb-3" th:text=${queDetail.userId}></h2>
-					<p th:text=${queDetail.targetId}></p>
-					<p th:text=${queDetail.ttl}></p>
-					<p th:text=${queDetail.cntn}></p>
-					<p th:text=${queDetail.writingDt}></p>
-					<p th:text=${queDetail.secretYn}></p>
-					<p th:text=${queDetail.category}></p>
-					<p th:text=${queDetail.rerepTgt}></p>
+					<h2 class="mb-3 mt-5" th:text=${queDetail[1].qNo} id="qNo"></h2>
+					<h2 class="mb-3" th:text=${queDetail[1].userId}></h2>
+					<p th:text=${queDetail[1].targetId}></p>
+					<p th:text=${queDetail[1].ttl}></p>
+					<p th:text=${queDetail[1].cntn}></p>
+					<p th:text=${queDetail[1].writingDt}></p>
+					<p th:text=${queDetail[1].secretYn}></p>
+					<p th:text=${queDetail[1].category}></p>
+					<p th:text=${queDetail[1].rerepTgt}></p>
 
 					<!--<div class="tag-widget post-tag-container mb-5 mt-5">
 						<div class="tagcloud">
@@ -48,14 +48,14 @@
 						</div>
 					</div>-->
 					
-		 <div class="comments"  id=reply>
-                  <h4 class="comment-title font-alt">There are comments</h4>
+		 <div class="comments"  id=reply th:if="${#lists.size(queDetail)}>1">
+                  <h4 class="comment-title font-alt">답변</h4>
                   <div class="comment clearfix">
                     <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
                     <div class="comment-content clearfix">
-                      <div class="comment-author font-alt"><a href="#">관리자</a></div>
+                      <div class="comment-author font-alt" th:text=${queDetail[0].ttl}><a href="#">관리자</a></div>
                       <form action="replyInsert">
-						<textarea name="replyCntn" id="replyCntn" rows="3" cols="90"></textarea>
+						<textarea name="replyCntn" id="replyCntn" rows="3" cols="90" ></textarea>
 						<button type="button" id="replyInsertBtn">댓글작성</button>
                       Today, 14:55 - 
                     	</form>

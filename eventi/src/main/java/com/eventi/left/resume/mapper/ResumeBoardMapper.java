@@ -2,7 +2,6 @@
 
 import java.util.List;
 
-import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 
@@ -37,5 +36,8 @@ public interface ResumeBoardMapper {
 	
 	//게시글 개수
 	public int count(ResumeBoardVO resumeBoardVO);
+	
+	//마이페이지 구직신청 삭제
+	public int applyDelete(ResumeBoardVO resumeBoardVO);
 }
                                      

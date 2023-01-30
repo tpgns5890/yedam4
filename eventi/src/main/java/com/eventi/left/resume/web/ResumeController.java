@@ -22,6 +22,7 @@ import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 import com.eventi.left.resume.service.ResumeService;
 
@@ -113,4 +114,11 @@ public class ResumeController {
 		model.addAttribute("seekerInfo", resumeService.seekerInfo(resumeBoardVO, paging));
 		return "content/myPage/myApplyList";
 	}
+	//2.마이페이지 구직신청 삭제
+	@GetMapping("/applyDelete")
+	@ResponseBody
+	public int applyDelete(ResumeBoardVO resumeBoardVO) {
+		int r = resumeService.applyDelete(resumeBoardVO);
+		return r; 
+}	
 }
