@@ -114,6 +114,7 @@
 				<form action="/eventImg/eventImgInsert" method="POST" enctype="multipart/form-data" id="event" name="event">
 					<h2>행사이미지 등록</h2>
 					<div id="box">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 						<input type="hidden" id="eventNo" name="eventNo" th:value="${nextNo}" readonly><br>
 						<input type="hidden" id="userId" name="userId" th:value="${session.member != null ? session.member.userId :''}" readonly><br>
 						<label>행사이름</label>
@@ -145,21 +146,21 @@
 		
 		//물품리스트 불러오기
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
-		//$.ajax({
-		//	url: '/eventImg/eventImgList',
-		//	method: 'post',
-		//	data: {
-		//		userId:userId
-		//	},
-		//	beforeSend: function (xhr) {
-		//		xhr.setRequestHeader(header, token);
-		//	},
-		//}).then(res => {
-			/* for(gd of res.rentGds){
+		$.ajax({
+			url: '/eventImg/eventImgList',
+			method: 'post',
+			data: {
+				userId:userId
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			 for(gd of res.rentGds){
 				$('#check').append(makeDesgin(gd));
 			}
-			$('#returnPaging').append(makePageing(res.paging)); */
-		//})
+			$('#returnPaging').append(makePageing(res.paging)); 
+		})
 		
 		function makeDesgin(gd){
 			let tag = `<tr id=${gd.goodsNo}>

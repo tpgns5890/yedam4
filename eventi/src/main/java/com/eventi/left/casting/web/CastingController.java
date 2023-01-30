@@ -3,6 +3,7 @@ package com.eventi.left.casting.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,10 +16,18 @@ import com.eventi.left.casting.service.CastingVO;
 public class CastingController {
 	@Autowired CastingService castingService;
 	
-	//섭외 전체 조회
-	@RequestMapping("/castingList")
+	//사회자별 전체 조회
+	@GetMapping("/mcCastingList")
 	public String castingList(Model model, CastingVO castingVO) {
-		model.addAttribute("casting", castingService.castingList(castingVO));
+		model.addAttribute("casting", castingService.mcCastingList(castingVO));
+		System.out.println(castingService.mcCastingList(castingVO));
+		return "content/casting/castingList";
+	}
+	
+	//의뢰자별 전체 조회
+	@GetMapping("/clientCastingList")
+	public String clientCastingList(Model model, CastingVO castingVO) {
+		model.addAttribute("casting", castingService.clientCastingList(castingVO));
 		return "content/casting/castingList";
 	}
 	
@@ -27,5 +36,11 @@ public class CastingController {
 	@ResponseBody
 	public int castingInsert(CastingVO castingVO) {
 		return castingService.castingInsert(castingVO);
+	}
+	
+	//진행현황업데이트
+	@PostMapping("/progUpdate")
+	public int progUpdate(CastingVO castingVO) {
+		return castingService.progressUpdate(castingVO);
 	}
 }
