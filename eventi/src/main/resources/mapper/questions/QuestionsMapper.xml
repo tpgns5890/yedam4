@@ -100,7 +100,7 @@
 		FROM Questions
 		WHERE Q_NO = #{qNo}
 		OR REREP_TGT = #{rerepTgt}
-		ORDER BY REREP_TGT
+		ORDER BY REREP_TGT DESC
 	</select>
 
 	<!-- 게시글 시퀀스번호 찾기 -->
