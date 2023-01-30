@@ -1,8 +1,8 @@
-/* .contest {
-	width: 1700px;
+.contest {
+	width: 80%;
 	margin: 0 auto;
 	margin-top: 30px;
-} */
+}
 
 #boxList {
 	margin-left: 250px;
@@ -10,8 +10,8 @@
 }
 
 .sideMenu {
-	width: 300px;
-	height: 1000px;
+	width: 16%;
+	height: 100%;
 	overflow: hidden;
 	margin-top: 50px;
 	float: left;
@@ -27,10 +27,9 @@
 
 .sideMenu a {
 	color: black;
-	font-weight: bolder;
 	text-decoration: none;
-	font-size: 18px;
 	font-weight: bolder;
+	font-size: 18px;
 }
 
 .submenu {
@@ -38,11 +37,11 @@
 	overflow: hidden;
 }
 
-.submenu li{
+.submenu li {
 	background: pink;
 }
 
-.submenu li a{
+.submenu li a {
 	margin-left: 20px;
 	font-size: 15px;
 }
@@ -56,27 +55,25 @@
 	height: 200px; /*서브메뉴 li한개의 높이 50*5*/
 	transition-duration: 1s;
 }
-form[name="designdesignSearchFrm"]{
-	margin-top:15px;
-	margin-left: 270px;
+
+form[name="designSearchFrm"], form[name="searchFrm"] {
+	margin-top: 15px;
+	margin-left: 415px;
 }
-form[name="searchFrm"]{
-	margin-top:15px;
-	margin-left: 480px;
-}
+
 table {
+	width:60%;
 	margin: 0 auto;
 	margin-top: 10px;
 	margin-bottom: 50px;
 	table-layout: fixed;
 }
-
 thead th {
-	text-align: center;
 	background: #b4defd;
-	padding: 20px 15px;
+	padding: 7px 0px;
+	text-align: center;
 	font-weight: border;
-	font-size: 16px;
+	font-size: 18px;
 	color: black;
 	text-transform: uppercase;
 }
@@ -87,7 +84,7 @@ tbody td {
 	text-align: center;
 	vertical-align: middle;
 	font-weight: 300;
-	font-size: 14px;
+	font-size: 16px;
 	color: black;
 	text-align: center
 }
@@ -140,7 +137,8 @@ input[type="text"] {
 	margin-left: 400px;
 }
 
-#paging {
-	width: 1700px;
+.paging, .block-27 {
+	width: 100%;
 	margin: 0 auto;
+	float: left;
 }

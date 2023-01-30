@@ -223,4 +223,14 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return mapper.bankUpdate(memberVO);
 	}
 
+	@Override
+	public int insertCrtf(CrtfVO crVO) {
+		return mapper.insertCrtf(crVO);
+	}
+
+	@Override
+	public List<CrtfVO> crtfSelect(String userId) {
+		return mapper.crtfSelect(userId);
+	}
+
 }

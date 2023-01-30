@@ -73,7 +73,7 @@ public class LikeServiceImpl implements LikesService {
 	public List<LikesVO> userlikeList(LikesVO vo,PagingVO paging) {
 
 		paging.setTotalRecord(mapper.setTotalRecord("T01",vo.getUserId()));
-		paging.setPageUnit(6); // 9개 출력 (default 10)
+		paging.setPageUnit(6); // 6개 출력 (default 10)
 		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
