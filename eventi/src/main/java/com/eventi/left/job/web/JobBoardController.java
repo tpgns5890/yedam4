@@ -27,6 +27,8 @@ import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.resume.service.ResumeBoardVO;
+import com.eventi.left.resume.service.ResumeService;
 
 @Controller
 public class JobBoardController {
@@ -38,6 +40,7 @@ public class JobBoardController {
 	//파일 service
 	@Autowired FilesService filesService;
 	@Autowired CodeService codeService;
+	@Autowired ResumeService resumeService;
 	
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
@@ -155,4 +158,5 @@ public class JobBoardController {
 		model.addAttribute("applyList", jobService.myApplyList(jobBoardVO, paging));
 		return "content/myPage/myApplyList";
 	}
+	
 }

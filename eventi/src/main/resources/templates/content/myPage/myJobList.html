@@ -36,7 +36,7 @@
 				내용<input type="text" name="jobCntn" value="">
 				<input type="hidden" name="page" value="1">
 				<button type="submit">검색</button>
-				<button type="button" id="deleteBtn">게시글삭제</button>
+				<button type="button" id="deleteBtn" onclick="jobDelete(${job.jobNo})">게시글삭제</button>
 			</form>
 			
 			
@@ -88,7 +88,7 @@
 							
 							<th:block th:if="${job.save} == 'N'">
 								<td th:text="등록완료"></td>
-								<td><button type="button" id="resumeDetail" th:onclick="|location.href='@{/resumeDetail(jobNo=${job.jobNo})}'|">지원자조회</button></td>
+								<td><button type="button" id="resumeDetail" th:onclick="|location.href='@{/resumeJob(jobNo=${job.jobNo})}'|">지원자조회</button></td>
 							</th:block>
 							
 						</tr>
@@ -107,7 +107,7 @@
 			</div>
 		</div>
 		
-		</div>
+	
 
 
 		<script>

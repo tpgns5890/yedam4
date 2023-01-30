@@ -75,7 +75,7 @@
 							<td th:text="${#dates.format(pro.eEday, 'yyyy-MM-dd')}"></td>
 							
 							<td th:text="${pro.see}"></td>
-							<td th:text="${pro.dt}"></td>
+							<td  th:text="${#dates.format(pro.dt, 'yyyy-MM-dd')}"></td>
 							
 							<th:block >
 								<td><button type="button" id="selete" th:onclick="|location.href='@{proUpdate(proNo=${pro.proNo})}'|">게시글수정</button></td>
@@ -135,7 +135,7 @@
 				for (let i = 0; i < trs.length; i++) {
 					if (trs[i].children[0].children[0].checked) {
 						
-						let cNo = trs[i].children[1].textContent; //체크된 공모번호
+						let proNo = trs[i].children[1].textContent; //체크된 공모번호
 
 						//삭제처리 ajax
 						$.ajax({

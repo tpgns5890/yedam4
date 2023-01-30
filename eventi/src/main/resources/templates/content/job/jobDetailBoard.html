@@ -97,10 +97,10 @@
 			 
 	<button type="button" class="btn btn-outline-primary" 
 			th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
-			
+	</th:block>
+<!-- 구직신청 -->	
 	<button type="button" class="btn btn-outline-primary" 
 			th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-	</th:block>
 <!-- 신고하기 -->
    <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
 
