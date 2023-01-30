@@ -4,16 +4,17 @@
 	<!-- 업체별 행사 이미지 리스트 -->
 	<select id="getEvent" resultType="com.eventi.left.prtfl.service.EventImgVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-		SELECT *
-		  FROM EVENT_IMG
-		 WHERE USER_ID = #{userId}
+		SELECT E.*, F.SEV_NM AS IMG
+		  FROM EVENT_IMG E, FILES F
+		 WHERE E.EVENT_NO = F.TARGET_ID
+           AND USER_ID = #{userId}
 		 <![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
 	</select>
 	
 	<!-- 업체별 행사 이미지 개수 -->
-	<select id="count" resultType="int">.
+	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		  FROM EVENT_IMG
 		 WHERE USER_ID = #{userId}
