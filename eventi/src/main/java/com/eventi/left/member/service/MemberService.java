@@ -42,5 +42,9 @@ public interface MemberService{
 	public int bankUpdate(MemberVO memberVO); // 계좌번호 변경.
 	
 	public MemberVO busiSelect(String userId); //업체회원 조회
+	
+	public int insertCrtf(CrtfVO crVO); //승급신청 자격증추가
+	
+	public List<CrtfVO> crtfSelect(String userId); // 회원의 자격증 조회
 
 }

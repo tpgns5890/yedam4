@@ -79,7 +79,7 @@ public class DesignServiceImpl implements DesignService {
 	@Override
 	public List<DesignVO> userDesignList(DesignVO vo, PagingVO paging) {
 		paging.setTotalRecord(mapper.count(vo));
-		paging.setPageUnit(4);
+		paging.setPageUnit(6);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 

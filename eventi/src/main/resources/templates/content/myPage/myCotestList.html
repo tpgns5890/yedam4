@@ -27,7 +27,7 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
-		<div class="container" >
+		<div class="contest" >
 		<!-- 리스트 값이 없을경우 -->
 		<div th:if="${#lists.isEmpty(contestList)}">	
 			<h3>등록한 공모전이 없습니다.</h3>
@@ -49,15 +49,15 @@
 				<table border="1" id="myTable">
 					<thead>
 						<tr>
-							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+							<th style="width:30px;"><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
 							<th>no</th>
 							<th>분류별</th>
-							<th>제목</th>
-							<th>진행기간</th>
+							<th style="width:200px;">제목</th>
+							<th style="width:230px;">진행기간</th>
 							<th>진행</th>
 							<th>지원수</th>
 							<th>등록</th>
-							<th>조회/우승자등록</th>
+							<th style="width:150px;">조회/우승자등록</th>
 						</tr>
 					</thead>
 					<tbody>

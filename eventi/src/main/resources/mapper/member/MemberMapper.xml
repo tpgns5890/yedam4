@@ -47,13 +47,17 @@
 
 	<!-- 자격증 승인신청 -->
 	<insert id="insertCrtf">
+		<selectKey keyProperty="crtfId" resultType="String" order="BEFORE">
+			SELECT 'CE'||(MAX(TO_NUMBER(SUBSTR(CRTF_ID,3)))+1) crtf_id
+			FROM CERTIFICATE
+		</selectKey>
 		INSERT INTO CERTIFICATE
-		VALUES('CE'||CERTIFICATE_ID.NEXTVAL, 
+		VALUES(#{crtfId}, 
 			   #{userId}, 
-			   #{certName}, 
-			   #{certNum},
+			   #{crtfName}, 
+			   #{crtfNum},
 			   'R',
-			   #{certType},
+			   #{crtfType},
 			   null,
 			   sysdate)
 	</insert>
@@ -183,6 +187,12 @@
 		FROM MEMBERS m join busi_member b
 		                on m.user_id = b.user_id
 		and m.USER_ID =  #{userId}
+	</select>
+	
+	<select id="crtfSelect" resultType="CrtfVO">
+		SELECT * 
+		FROM CERTIFICATE
+		WHERE USER_ID = #{userId}
 	</select>
 	
 </mapper>
