@@ -810,12 +810,12 @@
 			   let targetCat = 'T07';
 			   let banCntn = $("#banCntn").val();
 			   let userId = '[[${session.member.userId}]]';
-			   
+			   let banType = 'P2';
 			    $.ajax({
 						url : "/punishInsert",
 						method : 'post',
 						contentType : 'application/x-www-form-urlencoded',
-						data : {userId:userId, targetId:targetId, banCntn:banCntn, targetCat:targetCat},
+						data : {userId:userId, targetId:targetId, banType:banType, banCntn:banCntn, targetCat:targetCat},
 						beforeSend : function(xhr)
 		                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 		    				xhr.setRequestHeader(header, token);

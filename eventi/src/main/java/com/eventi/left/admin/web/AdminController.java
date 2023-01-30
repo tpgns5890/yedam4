@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.admin.service.AdminService;
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
@@ -36,28 +37,28 @@ public class AdminController {
 	public String certList() {
 		return "content/admin/adminCert";
 	}
-	// 자격증승인페이지 이동
+	// 공모전페이지 이동
 	@RequestMapping(value = "/adminContest")
 	public String adminContest() {
 		return "content/admin/adminContest";
 	}
-	// 자격증승인페이지 이동
+	// 신고회원페이지 이동
 	@RequestMapping(value = "/adminBanMem")
-	public String adminBanMem() {
+	public String adminBanMem(Model model, CodeVO codeVO) {
+		model.addAttribute("targetCat", service.getCat(codeVO));
 		return "content/admin/adminBanMem";
 	}
-	// 자격증승인페이지 이동
+	// 신고게시글페이지 이동
 	@RequestMapping(value = "/adminBanBrd")
 	public String adminBanBrd() {
 		return "content/admin/adminBanBrd";
 	}
-	// 자격증승인페이지 이동
+	// 회계페이지 이동
 	@RequestMapping(value = "/adminMoney")
 	public String adminMoney() {
 		return "content/admin/adminMoney";
 	}
 	
-
 	// 전체회원리스트 이동 및 회원 수 가져오기
 	@GetMapping("/memberList")
 	public String MemberList(Model model, MemberVO memberVO) {
@@ -82,6 +83,7 @@ public class AdminController {
 		return result;
 	}
 	
+	//자격증 리스트
 	@PostMapping("/certListAjax")
 	@ResponseBody
 	public Map<String, Object> certListAjax(CrtfVO vo, PagingVO paging) {
@@ -116,6 +118,16 @@ public class AdminController {
 		// 리턴할 최종Map(Member,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("punishList", service.punishList(punishVO, paging));
+		result.put("paging", paging);
+		return result;
+	}
+	
+	@PostMapping("/punBrdAjax")
+	@ResponseBody
+	public Map<String, Object> punishBrdList(PunishVO punishVO, PagingVO paging) {
+		// 리턴할 최종Map(Member,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("punishBrdList", service.punishBrdList(punishVO, paging));
 		result.put("paging", paging);
 		return result;
 	}

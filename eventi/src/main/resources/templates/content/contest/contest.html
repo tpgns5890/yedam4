@@ -921,12 +921,13 @@
 		   $("#punish").on('click', function() {
 			   let targetId = $("#targetId").val();
 			   let banCntn = $("#banCntn").val();
-			   
+			   let writer = "[[${contest.writer}]]"
+			   let banType = 'P1';
 			    $.ajax({
 						url : "/punishInsert",
 						method : 'post',
 						contentType : 'application/x-www-form-urlencoded',
-						data : {userId:userId, targetId:cNo, banCntn:banCntn, targetCat:"T01"},
+						data : {userId:userId, targetId:cNo, banType:banType,banCntn:banCntn, targetCat:"T01", writer: writer},
 						beforeSend : function(xhr)
 		                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 		    				xhr.setRequestHeader(header, token);

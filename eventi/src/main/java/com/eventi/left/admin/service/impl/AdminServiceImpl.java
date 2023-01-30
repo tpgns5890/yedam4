@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.eventi.left.admin.mapper.AdminMapper;
 import com.eventi.left.admin.service.AdminService;
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
@@ -39,7 +40,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<CrtfVO> certList(CrtfVO crtfVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.certCount(crtfVO));
-		paging.setPageUnit(3);
+		paging.setPageUnit(10);
 		crtfVO.setFirst(paging.getFirst());
 		crtfVO.setLast(paging.getLast());
 		return adminMapper.certList(crtfVO);
@@ -54,7 +55,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<HashMap<String, Object>> contestList(ContestVO contVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.contCount());
-		paging.setPageUnit(3);
+		paging.setPageUnit(10);
 		contVO.setFirst(paging.getFirst());
 		contVO.setLast(paging.getLast());
 		return adminMapper.contestList(contVO);
@@ -63,9 +64,23 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<PunishVO> punishList(PunishVO punishVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.punishCount(punishVO));
-		paging.setPageUnit(1);
+		paging.setPageUnit(10);
 		punishVO.setFirst(paging.getFirst());
 		punishVO.setLast(paging.getLast());
 		return adminMapper.punishList(punishVO);
+	}
+
+	@Override
+	public List<CodeVO> getCat(CodeVO codeVO) {
+		return adminMapper.getCat(codeVO);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> punishBrdList(PunishVO punishVO, PagingVO paging) {
+		paging.setTotalRecord(adminMapper.punishCount(punishVO));
+		paging.setPageUnit(10);
+		punishVO.setFirst(paging.getFirst());
+		punishVO.setLast(paging.getLast());
+		return adminMapper.punishBrdList(punishVO);
 	}
 }

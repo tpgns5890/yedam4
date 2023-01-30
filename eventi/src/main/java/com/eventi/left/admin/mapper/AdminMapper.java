@@ -3,6 +3,7 @@ package com.eventi.left.admin.mapper;
 import java.util.HashMap;
 import java.util.List;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
@@ -36,5 +37,9 @@ public interface AdminMapper {
 
 	//신고 조회
 	public List<PunishVO> punishList(PunishVO punishVO);
+
+	public List<CodeVO> getCat(CodeVO codeVO);
+
+	public List<HashMap<String, Object>> punishBrdList(PunishVO punishVO);
 
 }
