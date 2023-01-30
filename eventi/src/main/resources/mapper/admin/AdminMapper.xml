@@ -35,6 +35,11 @@
 			<if test="crtfType != null and crtfType != ''">
 				AND CRTF_TYPE = #{crtfType}
 			</if>
+			
+			<!-- 승인상태별 정렬 -->
+			<if test="accpYN != null and accpYN != ''">
+				AND ACCP_YN = #{accpYN}
+			</if>
 
 			<!-- 회원아이디 검색처리 -->
 			<if test="userId != null and userId != ''">
@@ -48,6 +53,11 @@
 			<!-- 승급유형별 정렬 -->
 			<if test="crtfType != null and crtfType != ''">
 				AND CRTF_TYPE = #{crtfType}
+			</if>
+			
+			<!-- 승인상태별 정렬 -->
+			<if test="accpYN != null and accpYN != ''">
+				AND ACCP_YN = #{accpYN}
 			</if>
 
 			<!-- 회원아이디 검색처리 -->
@@ -106,9 +116,11 @@
 						WHERE ACCP_YN = #{accpYN}
 						<include refid="cSelect" />
 						ORDER BY REQ_DATE DESC
-			   <![CDATA[) A 
+			   <![CDATA[
+			   			) A 
 			  	WHERE ROWNUM <= #{last}) 
-		WHERE RN >= #{first}]]>
+		WHERE RN >= #{first}
+					]]>
 	</select>
 
 	<!-- 자격증 count -->
@@ -121,7 +133,7 @@
 	<!-- 자격증 update -->
 	<update id="crtfUpdate">
 		UPDATE CERTIFICATE
-		SET ACCP_YN = #{accpYN}
+		SET ACCP_YN = #{accpYN}, ACCP_DATE = SYSDATE
 		WHERE CRTF_ID = #{crtfId}
 	</update>
 
@@ -166,19 +178,22 @@
 		WHERE RN >= #{first}]]>
 	</select>
 	
-	<!-- 신고 count -->
+	<!-- 회원신고count -->
 	<select id="punishCount" resultType="int">
 		SELECT COUNT(*)
 		FROM PUNISH
-		WHERE ban_type = #{banType}
+		WHERE BAN_TYPE = #{banType}
+		<include refid="pSelect" />
 	</select>
 	
-	<!-- 신고 조회 -->
+	<!-- 회원신고 조회 -->
 	<select id="punishList" resultType="PunishVO">
 	SELECT 	PUN_NO,
 			USER_ID,
 			TARGET_ID,
-			TARGET_CAT,
+			(SELECT CODE_NAME
+			FROM MNCODE
+			WHERE CODE_ID = TARGET_CAT)	TARGET_CAT,
 			DT,
 			BAN_TYPE,
 			BAN_CNTN,
@@ -186,9 +201,50 @@
 	FROM 	(SELECT ROWNUM RN, A.*
 			FROM	(SELECT *
 					FROM PUNISH
-					WHERE ban_type = #{banType}
+					WHERE BAN_TYPE = #{banType}
+					<include refid="pSelect" />
 			<![CDATA[) A 
 			WHERE ROWNUM <= #{last}) 
+		WHERE RN >= #{first}]]>
+	</select>
+	
+	<!-- 신고 where 조건 (where) -->
+	<sql id="pSelect">
+			<!-- 승급유형별 정렬 -->
+			<if test="targetCat != null and targetCat != ''">
+				AND TARGET_CAT = #{targetCat}
+			</if>
+			<!-- 회원아이디 검색처리 -->
+			<if test="userId != null and userId != ''">
+				AND (USER_ID LIKE '%'||#{userId}||'%'
+					OR TARGET_ID LIKE '%'||#{userId}||'%')
+			</if>
+	</sql>
+	
+	<!-- 신고 타겟 코드 조회 -->
+	<select id="getCat" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'T'
+		ORDER BY CODE_ID
+	</select>
+	
+	<select id="punishBrdList" resultType="hashmap">
+		SELECT	PUN_NO,
+				USER_ID,
+				TARGET_ID,
+				TARGET_CAT,
+				DT,
+				BAN_TYPE,
+				BAN_CNTN,
+				BAN_RSLT
+		FROM	(SELECT ROWNUM RN, A.*
+				FROM	(SELECT *
+						FROM 	PUNISH
+						WHERE 	WHERE BAN_TYPE = #{banType}
+						<include refid="pSelect" />
+			   <![CDATA[) A 
+			  	WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
 	</select>
 	

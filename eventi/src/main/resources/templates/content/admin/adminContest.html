@@ -22,6 +22,106 @@
 			padding-top: 50px;
 			background: #eeeeee;
 		}
+		#head-btn {
+			height: 60px;
+			display: flex;
+		}
+
+		.top-button {
+			cursor: pointer;
+			width: 250px;
+			display: flex;
+			height: 100%;
+			margin-right: 10px;
+			background: white;
+			box-shadow: 0 2px 2px 0 rgb(0 0 0/ 20%);
+			align-items: center;
+		}
+
+		.icon-area {
+			width: 50px;
+			height: 100%;
+			display: flex;
+			text-align: center;
+			justify-content: center;
+			align-content: center;
+			flex-wrap: wrap;
+		}
+
+		#icon-area-m {
+			background: #55dbc2;
+		}
+
+		#icon-area-p {
+			background: #f1e254;
+		}
+
+		#icon-area-b {
+			background: #d94844;
+		}
+
+		.images {
+			height: 35px;
+		}
+
+		.number-sec {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+			margin-left: 10px;
+		}
+
+		#list-area {
+			position: inherit;
+			width: 98.9%;
+			height: 83.5%;
+			margin-top: 10px;
+			background: white;
+			padding: 10px;
+		}
+
+		#list-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		#selArea {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: flex-start;
+			margin-right: 5px;
+		}
+		
+		#selArea input{
+			margin-right:5px;
+		}
+		#list-head-right {
+			display: flex;
+			align-items: center;
+		}
+
+		#member-table {
+			margin-top: 10px;
+			width: 100%;
+			text-align-last: center;
+			border-collapse: collapse;
+		}
+		#member-table thead{
+			background-color: #ddd;
+		}
+		#member-table tbody tr:hover{
+      	background-color: #eee;
+  		}
+		#table-div{
+			height:590px;
+		}
+		
+		#member-table th,td{
+			padding: 17px;
+			background-color: rgba(255,255,255,0.2);
+		}
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -171,7 +271,7 @@
 				}
 
 				//페이지 버튼 생성.
-				for (let i = page.startPage; i < page.endPage; i++) {
+				for (let i = page.startPage; i <= page.endPage; i++) {
 					if (page.page == i) {
 						ul.append($("<li/>").text(i).css("font-size", "20px")
 							.css("padding", "10px")

@@ -22,6 +22,106 @@
 			padding-top: 50px;
 			background: #eeeeee;
 		}
+		#head-btn {
+			height: 60px;
+			display: flex;
+		}
+
+		.top-button {
+			cursor: pointer;
+			width: 250px;
+			display: flex;
+			height: 100%;
+			margin-right: 10px;
+			background: white;
+			box-shadow: 0 2px 2px 0 rgb(0 0 0/ 20%);
+			align-items: center;
+		}
+
+		.icon-area {
+			width: 50px;
+			height: 100%;
+			display: flex;
+			text-align: center;
+			justify-content: center;
+			align-content: center;
+			flex-wrap: wrap;
+		}
+
+		#icon-area-m {
+			background: #55dbc2;
+		}
+
+		#icon-area-p {
+			background: #f1e254;
+		}
+
+		#icon-area-b {
+			background: #d94844;
+		}
+
+		.images {
+			height: 35px;
+		}
+
+		.number-sec {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+			margin-left: 10px;
+		}
+
+		#list-area {
+			position: inherit;
+			width: 98.9%;
+			height: 83.5%;
+			margin-top: 10px;
+			background: white;
+			padding: 10px;
+		}
+
+		#list-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		#selArea {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: flex-start;
+			margin-right: 5px;
+		}
+		
+		#selArea input{
+			margin-right:5px;
+		}
+		#list-head-right {
+			display: flex;
+			align-items: center;
+		}
+
+		#member-table {
+			margin-top: 10px;
+			width: 100%;
+			text-align-last: center;
+			border-collapse: collapse;
+		}
+		#member-table thead{
+			background-color: #ddd;
+		}
+		#member-table tbody tr:hover{
+      	background-color: #eee;
+  		}
+		#table-div{
+			height:590px;
+		}
+		
+		#member-table th,td{
+			padding: 17px;
+			background-color: rgba(255,255,255,0.2);
+		}
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -34,30 +134,18 @@
 			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
 			<div id="admin-contents">
 				<h3>
-					<b>자격증관리</b>
+					<b>신고게시글관리</b>
 				</h3>
-				<div id="head-btn">
-					<div id="headbtn-request" class="headbtns">
-						<span class="headbtn-text">승인대기</span>
-					</div>
-					<div id="headbtn-done" class="headbtns">
-						<span class="headbtn-text">승인완료</span>
-					</div>
-					<div id="headbtn-reject" class="headbtns">
-						<span class="headbtn-text">반려목록</span>
-					</div>
-				</div>
 				
 				<div id="list-area">
 					<div id="list-head">
 						<div id="list-head-right">
-							<div id="selArea">
-								전체<input type="radio" name="crtfType" value="">
-								사회자<input type="radio" name="crtfType" value="MC">
-								디자이너<input type="radio" name="crtfType" value="DESIGNER">
-							</div>
-							<div id="searchArea">
-								<input type="text" name="userId">
+							<div>
+								<select th:name="targetCat" id="selArea">
+									<option value=""> ===선택=== </option>
+									<option th:each="Cat : ${targetCat}" th:value="${Cat.codeId}" th:text="${Cat.codeName}"></option>
+								</select>
+								<input type="text" name="userId" id="searchArea">
 							</div>
 						</div>
 					</div>
@@ -66,12 +154,14 @@
 						<table id="cert-table">
 							<thead>
 								<tr>
-									<th>요청자ID</th>
-									<th>자격증이름</th>
-									<th>자격증번호</th>
-									<th>승급종류</th>
-									<th>요청일</th>
-									<th>처리일</th>
+									<th>글번호</th>
+									<th>작성자</th>
+									<th>제목</th>
+									<th>카테고리</th>
+									<th>신고자</th>
+									<th>신고일</th>
+									<th>신고사유</th>
+									<th></th>
 									<th></th>
 								</tr>
 							</thead>
@@ -92,7 +182,6 @@
 			</div>
 		</div>
 		<input type="hidden" name="page" value="1">
-		<input type="hidden" name="accpYN" value="R">
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -104,37 +193,30 @@
 				ajaxList(thispage);
 			}
 			
-			$("#headbtn-request").on('click', function () {
-				$('input[name="page"]').val("1");
-				$('input[name="accpYN"]').val("R");
-				ajaxList();
-			});
-			$("#headbtn-done").on('click', function () {
-				$('input[name="page"]').val("1");
-				$('input[name="accpYN"]').val("Y");
-				ajaxList();
-			});
-			$("#headbtn-reject").on('click', function () {
-				$('input[name="page"]').val("1");
-				$('input[name="accpYN"]').val("N");
-				ajaxList();
-			});
 			$('#selArea').on('change', function () {
+				$('input[name="page"]').val("1");
+				ajaxList();
+			});
+			
+			$('#searchArea').on('change', function () {
+				console.log('change')
 				$('input[name="page"]').val("1");
 				ajaxList();
 			});
 			//비동기 통신
 			function ajaxList(thispage) {
 				let page = $('input[name="page"]').val();
-				let accpYN = $('input[name="accpYN"]').val();
-				let crtfType = $('input:radio[name="crtfType"]:checked').val();
+				let banType = 'P1';
+				let targetCat = $('select[name="targetCat"]').val();
+				let userId = $('input[name="userId"]').val();
 				$.ajax({
-					url: "/admin/certListAjax",
+					url: "/admin/punBrdAjax",
 					method: 'post',
 					data: {
 						page,
-						accpYN,
-						crtfType
+						banType,
+						targetCat,
+						userId
 					},
 					beforeSend: function (xhr) {
 						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -143,14 +225,8 @@
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
 						$('tbody').empty();
-						for (crtf of result.certList) {
-							if(crtf.accpYN == "R"){
-								$('tbody').append(makeTrR(crtf));
-							}else if(crtf.accpYN == "Y"){
-								$('tbody').append(makeTrY(crtf));
-							}else{
-								$('tbody').append(makeTrN(crtf));
-							}
+						for (punish of result.punishList) {
+							$('tbody').append(makeTr(punish));
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
 						$('#returnPaging').empty();
@@ -160,59 +236,24 @@
 			}
 
 			//tr만들기
-			function makeTrR(crtf) {
-				var accpDate = crtf.accpDate;
+			function makeTr(punish) {
+				/* var accpDate = crtf.accpDate;
 				if(!crtf.accpDate){
 					accpDate = '승인대기중';
-				}
+				} */
 				let p = `
 				<tr>
-					<td>${crtf.userId}</td>
-					<td>${crtf.crtfName}</td>
-					<td>${crtf.crtfNum}</td>
-					<td>${crtf.crtfType}</td>
-					<td>${crtf.reqDate}</td>
-					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'Y')" value="${crtf.crtfId}">승인</button><td>
-					<td><button type="button" onclick="updateCrtf(this, 'N')" value="${crtf.crtfId}">거부</button><td>
+					<td>${punish.targetId}</td>
+					<td>${punish.targetId}</td>
+					<td>${punish.dt}</td>
+					<td>${punish.targetCat}</td>
+					<td>${punish.banCntn}</td>
+					<td><button type="button" onclick="updatePunMem(this, 'Y')" value="${punish.punNo}">승인</button><td>
+					<td><button type="button" onclick="updatePunMem(this, 'N')" value="${punish.punNo}">거부</button><td>
 				</tr>`;
 				return p;
 			}
-			function makeTrY(crtf) {
-				var accpDate = crtf.accpDate;
-				if(!crtf.accpDate){
-					accpDate = '승인대기중';
-				}
-				let p = `
-				<tr>
-					<td>${crtf.userId}</td>
-					<td>${crtf.crtfName}</td>
-					<td>${crtf.crtfNum}</td>
-					<td>${crtf.crtfType}</td>
-					<td>${crtf.reqDate}</td>
-					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'N')" value="${crtf.crtfId}">거부</button><td>
-				</tr>`;
-				return p;
-			}
-			function makeTrN(crtf) {
-				var accpDate = crtf.accpDate;
-				if(!crtf.accpDate){
-					accpDate = '승인대기중';
-				}
-				let p = `
-				<tr>
-					<td>${crtf.userId}</td>
-					<td>${crtf.crtfName}</td>
-					<td>${crtf.crtfNum}</td>
-					<td>${crtf.crtfType}</td>
-					<td>${crtf.reqDate}</td>
-					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'Y')" value="${crtf.crtfId}">승인</button><td>
-				</tr>`;
-				return p;
-			}
-
+			
 			// 페이징 만들기
 			function makePaging(page) {
 				if (page.totalRecord == 0) {
@@ -231,7 +272,7 @@
 				}
 
 				//페이지 버튼 생성.
-				for (let i = page.startPage; i < page.endPage; i++) {
+				for (let i = page.startPage; i <= page.endPage; i++) {
 					if (page.page == i) {
 						ul.append($("<li/>").text(i).css("font-size", "20px")
 							.css("padding", "10px")

@@ -3,6 +3,7 @@ package com.eventi.left.admin.service;
 import java.util.HashMap;
 import java.util.List;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
@@ -21,5 +22,9 @@ public interface AdminService {
 	public List<HashMap<String,Object>> contestList(ContestVO contVO, PagingVO paging); // 공모전 조회
 
 	public List<PunishVO> punishList(PunishVO punishVO, PagingVO paging);
+
+	public List<CodeVO> getCat(CodeVO codeVO);
+
+	public List<HashMap<String,Object>> punishBrdList(PunishVO punishVO, PagingVO paging); //신고게시글 조회
 
 }
