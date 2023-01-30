@@ -60,7 +60,6 @@ public class FilesServiceImpl implements FilesService {
 			if (file.exists()) {
 				System.out.println("파일이 있으면");
 				if (file.delete()) {
-					System.out.println("파일이 삭제될려면");
 					result = mapper.deleteFile(No); //타겟번호삭제
 					System.out.println("파일삭제 성공");
 				} else {
@@ -70,6 +69,8 @@ public class FilesServiceImpl implements FilesService {
 				System.out.println("파일이 존재하지 않습니다.");
 			}
 		}
+		
+		System.out.println("===============deleteFile================");
 		return result;
 
 	}

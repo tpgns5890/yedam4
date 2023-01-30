@@ -17,9 +17,9 @@ public class CastingVO {
 	private String clientId;      //의뢰자ID
 	private String eType;         //행사분야
 	private String eIntro;        //행사소개
-	@JsonFormat(pattern = "yyyy/MM/dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date eSdt;            //행사시작날짜
-	@JsonFormat(pattern = "yyyy/MM/dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date eLdt;            //행사마지막날짜
 	private String eStime;        //행사시작시간
 	private String eLtime;        //행사끝나는시간

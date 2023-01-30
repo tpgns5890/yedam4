@@ -347,6 +347,7 @@
 				<form id="castingCntn">
 					<h2>의뢰</h2>
 					<div id="box">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 						<label>사회자</label>
 						<input type="text" id="userId" name="userId" th:value="${mcSelect.userId}" readonly><br>
 						<label>의뢰자</label>
