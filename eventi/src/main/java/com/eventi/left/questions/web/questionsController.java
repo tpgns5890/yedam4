@@ -49,7 +49,7 @@ public class questionsController {
 	}
 
 	// 등록처리
-	@PostMapping("/insert")
+	@PostMapping("/insertQna")
 	public String qestionsInsert(QuestionsVO vo) {
 		qService.questionsInsert(vo); // 등록처리
 		return "redirect:/questions/myqnaList";
