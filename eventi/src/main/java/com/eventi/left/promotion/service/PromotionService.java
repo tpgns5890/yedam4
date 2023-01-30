@@ -33,4 +33,7 @@ public interface PromotionService {
 	
 	//댓글 조회
 	public List<ReplyVO> proReply(ReplyVO replyVO);
+	
+	//마이페이지 작성한 홍보게시글 조회
+	public List<PromotionVO> myPromotionList(PromotionVO promotionVO, PagingVO paging);
 }

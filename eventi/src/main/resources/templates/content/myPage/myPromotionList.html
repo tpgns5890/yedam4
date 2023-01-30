@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+<!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/myPageSide.css">
+<style>
+
+</style>
+</head>
+<body>
+
+	<!-- 2.레이아웃 content적용 -->
+	<div layout:fragment="content" class="content">
+	
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">마이페이지</h2>
+                <div class="module-subtitle font-serif" th:text="홍보게시글관리"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+		
+		<div style="min-height: 700px">
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+
+		<!-- 게시글 검색 -->
+			<form name="searchFrm">
+				제목<input type="text" name="eName" value="">
+				내용<input type="text" name="intro" value="">
+				<input type="hidden" name="page" value="1">
+				<button type="submit">검색</button>
+				<button type="button" id="deleteBtn">게시글삭제</button>
+			</form>
+			
+			
+			<!-- 테이블 -->
+			<div id="table">
+				<table border="1" id="myTable">
+					<thead>
+						<tr>
+							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+							<th>no</th>
+							<th>작성자</th>
+							<th>행사유형</th>
+							<th>제목</th>
+							<th>행사시작일</th>
+							<th>행사종료일</th>
+							<th>조회수</th>
+							<th>작성날짜</th>
+							<th>수정</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="pro : ${promotionList} ">
+							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
+							
+							<!-- 등록된 게시글로 이동 -->
+							<th:block >
+								<td th:text="${pro.proNo}" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|"></td>
+							</th:block>
+							
+							<td th:text="${pro.userId}"></td>
+							<td th:text="${pro.eType}"></td>
+							<td th:text="${pro.eName}"></td>
+							
+							<td th:text="${#dates.format(pro.eSday, 'yyyy-MM-dd')}"></td>
+							
+							<td th:text="${#dates.format(pro.eEday, 'yyyy-MM-dd')}"></td>
+							
+							<td th:text="${pro.see}"></td>
+							<td th:text="${pro.dt}"></td>
+							
+							<th:block >
+								<td><button type="button" id="selete" th:onclick="|location.href='@{proUpdate(proNo=${pro.proNo})}'|">게시글수정</button></td>
+							</th:block>
+							
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+			<!-- 페이징처리 -->
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	<script>
+		//페이지이동 및 검색
+		//페이징개수 변환 myContest 동적쿼리
+		function gopage(i) {
+			//내용초기화
+			$('input[name="eName"]').val('');
+			$('input[name="intro"]').val('');
+			searchFrm.page.value = i;
+			searchFrm.submit();
+		 }
+		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		// tr 전체체크시 모든항목 체크되도록 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
+		})
+		
+
+		//게시글 삭제
+		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
+		
+		function deleteContest(deleteCheck) {
+			let trs = document.querySelectorAll('table>tbody>tr');
+
+			if (!confirm('게시글을 삭제하시겠습니까?')) {
+				return false;
+			} else {
+				for (let i = 0; i < trs.length; i++) {
+					if (trs[i].children[0].children[0].checked) {
+						
+						let cNo = trs[i].children[1].textContent; //체크된 공모번호
+
+						//삭제처리 ajax
+						$.ajax({
+							url: '/proDelete',
+							method: "post",
+							data: {proNo},
+							beforeSend: function (xhr) {
+								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+								xhr.setRequestHeader(header, token);
+							},
+						}).then(res => {
+							if (res == 1) {
+								trs[i].remove(); // tr 화면동적 삭제
+								alert('삭제 완료');
+							} else {
+								alert('삭제 불가능합니다.');
+							}
+						})
+					}
+				}
+			}
+		}
+		
+	</script>
+	</div>
+</body>
+</html>

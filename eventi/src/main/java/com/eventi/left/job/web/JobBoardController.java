@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -127,18 +128,31 @@ public class JobBoardController {
 	}
 	
 	//게시글 수정
-		@PostMapping("/jobUpdate")
-		@ResponseBody //ajax방식
-		public int jobUpdate(JobBoardVO jobBoardVO, MultipartFile[] uploadFile) {
-			return jobService.getJobUpdate(jobBoardVO, uploadFile);
+	@PostMapping("/jobUpdate")
+	@ResponseBody //ajax방식
+	public int jobUpdate(JobBoardVO jobBoardVO, MultipartFile[] uploadFile) {
+		return jobService.getJobUpdate(jobBoardVO, uploadFile);
 			//rttr.addFlashAttribute("result", "게시글 수정 완료!");
-		}
+	}
 	
 	//게시글 삭제
-		@GetMapping("/jobDelete") //th:onclick = location
-		public String  jobDelete(JobBoardVO jobBoardVO) {
-			jobService.jobDelete(jobBoardVO);
-			return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
+	@GetMapping("/jobDelete") //th:onclick = location
+	public String  jobDelete(JobBoardVO jobBoardVO) {
+		jobService.jobDelete(jobBoardVO);
+		return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
 			
-		}
+	}
+	//마이페이지------------------------------------
+	//1.나의 구인게시물관리 페이지이동
+	@GetMapping("/myJobList")
+	public String myJobList(Model model, JobBoardVO jobBoardVO, @ModelAttribute("paging") PagingVO paging) {
+		model.addAttribute("jobList", jobService.myJobList(jobBoardVO, paging));
+		return "content/myPage/myJobList";
+	}
+	//2.내가 구직신청한 게시물 조회
+	@GetMapping("/myApplyList")
+	public String myApplyList(Model model, JobBoardVO jobBoardVO, @ModelAttribute("paging") PagingVO paging) {
+		model.addAttribute("applyList", jobService.myApplyList(jobBoardVO, paging));
+		return "content/myPage/myApplyList";
+	}
 }

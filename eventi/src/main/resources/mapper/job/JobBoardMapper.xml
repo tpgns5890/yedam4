@@ -22,6 +22,17 @@
 		</if>
 
 	</sql>
+	
+	<sql id="search">
+		<where>
+			<if test="title !=null and title != ''">
+				AND TITLE LIKE '%'||#{title}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			</if>
+			<if test="jobCntn!=null and jobCntn!=null != ''">
+				AND JOB_CNTN LIKE '%'||#{jobCntn}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			</if>
+		</where>
+	</sql>	
 	<!-- 구인게시글 전체조회 -->
 	<select id="getJobList" resultType="com.eventi.left.job.service.JobBoardVO">
 		SELECT JOB_NO,
@@ -136,4 +147,63 @@
 		SEE = SEE+1
 		WHERE JOB_NO  = #{jobNo}
 	</update>
+	
+	<!-- 마이페이지 구인게시글 조회 -->
+	<select id="myJobList" resultType="com.eventi.left.job.service.JobBoardVO">
+		SELECT JOB_NO,
+				TITLE,
+				JOB_CNTN,
+				PAY,
+				LOC,
+				code_select(E_TYPE) E_TYPE,
+				W_SDAY,
+				W_EDAY,
+				W_HOUR,
+				QUALIFICATION,
+				PREFERENCE,
+				IMG,
+				USER_ID,
+				DT,
+				CLOSE_DT,
+				CLOSE_DT - SYSDATE AS remain,
+                CNT,
+                RECOUNT,
+                SEE              
+         FROM (SELECT ROWNUM RN, A.* FROM(
+		           SELECT DISTINCT J.*, 
+		                 (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = J.JOB_NO) AS CNT,
+		                 (SELECT COUNT(*) FROM RESUME_BOARD WHERE JOB_NO = J.JOB_NO) AS reCount
+		            FROM JOB_BOARD J, LIKES L, RESUME_BOARD R
+		           WHERE J.JOB_NO = L.TARGET_NO(+)
+		             AND J.JOB_NO = R.JOB_NO(+)
+			<include refid="search" /> 
+		    <include refid="likeSelect" />
+		    
+		<![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<!-- 마이페이지 구직신청게시글 조회 -->
+	<select id="myApplyList" resultType="com.eventi.left.job.service.JobBoardVO">
+		SELECT J.JOB_NO,
+				CODE_SELECT(E_TYPE) E_TYPE,
+				J.TITLE,				      
+				J.W_SDAY,
+				J.W_EDAY,
+				J.PAY,
+				J.LOC,
+				J.CLOSE_DT       
+		FROM (SELECT ROWNUM RN, A.* 
+		       FROM(SELECT * FROM RESUME_BOARD R, JOB_BOARD J
+		WHERE R.JOB_NO = J.JOB_NO
+		
+		<include refid="search" />
+		
+		<![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
+		]]>
+	</select>
 </mapper>

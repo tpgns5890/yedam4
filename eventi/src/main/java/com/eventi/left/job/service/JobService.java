@@ -26,5 +26,10 @@ public interface JobService {
 	
 	//게시글 삭제
 	public int jobDelete(JobBoardVO jobBoardVO);
-
+	
+	//마이페이지 구인게시글 조회
+	public List<JobBoardVO> myJobList(JobBoardVO jobBoardVO, PagingVO paging);
+	
+	//마이페이지 구직신청한 게시글 조회
+	public List<JobBoardVO> myApplyList(JobBoardVO jobBoardVO, PagingVO paging); 
 }

@@ -2,6 +2,7 @@ package com.eventi.left.promotion.mapper;
 
 import java.util.List;
 
+import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.reply.service.ReplyVO;
 
@@ -33,4 +34,8 @@ public interface PromotionBoardMapper {
 	
 	//게시글 개수
 	public int count(PromotionVO promotionVO);
+	
+	//마이페이지 작성한 홍보게시글 조회
+	public List<PromotionVO> myPromotionList(PromotionVO promotionVO);
+	
 }
