@@ -32,6 +32,7 @@
 						  	 FROM likes l JOIN CONTEST c
 							              		 ON C.C_NO = L.TARGET_NO
 							 and l.USER_ID = #{userId}
+							 <![CDATA[ AND c.rprt < 5 ]]>
 	<![CDATA[
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 	]]>
@@ -82,10 +83,12 @@
 	
 	<!-- 게시글에 대한 로그인회원의 좋아요 확인 -->
 	<select id="setTotalRecord" resultType="int">
-		select count(*)
-		from likes
-		where user_id = #{userId}
-		and category = #{category}
+		SELECT COUNT(*)
+		  FROM LIKES L JOIN CONTEST C
+                    	ON L.TARGET_NO = C.C_NO
+		  AND USER_ID = #{userId}
+		  AND L.CATEGORY = #{category}
+         <![CDATA[ AND rprt < 5 ]]>
 	</select>
 	
 </mapper>

@@ -502,11 +502,21 @@ label {
 
 				//Map : 로그인회원의 좋아요 공모전박스생성
 				 function makeBox_map(contest) {
+					 let dDay = 'D-'+contest.DDAY;
 					
+					// 이미지가 없을경우.
 					 if(contest.IMG == null){
 							img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">`
 						}else{
 							img = `<img src="/fileView/${contest.IMG}" style="width: 500px; height: 500px; ">`
+						}
+					
+					// 마감된 공고문 리스트 생성
+					//숫자 문자형 변환 -> - 제거
+					if(contest.DDAY < 0){
+						data = (contest.DDAY).toString();
+						let str = (data.substr(1));
+						dDay = 'D+'+str;
 						}
 					
 					let p = ` 
@@ -516,7 +526,7 @@ label {
 			                  <div class="shop-item-image">${img}
 			                    <div class="shop-item-detail">
 					   				<div>
-					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] D-${contest.DDAY}</h3>
+					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] ${dDay}</h3>
 					   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
 					                  <h3 class="content-box-title font-serif">₩${contest.PAYCOMMA}</h3>
 									   <p>#${contest.STYLE}</p>
