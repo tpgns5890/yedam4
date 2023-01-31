@@ -57,7 +57,7 @@
 								   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
 							        </div>
 							        <div class="btn btn-round btn-b">
-							              <span class="select">상세보기</span>
+							              <span class="select" th:id="${d.dgnNo}">상세보기</span>
 						             </div>
 								</div>
 							</div>
@@ -73,6 +73,7 @@
 					<h3 id="title"></h3>
 					<div id="modelSelect"></div>
 				</div>
+				<div class="modal_layer"></div>
 			</div>
 			
 			<!-- 페이징처리 -->
@@ -107,7 +108,8 @@
 			//응모된 1건의 디자인
 			// 전체 파일리스트+ 정보출력.
 			$('.select').on("click", function(e){
-				let dNo = $(this).parent().prev().children().eq(1).text();
+				let dNo = e.target.id
+				console.log(dNo);
 				
 				$.ajax({
 					url: '/design/ajaxSelect',

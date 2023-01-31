@@ -16,25 +16,33 @@
 		</where>
 	</sql>
 
+	<!-- 검색처리 -->
+   <sql id="search">
+      <if test="ttl != null and ttl != ''">
+         and ttl LIKE '%'||#{ttl}||'%' 
+      </if>
+      <if test="cntn != null and cntn != ''">
+         and cntn LIKE '%'||#{cntn}||'%' 
+      </if>
+   </sql>
 
 	<!-- 공모전1건에 대한 문의+답변 리스트 -->
 	<select id="questionsList" resultType="QuestionsVO">
 		SELECT *
-		FROM ( select ROWNUM RN,
-		A.*FROM(
-		SELECT Q.q_no,
-		Q.USER_ID,
-		Q.TARGET_ID,
-		Q.TTL,
-		Q.CNTN,
-		Q.WRITING_DT,
-		Q.CATEGORY,
-		Q.REREP_TGT,Q.SECRET_YN,
-		NVL(REREP_TGT, Q_NO) GP
-		FROM Questions Q
-		WHERE target_id = #{targetId}
-		AND category = #{category}
-		ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+		FROM ( select ROWNUM RN, A.*FROM(
+				SELECT Q.q_no,
+					Q.USER_ID,
+					Q.TARGET_ID,
+					Q.TTL,
+					Q.CNTN,
+					Q.WRITING_DT,
+					Q.CATEGORY,
+					Q.REREP_TGT,Q.SECRET_YN,
+					NVL(REREP_TGT, Q_NO) GP
+				FROM Questions Q
+				WHERE target_id = #{targetId}
+				AND category = #{category}
+				ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
@@ -44,19 +52,18 @@
 	<select id="myQuestionsList" resultType="QuestionsVO">
 		SELECT B.*,
 		CASE WHEN Q_NO IN (SELECT Q.Q_NO
-		FROM QUESTIONS Q, QUESTIONS A
-		WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
-		ELSE '미답변'
-		END AS ANS
-		FROM ( select ROWNUM RN,
-		A.*FROM(
-		SELECT Q.*, NVL(rerep_tgt, Q_NO) GP
-		FROM Questions Q
-		WHERE category = #{category}
-		and rerep_tgt is null
-		and USER_ID = #{userId}
-		ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
-                        
+							FROM QUESTIONS Q, QUESTIONS A
+							WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
+														ELSE '미답변'
+							END AS ANS
+		FROM ( select ROWNUM RN, A.*FROM(
+				SELECT Q.*, NVL(rerep_tgt, Q_NO) GP
+				FROM Questions Q
+				WHERE category = #{category}
+				and rerep_tgt is null
+				and USER_ID = #{userId}
+				<include refid="search" />
+				ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
 		 <![CDATA[
 			        ) A 
 			    WHERE ROWNUM <= #{last}
@@ -69,14 +76,14 @@
 	<select id="qnaList" resultType="QuestionsVO">
 		SELECT B.*,
 		CASE WHEN Q_NO IN (SELECT Q.Q_NO
-		FROM QUESTIONS Q, QUESTIONS A
-		WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
-		ELSE '미답변'
-		END AS ANS
+							FROM QUESTIONS Q, QUESTIONS A
+							WHERE Q.Q_NO = A.REREP_TGT)  THEN '답변완료'
+														 ELSE '미답변'
+							END AS ANS
 		FROM (SELECT ROWNUM RN, A.*
-		FROM ( SELECT *
-		FROM QUESTIONS QU
-		WHERE USER_ID = #{vo.userId}
+				FROM ( SELECT *
+						FROM QUESTIONS QU
+						WHERE USER_ID = #{vo.userId}
 	    <![CDATA[
 			        ) A 
 			    WHERE ROWNUM <= #{paging.last}
@@ -87,17 +94,17 @@
 
 	<!-- 문의글 1건조회 -->
 	<select id="getQuestions" resultType="QuestionsVO">
-		select *
-		from Questions
-		where category = #{category}
-		and target_id = #{targetId}
-		and q_no = #{qNo}
+		SELECT *
+		FROM QUESTIONS
+		WHERE CATEGORY = #{category}
+		AND TARGET_ID = #{targetId}
+		AND Q_NO = #{qNo}
 	</select>
 
 	<!-- 문의글 1건과 답변1건 조회 -->
 	<select id="getQuestionsList" resultType="QuestionsVO">
 		SELECT *
-		FROM Questions
+		FROM QUESTIONS
 		WHERE Q_NO = #{qNo}
 		OR REREP_TGT = #{rerepTgt}
 		ORDER BY REREP_TGT DESC
@@ -107,7 +114,7 @@
 	<select id="getSeq" resultType="String">
 		SELECT
 		'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
-		FROM Questions
+		FROM QUESTIONS
 	</select>
 	
 	<!-- 게시글 등록 -->
@@ -116,10 +123,10 @@
 			order="BEFORE">
 			SELECT 'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
 			FROM
-			Questions
+			QUESTIONS
 		</selectKey>
 
-		insert into
+		INSERT INTO
 		QUESTIONS(Q_NO,USER_ID,TARGET_ID,TTL,CNTN,WRITING_DT,SECRET_YN,CATEGORY,REREP_TGT)
 		values( #{qNo},
 		#{userId},
@@ -134,18 +141,18 @@
 	</insert>
 
 	<update id="questionsUpdate">
-		update QUESTIONS
-		set CNTN= #{Cntn},
+		UPDATE QUESTIONS
+		SET CNTN= #{Cntn},
 		WRITING_DT = current_date,
 		SECRET_YN = #{secretYn}
-		where q_no = #{qNo}
-		and user_id = #{userId}
+		WHERE Q_NO = #{qNo}
+		AND USER_ID = #{userId}
 	</update>
 
 	<delete id="questionsDelete">
-		delete questions
-		where q_no = #{qNo}
-		and user_id =#{userId}
+		DELETE QUESTIONS
+		WHERE Q_NO = #{qNo}
+		AND USER_ID =#{userId}
 	</delete>
 
 	<!-- 전체 게시글 문의개수 -->
@@ -157,12 +164,11 @@
 
 	<!-- 회원의 마이페이지 문의게시글에 대한 개수 -->
 	<select id="targetCount" resultType="int">
-		SELECT count(*)
+		SELECT COUNT(*)
 		FROM
-		Questions Q
-		WHERE category = #{category}
-		and user_id = #{userId}
-		and
-		rerep_tgt is null
+		QUESTIONS Q
+		WHERE CATEGORY = #{category}
+		AND USER_ID = #{userId}
+		AND	REREP_TGT IS NULL
 	</select>
 </mapper>

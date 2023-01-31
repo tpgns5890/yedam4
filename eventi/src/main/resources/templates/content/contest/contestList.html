@@ -48,9 +48,7 @@ label {
 					
 					<!-- 회원 좋아요버튼-->
 					<th:block sec:authorize="isAuthenticated()">
-							<div id="header">
-								<div id="love" class="stage heart" onclick="likeClick(this)"></div>
-							</div>
+							<div id="love" class="stage heart" onclick="likeClick(this)"></div>
 					</th:block>
 				</div>
           
@@ -254,27 +252,28 @@ label {
 						img = `<img src="/fileView/${contest.img}" style="width: 500px; height: 500px; ">`
 					}
 					let p = ` 
-								<div class="col-sm-6 col-md-4 col-lg-4" >
+								<div class="col-sm-6 col-md-4 col-lg-4">
 					                <div id="${contest.cNo}" class="shop-item" >
-							  		<div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
-					                  <div class="shop-item-image">${img}
-					                    <div class="shop-item-detail">
-							   				<div>
-							   				  <h3 class="content-box-title font-serif">[${contest.category}] D-${contest.dDay}</h3>
-							   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
-							                  <h3 class="content-box-title font-serif">₩${contest.payComma}</h3>
-							                  <span>#${contest.style}</span>
-							                  <p>
-													신고<span id="rprt">${contest.rprt}</span>
-													조회<span id="inq">${contest.inq}</span>
-													좋아요<span id="likes">${contest.likes}</span>
-											   </p>
-											</div>
-					                    	<a href="../contest/select?cNo=${contest.cNo}" class="btn btn-round btn-b">
-					                    	<span class="icon-magnifying-glass">상세조회</span></a>
-					                    </div>
-					                  </div>
-					                </div>
+								  		  <div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;">
+								  		  </div>
+						                  <div class="shop-item-image">${img}
+							                    <div class="shop-item-detail">
+										   				<div>
+										   				  <h3 class="content-box-title font-serif">[${contest.category}] D-${contest.dDay}</h3>
+										   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
+										                  <h3 class="content-box-title font-serif">₩${contest.payComma}</h3>
+										                  <span>#${contest.style}</span>
+										                   <p>
+																신고<span id="rprt">${contest.rprt}</span>
+																조회<span id="inq">${contest.inq}</span>
+																좋아요<span id="likes">${contest.likes}</span>
+														   </p>
+														 </div>
+							                    		 <a href="../contest/select?cNo=${contest.cNo}" class="btn btn-round btn-b">
+							                    		<span class="icon-magnifying-glass">상세조회</span></a>
+							                    </div>
+						                  </div>
+						              </div>
 					              </div> `;
 					return p;
 				}
@@ -465,7 +464,7 @@ label {
 
 									//전체하트가 눌려진 상태로 재실행
 									if ($("#love").hasClass("active")) { 
-										loveClick();
+										likeClick();
 										
 									//기본 정렬리스트 재실행
 									}else{

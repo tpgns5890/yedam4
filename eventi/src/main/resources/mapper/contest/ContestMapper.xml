@@ -47,10 +47,7 @@
 	      
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(
-			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,style
-			            	  ,(select count(*) 
-				                from PUNISH
-				                where target_Id = c_no)AS rprt
+			            SELECT c_no,writer,ttl,cntn,category,dt_reg,dt_cls,dt_extns,pay,save,inq,style,rprt
                               ,CASE WHEN dt_extns IS NOT NULL 
                                     THEN  trunc(dt_extns) - trunc(sysdate) 
                                     ELSE  trunc(dt_cls) - trunc(sysdate)
@@ -240,7 +237,6 @@
 	<delete id="deleteContest">
 		delete contest
 		where c_no = #{cNo}
-		and writer = #{writer}
 	</delete>
 	
 	<!-- 결제후 공모전 등록 시퀀스번호 찾기 -->

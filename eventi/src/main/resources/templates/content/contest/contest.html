@@ -51,14 +51,24 @@
 								<h4 th:text="|#${contest.style}|" style="color: #117bd9"></h4>
 						</div>
 						
-						<!-- 신고수 -->
+						<!-- 신고수 및 버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<span onclick="login()" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+							<span onclick="login()" style='font-size: 20px;'>&#128680;</span>
+							<span th:text=${contest.rprt}></span>
 						</th:block>
 						
 						<th:block sec:authorize="isAuthenticated()">
-							<span id="modalUp" style='font-size: 20px;'>&#128680;</span><span th:text=${contest.rprt}></span>
+								<th:block th:if="|${session.member.getUserId()}| != ${contest.writer} ">
+									<span id="modalUp" style='font-size: 20px;'>&#128680;</span>
+								</th:block>
+								<th:block th:if="|${session.member.getUserId()}| == ${contest.writer} ">
+									<span style='font-size: 20px;'>&#128680;</span>
+								</th:block>
+									<span th:text=${contest.rprt}></span>
 						</th:block>
+						
+						
+						
 						
 						<!-- 조회수 -->
 						 <span style='font-size: 30px;'>&#128065;</span>
@@ -127,7 +137,7 @@
 							</div>
 
 							<!-- 공모전 작성자만 -->
-							<div class="contestBtn" th:if="|${session.member.getUserId()}| == ${contest.writer} " >
+							<div class="contestBtn" th:if="|${session.member.getUserId()}| == ${contest.writer} or |${session.member.getUserId()}| eq 'admin' " >
 									<button id="updateDate" type="button" class="w-btn w-btn-gra1">마감연장</button>
 									<button id="contestUpdate" type="button" class="w-btn w-btn-gra1">수정</button>
 									<button id="delBtn" type="button" class="w-btn w-btn-gra1">삭제</button>
@@ -159,7 +169,7 @@
 							</div>
 						</div>
 						<div>
-							<div class="block-27" id="returnPaging"></div>
+							<div class="block-27" id="returnPaging" style="width: 100px; margin: 0 auto"></div>
 						</div>
 					</div>
 				</div>
@@ -204,6 +214,7 @@
 				<h3 id="title"></h3>
 				<div id="modelSelect"></div>
 			</div>
+			<div class="modal_layer"></div>
 		</div>
 		
 		<!-- 참여작 페이지처리를 위한 히든인풋. -->
@@ -351,7 +362,7 @@
 				
 			})
 		};
-		
+	
 		//요청사항/문의내용/참여작 버튼이벤트-----------------------------------------------------------
 		$('#liCntn').on('click', contentSelect);
 		$('#liQuestions').on('click', questions);
@@ -368,7 +379,6 @@
 		//문의사항 페이징.
 			if(id == "questions"){
 				$('#questionsPage').val(i);
-				console.log($('#questionsPage').val());
 				questions();
 			}
 		}
@@ -513,6 +523,7 @@
 				//기존 박스 지우기
 				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
+				$("#designBox").empty();
 				
 				//작성자가 아니면 문의사항 입력박스 출력
 				if(userId != writer){
@@ -733,14 +744,14 @@
 		
 		//참여작 생성(공개)
 		function makeDesignNo(design){
-   			let div = `<div class="col-sm-6 col-md-4 col-lg-4">
-				           <div id="${design.dgnNo}" class="shop-item">
-				                <div class="shop-item-image">
+   			let div = `<div class="col-sm-6 col-md-4 col-lg-4" >
+				           <div class="shop-item">
+				                <div class="shop-item-image"  >
 				                	<img src="/fileView/${design.sevNm}" style="width: 340px; height: 340px">
 				                </div>
 				                <div class="shop-item-detail">
 				               		 <h3 class="content-box-title font-serif">${design.dgnNo}</h3>
-				                  	<span class="icon-magnifying-glass btn btn-round btn-b">상세조회</span></a>
+				                  	<span  id="${design.dgnNo}" class="icon-magnifying-glass btn btn-round btn-b">상세조회</span></a>
 				           	    </div>
 				    		</div>
 				    	</div>
@@ -749,19 +760,17 @@
    		}
 		//참여작 생성(비공개)   
 		function makeDesignYes(design){
-   			let div = `<ul style="list-style: none"> 
-		                  <li class="comment">
-		                    <div class="comment-body" id="${design.dgnNo}" style="float: left; margin-left: 20px; margin-botton: 20px;">
-		                  	  <img src="/images/public.jpg" class=" icon-lock" style="width: 340px; height: 340px"></a>
-		                      <div class="meta">${design.dgnNo}</div>
-		                   </li>
-                   		 </ul> `
+   			let div = `<div class="col-sm-6 col-md-4 col-lg-4"> 
+   							<div class="shop-item-image">
+		                  	  <img id="${design.dgnNo}"  src="/images/secret.jpg" class=" icon-lock" style="width: 340px; height: 340px">
+                  		 	</div>
+                  	  </div> `
    			return div;
    		}
 		
 		//디자인 공개여부 모달창---------------------------------------------------------------
 		$('#designBox').on("click", function(e){
-			let dNo = $(this).children('div').children('div').attr("id");
+			let dNo = e.target.id
 			designModel.style.display = "block";
 			
 			$.ajax({

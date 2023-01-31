@@ -1,3 +1,7 @@
+ul {
+	padding: 0px;
+	list-style: none;
+}
 .contest {
 	width: 80%;
 	margin: 0 auto;
@@ -62,7 +66,7 @@ form[name="designSearchFrm"], form[name="searchFrm"] {
 }
 
 table {
-	width:60%;
+	width:1000px;
 	margin: 0 auto;
 	margin-top: 10px;
 	margin-bottom: 50px;
