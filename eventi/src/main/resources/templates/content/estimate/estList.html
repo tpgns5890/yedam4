@@ -33,32 +33,20 @@ tbody>tr:hover {
 				</tr>
 			</thead>
 			<tbody id="check">
-				<!-- 	<tr th:each="est : ${estList}" th:onclick="|location.href='@{estDetail(eno=${est.eno})}'|">
-				<td th:text=${est.eno}></td> 
-				<td th:text=${est.eventType}></td>
-				<td th:text=${est.writingDate}></td>
-				<td th:text=${est.adoptionYn}></td>
-			</tr> -->
 			</tbody>
 		</table>
-		<button onclick="test()">테스트</button>
 		<!-- 페이징 처리 -->
 		<div class="row mt-5" id="paging">
 			<div class="col text-center">
 				<div class="block-27" id="returnPaging"></div>
 			</div>
 		</div>
+		<input type="hidden" id="yn" value="${eList.adoptionYn}">
 		<input type="hidden" name="page" value="1">
 		<script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 ajaxList();
-
-function test() {
-	if(window.sessionStroage.getItem("member")== null){
-		alert("로그인해주세요.")
-	}
-}
 
 function gopage(i) {
 	let page = $('input[name="page"]').val(i);
@@ -94,19 +82,33 @@ function ajaxList() {
 
 //tr만들기
 function makeTr(eList) {
+	var yn = `${eList.adoptionYn}`;
+	console.log(yn);
 	let p = "";
 	var member = '[[${session.member != null ? session.member.userId :''}]]';
+	//비회원 클릭시 로그인 창 띄우기
 	if(member == ""){
+		if(yn == 'N'){
 		p = `
 			<tr onclick="alert('로그인 후 이용해주세요.');login();">
 				<td>${eList.eno}</td> 
 				<td>${eList.eventType}</td>
 				<td>${eList.writingDate}</td>
-				<td>${eList.adoptionYn}</td>
+				<td>채택전</td>
 			</tr>`;
 		return p;
+		}
+		else {
+			p = `
+				<tr onclick="alert('로그인 후 이용해주세요.');login();">
+					<td>${eList.eno}</td> 
+					<td>${eList.eventType}</td>
+					<td>${eList.writingDate}</td>
+					<td>채택완료</td>
+				</tr>`;
+			return p;
+		}
 	}
-	console.log("로그인아이디"+member)
 	 p = `
 	<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
 		<td>${eList.eno}</td> 
@@ -163,6 +165,7 @@ function makePaging(page) {
 	pagination.append(ul);
 	return pagination;
 }
+
 //로그인 창 띄우기
 function login(){
 	 $("#header_modal").show();

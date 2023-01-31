@@ -25,6 +25,7 @@ public class EstVO {
 	private String eventDuration; //행사소요시간
 	private String expectedLocal; //행사예상지역
 	private String wishes; //행사희망사항
+	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date writingDate; //작성일시
 	private String adoptionYn; //제안서 채택유무
 	

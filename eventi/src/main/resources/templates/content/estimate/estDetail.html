@@ -89,6 +89,7 @@ button {
         <label for="title" id="title">행사 관련 희망사항을 알려주세요.</label>
     <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
     <input type="hidden" id="thisEno" th:value="${est.eno}">
+    <input type="hidden" id="thisUserId" th:value="${est.userId}">
   </form>
 </div>
 <!-- Button trigger modal -->
@@ -98,7 +99,7 @@ button {
  	</th:block>
  	<!-- 로그인된 회원 버튼표시-->	
 <th:block sec:authorize="isAuthenticated()">			
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop">제안서 작성</button>
+ <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop">제안서 작성</button>
  	</th:block>
  <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -121,7 +122,6 @@ button {
 	    <th><input type="checkbox" id="all_select"></th>	
 		<th>물품명</th>
 		<th>금액</th>
-		<th>개수</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -190,7 +190,6 @@ button {
 		<tr>	
 		<th>물품명</th>
 		<th>금액</th>
-		<th>개수</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -228,6 +227,16 @@ button {
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
+//업체회원 아닐시 제안서 작성불가 알림
+$('#prop').on('click', function(){
+	var userId = '[[${session.member != null ? session.member.userId :''}]]';
+	if(userId.indexOf('bu') == -1){
+		alert('업체회원만 작성할 수 있습니다.')
+		return false;
+	}
+	console.log(userId.indexOf('bu'))
+})
+
 //해당업체의 등록된물품 조회
   $(function() {
 var userId = $('input[name="sessionId"]').val();
@@ -247,8 +256,8 @@ var data = {"userId" : userId};
 				var tr = $("<tr />").append($("<input type=checkbox name=chk>"))
 				var goodsNm = $("<td />").append(goods.goodsNm);
 				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
-				var stock = $("<td class='stock'/>").append(goods.stock);
-				tr.append(goodsNm, rentalPrc, stock)
+				//var stock = $("<input name=stock/>").append(goods.stock);
+				tr.append(goodsNm, rentalPrc)
 				$('#myGdList>tbody').append(tr);
 			})
          },
@@ -267,8 +276,7 @@ var data = {"userId" : userId};
 		var total = 0; //전체합
 		for(let i = 0; i < goods.length; i++){
 		if($('#myGdList tbody tr').eq(i).find('input').is(":checked")) {
-		 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html())
-		 			  * parseInt($('#myGdList tbody tr').eq(i).find('td').eq(2).html());
+		 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html());	  
 		 }
 		}
 		 var inputVal = parseInt($('#etcList input').val());
@@ -308,10 +316,16 @@ var data = {"userId" : userId};
  });
  //견적서 삭제
  $('#deleteBtn').on("click", function(){
+	 var thisUserId = $('#thisUserId').val();
      var thisEno = $('#thisEno').val();
      var userId = $('#deleteBtn').val();
      var data = {"eno": thisEno, "userId": userId};
-   
+     
+     //해당견적서 작성자 아닐시 삭제불가
+	 if(userId != thisUserId) {
+		 alert('작성자만 삭제할 수 있습니다.')
+		 return false;
+	 }   
 	 if(!confirm('삭제하시겠습니까?')) {
 		 return false;
 	 }
@@ -416,8 +430,8 @@ var data = {"userId" : userId};
         				var tr = $("<tr />")
         				var goodsNm = $("<td />").append(goods.goodsNm);
         				var unitPrc = $("<td class='prc'/>").append(goods.unitPrc);
-        				var count = $("<td class='stock'/>").append(goods.count);
-        				tr.append(goodsNm, unitPrc, count)
+        				//var count = $("<td class='stock'/>").append(goods.count);
+        				tr.append(goodsNm, unitPrc)
         				$('#fixedGdList tbody').append(tr);
         			})
                  },
