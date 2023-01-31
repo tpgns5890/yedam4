@@ -92,6 +92,7 @@
                     <div class="post-meta" th:text=${proDetail.proNo} id="proNo"  >By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Photography, </a><a href="#">Web Design</a>
                     </div>
                   </div>
+                 
                    <div class="post-entry" >
                     <p th:text=${proDetail.userId}> The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
                     <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
@@ -104,6 +105,9 @@
                       <li th:text=${proDetail.accommodate}>Their separate existence is a myth.</li>
                     </ul>
                     <p th:text=${proDetail.see}>The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                    
+                    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+  				 <th:block th:if="${session.member.userId} == ${proDetail.userId}">
                     <div class="tag-widget post-tag-container mb-5 mt-5">
 						<div class="tagcloud">
 							<a href="#" class="tag-cloud-link"
@@ -112,6 +116,8 @@
 								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
 						</div>
 					</div>
+				</th:block>	
+				
                   </div>
                 </div>
                 
@@ -136,7 +142,8 @@
                 </div>
                 <div class="post">
                   <div class="post-video embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/Jkk0VHiCnKY" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                  	<video th:each="file : ${files}" th:if="${#strings.containsIgnoreCase(file,'.mp4')}" th:src="|/fileView/${file.sevNm}|" width="500px" height="200px" controls></video>
+                   <!--  <iframe class="embed-responsive-item" src="//www.youtube.com/embed/Jkk0VHiCnKY" frameborder="0" allowfullscreen="allowfullscreen"></iframe> -->
                   </div>
                   <div class="post-header font-alt">
                     <h2 class="post-title"><a href="#">Post with video</a></h2>

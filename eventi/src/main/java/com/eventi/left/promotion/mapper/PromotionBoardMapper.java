@@ -2,7 +2,9 @@ package com.eventi.left.promotion.mapper;
 
 import java.util.List;
 
-import com.eventi.left.contest.service.ContestVO;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.reply.service.ReplyVO;
 
@@ -21,10 +23,10 @@ public interface PromotionBoardMapper {
 	public String getSeq();
 	
 	//게시글 등록
-	public int proInsert(PromotionVO promotionVO);
+	public int proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//게시글 수정
-	public int proUpdate(PromotionVO promotionVO);
+	public int proUpdate(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//게시글 삭제
 	public int proDelete(PromotionVO promotionVO);

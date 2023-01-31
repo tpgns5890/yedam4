@@ -8,61 +8,92 @@
 
 <head>
 <style>
-.label{
-color: black;
-}
-#modal {
-			display: none;
-			position: fixed;
-			top: 25em;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 1;
-			width: 100%;
+	.label{
+	color: black;
+	}
+	#modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
 
-		}
+	}
 
-		#modal h2 {
-			margin: 0;
-		}
+	#modal h2 {
+		margin: 0;
+	}
 
-		#modal button {
-			display: inline-block;
-			width: 100px;
-			border: 0.2px solid black;
-			border-radius: 5px;
-		}
+	#modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
 
-		#modal .modal_content {
-			width: 350px;
-			min-height: 200px;
-			margin: 0 auto;
-			padding: 20px;
-			background: #fff;
-			border: 0.5px solid #666;
-			border-radius: 15px;
-		}
+	#modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
 
-		#modal .modal_layer {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.5);
-			z-index: -1;
-		}
+	#modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
 
-		#modal_login_btn {
-			background: #2fb380;
-		}
+	#modal_login_btn {
+		background: #2fb380;
+	}
 
-		#button_box {
-			display: flex;
-			margin-top: 40px;
-			justify-content: flex-end;
-		}
+	#button_box {
+		display: flex;
+		margin-top: 40px;
+		justify-content: flex-end;
+	}
+	
+	ul {
+  		padding: 16px 0;
+	}
+	
+	ul li {
+	  display: inline-block;
+	  margin: 0 5px;
+	  font-size: 14px;
+	  letter-spacing: -.5px;
+	}
+	
+	ul li.tag-item {
+	  padding: 4px 8px;
+	  border-radius : 10px;
+	  background-color: pink;
+	  color: #000;
+	}
+	
+	.tag-item:hover {
+	  background-color: #262626;
+	  color: #fff;
+	}
+	
+	.style-del-btn{
+		font-size: 12px;
+	  	font-weight: bold;
+	  	cursor: pointer;
+	 	margin-left: 8px;
+	}
+	
 </style>
 </head>
 <div layout:fragment="content">
@@ -117,10 +148,12 @@ color: black;
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">행사유형</label> 
-								<select id="eType" name="eType">
+								<select id="eType" name="eType" onchange="jobStyle(this)">
 									<option value="">행사유형을 선택해 주세요.</option>
 									<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 								</select>
+								<!-- <input type="hidden" value="" name="eTypeList" id="eTypeList" />-->
+             					<ul id="eTypeTag"></ul>
 							</div>
 						</div>
 						
@@ -230,12 +263,7 @@ smartEditor = function() {
 $(document).ready(function() {
 	smartEditor()
 })
-		
-$('#insert').on('click', function insert() {
-			 oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
-			let jobCntn = document.getElementById("jobCntn").value //태그 생성 
-		})
-		
+
 	//파일 업로드 이미지 미리보기
 	    //파일 INPUT창에 변화가 있을 경우 실행
 	    $("#imgInp").on('change', function() {
@@ -267,7 +295,16 @@ $('#insert').on('click', function insert() {
 	    	//file영역에 있던 값 삭제
 	    	$("#imgInp").val('');
 	    })
-	    
+	    //태그 속성 지정
+		$('#insert').on('click', function insert() {
+					 oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
+					let jobCntn = document.getElementById("jobCntn").value //태그 생성 
+			
+		//행사유형: 하나의 값만 넣어야함
+		/* var eTypeList = eTag();
+	    $("eTypeList").val(eTypeList);
+		}) */
+		
 	    //임시저장 체크박스를 클릭했을 경우
 	    $('#save').click(function(){
 	    	if($('#save').is(':checked')){
@@ -363,6 +400,53 @@ $('#insert').on('click', function insert() {
 				}
 	    })
 	    }
+	    //스타일태그
+	    function jobStyle(e){
+	    	 let tagText = e.options[e.selectedIndex].text;
+	  		 let tagValue = e.options[e.selectedIndex].value;
+	     	 
+	      	// 값이 없으면 동작 안합니다.
+	           if (tagValue !== "") {
+
+	             // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+	             var result = Object.values(eTag).filter(function (word) {
+	                 return word === tagValue;
+	               })
+
+	             // 태그 중복 검사
+	             if (result.length == 0) {
+	            	 $("#eTypeTag").empty(); 
+	               $("#eTypeTag")
+	                 .append("<li class='tag-item'>" + tagText + "<span class='style-del-btn' idx='" + eTypeCounter + "'>x</span></li>");
+	               eTypeAddTag(tagValue);
+	             } else {
+	               alert("태그값이 중복됩니다.");
+	             }
+	           }
+	    }
+	    
+	    //태그
+	    var eTag = {};
+	    var eTypeCounter = 0;
+	    
+	 	//입력한 값을 태그로 생성한다.
+        function eTypeAddTag (value) {
+        	eTypeTag[eTypeCounter] = value;
+        	eTypeCounter++;  // del-btn 의 고유 id 가 된다.
+        }
+	 	//서버로 보냄
+	 	function eTag () {
+            return Object.values(eTypeTag).filter(function (word) {
+                return word !== "";
+            });
+        }
+	 	
+	 	//삭제버튼
+	 	$(document).on("click", ".style-del-btn", function (e) {
+            var index = $(this).attr("idx");
+            eTag[index] = "";
+            $(this).parent().remove();
+        });
 	</script>
 </div>
 </html>

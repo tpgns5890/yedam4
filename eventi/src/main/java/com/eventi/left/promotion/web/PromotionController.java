@@ -30,16 +30,14 @@ public class PromotionController {
 
 	@Autowired 
 	PromotionService proService;
-	//댓글 service
-	@Autowired
-	ReplyService service;
-	//파일 service
+	@Autowired ReplyService service;
 	@Autowired FilesService filesService;
 	@Autowired CodeService codeService;
 	
 	//홍보게시물 전체조회
 	@RequestMapping(value = "/proList", method=RequestMethod.GET)
 	public String proList(Model model, PromotionVO promotionVO, PagingVO paging) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
 		//paging.setPageSize(4);
 		//promotionVO.setOrderCol("see");
@@ -51,18 +49,19 @@ public class PromotionController {
 		//사진파일
 		List<FilesVO> files = new ArrayList<>();
 		for(PromotionVO content : contents) {
-			files = filesService.fileList(content.getProNo());
+			files = filesService.fileList(content.getUserId());
+			content.setFiles(files);
 			
 			//파일리스트 저장된 파일정보가 홍보번호와 같다면 이미지셋팅.
-			for(FilesVO file : files) {
-				if(file.getTargetId().equals(content.getProNo())) {
-					content.setImg(file.getSevNm());
-				}
-			}
+			/*
+			 * for(FilesVO file : files) {
+			 * if(file.getTargetId().equals(content.getUserId())) {
+			 * content.setImg(file.getSevNm()); } }
+			 */
 		}
 		model.addAttribute("proList", contents);
 		//이미지
-		model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
+		//model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 		return "content/promotion/proList";
 	}
 	
@@ -76,29 +75,37 @@ public class PromotionController {
 	//게시글상세조회
 	@RequestMapping(value = "/proDetail", method=RequestMethod.GET) 
 	public String proDetail(Model model, PromotionVO promotionVO, ReplyVO replyVO, PagingVO paging) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
 		promotionVO.setLast(4);
 		promotionVO.setFirst(1);
 		promotionVO.setOrderCol("see");
 		
-		List<PromotionVO> contents = proService.proList(promotionVO, paging);
-
-		model.addAttribute("contents", contents);
+		/*
+		 * List<PromotionVO> contents = proService.proList(promotionVO, paging);
+		 * model.addAttribute("contents", contents);
+		 */
+		
 		//조회수
 		proService.seeUp(promotionVO);
-		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		
 		//상세내용
 		model.addAttribute("proDetail", proService.proDetail(promotionVO));
-		//이미지
-		model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
+		
+		//사진 및 동영상
+		List<FilesVO> files = new ArrayList<>();
+		files = filesService.fileList(promotionVO.getUserId());
+		model.addAttribute("files", files);
+		/* model.addAttribute("file", filesService.fileList(promotionVO.getProNo())); */
 		return "content/promotion/proDetail";
 	}
 		
-	//게시글등록폼이동
+	//게시글등록폼이동 
 		@RequestMapping(value = "/proInsert", method=RequestMethod.GET) 
-		public String proInsert(Model model, PromotionVO promotionVO) {
+		public String proInsert(Model model, PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+			//option 코드 가져오기
 			model.addAttribute("nextNo", proService.getSeq());
-			model.addAttribute("types", codeService.getType());
+			model.addAttribute("types", codeService.getType()); 
 			return "content/promotion/proInsert";
 		}
 	
@@ -106,22 +113,27 @@ public class PromotionController {
 		@PostMapping("/proInsert")
 		public String proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 			proService.proInsert(promotionVO, filesVO, uploadFile); //값이 vo자동으로 저장
+			//String userId = promotionVO.getUserId();
 			return "redirect:/proList";
 		}		
 	
 	//게시글수정페이지로이동
 		@RequestMapping(value = "/proUpdate", method=RequestMethod.GET) 
 		public String proUpdate(Model model, PromotionVO promotionVO) {
+			//정보 가져오기 
 			model.addAttribute("proUpdate", proService.proDetail(promotionVO));
-			//이미지
-			model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
+			//사진 및 동영상
+			List<FilesVO> files = new ArrayList<>();
+			files = filesService.fileList(promotionVO.getUserId());
+			model.addAttribute("files", files);
+			/* model.addAttribute("file", filesService.fileList(promotionVO.getProNo())); */
 			return "content/promotion/proUpdate";
 		}
 		
 	//게시글 수정
 		@PostMapping("/proUpdate")
-		public String proUpdate(PromotionVO promotionVO, MultipartFile uploadFile) {
-			proService.proUpdate(promotionVO, uploadFile );
+		public String proUpdate(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+			proService.proUpdate(promotionVO, filesVO, uploadFile);
 			return "redirect:/proList";
 		}
 

@@ -1,6 +1,5 @@
 package com.eventi.left.promotion.service.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +49,12 @@ public class PromotionServiceImpl implements PromotionService{
 	//게시글 등록
 	@Override
 	public int proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
-		int r = proMapper.proInsert(promotionVO);
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		//사진등록
+		int r = proMapper.proInsert(promotionVO, filesVO, uploadFile);
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadFile, promotionVO.getProNo(), "T02");
+			list = newUp.uploadFiles(uploadFile, promotionVO.getUserId(), "T02");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,22 +63,26 @@ public class PromotionServiceImpl implements PromotionService{
 
 	//게시글 수정
 	@Override
-	public int proUpdate(PromotionVO promotionVO, MultipartFile uploadFile) {
-		
-		//사진등록
-		String realFolder = "/files/pro";
-		File dir = new File(realFolder);
-		if(!dir.isDirectory()) {
-			dir.mkdirs();
+	public int proUpdate(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		//사진첨부 
+		if(uploadFile[0].getOriginalFilename() !="") {
+			promotionVO.setImg(uploadFile[0].getOriginalFilename());
 		}
-						
-		//파일 이름 저장
-		String img = uploadFile.getOriginalFilename();
-						
-		//VO에 IMG 부분에 파일 이름 저장
-		promotionVO.setImg(img);
+		uploadFiles(uploadFile, promotionVO);
+		int r = proMapper.proUpdate(promotionVO, filesVO, uploadFile);
 		
-		return proMapper.proUpdate(promotionVO);
+		return r; 
+	}
+
+	//파일 업로드
+	public void uploadFiles(MultipartFile[] uploadFile, PromotionVO promotionVO) {
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.uploadFiles(uploadFile, promotionVO.getUserId(), "T02");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	//게시글 삭제
