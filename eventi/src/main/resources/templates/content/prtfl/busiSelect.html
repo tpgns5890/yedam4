@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/default_layout}">
+   
+<head>
+<!-- csrf 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<link href="/css/star.css" rel="stylesheet">
+
+<style>
+	footer {
+		display: none;
+	}
+
+	* {
+	  box-sizing: border-box;
+	}
+	
+	#check{
+		min-height : 2000px;
+	}
+
+	#left {
+	  float: left;
+	  width: 30%;
+	  height: 300px; /* only for demonstration, should be removed */
+	  padding: 20px;
+	}
+	
+	article {
+	  float: left;
+	  padding: 20px;
+	  width: 70%;
+	  height: 300px; /* only for demonstration, should be removed */
+	}
+	
+	.border {
+		border: 1px solid black;
+		border-radius: 5px;
+		padding: 5px;
+	}
+	
+	.label {
+		color : black;
+	}
+	
+	#btn {
+		width: 250px;
+		margin:auto;
+        display:block;
+        margin-bottom: 3px;
+	}
+	
+	.heart {
+	  width: 100px;
+	  height: 100px;
+	  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+	  background-position: 0 0;
+	  cursor: pointer;
+	  transition: background-position 1s steps(28);
+	  transition-duration: 0s;
+	 }
+	 
+	 .active {
+	    transiion-duration: 1s;
+	    background-position: -2800px 0;
+	  }
+	  
+	  #love{
+	  	float: right;
+	  }
+	  
+   .modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.modal h2 {
+		margin: 0;
+	}
+
+	.modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
+
+	.modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
+
+	.modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.box {
+	    width: 150px;
+	    height: 150px; 
+	    border-radius: 100%;
+	    overflow: hidden;
+	    text-align: center !important;
+	    margin:0 auto;
+	}
+	
+	.profile {
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover;
+	}
+	
+	/*디자인 정렬*/	
+	.imgArray {
+	    margin: 5%;
+	}
+</style>
+</head>
+
+<div layout:fragment="content">
+
+    <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+     <div class="container">
+       <div class="row">
+         <div class="col-sm-6 col-sm-offset-3">
+           <h2 class="module-title font-alt">디자이너포트폴리오</h2>
+           <div class="module-subtitle font-serif">디자이너포트폴리오</div>
+         </div>
+       </div>
+     </div>
+   </section>
+   
+   <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+   <th:block th:if="${session.member.userId} == ${busiSelect.userId}">
+	   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{busiUpdate(userId=${busiSelect.userId})}'|">글 수정하기</button>
+	  <button type="button" class="btn btn-primary" th:onclick="">글 삭제하기</button>
+	</th:block>
+   
+    <section id="check">
+  <nav id="left">
+  	<div class="border">
+  		<!-- <label class="label" th:text="'조회수' + ${busiSelect.inq}"></label>
+  		<span class="label" th:text="좋아요수"></span><label class="label" id ="likeCount" th:text="${busiSelect.cnt}"></label>
+  		<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
+  		<hr>
+  		<br><br> -->
+  		
+  		<div class="box">
+		<img class="profile" th:src="|/fileView/${busiSelect.img}|">
+  		</div>
+  		
+  		<label style="display:none;"class="label" id="userId" th:text="${busiSelect.userId}"></label><br>
+  		<label class="label" id="userName" th:text="${busiSelect.busiTitle}"></label><br>
+  		<hr>
+  		
+  		<!-- <th:block th:if="${session.member.userId} != ${busiSelect.userId}"> -->
+  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
+  		<!-- </th:block> -->
+  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
+  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
+		<hr>
+
+  	</div>
+  </nav>
+  
+  <article>
+    <div role="tabpanel">
+                  <ul class="nav nav-tabs font-alt" role="tablist">
+                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-tools-2"></span>포트폴리오</a></li>
+                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-tools-2"></span>후기</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="support">
+                    	<div class="border">
+							<label class="label">작업물분위기</label> 
+							<label class="label" th:text="${busiSelect.busiStyle}"></label><br>
+							<label class="label">가능지역</label> 
+							<label class="label" th:text="${busiSelect.busiArea}"></label> <br>
+                    	</div>
+                    	
+                    	<br>
+                    	<h5>업체소개</h5>
+                    	<div class="border">	
+  							<label class="label" th:utext="${busiSelect.intro}"></label>
+                    	</div>
+            			
+            			<br>
+                    	<h5>보유물품</h5>
+                    	<div class="border">
+                    		    <!-- 게시글 리스트 -->
+								<table class="table mb-3">
+									<thead class="thead-dark">
+										<tr>
+										    <th><input type="checkBox"></th>
+											<th>카테고리</th>
+											<th>물품이미지</th>
+											<th>물품이름</th>
+											<th>보유개수</th>
+											<th>1일 대여비</th>
+										</tr>
+									</thead>
+									<tbody id="gdCheck">
+									</tbody>
+								</table>
+								
+							<!-- 물품 페이지처리를 위한 히든인풋. -->
+							<input type="hidden" name="gdPage" id="gdPage" value="1">
+				             <!-- //페이징 경로 :: 문자 -->
+							<div class="row mt-5" id="pagingGd">
+								<div class="col text-center">
+									<div class="block-27" id="returnPagingGD">
+									</div>
+								</div>
+							</div>
+					     </div>
+					     
+					     <h5>행사사진</h5>
+                    	<div class="border">
+
+				          <div class="container">
+				            <ul class="works-grid works-grid-gut works-grid-3 works-hover-w" id="works-grid" style="position: relative; height: 800px;">
+				            </ul>
+				          </div>
+
+						    <!-- 이미지 페이지처리를 위한 히든인풋. -->
+							<input type="hidden" name="imgPage" id="imgPage" value="1">
+							 <!-- //페이징 경로 :: 문자 -->
+							<div class="row mt-5" id="pagingImg">
+								<div class="col text-center">
+									<div class="block-27" id="returnPagingImg">
+									</div>
+								</div>
+							</div>
+						</div>
+					       
+                    	<br>
+                    	<h5>댓글</h5>
+                    	<div class="border">
+					        <ul class="comment-list" id=reply></ul>
+					        
+					        <!-- 댓글 작성 -->
+						    <form id="replyInsertFrm">
+						    	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
+						    	<button type="button" id="repInsertBtn">댓글추가</button>
+						    </form>
+                    	</div>
+                    </div>
+                    
+                    <!-- 후기카테고리 -->
+                    <div class="tab-pane" id="sales">
+                    	<div class="tab-pane active" id="reviews">
+	                    
+	                    <th:block th:if="${recount.reavg} != null">
+	                    <div class="border">
+	                    	<h3>총 평점</h3>
+	                    	<span th:each="num: ${#numbers.sequence(1, recount.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${recount.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${recount.laststar == 1}"><i class="fa fa-star-o star"></i></span>
+	                    	<p th:text="|${recount.reavg} / 5|"><p>
+	                    	
+	                    	<h3>전체 후기수</h3>
+	                    	<i class="fa  fa-group"></i>
+	                    	<p th:text="|${recount.recount}개|"><p>
+	                    </div>
+	                    
+                    	<div class="border">
+		                    <div class="comments reviews" th:each="re : ${reviews}">
+		                      <div class="comment clearfix">
+		                        <div class="comment-content clearfix">
+		                          <div class="comment-author font-alt" th:text="${re.userId}"></div>
+		                          <div class="comment-body">
+		                            <p th:text="${re.reviewCntn}"></p>
+		                          </div>
+		                          <div class="comment-meta font-alt"><span  th:text="${#dates.format(re.writingDt, 'yyyy/MM/dd')}"></span>-
+		                          		
+		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${re.laststar == 1}"><i class="fa fa-star-o star"></i></span>
+		                          </div>
+		                        </div>
+		                      </div>
+	                    	</div>
+	                    </div>
+	                    </th:block>
+	                    
+	                    <th:block th:if="${recount.reavg} == null">
+	                    	<div class="border">
+	                    		<h3>후기가 없습니다.</h3>
+	                    	</div>
+	                    </th:block>
+	                  	</div>
+                    </div>
+                  </div>
+                </div>
+  </article>
+</section>
+	
+	<!-- 신고 폼 -->
+	<div id="punishFrm" class="modal">
+			<div class="modal_content">
+				<h2>신고</h2>
+				<div id="box">
+					<label>신고대상자</label>
+					<input type="text" id="targetId" name="targetId" th:value="${busiSelect.userId}" readonly><br>
+					<label>신고자</label>
+					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+					<label>신고사유</label>
+					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+					<button type="button" class="cancel">취소</button>
+					<button type="button" id="punish">신고</button>
+				</div>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+    
+    <!-- 후기 폼 -->
+    <div id="reviewFrm" class="modal">
+			<div class="modal_content">
+				<label>대상</label>
+				<input type="text" id="reviewTgt" name="reviewTgt" th:value="${busiSelect.userId}" readonly><br>
+				
+				<label>의뢰자</label>
+				<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
+				
+				<label>별점</label>
+				<div class="starpoint_wrap">
+				  <div class="starpoint_box">
+				    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
+				    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1</span></label>
+				    <label for="starpoint_3" class="label_star" title="1.5"><span class="blind">1.5</span></label>
+				    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2</span></label>
+				    <label for="starpoint_5" class="label_star" title="2.5"><span class="blind">2.5</span></label>
+				    <label for="starpoint_6" class="label_star" title="3"><span class="blind">3</span></label>
+				    <label for="starpoint_7" class="label_star" title="3.5"><span class="blind">3.5</span></label>
+				    <label for="starpoint_8" class="label_star" title="4"><span class="blind">4</span></label>
+				    <label for="starpoint_9" class="label_star" title="4.5"><span class="blind">4.5</span></label>
+				    <label for="starpoint_10" class="label_star" title="5"><span class="blind">5</span></label>
+				    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio">
+				    <span class="starpoint_bg"></span>
+				  </div>
+				</div>
+				<br>
+				
+				<label>후기</label>
+				<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
+				<button type="button" class="cancel">취소</button>
+				<button type="button" id="review">후기등록</button>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+	
+   <script>
+   		//csrf 설정
+   		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		gdList();
+		imgList();
+		
+		//하트 이벤트
+		//하트를 클릭했을 경우 발생하는 이벤트
+		$(".heart").on("click", function () {
+			//active 클래스가 없을 경우 생성, 있을 경우 삭제
+			$(this).toggleClass("active");
+			//하트 기준으로 리스트 정렬 함수
+			//range();
+		});
+		
+		//해당 포트폴리오 작성자에 대한 댓글을 가져오기 위해 replyTag에 작성자ID를 구해준다.
+   		let replyTgt = '[[${busiSelect.userId}]]';
+
+   		//댓글, 대댓글 불러오는 ajax
+   		$.ajax({
+   			url : '/replyList',
+   			method : 'post',
+   			data : JSON.stringify({replyTgt:replyTgt, boardCat:'T07'}),
+   			contentType : "application/json",
+   			beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+            }
+   		}).then(res => {
+   			for(reply of res){
+   				//댓글일 경우
+   				if(reply.rerepTgt == null){
+   					$("#reply").append(make(reply));
+   				} else { //대댓글일 경우, 대댓글의 경우 rerepTgt컬럼에 대댓글을 단 댓글 번호가 적혀있다.
+   					//대댓글은 연관있는 댓글 바로 밑에 들어가야되기 때문에 댓글 생성시 id를 부여하여 rerepTgt이 댓글ID와 같은 번호가 적힌 댓글 밑으로 append한다.
+   					$("#" + reply.rerepTgt).append(makeRe(reply));
+   				}
+   			}
+   		})
+   		
+   		//댓글 tr생성
+   		function make(reply){
+   			let delBtn = '';
+			let upBtn = '';
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			
+			//댓글 작성자일 경우에만 삭제 버튼 생성
+			if(reply.userId ==userId){
+				delBtn = `<button class='repDelete'>삭제</button>`;
+				upBtn = `<button class='repUpdate'>수정</button>`;
+			}
+			
+   			let p = `
+                  <li class="comment">
+                    <div class="comment-body"  id="${reply.replyNo}">
+                      <h3>${reply.userId}</h3>
+                      <div class="meta">${reply.writingDt}</div>
+                      <p>${reply.replyCntn}</p>
+                      <button type="button" class="reply">Reply</button>
+                      ${delBtn} ${upBtn}
+                    </div>
+                   </li>
+                `
+   			return p;
+   		}
+   		
+   		//대댓글 tr생성
+   		function makeRe(reply){
+   			let delBtn = '';
+			let upBtn = '';
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			
+			//댓글 작성자일 경우에만 삭제 버튼 생성
+			if(reply.userId ==userId){
+				delBtn = `<button class='repDelete'>삭제</button>`;
+				upBtn = `<button class='repUpdate'>수정</button>`;
+			}
+   			
+   			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
+   			$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+   			
+   			let p = `<ul class="children">
+                <li class="comment">
+                <div class="comment-body">
+                  <h3>${reply.userId}</h3>
+                  <div class="meta">${reply.writingDt}</div>
+                  <p>${reply.replyCntn}</p>
+                  ${delBtn} ${upBtn}
+                </div>
+              </li>
+            </ul>`
+            
+            return p;
+   		}
+   		
+   	//댓글 추가
+		$("#repInsertBtn").on("click", function() {
+			//textarea에 있는 값 들고 오기
+			let replyCntn = $('#replyCntn').val();
+			let userId = '[[${session.member.userId}]]';
+			
+			$.ajax({
+	   			url : '/replyInsert',
+	   			method : 'post',
+	   			data : JSON.stringify({userId:userId, replyTgt:replyTgt, replyCntn:replyCntn, boardCat:'T08'}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            }
+	   		}).then(res => {
+	   			//댓글 부분에 등록하기
+	   			$("#reply").append(make(res));
+	   			$('#replyCntn').val('');
+	   		})
+		});
+		
+		//reply버튼을 클릭했을 경우 대댓글 입력 폼 생성
+		$(document).on('click', '.reply', function(e){
+		    e.preventDefault();
+		    //대댓글을 작성할 replyNo 구하기
+		    let rerepTgt = $(this).parent("div").attr('id');
+		    //대댓글 입력할 수 있는 폼 생성
+		  	$(this).parent("div").append(makeFrm(rerepTgt));
+		  	
+		  	//reply버튼 숨김
+		  	$(this).hide();
+		})
+		
+		//대댓글 입력 폼
+		function makeFrm(rerepTgt) {
+			let form = `<form>
+				<input type="hidden" id="rerepTgt" name="rerepTgt" value="${rerepTgt}">
+	            <textarea class="form-control" id="replyCntn" name="replyCntn" rows="3"></textarea>
+	            <button type="button" id="rerepTgt" class="reply">답변</button>
+	        </form>`
+		    
+		    return form;
+		}
+		
+		//대댓글 추가
+		$(document).on('click', '#rerepTgt', function(e){
+			let replyCntn = $('#replyCntn').val();
+			let rerepTgt = $('#rerepTgt').val();
+			let userId = '[[${session.member.userId}]]';
+			
+			$(this).parent("form").remove();
+			$.ajax({
+	   			url : '/replyInsert',
+	   			method : 'post',
+	   			data : JSON.stringify({userId:userId, replyTgt:replyTgt, replyCntn:replyCntn, boardCat:'T08', rerepTgt:rerepTgt}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+	            }
+	   		}).then(res => {
+	   			
+	   			$("#" + res.rerepTgt).append(makeRe(res));
+	   		})
+		})
+		
+		//댓글 삭제
+		$(document).on('click', '.repDelete', function(e){
+			let btn=$(this);
+			let replyNo = $(this).parent("div").attr('id');
+			$.ajax({
+				url : '/replyDelete',
+				type : 'POST',
+				data : {
+					replyNo : replyNo
+				},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+				},
+				success : function(result){
+					if(result ==1){
+					btn.closest(".comment").remove();
+				}
+			}
+		});		
+	});
+		
+		//댓글 수정 폼으로 변경
+		$(document).on('click', '.repUpdate', function(e){
+			let replyNo = $(this).parent("div").attr('id');
+			let p = $(this).parent("div").children("p").text();			
+			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
+			
+			$(this).toggleClass("updateBtn");
+		});
+		
+		//댓글 수정
+		$(document).on('click', '.updateBtn', function(e){
+			$(this).toggleClass("updateBtn");
+			let btn = $(this);
+			let replyCntn = $('#replyCntn').val();
+			let replyNo = $('#replyNo').val();
+			let updateBtn = `<button class='repUpdate'>수정</button>`;
+			
+			$.ajax({
+				url : '/replyUpdate',
+				type : 'POST',
+				data : JSON.stringify({replyNo : replyNo, replyCntn : replyCntn}),
+				contentType : "application/json",
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+				},
+				success : function(result){
+					btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
+				}		
+			})
+		});
+		
+		//페이징 정보
+		function gopage(i, id) {
+			//물품페이지 이동
+			if(id == "gd"){
+				$("#gdPage").val(i);
+				gdList();
+			}
+			
+			//행사이미지 이동
+			if(id == "img"){
+				$("#imgPage").val(i);
+				imgList();
+			}
+		}
+		
+		//이미지 전체 리스트
+		function imgList() {
+			let userId = '[[${busiSelect.userId}]]';
+			let page = $('input[name="imgPage"]').val();
+			$.ajax({
+				url: '/eventImg/eventImgList',
+				method: 'post',
+				data: {
+					userId:userId, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#works-grid').empty();
+				 for(img of res.imgs){
+					$('#works-grid').append(makeImg(img));
+				}
+				$('#returnPagingImg').empty();
+				$('#returnPagingImg').append(makePageing(res.paging, "img")); 
+			})
+		}
+		
+		//이미지정보리스트
+		function makeImg(img){
+			console.log(img);
+			let tag = `<li class="work-item illustration webdesign">
+				                <div class="work-image"><img src="/fileView/${img.img}" style="width:360px; height:260px;"></div>
+				                <div class="work-caption font-alt">
+				                  <h3 class="work-title">${img.eventTtl}</h3>
+				                  <div class="work-descr">${img.eventCaregory}</div>
+				                </div>
+				        </li>`;
+	        
+		 	return tag;
+		}
+		
+		//물품 전체 리스트
+		function gdList() {
+			//물품리스트 불러오기
+			let userId = '[[${busiSelect.userId}]]';
+			let page = $('input[name="gdPage"]').val();
+			console.log(page);
+			$.ajax({
+				url: '/rent/rentGdList',
+				method: 'post',
+				data: {
+					userId:userId, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#gdCheck').empty();
+				for(gd of res.rentGds){
+					$('#gdCheck').append(makeGd(gd));
+				}
+				$('#returnPagingGD').empty();
+				$('#returnPagingGD').append(makePageing(res.paging, "gd"));
+			})
+		}
+		
+		//물품정보리스트
+		function makeGd(gd){
+			let tag = `<tr id=${gd.goodsNo}>
+							<td><input type="checkBox"></td>
+							<td>${gd.caregory}</td>
+							<td><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
+							<td>${gd.goodsNm}</td>
+							<td>${gd.totalStock}</td>
+							<td>${gd.rentalPrc}</td>
+						</tr>`;
+	        
+		 	return tag;
+		}
+	
+		//페이징 만들기
+		function makePageing(page, id) {
+			if (page.totalRecord == 0) {
+				return;
+			}
+			
+			let pagination = $("<div/>")
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text(), id);
+											})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
+			
+		//디자이너 좋아요 처리
+		$(".heart").on("click", function() {
+			 $(this).toggleClass("active");
+			 let userId = '[[${session.member.userId}]]';
+			 let targetNo = '[[${busiSelect.userId}]]';
+			 let category = 'T09';
+			 
+			 //좋아요를 추가했을 경우
+		     if($(this).hasClass("active")){
+		    	 //총 좋아요수 처리
+		    	 let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) + 1);
+		    	 
+		    	 //post방식으로 좋아요 등록하기
+		    	 $.ajax({
+						url : "/likes/lInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
+		    	 //총 좋아요수 처리
+		    	 let likeCount = $('#likeCount').text();
+		    	 $('#likeCount').text(parseInt(likeCount) - 1);
+		    	 
+		    	//post방식으로 좋아요 취소하기
+		    	 $.ajax({
+						url : "/likes/lDelete",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetNo:targetNo, category:category},
+						beforeSend : function(xhr)
+		                {
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							
+						},
+						fail : function(result) {
+							alert('필수항목을 입력해주세요')
+						}
+					})
+		     }
+	 })
+		 
+		   //신고부분
+		   //신고 모달창 띄우기
+		   $('.punishModalUp').on('click', function() {
+			   $("#punishFrm").show();
+		   })
+		   
+		   //모달창에서 취소를 눌렀을 경우
+		   $(".cancel").on('click', function() {
+				$(".modal").hide();
+			});
+		   
+		   //모달창에서 신고를 눌렀을 경우
+		   $("#punish").on('click', function() {
+			   let targetId = '[[${busiSelect.userId}]]';
+			   let targetCat = 'T08';
+			   let banCntn = $("#banCntn").val();
+			   let userId = '[[${session.member.userId}]]';
+			   let banType = 'P2';
+			    $.ajax({
+						url : "/punishInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetId:targetId, banType:banType, banCntn:banCntn, targetCat:targetCat},
+						beforeSend : function(xhr)
+		                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							alert('신고되었습니다.');
+							$("#punishFrm").hide();
+						},
+						fail : function(result) {
+							console.log(result)
+						}
+					})
+		   })
+		   
+		   //후기부분
+		   //후기 모달창 띄우기
+		   $('.reviewModalUp').on('click', function() {
+			   console.log('클릭');
+			   $("#reviewFrm").show();
+		   })
+		   
+		   //클릭한 별점 수 저장
+		   let stars = 0;
+		   $(".label_star").on('click', function() {
+			   stars = $(this).text();		   
+		   })
+	
+		   //모달창에서 후기등록 버튼을 눌렀을 경우
+		   $("#review").on('click', function() {
+			   let reviewTgt = $("#reviewTgt").val();
+			   let category = 'T08';
+			   let reviewCntn = $("#reviewCntn").val();
+			   let userId = '[[${session.member.userId}]]';
+			   let star = stars;
+			   
+			    $.ajax({
+						url : "/review/reviewInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, reviewTgt:reviewTgt, star:star, reviewCntn:reviewCntn, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							alert('후기가 등록되었습니다.');
+							$("#reviewFrm").hide();
+						},
+						fail : function(result) {
+							console.log(result)
+						}
+					})
+		   })
+		   
+		   //채팅버튼을 눌렀을 때
+			$(".chattingUp").on("click", function () {
+				$(".chat").toggleClass("active");
+				
+				let toId = '[[${busiSelect.userId}]]';
+				console.log("로그인된 아이디== "+fromId)
+				console.log("메세지받을 아이디== "+toId)
+				//채팅방 구독 생성
+				function createChatRoom() {
+					console.log("1 채팅방 생성");
+					let chatroomDataList = new Array();
+					let chatroomData1 = {
+							toId : toId,
+							fromId : fromId
+					};
+					chatroomDataList.push(chatroomData1);
+					let chatroomData2 = {
+							toId : fromId,
+							fromId : toId
+					};
+					chatroomDataList.push(chatroomData2);
+					
+					console.log(JSON.stringify(chatroomDataList));
+					
+					$.ajax({
+			   			url : '/chatInsert',
+			   			method : 'post',
+			   			data : JSON.stringify(chatroomDataList),
+			   			contentType : "application/json; charset=UTF-8",
+			   			beforeSend : function(xhr)
+			            {  
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			console.log("2 채팅방 생성 번호: " + cId);
+			   			cId = res;
+			   			chattingList(cId)
+			   		})
+				}
+			   	
+			   	function chattingList(cId){
+			   		console.log('chattingList:', cId);
+			   		$.ajax({
+						url : '/chatSelect',
+						method : 'post',
+			   			data : JSON.stringify({toId:toId, fromId:fromId}),
+			   			contentType : "application/json; charset=UTF-8",
+			   			beforeSend : function(xhr)
+			            {   
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			$(".chat-list").empty();
+			   			for(r of res){
+			   				$(".chat-list").append(makeList(r));
+			   			}
+			   			message(cId);
+			   		})
+			   		
+			   		$(".chat-popup").show();
+			   	}
+		
+				function makeList(r){
+					let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+									<div class="flex-grow-1 ms-3">
+										<h3>${r.toId}</h3>
+										<p>front end developer</p>
+									</div>
+								 </a>`;
+					return list;
+				}
+					
+				//채팅화면이 나타난다.
+				if ($(".chat").hasClass("active")) {
+					$.ajax({
+						url : '/checkChat',
+						method : 'post',
+			   			data : JSON.stringify({toId:toId, fromId:fromId}),
+			   			contentType : "application/json; charset=UTF-8",
+			   			beforeSend : function(xhr)
+			            {   
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			if(res != ''){
+			   				console.log('res.cId:', res.cid);
+			   				chattingList(res.cid);
+			   			} else {
+			   				createChatRoom();
+			   			}
+			   		})
+					$(".chat-popup").show();
+					$(".chatbox").show();
+				}
+		
+				//채팅화면이 사라진다.
+				if (!$(".chat").hasClass("active")) {
+					$(".chat-popup").hide();
+					$(".chatbox").hide();
+				}
+			});
+   </script>
+</div>
+</html>

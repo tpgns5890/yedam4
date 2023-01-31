@@ -52,31 +52,29 @@
 		</li>
 		
 		<!-- 추가부분(지은) -->
-		<!-- <li><a href="#">물품관리</a>
-			<ul class="submenu">
-				<li><a href="#">물품등록</a></li>
-				<li><a href="#">물품리스트</a></li>
-			</ul></li> -->
-		<!-- <li><a href="#">블라인드게시판</a>
+		<li><a href="#">블라인드게시판</a>
 			<ul class="submenu">
 				<li><a href="#">나의 게시글</a></li>
-			</ul></li> -->
+			</ul></li>
+			
 		<li><a href="#">사회자포트폴리오</a>
 			<ul class="submenu">
-				<li><a href="#">사회자포트폴리오 등록</a></li>
+				<li><a href="/prtfl/mcInsert">사회자포트폴리오 등록</a></li>
 				<li><a href="#">사회자포트폴리오</a></li>
 				<li><a href="#">사회자 동영상</a></li>
 			</ul></li>
+			
 		<li><a href="#">디자이너포트폴리오</a>
 			<ul class="submenu">
 				<li><a href="/prtfl/dgnerInsert">디자이너포트폴리오 등록</a></li>
 				<li><a th:href="|/prtfl/dgnerSelect?userId=${session.member.userId}|">디자이너포트폴리오</a></li>
 				<li><a href="/design/myDesignInsert">디자인 등록</a></li>
 			</ul></li>
+			
 		<li><a href="#">업체포트폴리오</a>
 			<ul class="submenu">
-				<li><a href="#">업체포트폴리오 등록</a></li>
-				<li><a href="#">업체포트폴리오</a></li>
+				<li><a href="/prtfl/busiInsert">업체포트폴리오 등록</a></li>
+				<li><a th:href="|/prtfl/busiSelect?userId=${session.member.userId}|">업체포트폴리오</a></li>
 				<li><a href="/eventImg/eventImgList">행사사진 리스트</a></li>
 			</ul></li>
 	</ul>

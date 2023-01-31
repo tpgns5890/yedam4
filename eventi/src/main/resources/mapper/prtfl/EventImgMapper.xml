@@ -4,7 +4,7 @@
 	<!-- 업체별 행사 이미지 리스트 -->
 	<select id="getEvent" resultType="com.eventi.left.prtfl.service.EventImgVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-		SELECT E.*, F.SEV_NM AS IMG
+		SELECT E.EVENT_NO, E.USER_ID, E.EVENT_TTL, codeArr_select(E.EVENT_CAREGORY) EVENTCAREGORY, F.SEV_NM AS IMG
 		  FROM EVENT_IMG E, FILES F
 		 WHERE E.EVENT_NO = F.TARGET_ID
            AND USER_ID = #{userId}

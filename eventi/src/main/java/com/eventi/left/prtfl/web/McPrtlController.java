@@ -41,7 +41,7 @@ public class McPrtlController {
 	@GetMapping("/mcList")
 	public String mcList(Model model, McPrtflVO mcPrtflVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-				
+		
 		List<McPrtflVO> mcList = mcPrtflService.mcAll(mcPrtflVO, paging);
 		model.addAttribute("paging", paging);
 		
