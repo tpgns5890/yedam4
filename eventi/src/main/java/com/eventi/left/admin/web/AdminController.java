@@ -45,12 +45,13 @@ public class AdminController {
 	// 신고회원페이지 이동
 	@RequestMapping(value = "/adminBanMem")
 	public String adminBanMem(Model model, CodeVO codeVO) {
-		model.addAttribute("targetCat", service.getCat(codeVO));
+		model.addAttribute("targetCat", service.getMemberCat(codeVO));
 		return "content/admin/adminBanMem";
 	}
 	// 신고게시글페이지 이동
 	@RequestMapping(value = "/adminBanBrd")
-	public String adminBanBrd() {
+	public String adminBanBrd(Model model, CodeVO codeVO) {
+		model.addAttribute("targetCat", service.getBoardCat(codeVO));
 		return "content/admin/adminBanBrd";
 	}
 	// 회계페이지 이동
@@ -102,6 +103,7 @@ public class AdminController {
 		return r;
 	}
 	
+	//공모전 조회 Ajax
 	@PostMapping("/contestAjax")
 	@ResponseBody
 	public Map<String, Object> contestAjax(ContestVO vo, PagingVO paging) {
@@ -112,6 +114,7 @@ public class AdminController {
 		return result;
 	}
 	
+	//신고 회원 조회 Ajax
 	@PostMapping("/punMemAjax")
 	@ResponseBody
 	public Map<String, Object> punMemAjax(PunishVO punishVO, PagingVO paging) {
@@ -122,6 +125,7 @@ public class AdminController {
 		return result;
 	}
 	
+	//신고 게시물 조회 Ajax
 	@PostMapping("/punBrdAjax")
 	@ResponseBody
 	public Map<String, Object> punishBrdList(PunishVO punishVO, PagingVO paging) {
@@ -131,4 +135,29 @@ public class AdminController {
 		result.put("paging", paging);
 		return result;
 	}
+	
+	//회원 신고 승인
+	@PostMapping("/banMemAccept")
+	@ResponseBody
+	public int banMemAccept(PunishVO punishVO) {
+		int r = service.banMemAccept(punishVO);
+		return r;
+	}
+	
+	//신고 거부
+	@PostMapping("/banReject")
+	@ResponseBody
+	public int banReject(PunishVO punishVO) {
+		int r = service.banReject(punishVO);
+		return r;
+	}
+	
+	//게시글 신고 승인
+	@PostMapping("/banBrdAccept")
+	@ResponseBody
+	public int banBrdAccept(PunishVO punishVO) {
+		int r = service.banBrdAccept(punishVO);
+		return r;
+	}
+
 }

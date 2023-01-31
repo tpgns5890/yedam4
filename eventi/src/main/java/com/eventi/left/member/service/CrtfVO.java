@@ -16,9 +16,9 @@ public class CrtfVO {
 	private String crtfNum;
 	private String accpYN;
 	private String crtfType;
-	@JsonFormat(pattern = "yyyy/MM/dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date accpDate;
-	@JsonFormat(pattern = "yyyy/MM/dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date reqDate;
 	
 	Integer first = 1; //첫페이지

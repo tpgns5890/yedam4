@@ -228,7 +228,6 @@
 				var firstId = contest.FIRSTID;
 				var secondId = contest.SECONDID;
 				var thirdId = contest.THIRDID;
-				console.log(firstId);
 				if(!firstId){
 					firstId = '수상자없음';
 				}
@@ -238,7 +237,7 @@
 				if(!thirdId){
 					thirdId = '수상자없음';
 				}
-				let p = `<tr>
+				let p = `<tr onclick="location.href='../contest/select?cNo=${contest.CNO}'">
 							<td>${contest.CNO}</td>
 							<td>${contest.PAY}</td>
 							<td>${contest.WRITER}</td>

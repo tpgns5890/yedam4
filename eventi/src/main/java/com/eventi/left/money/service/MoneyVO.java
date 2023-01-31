@@ -19,5 +19,8 @@ public class MoneyVO {
 	private String payNo;	//결제번호
 	private String settYN = "N";//승인여부
 	private String targetId;	//해당 게시글Id
+	
+	
+	private String search;
 
 }

@@ -22,6 +22,107 @@
 			padding-top: 50px;
 			background: #eeeeee;
 		}
+
+		#head-btn {
+			height: 60px;
+			display: flex;
+		}
+
+		.top-button {
+			cursor: pointer;
+			width: 250px;
+			display: flex;
+			height: 100%;
+			margin-right: 10px;
+			background: white;
+			box-shadow: 0 2px 2px 0 rgb(0 0 0/ 20%);
+			align-items: center;
+		}
+
+		.icon-area {
+			width: 50px;
+			height: 100%;
+			display: flex;
+			text-align: center;
+			justify-content: center;
+			align-content: center;
+			flex-wrap: wrap;
+		}
+
+		#icon-area-m {
+			background: #55dbc2;
+		}
+
+		#icon-area-p {
+			background: #f1e254;
+		}
+
+		#icon-area-b {
+			background: #d94844;
+		}
+
+		.images {
+			height: 35px;
+		}
+
+		.number-sec {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+			margin-left: 10px;
+		}
+
+		#list-area {
+			position: inherit;
+			width: 98.9%;
+			height: 83.5%;
+			margin-top: 10px;
+			background: white;
+			padding: 10px;
+		}
+
+		#list-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		#selArea {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			align-items: flex-start;
+			margin-right: 5px;
+		}
+		
+		#selArea input{
+			margin-right:5px;
+		}
+		#list-head-right {
+			display: flex;
+			align-items: center;
+		}
+
+		#member-table {
+			margin-top: 10px;
+			width: 100%;
+			text-align-last: center;
+			border-collapse: collapse;
+		}
+		#member-table thead{
+			background-color: #ddd;
+		}
+		#member-table tbody tr:hover{
+      	background-color: #eee;
+  		}
+		#table-div{
+			height:590px;
+		}
+		
+		#member-table th,td{
+			padding: 17px;
+			background-color: rgba(255,255,255,0.2);
+		}
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -34,30 +135,25 @@
 			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
 			<div id="admin-contents">
 				<h3>
-					<b>자격증관리</b>
+					<b>회계관리</b>
 				</h3>
 				<div id="head-btn">
 					<div id="headbtn-request" class="headbtns">
-						<span class="headbtn-text">승인대기</span>
+						<span class="headbtn-text">정산요청</span>
 					</div>
 					<div id="headbtn-done" class="headbtns">
-						<span class="headbtn-text">승인완료</span>
+						<span class="headbtn-text">입금내역</span>
 					</div>
 					<div id="headbtn-reject" class="headbtns">
-						<span class="headbtn-text">반려목록</span>
+						<span class="headbtn-text">정산내역</span>
 					</div>
 				</div>
 				
 				<div id="list-area">
 					<div id="list-head">
 						<div id="list-head-right">
-							<div id="selArea">
-								전체<input type="radio" name="crtfType" value="">
-								사회자<input type="radio" name="crtfType" value="MC">
-								디자이너<input type="radio" name="crtfType" value="DESIGNER">
-							</div>
 							<div id="searchArea">
-								<input type="text" name="userId">
+								<input type="text" name="search">
 							</div>
 						</div>
 					</div>
