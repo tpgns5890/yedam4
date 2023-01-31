@@ -512,7 +512,6 @@ var data = {"userId" : userId};
 			 	//채팅버튼을 눌렀을 때
 				$(".chattingUp").on("click", function () {
 					$(".chat").toggleClass("active");
-					alert("메세지받을대상은: "+$(this).attr('id'))
 					let toId = $(this).attr('id');
 					let From = $('#sessionId').val();
 					//채팅방 구독 생성
