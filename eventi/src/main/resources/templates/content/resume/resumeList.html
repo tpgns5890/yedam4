@@ -17,39 +17,7 @@
 			</div>
 		</div>
 	</section>
-	<!-- <button type="button" id="hireBtn">채용</button>
-<button type="button" id="unHireBtn">미채용</button> -->
-	<!-- 	<table class="table mb-3" >
-	<thead class="thead-dark">
-			<tr>
-				<th><input type="checkBox" value="채용" class="hire" id="allHire" 
-					></th> 
-				<th>구직신청게시글번호</th>
-				<th>구직자ID</th> 
-				<th>구직자정보</th>
-				<th>구인게시글번호</th>
-				<th>채용여부</th>
-			</tr>		
-		</thead>
-		<tbody>
-			<tr th:each="res : ${resumeList}">
-			<th:block th:if="${res.hire} == 'Y'" >
-				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()" checked></td> 
-				</th:block>
-				
-				<th:block th:if ="${res.hire} == 'N'">
-				<td><input class="hire" type="checkBox" value="hire" onkeyup="hire()"></td> 
-				</th:block>
-				<td th:text=${res.resumeNo}></td>
-				<td th:text=${res.seekerId}></td>
-				<td th:text=${res.seekerCntn}></td>
-				<td th:text=${res.jobNo}>  </td>
-				<td th:if="${res.hire} == 'Y'">채용</td>
-				<td th:unless="${res.hire} == 'Y'">미채용</td>
-			</tr>
-		</tbody>
-	</table> -->
-
+	
 	<section class="module" id="news">
 		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
 		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
@@ -86,10 +54,10 @@
 							</h2>
 							<div class="post-meta" th:text=${res.seekerId}><a href="#"></a></div>
 						</div>
-						<div class="post-entry" th:text=${res.seekerCntn}>
+						<div class="post-entry" th:text=${res.title}>
 						</div>
 						<div class="post-more">
-							<a class="more-link" href="#">Read more</a>
+							<a class="more-link" href="#" th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">Read more</a>
 						</div>
 						<div th:if="${res.hire} == 'Y'">채용</div>
 						<div th:unless="${res.hire} == 'Y'">미채용</div>
