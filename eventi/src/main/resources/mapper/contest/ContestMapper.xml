@@ -57,7 +57,7 @@
                               	 where target_no = c_no) AS likes
 			             FROM CONTEST
 			             WHERE SAVE = 'N'
-			             AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
+			             AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate
 						<include refid="category" />
 						order by ${order} 
 	<![CDATA[
@@ -116,7 +116,7 @@
 		SELECT COUNT(*)
 		FROM CONTEST
 		WHERE SAVE = 'N'
-		AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate  
+		AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate
 		<include refid="category" />
 	</select>
 	
@@ -139,6 +139,17 @@
 	      	,(select sev_nm
 		         from files
 		         where target_Id = c_no) AS img
+		     
+     		, CASE WHEN dt_extns IS NOT NULL  THEN 
+                          CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
+                               ELSE '마감'
+                          END
+                        WHEN dt_extns IS NULL THEN 
+                             CASE WHEN trunc(dt_cls) >= trunc(SYSDATE) THEN '진행중'
+                                  ELSE '마감'
+                             END
+                    END AS ing
+                    
 		 FROM CONTEST
 		WHERE  C_NO = #{cNo}
 	</select>
@@ -207,7 +218,6 @@
 		set TTL = #{ttl},
 			CNTN = #{cntn}
 		where c_no = #{cNo}
-		and writer = #{writer}
 	</update>
 	
 	<!-- 공모전  임시저장 불러오기 수정 -->
@@ -230,7 +240,6 @@
 		update CONTEST
 			set DT_EXTNS = #{dtExtns}
 		where c_no = #{cNo}
-		and writer = #{writer}
 	</update>
 
 	<!-- 공모전 삭제 -->

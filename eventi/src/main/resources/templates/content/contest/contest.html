@@ -422,7 +422,7 @@
 			let p = '';
 			
 			//문의 작성자일 경우만 삭제,수정버튼
-			if(question.userId == userId){
+			if(question.userId == userId || userId == 'admin'){
 				delBtn = `<button class='qDelete'>삭제</button>`;
 				upBtn = `<button class='qUpdate'>수정</button>`;
 			
@@ -433,7 +433,8 @@
 			
 			 //회원아이디에 따라 다르게 표시됌.(수정,삭제,답변등록)
 			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
-			if(question.secretYn == 'Y' && question.userId != userId &&  writer != userId  || question.secretYn == 'Y' && userId == ""){
+			if(question.secretYn == 'Y' && question.userId != userId &&  writer != userId && userId != "admin"
+				|| question.secretYn == 'Y' && userId == "" ){
 				p =`<ul class="children" style="list-style: none">
 						<li class="comment">
 						<div class="comment-body" id="${question.qNo}">

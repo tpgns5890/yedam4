@@ -120,7 +120,6 @@
 	<delete id="delete">
 		delete design
 		where dgn_no = #{dgnNo}
-		and user_id = #{userId}
 	</delete>
 	
 	<select id="getSequence" resultType="string">

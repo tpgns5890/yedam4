@@ -24,12 +24,12 @@ public interface DesignMapper {
 	 
 	public int update(DesignVO vo); //수정
 	
-	public int delete(DesignVO vo); //삭제
+	public int delete(String dgnNo); //삭제
 	
 	public String getSequence(); //시퀀스 맥시멈번호 찾기.
 	
 	public List<DesignVO> saveGetdesign(DesignVO DesignVO); // 임시저장 1건,디자인파일 여러건조회
 
 	public List<DesignVO> dSave(DesignVO DesignVO); //임시저장 리스트.
-
+	
 }
