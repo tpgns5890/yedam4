@@ -28,19 +28,25 @@
 							mo_type,
 							mo_price,
 							user_id,
+							user_name,
 							pay_no,
 							sett_yn,
-							target_id)
+							target_id,
+							mo_cat,
+							mo_dt)
 			values(
-					money_seq.nextval,
+					'MO'||money_seq.nextval,
 			        #{bankName},
 			        #{bankAccount},
 			        #{moType},
 			        #{moPrice},
 			        #{userId},
+			        #{userName},
 			        #{payNo},
 			        #{settYN},
-			        #{targetId}
+			        #{targetId},
+			        #{moCat},
+			        SYSDATE
 	       		 )
 	</insert>
 	
