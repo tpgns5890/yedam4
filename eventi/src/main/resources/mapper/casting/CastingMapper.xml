@@ -13,13 +13,19 @@
 		</where>
 	</sql>
 	
+	<sql id="cancelCntn">
+		<if test="cancel != null and cancel != ''">
+			,CANCEL = #{cancel}
+		</if>
+	</sql>
+	
 	<!-- user별 의뢰 전체 조회 -->
 	<select id="mcCastingList" resultType="com.eventi.left.casting.service.CastingVO">
 		SELECT C.CASTING_NO, C.USER_ID, C.CLIENT_ID, 
-		       C.E_TYPE, C.E_INTRO, C.E_SDT, C.E_LDT, 
+		       CODEARR_SELECT(C.E_TYPE) ETYPE, C.E_INTRO, C.E_SDT, C.E_LDT, 
 		       C.E_STIME, C.E_LTIME, C.CASTING_PRICE, C.DT,
 		       <![CDATA[ 
-		       CASE WHEN TRUNC(C.E_LDT) < TRUNC(SYSDATE) THEN '행사완료'
+		       CASE WHEN TRUNC(C.E_LDT) < TRUNC(SYSDATE) AND C.PROGRESS != '행사취소' AND C.PROGRESS != '후기작성완료' THEN '행사완료'
 			        ELSE PROGRESS
 			        END AS PROGRESS, C.CANCEL
 			   ]]>
@@ -37,6 +43,19 @@
 	<update id="progressUpdate">
 		UPDATE CASTING
 		SET PROGRESS = #{progress}
+		<include refid="cancelCntn" />
 		WHERE CASTING_NO = #{castingNo}
 	</update>
+	
+	<!-- 환불금액 확인 -->
+	<select id="refund" resultType="com.eventi.left.casting.service.CastingVO">
+		SELECT C.CASTING_NO, C.USER_ID, C.CLIENT_ID, C.CASTING_PRICE, TRUNC(C.E_LDT) - TRUNC(SYSDATE) AS LASTDAT,
+		       CASE WHEN TRUNC(C.E_LDT) - TRUNC(SYSDATE) >= 14 THEN C.CASTING_PRICE
+                    WHEN TRUNC(C.E_LDT) - TRUNC(SYSDATE) >= 7 THEN C.CASTING_PRICE * 0.5
+                    WHEN TRUNC(C.E_LDT) - TRUNC(SYSDATE) >= 4 THEN C.CASTING_PRICE * 0.3
+			        ELSE 0
+			        END AS CHECKS	   
+		  FROM CASTING C
+         WHERE C.CASTING_NO = #{castingNo}
+	</select>
 </mapper>
