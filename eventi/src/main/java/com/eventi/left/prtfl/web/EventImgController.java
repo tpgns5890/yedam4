@@ -36,7 +36,7 @@ public class EventImgController {
 	}
 	
 	//행사이미지 리스트
-	@PostMapping("/eventImgLists")
+	@PostMapping("/eventImgList")
 	@ResponseBody
 	public Map<String, Object> eventImgListFrm(EventImgVO eventImgVO, PagingVO paging){
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -48,10 +48,9 @@ public class EventImgController {
 	
 	//행사이미지 등록
 	@PostMapping("/eventImgInsert")
-	@ResponseBody
 	public String eventImgInsert(EventImgVO eventImgVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		eventImgService.eventInsert(eventImgVO, filesVO, uploadFile);
-		return "redirect:/prtfl/eventImgList";
+		return "redirect:/eventImg/eventImgList";
 	}
 
 }

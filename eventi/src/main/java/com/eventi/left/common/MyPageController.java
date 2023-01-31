@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
 
@@ -96,9 +97,23 @@ public class MyPageController {
 	}
 
 	// 승급신청
-	@GetMapping("/userUpgrade")
-	public String userUpgrade() {
+	@GetMapping("/userUpgradeForm")
+	public String userUpgrade(Model model) {
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String userId = user.getUserId();
+		
+		model.addAttribute("userCrtf", service.crtfSelect(userId));
+
 		return "content/myPage/userUpgrade";
+	}
+
+	// 승급신청 자격증등록
+	@PostMapping("userUpgrade")
+	@ResponseBody
+	public CrtfVO userInsertCrtf(CrtfVO crVO) {
+		service.insertCrtf(crVO);
+		return crVO;
 	}
 
 }

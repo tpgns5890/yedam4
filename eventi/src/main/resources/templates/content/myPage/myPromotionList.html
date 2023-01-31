@@ -75,7 +75,7 @@
 							<td th:text="${#dates.format(pro.eEday, 'yyyy-MM-dd')}"></td>
 							
 							<td th:text="${pro.see}"></td>
-							<td th:text="${pro.dt}"></td>
+							<td  th:text="${#dates.format(pro.dt, 'yyyy-MM-dd')}"></td>
 							
 							<th:block >
 								<td><button type="button" id="selete" th:onclick="|location.href='@{proUpdate(proNo=${pro.proNo})}'|">게시글수정</button></td>
@@ -135,18 +135,15 @@
 				for (let i = 0; i < trs.length; i++) {
 					if (trs[i].children[0].children[0].checked) {
 						
-						let cNo = trs[i].children[1].textContent; //체크된 공모번호
+						let proNo = trs[i].children[1].textContent; //체크된 공모번호
 
 						//삭제처리 ajax
 						$.ajax({
-							url: '/proDelete',
-							method: "post",
-							data: {proNo},
-							beforeSend: function (xhr) {
-								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-								xhr.setRequestHeader(header, token);
-							},
+							url: '/proDeleteAjax',
+							method: "get",
+							data: {proNo}
 						}).then(res => {
+								console.log(res);
 							if (res == 1) {
 								trs[i].remove(); // tr 화면동적 삭제
 								alert('삭제 완료');

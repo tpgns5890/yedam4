@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.casting.mapper.CastingMapper">
-	<!-- 의뢰 전체 조회 -->
-	<select id="castingList" resultType="com.eventi.left.casting.service.CastingVO">
-		SELECT *
-		FROM CASTING
+	<sql id="targetId">
+		<where>
+		<if test="userId != null and userId != ''">
+			C.USER_ID = #{userId}
+		</if>
+		
+		<if test="clientId != null and clientId != ''">
+			C.CLIENT_ID = #{clientId}
+		</if>
+		</where>
+	</sql>
+	
+	<!-- user별 의뢰 전체 조회 -->
+	<select id="mcCastingList" resultType="com.eventi.left.casting.service.CastingVO">
+		SELECT C.CASTING_NO, C.USER_ID, C.CLIENT_ID, 
+		       C.E_TYPE, C.E_INTRO, C.E_SDT, C.E_LDT, 
+		       C.E_STIME, C.E_LTIME, C.CASTING_PRICE, C.DT,
+		       <![CDATA[ 
+		       CASE WHEN TRUNC(C.E_LDT) < TRUNC(SYSDATE) THEN '행사완료'
+			        ELSE PROGRESS
+			        END AS PROGRESS, C.CANCEL
+			   ]]>
+		FROM CASTING C
+		<include refid="targetId" />
 	</select>
 	
 	<!-- 의뢰 추가 -->
 	<insert id="castingInsert">
-		INSERT INTO CASTING
+		INSERT INTO CASTING(CASTING_NO, USER_ID, CLIENT_ID, E_TYPE, E_INTRO, E_SDT, E_LDT, E_STIME, E_LTIME, CASTING_PRICE, DT)
 		VALUES('CA'||CAST_SEQ.NEXTVAL, #{userId}, #{clientId}, #{eType}, #{eIntro}, #{eSdt}, #{eLdt}, #{eStime}, #{eLtime}, #{castingPrice}, SYSDATE)
 	</insert>
+	
+	<!-- 진행현황 업데이트 -->
+	<update id="progressUpdate">
+		UPDATE CASTING
+		SET PROGRESS = #{progress}
+		WHERE CASTING_NO = #{castingNo}
+	</update>
 </mapper>

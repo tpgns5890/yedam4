@@ -446,13 +446,15 @@
 	   $("#punish").on('click', function() {
 		   let targetId = $("#targetId").val();
 		   let banCntn = $("#banCntn").val();
+		   let writer = "[[${bSelect.writer}]]";
+		   let banType = 'P1';
 		   console.log(userId, targetId, banCntn, type);
 		   
 		    $.ajax({
 					url : "/punishInsert",
 					method : 'post',
 					contentType : 'application/x-www-form-urlencoded',
-					data : {userId:userId, targetId:bBoardNo, banCntn:banCntn, targetCat:type},
+					data : {userId:userId, targetId:bBoardNo,banType:banType, banCntn:banCntn, targetCat:type, writer:writer},
 					beforeSend : function(xhr)
 	                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 	    				xhr.setRequestHeader(header, token);

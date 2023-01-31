@@ -7,6 +7,20 @@
 <link rel="stylesheet" href="/css/model.css">
 <link rel="stylesheet" href="/css/heart.css">
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+<style>
+label {
+	font-weight:bold;
+	font-size: 20px;
+	display:inline-block;
+	text-align:center;
+	width:60px;
+	margin: 10px;
+}
+ #order_check  {
+ 	width: 20%;
+	margin: 7px 10px;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
@@ -26,7 +40,7 @@
           <div class="container">
           
           	   <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-33px; width: 100px;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-30px; left:1035px; width: 100px;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" onclick="login()"></div>
@@ -40,10 +54,10 @@
 					</th:block>
 				</div>
           
-          	  <div id="cotestHeader" >
+          	<div id="cotestHeader">
 	              <!-- 공모전 정렬기준 -->
-	              <div class="col-sm-3 mb-sm-20"  style="width: 180px;">
-	                <select id="order" name="order" class="form-control">
+	              <div class="col-sm-3 mb-sm-20" id="order_check">
+	                <select id="order" name="order" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
 						<option value="inq DESC" selected="selected">조회수</option>
 						<option value="likes DESC">좋아요순</option>
 						<option value="pay DESC">금액순</option>
@@ -54,32 +68,29 @@
 	              
 	              
 	              	<!-- 분류별 기준 뽑아오기 -->
-	              	 <div class="col-sm-3 mb-sm-20" style="width: 300px; line-height: 40px; text-align:center;">
-		                <div>
-		                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);"><label>현수막</label>
-								<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);"><label>배너</label>
-								<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);"><label>로고</label>
-								<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);"><label>포스터</label>
-								<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);"><label>기타</label>
-						</div>
+	              	 <div id="catrgory_check" >
+	                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);"><label>현수막</label>
+							<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);"><label>배너</label>
+							<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);"><label>로고</label>
+							<input type="checkbox" name="category" value="D4" onclick="doOpenCheck(this);"><label>포스터</label>
+							<input type="checkbox" name="category" value="D5" onclick="doOpenCheck(this);"><label>기타</label>
 	                </div>
 	              
-	              <div class="col-sm-3">
+	              <div class="col-sm-3"   >
 	              	<!-- 비회원 공모전작성버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
-						<button style="position:relative; top:-20px; right: -350px" class="w-btn w-btn-gra1" onclick="login()" >공모전 작성</button></a>
+						<button class="w-btn w-btn-gra1" onclick="login()" style="position:relative; top:-65px; left: 550px">공모전 작성</button>
 					</th:block>
 					
 					<!-- 일반회원 공모전작성버튼-->
 					<th:block sec:authorize="isAuthenticated()">
 						<a href="./insert">
-							<button style="position:relative; top:-20px; right: -350px" class="w-btn w-btn-gra1">공모전 작성</button>
+							<button class="w-btn w-btn-gra1" style="position:relative; top:-65px; left: 550px">공모전 작성</button>
 						</a>
 					</th:block>
 	              </div>
 	           </div>
-	           
-          </div>
+	         </div>
         </section>
            
 

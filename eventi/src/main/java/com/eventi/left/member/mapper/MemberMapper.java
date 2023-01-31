@@ -13,7 +13,7 @@ public interface MemberMapper {
 
 	public int insertMember(MemberVO memberVO); // 일반회원 회원가입
 
-	public void insertCrtf(CrtfVO crVO);
+	public int insertCrtf(CrtfVO crVO); //승급신청 자격증추가
 
 	public MemberVO getMember(String userId);
 
@@ -40,5 +40,7 @@ public interface MemberMapper {
 	public int busiUpdate(BusiVO busiVO); // 업체 추가 회원정보 변경.
 
 	public MemberVO busiSelect(String userId); // 업체회원 조회
+	
+	public List<CrtfVO>crtfSelect(String userId); // 회원의 자격증리스트 조회
 
 }

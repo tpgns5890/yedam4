@@ -52,8 +52,7 @@ ul{
 					<div class="col-md-12">
                      <div class="form-group" id="fileInsert">
                         <!-- 이미지가 있을 경우와 없을 경우 if문으로 처리 -->
-                        <input type="file" id="imgInp" name="uploadFile" multiple="multiple" th:if="|$lists.isEmpty(fileList)|"/>
-                   <!-- <input type="file" id="imgInp" name="uploadFile" multiple="multiple" th:if="|${fileList == null}|"/> -->
+                        <input type="file" id="imgInp" name="uploadFile" th:if="|$lists.isEmpty(fileList)|"/>
                         <div th:each="f : ${fileList}">
                            <div th:if="|/fileView/${f.sevNm} != null}|">
                               <img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />

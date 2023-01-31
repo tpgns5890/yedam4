@@ -27,6 +27,8 @@ import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.resume.service.ResumeBoardVO;
+import com.eventi.left.resume.service.ResumeService;
 
 @Controller
 public class JobBoardController {
@@ -38,6 +40,7 @@ public class JobBoardController {
 	//파일 service
 	@Autowired FilesService filesService;
 	@Autowired CodeService codeService;
+	@Autowired ResumeService resumeService;
 	
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
@@ -137,7 +140,7 @@ public class JobBoardController {
 	
 	//게시글 삭제
 	@GetMapping("/jobDelete") //th:onclick = location
-	public String  jobDelete(JobBoardVO jobBoardVO) {
+	public String jobDelete(JobBoardVO jobBoardVO) {
 		jobService.jobDelete(jobBoardVO);
 		return "redirect:/jobList"; //이게 string 이니까 public 옆에도 string으로 
 			
@@ -155,4 +158,11 @@ public class JobBoardController {
 		model.addAttribute("applyList", jobService.myApplyList(jobBoardVO, paging));
 		return "content/myPage/myApplyList";
 	}
+	//2.나의 구인게시글 삭제
+	@GetMapping("/myJobDelete")
+	@ResponseBody
+	public int myJobDelete(JobBoardVO jobBoardVO) {
+		int r = jobService.jobDelete(jobBoardVO);
+		return r; 
+}	
 }

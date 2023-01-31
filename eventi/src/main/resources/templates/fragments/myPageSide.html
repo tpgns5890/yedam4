@@ -8,8 +8,9 @@
 		<li><a href="#">내정보관리</a>
 			<ul class="submenu">
 				<li><a href="/myPage/userMypage">회원정보 조회</a></li>
-				<li><a href="/myPage/userUpgrade">승급신청</a></li>
-			</ul></li>
+				<li><a href="/myPage/userUpgradeForm">승급신청</a></li>
+			</ul>
+		</li>
 
 		<li><a href="#">공모전관리</a>
 			<ul class="submenu">
@@ -17,31 +18,38 @@
 				<li><a href="/design/designMypage">공모전응모관리</a></li>
 				<li><a href="/contest/like">관심공모전</a></li>
 				<li><a href="/contest/qnaList">공모전문의</a></li>
-			</ul></li>
+			</ul>
+		</li>
 		<li><a href="#">견적/제안서</a>
 			<ul class="submenu">
 				<li><a href="#">제안서 목록</a></li>
 				<li><a href="#">진행중인제안서 목록</a></li>
 				<li><a href="#">나의 견적요청 목록</a></li>
-			</ul></li>
+			</ul>
+		</li>
 		<li><a href="#">물품관리</a>
 			<ul class="submenu">
 				<li><a href="/rent/rentGdInsert">물품등록</a></li>
 				<li><a href="/rent/rentGdList">물품리스트</a></li>
-			</ul></li>
-		<li><a href="#">행사관리</a>
+			</ul>
+		</li>
+		<li><a href="#">의뢰내역</a>
 			<ul class="submenu">
-				<li><a href="#">의뢰내역</a></li>
-			</ul></li>
+				<li><a th:href="|/casting/mcCastingList?userId=${session.member.userId}|">사회요청내역</a></li>
+				<li><a th:href="|/casting/mcCastingList?clientId=${session.member.userId}|">의뢰내역</a></li>
+			</ul>
+		</li>
 		<li><a href="#">구인구직</a>
 			<ul class="submenu">
 				<li><a href="/myJobList">구인게시글 관리</a></li>
-				<li><a href="/myApplyList">구직신청내역</a></li>
-			</ul></li>
+				<li><a href="/seekerInfo">구직신청내역</a></li>
+			</ul>
+		</li>
 		<li><a href="#">홍보게시판</a>
 			<ul class="submenu">
 				<li><a href="/myProList">홍보게시글 관리</a></li>
-			</ul></li>
+			</ul>
+		</li>
 		
 		<!-- 추가부분(지은) -->
 		<!-- <li><a href="#">물품관리</a>

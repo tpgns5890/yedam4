@@ -144,6 +144,8 @@ public class McPrtlController {
 	//사회자 정보 수정
 	@PostMapping("/mcUpdate")
 	public String mcUpdateFrm(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		System.out.println("mc++++++" + mcPrtflVO);
+		System.out.println("FILE++++++" + uploadFile);
 		mcPrtflService.mcUpdate(mcPrtflVO, filesVO, uploadFile);
 		return "redirect:/prtfl/mcSelect?userId=" + mcPrtflVO.getUserId();
 	}

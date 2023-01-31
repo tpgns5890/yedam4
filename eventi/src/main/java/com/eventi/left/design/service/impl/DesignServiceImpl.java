@@ -79,7 +79,7 @@ public class DesignServiceImpl implements DesignService {
 	@Override
 	public List<DesignVO> userDesignList(DesignVO vo, PagingVO paging) {
 		paging.setTotalRecord(mapper.count(vo));
-		paging.setPageUnit(4);
+		paging.setPageUnit(6);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
@@ -121,7 +121,7 @@ public class DesignServiceImpl implements DesignService {
 	public void uploadFiles(MultipartFile[] uploadfile, DesignVO vo) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T07");//대상구분 디자인(잠시수정)
+			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");//대상구분 디자인(잠시수정)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.punish.mapper.PunishMapper">
 	<insert id="punishInsert">
-		INSERT INTO PUNISH(PUN_NO, USER_ID, TARGET_ID, TARGET_CAT, DT, BAN_CNTN)
-		VALUES('PU'||PUNISH_SEQ.NEXTVAL, #{userId}, #{targetId}, #{targetCat}, SYSDATE, #{banCntn})
+		INSERT INTO PUNISH(PUN_NO, USER_ID, TARGET_ID, TARGET_CAT, DT, BAN_TYPE, BAN_CNTN, BAN_RSLT, WRITER)
+		VALUES('PU'||PUNISH_SEQ.NEXTVAL, #{userId}, #{targetId}, #{targetCat}, SYSDATE, #{banType}, #{banCntn},'R', #{writer})
 	</insert>
 	
 	<select id="punishCheck" resultType="int">

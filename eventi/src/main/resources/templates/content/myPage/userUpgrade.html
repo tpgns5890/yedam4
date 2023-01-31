@@ -6,6 +6,7 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -23,77 +24,94 @@
         </section>
 		
 		
-		<div style="min-height: 700px">
-			<!-- 3.현재페이지 myPageSide 적용 -->
-			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
+		<div id="user"style="min-height: 700px;">
 			<div id="signIn-right">
-					<input type="radio" class="inputRadio" name="certType" value="MC"><label class="labelRadio">사회자</label>
-					<input type="radio" class="inputRadio" name="certType" value="DESIGNER"><label class="labelRadio">디자이너</label> <br>
-					<label for="name">자격증 발급번호</label><input type="text" id="inputQno">
-					<button type='button' id="qPlus">추가</button>
-					<br><br>
-					<ul id="qList">
-						<li class="qualLi"><span data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증명: 정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">X</button></li>
-							
-						<!-- <li class="qualLi"><span
-								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
-								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">X</button></li>
-						<li class="qualLi"><span
-								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
-								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">X</button></li>
-						<li class="qualLi"><span
-								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
-								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">X</button></li>
-						<li class="qualLi"><span
-								data-value='{"certName":"정보처리기능사","certNum":"12345678901A","certType":"MC"}'>자격증 명:
-								정보처리기능사, 자격증발급번호: 12345678901A</span>
-							<button type="button" class="quDelBtn">X</button></li> -->
-					</ul>
+					<label style="width: 100px">사회자</label><input type="radio" name="crtfType" value="MC">
+					<label style="width: 100px">디자이너</label><input type="radio" name="crtfType" value="DESIGNER"><br>
+					<label style="width: 150px;">자격증명</label> <input type="text" id="crtfName" name="crtfName"><br>
+					<label style="width: 150px">자격증 발급번호</label> <input type="text" id="crtfNum" name="crtfNum">
+					<button type='button' id="qPlus">승급신청</button>
+			</div>
+			
+			<div id="userCrtf">
+				<div th:if="${userCrtf} != null">
+					<div th:each="data : ${userCrtf}">
+						<ul id="qList" style="list-style: none;">
+						<li class="qualLi">
+							<span th:id="${data.crtfId}" th:text="|자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}|"></span>
+							<button type="button" class="quDelBtn">X</button>
+						</li>
+					 </ul>						
+					</div>
 				</div>
+			</div>
 					
-		
-		
 		</div>
-	<script >
-	/* 자격증추가 */
-	/* 자격증 진위확인 api사용 */
-	$("#qPlus").click(function () {
-		var name = $("#inputName").val();
-		var qNo = $("#inputQno").val();
-		var certType = $('input[name="certType"]:checked').val(); //:checked').value;
-		var qName = "";
-		$.ajax({
-			url: `qualCheck?no=${qNo}&name=${name}`,
-			dataType: "json",
-			success: function (result) {
-				if (result.result == true) {
-					qName = result.certificateName;
-					/* li 만들고 append */
-					$("#qList").append($("<li/>").attr('class', 'qualLi').append(
-						$("<span/>").attr('data-value', '{certName:' + qName + ',certName:' +
-							qNo + ',certType:' + certType + '}').text("자격증 명: " + qName +
-							", 자격증발급번호: " + qNo),
-						$("<button/>").attr({
-							type: "button",
-							class: "qDel"
-						}).text("X").on('click', function () {
-							$(this).parentsUntil('#qList').remove(); //삭제버튼 추가
-						})
-					))
-				} else {
-					alert('확인되지 않는 자격증입니다.')
-				}
-			},
-			error: function () {
-				alert("서버 요청 실패");
+	<script>
+	//csrf 설정
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+
+		//승급신청 버튼.
+		$('#qPlus').on("click", function(){
+			let userId = '[[${session.member.userId}]]';
+			let crtfType = $('input:radio[name="crtfType"]:checked').val();
+			let crtfName =  $('input[name="crtfName"]').val();
+			let crtfNum= $('input[name="crtfNum"]').val();
+			
+			console.log(crtfType);
+			if(crtfType == "" || crtfType ==null){
+				alert('승급정보를 선택해주세요');
+				return false;
 			}
-		})
-	});
+			if(crtfName == "" || crtfNum == ""){
+				alert('자격증 정보를 기입해주세요');	
+				return false;
+			}
+			
+			if(confirm(crtfName + ' 등록으로 승급신청 하시겠습니까?')){
+				$.ajax({
+	 	   			url : '/myPage/userUpgrade',
+	 	   			method : 'post',
+		            data:{userId,crtfName,crtfNum,crtfType},
+	 	   			beforeSend : function(xhr)
+	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 					xhr.setRequestHeader(header, token);
+	 	            },
+					success : function(result){
+				      if(result != null){
+				    	  $('#userCrtf').append(makeli(result));
+						  alert('신청완료');
+							
+				     }else {
+							alert('신청실패')	
+				     }
+					 },
+			        fail: function () {
+			           }
+					})
+			
+			}else{
+				return false;
+				
+			}
+		});
+		
+		function makeli(data){
+			console.log(data);
+			let p = `<ul id="qList" style="list-style: none;">
+						<li class="qualLi">
+							<span id="${data.crtfId}">자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}</span>
+							<button type="button" class="quDelBtn">X</button>
+						</li>
+					 </ul>
+					`;
+					
+			return p;
+		}
 	</script>
 	</div>
 </body>

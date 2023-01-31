@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
 
@@ -37,4 +38,16 @@ public interface ResumeService {
 	
 	//구직자 부분미채용 
 	public int unHireUpdates(List<ResumeBoardVO> resumeBoardVO);
+	
+	//시퀀스 값 찾기
+	public String getSeq();
+	
+	//게시글 개수
+	public int count(ResumeBoardVO resumeBoardVO);
+	
+	//마이페이지 구직자정보 조회
+	public List<ResumeBoardVO> seekerInfo(ResumeBoardVO resumeBoardVO, PagingVO paging);
+	
+	//마이페이지 구직신청 삭제
+	public int applyDelete(ResumeBoardVO resumeBoardVO);
 }

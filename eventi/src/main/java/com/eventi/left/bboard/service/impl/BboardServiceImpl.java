@@ -82,15 +82,14 @@ public class BboardServiceImpl implements BboardService{
 	
 	//수정
 	@Override
-	public int bboardUpdate(BboardVO bboardVO, MultipartFile[] uploadFile) {
+	public int bboardUpdate(BboardVO bboardVO, MultipartFile[] uploadfile) {
 		//내용 수정
 		int r = bboardMapper.bboardUpdate(bboardVO);
 		
-		List<FileDto> list= new ArrayList<FileDto>();
 		//파일 업로드하는 기능 부르기+데베에 저장하기/첨부파일 테이블에 저장할 때 쓰임
+		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadFile, bboardVO.getBBoardNo(), bboardVO.getType());
-			filesMapper.oneDeleteFile(bboardVO.getBBoardNo());
+			list = newUp.uploadFiles(uploadfile, bboardVO.getBBoardNo(), bboardVO.getType());//대상구분 디자인(잠시수정)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

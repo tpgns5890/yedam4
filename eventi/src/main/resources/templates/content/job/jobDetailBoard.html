@@ -97,10 +97,10 @@
 			 
 	<button type="button" class="btn btn-outline-primary" 
 			th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
-			
+	</th:block>
+<!-- 구직신청 -->	
 	<button type="button" class="btn btn-outline-primary" 
 			th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-	</th:block>
 <!-- 신고하기 -->
    <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
 
@@ -315,13 +315,13 @@
 			   $("#punish").on('click', function() {
 				   let targetId = $("#targetId").val();
 				   let banCntn = $("#banCntn").val();
-				  
-				   
+				   let writer = "[[${job.userId}]]"
+				   let banType = 'P1';
 				    $.ajax({
 							url : "/punishInsert",
 							method : 'post',
 							contentType : 'application/x-www-form-urlencoded',
-							data : {userId:userId, targetId:jobNo, banCntn:banCntn, targetCat:type},
+							data : {userId:userId, targetId:jobNo,banType:banType, banCntn:banCntn, targetCat:type, writer:writer},
 							beforeSend : function(xhr)
 			                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 			    				xhr.setRequestHeader(header, token);

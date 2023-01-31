@@ -91,16 +91,16 @@
 		from Questions
 		where category = #{category}
 		and target_id = #{targetId}
-		and
-		q_no = #{qNo}
+		and q_no = #{qNo}
 	</select>
 
 	<!-- 문의글 1건과 답변1건 조회 -->
 	<select id="getQuestionsList" resultType="QuestionsVO">
 		SELECT *
 		FROM Questions
-		where q_no = #{qNo}
-		or rerep_tgt = #{rerepTgt}
+		WHERE Q_NO = #{qNo}
+		OR REREP_TGT = #{rerepTgt}
+		ORDER BY REREP_TGT DESC
 	</select>
 
 	<!-- 게시글 시퀀스번호 찾기 -->
@@ -109,7 +109,8 @@
 		'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
 		FROM Questions
 	</select>
-
+	
+	<!-- 게시글 등록 -->
 	<insert id="questionsInsert">
 		<selectKey keyProperty="qNo" resultType="String"
 			order="BEFORE">
@@ -144,8 +145,7 @@
 	<delete id="questionsDelete">
 		delete questions
 		where q_no = #{qNo}
-		and user_id =
-		#{userId}
+		and user_id =#{userId}
 	</delete>
 
 	<!-- 전체 게시글 문의개수 -->

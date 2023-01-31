@@ -30,7 +30,7 @@
 
 
 			
-			<div class="container" >
+			<div class="contest" >
 			 	<!-- 문의내역이 없을경우 -->
 			 	<div th:if="${#lists.isEmpty(qnaList)}">
 					<h3>문의내역이 없습니다.</h3>
@@ -40,22 +40,23 @@
 			 	<div th:if="${!#lists.isEmpty(qnaList)}">
 				
 				<!-- 게시글 검색 -->
-				<form name="searchFrm">
-					<label>내용</label><input type="text" id="cntn" name="cntn" value="">
+				<form id="searchFrm" name="searchFrm">
+					<label>제목</label><input type="text" id="Ttl" name="Ttl" value="">
+					<label>내용</label><input type="text" id="Cntn" name="Cntn" value="">
 					<input type="hidden" name="page" value="1">
-					<button type="submit" id="submit" class="btn btn-g btn-round inputBtn">검색</button>
+					<button type="submit" class="btn btn-g btn-round inputBtn">검색</button>
 				</form>
 				
 					<!-- 테이블 -->
 						<table border="1" id="myTable">
 							<thead>
 								<tr>
-									<th>문의No</th>
-									<th>게시글No</th>
-									<th style=" width: 380px;">문의사항제목</th>
-									<th>작성일자</th>
+									<th style=" width: 100px;">문의No</th>
+									<th style=" width: 100px;">게시글No</th>
+									<th >문의사항제목</th>
+									<th >작성일자</th>
 									<th>답변유무</th>
-									<th>조회</th>
+									<th style=" width: 80px;">조회</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -100,10 +101,13 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 
+		
 		//페이징 
 		function gopage(i) {
-			searchFrm.page.value = i;
-			searchFrm.submit();
+			$('input[name="Ttl"]').val('');
+			$('input[name="Cntn"]').val('');
+			$("input[name='page']").val(i);
+			$("#searchFrm").submit();   
 		}
 		
 		//모달창-----------------------------------------------------------

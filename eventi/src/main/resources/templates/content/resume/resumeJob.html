@@ -21,7 +21,7 @@
 			<tr>
 				<th>구직신청게시글번호</th>
 				<th>구직자ID</th>
-				<th>구직자정보</th>
+				<th>제목</th>
 				<th>구인게시글번호</th>
 				
 			</tr>		
@@ -31,7 +31,7 @@
 				th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">
 				<td th:text=${res.resumeNo}></td>
 				<td th:text=${res.seekerId}></td>
-				<td th:text=${res.seekerCntn}></td>
+				<td th:text=${res.title}></td>
 				<td th:text=${res.jobNo}></td>
 			</tr>
 		</tbody>

@@ -40,7 +40,7 @@
 
 					<div class="col-md-12">
 						<div class="form-group">
-							<input type="hidden" name="seekerId" id="seekerId" th:value="admin">
+							<input type="hidden" name="seekerId" id="seekerId" th:value="${session.member.userId}">
 							<label class="label" for="#">이름</label>
 							<input type="text" name="userName" id="userName" th:value=${session.member.name} readonly>
 							<!--vo와같음 -->
@@ -65,8 +65,8 @@
 
 					<div class="col-md-12">
 						<div class="form-group">
-							<label class="label" for="#">구직자정보</label>
-							<input type="text" name="seekerCntn" id="seekerCntn">
+							<label class="label" for="#">제목</label>
+							<input type="text" name="title" id="title">
 						</div>
 					</div>
 
@@ -74,7 +74,7 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<label class="label" for="#">자기소개서</label>
-							<textarea name="resumeCntn" class="form-control" id="resumeCntn" cols="30"
+							<textarea name="cntn" class="form-control" id="cntn" cols="30"
 								rows="4"></textarea>
 						</div>
 					</div>
@@ -111,8 +111,8 @@
 		//submit 유효성검사
 		$('#ApplyJob').submit(function () {
 			let check = $('input[type="checkbox"]').is(":checked");
-			let seeker = $('#seekerCntn').val();
-			let cntn = $('#resumeCntn').val();
+			let title = $('#title').val();
+			let cntn = $('#cntn').val();
 			if(!seeker){
 				alert('구직자정보를 입력해주세요.');
 				return false;

@@ -122,4 +122,6 @@ public class PromotionServiceImpl implements PromotionService{
 		
 		return proMapper.myPromotionList(promotionVO);
 	}
+
+	
 }

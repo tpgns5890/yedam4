@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		// get parameter 담아주기
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url) // url
 				.queryParam("apiKey", apiKey) // 인증키
-				.queryParam("name", name) // 이름
+				//.queryParam("name", name) // 이름
 				.queryParam("no", qNo); // 자격증발급번호
 		RestTemplate restTpl = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders(); // 담아줄 header
@@ -113,7 +113,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 		return ResponseEntity.ok(result);
 	}
-
+	
 	// userdetails
 	@Override
 	public UserDetails loadUserByUsername(String username) throws AuthenticationException {
@@ -221,6 +221,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public int bankUpdate(MemberVO memberVO) {
 		return mapper.bankUpdate(memberVO);
+	}
+
+	@Override
+	public int insertCrtf(CrtfVO crVO) {
+		return mapper.insertCrtf(crVO);
+	}
+
+	@Override
+	public List<CrtfVO> crtfSelect(String userId) {
+		return mapper.crtfSelect(userId);
 	}
 
 }

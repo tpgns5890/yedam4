@@ -17,14 +17,12 @@
 </sql>	
 
 <sql id="search">
-	<where>
 		<if test="eName !=null and eName != ''">
 			AND E_NAME LIKE '%'||#{eName}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
 		<if test="intro!=null and intro!=null != ''">
 			AND INTRO LIKE '%'||#{intro}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
-	</where>
 </sql>		
 	<!-- 홍보게시판 메인 -->
 	<select id="proList" resultType="com.eventi.left.promotion.service.PromotionVO">
@@ -100,7 +98,7 @@
 	<!-- 게시글 삭제 -->
 	<delete id="proDelete">
 		DELETE FROM PROMOTION_BOARD
-		WHERE PRO_NO=#{proNo}
+		WHERE PRO_NO= #{proNo}
 	</delete>
 	
 	<!-- 댓글 조회 -->
@@ -117,7 +115,8 @@
 				code_select(E_TYPE) E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE, DT
 		FROM (SELECT ROWNUM RN, A.* 
 		       FROM(SELECT * FROM PROMOTION_BOARD
-			<include refid="search" />       
+		WHERE USER_ID = #{userId}   
+			<include refid="search" />    
 		<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}

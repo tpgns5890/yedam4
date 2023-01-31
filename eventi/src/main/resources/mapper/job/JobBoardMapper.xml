@@ -24,14 +24,14 @@
 	</sql>
 	
 	<sql id="search">
-		<where>
+		
 			<if test="title !=null and title != ''">
 				AND TITLE LIKE '%'||#{title}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 			</if>
 			<if test="jobCntn!=null and jobCntn!=null != ''">
 				AND JOB_CNTN LIKE '%'||#{jobCntn}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 			</if>
-		</where>
+		
 	</sql>	
 	<!-- 구인게시글 전체조회 -->
 	<select id="getJobList" resultType="com.eventi.left.job.service.JobBoardVO">
@@ -165,6 +165,7 @@
 				USER_ID,
 				DT,
 				CLOSE_DT,
+				SAVE,
 				CLOSE_DT - SYSDATE AS remain,
                 CNT,
                 RECOUNT,
@@ -173,11 +174,10 @@
 		           SELECT DISTINCT J.*, 
 		                 (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = J.JOB_NO) AS CNT,
 		                 (SELECT COUNT(*) FROM RESUME_BOARD WHERE JOB_NO = J.JOB_NO) AS reCount
-		            FROM JOB_BOARD J, LIKES L, RESUME_BOARD R
-		           WHERE J.JOB_NO = L.TARGET_NO(+)
-		             AND J.JOB_NO = R.JOB_NO(+)
+		            FROM JOB_BOARD J, RESUME_BOARD R
+		             WHERE J.JOB_NO = R.JOB_NO(+)
+		             AND J.USER_ID = #{userId} 
 			<include refid="search" /> 
-		    <include refid="likeSelect" />
 		    
 		<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 

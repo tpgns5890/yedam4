@@ -29,7 +29,6 @@ import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.mapper.MemberMapper;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.money.mapper.MoneyMapper;
-import com.eventi.left.money.service.MoneyService;
 import com.eventi.left.money.service.MoneyVO;
 
 @Service
@@ -72,7 +71,7 @@ public class ContestServiceImpl implements ContestService {
 
 		// 페이징 동적쿼리로 카테고리 입력시 개수파악(setFirst,setLast 세팅)
 		paging.setTotalRecord(mapper.contestCount(vo));
-		paging.setPageUnit(6); // 9개 출력 (default 10)
+		paging.setPageUnit(6); // 6개 출력 (default 10)
 		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
@@ -144,12 +143,12 @@ public class ContestServiceImpl implements ContestService {
 			// 제목,내용 수정할경우(그 외 공모전민감자료 수정불가)
 		} else {
 			// 파일업로드,공모전 수정
-			result = mapper.updateContest(vo);
 			uploadFiles(uploadFile, vo);
+			result = mapper.updateContest(vo);
 
 			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
-			Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
-			thread.start();
+			//Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
+			//thread.start();
 		}
 		return result;
 	}

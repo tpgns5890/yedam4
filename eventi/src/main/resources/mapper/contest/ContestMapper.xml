@@ -134,10 +134,7 @@
 	
 	<!-- 공모전 1건 상세조회 -->
 	<select id="getContest" resultType="ContestVO">
-		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq
-			,(select count(*) 
-                from PUNISH
-                where target_Id = c_no)AS rprt
+		SELECT c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
 			,category categoryCode
 	        ,code_select(category) category
 	        ,REPLACE(codeArr_select(style), ',', ' #') style
@@ -184,12 +181,6 @@
 
 	<!-- 공모전 등록(cno 시퀀스 최대값+1 (문자열->숫자+1->문자열 변경) -->
 	<insert id="insertContest">
-		<!-- <selectKey keyProperty="cNo" resultType="String" order="BEFORE">
-			SELECT
-			'CO'||(MAX(TO_NUMBER(SUBSTR(C_NO,3)))+1) C_NO
-			FROM CONTEST
-		</selectKey> -->
-		
 		insert into
 		CONTEST(C_NO,
 		        WRITER,

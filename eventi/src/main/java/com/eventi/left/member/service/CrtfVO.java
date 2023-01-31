@@ -21,6 +21,6 @@ public class CrtfVO {
 	@JsonFormat(pattern = "yyyy/MM/dd")
 	private Date reqDate;
 	
-	Integer first;
-	Integer last;
+	Integer first = 1; //첫페이지
+	Integer last = 5; //마지막페이지
 }

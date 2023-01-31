@@ -197,19 +197,17 @@
 		</div>
 	</div>
 	
-	<div class="col-md-12">
-		<div class="form-group">
+	<!-- <div class="col-md-12">
+		<div class="form-group" id="addMove">
 			<label class="label" for="movie">동영상등록</label><br>
 			<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
 			<th:block th:each="file : ${files}">
 			<div th:if="${#strings.containsIgnoreCase(file,'.mp4')}">
-			<input type="file" id="videoInp" name="uploadFile" th:text="${file.fNm}"/><span><button type="button" class="cancel">-</button></span>
+			<input type="file" class="videoInp" name="uploadFile" th:text="${file.fNm}"/><span><button type="button" class="cancel">-</button></span>
 			</div>
 			</th:block>
-			<div id="addMove">
-			</div>
 		</div>
-	</div>
+	</div> -->
 	
 	<div class="col-md-12">
 		<div class="form-group">
@@ -325,7 +323,7 @@
     
     //동영상추가버튼
     $("#movieInsert").on('click', function() {
-    	let tag = `<div><input type="file" id="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
+    	let tag = `<div><input type="file" class="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
     	$("#addMove").append(tag);
     })
     
