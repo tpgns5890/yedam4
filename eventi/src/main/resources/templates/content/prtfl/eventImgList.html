@@ -7,14 +7,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<link rel="stylesheet" href="/css/myPageSide.css">
 <style>
 	.label {
 		color : black;
 	}
 	
 	#check{
-		min-height : 3000px;
+		min-height : 1000px;
 	}
 	
 	.fileShow{
@@ -86,7 +86,10 @@
             </div>
           </div>
         </section>
+    <!-- 현재페이지 myPageSide 적용 -->
+	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
+    <div id="check">
     <button class="btn btn-primary btn-round" type="button" id="imgUp">이미지 등록</button> 
 
 	<div class="container">
@@ -134,6 +137,7 @@
 			</div>
 		<div class="modal_layer"></div>
 	</div>
+	</div>
 					     	
 	<script>
 		var token = $("meta[name='_csrf']").attr("content");
@@ -151,7 +155,6 @@
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			console.log(res.imgs)
 			 for(img of res.imgs){
 				$('#works-grid').append(makeDesgin(img));
 			}
@@ -223,7 +226,7 @@
 			let userId = '[[${session.member != null ? session.member.userId :''}]]';
 			let page = i;
 			$.ajax({
-				url: '/rent/rentGdList',
+				url: '/eventImg/eventImgList',
 				method: 'post',
 				data: {
 					userId:userId, page:page
@@ -232,9 +235,9 @@
 					xhr.setRequestHeader(header, token);
 				},
 			}).then(res => {
-				$('#check').empty();
-				for(design of res.designs){
-					$('#check').append(makeDesgin(gd));
+				$('#works-grid').empty();
+				for(img of res.imgs){
+					$('#works-grid').append(makeDesgin(img));
 				}
 				
 				$('#returnPaging').empty();

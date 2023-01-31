@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eventi.left.prtfl.mapper.BusiPrtflMapper">
+	
+	<!-- 전체조회 -->
 	<select id="busiList" resultType="com.eventi.left.prtfl.service.BusiPrtflVO">
 		SELECT *
 		FROM BUSI_PRTFL
 	</select>
+	
+	<!-- 포트폴리오 상세 조회 -->
+	<select id="busiSelect" resultType="com.eventi.left.prtfl.service.BusiPrtflVO">
+		SELECT B.USER_ID, B.INTRO, B.TEL, B.BUSI_TITLE, CODEARR_SELECT(M.BUSI_AREA) busiArea, CODEARR_SELECT(M.BUSI_STYLE) busiStyle, F.SEV_NM IMG
+		  FROM BUSI_PRTFL B, BUSI_MEMBER M, FILES F
+		 WHERE B.USER_ID = M.USER_ID
+		   AND B.USER_ID = F.TARGET_ID
+		   AND B.USER_ID = #{userId}
+	</select>
+	
+	<!-- 포트폴리오 등록 -->
+	<insert id="busiInsert">
+		INSERT INTO BUSI_PRTFL(USER_ID, BUSI_TITLE, TEL, INTRO, DT, img)
+		VALUES(#{userId}, #{busiTitle}, #{tel}, #{intro}, SYSDATE, #{img})
+	</insert>
+	
+	<!-- 조회수 +1 -->
+	<update id="inqUpdate">
+		UPDATE BUSI_PRTFL
+		   SET INQ = INQ + 1
+		 WHERE USER_ID = #{userId}
+	</update>
 </mapper>
