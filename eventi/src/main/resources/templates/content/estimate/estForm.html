@@ -111,39 +111,13 @@ h1 {
   overflow: hidden;
 }
 /* 상태바 */
-.progressbar{
-  width: 400px;
-  height: 15px;
-  border-radius: 10px;
-  overflow:hidden;
-  background: #ccc;
-  position:relative;
-  margin: 10px auto;
+.progress-bar {
+  width: 0%;
+  height: 20px;
+  background-color: green;
+  transition: width 0.5s linear;
 }
-.progressbar::after{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  height: 15px;
-  width:0;
-  background:blue;
-  animation: progress 2s ease forwards;
-}
-@keyframes progress{
-  0%{width: 0px}
-  100%{width: 14%;}
-}
-.progress{
-  position: absolute;
-  top:0;
-  right:0;
-  z-index:99;
-}
-.progress::after{
-  content: '%';
-  
-}
+
 </style>
 </head>
 <body>
@@ -162,9 +136,7 @@ h1 {
 <div id="bodyContents">
 
 <!-- 상태바 -->
-<div class="progressbar">
-<!--   <span class="progress">0</span> -->
-</div>
+<div class="progress-bar"></div>
 <h1>어떤 행사를 기획중이신가요?</h1>
 <table id="customers">
   <tr>
@@ -209,7 +181,7 @@ h1 {
 
  <!-- 행사장소 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 예정 장소는 어디인가요?</h1>
 <table id="customers">
   <tr>
@@ -267,7 +239,7 @@ h1 {
 
  <!-- 행사규모 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 규모는 어느정도인가요?</h1>
 <table id="customers">
   <tr>
@@ -313,7 +285,7 @@ h1 {
 
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
- <div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 날짜를 선택해주세요.</h1>
 <input type="date" name="eventDate" value=""><br>
  <input type="button" value="이전" class="prev">
@@ -322,7 +294,7 @@ h1 {
 
  <!-- 행사시작시간 선택 -->
 <div id="bodyContents" class="hidden">
- <div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 시작 시간은 언제인가요?</h1>
 <table id="customers">
   <tr>
@@ -348,7 +320,7 @@ h1 {
 
  <!-- 행사소요시간 선택 -->
 <div id="bodyContents" class="hidden">
- <div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 예상 소요시간을 선택해주세요</h1>
 <table id="customers">
   <tr>
@@ -394,7 +366,7 @@ h1 {
  
   <!-- 행사지역 선택 -->
  <div id="bodyContents" class="hidden">
-   <div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 예상 지역을 선택해주세요.</h1>
 <select name="expectedLocal" >
 	<option value="A00">==지역선택==</option>
@@ -418,7 +390,7 @@ h1 {
 
  <!-- 행사 희망사항 입력 -->
 <div id="bodyContents" class="hidden">
- <div class="progressbar"></div>
+<div class="progress-bar"></div>
 <h1>행사 관련 희망사항을 알려주세요.</h1>
 <input name="wishes" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
  <input type="button" value="이전" class="prev">
@@ -437,6 +409,7 @@ h1 {
 <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 </form>
 <script>
+
 //페이지 벗어나기전 알림
  var checkUnload = true;
  $(window).on("beforeunload", function(){
@@ -465,8 +438,18 @@ $('input:radio').click(function() {
 	});
 	
 //다음 버튼 클릭 시
+	var width = 0;
 $('.next').click(function() {
-	
+	var progressBar = $('.progress-bar')
+	  width = 0;
+	  var intervalId = setInterval(function() {
+	    if (width >= 14) {
+	      clearInterval(intervalId);
+	    } else {
+	      width++;
+	      progressBar.style.width = width + "%";
+	    }
+	  }, 50);
 	var name = $(this).attr('id');
 
 	
@@ -571,18 +554,6 @@ $('.submit').click(function() {
 function login(){
 	 $("#header_modal").show();
 }
-
-//상태바
-$({ val : 0 }).animate({ val : 30 }, {
-   duration: 5000,
-  step: function() {
-    $(".progress").text(Math.floor(this.val));
-  } ,
-  complete: function() {
-    $(".progress").text(Math.floor(this.val));
-    $(".progress").css("color","#fff");
-  } 
-});
 </script>
 </div>
 </body>

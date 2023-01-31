@@ -109,14 +109,25 @@ function makeTr(eList) {
 			return p;
 		}
 	}
+	if(yn == 'N'){
 	 p = `
 	<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
 		<td>${eList.eno}</td> 
 		<td>${eList.eventType}</td>
 		<td>${eList.writingDate}</td>
-		<td>${eList.adoptionYn}</td>
+		<td>채택전</td>
 	</tr>`;
 	return p;
+	}
+	else {
+		 p = `
+				<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
+					<td>${eList.eno}</td> 
+					<td>${eList.eventType}</td>
+					<td>${eList.writingDate}</td>
+					<td>채택완료</td>
+				</tr>`;
+	}
 }
 
 // 페이징 만들기
