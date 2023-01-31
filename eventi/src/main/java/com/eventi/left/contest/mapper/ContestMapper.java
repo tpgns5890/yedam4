@@ -6,10 +6,11 @@ import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 
 public interface ContestMapper {
+	
 	// 공모전
 	public List<ContestVO> contestList(ContestVO contestVO); // 전체조회
-
-	public List<ContestVO> myContestList(ContestVO ContestVO); // 작성한 공모전리스트 조회
+	
+	public List<ContestVO> myContestList(ContestVO ContestVO); // 작성한 공모전리스트 조회(마이페이지)
 
 	public int contestCount(ContestVO ContestVO); // 공모전 등록건수(임시건수 제외)
 

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/css/model.css">
 <link rel="stylesheet" href="/css/heart.css">
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+<link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
 <style>
 label {
 	font-weight:bold;
@@ -40,7 +41,7 @@ label {
           <div class="container">
           
           	   <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-30px; left:1035px; width: 100px;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-25px; right:40px; width: 100px;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" onclick="login()"></div>
@@ -83,19 +84,22 @@ label {
 					<!-- 일반회원 공모전작성버튼-->
 					<th:block sec:authorize="isAuthenticated()">
 						<a href="./insert">
-							<button class="w-btn w-btn-gra1" style="position:relative; top:-65px; left: 550px">공모전 작성</button>
+							<button class="w-btn w-btn-gra1" style="position:relative; top:-65px; left: 480px">공모전 작성</button>
 						</a>
 					</th:block>
+					
+					<!-- 마감된 공모전 조회 -->
+					<button type="button" id="history" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="position:relative; top:-145px; left: 650px">마감 공모전</button>
+					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none; position:relative; top:-145px; left: 650px">진행중 공모전</button>
 	              </div>
 	           </div>
 	         </div>
         </section>
            
 
-			<!-- 공모전 리스트 -->
 			<div class="container">
+				<!-- 공모전 리스트 -->
 				<div class="row multi-columns-row" id="boxList"  > </div>
-			<!-- end -->
 
 				<!-- //페이징 경로 :: 문자 -->
 				<div class="row mt-5" id="paging">
@@ -109,6 +113,17 @@ label {
 				<input type="hidden" name="orderSelect" value="dt_Reg">
 				<input type="hidden" name="categorySelect" value="">
 				<input type="hidden" name="page" value="1">
+				<input type="hidden" name="history" value="">
+			</div>
+			
+			<!-- 우승자 상세보기 모달 -->
+			<div id="winnerModel" class="modal">
+				<div class="img_modal_content">
+					<span id="winnerCancel" class="close">&times;</span>
+					<h3 id="coNo"></h3>
+					<div id="modelSelect"></div>
+				</div>
+				<div class="modal_layer"></div>
 			</div>
 
 
@@ -118,10 +133,88 @@ label {
 				var header = $("meta[name='_csrf_header']").attr("content");
 				contestList(); // 첫 화면 리스트출력
 
+				//로그인 모달창
 				function login(){
 					 $("#header_modal").show();
 				}
+				//우승자 모달창 출력----------------------------------------------------
+				var winnerModel = document.getElementById("winnerModel");
+		
+				// <span> (x), close the modal
+				$('.close').on("click", function(){
+					winnerModel.style.display = "none";
+				})
 				
+				$("#boxList").on("click", ".shop-item-image", function(){
+					
+					let coNo = $(this).prev().attr("id");
+					console.log($(this));
+					
+					if($('#history').css("display") != "none"){
+						location.href = "/contest/select?cNo=" + coNo;
+						return false;
+					}
+	
+						$.ajax({
+							url: '/winner/select',
+							method: 'post',
+							data:{ coNo },
+							beforeSend: function (xhr) {
+								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+								xhr.setRequestHeader(header, token);
+							},
+							success: function (result) {
+				        	   	console.log(result);
+				        	   	
+								if(result == null || result==''){
+									alert('등록된 우승자가 없습니다.')
+									return false;
+								}			        	   	
+				        	   	
+				        	   	$('#modelSelect').empty();
+				        	   	for(winner of result){
+					        	   	makeWinner(winner);
+				        	   	}
+				        	   	winnerModel.style.display = "block";
+					        },
+					        fail: function () {
+				        		console.log("실패");
+					        }
+						
+						})
+				})
+				
+				//우승자 모달창 생성.
+				//모달창 :디자인 응모작품 생성.
+				function makeWinner(data){
+					$('#coNo').empty();
+					$('#coNo').text("["+data.TTL + "] 우승자");
+					let img = null;
+					
+					if(data.GRADE == 1){
+						img = 'first'
+					}else if(data.GRADE == 2){
+						img = 'second'
+					}else{
+						img = 'third'
+					}
+					
+					let design = `  <div class="design" id="${data.DGN_NO}" style="float: left; margin:10px">
+						 				<div>
+											<img src="/images/${img}.jpg" style="width: 100px; height: 100px;">
+											<p>작품명 : ${data.NAME}</p>
+											<p>ID : ${data.USER_ID}
+											</p><button type="button" onclick="">포트폴리오 방문</button>
+										</div>
+										<img src="/fileView/${data.SEVNM}" style="width: 500px; height: 500px">
+								   </div>
+								  `
+						$('#modelSelect').append(design);
+					
+				}
+				
+				
+				//페이지 이동----------------------------------------------------
 				function gopage(i) {
 					let page = $('input[name="page"]').val(i);
 					
@@ -136,8 +229,7 @@ label {
 					}
 					
 				}
-				
-				//공모전 기본 전체리스트
+				//공모전 기본 전체리스트----------------------------------------------------
 				function contestList() {
 					
 					$.ajax({
@@ -187,10 +279,28 @@ label {
 					});
 				});
 				
+				//지난공모전 분류,정렬기준 전체확인 => 리스트출력.
+				$('.status').on("click", function(){
+					
+					let id = $(this).attr("id");
+					
+					if(id == 'history'){
+						$('input[name=history]').val('history');
+						$(this).css('display', 'none');
+						$('#now').css('display', 'block');
+					}else{
+						$('input[name=history]').val('');
+						$(this).css('display', 'none');
+						$('#history').css('display', 'block');
+					}
+					$('input[name=page]').val(1);
+					checkSelect();
+				});
 				
 
 				//분류,정렬기준 전체확인 => 리스트 출력.
 				function checkSelect() {
+					let ing = $('input[name=history]').val();
 					let category = $('input[name=categorySelect]').val();
 					let order = $('input[name=orderSelect]').val();
 					let page = $('input[name=page]').val();
@@ -201,7 +311,8 @@ label {
 						data: {
 							category,
 							order,
-							page
+							page,
+							ing
 						},
 						beforeSend: function (xhr) {
 							/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -239,8 +350,25 @@ label {
 				//공모전 1건의 대한 박스 생성
 				function makeBox(contest) {
 					//로그인 회원의 하트눌려진것만 체크
-					let active;
-					let img;
+					let dDay = 'D-'+contest.dDay;
+					let active= '';
+					let img= '';
+					let link = ` <a href="/contest/select?cNo=${contest.cNo}" class="btn btn-round btn-b">
+								 <span class="icon-magnifying-glass">상세조회</span></a>
+								`;
+					
+					// 마감된 공고문 리스트 생성
+					//숫자 문자형 변환 -> - 제거
+					if(contest.dDay < 0){
+						data = (contest.dDay).toString();
+						let str = (data.substr(1));
+						dDay = 'D+'+str;
+						
+						link = ` <a href="#" class="btn btn-round btn-b">
+							 <span class="icon-magnifying-glass">우승자조회</span></a>
+							`;
+					}
+					
 					if(contest.userLike > 0){
 						//console.log(contest.cNo);
 						//console.log(contest.userLike);
@@ -253,13 +381,13 @@ label {
 					}
 					let p = ` 
 								<div class="col-sm-6 col-md-4 col-lg-4">
-					                <div id="${contest.cNo}" class="shop-item" >
+					                <div class="shop-item" >
 								  		  <div id="${contest.cNo}" class="stage heart ${active}" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;">
 								  		  </div>
 						                  <div class="shop-item-image">${img}
 							                    <div class="shop-item-detail">
 										   				<div>
-										   				  <h3 class="content-box-title font-serif">[${contest.category}] D-${contest.dDay}</h3>
+										   				  <h3 class="content-box-title font-serif">[${contest.category}] ${dDay}</h3>
 										   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
 										                  <h3 class="content-box-title font-serif">₩${contest.payComma}</h3>
 										                  <span>#${contest.style}</span>
@@ -269,8 +397,7 @@ label {
 																좋아요<span id="likes">${contest.likes}</span>
 														   </p>
 														 </div>
-							                    		 <a href="../contest/select?cNo=${contest.cNo}" class="btn btn-round btn-b">
-							                    		<span class="icon-magnifying-glass">상세조회</span></a>
+							                    		${link}
 							                    </div>
 						                  </div>
 						              </div>
@@ -384,7 +511,7 @@ label {
 					
 					let p = ` 
 						<div class="col-sm-6 col-md-4 col-lg-4">
-			                <div id="${contest.C_NO}" class="shop-item">
+			                <div class="shop-item">
 		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -270px;"></div>
 			                  <div class="shop-item-image">${img}
 			                    <div class="shop-item-detail">

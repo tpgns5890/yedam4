@@ -1,0 +1,57 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--headerFragment 선언-->
+<div th:fragment="myPageSide">
+
+	<div id="wrapper">
+		<div class="topbar" style="position: absolute; top: 0;">
+			<!-- 왼쪽 메뉴 -->
+			<div class="left side-menu">
+				<div class="sidebar-inner">
+					<div id="sidebar-menu">
+						<ul>
+							<li class="has_sub"><a href="javascript:void(0);"
+								class="waves-effect"> <i class="fas fa-bars"></i>
+							</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- 왼쪽 서브 메뉴 -->
+			<div class="left_sub_menu">
+				<div class="sub_menu">
+					<h2>마이페이지</h2>
+					<ul class="big_menu">
+						<li>내정보관리<i class="arrow fas fa-angle-right"></i></li>
+						<ul class="small_menu">
+							<li><a href="/myPage/userMypage">회원정보조회</a></li>
+							<li><a href="/myPage/userUpgradeForm">승급신청</a></li>
+						</ul>
+					</ul>
+					<ul class="big_menu">
+						<li>공모전관리<i class="arrow fas fa-angle-right"></i></li>
+						<ul class="small_menu">
+							<li><a href="/contest/mySelect">공모전리스트</a></li>
+							<li><a href="/design/designMypage">응모리스트</a></li>
+							<li><a href="/contest/like">관심리스트</a></li>
+							<li><a href="/contest/qnaList">문의내역</a></li>
+						</ul>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			$(".has_sub").click(function() {
+				$(".left_sub_menu").fadeToggle(300);
+			});
+			// 왼쪽메뉴 드롭다운
+			$(".sub_menu ul.small_menu").hide();
+			$(".sub_menu ul.big_menu").click(function() {
+				$("ul", this).slideToggle(300);
+			});
+		});
+	</script>
+</div>
+</html>

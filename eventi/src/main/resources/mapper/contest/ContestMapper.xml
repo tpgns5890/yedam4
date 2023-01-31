@@ -29,7 +29,7 @@
 	</sql>
 	
 
-	<!-- 공모전 전체조회(임시저장 제외,페이징) -->
+	<!-- 공모전 전체조회(임시저장/신고5회초과 제외,페이징) -->
 	<select id="contestList" resultType="ContestVO">
 
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
@@ -57,8 +57,16 @@
                               	 where target_no = c_no) AS likes
 			             FROM CONTEST
 			             WHERE SAVE = 'N'
-			             AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate
-						<include refid="category" />
+						 <include refid="category" />
+			             <![CDATA[ AND rprt < 5 ]]>
+						 <choose>
+			                <when test="ing == 'history'"> 
+			                     <![CDATA[ AND NVL2(dt_extns,dt_extns,dt_cls) < sysdate ]]>
+			                </when>
+			                <otherwise>
+		                     	<![CDATA[ AND NVL2(dt_extns,dt_extns,dt_cls) >= sysdate ]]>
+			                </otherwise>
+			            </choose>
 						order by ${order} 
 	<![CDATA[
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
@@ -116,8 +124,16 @@
 		SELECT COUNT(*)
 		FROM CONTEST
 		WHERE SAVE = 'N'
-		AND NVL2(dt_extns,dt_extns,dt_cls) > sysdate
 		<include refid="category" />
+		<![CDATA[ AND rprt < 5 ]]>
+		 <choose>
+              <when test="ing == 'history'"> 
+                   <![CDATA[ AND NVL2(dt_extns,dt_extns,dt_cls) < sysdate ]]>
+              </when>
+              <otherwise>
+                  	<![CDATA[ AND NVL2(dt_extns,dt_extns,dt_cls) >= sysdate ]]>
+              </otherwise>
+          </choose>
 	</select>
 	
 	<!-- 나의 공모전 총 등록개수 조회/검색결과만큼 개수반환 -->
