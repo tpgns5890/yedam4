@@ -57,7 +57,7 @@
 				
 		<!--마감이면서 우승자등록이 되어있지 않은경우만 -->
 		<th:block th:if="${contest.ing} == '마감' ">
-			<div th:if="${winner[0].dNo} == null or ${winner[0].dNo} == ''">
+			<div th:if="${winner[0].dNo} == null">
 					<!-- 우승자 등록 -->
 					<div>
 						<h4 class="font-alt mb-0">우승자 등록</h4>

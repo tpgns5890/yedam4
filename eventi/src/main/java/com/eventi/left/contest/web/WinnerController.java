@@ -45,7 +45,7 @@ public class WinnerController {
 	@PostMapping("/update")
 	public String winnerUpdate(WinnerVO vo) {
 		int r = service.updateWinner(vo);
-		return "redirect:/contest/List";
+		return "redirect:/contest/mySelect";
 	}
 
 

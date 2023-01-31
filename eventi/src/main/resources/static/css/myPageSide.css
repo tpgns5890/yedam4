@@ -64,7 +64,9 @@ form[name="designSearchFrm"], form[name="searchFrm"] {
 	margin-top: 15px;
 	margin-left: 415px;
 }
-
+tr:hover{
+	background: silver;
+} 
 table {
 	width:1000px;
 	margin: 0 auto;

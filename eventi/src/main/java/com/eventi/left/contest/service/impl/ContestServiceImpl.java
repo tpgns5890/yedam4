@@ -222,6 +222,7 @@ public class ContestServiceImpl implements ContestService {
 			money.setTargetId(contest.getcNo());
 			money.setPayNo(moneyMapper.oneMoneySelect(vo.getcNo()).getPayNo()); // 결제코드 추가하기
 			money.setMoType("M2"); // 출금코드
+			money.setSettYN("N"); // 출금코드
 			moneyMapper.insertMoney(money); 
 		}
 

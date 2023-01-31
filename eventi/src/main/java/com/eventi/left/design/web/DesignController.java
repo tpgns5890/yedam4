@@ -107,8 +107,8 @@ public class DesignController {
 	// 디자인 삭제처리(링크처리는 get/ deleteMappging form)
 	@PostMapping("/delete")
 	@ResponseBody
-	public int designDelete(DesignVO vo) {
-		return service.delete(vo);
+	public int designDelete(String dgnNo) {
+		return service.delete(dgnNo);
 	}
 
 	// 1.디자이너 : 응모관리 -> 디자인조회

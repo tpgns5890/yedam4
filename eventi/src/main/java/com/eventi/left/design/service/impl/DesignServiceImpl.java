@@ -67,8 +67,8 @@ public class DesignServiceImpl implements DesignService {
 	}
 
 	@Override
-	public int delete(DesignVO vo) {
-		return mapper.delete(vo);
+	public int delete(String dgnNo) {
+		return mapper.delete(dgnNo);
 	}
 
 	@Override

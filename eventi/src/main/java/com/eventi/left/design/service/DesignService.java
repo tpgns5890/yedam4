@@ -22,7 +22,7 @@ public interface DesignService {
 
 	public int update(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile); // 수정
 
-	public int delete(DesignVO vo); // 삭제
+	public int delete(String dgnNo); // 삭제
 
 	public String getSequence(); // 시퀀스 맥시멈번호 찾기.
 	
