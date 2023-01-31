@@ -52,6 +52,7 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.crtfUpdate(crtfVO);
 	}
 
+	//공모전 조회
 	@Override
 	public List<HashMap<String, Object>> contestList(ContestVO contVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.contCount());
@@ -60,7 +61,8 @@ public class AdminServiceImpl implements AdminService{
 		contVO.setLast(paging.getLast());
 		return adminMapper.contestList(contVO);
 	}
-
+	
+	//신고회원 조회
 	@Override
 	public List<PunishVO> punishList(PunishVO punishVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.punishCount(punishVO));
@@ -69,12 +71,20 @@ public class AdminServiceImpl implements AdminService{
 		punishVO.setLast(paging.getLast());
 		return adminMapper.punishList(punishVO);
 	}
-
+	
+	//회원 카테고리
 	@Override
-	public List<CodeVO> getCat(CodeVO codeVO) {
-		return adminMapper.getCat(codeVO);
+	public List<CodeVO> getMemberCat(CodeVO codeVO) {
+		return adminMapper.getMemberCat(codeVO);
+	}
+	
+	//게시글 카테고리
+	@Override
+	public List<CodeVO> getBoardCat(CodeVO codeVO) {
+		return adminMapper.getBoardCat(codeVO);
 	}
 
+	//신고글 조회
 	@Override
 	public List<HashMap<String, Object>> punishBrdList(PunishVO punishVO, PagingVO paging) {
 		paging.setTotalRecord(adminMapper.punishCount(punishVO));
@@ -83,4 +93,34 @@ public class AdminServiceImpl implements AdminService{
 		punishVO.setLast(paging.getLast());
 		return adminMapper.punishBrdList(punishVO);
 	}
+
+	//회원신고 승인
+	@Override
+	public int banMemAccept(PunishVO punishVO) {
+		adminMapper.banMember(punishVO.getTargetId());
+		return adminMapper.banMemAccept(punishVO);
+	}
+	
+	//회원신고 거절
+	@Override
+	public int banReject(PunishVO punishVO) {
+		return adminMapper.banReject(punishVO);
+	}
+
+	//게시글신고 승인
+	@Override
+	public int banBrdAccept(PunishVO punishVO) {
+		adminMapper.banMember(punishVO.getWriter());
+		if(punishVO.getTargetCat()=="T01") {
+			adminMapper.banBoard1(punishVO.getTargetId());
+		}else if(punishVO.getTargetCat()=="T03") {
+			adminMapper.banBoard2(punishVO.getTargetId());
+		}else {
+			adminMapper.banBoard3(punishVO.getTargetId());
+		}
+		return adminMapper.banBrdAccept(punishVO);
+	}
+
+	
+
 }

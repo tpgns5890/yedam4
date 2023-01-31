@@ -197,12 +197,14 @@
 			DT,
 			BAN_TYPE,
 			BAN_CNTN,
-			BAN_RSLT
+			BAN_RSLT,
+			ST_ORDER
 	FROM 	(SELECT ROWNUM RN, A.*
 			FROM	(SELECT *
 					FROM PUNISH
 					WHERE BAN_TYPE = #{banType}
 					<include refid="pSelect" />
+					ORDER BY ST_ORDER, DT
 			<![CDATA[) A 
 			WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
@@ -221,31 +223,100 @@
 			</if>
 	</sql>
 	
-	<!-- 신고 타겟 코드 조회 -->
-	<select id="getCat" resultType="CodeVO">
+	<!-- 회원신고 타겟 코드 조회 -->
+	<select id="getMemberCat" resultType="CodeVO">
 		SELECT CODE_ID, CODE_NAME
 		FROM MNCODE 
 		WHERE CL_ID = 'T'
+		AND CODE_ID IN ('T06','T07', 'T08')
 		ORDER BY CODE_ID
 	</select>
 	
+	<!-- 게시글신고 타겟 코드 조회 -->
+	<select id="getBoardCat" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'T'
+		AND CODE_ID IN ('T01','T03', 'T04')
+		ORDER BY CODE_ID
+	</select>
+	
+	<!-- 신고 게시글 조회 -->
 	<select id="punishBrdList" resultType="hashmap">
 		SELECT	PUN_NO,
 				USER_ID,
 				TARGET_ID,
 				TARGET_CAT,
-				DT,
+				TO_CHAR(DT, 'YYYY-mm-dd') DT,
 				BAN_TYPE,
 				BAN_CNTN,
-				BAN_RSLT
+				BAN_RSLT,
+				WRITER,
+				ST_ORDER,
+				(CASE 	WHEN TARGET_CAT = 'T01' THEN	(SELECT TTL
+												   		FROM CONTEST
+												   		WHERE C_NO = TARGET_ID)
+						WHEN TARGET_CAT = 'T03' THEN 	(SELECT TITLE
+														FROM JOB_BOARD
+														WHERE JOB_NO = TARGET_ID)
+						WHEN TARGET_CAT = 'T04' THEN	(SELECT TTL
+														FROM B_BOARD
+														WHERE B_BOARD_NO = TARGET_ID)
+						END) AS TTL
 		FROM	(SELECT ROWNUM RN, A.*
 				FROM	(SELECT *
 						FROM 	PUNISH
-						WHERE 	WHERE BAN_TYPE = #{banType}
+						WHERE	BAN_TYPE = #{banType}
 						<include refid="pSelect" />
+						ORDER BY ST_ORDER, DT
 			   <![CDATA[) A 
 			  	WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
 	</select>
+
+	<!-- 회원신고 승인 -->
+	<update id="banMember">
+		UPDATE MEMBERS
+		SET RPRT = RPRT + 1
+		WHERE USER_ID = #{targetId}
+	</update>
+	<update id="banMemAccept">
+		UPDATE PUNISH
+		SET BAN_RSLT = 'Y',
+			ST_ORDER = 1
+		WHERE PUN_NO = #{punNo}
+	</update>
+	
+	<!-- 회원신고 거절 -->
+	<update id="banReject">
+		UPDATE PUNISH
+		SET BAN_RSLT = 'N',
+			ST_ORDER = 1
+		WHERE PUN_NO = #{punNo}
+	</update>
+	
+	<!-- 게시글신고 승인 -->
+	<update id="banBoard1">
+		UPDATE CONTEST
+		SET RPRT = RPRT + 1
+		WHERE C_NO = #{targetId}
+	</update>
+	<update id="banBoard2">
+		UPDATE JOB_BOARD
+		SET RPRT = RPRT + 1
+		WHERE JOB_NO = #{targetId}
+	</update>
+	<update id="banBoard3">
+		UPDATE B_BOARD
+		SET RPRT = RPRT + 1
+		WHERE B_BOARD_NO = #{targetId}
+	</update>
+	
+	<update id="banBrdAccept">
+		UPDATE PUNISH
+		SET BAN_RSLT = 'Y',
+			ST_ORDER = 1
+		WHERE PUN_NO = #{punNo}
+	</update>
 	
 </mapper>

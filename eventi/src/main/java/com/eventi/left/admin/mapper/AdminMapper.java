@@ -35,11 +35,30 @@ public interface AdminMapper {
 	//신고회원 수
 	public int punishCount(PunishVO punishVO);
 
-	//신고 조회
+	//회원신고 조회
 	public List<PunishVO> punishList(PunishVO punishVO);
 
-	public List<CodeVO> getCat(CodeVO codeVO);
+	//카테고리 가져오기
+	public List<CodeVO> getMemberCat(CodeVO codeVO);
+	public List<CodeVO> getBoardCat(CodeVO codeVO);
 
+	//신고게시물조회
 	public List<HashMap<String, Object>> punishBrdList(PunishVO punishVO);
+
+	//회원신고 승인
+	public void banMember(String targetId);
+	public int banMemAccept(PunishVO punishVO);
+	
+	//회원신고 거절
+	public int banReject(PunishVO punishVO);
+
+	//게시글신고 승인
+	public void banBoard1(String targetId);
+	public void banBoard2(String targetId);
+	public void banBoard3(String targetId);
+	public int banBrdAccept(PunishVO punishVO);
+
+
+
 
 }

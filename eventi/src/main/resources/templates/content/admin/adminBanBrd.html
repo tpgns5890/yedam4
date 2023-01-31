@@ -162,7 +162,7 @@
 									<th>신고일</th>
 									<th>신고사유</th>
 									<th></th>
-									<th></th>
+
 								</tr>
 							</thead>
 							<tbody>
@@ -225,7 +225,7 @@
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
 						$('tbody').empty();
-						for (punish of result.punishList) {
+						for (punish of result.punishBrdList) {
 							$('tbody').append(makeTr(punish));
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
@@ -237,22 +237,29 @@
 
 			//tr만들기
 			function makeTr(punish) {
-				/* var accpDate = crtf.accpDate;
-				if(!crtf.accpDate){
-					accpDate = '승인대기중';
-				} */
+				var banRslt = punish.BAN_RSLT;
+				if(banRslt=='Y'){
+					banRslt = '[승인]';
+				}else if(banRslt=='N'){
+					banRslt = '[거부]';
+				}else{
+					banRslt = `<button type="button" onclick="updateBrdY(this)" value="${punish.PUN_NO}">승인</button>
+						<button type="button" onclick="updateBrdN(this)" value="${punish.PUN_NO}">거부</button>`
+				}
 				let p = `
 				<tr>
-					<td>${punish.targetId}</td>
-					<td>${punish.targetId}</td>
-					<td>${punish.dt}</td>
-					<td>${punish.targetCat}</td>
-					<td>${punish.banCntn}</td>
-					<td><button type="button" onclick="updatePunMem(this, 'Y')" value="${punish.punNo}">승인</button><td>
-					<td><button type="button" onclick="updatePunMem(this, 'N')" value="${punish.punNo}">거부</button><td>
+					<td>${punish.PUN_NO}</td>
+					<td>${punish.WRITER}</td>
+					<td>${punish.TTL}</td>
+					<td>${punish.TARGET_CAT}</td>
+					<td>${punish.USER_ID}</td>
+					<td>${punish.DT}</td>
+					<td>${punish.BAN_CNTN}</td>
+					<td id="${punish.WRITER}">${banRslt}</td>
 				</tr>`;
 				return p;
 			}
+			
 			
 			// 페이징 만들기
 			function makePaging(page) {
@@ -301,24 +308,49 @@
 				return pagination;
 			}
 			
-			//승인,거부 버튼
-			function updateCrtf(element, value){
-				let crtfId = element.value;
-				let accpYN = value;
+			//승인버튼
+			function updateBrdY(element){
+				let punNo = element.value;
+				let writer = element.parentElement.id;
+				let targetId = element.parentElement.parentElement.children.item(2).innerText
 				$.ajax({
-					url:"/admin/crtfUpdate",
+					url:"/admin/banBrdAccept",
 					method: 'post',
 					data: {
-						crtfId,
-						accpYN
+						punNo,
+						writer,
+						targetId
 					},
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader(header, token);
 					},
 					success:function(result){
 						if(result>0){
-							element.parentElement.parentElement.remove();
-							alert("처리되었습니다.")
+							ajaxList();
+							alert("처리되었습니다.");
+						}
+					}
+				})
+
+			}
+			
+			//승인버튼
+			function updateBrdN(element){
+				let punNo = element.value;
+
+				$.ajax({
+					url:"/admin/banReject",
+					method: 'post',
+					data: {
+						punNo
+					},
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success:function(result){
+						if(result>0){
+							ajaxList();
+							alert("처리되었습니다.");
 						}
 					}
 				})

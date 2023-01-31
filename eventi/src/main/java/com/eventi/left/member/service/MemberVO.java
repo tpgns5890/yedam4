@@ -33,7 +33,7 @@ public class MemberVO implements UserDetails {
 	private String depotr;
 	private String bank;
 	private String accnt;
-	@JsonFormat(pattern = "yyyy/MM/dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date userRegDate;
 	private String userState;
 	private List<CrtfVO> crtfs;
