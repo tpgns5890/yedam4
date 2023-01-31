@@ -5,20 +5,46 @@
 	layout:decorate="~{layouts/default_layout}">
 
 <head>
-	<style>
-		.fileDown{
-			display : none;
-		}
-		.label{
-			color: black;
-}
-	</style>
+<style>
+	.fileDown{
+		display : none;
+	}
 	
-	<!-- csrf 설정 -->
-	<meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	.label{
+		color: black;
+	}
+	
+	ul {
+  		padding: 16px 0;
+	}
+	
+	ul li {
+	  display: inline-block;
+	  margin: 0 5px;
+	  font-size: 14px;
+	  letter-spacing: -.5px;
+	}
+	
+	ul li.tag-item {
+	  padding: 4px 8px;
+	  border-radius : 10px;
+	  background-color: pink;
+	  color: #000;
+	}
+	
+	.tag-item:hover {
+	  background-color: #262626;
+	  color: #fff;
+	}
+	
+	.area-del-btn, .type-del-btn, .style-del-btn {
+	  font-size: 12px;
+	  font-weight: bold;
+	  cursor: pointer;
+	  margin-left: 8px;
+	}
+</style>
 </head>
-
 <div layout:fragment="content">
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
           <div class="container">
@@ -86,10 +112,12 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">행사유형</label> 
-								<select id="eType" name="eType">
+								<select id="eType" name="eType" onchange="proStyle(this)">
 									<option value="">행사유형을 선택해 주세요.</option>
 									<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 								</select>
+								<!-- <input type="hidden" value="" name="eTypeList" id="eTypeList" /> -->
+             					<ul id="eTypeTag"></ul>
 							</div>
 						</div>
 						
@@ -117,6 +145,22 @@
 						              <span>Cancel</span>
 						          	</button>
 								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="movie">동영상등록</label><br>
+								<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
+								<input type="file" id="videoInp" name="uploadFile"/>
+								<div id="addMove">
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="button" id="movieInsert" value="동영상추가" class="btn btn-primary">
 							</div>
 						</div>
 						
@@ -152,11 +196,6 @@ smartEditor = function() {
 $(document).ready(function() {
 	smartEditor()
 })
-//글자스타일 -태그를 db에 저장해줌	
-$('#insert').on('click', function insert() {
-			 oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", []) 
-			let intro = document.getElementById("intro").value //태그 생성 
-		})
 		
 //파일 업로드 이미지 미리보기
 	    //파일 INPUT창에 변화가 있을 경우 실행
@@ -188,7 +227,78 @@ $('#insert').on('click', function insert() {
 	    	$(this).parent().toggleClass("fileDown");
 	    	//file영역에 있던 값 삭제
 	    	$("#imgInp").val('');
-	    })		
+	    })
+	    
+	    //글자스타일 -태그를 db에 저장해줌	
+		$('#insert').on('click', function insert() {
+				 oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", []) 
+				let intro = document.getElementById("intro").value //태그 생성 
+		
+		//행사유형
+		/* var eTypeList = eTag();
+		$("eTypeList").val(eTypeList); */
+	
+		})
+		
+		//동영상추가버튼
+	    $("#movieInsert").on('click', function() {
+	    	let tag = `<div><input type="file" id="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
+	    	$("#addMove").append(tag);
+	    })
+	    
+	    //동영상삭제
+	    $(document).on('click', '.cancel', function() {
+	    	console.log($(this));
+	    	$(this).parent().parent('div').remove();
+	    })
+		
+	    //스타일태그
+	    function proStyle(e){
+	    	 let tagText = e.options[e.selectedIndex].text;
+	  		 let tagValue = e.options[e.selectedIndex].value;
+	     	 
+	      	// 값이 없으면 동작 안합니다.
+	           if (tagValue !== "") {
+			
+	             // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+	             var result = Object.values(eTag).filter(function (word) {
+	                 return word === tagValue;
+	               })
+
+	             // 태그 중복 검사
+	             if (result.length == 0) {
+	            	$("#eTypeTag").empty(); 
+	               $("#eTypeTag")
+	                 .append("<li class='tag-item'>" + tagText + "<span class='style-del-btn' idx='" + eTypeCounter + "'>x</span></li>");
+	               eTypeAddTag(tagValue);
+	             } else {
+	               alert("태그값이 중복됩니다.");
+	             }
+	     	}
+		}
+	    
+	  //태그
+	    var eTag = {};
+	    var eTypeCounter = 0;
+	    
+	 	//입력한 값을 태그로 생성한다.
+        function eTypeAddTag (value) {
+        	eTypeTag[eTypeCounter] = value;
+        	eTypeCounter++;  // del-btn 의 고유 id 가 된다.
+        }
+	 	//서버로 보냄
+	 	function eTag () {
+            return Object.values(eTypeTag).filter(function (word) {
+                return word !== "";
+            });
+        } 
+	 	
+	 	//삭제버튼
+	 	$(document).on("click", ".style-del-btn", function (e) {
+            var index = $(this).attr("idx");
+            eTag[index] = "";
+            $(this).parent().remove();
+        });
 	</script>
 </div>
 </html>

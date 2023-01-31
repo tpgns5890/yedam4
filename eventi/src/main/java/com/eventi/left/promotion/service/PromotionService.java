@@ -26,7 +26,7 @@ public interface PromotionService {
 	public int proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//게시글 수정
-	public int proUpdate(PromotionVO promotionVO, MultipartFile uploadFile);
+	public int proUpdate(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile);
 	
 	//게시글 삭제
 	public int proDelete(PromotionVO promotionVO);
