@@ -11,10 +11,10 @@
 
 <meta charset="UTF-8">
 <style>
+/* table */
 #customers {
-  font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  margin: 0 auto;
+  margin: 50px auto;
 }
 
 #customers td, #customers th {
@@ -26,6 +26,9 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
+}
+#customers td {
+   width: 600px;
 }
 /* The container */
 .checkList {
@@ -57,7 +60,7 @@
   width: 25px;
   background-color: #eee;
   border-radius: 50%;
-}
+}css checked 라벨글씨
 
 /* On mouse-over, add a grey background color */
 .checkList:hover input ~ .checkmark {
@@ -76,12 +79,12 @@
   display: none;
 }
 
-/* Show the indicator (dot/circle) when checked */
+/* 체크시 하얀 동그라미 표시 */
 .checkList input:checked ~ .checkmark:after {
   display: block;
 }
 
-/* Style the indicator (dot/circle) */
+/* 체크시 나타나는 하얀동그라미 스타일 */
 .checkList .checkmark:after {
  	top: 9px;
 	left: 9px;
@@ -90,8 +93,8 @@
 	border-radius: 50%;
 	background: white;
 }
-h1 {
 
+h2 {
   text-align: center;
 }
 #p {
@@ -103,21 +106,24 @@ h1 {
 .etcVal {
 	margin-left: 20px;
 }
+/* 선택박스창 */
 #bodyContents {
+  position: relative; 
+  top: -35px;
   height: auto;
-  width: 800px;
-  margin: 50px auto;
-  border: 1px solid #ccc;
+  width: 700px;
+  margin: auto;
+  border: 2px solid #ccc;
+  background-color: white;
   overflow: hidden;
 }
-/* 상태바 */
+/* 상태바 
 .progress-bar {
-  width: 0%;
+  width: 10%;
   height: 20px;
   background-color: green;
   transition: width 0.5s linear;
-}
-
+}*/
 </style>
 </head>
 <body>
@@ -136,12 +142,12 @@ h1 {
 <div id="bodyContents">
 
 <!-- 상태바 -->
-<div class="progress-bar"></div>
-<h1>어떤 행사를 기획중이신가요?</h1>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>어떤 행사를 기획중이신가요?</h2>
 <table id="customers">
   <tr>
-    <td><label class="checkList">기념식
-  <input type="radio" name="eventType" value="기념식">
+    <td><label for="radio1" class="checkList">기념식
+  <input type="radio" name="eventType" value="기념식" id="radio1" class="input-radio">
   <span class="checkmark"></span>
 </label></td>
   </tr>
@@ -181,8 +187,8 @@ h1 {
 
  <!-- 행사장소 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 예정 장소는 어디인가요?</h1>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 예정 장소는 어디인가요?</h2>
 <table id="customers">
   <tr>
     <td><label class="checkList">호텔
@@ -239,8 +245,8 @@ h1 {
 
  <!-- 행사규모 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 규모는 어느정도인가요?</h1>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 규모는 어느정도인가요?</h2>
 <table id="customers">
   <tr>
     <td><label class="checkList">30명 미만
@@ -285,17 +291,19 @@ h1 {
 
  <!-- 행사날짜 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 날짜를 선택해주세요.</h1>
-<input type="date" name="eventDate" value=""><br>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 날짜를 선택해주세요.</h2>
+<div class="form-group">
+<input type="date" name="eventDate" value="" class="form-control"><br>
+</div>
  <input type="button" value="이전" class="prev">
  <input type="button" value="다음" id="eventDate" class="next">
 </div><!-- end of bodyContents -->
 
  <!-- 행사시작시간 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 시작 시간은 언제인가요?</h1>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 시작 시간은 언제인가요?</h2>
 <table id="customers">
   <tr>
     <td><label class="checkList">오전
@@ -308,11 +316,6 @@ h1 {
   <input type="radio"  name="eventTime" value="pm">
   <span class="checkmark"></span>
 </label></td>
-  <!-- </tr>
-  <tr>
-   <td><label class="container">시간</label>
-  <input name="time"></td>
-  </tr> -->
 </table>
  <input type="button" value="이전" class="prev">
  <input type="button" value="다음" class="next" id="eventTime">
@@ -320,8 +323,8 @@ h1 {
 
  <!-- 행사소요시간 선택 -->
 <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 예상 소요시간을 선택해주세요</h1>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 예상 소요시간을 선택해주세요</h2>
 <table id="customers">
   <tr>
     <td><label class="checkList">1시간
@@ -366,9 +369,10 @@ h1 {
  
   <!-- 행사지역 선택 -->
  <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 예상 지역을 선택해주세요.</h1>
-<select name="expectedLocal" >
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 예상 지역을 선택해주세요.</h2>
+<div class="form-group">
+<select name="expectedLocal" class="form-control">
 	<option value="A00">==지역선택==</option>
 	<option value="A01">서울</option>
 	<option value="A02">인천</option>
@@ -384,14 +388,15 @@ h1 {
 	<option value="A12">경상도</option>
 	<option value="A13">제주도</option>
 </select>
+</div>
  <input type="button" value="이전" class="prev">
  <input type="button" value="다음" class="next" id="expectedLocal">
 </div><!-- end of bodyContents -->
 
  <!-- 행사 희망사항 입력 -->
 <div id="bodyContents" class="hidden">
-<div class="progress-bar"></div>
-<h1>행사 관련 희망사항을 알려주세요.</h1>
+<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
+<h2>행사 관련 희망사항을 알려주세요.</h2>
 <input name="wishes" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
  <input type="button" value="이전" class="prev">
  
@@ -438,21 +443,10 @@ $('input:radio').click(function() {
 	});
 	
 //다음 버튼 클릭 시
-	var width = 0;
 $('.next').click(function() {
-	var progressBar = $('.progress-bar')
-	  width = 0;
-	  var intervalId = setInterval(function() {
-	    if (width >= 14) {
-	      clearInterval(intervalId);
-	    } else {
-	      width++;
-	      progressBar.style.width = width + "%";
-	    }
-	  }, 50);
+
 	var name = $(this).attr('id');
 
-	
 	//선택항목 별 선택여부 체크
 	switch(name){
 	case "eventType" :
@@ -554,6 +548,40 @@ $('.submit').click(function() {
 function login(){
 	 $("#header_modal").show();
 }
+//선택된 항목의 글씨체 변경
+/*	$(document).ready(function() {
+		  $('input[type="radio"]').on("change", function() {
+			  if($('input[type="radio"]:checked').is(':checked')){
+				  console.log($('input[type="radio"]:checked').is(':checked'))
+				  $(this).closest('label').css('color', 'red');
+			  }
+			  else if(!$('input[type="radio"]:checked').is(':checked')){
+				  $('input[type="radio"]').closest('label').css('color', 'black');
+			  }
+		   
+		   
+		  });
+		});*/
+//상태바 제어
+/* const prevButton = $(".prev");
+const nextButton = $(".next");
+const progressBar = $("#progress-Bar");
+
+nextButton.click(function() {
+  let currentValue = progressBar.val();
+  if (currentValue >= 100) {
+    currentValue = 0;
+  }
+  progressBar.val(currentValue + 10);
+});
+
+previousButton.click(function() {
+  let currentValue = progressBar.val();
+  if (currentValue <= 0) {
+    currentValue = 100;
+  }
+  progressBar.val(currentValue - 10);
+}); */
 </script>
 </div>
 </body>
