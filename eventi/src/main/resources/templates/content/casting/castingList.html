@@ -41,6 +41,7 @@
 		<thead class="thead-dark">
 			<tr>
 			    <th><input type="checkBox"></th>
+			    <th>사회자ID</th>
 				<th>의뢰자ID</th>
 				<th>행사분야</th>
 				<th>행사요일</th>
@@ -53,6 +54,7 @@
 		<tbody id="check">
 			<tr th:each="cast : ${casting}" th:id="${cast.castingNo}">
 				<td><input type="checkBox"></td>
+				<td th:text="${cast.userId}"></td>
 				<td th:text="${cast.clientId}"></td>
 				<td th:text="${cast.eType}"></td>
 				<td th:text="|${#dates.format(cast.eSdt, 'yyyy/MM/dd')} - ${#dates.format(cast.eLdt, 'yyyy/MM/dd')}|"></td>
@@ -67,6 +69,9 @@
 				</th:block>
 				<th:block th:if="${cast.progress} == '행사전'">
 				<td><button type="button" th:text="행사취소"></button></td>
+				</th:block>
+				<th:block th:if="${cast.progress} == '행사완료'">
+				<td><button type="button" th:text="후기작성"></button></td>
 				</th:block>
 			</tr>
 		</tbody>
@@ -99,7 +104,7 @@
 			$(".castingOk").on('click', function() {
 				let castingNo = $(this).parent().parent().attr('id');
 			    let progress = "결제중";
-			
+
 				 $.ajax({
 			   			url : '/casting/progUpdate',
 			   			method : 'post',
@@ -114,53 +119,86 @@
 			   		}) 
 			})
 			
-			$(".").on('click', function(){
-				requestPay();
+			$(".cashback").on('click', function(){
+				console.log('클릭')
+				
+				let amount = $(this).parent().prev().prev().text()
+				let buyer_email = '[[${session.member.userEmail}]]';
+				let buyer_name = '[[${session.member.name}]]';
+				let buyer_tel = '[[${session.member.userPhone}]]';
+				let userId = '[[${session.member.userId}]]';
+				let targetId = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
+				let castingNo = $(this).parent().parent().attr('id');
+				
+				console.log(targetId)
+				//결제
+				const IMP = window.IMP; // 생략 가능
+				IMP.init("imp42430553"); // 예: imp00000000a
+				
+				var today = new Date();
+				var hours = today.getHours(); // 시
+				var minutes = today.getMinutes();  // 분
+				var seconds = today.getSeconds();  // 초
+				var milliseconds = today.getMilliseconds();
+				var makeMerchantUid = hours + minutes + seconds + milliseconds;
+				
+				IMP.request_pay({
+					pg: 'kicc',
+					pay_method: 'card',
+					merchant_uid: "evt" + makeMerchantUid, //상점에서 생성한 고유 주문번호
+					name: '사회자섭외비',  //'주문명:결제테스트',
+					amount: amount,  // 가격1,
+					buyer_email: buyer_email,	//'tpgns5890@naver.com',
+					buyer_name: buyer_name,	//'천세훈',
+					buyer_tel: buyer_tel	//'010-3670-5890'
+				}, function(rsp) {
+					if (rsp.success) {
+						$.ajax({
+							url: "/pay/requestPay",
+							method: "POST",
+							contentType: "application/json",
+							dataType: "json",
+							data: JSON.stringify({
+								moType:'M1',
+								moPrice:amount,
+								userId:userId,
+								userName:rsp.buyer_name,
+								payNo:rsp.pg_tid, // 결제 고유번호
+								targetId:targetId,
+						       	moCat:'T06'
+						   }),
+						   beforeSend : function(xhr){
+			                    xhr.setRequestHeader(header, token);
+			               },
+			               success: function(res){
+			                  alert("결제완료되었습니다.");
+			                  updateSt(castingNo);
+			               },
+			               error: function(err){
+			                  console.log(err)
+			               }
+				})
+					} else {
+						alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+					}
+				})
 			})
-		
-		//결제
-		const IMP = window.IMP; // 생략 가능
-		IMP.init("imp42430553"); // 예: imp00000000a
-		
-		var today = new Date();
-		var hours = today.getHours(); // 시
-		var minutes = today.getMinutes();  // 분
-		var seconds = today.getSeconds();  // 초
-		var milliseconds = today.getMilliseconds();
-		var makeMerchantUid = hours + minutes + seconds + milliseconds;
-		
-		function requestPay() {
-			IMP.request_pay({
-				pg: 'kicc',
-				pay_method: 'card',
-				merchant_uid: "evt" + makeMerchantUid, //상점에서 생성한 고유 주문번호
-				name: '사회자섭외비',  //'주문명:결제테스트',
-				amount: 10,  // 가격1,
-				buyer_email: 'buyer_email',	//'tpgns5890@naver.com',
-				buyer_name: 'buyer_name',	//'천세훈',
-				buyer_tel: 'buyer_tel',	//'010-3670-5890'
-				//buyer_addr: 'buyer_addr',	//'대구동구동호동',
-				//buyer_postcode: 'buyer_postcode'	//'123-456',
-			}, function(rsp) {
-				if (rsp.success) {
-					// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-					// jQuery로 HTTP 요청
-					jQuery.ajax({
-						url: "{서버의 결제 정보를 받는 가맹점 endpoint}",
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						data: {
-							imp_uid: rsp.imp_uid,            // 결제 고유번호
-							merchant_uid: rsp.merchant_uid   // 주문번호
-						}
-					}).done(function(data) {
-						// 가맹점 서버 결제 API 성공시 로직
-					})
-				} else {
-					alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
-				}
-			});
-		}
+			
+			function updateSt(castingNo){
+				let progress = "행사전";
+				$.ajax({
+		   			url : '/casting/progUpdate',
+		   			method : 'post',
+		   			data : JSON.stringify({progress:progress, castingNo:castingNo}),
+		   			contentType : "application/json",
+		   			beforeSend : function(xhr)
+		            {   
+						xhr.setRequestHeader(header, token);
+		            }
+		   		}).then(res => {
+		   			console.log(res);
+		   		}) 
+			}
 	</script>
 	</div>
 </body>

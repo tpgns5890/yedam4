@@ -19,6 +19,7 @@
 		  FROM DGNER_PRTFL D, LIKES l, FILES F
 		 WHERE d.USER_ID = L.TARGET_NO(+)
 		   AND d.IMG = F.F_NM
+		   AND D.USER_ID = F.TARGET_ID
 		   AND d.USER_ID = #{userId}
 	</select>
 	
