@@ -6,19 +6,70 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-
+<title>의뢰내역</title>
+<link rel="stylesheet" href="/css/myPageSide.css">
+<link href="/css/star.css" rel="stylesheet">
 <style>
 	.label {
 		color : black;
 	}
 	
-	#check{
-		min-height : 3000px;
-	}
-	
 	.fileShow{
 			display : none !important;
+	}
+	
+	.modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.modal h2 {
+		margin: 0;
+	}
+
+	.modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
+
+	.modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
+
+	.modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.cancelCntn {
+	  padding: 15px 20px;
+	  background-color: #444444;
+	  border-radius: 5px;
+	  color: #ffffff;
+	  display: none;
+	}
+	
+	.cancelTitle:hover + .cancelCntn {
+	  display: block;
 	}
 </style>
 </head>
@@ -29,16 +80,18 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">물품리스트</h2>
-                <div class="module-subtitle font-serif">물품리스트</div>
+                <h2 class="module-title font-alt">의뢰리스트</h2>
+                <div class="module-subtitle font-serif">의뢰리스트</div>
               </div>
             </div>
           </div>
         </section>
         
+        <th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+        
         <!-- 의뢰 리스트 -->
 	<table class="table mb-3">
-		<thead class="thead-dark">
+		<thead>
 			<tr>
 			    <th><input type="checkBox"></th>
 			    <th>사회자ID</th>
@@ -61,32 +114,105 @@
 				<td th:text = "|${cast.eStime} ~ ${cast.eLtime}|"></td>
 				<td th:text = "${cast.castingPrice}"></td>
 				<td th:text = "${cast.progress}"></td>
-				<th:block th:if="${cast.progress} == '결제전'">
+				<th:block th:if="${cast.progress} == '결제전' and ${param.userId} != null">
 				<td><button type="button" class="castingOk" th:text="수락"></button><button type="button" class="castingNo" th:text="거절"></button></td>
 				</th:block>
-				<th:block th:if="${cast.progress} == '결제중'">
+				<th:block th:if="${cast.progress} == '결제진행중' and ${param.clientId} != null">
 				<td><button type="button" class="cashback" th:text="결제하기"></button></td>
 				</th:block>
 				<th:block th:if="${cast.progress} == '행사전'">
-				<td><button type="button" th:text="행사취소"></button></td>
+				<td><button type="button" class="eventCancel" th:text="행사취소"></button></td>
 				</th:block>
 				<th:block th:if="${cast.progress} == '행사완료'">
-				<td><button type="button" th:text="후기작성"></button></td>
+				<td><button type="button" class="review" th:text="후기작성"></button></td>
+				</th:block>
+				<th:block th:if="${cast.progress} == '행사취소'">
+				<td><p class="cancelTitle">취소사유...</p><div class="cancelCntn" th:text="${cast.cancel}"></div></td>
 				</th:block>
 			</tr>
 		</tbody>
 	</table>
+		
+	<!-- 후기 폼 -->
+    <div id="reviewFrm" class="modal">
+			<div class="modal_content">
+				<label>대상</label>
+				<input type="text" id="reviewTgt" name="reviewTgt" readonly><br>
+				
+				<label>의뢰자</label>
+				<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
+				
+				<label>별점</label>
+				<div class="starpoint_wrap">
+				  <div class="starpoint_box">
+				    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
+				    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1</span></label>
+				    <label for="starpoint_3" class="label_star" title="1.5"><span class="blind">1.5</span></label>
+				    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2</span></label>
+				    <label for="starpoint_5" class="label_star" title="2.5"><span class="blind">2.5</span></label>
+				    <label for="starpoint_6" class="label_star" title="3"><span class="blind">3</span></label>
+				    <label for="starpoint_7" class="label_star" title="3.5"><span class="blind">3.5</span></label>
+				    <label for="starpoint_8" class="label_star" title="4"><span class="blind">4</span></label>
+				    <label for="starpoint_9" class="label_star" title="4.5"><span class="blind">4.5</span></label>
+				    <label for="starpoint_10" class="label_star" title="5"><span class="blind">5</span></label>
+				    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio">
+				    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio">
+				    <span class="starpoint_bg"></span>
+				  </div>
+				</div>
+				<br>
+				
+				<label>후기</label>
+				<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
+				<button type="button" class="cancel">취소</button>
+				<button type="button" id="review">후기등록</button>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+	
+	<!-- 행사취소 폼 -->
+    <div id="cancelFrm" class="modal">
+			<div class="modal_content">
+				<form id="cancelCheck" action="/casting/progUpdate" method="post">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+					<input type="hidden" id="castingNo" name="castingNo" readonly><br>
+				
+					<h3>행사취소 사유</h3>
+					<h4 style="color:red;">*취소시 포트폴리오에서 취소횟수를 확인할 수 있습니다.</h4>
+					<input type="hidden" id="userId" name="userId" th:value="${session.member.userId}"><br>
+					<input type="hidden" id="progress" name="progress" th:value="행사취소"><br>
+					
+					<p><span id="client" th:text="지은"></span>님의 행사를 취소하시겠습니까?</p>
+					
+					<label>취소사유</label>
+					<input type="text" id="cancel" name="cancel"><br>
+					
+					<button type="button" class="cancel">나가기</button>
+					<button type="button" id="eventCancel">취소등록</button>
+				</form>		
+			</div>
+		<div class="modal_layer"></div>
+	</div>
 					     	
 	<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		
+		let param = '[[${param.userId}]]';
 		//사회요청거절
 		$(".castingNo").on('click', function() {
 			let castingNo = $(this).parent().parent().attr('id');
-			let progress = "행사취소";
+			let progress = "요청거절";
 			
-			 $.ajax({
+			  $.ajax({
 		   			url : '/casting/progUpdate',
 		   			method : 'post',
 		   			data : JSON.stringify({progress:progress, castingNo:castingNo}),
@@ -96,14 +222,18 @@
 						xhr.setRequestHeader(header, token);
 		            }
 		   		}).then(res => {
-		   			console.log(res);
+		   			if(param != ''){
+		   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+		   			} else {
+		   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+		   			}
 		   		}) 
 			})
 			
 			//사회요청수락
 			$(".castingOk").on('click', function() {
 				let castingNo = $(this).parent().parent().attr('id');
-			    let progress = "결제중";
+			    let progress = "결제진행중";
 
 				 $.ajax({
 			   			url : '/casting/progUpdate',
@@ -115,13 +245,15 @@
 							xhr.setRequestHeader(header, token);
 			            }
 			   		}).then(res => {
-			   			console.log(res);
+			   			if(param != ''){
+			   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+			   			} else {
+			   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+			   			}
 			   		}) 
 			})
 			
 			$(".cashback").on('click', function(){
-				console.log('클릭')
-				
 				let amount = $(this).parent().prev().prev().text()
 				let buyer_email = '[[${session.member.userEmail}]]';
 				let buyer_name = '[[${session.member.name}]]';
@@ -172,7 +304,8 @@
 			               },
 			               success: function(res){
 			                  alert("결제완료되었습니다.");
-			                  updateSt(castingNo);
+			                  updateSt(castingNo, '행사전');
+			                  console.log(this);
 			               },
 			               error: function(err){
 			                  console.log(err)
@@ -184,8 +317,7 @@
 				})
 			})
 			
-			function updateSt(castingNo){
-				let progress = "행사전";
+			function updateSt(castingNo, progress){
 				$.ajax({
 		   			url : '/casting/progUpdate',
 		   			method : 'post',
@@ -196,9 +328,99 @@
 						xhr.setRequestHeader(header, token);
 		            }
 		   		}).then(res => {
-		   			console.log(res);
+		   			if(param != ''){
+		   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+		   			} else {
+		   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+		   			}
 		   		}) 
 			}
+		
+			//후기부분
+		   //후기 모달창 띄우기
+		   let castingNo = '';
+		   $('.review').on('click', function() {
+			   castingNo=$(this).parent().parent().attr('id');
+			   let targetId = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
+			   $('#reviewTgt').val(targetId)
+			   $("#reviewFrm").show();
+		   })
+		   
+		   //클릭한 별점 수 저장
+		   let stars = 0;
+		   $(".label_star").on('click', function() {
+			   stars = $(this).text();		   
+		   })
+
+		   //모달창에서 후기등록 버튼을 눌렀을 경우
+		   $("#review").on('click', function() {
+			   let reviewTgt = $("#reviewTgt").val();
+			   let category = 'T06';
+			   let reviewCntn = $("#reviewCntn").val();
+			   let userId = '[[${session.member.userId}]]';
+			   let star = stars;
+			   
+			    $.ajax({
+						url : "/review/reviewInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, reviewTgt:reviewTgt, star:star, reviewCntn:reviewCntn, category:category},
+						beforeSend : function(xhr)
+		                {  
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							alert('후기가 등록되었습니다.');
+							$("#reviewFrm").hide();
+							updateSt(castingNo,'후기작성완료');
+						},
+						fail : function(result) {
+							console.log(result)
+						}
+					})
+		   })
+		   
+		   //사회자가 취소할 경우
+		   $(".eventCancel").on('click', function(){
+			   castingNo=$(this).parent().parent().attr('id');
+			   let client = $(this).parent().prev().prev().prev().prev().prev().prev().text();
+			   $('#castingNo').val(castingNo);
+			   $('#client').text(client);
+			   $("#cancelFrm").show();
+		   })
+		   
+		   $("#eventCancel").on('click', function(){
+			   if(confirm('정말 취소하시겠습니까?')){
+				   let castingNo = $("#castingNo").val();
+				   let userId =  $("#userId").val();
+				   let progress = '행사취소';
+				   let cancel = $("#cancel").val();
+				   
+				   console.log(castingNo, userId, progress, cancel)
+				    $.ajax({
+			   			url : '/casting/progUpdate',
+			   			method : 'post',
+			   			data : JSON.stringify({castingNo:castingNo, userId:userId, progress:progress, cancel:cancel}),
+			   			contentType : "application/json",
+			   			beforeSend : function(xhr)
+			            {   
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			alert('행사가 취소되었습니다.');
+			   			if(param != ''){
+			   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+			   			} else {
+			   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+			   			}
+			   		}) 
+			   }  
+		   })
+		   
+		   //모달창에서 취소를 눌렀을 경우
+		   $(".cancel").on('click', function() {
+				$(".modal").hide();
+			});
 	</script>
 	</div>
 </body>

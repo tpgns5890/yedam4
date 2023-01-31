@@ -43,7 +43,9 @@ public class CastingController {
 	@PostMapping("/progUpdate")
 	@ResponseBody
 	public int progUpdate(@RequestBody CastingVO castingVO) {
-		System.out.println(castingVO);
 		return castingService.progressUpdate(castingVO);
 	}
+	
+	//환불금액찾기
+	
 }

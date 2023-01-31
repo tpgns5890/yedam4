@@ -14,4 +14,7 @@ public interface CastingService {
 	
 	//진행현황업데이트
 	public int progressUpdate(CastingVO castingVO);
+	
+	//환불금액찾기
+	public CastingVO refund(CastingVO castingVO);
 }
