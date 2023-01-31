@@ -238,6 +238,7 @@
 			//tr만들기
 			function makeTr(punish) {
 				var banRslt = punish.BAN_RSLT;
+				var targetCat = punish.TARGET_CAT;
 				if(banRslt=='Y'){
 					banRslt = '[승인]';
 				}else if(banRslt=='N'){
@@ -246,11 +247,19 @@
 					banRslt = `<button type="button" onclick="updateBrdY(this)" value="${punish.PUN_NO}">승인</button>
 						<button type="button" onclick="updateBrdN(this)" value="${punish.PUN_NO}">거부</button>`
 				}
+				
+				if(targetCat=='T01'){
+					targetCat = `<td onclick="location.href='../contest/select?cNo=${punish.TARGET_ID}'">${punish.TTL}</td>`
+				}else if(targetCat=='T03'){
+					targetCat = `<td onclick="location.href='../jobDetail?jobNo=${punish.TARGET_ID}'">${punish.TTL}</td>`
+				}else{
+					targetCat = `<td onclick="location.href='../bboard/bSelect?bBoardNo=${punish.TARGET_ID}'">${punish.TTL}</td>`
+				}
 				let p = `
 				<tr>
 					<td>${punish.PUN_NO}</td>
 					<td>${punish.WRITER}</td>
-					<td>${punish.TTL}</td>
+					${targetCat}
 					<td>${punish.TARGET_CAT}</td>
 					<td>${punish.USER_ID}</td>
 					<td>${punish.DT}</td>
