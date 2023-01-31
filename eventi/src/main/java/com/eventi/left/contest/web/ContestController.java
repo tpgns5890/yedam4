@@ -266,14 +266,6 @@ public class ContestController {
 	@ResponseBody
 	public MoneyVO ContestRequestPay(@RequestBody MoneyVO vo) {
 
-//		// 등록된 정보조회(입금자명,은행코드,계좌번호)
-//		// 로그인 회원정보
-//		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-//		user = memberService.getMember(vo.getUserId());
-//		// 공통정보 세팅
-//		vo.setBankName(user.getBank()); // 은행정보
-//		vo.setBankAccount(user.getAccnt()); // 계좌번호
-		
 		//임시저장한 공모글을 불러오지 않았다면 
 		if(vo.getTargetId() == null || vo.getTargetId() == "") {
 			vo.setTargetId(service.getSequence()); //공모전 결제후 입금(맥시멈 시퀀스값 설정)

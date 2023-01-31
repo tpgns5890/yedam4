@@ -75,6 +75,8 @@ public class ContestServiceImpl implements ContestService {
 		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
+		
+		System.out.println("vo===" + vo);
 
 		return mapper.contestList(vo);
 	}
@@ -146,9 +148,9 @@ public class ContestServiceImpl implements ContestService {
 			uploadFiles(uploadFile, vo);
 			result = mapper.updateContest(vo);
 
-			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
-			//Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
-			//thread.start();
+			//현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			Thread thread = new Thread(new MembersSendMail(vo, 0, result));// vo,insert,update
+			thread.start();
 		}
 		return result;
 	}
@@ -184,7 +186,7 @@ public class ContestServiceImpl implements ContestService {
 		int result = mapper.saveUpdateContest(vo);
 		uploadFiles(uploadFile, vo);
 
-		// 임시저장이 아닌경우만 이메일발송.
+		// 임시저장이 아니고 불러오기 등록일경우 이메일발송.
 		if (vo.getSave().equals("N")) {
 			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
 			Thread thread = new Thread(new MembersSendMail(vo, result, 0)); // vo,insert,update
@@ -217,12 +219,14 @@ public class ContestServiceImpl implements ContestService {
 			MoneyVO money = new MoneyVO();
 			money.setBankName(user.getBank()); // 은행정보
 			money.setBankAccount(user.getAccnt()); // 계좌번호
+			money.setMoType("M2"); // 출금코드
 			money.setMoPrice(contest.getPay());
 			money.setUserId(contest.getWriter());
-			money.setTargetId(contest.getcNo());
+			money.setUserName(user.getName());
 			money.setPayNo(moneyMapper.oneMoneySelect(vo.getcNo()).getPayNo()); // 결제코드 추가하기
-			money.setMoType("M2"); // 출금코드
 			money.setSettYN("N"); // 출금코드
+			money.setTargetId(contest.getcNo());
+			money.setMoCat("T01");
 			moneyMapper.insertMoney(money); 
 		}
 

@@ -69,6 +69,7 @@ public class LikeServiceImpl implements LikesService {
 		return mapper.likeDelete(LikesVO);
 	}
 
+	//좋아요 로그인회원의 공모전리스트
 	@Override
 	public List<LikesVO> userlikeList(LikesVO vo,PagingVO paging) {
 
@@ -77,8 +78,6 @@ public class LikeServiceImpl implements LikesService {
 		paging.setPageSize(5);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
-		
-		
 
 		return mapper.userlikeList(vo);
 	}

@@ -47,6 +47,13 @@ public class WinnerController {
 		int r = service.updateWinner(vo);
 		return "redirect:/contest/mySelect";
 	}
+	
+	//마감된 공고문 우승자 조회
+	@PostMapping("/select")
+	@ResponseBody
+	public List<WinnerVO> winnerSelect(String coNo) {
+		return service.winnerSelect(coNo);
+	}
 
 
 }

@@ -54,4 +54,9 @@ public class WinnerServiceImpl implements WinnerService {
 		return mapper.deleteWinner(wNo);
 	}
 
+	@Override
+	public List<WinnerVO> winnerSelect(String cNo) {
+		return mapper.winnerSelect(cNo);
+	}
+
 }

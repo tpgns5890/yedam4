@@ -324,12 +324,13 @@
 								contentType: "application/json",
 								dataType: "json",
 								data: JSON.stringify({
-									targetId:cNo,
-							        moType:'M1',
-							        moPrice:payment,
-							        userId,
+							        moType:'M1',  //입금코드
+							        moPrice:payment,//가격
+							        userId, 		//회원ID
+							        userName,		//성명
 									payNo: rsp.pg_tid, // 결제 고유번호
-									//vo 필요한값 추가하기 
+									targetId:cNo, //공모번호
+									moCat:"T01"	//카테고리
 							   }),
 							   beforeSend : function(xhr){
 				                    xhr.setRequestHeader(header, token);

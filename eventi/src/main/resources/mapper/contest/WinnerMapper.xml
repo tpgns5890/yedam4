@@ -56,4 +56,23 @@
 		where co_no = #{coNo}
 	</select>
 	
+	<select id="winnerSelect" resultType="map">
+		select  (select ttl 
+				  from contest 
+				  where c_no = w.co_no)ttl,
+				  w.*,
+				  d.dgn_no,
+				  d.user_id,
+				  d.name,
+	              d.center_img,
+				  f.sev_nm sevNm
+		from design d join winner w 
+		                  on d.c_no = w.co_no
+		               join files f 
+		               	  on f.target_id = w.d_No
+		and co_no = #{coNo}
+		and d.center_img = f.f_nm
+		order by grade
+	</select>
+	
 </mapper>
