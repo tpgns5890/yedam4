@@ -32,7 +32,7 @@
 		<div id="count"></div>
 
 		<!-- 지원자 디자인 리스트 -->
-		<div class="container">
+		<div class="contest">
 			<div class="row multi-columns-row" id="boxList"></div>
 			<!-- end -->
 
@@ -50,7 +50,9 @@
 					<h3 id="title"></h3>
 					<div id="modelSelect"></div>
 				</div>
+				<div class="modal_layer"></div>
 			</div>
+			
 		</div>
 				
 		<!--마감이면서 우승자등록이 되어있지 않은경우만 -->
@@ -192,9 +194,9 @@
 				div ='상세보기';
 			}
 
-			let design = ` <div class="col-sm-6 col-md-4 col-lg-4 design" id="${dNo}">
+			let design = ` <div class="col-sm-6 col-md-4 col-lg-4 design" id="${dNo}" style="width: 400px; margin-right:5px">
 					            <div class="shop-item">
-					            <div class="shop-item-image"><img src="/fileView/${fileName}" style="width: 500px; height: 500px">
+					            <div class="shop-item-image"><img src="/fileView/${fileName}" style="width: 400px; height: 400px">
 					              <div class="shop-item-detail">
 	
 					              <div id ="${userId}">

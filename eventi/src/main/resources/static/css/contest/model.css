@@ -1,24 +1,22 @@
-/* The Modal (background) */
+<!--공모전 디자인 미리보기 모달-->
 .modal {
 	display: none; /* Hidden by default */
 	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
+	z-index: -1; /* Sit on top */
 	padding-top: 100px; /* Location of the box */
 	left: 0;
 	top: 0;
 	width: 100%; /* Full width */
 	height: 100%; /* Full height */
 	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0, 0, 0); /* Fallback color */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
 }
-/* design Modal Content */
 .img_modal_content {
 	background-color: #fefefe;
-	margin: auto;
+	margin : 70px auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 40%;
+	width: 50%;
 	height: 70%;
 	text-align: left;
 	
@@ -26,7 +24,6 @@
 	max-height: calc(100vh - 210px);
     overflow-y: auto;
 }
-/* The Close Button */
 .close {
 	color: #aaaaaa;
 	float: right;
@@ -49,7 +46,8 @@
 	display: inline-block;
 }
 
-<!--신고모달-->
+<!--공모전 신고,마감연장 모달-->
+
 #rprtModal h2,
  #extensionModal h2 {
 	margin: 0;
@@ -73,7 +71,7 @@
 	border-radius: 15px;
 }
 
-#rprtModal .modal_layer {
+.modal_layer {
 	position: fixed;
 	top: 0;
 	left: 0;
