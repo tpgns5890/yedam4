@@ -132,10 +132,15 @@ public class BboardController {
 	//게시글 삭제
 	@GetMapping("/bDelete")
 	public String bDeleteForm(Model model, BboardVO bboardVO) {
-		String type = bboardVO.getType();
-		bboardService.bboardDelete(bboardVO);
+		if(bboardVO.getType() != null) {
+			String type = bboardVO.getType();
+			bboardService.bboardDelete(bboardVO);
+			return "redirect:/bboard/bList?type=" + type;
+		} else {
+			bboardService.bboardDelete(bboardVO);
+			return "redirect:/bboard/myBlist";
+		}
 		
-		return "redirect:/bboard/bList?type=" + type;
 	}
 	
 	//마이페이지에서 내가 쓴 게시글 보기
@@ -147,6 +152,7 @@ public class BboardController {
 		//전체리스트와 타입 구하기
 		model.addAttribute("bList", bboardService.myBboardList(bboardVO, paging));
 		model.addAttribute("paging", paging);
+		
 		return "content/myPage/myBboardList";
 	}
 }

@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<link rel="stylesheet" href="/css/myPageSide.css">
 <style>
 	.label {
 		color : black;
@@ -35,6 +35,10 @@
             </div>
           </div>
         </section>		
+        
+        <!-- 현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+    
 		
 		<form action="/rent/rentGdInsert" enctype="multipart/form-data" id="myrentGdfrm" name="myrentGdfrm" method="post">
 			<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -42,7 +46,7 @@
 			<input type="hidden" id="goodsNo" name="goodsNo" th:value="${nextNo}" readonly="readonly"><br />
 			<input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member != null ? session.member.userId :''}">
 			
-			<!-- 디자인 카테고리 -->
+			<!-- 카테고리 -->
 			<div class="col-md-12">
 				<div class="form-group">
 					<label class="label" for="designStyleList">물품카테고리</label> 
