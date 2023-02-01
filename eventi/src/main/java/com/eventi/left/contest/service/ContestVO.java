@@ -32,6 +32,7 @@ public class ContestVO {
 	private int inq; 	 //조회수
 	private int rprt; 	 //신고수
 	private String style; 	 //선호하는태그
+	private String settYN; //상금정산여부
 	
 	//정렬,검색
 	private String order = "inq DESC"; //기본 정렬기준

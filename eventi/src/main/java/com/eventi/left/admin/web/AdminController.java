@@ -16,6 +16,7 @@ import com.eventi.left.admin.service.AdminService;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.money.service.MoneyVO;
@@ -175,19 +176,36 @@ public class AdminController {
 		return result;
 	}
 	
+	//송금 api 
 	@PostMapping("/sendMoney")
 	@ResponseBody
 	public ResponseEntity<JsonNode> sendMoney(MoneyVO moneyVO){
 		ResponseEntity<JsonNode> responseEntity = service.sendMoney(moneyVO);
-		System.out.println(responseEntity);
 		return responseEntity;
 	}
 	
 	//정산 승인
-		@PostMapping("/updateMoney")
-		@ResponseBody
-		public int updateMoney(MoneyVO moneyVO) {
-			int r = service.updateMoney(moneyVO);
-			return r;
-		}
+	@PostMapping("/updateMoney")
+	@ResponseBody
+	public int updateMoney(MoneyVO moneyVO) {
+		int r = service.updateMoney(moneyVO);
+		return r;
+	}
+	
+	//정산 전 확인 모달창 정보 조회
+	@PostMapping("/getSettCheck")
+	@ResponseBody
+	public Map<String, Object> getSettCheck(WinnerVO winnerVO){
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("winnerList", service.winnerList(winnerVO));
+		return result;
+	}
+	
+	//정산테이블로 모달 정보 보내기
+	@PostMapping("/sendToMoney")
+	@ResponseBody
+	public int sendToMoney(WinnerVO winnerVO) {
+		int result  = service.sendToMoney(winnerVO);
+		return result;
+	}
 }

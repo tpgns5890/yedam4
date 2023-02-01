@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.money.service.MoneyVO;
@@ -65,5 +66,14 @@ public interface AdminMapper {
 	//회계 조회
 	public List<MoneyVO> moneyList(MoneyVO moneyVO);
 
+	//회계업데이트
 	public int updateMoney(MoneyVO moneyVO);
+
+	//우승자 모달창 정보 조회
+	public List<MoneyVO> winnerList(WinnerVO winnerVO);
+
+	//Money테이블 insert
+	public int insertMoney(MoneyVO money);
+
+	public void updateContest(WinnerVO winnerVO); 
 }

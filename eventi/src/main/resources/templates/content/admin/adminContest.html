@@ -122,6 +122,66 @@
 			padding: 17px;
 			background-color: rgba(255,255,255,0.2);
 		}
+		#modal {
+			display: none;
+			position: fixed;
+			top: 15em;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			width: 100%;
+		}
+
+		#modal h2 {
+			margin: 0;
+		}
+
+		#modal .modal_content {
+			width: 430px;
+			min-height: 200px;
+			margin: 0 auto;
+			padding: 20px;
+			background: #fff;
+			border: 0.5px solid #666;
+			border-radius: 15px;
+		}
+
+		#modal .modal_layer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+
+		#button_box {
+			display: flex;
+			margin-top: 40px;
+			justify-content: flex-end;
+		}
+
+		#modal_close_btn {
+			position: relative;
+			cursor: pointer;
+			background: 0 0;
+			border: 0 !important;
+			font-size: 15px;
+			color: #000;
+			text-shadow: 0 1px 0 #fff;
+			opacity: .5;
+			float: right;
+			width: auto !important;
+		}
+
+		#modal_close_btn:hover {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+			opacity: 1;
+		}
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -167,23 +227,41 @@
 							</tbody>
 						</table>
 					</div>
-					
 					<!-- 페이징 처리 -->
 					<div class="row mt-5" id="paging">
 						<div class="col text-center">
 							<div class="block-27" id="returnPaging"></div>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		</div>
+		<div id="modal">
+			<div class="modal_content">
+				<button id="modal_close_btn" type="button">X</button>
+				<h3 class="font-alt"><b>송금확인</b></h3>
+				<hr>
+				<div id="modalList">
+					
+				</div>
+				<hr>
+				<div id="button_box">
+					
+				</div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
+		
 		<input type="hidden" name="page" value="1">
-
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			ajaxList();
+			
+			/*모달 창 닫기*/
+			$("#modal_close_btn").on('click', function () {
+				$("#modal").hide();
+			});
 			
 			function gopage(i) {
 				let thispage = $('input[name="page"]').val(i);
@@ -211,7 +289,6 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
-						console.log(result)
 						$('tbody').empty();
 						for (contest of result.contestList) {
 							$('tbody').append(makeTr(contest));
@@ -237,17 +314,17 @@
 				if(!thirdId){
 					thirdId = '수상자없음';
 				}
-				let p = `<tr onclick="location.href='../contest/select?cNo=${contest.CNO}'">
+				let p = `<tr>
 							<td>${contest.CNO}</td>
 							<td>${contest.PAY}</td>
 							<td>${contest.WRITER}</td>
-							<td>${contest.TTL}</td>
+							<td onclick="location.href='../contest/select?cNo=${contest.CNO}'">${contest.TTL}</td>
 							<td>${contest.DTREG}</td>
 							<td>${contest.DTCLS}</td>
 							<td>${firstId}</td>
 							<td>${secondId}</td>
 							<td>${thirdId}</td>
-							<td><button type="button" onclick="settle()" value="${contest.cNo}">상금정산</button></td>
+							<td><button type="button" onclick="settleCheck(this)" value="${contest.CNO}">상금정산</button></td>
 						</tr>`;
 				return p;
 			}
@@ -299,30 +376,59 @@
 				return pagination;
 			}
 			
-			//정산 버튼
-			function settle(){
-				let crtfId = element.value;
-				let accpYN = value;
+			//모달창
+			function settleCheck(element){
+				let coNo = element.value;
+				
 				$.ajax({
-					url:"/admin/crtfUpdate",
-					method: 'post',
-					data: {
-						crtfId,
-						accpYN
-					},
+					url:"/admin/getSettCheck",
+					type:"POST",
+					data:{coNo},
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader(header, token);
 					},
 					success:function(result){
-						if(result>0){
-							element.parentElement.parentElement.remove();
-							alert("처리되었습니다.")
+						let i = 1;
+						$("#modal").show();
+						$("#modalList div").remove();
+						$("#button_box button").remove();
+						for(winner of result.winnerList){
+							
+							$("#modalList").append(makeDiv(winner, i));
+							i++;
 						}
+						$("#button_box").append($("<button/>").attr({"id":"modal_login_btn",
+							"class":"btn btn-success btn-circle"}).text('정산').val(coNo));
+						$("#button_box").on('click',function(){
+							$.ajax({
+								url:"/admin/sendToMoney",
+								type:"POST",
+								data:{coNo},
+								beforeSend: function (xhr) {
+									xhr.setRequestHeader(header, token);
+								},success:function(){
+									alert("정산완료!");
+									$("#modal").hide();
+									ajaxList();
+								}
+							})
+						})
 					}
 				})
 
 			}
+
 			
+			
+			function makeDiv(winner, i){
+				let p =`
+					<div>
+						<h4 class="font-alt"><b>${i}등 ${winner.moPrice}</b></h4>
+						<h5 class="font-alt">${winner.bankName} ${winner.bankAccount} ${winner.userName}(${winner.userId})</h5>
+					</div>
+				`;
+				return p;
+			}
 		</script>
 	</div>
 </body>
