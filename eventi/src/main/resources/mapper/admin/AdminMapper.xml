@@ -157,23 +157,24 @@
         				ELSE DT_CLS
         				END), 'YYYY-mm-dd') dtCls, 
         		(SELECT USER_ID
-        		FROM WINNER
-        		WHERE CO_NO = C_NO
-        		AND GRADE = 1) AS firstId,
+        		FROM 	WINNER
+        		WHERE 	CO_NO = C_NO
+        		AND 	GRADE = 1) AS firstId,
         		(SELECT USER_ID
-        		FROM WINNER 
-        		WHERE CO_NO = C_NO
-        		AND GRADE = 2) AS secondId, 
+        		FROM 	WINNER 
+        		WHERE 	CO_NO = C_NO
+        		AND 	GRADE = 2) AS secondId, 
         		(SELECT USER_ID
-        		FROM WINNER w
-        		WHERE CO_NO = C_NO
-        		AND GRADE = 3) AS thirdId
+        		FROM 	WINNER
+        		WHERE 	CO_NO = C_NO
+        		AND 	GRADE = 3) AS thirdId
 		FROM	(SELECT ROWNUM RN, A.*
 				FROM	(SELECT *
 						FROM 	(SELECT DISTINCT c.*
 								FROM CONTEST c, WINNER w
 								WHERE c.C_NO = w.CO_NO 
-								AND w.USER_ID IS NOT NULL)
+								AND w.USER_ID IS NOT NULL
+								AND c.SETT_YN != 'Y')
 								<![CDATA[) A 
 			  	WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
@@ -344,7 +345,7 @@
 				FROM	(SELECT *
 						FROM 	MONEY
 						<include refid="moSelect" />
-						ORDER BY MO_DT
+						ORDER BY MO_DT DESC
 			   <![CDATA[) A 
 			  	WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
@@ -370,4 +371,54 @@
 			</if>
 		</where>
 	</sql>
+	
+	<!-- 우승자 조회 -->	
+	<select id="winnerList" resultType="MoneyVO">
+		SELECT 	W_PAY MO_PRICE,
+				USER_ID,
+				(SELECT USER_NAME
+				FROM MEMBERS
+				WHERE USER_ID = w.USER_ID) USER_NAME,
+				(SELECT CODE_SELECT(BANK)
+				FROM MEMBERS
+				WHERE USER_ID = w.USER_ID) BANK_NAME,
+				(SELECT ACCNT
+				FROM MEMBERS
+				WHERE USER_ID = w.USER_ID) BANK_ACCOUNT
+		FROM WINNER w
+		WHERE CO_NO = #{coNo}
+	</select>
+	
+	<update id="updateContest">
+		UPDATE CONTEST
+		SET SETT_YN = 'Y'
+		WHERE C_NO = #{coNo}
+	</update>
+	
+	<insert id="insertMoney">
+		INSERT INTO MONEY	(MO_NUM,
+							BANK_NAME,
+							BANK_ACCOUNT,
+							MO_TYPE,
+							MO_PRICE,
+							USER_ID,
+							USER_NAME,
+							SETT_YN,
+							TARGET_ID,
+							MO_CAT,
+							MO_DT)
+			VALUES(
+					'MO'||MONEY_SEQ.NEXTVAL,
+			        #{bankName},
+			        #{bankAccount},
+			       	'M2',
+			        #{moPrice},
+			        #{userId},
+			        #{userName},
+			        'N',
+			        #{userId},
+			        'T01',
+			        SYSDATE
+	       		 )
+	</insert>
 </mapper>

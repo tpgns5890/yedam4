@@ -650,7 +650,6 @@ a,
 --------------------------------------------------------------*/
 .btn {
   border-radius: 0;
-  text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 11px;
   padding: 8px 37px;
@@ -813,7 +812,6 @@ a,
 
 /* Forms common style */
 .form-control {
-  text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 11px;
   height: 33px;
@@ -888,7 +886,6 @@ blockquote {
 }
 
 .font-alt {
-  text-transform: uppercase;
   letter-spacing: 2px;
 }
 
@@ -1241,7 +1238,6 @@ General Styles - Owlcarousel
   border: 0;
   border-radius: 0;
   z-index: 1000;
-  text-transform: uppercase;
   letter-spacing: 3px;
   font-size: 14px;
   font-weight:bold;
@@ -1343,7 +1339,6 @@ General Styles - Owlcarousel
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
-	text-transform: uppercase;
 	letter-spacing: 2px;
 	font-size: 11px;
 }
@@ -1555,7 +1550,6 @@ Google map
 
 .features-title,
 .alt-features-title {
-  text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 400;
   font-size: 14px;
@@ -2230,7 +2224,6 @@ Google map
 .pagination a {
   border: 1px solid #eaeaea;
   display: inline-block;
-  text-transform: uppercase;
   text-align: center;
   color: #999;
   padding: 4px 12px;

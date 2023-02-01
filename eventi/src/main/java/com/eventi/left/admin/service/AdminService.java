@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.money.service.MoneyVO;
@@ -38,6 +39,10 @@ public interface AdminService {
 	public ResponseEntity<JsonNode> sendMoney(MoneyVO moneyVO); //송금 api호출
 
 	public int updateMoney(MoneyVO moneyVO);
+
+	public List<MoneyVO> winnerList(WinnerVO winnerVO);
+
+	public int sendToMoney(WinnerVO winnerVO);
 
 
 

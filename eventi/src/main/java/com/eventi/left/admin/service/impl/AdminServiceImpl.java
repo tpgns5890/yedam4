@@ -21,6 +21,7 @@ import com.eventi.left.admin.service.AdminService;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
+import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.money.service.MoneyVO;
@@ -207,6 +208,23 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public int updateMoney(MoneyVO moneyVO) {
 		return adminMapper.updateMoney(moneyVO);
+	}
+
+	@Override
+	public List<MoneyVO> winnerList(WinnerVO winnerVO) {
+		return adminMapper.winnerList(winnerVO);
+	}
+
+	@Override
+	public int sendToMoney(WinnerVO winnerVO) {
+		int i = 0;
+		List<MoneyVO> winners = adminMapper.winnerList(winnerVO);
+		for (MoneyVO money : winners) {
+			adminMapper.insertMoney(money);
+			i++;
+		}
+		adminMapper.updateContest(winnerVO);
+		return i;
 	}
 
 	

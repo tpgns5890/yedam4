@@ -31,6 +31,6 @@ public class MoneyVO {
 	
 	private String search;
 	
-	private Integer first;
-	private Integer last;
+	Integer first;
+	Integer last;
 }
