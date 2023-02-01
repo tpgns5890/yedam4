@@ -160,7 +160,6 @@
 									<th>2등</th>
 									<th>3등</th>
 									<th></th>
-									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -212,6 +211,7 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
+						console.log(result)
 						$('tbody').empty();
 						for (contest of result.contestList) {
 							$('tbody').append(makeTr(contest));
@@ -247,7 +247,7 @@
 							<td>${firstId}</td>
 							<td>${secondId}</td>
 							<td>${thirdId}</td>
-							<td><button type="button" onclick="settle()" value="${contest.cNo}">상금정산</button><td>
+							<td><button type="button" onclick="settle()" value="${contest.cNo}">상금정산</button></td>
 						</tr>`;
 				return p;
 			}

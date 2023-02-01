@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,9 @@ import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.punish.service.PunishVO;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Controller
 @RequestMapping("/admin")
@@ -111,6 +114,7 @@ public class AdminController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("contestList", service.contestList(vo, paging));
 		result.put("paging", paging);
+		System.out.println(result);
 		return result;
 	}
 	
@@ -160,4 +164,30 @@ public class AdminController {
 		return r;
 	}
 
+	//회계조회 Ajax
+	@PostMapping("/moneyList")
+	@ResponseBody
+	public Map<String, Object> moneyList(MoneyVO moneyVO, PagingVO paging) {
+		// 리턴할 최종Map(Member,paging VO)
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("moneyList", service.moneyList(moneyVO, paging));
+		result.put("paging", paging);
+		return result;
+	}
+	
+	@PostMapping("/sendMoney")
+	@ResponseBody
+	public ResponseEntity<JsonNode> sendMoney(MoneyVO moneyVO){
+		ResponseEntity<JsonNode> responseEntity = service.sendMoney(moneyVO);
+		System.out.println(responseEntity);
+		return responseEntity;
+	}
+	
+	//정산 승인
+		@PostMapping("/updateMoney")
+		@ResponseBody
+		public int updateMoney(MoneyVO moneyVO) {
+			int r = service.updateMoney(moneyVO);
+			return r;
+		}
 }

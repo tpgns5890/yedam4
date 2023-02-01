@@ -1,10 +1,20 @@
 package com.eventi.left.admin.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.eventi.left.admin.mapper.AdminMapper;
 import com.eventi.left.admin.service.AdminService;
@@ -13,7 +23,11 @@ import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.punish.service.PunishVO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -119,6 +133,80 @@ public class AdminServiceImpl implements AdminService{
 			adminMapper.banBoard3(punishVO.getTargetId());
 		}
 		return adminMapper.banBrdAccept(punishVO);
+	}
+
+	//회계조회
+	@Override
+	public List<MoneyVO> moneyList(MoneyVO moneyVO, PagingVO paging) {
+		paging.setTotalRecord(adminMapper.moneyCount(moneyVO));
+		paging.setPageUnit(10);
+		moneyVO.setFirst(paging.getFirst());
+		moneyVO.setLast(paging.getLast());
+		return adminMapper.moneyList(moneyVO);
+	}
+
+	
+	/* ajax 함수내에서 cors 우회가 불가능하여 서버쪽에서 request 요청을 만들어 CORS 해결 */
+	/* RestTemplate 사용 */
+	/* 송금 API */
+	@Override
+	public ResponseEntity<JsonNode> sendMoney(MoneyVO moneyVO){
+		String url = "https://developers.nonghyup.com/ReceivedTransferOtherBank.nh";
+		String bankName = moneyVO.getBankName();
+		String bankAccount = moneyVO.getBankAccount();
+		int moPrice = moneyVO.getMoPrice();
+		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		String today = now.format(formatter);
+		
+		LocalTime nowTime = LocalTime.now();
+		DateTimeFormatter tformatter = DateTimeFormatter.ofPattern("HHmmss");
+		String formatedNow = nowTime.format(tformatter);
+		String IsTuno = today+formatedNow;
+		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> header = new HashMap<String, Object>();
+		header.put("ApiNm","ReceivedTransferOtherBank");
+		header.put("Tsymd",today);
+		header.put("Trtm",formatedNow);
+		header.put("Iscd","001712");
+		header.put("FintechApsno","001");
+		header.put("ApiSvcCd","DrawingTransferA");
+		header.put("IsTuno",IsTuno);
+		header.put("AccessToken","2baa445640c38231cf67e1b099c3d4ec97a7e51a33dec5e5757cde32f5a86c4b");
+		param.put("Header",header);
+		param.put("Bncd", bankName);
+		param.put("Acno", bankAccount);
+		param.put("Tram", moPrice);
+		param.put("DractOtlt", "이벤티");
+		
+		//header설정
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		ObjectMapper obMapper = new ObjectMapper();
+		
+		HttpEntity<String> request = null;
+		try {
+			request = new HttpEntity<String>(obMapper.writeValueAsString(param), headers);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		//uri 생성
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);							
+		
+		//restTemplate
+		RestTemplate restTpl = new RestTemplate();
+		
+		//result JsonNode 생성
+		JsonNode responseEntity = restTpl.postForObject(builder.toUriString(), request, JsonNode.class);
+		return ResponseEntity.ok(responseEntity);
+	}
+
+	//회계 update
+	@Override
+	public int updateMoney(MoneyVO moneyVO) {
+		return adminMapper.updateMoney(moneyVO);
 	}
 
 	
