@@ -7,32 +7,24 @@
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
 <link rel="stylesheet" href="/css/contest/cotestForm.css">
+<link rel="stylesheet" href="/css/contest/button.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">회원등급 승급신청</h2>
-              </div>
-            </div>
-          </div>
-        </section>
-		
+    <h2 hidden="hidden" class="module-title font-alt">회원승급신청</h2>
 		
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
 		<div id="user"style="min-height: 700px;">
 			<div id="signIn-right">
-					<label style="width: 100px">사회자</label><input type="radio" name="crtfType" value="MC">
-					<label style="width: 100px">디자이너</label><input type="radio" name="crtfType" value="DESIGNER"><br>
-					<label style="width: 150px;">자격증명</label> <input type="text" id="crtfName" name="crtfName"><br>
-					<label style="width: 150px">자격증 발급번호</label> <input type="text" id="crtfNum" name="crtfNum">
-					<button type='button' id="qPlus">승급신청</button>
+					<label>사회자</label><input type="radio" name="crtfType" value="MC">
+					<label>디자이너</label><input type="radio" name="crtfType" value="DESIGNER"><br>
+					<label>자격증명</label> <input type="text" id="crtfName" name="crtfName"><br>
+					<label>발급번호</label> <input type="text" id="crtfNum" name="crtfNum">
+					<button type='button' class="w-btn w-btn-gra1" id="qPlus">승급신청</button>
 			</div>
 			
 			<div id="userCrtf">

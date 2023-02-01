@@ -20,7 +20,7 @@
 			<!-- 왼쪽 서브 메뉴 -->
 			<div class="left_sub_menu">
 				<div class="sub_menu">
-					<h2>마이페이지</h2>
+					<h2 id="mypage_h2"></h2>
 					<ul class="big_menu">
 						<li>내정보관리<i class="arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
@@ -113,6 +113,8 @@
 		</div>
 	</div>
 	<script>
+	change();
+	
 		$(function() {
 			$(".has_sub").click(function() {
 				$(".left_sub_menu").fadeToggle(300);
@@ -123,6 +125,13 @@
 				$("ul", this).slideToggle(300);
 			});
 		});
+		
+		 function change(){
+			 console.log($('h2').text());
+			$('#mypage_h2').empty();
+			$('#mypage_h2').html($('h2').text());
+			
+		}
 	</script>
 </div>
 </html>

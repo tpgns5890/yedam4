@@ -11,18 +11,18 @@ ul {
 
 .designDiv {
 	margin: 0 auto;
-	margin-top: 30px;
+	margin-top: 100px;
 	margin-left: 140px;
 }
 
 .contest, #boxList {
 	margin: 0 auto;
-	margin-top: 30px;
+	margin-top: 100px;
 	margin-left: 270px;
 }
 
 /* 페이징 */
-.block-27{
+.block-27 {
 	width: 100%;
 }
 
@@ -86,7 +86,7 @@ input[type="text"] {
 	border-radius: 4px;
 }
 
-.inputBtn, .delBtn, button[type="submit"] {
+.inputBtn, .delBtn, #searchBtn {
 	font-size: 16px;
 	height: 30px;
 }

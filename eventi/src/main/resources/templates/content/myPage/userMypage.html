@@ -12,17 +12,7 @@
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg"
-			data-background="/assets/images/gallery_bg.jpg"
-			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
-						<h2 class="module-title font-alt">회원정보 조회</h2>
-					</div>
-				</div>
-			</div>
-		</section>
+	<h2 hidden="hidden" class="module-title font-alt">회원정보 조회</h2>
 
 		<div>
 			<!-- 3.현재페이지 myPageSide 적용 -->
@@ -116,7 +106,7 @@
 						</ul>
 					</th:block>
 				</ul>
-				<div style="position: relative; top: 20px; left: 135px;">
+				<div style="position: relative; top: 20px; left: 335px;">
 					<button type="button" id="update" class="w-btn w-btn-gra1">수정</button>
 					<button type="button" id="delete" class="w-btn w-btn-gra1">탈퇴</button>
 				</div>
@@ -133,8 +123,7 @@
 					type="text" id="passwordchk" name="passwordchk" required="required"><br>
 				<font id="pw_feedback" size="2" value="1"></font>
 				<div id="checkDiv">
-					<button id="check" class="modelBtn1" style="width: 50px;"
-						type="button">확인</button>
+					<button id="check" class="modelBtn1" style="width: 50px;" type="button">확인</button>
 				</div>
 			</div>
 			<div class="modal_layer"></div>

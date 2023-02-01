@@ -97,13 +97,14 @@
                         from design d
                         where d.c_no = c.c_no
                         and save = 'N')designCount,
-                        
-                      CASE WHEN dt_extns IS NOT NULL  THEN 
-	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행중'
+                     
+                      CASE WHEN save = 'Y'  THEN '임시저장'
+                      	  WHEN dt_extns IS NOT NULL  THEN 
+	                           CASE WHEN trunc(dt_extns) >= trunc(SYSDATE) THEN '진행'
 	                                ELSE '마감'
 	                           END
                           WHEN dt_extns IS NULL THEN 
-                               CASE WHEN trunc(dt_cls) >= trunc(SYSDATE) THEN '진행중'
+                               CASE WHEN trunc(dt_cls) >= trunc(SYSDATE) THEN '진행'
                                     ELSE '마감'
                                END
                       END AS ing
