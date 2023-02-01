@@ -1,0 +1,206 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--headerFragment 선언-->
+<div th:fragment="myPageSide">
+
+	<!-- 일반회원 사이드 메뉴바 -->
+	<ul class="sideMenu">
+		<li><a href="#">내정보관리</a>
+			<ul class="submenu">
+				<li><a href="/myPage/userMypage">회원정보조회</a></li>
+				<li><a href="/myPage/userUpgradeForm">승급신청</a></li>
+			</ul>
+		</li>
+
+		<li><a href="#">공모전관리</a>
+			<ul class="submenu">
+				<li><a href="/contest/mySelect">공모전리스트</a></li>
+				<li><a href="/design/designMypage">응모리스트</a></li>
+				<li><a href="/contest/like">관심리스트</a></li>
+				<li><a href="/contest/qnaList">문의내역</a></li>
+			</ul>
+		</li>
+		<li><a href="#">견적/제안서</a>
+			<ul class="submenu">
+				<li><a href="#">제안서 목록</a></li>
+				<li><a href="#">진행중인제안서 목록</a></li>
+				<li><a href="#">나의 견적요청 목록</a></li>
+			</ul>
+		</li>
+		<li><a href="#">물품관리</a>
+			<ul class="submenu">
+				<li><a href="/rent/rentGdInsert">물품등록</a></li>
+				<li><a href="/rent/rentGdList">물품리스트</a></li>
+			</ul>
+		</li>
+		<li><a href="#">의뢰내역</a>
+			<ul class="submenu">
+				<li><a th:href="|/casting/mcCastingList?userId=${session.member.userId}|">사회요청내역</a></li>
+				<li><a th:href="|/casting/mcCastingList?clientId=${session.member.userId}|">의뢰내역</a></li>
+			</ul>
+		</li>
+		<li><a href="#">구인구직</a>
+			<ul class="submenu">
+				<li><a href="/myJobList">구인게시글 관리</a></li>
+				<li><a href="/seekerInfo">구직신청내역</a></li>
+			</ul>
+		</li>
+		<li><a href="#">홍보게시판</a>
+			<ul class="submenu">
+				<li><a href="/myProList">홍보게시글 관리</a></li>
+			</ul>
+		</li>
+		
+		<!-- 추가부분(지은) -->
+		<li><a href="#">블라인드게시판</a>
+			<ul class="submenu">
+				<li><a href="/bboard/myBlist">나의 게시글</a></li>
+			</ul></li>
+			
+		<li><a href="#">사회자포트폴리오</a>
+			<ul class="submenu">
+				<li><a href="/prtfl/mcInsert">사회자포트폴리오 등록</a></li>
+				<li><a href="#">사회자포트폴리오</a></li>
+				<li><a href="#">사회자 동영상</a></li>
+			</ul></li>
+			
+		<li><a href="#">디자이너포트폴리오</a>
+			<ul class="submenu">
+				<li><a href="/prtfl/dgnerInsert">디자이너포트폴리오 등록</a></li>
+				<li><a th:href="|/prtfl/dgnerSelect?userId=${session.member.userId}|">디자이너포트폴리오</a></li>
+				<li><a href="/design/myDesignInsert">디자인 등록</a></li>
+			</ul></li>
+			
+		<li><a href="#">업체포트폴리오</a>
+			<ul class="submenu">
+				<li><a href="/prtfl/busiInsert">업체포트폴리오 등록</a></li>
+				<li><a th:href="|/prtfl/busiSelect?userId=${session.member.userId}|">업체포트폴리오</a></li>
+				<li><a href="/eventImg/eventImgList">행사사진 리스트</a></li>
+			</ul></li>
+	</ul>
+
+	<!-- 사회자 -->
+	<!-- <ul class="menu">
+				<li><a href="#">내정보관리</a>
+					<ul class="submenu">
+						<li><a href="#">회원정보 조회</a></li>
+					</ul></li>
+				<li><a href="#">행사관리</a>
+					<ul class="submenu">
+						<li><a href="#">의뢰내역 조회</a></li>
+					</ul></li>
+				<li><a href="#">포트폴리오 관리</a>
+					<ul class="submenu">
+						<li><a href="#">내 포트폴리오</a></li>
+					</ul></li>
+				<li><a href="#">블라인드게시판</a>
+					<ul class="submenu">
+						<li><a href="#">블라인드게시판 목록</a></li>
+						<li><a href="#">자유게시판 목록</a></li>
+					</ul></li>
+				<li><a href="#">홍보게시판</a>
+					<ul class="submenu">
+						<li><a href="#">홍보게시글</a></li>
+					</ul></li>
+			</ul> -->
+	<!-- 디자이너 -->
+	<!-- <ul class="menu">
+				<li><a href="#">내정보관리</a>
+					<ul class="submenu">
+						<li><a href="#">회원정보 조회</a></li>
+					</ul></li>
+					
+				<li><a href="#">공모전관리</a>
+					<ul class="submenu">
+						<li><a href="#">문의내역</a></li>
+						<li><a href="#">공모전 응모관리</a></li>
+						<li><a href="#">관심공모전</a></li>
+						<li><a href="#">공모전문의</a></li>
+					</ul></li>
+				<li><a href="#">포트폴리오 관리</a>
+					<ul class="submenu">
+						<li><a href="#">내 포트폴리오</a></li>
+					</ul></li>
+				<li><a href="#">블라인드게시판</a>
+					<ul class="submenu">
+						<li><a href="#">블라인드게시판 목록</a></li>
+						<li><a href="#">자유게시판 목록</a></li>
+					</ul></li>
+				<li><a href="#">홍보게시판</a>
+					<ul class="submenu">
+						<li><a href="#">홍보게시글</a></li>
+					</ul></li>
+			</ul> -->
+	<!-- 대여업체 -->
+	<!-- <ul class="menu">
+				<li><a href="#">내정보관리</a>
+					<ul class="submenu">
+						<li><a href="#">회원정보 조회</a></li>
+					</ul></li>
+					
+				<li><a href="#">공모전관리</a>
+					<ul class="submenu">
+						<li><a href="/contest/mySelect">공모전게시글관리</a></li>
+						<li><a href="/design/designMypage">공모전응모관리</a></li>
+						<li><a href="/contest/like">관심공모전</a></li>
+						<li><a href="#">공모전문의</a></li>
+					</ul></li>
+				<li><a href="#">물품관리</a>
+					<ul class="submenu">
+						<li><a href="#">물품 등록</a></li>
+						<li><a href="#">물품 리스트</a></li>
+						<li><a href="#">물품 대여목록</a></li>
+					</ul></li>
+				<li><a href="#">행사관리</a>
+					<ul class="submenu">
+						<li><a href="#">의뢰내역</a></li>
+					</ul></li>
+				<li><a href="#">구인구직 관리</a>
+					<ul class="submenu">
+						<li><a href="#">구인게시글</a></li>
+					</ul></li>
+				<li><a href="#">홍보게시판</a>
+					<ul class="submenu">
+						<li><a href="#">홍보게시글</a></li>
+					</ul></li>
+			</ul> -->
+	<!-- 기획업체 -->
+	<!-- <ul class="menu">
+				<li><a href="#">내정보관리</a>
+					<ul class="submenu">
+						<li><a href="#">회원정보 조회</a></li>
+					</ul></li>
+					
+				<li><a href="#">공모전관리</a>
+					<ul class="submenu">
+						<li><a href="/contest/mySelect">공모전게시글관리</a></li>
+						<li><a href="/design/designMypage">공모전응모관리</a></li>
+						<li><a href="/contest/like">관심공모전</a></li>
+						<li><a href="#">공모전문의</a></li>
+					</ul></li>
+				<li><a href="#">제안서관리</a>
+					<ul class="submenu">
+						<li><a href="#">제안요청서</a></li>
+					</ul></li>
+				<li><a href="#">물품관리</a>
+					<ul class="submenu">
+						<li><a href="#">물품 등록</a></li>
+						<li><a href="#">물품 리스트</a></li>
+						<li><a href="#">물품 대여목록</a></li>
+					</ul></li>
+				<li><a href="#">행사관리</a>
+					<ul class="submenu">
+						<li><a href="#">의뢰내역</a></li>
+					</ul></li>
+				<li><a href="#">구인구직 관리</a>
+					<ul class="submenu">
+						<li><a href="#">구인게시글</a></li>
+					</ul></li>
+				<li><a href="#">홍보게시판</a>
+					<ul class="submenu">
+						<li><a href="#">홍보게시글</a></li>
+					</ul></li>
+			</ul>  -->
+
+</div>
+</html>
