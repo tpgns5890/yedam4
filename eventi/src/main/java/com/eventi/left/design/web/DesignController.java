@@ -1,7 +1,9 @@
 package com.eventi.left.design.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +26,14 @@ import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.likes.service.LikesService;
+import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberService;
 import com.eventi.left.member.service.MemberVO;
+
 /**
  * 
- * @author 배수빈
- * 디자인에 대한 컨트롤러
+ * @author 배수빈 디자인에 대한 컨트롤러
  *
  */
 @Controller
@@ -43,16 +47,17 @@ public class DesignController {
 	FilesService fService;
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	LikesService likeService;
 
 	/**
 	 * 
-	 * @param model 
+	 * @param model
 	 * @param vo
 	 * @param paging
-	 * @return
-	 * 전체 디자인 리스트 조회
+	 * @return 전체 디자인 리스트 조회
 	 */
-	@RequestMapping("/designList")
+	@GetMapping("/designList")
 	public String bfList(Model model, DesignVO vo, PagingVO paging) {
 		model.addAttribute("designList", service.designList(vo, paging));
 		model.addAttribute("paging", paging);
@@ -62,7 +67,7 @@ public class DesignController {
 	// 회원의 디자인 응모하기 폼 이동.
 	@GetMapping("/designInsertForm")
 	public String designInsert(Model model, DesignVO vo) {
-		
+
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
@@ -162,22 +167,31 @@ public class DesignController {
 		service.saveUpdateDesign(vo, filesVO, uploadFile);
 		return "redirect:/design/designMypage";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//지은(수정)
-	//마이페이제에서 디자인 등록
-	@Autowired CodeService codeService;
-	
+
+	// 로그인회원의 관심 디자인리스트
+	@PostMapping("/ajaxlike")
+	@ResponseBody
+	public Map<String, Object> designlikeList(LikesVO vo, PagingVO paging) {
+
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		vo.setUserId(user.getUserId());
+
+		// 리턴할 최종Map
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("design", likeService.designlikeList(vo, paging));
+		result.put("paging", paging);
+		return result;
+	}
+
+	// 지은(수정)
+	// 마이페이제에서 디자인 등록
+	@Autowired
+	CodeService codeService;
+
 	@GetMapping("/myDesignInsert")
 	public String myDesignInsert(Model model, DesignVO designVO) {
-		
+
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
@@ -185,11 +199,11 @@ public class DesignController {
 		model.addAttribute("user", memberService.getMember(sessionId));
 		model.addAttribute("contest", cService.getContest(designVO.getcNo()));
 		model.addAttribute("dNo", service.getSequence());
-		
+
 		model.addAttribute("designCat", codeService.getdesignCat());
 		return "content/design/designInsert";
 	}
-	
+
 	@PostMapping("/myDesignInsert")
 	public String myDesignInsert(Model model, DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
 

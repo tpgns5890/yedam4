@@ -10,9 +10,11 @@ public interface DesignMapper {
 	public List<DesignVO> designList(DesignVO vo);
 	
 	//등록된 디자인 개수
-	public int count(DesignVO vo);
+	public int count(DesignVO vo); //마이페이지 회원의 디자인 개수
 	
-	public int entryDesign(String cNo);
+	public int allCount(DesignVO vo); //디자인 전체 개수
+	
+	public int entryDesign(String cNo); //공모전에 접수된 디자인개수
 
 	public List<DesignVO> contestDesignList(DesignVO vo); //게시글 1건 디자인리스트.
 	

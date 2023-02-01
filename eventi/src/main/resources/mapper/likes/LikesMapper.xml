@@ -11,7 +11,7 @@
 	</sql>
 	
 
-	<!-- 좋아요 전체 조회 -->
+	<!-- 로그인회원의 공모전 좋아요 전체리스트 -->
 	<!-- join map으로 받을경우, 컬럼명 대문자 인식!! -->
 	<select id="userlikeList" resultType="map">
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,inq,rprt
@@ -37,6 +37,26 @@
 	) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 	]]>
 	</select>
+	
+	<select  id="designlikeList" resultType="map">
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+				SELECT d.dgn_no,d.user_id,d.c_no,name,d.cntn,d.win_yn,d.dt,d.pubc_yn,d.save
+						,code_select(d.caregory)caregory,
+	                    (select sev_nm 
+	                      from files 
+	                      where target_id = dgn_no
+	                      and f_nm = center_img) AS center_img
+				FROM design d join likes l
+	                            on d.dgn_no = l.target_no
+				AND SAVE = 'N'
+				AND PUBC_YN = 'N'
+	            AND L.USER_ID  = #{userId}
+				ORDER BY DT DESC
+		<![CDATA[
+		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+		]]>
+	</select>
+	
 
 	<select id="likeList" resultType="LikesVO">
 		SELECT * FROM likes
@@ -81,7 +101,7 @@
 		and category = #{category}
 	</select>
 	
-	<!-- 게시글에 대한 로그인회원의 좋아요 확인 -->
+	<!-- 공모전에 대한 로그인회원의 좋아요 확인 -->
 	<select id="setTotalRecord" resultType="int">
 		SELECT COUNT(*)
 		  FROM LIKES L JOIN CONTEST C
@@ -89,6 +109,16 @@
 		  AND USER_ID = #{userId}
 		  AND L.CATEGORY = #{category}
          <![CDATA[ AND rprt < 5 ]]>
+	</select>
+	
+	<!-- 디자인에 대한 로그인회원의 좋아요 확인 -->
+	<select id="setTotalRecordDesign" resultType="int">
+		SELECT COUNT(*) 
+		FROM LIKES L JOIN design d 
+		            ON L.TARGET_NO = d.dgn_no
+		AND PUBC_YN = 'N'
+		AND l.USER_ID = #{userId}
+		AND L.CATEGORY = #{category}
 	</select>
 	
 </mapper>
