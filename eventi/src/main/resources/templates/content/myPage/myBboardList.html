@@ -27,6 +27,13 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
+			<!-- 타입별 정렬 -->
+			<select id="type" name="type">
+				<option value="">정렬</option>
+				<option value="T04" th:selected="${bboardVO.type=='T04'}">자유</option>
+				<option value="T05" th:selected="${bboardVO.type=='T05'}">멘토링</option>
+			</select>
+			
 			<!-- 대분류 정렬 -->
 			<select id="lclsf" name="lclsf">
 				<option value="">대분류</option>
@@ -49,6 +56,9 @@
 			<!-- 게시글 검색 -->
 			<input type="text" name="search">
 			<input type="button" id="find" value="찾기">
+			
+			<!-- 게시글 삭제 -->
+			<button type="button" id="deleteBtn"  class="btn btn-d btn-round delBtn">삭제</button>
 			
 			<!-- 테이블 -->
 			<div id="table">
@@ -122,12 +132,13 @@
 	<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		
+
 		//페이지처리
 		function gopage(i) {
 			let lclsf = $("#lclsf option:selected").val();
 			let order = $("#order option:selected").val();
-			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&page=` + i;
+			let type = $("#type option:selected").val();
+			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&type=${type}&page=` + i;
 		}
 		
 		//정렬 클릭시
@@ -137,14 +148,18 @@
 		$('#order').change(function () {
 			range();
 		});
+		$('#type').change(function(){
+			range();
+		})
 		
 		//정렬 리스트 불러오는 함수
 		function range() {
 			//정렬 기준
 			let lclsf = $("#lclsf option:selected").val();
 			let order = $("#order option:selected").val();
+			let type = $("#type option:selected").val();
 
-			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}`
+			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&type=${type}`
 		}
 		
 		//검색 기능
@@ -153,8 +168,9 @@
 			let lclsf = $("#lclsf option:selected").val();
 			let search = $("input[name=search]").val();
 			let order = $("#order option:selected").val();
+			let type = $("#type option:selected").val();
 
-			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&ttl=${search}`;
+			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&type=${type}&ttl=${search}`;
 
 			$("input[name=search]").val('');
 		})
@@ -169,7 +185,26 @@
 			})
 		})
 		
-		
+				
+		//게시글 삭제
+		document.querySelector('#deleteBtn').addEventListener('click', deleteBoard);
+
+		function deleteBoard(deleteCheck){
+			let trs = document.querySelectorAll('table>tbody>tr');
+	
+			if(!confirm('게시글을 삭제하시겠습니까?')){
+				return false;
+			} else {
+				for(let i = 0; i<trs.length; i++){
+					if(trs[i].children[0].children[0].checked) {
+						let bBoardNo = trs[i].children[1].textContent;
+						location.href = `/bboard/bDelete?bBoardNo=${bBoardNo}`;
+						
+					}
+				}
+			}
+		}
+	
 	</script>
 </div>
 </body>

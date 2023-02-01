@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<link rel="stylesheet" href="/css/myPageSide.css">
 <style>
 	.label {
 		color : black;
@@ -35,6 +35,11 @@
             </div>
           </div>
         </section>
+        
+        <!-- 현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+        
+        <button class="btn btn-primary btn-round" type="button" th:onclick="|location.href='@{rentGdInsert}'|">물품 등록</button> 
         
         <!-- 게시글 리스트 -->
 	<table class="table mb-3">
