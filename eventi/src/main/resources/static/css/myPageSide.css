@@ -1,11 +1,12 @@
+
 ul {
 	padding: 0px;
 	list-style: none;
 }
 .contest {
-	width: 80%;
-	margin: 0 auto;
-	margin-top: 30px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-left: 245px;
 }
 
 #boxList {
@@ -60,19 +61,12 @@ ul {
 	transition-duration: 1s;
 }
 
-form[name="designSearchFrm"], form[name="searchFrm"] {
-	margin-top: 15px;
-	margin-left: 415px;
-}
 tr:hover{
 	background: silver;
 } 
 table {
-	width:1000px;
-	margin: 0 auto;
-	margin-top: 10px;
-	margin-bottom: 50px;
-	table-layout: fixed;
+	width: 90%;
+	padding: 20px;
 }
 thead th {
 	background: #b4defd;

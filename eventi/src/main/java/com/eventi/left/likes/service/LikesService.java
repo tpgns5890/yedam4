@@ -9,6 +9,8 @@ public interface LikesService {
 	// 좋아요
 	public List<LikesVO> userlikeList(LikesVO vo,PagingVO paging) ; // 전체조회,세션아이디 조회.
 
+	public List<LikesVO> designlikeList(LikesVO LikesVO,PagingVO paging); // 회원의 좋아요 디자인리스트 조회
+	
 	public List<LikesVO> likeList(LikesVO LikesVO); // 전체조회
 
 	public LikesVO getLike(LikesVO LikesVO); // 1건조회

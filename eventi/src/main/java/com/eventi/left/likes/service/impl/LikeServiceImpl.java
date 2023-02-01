@@ -82,4 +82,15 @@ public class LikeServiceImpl implements LikesService {
 		return mapper.userlikeList(vo);
 	}
 
+	@Override
+	public List<LikesVO> designlikeList(LikesVO vo,PagingVO paging) {
+		
+		paging.setTotalRecord(mapper.setTotalRecordDesign("T09",vo.getUserId()));
+		paging.setPageUnit(6); // 6개 출력 (default 10)
+		paging.setPageSize(5);
+		vo.setFirst(paging.getFirst());
+		vo.setLast(paging.getLast());
+		return mapper.designlikeList(vo);
+	}
+
 }

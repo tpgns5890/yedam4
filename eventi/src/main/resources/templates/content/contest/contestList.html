@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 <link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
 <style>
+.container {
+    width: 75%;
+}
 label {
 	font-weight:bold;
 	font-size: 20px;
@@ -21,6 +24,24 @@ label {
  	width: 20%;
 	margin: 7px 10px;
 }
+.col-md-4{
+    top: -100px !important;
+	margin-bottom: -90px !important;
+	}
+.module-small {
+    padding: 20px 0;
+}
+.col-sm-3 {
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+}
+#cotestHeader{
+	display:flex;
+	flex-direction: row;
+    align-items: center;
+}
+
 </style>
 </head>
 <body>
@@ -84,13 +105,13 @@ label {
 					<!-- 일반회원 공모전작성버튼-->
 					<th:block sec:authorize="isAuthenticated()">
 						<a href="./insert">
-							<button class="w-btn w-btn-gra1" style="position:relative; top:-65px; left: 480px">공모전 작성</button>
+							<button class="w-btn w-btn-gra1">공모전 작성</button>
 						</a>
 					</th:block>
 					
 					<!-- 마감된 공모전 조회 -->
-					<button type="button" id="history" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="position:relative; top:-145px; left: 650px">마감 공모전</button>
-					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none; position:relative; top:-145px; left: 650px">진행중 공모전</button>
+					<button type="button" id="history" class="w-btn w-btn-gra1 w-btn-gra-anim   status" >마감 공모전</button>
+					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none;">진행중 공모전</button>
 	              </div>
 	           </div>
 	         </div>
@@ -203,8 +224,10 @@ label {
 						 				<div>
 											<img src="/images/${img}.jpg" style="width: 100px; height: 100px;">
 											<p>작품명 : ${data.NAME}</p>
-											<p>ID : ${data.USER_ID}
-											</p><button type="button" onclick="">포트폴리오 방문</button>
+											<p>ID : ${data.USER_ID}</p>
+											<a href="/prtfl/dgnerSelect?userId=${data.USER_ID}">
+												<button type="button" onclick="">포트폴리오 방문</button>
+											</a>
 										</div>
 										<img src="/fileView/${data.SEVNM}" style="width: 500px; height: 500px">
 								   </div>

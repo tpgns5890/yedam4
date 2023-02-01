@@ -13,23 +13,51 @@
 			<if test="name != null and name != ''">
 				and name LIKE '%'||#{name}||'%' 
 			</if>
-	</sql>	
+			<if test="cntn != null and cntn != ''">
+				and cntn LIKE '%'||#{cntn}||'%' 
+			</if>
+	</sql>
+	
+	<!-- 로그인했을경우, 좋아요 체크확인 -->
+	<sql id="loginLikeCheck">
+		<if test="userId != null and userId != ''">
+			,(select count(*) from likes where target_no = dgn_no and user_id= #{userId})AS mylike
+		</if>
+	</sql>
 	
 	<select id="designList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-			SELECT *
+			SELECT dgn_no,user_id,c_no,name,cntn,win_yn,dt,pubc_yn,save,code_select(caregory)caregory,
+                    (select sev_nm 
+                      from files 
+                      where target_id = dgn_no
+                      and f_nm = center_img) AS center_img
+                       <include refid="loginLikeCheck" />
 			FROM design
+			WHERE SAVE = 'N'
+			AND PUBC_YN = 'N'
+			<include refid="search" />
 			order by dt DESC
 	  	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
 		]]>
 	</select>
 	
+	<!-- 응모조회 리스트 개수 반환 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM DESIGN
 		where SAVE = 'N'
 		<include refid="check" /> 
+		<include refid="search" /> 
+	</select>
+	
+	<!-- 전체디자인 리스트 개수 반환 -->
+	<select id="allCount" resultType="int">
+		SELECT COUNT(*)
+		FROM DESIGN
+		where SAVE = 'N'
+		AND PUBC_YN = 'N'
 		<include refid="search" /> 
 	</select>
 	

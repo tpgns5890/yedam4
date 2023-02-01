@@ -32,7 +32,15 @@ public class DesignServiceImpl implements DesignService {
 
 	@Override
 	public List<DesignVO> designList(DesignVO vo, PagingVO paging) {
-		paging.setTotalRecord(mapper.count(vo));
+
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		if (user != null) {
+			String sessionId = user.getUserId();
+			vo.setUserId(sessionId);
+		}
+
+		paging.setTotalRecord(mapper.allCount(vo));
 		paging.setPageUnit(6);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
@@ -54,8 +62,8 @@ public class DesignServiceImpl implements DesignService {
 	public int insert(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
 		System.out.println("+++++++++++" + uploadFile[0]);
 		// 대표사진세팅.
-		vo.setCenterImg(uploadFile[0].getOriginalFilename()); 
-		
+		vo.setCenterImg(uploadFile[0].getOriginalFilename());
+
 		// 파일업로드,디자인등록
 		uploadFiles(uploadFile, vo);
 		return mapper.insert(vo);
@@ -104,24 +112,24 @@ public class DesignServiceImpl implements DesignService {
 	// 공모전 임시저장 불러오기 수정
 	@Override
 	public int saveUpdateDesign(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
-		
-		//로그인회원아이디
+
+		// 로그인회원아이디
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setUserId(user.getUserId());
-		
+
 		// 1번째 사진 대표사진세팅.
-		vo.setCenterImg(uploadFile[0].getOriginalFilename()); 
-		
+		vo.setCenterImg(uploadFile[0].getOriginalFilename());
+
 		// 파일업로드,디자인등록
 		uploadFiles(uploadFile, vo);
 		return mapper.update(vo);
 	}
-	
+
 	// 디자인 파일 업로드하는 메소드
 	public void uploadFiles(MultipartFile[] uploadfile, DesignVO vo) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");//대상구분 디자인(잠시수정)
+			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");// 대상구분 디자인(잠시수정)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
