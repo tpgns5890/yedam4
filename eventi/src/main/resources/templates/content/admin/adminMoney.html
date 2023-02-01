@@ -163,11 +163,11 @@
 							<thead>
 								<tr>
 									<th>요청자ID</th>
-									<th>자격증이름</th>
-									<th>자격증번호</th>
-									<th>승급종류</th>
+									<th>은행사</th>
+									<th>계좌번호</th>
+									<th>정산종류</th>
+									<th>정산금액</th>
 									<th>요청일</th>
-									<th>처리일</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -188,7 +188,8 @@
 			</div>
 		</div>
 		<input type="hidden" name="page" value="1">
-		<input type="hidden" name="accpYN" value="R">
+		<input type="hidden" name="moType" value="M2">
+		<input type="hidden" name="settYN" value="N">
 		<script>
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -202,35 +203,61 @@
 			
 			$("#headbtn-request").on('click', function () {
 				$('input[name="page"]').val("1");
-				$('input[name="accpYN"]').val("R");
+				$('input[name="moType"]').val("M2");
+				$('input[name="settYN"]').val("N");
 				ajaxList();
 			});
 			$("#headbtn-done").on('click', function () {
 				$('input[name="page"]').val("1");
-				$('input[name="accpYN"]').val("Y");
+				$('input[name="moType"]').val("M1");
+				$('input[name="settYN"]').val("");
 				ajaxList();
 			});
 			$("#headbtn-reject").on('click', function () {
 				$('input[name="page"]').val("1");
-				$('input[name="accpYN"]').val("N");
+				$('input[name="moType"]').val("M2");
+				$('input[name="settYN"]').val("Y");
 				ajaxList();
 			});
 			$('#selArea').on('change', function () {
 				$('input[name="page"]').val("1");
 				ajaxList();
 			});
+			
 			//비동기 통신
 			function ajaxList(thispage) {
 				let page = $('input[name="page"]').val();
-				let accpYN = $('input[name="accpYN"]').val();
-				let crtfType = $('input:radio[name="crtfType"]:checked').val();
+				let moType = $('input[name="moType"]').val();
+				let settYN = $('input[name="settYN"]').val();
+				
+				let m2Tr = `
+					<tr>
+						<th>요청자ID</th>
+						<th>은행사</th>
+						<th>계좌번호</th>
+						<th>정산종류</th>
+						<th>정산금액</th>
+						<th>요청일</th>
+						<th></th>
+					</tr>`;
+				let m1Tr=`
+					<tr>
+						<th>입자ID</th>
+						<th>입금자이름</th>
+						<th>입금종류</th>
+						<th>정산금액</th>
+						<th>결제번호</th>
+						<th>요청일</th>
+						<th></th>
+					</tr>`;
+				
 				$.ajax({
-					url: "/admin/certListAjax",
+					url: "/admin/moneyList",
 					method: 'post',
 					data: {
 						page,
-						accpYN,
-						crtfType
+						moType,
+						settYN
 					},
 					beforeSend: function (xhr) {
 						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -238,14 +265,23 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
-						$('tbody').empty();
-						for (crtf of result.certList) {
-							if(crtf.accpYN == "R"){
-								$('tbody').append(makeTrR(crtf));
-							}else if(crtf.accpYN == "Y"){
-								$('tbody').append(makeTrY(crtf));
-							}else{
-								$('tbody').append(makeTrN(crtf));
+						if(moType=="M2"){
+							$('thead').empty();
+							$('thead').append(m2Tr);
+							$('tbody').empty();
+							for (money of result.moneyList) {
+								if(settYN == "N"){
+									$('tbody').append(makeTr(money));
+								}else{
+									$('tbody').append(makeTrB(money));
+								}
+							}
+						}else{
+							$('thead').empty();
+							$('thead').append(m1Tr);
+							$('tbody').empty();
+							for (money of result.moneyList) {
+								$('tbody').append(makeTrA(money));
 							}
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
@@ -256,59 +292,44 @@
 			}
 
 			//tr만들기
-			function makeTrR(crtf) {
-				var accpDate = crtf.accpDate;
-				if(!crtf.accpDate){
-					accpDate = '승인대기중';
-				}
+			function makeTr(money) {
 				let p = `
-				<tr>
-					<td>${crtf.userId}</td>
-					<td>${crtf.crtfName}</td>
-					<td>${crtf.crtfNum}</td>
-					<td>${crtf.crtfType}</td>
-					<td>${crtf.reqDate}</td>
-					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'Y')" value="${crtf.crtfId}">승인</button><td>
-					<td><button type="button" onclick="updateCrtf(this, 'N')" value="${crtf.crtfId}">거부</button><td>
-				</tr>`;
+					<tr>
+						<td>${money.userId}</td>
+						<td>${money.bankName}</td>
+						<td>${money.bankAccount}</td>
+						<td>${money.moCat}</td>
+						<td>${money.moPrice}</td>
+						<td>${money.moDt}</td>
+						<td><button type="button" onclick="sendMoney(this)" value="${money.moNum}">정산</button><td>
+					</tr>`;
 				return p;
 			}
-			function makeTrY(crtf) {
-				var accpDate = crtf.accpDate;
-				if(!crtf.accpDate){
-					accpDate = '승인대기중';
-				}
+			function makeTrA(money) {
 				let p = `
-				<tr>
-					<td>${crtf.userId}</td>
-					<td>${crtf.crtfName}</td>
-					<td>${crtf.crtfNum}</td>
-					<td>${crtf.crtfType}</td>
-					<td>${crtf.reqDate}</td>
-					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'N')" value="${crtf.crtfId}">거부</button><td>
-				</tr>`;
+					<tr>
+						<td>${money.userId}</td>
+						<td>${money.userName}</td>
+						<td>${money.moCat}</td>
+						<td>${money.moPrice}</td>
+						<td>${money.payNo}</td>					
+						<td>${money.moDt}</td>
+					</tr>`;
 				return p;
 			}
-			function makeTrN(crtf) {
-				var accpDate = crtf.accpDate;
-				if(!crtf.accpDate){
-					accpDate = '승인대기중';
-				}
+			function makeTrB(money) {
 				let p = `
-				<tr>
-					<td>${crtf.userId}</td>
-					<td>${crtf.crtfName}</td>
-					<td>${crtf.crtfNum}</td>
-					<td>${crtf.crtfType}</td>
-					<td>${crtf.reqDate}</td>
-					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'Y')" value="${crtf.crtfId}">승인</button><td>
-				</tr>`;
+					<tr>
+						<td>${money.userId}</td>
+						<td>${money.bankName}</td>
+						<td>${money.bankAccount}</td>
+						<td>${money.moCat}</td>
+						<td>${money.moPrice}</td>
+						<td>${money.moDt}</td>
+					</tr>`;
 				return p;
 			}
-
+			
 			// 페이징 만들기
 			function makePaging(page) {
 				if (page.totalRecord == 0) {
@@ -356,28 +377,52 @@
 				return pagination;
 			}
 			
-			//승인,거부 버튼
-			function updateCrtf(element, value){
-				let crtfId = element.value;
-				let accpYN = value;
+			//정산 버튼
+			function sendMoney(element){
+				let moNum = element.value;
+				let userId = element.parentElement.parentElement.children.item(0).innerText;
+				let bankName = element.parentElement.parentElement.children.item(1).innerText
+				let bankAccount = element.parentElement.parentElement.children.item(2).innerText;
+				let moCat = element.parentElement.parentElement.children.item(3).innerText;
+				let moPrice = parseInt(element.parentElement.parentElement.children.item(4).innerText);
+				let moDt = element.parentElement.parentElement.children.item(5).innerText;
+				
 				$.ajax({
-					url:"/admin/crtfUpdate",
+					url:"/admin/sendMoney",
 					method: 'post',
 					data: {
-						crtfId,
-						accpYN
+						bankName,
+						bankAccount,
+						moPrice
 					},
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader(header, token);
-					},
-					success:function(result){
-						if(result>0){
-							element.parentElement.parentElement.remove();
-							alert("처리되었습니다.")
+					},success: function(result){
+						if(result.Header.Rpcd==00000){
+							alert(result.Header.Rsms);
+							let payNo = result.Header.IsTuno;
+							let settDt = result.Header.Tsymd;
+							let settYN = "Y";
+							$.ajax({
+								url:"/admin/updateMoney",
+								method:'post',
+								data:{
+									moNum,
+									settYN,
+									settDt,
+									payNo
+								},beforeSend: function (xhr) {
+									xhr.setRequestHeader(header, token);
+								},success: function(result){
+									console.log(result);
+									ajaxList();
+								}
+							})
+						}else{
+							alert(result.Header.Rsms);
 						}
 					}
 				})
-
 			}
 			
 		</script>

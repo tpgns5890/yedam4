@@ -7,6 +7,7 @@ import com.eventi.left.common.CodeVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.punish.service.PunishVO;
 
 public interface AdminMapper {
@@ -58,7 +59,11 @@ public interface AdminMapper {
 	public void banBoard3(String targetId);
 	public int banBrdAccept(PunishVO punishVO);
 
+	//회계 수 카운트
+	public int moneyCount(MoneyVO moneyVO);
 
+	//회계 조회
+	public List<MoneyVO> moneyList(MoneyVO moneyVO);
 
-
+	public int updateMoney(MoneyVO moneyVO);
 }

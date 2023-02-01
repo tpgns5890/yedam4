@@ -170,10 +170,11 @@
         		AND GRADE = 3) AS thirdId
 		FROM	(SELECT ROWNUM RN, A.*
 				FROM	(SELECT *
-						FROM 	CONTEST
-						WHERE 	(CASE WHEN DT_EXTNS IS NOT NULL THEN DT_EXTNS
-            					ELSE DT_CLS
-            					END<![CDATA[) < SYSDATE) A 
+						FROM 	(SELECT DISTINCT c.*
+								FROM CONTEST c, WINNER w
+								WHERE c.C_NO = w.CO_NO 
+								AND w.USER_ID IS NOT NULL)
+								<![CDATA[) A 
 			  	WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
 	</select>
@@ -311,7 +312,6 @@
 		SET RPRT = RPRT + 1
 		WHERE B_BOARD_NO = #{targetId}
 	</update>
-	
 	<update id="banBrdAccept">
 		UPDATE PUNISH
 		SET BAN_RSLT = 'Y',
@@ -319,4 +319,55 @@
 		WHERE PUN_NO = #{punNo}
 	</update>
 	
+	<!-- 회계 조회 -->
+	<select id="moneyCount" resultType="int">
+		select count(*)
+		from money
+		<include refid="moSelect" />
+	</select>
+	
+	<select id="moneyList" resultType="MoneyVO">
+		SELECT 	MO_NUM,
+				BANK_NAME,
+				BANK_ACCOUNT,
+				MO_TYPE,
+				MO_PRICE,
+				USER_ID,
+				PAY_NO,
+				SETT_YN,
+				TARGET_ID,
+				MO_CAT,
+				USER_NAME,
+				TO_CHAR(MO_DT, 'YYYY-mm-dd') MO_DT,
+				TO_CHAR(SETT_DT, 'YYYY-mm-dd') SETT_DT
+		FROM (SELECT ROWNUM RN, A.*
+				FROM	(SELECT *
+						FROM 	MONEY
+						<include refid="moSelect" />
+						ORDER BY MO_DT
+			   <![CDATA[) A 
+			  	WHERE ROWNUM <= #{last}) 
+		WHERE RN >= #{first}]]>
+	</select>
+	
+	
+	<!-- 회계업데이트 -->
+	<update id="updateMoney">
+		UPDATE MONEY 
+		SET PAY_NO = #{payNo},
+			SETT_YN = #{settYN},
+			SETT_DT = #{settDt}
+		WHERE MO_NUM = #{moNum}
+	</update>
+	
+	<sql id="moSelect">
+		<where>
+			<if test="moType != null and moType !=''">
+				and MO_TYPE = #{moType}
+			</if>
+			<if test="settYN != null and settYN !=''">
+				and SETT_YN = #{settYN}
+			</if>
+		</where>
+	</sql>
 </mapper>

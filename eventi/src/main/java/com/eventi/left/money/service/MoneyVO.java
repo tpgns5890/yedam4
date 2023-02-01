@@ -1,5 +1,7 @@
 package com.eventi.left.money.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +22,15 @@ public class MoneyVO {
 	private String settYN;//승인여부
 	private String targetId;	//해당 게시글Id
 	private String userName; //입금자이름
+	
 	private String moCat;  //카테고리
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private String moDt;   //결제날짜
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private String settDt; //정산날짜
 	
 	private String search;
-
+	
+	private Integer first;
+	private Integer last;
 }

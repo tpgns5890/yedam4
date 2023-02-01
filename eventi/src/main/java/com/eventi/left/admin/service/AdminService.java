@@ -3,12 +3,16 @@ package com.eventi.left.admin.service;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.member.service.CrtfVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.punish.service.PunishVO;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public interface AdminService {
 	public int count(MemberVO memberVO);  //회원 수 카운트
@@ -28,6 +32,12 @@ public interface AdminService {
 	public int banBrdAccept(PunishVO punishVO); //게시글신고 승인
 
 	public int banReject(PunishVO punishVO); //신고 거절
+
+	public List<MoneyVO> moneyList(MoneyVO moneyVO, PagingVO paging);
+
+	public ResponseEntity<JsonNode> sendMoney(MoneyVO moneyVO); //송금 api호출
+
+	public int updateMoney(MoneyVO moneyVO);
 
 
 
