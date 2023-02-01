@@ -1,3 +1,4 @@
+/* 공모전 등록,응모 폼 */
 .fileDown {
 	display: none;
 }
@@ -18,10 +19,8 @@ ul {
 	padding: 0px;
 	list-style: none;
 }
-  select,
-  input[type=text],
-  input[type=number],
-  input[type=date] {
+
+select, input[type=text], input[type=number], input[type=date] {
 	width: 50%;
 	padding: 12px;
 	margin: 10px;
@@ -29,15 +28,17 @@ ul {
 	border-radius: 4px;
 	resize: vertical;
 }
-  input[type=radio]{
+
+input[type=radio] {
 	margin: 5px;
 }
+
 label {
-	display:inline-block;
-	text-align:left;
-	width:100px;
-	font-weight:bold;
-	font-size: 16px;
+	display: inline-block;
+	text-align: left;
+	width: 100px;
+	font-weight: bold;
+	font-size: 18px;
 }
 
 ul li.tag-item {
@@ -62,15 +63,40 @@ ul li.tag-item {
 	cursor: pointer;
 	margin-left: 8px;
 }
-.contestTag{
-	margin-left : 110px;
+
+.contestTag {
+	margin-left: 110px;
 }
-.userUlTag{
-	margin-left : 110px;
+/* 회원정보 폼 */
+.userUlTag {
+	margin-left: 110px;
 }
+
 #user {
-	padding-top: 70px;
-	width: 800px;
+	width: 80%;
 	margin: 0 auto;
+	margin-top: 100px;
+	margin-left: 600px;
 	margin-bottom: 60px;
+	margin-top: 100px;
+}
+
+#signIn-right label {
+	width: 70px;
+}
+
+#signIn-right input[type="text"] {
+	width: 15%;
+}
+/* 디자인응모폼 */
+#winnerInput {
+	margin-left: 300px;
+}
+
+#winnerInput input[type="text"] {
+	width: 15%;
+}
+
+#winnerInput button {
+	width: 118px
 }

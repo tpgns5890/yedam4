@@ -11,25 +11,11 @@
 <body>
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-
-		<section class="module bg-dark-60 gallery-page-header parallax-bg"
-			data-background="/assets/images/gallery_bg.jpg"
-			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
-						<h2 class="module-title font-alt">마이페이지</h2>
-						<div class="module-subtitle font-serif">공모전 문의리스트</div>
-					</div>
-				</div>
-			</div>
-		</section>
+	<h2 hidden="hidden" class="module-title font-alt">문의내역</h2>
 
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
-
-			
 			<div class="contest" >
 			 	<!-- 문의내역이 없을경우 -->
 			 	<div th:if="${#lists.isEmpty(qnaList)}">
@@ -48,7 +34,7 @@
 				</form>
 				
 					<!-- 테이블 -->
-						<table border="1" id="myTable">
+						<table id="table">
 							<thead>
 								<tr>
 									<th style=" width: 100px;">문의No</th>
@@ -85,13 +71,13 @@
 			
 		<!--문의내역 상세보기 -->
 		<div id="qnaModal" class="modal">
-			<!-- Modal content -->
 			<div class="modal_content">
 				<span class="close">&times;</span>
 				<h3 style="text-align: center;">문의내역</h3>
 				<div id="qna"></div>
 				<div id="qnaRep"></div>
 			</div>
+			<div class="modal_layer"></div>
 		</div>
 			
 			

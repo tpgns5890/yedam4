@@ -1,0 +1,144 @@
+
+ul {
+	padding: 0px;
+	list-style: none;
+}
+.contest {
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-left: 245px;
+}
+
+#boxList {
+	margin-left: 250px;
+	margin-top: 30px;
+}
+
+.sideMenu {
+	width: 16%;
+	height: 100%;
+	overflow: hidden;
+	margin-top: 50px;
+	float: left;
+	margin-right: 20px;
+}
+
+.sideMenu>li {
+	text-align: left;
+	line-height: 50px;
+	list-style: none;
+	margin-left: 50px;
+}
+
+.sideMenu a {
+	color: black;
+	text-decoration: none;
+	font-weight: bolder;
+	font-size: 18px;
+}
+
+.submenu {
+	height: 0; /*ul의 높이를 안보이게 처리*/
+	overflow: hidden;
+}
+
+.submenu li {
+	background: pink;
+}
+
+.submenu li a {
+	margin-left: 20px;
+	font-size: 15px;
+}
+
+.sideMenu>li:hover {
+	background-color: rgb(255, 255, 255);
+	transition-duration: 0.5s;
+}
+
+.sideMenu>li:hover .submenu {
+	height: 200px; /*서브메뉴 li한개의 높이 50*5*/
+	transition-duration: 1s;
+}
+
+tr:hover{
+	background: silver;
+} 
+table {
+	width: 90%;
+	padding: 20px;
+}
+thead th {
+	background: #b4defd;
+	padding: 7px 0px;
+	text-align: center;
+	font-weight: border;
+	font-size: 18px;
+	color: black;
+	text-transform: uppercase;
+}
+
+tbody td {
+	height: 60px;
+	padding: 10px;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: 300;
+	font-size: 16px;
+	color: black;
+	text-align: center
+}
+
+#deleteBtn {
+	margin-top: 30px;
+	margin-bottom: 10px;
+	margin-left: 165px;
+}
+
+.block-27 {
+	width: 200px;
+	margin-left: 180px;
+}
+
+#search {
+	margin-top: 30px;
+	width: 500px;
+}
+
+label {
+	display: inline-block;
+	text-align: center;
+	width: 40px;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+input[type="text"] {
+	width: 270px;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: vertical;
+}
+
+.inputBtn, .delBtn {
+	font-size: 18px;
+	height: 40px;
+}
+
+.btn, #deleteBtn {
+	margin: 0px;
+	margin-right: 10px;
+}
+
+.col text-center {
+	width: 1500px;
+	margin-left: 400px;
+}
+
+.paging, .block-27 {
+	width: 100%;
+	margin: 0 auto;
+	float: left;
+}

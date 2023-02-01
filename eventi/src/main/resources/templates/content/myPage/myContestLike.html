@@ -12,16 +12,7 @@
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
 	
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif" > 관심공모전</div>
-              </div>
-            </div>
-          </div>
-        </section>
+         <h2 hidden="hidden" class="module-title font-alt">관심공모전</h2>
 		
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>

@@ -7,6 +7,8 @@
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
 <link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
+<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 </head>
 <body>
 	<!-- 2.레이아웃 content적용 -->
@@ -59,7 +61,7 @@
 		<th:block th:if="${contest.ing} == '마감' ">
 			<div th:if="${winner[0].dNo} == null">
 					<!-- 우승자 등록 -->
-					<div>
+					<div id="winnerInput">
 						<h4 class="font-alt mb-0">우승자 등록</h4>
 						<hr class="divider-w mt-10 mb-20">
 						<div>
@@ -101,8 +103,8 @@
 										</div>
 									</th:block>
 		
-									<button type="reset" class="btn btn-g btn-round btn-lg">초기화</button>
-									<button type="submit" class="btn btn-g btn-round btn-lg">등록</button>
+									<button type="reset" class="w-btn w-btn-gra1">초기화</button>
+									<button type="submit" class="w-btn w-btn-gra1">등록</button>
 							</form>
 						</div>
 					</div>

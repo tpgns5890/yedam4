@@ -72,7 +72,7 @@ public class ContestServiceImpl implements ContestService {
 		// 페이징 동적쿼리로 카테고리 입력시 개수파악(setFirst,setLast 세팅)
 		paging.setTotalRecord(mapper.contestCount(vo));
 		paging.setPageUnit(6); // 6개 출력 (default 10)
-		paging.setPageSize(5);
+		paging.setPageSize(3);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 		
@@ -248,8 +248,8 @@ public class ContestServiceImpl implements ContestService {
 
 		// 페이징처리
 		paging.setTotalRecord(mapper.myContest(vo));
-		paging.setPageUnit(10); // 12개 출력 (default 10)
-		paging.setPageSize(5);
+		paging.setPageUnit(10); // 10개 출력
+		paging.setPageSize(3);
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 

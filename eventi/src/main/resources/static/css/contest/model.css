@@ -64,11 +64,12 @@
 .modal_content {
 	width: 350px;
 	min-height: 200px;
-	margin: 0 auto;
-	padding: 20px;
 	background: #fff;
 	border: 0.5px solid #666;
 	border-radius: 15px;
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 250px;
 }
 
 .modal_layer {
