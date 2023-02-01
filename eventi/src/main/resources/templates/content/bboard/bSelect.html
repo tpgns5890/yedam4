@@ -70,17 +70,22 @@
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
-<div layout:fragment="content">
-   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-     <div class="container">
-       <div class="row">
-         <div class="col-sm-6 col-sm-offset-3">
-           <h2 class="module-title font-alt">Big Title</h2>
-           <div class="module-subtitle font-serif">Small Title</div>
-         </div>
-       </div>
-     </div>
-   </section>
+<div layout:fragment="content" class="content">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">블라인드게시판</h2>
+                <th:block th:if="${bSelect.type =='T04'}">
+                	<div class="module-subtitle font-serif">자유게시판</div>
+                </th:block>
+                <th:block th:if="${bSelect.type =='T05'}">
+                	<div class="module-subtitle font-serif">멘토링게시판</div>
+                </th:block>
+              </div>
+            </div>
+          </div>
+        </section>
    
    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
    <th:block th:if="${session.member.userId} == ${bSelect.writer}">

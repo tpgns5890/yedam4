@@ -278,26 +278,6 @@
   </article>
 </section>
 	
-	<!-- 신고 폼 -->
-	<div id="punishFrm" class="modal">
-			<div class="modal_content">
-				<h2>신고</h2>
-				<div id="box">
-					<label>신고대상자</label>
-					<input type="text" id="targetId" name="targetId" th:value="${mcSelect.userId}" readonly><br>
-					<label>신고자</label>
-					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
-					<label>신고사유</label>
-					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
-					<button type="button" class="cancel">취소</button>
-					<button type="button" id="punish">신고</button>
-				</div>
-			</div>
-		<div class="modal_layer"></div>
-	</div>
-    
-    
-	
 	<!-- 의뢰하기 폼 -->
 	<div id="castingFrm" class="modal">
 			<div class="modal_content">

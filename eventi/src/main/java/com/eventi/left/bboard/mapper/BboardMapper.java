@@ -38,4 +38,10 @@ public interface BboardMapper {
 	
 	//게시글 댓글 조회
 	public List<ReplyVO> bboardReply(ReplyVO reply);
+	
+	//마이페이지에서 내가 쓴 게시글 조회
+	public List<BboardVO> myBboardList(BboardVO bboardVO);
+	
+	//내가 쓴 게시글 수
+	public int myListCount(BboardVO bboardVO);
 }

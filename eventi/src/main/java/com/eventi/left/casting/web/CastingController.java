@@ -47,5 +47,9 @@ public class CastingController {
 	}
 	
 	//환불금액찾기
-	
+	@PostMapping("/refund")
+	@ResponseBody
+	public CastingVO refund(@RequestBody CastingVO castingVO) {
+		return castingService.refund(castingVO);
+	}
 }

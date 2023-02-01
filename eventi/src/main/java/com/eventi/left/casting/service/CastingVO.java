@@ -27,4 +27,7 @@ public class CastingVO {
 	private Date dt;              //작성일자
 	private String progress;      //진행상태
 	private String cancel;        //취소사유
+	
+	private Integer checks;       //클라이언트 기준 환불 금액
+	private Integer lastday;      //행사남은일수
 }

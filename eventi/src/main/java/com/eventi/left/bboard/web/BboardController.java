@@ -137,4 +137,16 @@ public class BboardController {
 		
 		return "redirect:/bboard/bList?type=" + type;
 	}
+	
+	//마이페이지에서 내가 쓴 게시글 보기
+	@GetMapping("/myBlist")
+	public String myBlist(Model model, BboardVO bboardVO, PagingVO paging) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		bboardVO.setWriter(user.getUserId());
+		
+		//전체리스트와 타입 구하기
+		model.addAttribute("bList", bboardService.myBboardList(bboardVO, paging));
+		model.addAttribute("paging", paging);
+		return "content/myPage/myBboardList";
+	}
 }

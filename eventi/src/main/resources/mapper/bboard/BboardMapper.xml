@@ -28,18 +28,41 @@
 	<!-- 서브쿼리 이용해서 게시글 번호 별 좋아요 수도 함께 가져온다. -->
 	<!-- 좋아요순으로 정렬을 하고 싶을 경우 ${order}에 좋아요 수 컬럼 별칭을 넣어주면 된다. -->
 	<select id="bboardList" resultType="com.eventi.left.bboard.service.BboardVO">
-	SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-	SELECT DISTINCT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt, rpad(substr(WRITER,'1','1'),LENGTH(WRITER),'*') AS CHECKANO
-	FROM B_BOARD b LEFT JOIN likes l
-	ON b.b_board_no = l.target_no
-	WHERE TYPE = #{type}
-	AND SAVE = 'N'
-	<include refid="bSelect" />
-	<include refid="likeSelect" />
-	ORDER BY ${order} DESC
-	<![CDATA[
-			   ) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
-	]]>
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT DISTINCT b.*, (select count(*) from likes where target_no = b.b_board_no) AS cnt, rpad(substr(WRITER,'1','1'),LENGTH(WRITER),'*') AS CHECKANO
+		FROM B_BOARD b LEFT JOIN likes l
+		ON b.b_board_no = l.target_no
+		WHERE TYPE = #{type}
+		AND SAVE = 'N'
+		<include refid="bSelect" />
+		<include refid="likeSelect" />
+		ORDER BY ${order} DESC
+		<![CDATA[
+				   ) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<!-- 마이페이지에서 내가 쓴 게시글 가져오기 -->
+	<select id="myBboardList" resultType="com.eventi.left.bboard.service.BboardVO">
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT DISTINCT B.B_BOARD_NO, B.WRITER, B.TTL, B.LCLSF, 
+		       B.MCLSF, B.CNTN, B.INQ, B.DT, CODE_SELECT(B.TYPE) TYPE, B.SAVE , 
+		       (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = B.B_BOARD_NO) AS CNT
+		 FROM B_BOARD B
+		WHERE B.WRITER = #{writer}
+		<include refid="bSelect" />
+		ORDER BY ${order} DESC
+		<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<!-- 내가 작성한 게시글 총 건수 -->
+	<select id="myListCount" resultType="int">
+		SELECT COUNT(*)
+		FROM B_BOARD b
+		Where writer = #{writer}
+		<include refid="bSelect" />
 	</select>
 	
 	<!-- 조건별 게시글 총 건수 -->
