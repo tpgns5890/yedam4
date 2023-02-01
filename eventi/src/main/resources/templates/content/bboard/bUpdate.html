@@ -12,13 +12,18 @@
 	</style>
 </head>
 
-<div layout:fragment="content">
-	<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+<div layout:fragment="content" class="content">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">게시글</h2>
-                <div class="module-subtitle font-serif">게시글 수정</div>
+                <h2 class="module-title font-alt">블라인드게시판</h2>
+                <th:block th:if="${type =='T04'}">
+                	<div class="module-subtitle font-serif">자유게시판 수정</div>
+                </th:block>
+                <th:block th:if="${type =='T05'}">
+                	<div class="module-subtitle font-serif">멘토링게시판 수정</div>
+                </th:block>
               </div>
             </div>
           </div>

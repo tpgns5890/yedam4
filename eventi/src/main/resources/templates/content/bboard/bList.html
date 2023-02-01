@@ -25,18 +25,22 @@
 	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
-<div layout:fragment="content">
-	<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg"
-		style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-6 col-sm-offset-3">
-					<h2 class="module-title font-alt">자유게시글</h2>
-					<div class="module-subtitle font-serif">자유게시글</div>
-				</div>
-			</div>
-		</div>
-	</section>
+<div layout:fragment="content" class="content">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">블라인드게시판</h2>
+                <th:block th:if="${type =='T04'}">
+                	<div class="module-subtitle font-serif">자유게시판</div>
+                </th:block>
+                <th:block th:if="${type =='T05'}">
+                	<div class="module-subtitle font-serif">멘토링게시판</div>
+                </th:block>
+              </div>
+            </div>
+          </div>
+        </section>
 
 	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{bInsert(type=${type})}'|">글
 		등록하기</button>
@@ -188,68 +192,6 @@
 				location.href = `/bboard/bList?lclsf=${lclsf}&type=${type}&order=${order}`
 			}
 		}
-
-		//채팅버튼을 눌렀을 때
-		$(".chat").on("click", function () {
-			$(this).toggleClass("active");
-			
-			let fromId = '[[${session.member.userId}]]';
-			console.log('클릭')
-			
-			function createChatRoom() {
-				console.log('함수')
-				let chatroomDataList = new Array();
-				let chatroomData1 = {
-						toId : 'test04',
-						fromId : fromId
-				};
-				chatroomDataList.push(chatroomData1);
-				let chatroomData2 = {
-						toId : fromId,
-						fromId : 'test04'
-				};
-				chatroomDataList.push(chatroomData2);
-				
-				console.log(JSON.stringify(chatroomDataList));
-				
-				$.ajax({
-		   			url : '/chatInsert',
-		   			method : 'post',
-		   			data : JSON.stringify(chatroomDataList),
-		   			contentType : "application/json; charset=UTF-8",
-		   			beforeSend : function(xhr)
-		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-						xhr.setRequestHeader(header, token);
-		            }
-		   		}).then(res => {
-		   			alert('채팅방 번호' + res);
-		   		})
-			}
-			
-			//채팅화면이 나타난다.
-			if ($(this).hasClass("active")) {
-				
-				createChatRoom();
-				$(".chat-popup").show();
-			}
-
-			//채팅화면이 사라진다.
-			if (!$(this).hasClass("active")) {
-				$(".chat-popup").hide();
-			}
-		})
-
-		//채팅방 관련 - 아직 구현 안함
-		$(document).ready(function () {
-			$(".chat-list a").click(function () {
-				$(".chatbox").addClass("showbox");
-				return false;
-			});
-
-			$(".chat-icon").click(function () {
-				$(".chatbox").removeClass("showbox");
-			});
-		});
 	</script>
 </div>
 </html>

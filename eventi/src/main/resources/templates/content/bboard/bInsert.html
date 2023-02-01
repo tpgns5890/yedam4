@@ -69,27 +69,22 @@
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
-<div layout:fragment="content">
-	<section class="hero-wrap hero-wrap-2"
-		style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-		data-stellar-background-ratio="0.5">
-		<div class="overlay"></div>
-		<div class="container">
-			<div
-				class="row no-gutters slider-text align-items-end justify-content-center">
-				<div
-					class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-					<!-- 게시글 유형별 if문을 통해 처리 -->
-					<th:block th:if="${type =='T04'}">
-						<h2 class="mb-0 bread">자유게시글 등록</h2>
-					</th:block>
-					<th:block th:if="${type =='T05'}">
-						<h2 class="mb-0 bread">멘토링게시글 등록</h2>
-					</th:block>
-				</div>
-			</div>
-		</div>
-	</section>
+<div layout:fragment="content" class="content">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">블라인드게시판</h2>
+                <th:block th:if="${type =='T04'}">
+                	<div class="module-subtitle font-serif">자유게시판 등록</div>
+                </th:block>
+                <th:block th:if="${type =='T05'}">
+                	<div class="module-subtitle font-serif">멘토링게시판 등록</div>
+                </th:block>
+              </div>
+            </div>
+          </div>
+        </section>
 
 	<div class="row no-gutters">
 		<div class="col-md-7">

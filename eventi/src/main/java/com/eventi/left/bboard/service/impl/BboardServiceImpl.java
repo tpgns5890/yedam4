@@ -129,4 +129,15 @@ public class BboardServiceImpl implements BboardService{
 	public String getSeq() {
 		return bboardMapper.getSeq();
 	}
+
+	//마이페이지에서 내가 쓴 게시글 조회
+	@Override
+	public List<BboardVO> myBboardList(BboardVO bboardVO, PagingVO paging) {
+		paging.setTotalRecord(bboardMapper.myListCount(bboardVO));
+		paging.setPageUnit(10);
+		bboardVO.setFirst(paging.getFirst());
+		bboardVO.setLast(paging.getLast());
+		
+		return bboardMapper.myBboardList(bboardVO);
+	}
 }

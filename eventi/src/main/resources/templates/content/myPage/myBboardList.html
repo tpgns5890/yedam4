@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}">
+<head>
+<!-- 1.사이드바 css적용 -->
+<link rel="stylesheet" href="/css/myPageSide.css">
+<link rel="stylesheet" href="/css/contest/button.css"> 
+</head>
+<body>
+
+	<!-- 2.레이아웃 content적용 -->
+	<div layout:fragment="content" class="content">
+	
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">마이페이지</h2>
+                <div class="module-subtitle font-serif" th:text="블라인드게시글관리"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+		
+		<!-- 3.현재페이지 myPageSide 적용 -->
+		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+			
+			<!-- 대분류 정렬 -->
+			<select id="lclsf" name="lclsf">
+				<option value="">대분류</option>
+				<option value="genrl" th:selected="${bboardVO.lclsf=='genrl'}">일반</option>
+				<option value="reply" th:selected="${bboardVO.lclsf=='reply'}">후기</option>
+				<option value="mc" th:selected="${bboardVO.lclsf=='mc'}">사회자</option>
+				<option value="dgner" th:selected="${bboardVO.lclsf=='dgner'}">디자이너</option>
+			</select>
+	
+			<!-- 조회순, 작성일순 정렬 -->
+			<select id="order" name="order">
+				<option value="">정렬</option>
+				<option value="dt" th:selected="${bboardVO.order=='dt'}">작성일순</option>
+				<option value="inq" th:selected="${bboardVO.order=='inq'}">조회순</option>
+			</select>
+			
+			<!-- 페이징 -->
+			<input type="hidden" name="page" value="1">
+			
+			<!-- 게시글 검색 -->
+			<input type="text" name="search">
+			<input type="button" id="find" value="찾기">
+			
+			<!-- 테이블 -->
+			<div id="table">
+				<table border="1" id="myTable">
+					<thead>
+						<tr>
+							<th style="width:35px;"><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+							<th style="width:70px;">no</th>
+							<th style="width:80px;">타입</th>
+							<th style="width:80px;">대분류</th>
+							<th style="width:80px;">소분류</th>
+							<th style="width:600px;">제목</th>
+							<th style="width:80px;">조회수</th>
+							<th style="width:110px;">작성일자</th>
+							<th style="width:130px;">저장여부</th>
+							<th style="width:130px;">조회/게시글등록</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="b : ${bList} ">
+							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
+							
+							<!-- 등록된 게시글로 이동 -->
+							<th:block th:if="${b.save} == 'N'">
+								<td th:text=${b.bBoardNo} th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|"></td>
+							</th:block>
+							
+							<!-- 임시저장된 게시글 누를시 등록폼이동 -->
+							<th:block th:if="${b.save} == 'Y'">
+								<td th:text=${b.bBoardNo}></td>
+							</th:block>
+								
+							<td th:text=${b.type}></td>
+							<td th:text=${b.lclsf}></td>
+							<td th:text=${b.mclsf}></td>
+							<td th:text="${b.ttl}"></td>
+							<td th:text="${b.inq}"></td>
+							<td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
+							
+							<!-- 게시글 종류 별 임시저장 이동 -->
+							<th:block th:if="${b.save} == 'Y' and ${b.type} == '자유'">
+								<td th:text="임시저장"></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{bInsert(type=T04)}'|">게시글등록</button></td>
+							</th:block>
+							
+							<th:block th:if="${b.save} == 'Y' and ${b.type} == '멘토링'">
+								<td th:text="임시저장"></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{bInsert(type=T05)}'|">게시글등록</button></td>
+							</th:block>
+							
+							<!-- 등록완료후 진행중인경우 -->
+							<th:block th:if="${b.save} == 'N'">
+								<td th:text="등록완료"></td>
+								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{bSelect(bBoardNo=${b.bBoardNo})}'|">상세조회</button></td>
+							</th:block>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+			<!-- 페이징처리 -->
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
+					</div>
+				</div>
+			</div>
+			
+	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		//페이지처리
+		function gopage(i) {
+			let lclsf = $("#lclsf option:selected").val();
+			let order = $("#order option:selected").val();
+			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&page=` + i;
+		}
+		
+		//정렬 클릭시
+		$('#lclsf').change(function () {
+			range();
+		});
+		$('#order').change(function () {
+			range();
+		});
+		
+		//정렬 리스트 불러오는 함수
+		function range() {
+			//정렬 기준
+			let lclsf = $("#lclsf option:selected").val();
+			let order = $("#order option:selected").val();
+
+			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}`
+		}
+		
+		//검색 기능
+		$('#find').click(function () {
+			//정렬 기준
+			let lclsf = $("#lclsf option:selected").val();
+			let search = $("input[name=search]").val();
+			let order = $("#order option:selected").val();
+
+			location.href = `/bboard/myBlist?lclsf=${lclsf}&order=${order}&ttl=${search}`;
+
+			$("input[name=search]").val('');
+		})
+		
+		// 전체체크시 모든항목 체크 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
+		})
+		
+		
+	</script>
+</div>
+</body>
+</html>

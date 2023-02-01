@@ -120,11 +120,14 @@
 				<th:block th:if="${cast.progress} == '결제진행중' and ${param.clientId} != null">
 				<td><button type="button" class="cashback" th:text="결제하기"></button></td>
 				</th:block>
-				<th:block th:if="${cast.progress} == '행사전'">
-				<td><button type="button" class="eventCancel" th:text="행사취소"></button></td>
+				<th:block th:if="${cast.progress} == '행사전' and ${param.userId} != null">
+				<td><button type="button" class="mcCancel" th:text="행사취소"></button></td>
+				</th:block>
+				<th:block th:if="${cast.progress} == '행사전' and ${param.clientId} != null">
+				<td><button type="button" class="clientCancel" th:text="행사취소"></button></td>
 				</th:block>
 				<th:block th:if="${cast.progress} == '행사완료'">
-				<td><button type="button" class="review" th:text="후기작성"></button></td>
+				<td><button type="button" class="review" th:text="정산"></button><button type="button" class="noshow" th:text="노쇼"></button></td>
 				</th:block>
 				<th:block th:if="${cast.progress} == '행사취소'">
 				<td><p class="cancelTitle">취소사유...</p><div class="cancelCntn" th:text="${cast.cancel}"></div></td>
@@ -183,12 +186,13 @@
 			<div class="modal_content">
 				<form id="cancelCheck" action="/casting/progUpdate" method="post">
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-					<input type="hidden" id="castingNo" name="castingNo" readonly><br>
+					<input type="text" id="castingNo" name="castingNo" readonly><br>
 				
 					<h3>행사취소 사유</h3>
 					<h4 style="color:red;">*취소시 포트폴리오에서 취소횟수를 확인할 수 있습니다.</h4>
-					<input type="hidden" id="userId" name="userId" th:value="${session.member.userId}"><br>
-					<input type="hidden" id="progress" name="progress" th:value="행사취소"><br>
+					사회자<input type="text" id="mcId" name="mcId"><br>
+					클라이언트<input type="text" id="clientId" name="clientId"><br>
+					<input type="text" id="progress" name="progress" th:value="행사취소"><br>
 					
 					<p><span id="client" th:text="지은"></span>님의 행사를 취소하시겠습니까?</p>
 					
@@ -196,8 +200,33 @@
 					<input type="text" id="cancel" name="cancel"><br>
 					
 					<button type="button" class="cancel">나가기</button>
-					<button type="button" id="eventCancel">취소등록</button>
+					<th:block th:if="${param.userId} != null">
+					<button type="button" id="mcCancel">취소등록</button>
+					</th:block>
+					
+					<th:block th:if="${param.clientId} != null">
+					<button type="button" id="clientCancel">취소등록</button>
+					</th:block>
 				</form>		
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+	
+	<!-- 신고 폼 -->
+	<div id="punishFrm" class="modal">
+			<div class="modal_content">
+				<h2>신고</h2>
+				<div id="box">
+					<input type="text" id="castNo" name="castingNo" readonly><br>
+					<label>신고대상자</label>
+					<input type="text" id="targetId" name="targetId"readonly><br>
+					<label>신고자</label>
+					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+					<label>신고사유</label>
+					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+					<button type="button" class="cancel">취소</button>
+					<button type="button" id="punish">신고</button>
+				</div>
 			</div>
 		<div class="modal_layer"></div>
 	</div>
@@ -206,54 +235,49 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		
+		//새로고침할때 필요
 		let param = '[[${param.userId}]]';
-		//사회요청거절
+		
+		//진행현황 업데이트 함수(의뢰번호, 진행현황)
+		function updateSt(castingNo, progress){
+			$.ajax({
+	   			url : '/casting/progUpdate',
+	   			method : 'post',
+	   			data : JSON.stringify({progress:progress, castingNo:castingNo}),
+	   			contentType : "application/json",
+	   			beforeSend : function(xhr)
+	            {   
+					xhr.setRequestHeader(header, token);
+	            }
+	   		}).then(res => {
+	   			if(param != ''){
+	   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+	   			} else {
+	   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+	   			}
+	   		}) 
+		}
+		
+		//사회자가 의뢰요청 거절했을 경우
 		$(".castingNo").on('click', function() {
-			let castingNo = $(this).parent().parent().attr('id');
-			let progress = "요청거절";
+			let castingNo = $(this).parent().parent().attr('id');		
+			updateSt(castingNo, "요청거절") 
+			alert("거절 처리되었습니다.")
+		})
 			
-			  $.ajax({
-		   			url : '/casting/progUpdate',
-		   			method : 'post',
-		   			data : JSON.stringify({progress:progress, castingNo:castingNo}),
-		   			contentType : "application/json",
-		   			beforeSend : function(xhr)
-		            {   
-						xhr.setRequestHeader(header, token);
-		            }
-		   		}).then(res => {
-		   			if(param != ''){
-		   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
-		   			} else {
-		   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
-		   			}
-		   		}) 
-			})
-			
-			//사회요청수락
+			//사회자가 의뢰요청 수락했을 경우
 			$(".castingOk").on('click', function() {
 				let castingNo = $(this).parent().parent().attr('id');
-			    let progress = "결제진행중";
-
-				 $.ajax({
-			   			url : '/casting/progUpdate',
-			   			method : 'post',
-			   			data : JSON.stringify({progress:progress, castingNo:castingNo}),
-			   			contentType : "application/json",
-			   			beforeSend : function(xhr)
-			            {   
-							xhr.setRequestHeader(header, token);
-			            }
-			   		}).then(res => {
-			   			if(param != ''){
-			   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
-			   			} else {
-			   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
-			   			}
-			   		}) 
+			    if(confirm('추후 행사 취소할 경우 사용 제한될 수 있습니다.')){
+			    	updateSt(castingNo, "결제진행중")
+			    	alert("수락 처리되었습니다.")
+			    }
 			})
 			
+			
+			//클라이언트가 결제버튼을 클릭했을 경우
 			$(".cashback").on('click', function(){
+				//결제에 넘어갈 데이터 저장
 				let amount = $(this).parent().prev().prev().text()
 				let buyer_email = '[[${session.member.userEmail}]]';
 				let buyer_name = '[[${session.member.name}]]';
@@ -261,9 +285,8 @@
 				let userId = '[[${session.member.userId}]]';
 				let targetId = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
 				let castingNo = $(this).parent().parent().attr('id');
-				
-				console.log(targetId)
-				//결제
+
+				//결제 시작
 				const IMP = window.IMP; // 생략 가능
 				IMP.init("imp42430553"); // 예: imp00000000a
 				
@@ -279,12 +302,14 @@
 					pay_method: 'card',
 					merchant_uid: "evt" + makeMerchantUid, //상점에서 생성한 고유 주문번호
 					name: '사회자섭외비',  //'주문명:결제테스트',
-					amount: amount,  // 가격1,
-					buyer_email: buyer_email,	//'tpgns5890@naver.com',
-					buyer_name: buyer_name,	//'천세훈',
-					buyer_tel: buyer_tel	//'010-3670-5890'
+					amount: amount,  // 가격,
+					buyer_email: buyer_email,	//이메일,
+					buyer_name: buyer_name,	//결제자 이름,
+					buyer_tel: buyer_tel	//결제자 번호
 				}, function(rsp) {
+					//결제가 성공했을 경우
 					if (rsp.success) {
+						//정산DB에 저장
 						$.ajax({
 							url: "/pay/requestPay",
 							method: "POST",
@@ -316,32 +341,23 @@
 					}
 				})
 			})
-			
-			function updateSt(castingNo, progress){
-				$.ajax({
-		   			url : '/casting/progUpdate',
-		   			method : 'post',
-		   			data : JSON.stringify({progress:progress, castingNo:castingNo}),
-		   			contentType : "application/json",
-		   			beforeSend : function(xhr)
-		            {   
-						xhr.setRequestHeader(header, token);
-		            }
-		   		}).then(res => {
-		   			if(param != ''){
-		   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
-		   			} else {
-		   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
-		   			}
-		   		}) 
-			}
 		
-			//후기부분
+		   //환불금액저장
+		   let mcPay = 0;
+		   let clientPay = 0;
+		
+		   //후기부분
 		   //후기 모달창 띄우기
 		   let castingNo = '';
 		   $('.review').on('click', function() {
+			   //모달창에 들어갈 내용 지정
 			   castingNo=$(this).parent().parent().attr('id');
 			   let targetId = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
+			   let castingPrice = $(this).parent().prev().prev().text();
+			   
+			   //사회자에게 섭외비 정산
+			   mcPay = castingPrice;
+			   
 			   $('#reviewTgt').val(targetId)
 			   $("#reviewFrm").show();
 		   })
@@ -360,6 +376,7 @@
 			   let userId = '[[${session.member.userId}]]';
 			   let star = stars;
 			   
+			   //후기 등록
 			    $.ajax({
 						url : "/review/reviewInsert",
 						method : 'post',
@@ -370,9 +387,10 @@
 		    				xhr.setRequestHeader(header, token);
 		                },
 						success : function(data) {
-							alert('후기가 등록되었습니다.');
+							mcRefund(reviewTgt);
+							alert('후기등록 및 정산이 완료되었습니다.');
 							$("#reviewFrm").hide();
-							updateSt(castingNo,'후기작성완료');
+							updateSt(castingNo,'정산완료');
 						},
 						fail : function(result) {
 							console.log(result)
@@ -380,23 +398,110 @@
 					})
 		   })
 		   
+		   //노쇼처리
+		   $(".noshow").on('click', function(){
+			   let mc = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
+			   
+			   //환불비용저장
+			   let castingPrice = $(this).parent().prev().prev().text();
+			   clientPay = castingPrice;
+			   
+			   $("#targetId").val(mc);
+			   $("#punishFrm").show();
+			   
+			   let castingNo=$(this).parent().parent().attr('id');
+			   $("#castNo").val(castingNo);
+			   
+			   //신고모달창
+			   $("#punishFrm").show();
+			   
+		   	})
+		   	
+		   	//노쇼신고버튼 클릭시
+		   	$("#punish").on('click', function() {
+			   let targetId = $("#targetId").val();
+			   let targetCat = 'T06';
+			   let banCntn = $("#banCntn").val();
+			   let userId = '[[${session.member.userId}]]';
+			   let banType = 'P2';
+			   let castingNo = $("#castNo").val();
+			   let client = $("#userId").val();
+			   
+			    $.ajax({
+						url : "/punishInsert",
+						method : 'post',
+						contentType : 'application/x-www-form-urlencoded',
+						data : {userId:userId, targetId:targetId, banType:banType, banCntn:banCntn, targetCat:targetCat},
+						beforeSend : function(xhr)
+		                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+		    				xhr.setRequestHeader(header, token);
+		                },
+						success : function(data) {
+							//진행현황 업데이트
+							updateSt(castingNo, "노쇼");
+							//환불처리
+							clientRefund(client)
+				   			alert('사회자 신고가 완료되었습니다.');
+				   			if(param != ''){
+				   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+				   			} else {
+				   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+				   			}
+						},
+						fail : function(result) {
+							console.log(result)
+						}
+					})
+		   		})
+		   
 		   //사회자가 취소할 경우
-		   $(".eventCancel").on('click', function(){
+		   $(".mcCancel").on('click', function(){
 			   castingNo=$(this).parent().parent().attr('id');
 			   let client = $(this).parent().prev().prev().prev().prev().prev().prev().text();
-			   $('#castingNo').val(castingNo);
-			   $('#client').text(client);
-			   $("#cancelFrm").show();
+			   let mc = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
+			   let castingPrice = $(this).parent().prev().prev().text();
+			   
+			   //환불금액 정해주기
+			   clientPay = castingPrice;
+			   
+			   //정산처리
+			   $.ajax({
+				   url : '/casting/refund',
+				   method : 'post',
+		   		   data : JSON.stringify({castingNo:castingNo}),
+		   		   contentType : "application/json",
+		   		   beforeSend : function(xhr)
+		            {   
+						xhr.setRequestHeader(header, token);
+		            }
+			   }).then(res => {
+				   console.log(res)
+				   console.log(res.lastday <= 3)
+				   if(res.lastday <= 3){
+					   confirm('행사 3일전에는 취소가 불가능합니다.');
+				   } else {
+					   //의뢰번호
+					   $('#castingNo').val(castingNo);
+					   //클라이언트ID
+					   $('#client').text(client);
+					   $('#clientId').val(client);
+					   //사회자ID
+					   $('#mcId').val(mc);
+					   $("#cancelFrm").show();
+				   }
+			   })
 		   })
 		   
-		   $("#eventCancel").on('click', function(){
+		   //모달창에서 행사 취소 버튼을 눌렀을 경우
+		   $("#mcCancel").on('click', function(){
 			   if(confirm('정말 취소하시겠습니까?')){
 				   let castingNo = $("#castingNo").val();
 				   let userId =  $("#userId").val();
 				   let progress = '행사취소';
 				   let cancel = $("#cancel").val();
-				   
-				   console.log(castingNo, userId, progress, cancel)
+				   let clientId =  $("#clientId").val();
+
+				   //진행현황 업데이트
 				    $.ajax({
 			   			url : '/casting/progUpdate',
 			   			method : 'post',
@@ -407,6 +512,7 @@
 							xhr.setRequestHeader(header, token);
 			            }
 			   		}).then(res => {
+			   			clientRefund(clientId)
 			   			alert('행사가 취소되었습니다.');
 			   			if(param != ''){
 			   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
@@ -421,6 +527,143 @@
 		   $(".cancel").on('click', function() {
 				$(".modal").hide();
 			});
+		   
+		   //클라이언트가 행사 취소를 누를 경우
+		   $(".clientCancel").on('click', function(){
+			   let castingNo = $(this).parent().parent().attr('id');
+			   let client = $(this).parent().prev().prev().prev().prev().prev().prev().text();
+			   let castingPrice = $(this).parent().prev().prev().text();
+			   let mc = $(this).parent().prev().prev().prev().prev().prev().prev().prev().text();
+			   
+			   //현재날짜기준으로 행사까지 몇일 남았는지 확인
+			   $.ajax({
+				   url : '/casting/refund',
+				   method : 'post',
+		   		   data : JSON.stringify({castingNo:castingNo}),
+		   		   contentType : "application/json",
+		   		   beforeSend : function(xhr)
+		            {   
+						xhr.setRequestHeader(header, token);
+		            }
+			   }).then(res => {
+				   //환불 받을 금액 처리
+				   if(confirm(res.checks + '원 환불됩니다. 취소하시겠습니까?')){
+					   clientPay = res.checks;
+					   mcPay = castingPrice - clientPay;
+
+					   //의뢰번호
+					   $('#castingNo').val(castingNo);
+					   //클라이언트번호
+					   $('#client').text(client);
+					   $('#clientId').val(client);
+					   //사회자ID
+					   $('#mcId').val(mc);
+					   
+					   $("#cancelFrm").show();
+				   }
+			   })
+		   })
+		   
+		   //모달창에서 행사취소 버튼을 눌렀을 경우
+		   $("#clientCancel").on('click', function(){
+			   if(confirm('정말 취소하시겠습니까?')){
+				   let castingNo = $("#castingNo").val();
+				   let userId =  $("#mcId").val();
+				   let clientId =  $("#clientId").val();
+				   let progress = '행사취소';
+				   let cancel = $("#cancel").val();
+
+				     $.ajax({
+			   			url : '/casting/progUpdate',
+			   			method : 'post',
+			   			data : JSON.stringify({castingNo:castingNo, userId:userId, progress:progress, cancel:cancel}),
+			   			contentType : "application/json",
+			   			beforeSend : function(xhr)
+			            {   
+							xhr.setRequestHeader(header, token);
+			            }
+			   		}).then(res => {
+			   			//사회자 환불금액이 0일 경우 실행x
+			   			if(mcPay != 0){			   				
+			   				mcRefund(userId);
+			   			}
+			   			
+			   			//클라이언트 환불금액이 0일 경우 실행x
+			   			if(clientPay != 0){
+				   			clientRefund(clientId);
+			   			}
+			   			
+			   			alert('행사가 취소되었습니다.');
+			   			if(param != ''){
+			   				location.href='/casting/mcCastingList?userId=[[${session.member.userId}]]';
+			   			} else {
+			   				location.href='/casting/mcCastingList?clientId=[[${session.member.userId}]]';
+			   			}
+			   		}) 
+			   }
+		   })
+		   
+		   //사회자 정산처리
+		   function mcRefund(mc){
+			   //클라이언트가 사회자한테 보내는 것이기 때문에 session으로 처리
+			   let userId = '[[${session.member.userId}]]';
+			   let targetId = mc;
+				
+			   //정산내역 보내기
+			    $.ajax({
+					url: "/pay/requestPay",
+					method: "POST",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify({
+						moType:'M2',
+						moPrice:mcPay,
+						userId:userId,
+						targetId:targetId,
+				       	moCat:'T06'
+				   }),
+				   beforeSend : function(xhr){
+	                    xhr.setRequestHeader(header, token);
+	               },
+	               success: function(res){
+
+	               },
+	               error: function(err){
+	                  console.log(err)
+	               }
+		   		})
+		   }
+		   
+		   //클라이언트 정산
+		   function clientRefund(client){
+			   //사회자가 취소할 경우 업체 이름으로 가야되기 때문에 client로 설정
+			   let userId = client;
+			   let targetId = client;
+				
+			   //정산처리
+			    $.ajax({
+					url: "/pay/requestPay",
+					method: "POST",
+					contentType: "application/json",
+					dataType: "json",
+					data: JSON.stringify({
+						moType:'M2',
+						moPrice:clientPay,
+						userId:userId,
+						targetId:targetId,
+				       	moCat:'T06'
+				   }),
+				   beforeSend : function(xhr){
+	                    xhr.setRequestHeader(header, token);
+	               },
+	               success: function(res){
+
+	               },
+	               error: function(err){
+	                  console.log(err)
+	               }
+		   		})
+		   }
 	</script>
 	</div>
 </body>
