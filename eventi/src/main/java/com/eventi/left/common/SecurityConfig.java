@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -33,8 +34,7 @@ public class SecurityConfig {
 	@Qualifier("dataSource")
 	private DataSource dataSource;
 	
-	@Autowired
-	LoginSuccessHandler loginSuccessHandler;
+	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 	
 	@Autowired
 	AuthenticationFailureHandler customFailureHandler;
@@ -60,7 +60,7 @@ public class SecurityConfig {
 				.usernameParameter("userid")	// 아이디 파라미터명 설정
 				.passwordParameter("password")	// 패스워드 파라미터명 설정
 				.loginProcessingUrl("/login")	// 로그인 Form Action Url
-				.successHandler(loginSuccessHandler)	//LoginSuccessHandler 컴포넌트 호출
+				.successHandler(authenticationSuccessHandler)	//LoginSuccessHandler 컴포넌트 호출
 				.failureHandler(customFailureHandler);
 		
 		http.rememberMe()	//자동로그인
@@ -68,7 +68,7 @@ public class SecurityConfig {
 			.rememberMeParameter("remember-me")
 			.userDetailsService(impl)
 			.tokenRepository(persistentTokenRepository()) //DataSource 추가
-			.authenticationSuccessHandler(loginSuccessHandler);
+			.authenticationSuccessHandler(authenticationSuccessHandler);
 		
 		http.logout() // 로그아웃 처리
 			.logoutUrl("/logout")

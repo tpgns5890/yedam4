@@ -279,8 +279,17 @@
 	<!-- 회원신고 승인 -->
 	<update id="banMember">
 		UPDATE MEMBERS
-		SET RPRT = RPRT + 1
+		SET RPRT = 	RPRT + 1,
+			LOCKED = CASE 	WHEN RPRT = 4 THEN '0'
+							WHEN RPRT = 9 THEN '0'
+							WHEN RPRT = 14 THEN '0'
+							ELSE '1' END,
+			LOCKED_DT = CASE 	WHEN RPRT = 4 THEN SYSDATE+10
+								WHEN RPRT = 9 THEN SYSDATE+30
+							 	WHEN RPRT = 14 THEN SYSDATE+40000
+							 	ELSE NULL END
 		WHERE USER_ID = #{targetId}
+		AND LOCKED = '1'
 	</update>
 	<update id="banMemAccept">
 		UPDATE PUNISH

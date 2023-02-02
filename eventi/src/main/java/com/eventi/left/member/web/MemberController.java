@@ -1,5 +1,7 @@
 package com.eventi.left.member.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -124,8 +126,11 @@ public class MemberController {
 	@RequestMapping(value="/loginPage")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "exception", required = false) String exception,
-			Model model) throws Exception {
-		
+			Model model,HttpServletRequest request) throws Exception {
+		String uri = request.getHeader("Referer");
+	    if (uri != null && !uri.contains("/loginPage")) {
+	        request.getSession().setAttribute("prevPage", uri);
+	    }
 		/* 에러와 예외를 모델에 담아 view resolve */
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);

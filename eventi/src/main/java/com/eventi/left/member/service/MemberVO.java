@@ -36,6 +36,10 @@ public class MemberVO implements UserDetails {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date userRegDate;
 	private String userState;
+	private boolean locked; //계정 제한 구현
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date lockedDt;
+	
 	private List<CrtfVO> crtfs;
 	private BusiVO busi;
 	
@@ -47,6 +51,8 @@ public class MemberVO implements UserDetails {
 	
 	private String busiAreaCode;
 	private String busiStyleCode;
+	
+	
 
 	Integer first; //첫페이지
 	Integer last; //마지막페이지
@@ -76,7 +82,7 @@ public class MemberVO implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return locked;
 	}
 
 	@Override

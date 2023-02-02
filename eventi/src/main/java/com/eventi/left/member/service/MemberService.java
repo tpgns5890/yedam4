@@ -3,6 +3,7 @@ package com.eventi.left.member.service;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -21,7 +22,7 @@ public interface MemberService{
 
 	public ResponseEntity<JsonNode> crtfCheck(String name, String qNo); //자격증 진위확인
 
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, LockedException;
 
 	public String findId(String name, String email); //아이디 찾기
 
