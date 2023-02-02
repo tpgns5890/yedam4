@@ -34,7 +34,7 @@ public class EstController {
 		return "content/estimate/estList";
 	}
 
-	// 전체회원 리스트(ajax)
+	// 견적요청서(ajax)
 	@PostMapping("/estListAjax")
 	@ResponseBody
 	public Map<String, Object> memberListAjax(EstVO estVO, PagingVO paging) {
