@@ -16,6 +16,7 @@ public class JobBoardVO {
 	Integer pay; //수당
 	private String loc; //위치
 	private String eType; //행사종류
+	private String eTypeName; //행사이름
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date wSday; //근무시작일
 	@DateTimeFormat(pattern = "yyyy-MM-dd") 

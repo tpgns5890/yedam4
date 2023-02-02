@@ -22,70 +22,13 @@
 	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
 	<th:block th:if="${session.member.userId} == ${proDetail.userId}">
 	</th:block>
- 	<!-- <section class="module-small">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-8 col-sm-offset-1">
-                <div class="post">
-                  <div class="post-thumbnail" >	<div th:each="f : ${file}">
-				 <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
-			</div></div>
-                  <div class="post-header font-alt">
-                    <h1 class="post-title" th:text=${proDetail.eName}>Our trip to the Alps</h1>
-                    <div class="post-meta" th:text=${proDetail.proNo} id="proNo"  >By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Photography, </a><a href="#">Web Design</a>
-                    </div>
-                  </div>
-                  
-                  <div class="post-entry" >
-                    <p th:text=${proDetail.userId}> The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
-                    <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
-                      <p th:utext=${proDetail.intro}>Lorem </p>
-                    <ul>
-                      <li th:text="${#dates.format(proDetail.eSday, 'yyyy-MM-dd')}">The European languages are members of the same family.</li>
-                      <li th:text="${#dates.format(proDetail.eEday, 'yyyy-MM-dd')}">Their separate existence is a myth.</li>
-                      <li th:text=${proDetail.loc}>For science, music, sport, etc, Europe uses the same vocabulary.</li>
-                      <li th:text=${proDetail.entrance}>Their separate existence is a myth.</li>
-                      <li th:text=${proDetail.accommodate}>Their separate existence is a myth.</li>
-                    </ul>
-                    <p th:text=${proDetail.see}>The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
-                    <div class="tag-widget post-tag-container mb-5 mt-5">
-						<div class="tagcloud">
-							<a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
-							<a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
-						</div>
-					</div>
-                  </div>
-                  
-                </div>
-                <div class="comments"  id=reply>
-                  <h4 class="comment-title font-alt">There are comments</h4>
-                  <div class="comment clearfix">
-                    <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
-                    <div class="comment-content clearfix">
-                      <div class="comment-author font-alt"><a href="#">John Doe</a></div>
-                      <form action="replyInsert">
-						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
-						<button type="button" id="replyInsertBtn">댓글작성</button>
-                      Today, 14:55 - 
-                    	</form>
-                      </div>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-       </section>  -->
-       
        <section class="module">
           <div class="container">
             <div class="row">
               <div class="col-sm-8">
                 <div class="post">
-                  <div class="post-thumbnail"><div th:each="f : ${file}">
-				 <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></div></div>
+                  
+				 <img th:src="|/fileView/${proDetail.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></div><div>
 				 
                   <div class="post-header font-alt">
                     <h1 class="post-title" th:text=${proDetail.eName}>Our trip to the Alps</h1>
@@ -416,7 +359,7 @@
 	$(document).on('click', '.updateBtn', function(e){
 		$(this).toggleClass("updateBtn");
 		let btn = $(this);
-		let replyCntn = $('#replyCntn').val();
+		let replyCntn = btn.closest(".comment-body").find('#replyCntn').val();
 		let replyNo = $('#replyNo').val();
 		let updateBtn = `<button class='repUpdate'>수정</button>`;
 		

@@ -14,22 +14,13 @@
 
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-	
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif" th:text="구인게시글관리"></div>
-              </div>
-            </div>
-          </div>
-        </section>
+	<h2 hidden="hidden" class="module-title font-alt">구인게시글관리</h2>
+            
 		
-		<div style="min-height: 700px">
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
+		<div class="contest">
 		<!-- 게시글 검색 -->
 			<form name="searchFrm">
 				제목<input type="text" name="title" value="">
@@ -41,8 +32,8 @@
 			
 			
 			<!-- 테이블 -->
-			<div id="table">
-				<table border="1" id="myTable">
+			<div >
+				<table id="table">
 					<thead>
 						<tr>
 							<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
@@ -74,7 +65,14 @@
 							<td th:text=${job.eType}></td>
 							<td th:text=${job.title}></td>
 							
-							<td th:text="${job.remain}"></td>
+						 	<th:block th:if="${job.remain > 0}">
+								<td  th:text="|${job.remain} 일전|"></td>
+							</th:block>
+							
+							<th:block th:unless="${job.remain > 0} ">
+								<td th:text="마감"></td>
+							</th:block>
+
 							
 							<td th:text="${job.reCount}"></td>
 							

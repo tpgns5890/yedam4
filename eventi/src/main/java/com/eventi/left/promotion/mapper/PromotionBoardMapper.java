@@ -23,10 +23,10 @@ public interface PromotionBoardMapper {
 	public String getSeq();
 	
 	//게시글 등록
-	public int proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile);
+	public int proInsert(PromotionVO promotionVO);
 	
 	//게시글 수정
-	public int proUpdate(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile);
+	public int proUpdate(PromotionVO promotionVO);
 	
 	//게시글 삭제
 	public int proDelete(PromotionVO promotionVO);

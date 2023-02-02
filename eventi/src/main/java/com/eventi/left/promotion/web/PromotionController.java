@@ -143,6 +143,7 @@ public class PromotionController {
 			proService.proDelete(promotionVO);
 			return "redirect:/proList"; 
 		}
+		
 	//마이페이지------------------------------------
 	//1.나의 홍보게시물관리 페이지이동
 		@GetMapping("/myProList")

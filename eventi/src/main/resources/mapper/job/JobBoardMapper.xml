@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.job.mapper.JobBoardMapper">
-	<!-- 구인게시글 검색(이걸하는 이유... 데이터 용량때문...) --> 
+	<!-- 구인게시글 검색 --> 
 	<sql id="jSelect">
 	
 		<!-- 검색창 입력 시 -->
 		<if test="title !=null and title != ''">
-			AND ( TITLE LIKE '%${title}%' OR JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			AND (TITLE LIKE '%${title}%' OR JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
 		<!-- option 선택 시-->
 		<if test="eType !=null and eType != ''">
 			AND E_TYPE = #{eType}
 		</if>
-		AND CLOSE_DT >= SYSDATE 
+	
 	</sql>	
 	
 	<sql id="likeSelect">
@@ -23,16 +23,15 @@
 
 	</sql>
 	
-	<sql id="search">
-		
+	<sql id="search">		
 			<if test="title !=null and title != ''">
-				AND TITLE LIKE '%'||#{title}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+				AND TITLE LIKE '%'||#{title}||'%'  
 			</if>
 			<if test="jobCntn!=null and jobCntn!=null != ''">
-				AND JOB_CNTN LIKE '%'||#{jobCntn}||'%'  <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
-			</if>
+				AND JOB_CNTN LIKE '%'||#{jobCntn}||'%'  
+			</if>		
+	</sql>
 		
-	</sql>	
 	<!-- 구인게시글 전체조회 -->
 	<select id="getJobList" resultType="com.eventi.left.job.service.JobBoardVO">
 		SELECT JOB_NO,
@@ -65,7 +64,7 @@
 		  
 			<include refid="jSelect" />
 			<include refid="likeSelect" />
-			     <if test="orderCol !=null and orderCol != ''">
+			    <if test="orderCol !=null and orderCol != ''">
                 ORDER BY ${orderCol} desc
                 </if>
 	  	<![CDATA[
@@ -82,7 +81,24 @@
 	
 	<!-- 구인게시글 단건조회 -->
 	<select id="getJob" resultType="com.eventi.left.job.service.JobBoardVO">
-		SELECT j.*
+		SELECT JOB_NO,
+				TITLE,
+				JOB_CNTN,
+				PAY,
+				LOC,
+				E_TYPE,
+				code_select(E_TYPE) E_Type_Name,
+				W_SDAY,
+				W_EDAY,
+				W_HOUR,
+				QUALIFICATION,
+				PREFERENCE,
+				IMG,
+				USER_ID,
+				DT,
+				CLOSE_DT,
+				SEE,
+				SAVE
 			  ,CLOSE_DT - SYSDATE AS remain
 			  ,(select count(*)
 	              from likes l

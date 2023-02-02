@@ -40,7 +40,7 @@
 <form id="searchForm">
 <!-- option 게시글별 조회수, 작성일순 정렬기준 -->
 <label>행사유형</label>
-	<select id="etype" name="etype"  onchange="order()">
+	<select id="etype" name="eType"  onchange="order()">
 		<option value="" selected>------</option>
 		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
 		<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
@@ -70,7 +70,7 @@
 		<option value="cnt">좋아요순</option>
 	</select>
 	<!-- 게시글 검색 -->
-	<input type="text" name="search">
+	<input type="text" name="title">
 	<input type="button" id="find" value="찾기" onclick="order()">
 </form>
 </div>
@@ -106,15 +106,25 @@
 				<td th:text=${job.title}></td>
 				<td th:text=${job.eType}></td>
 				<td th:text=${job.userId}></td>
-				<td th:text=${job.cnt}></td>
+				<td th:utext=${job.cnt}></td>
 				<td th:text=${job.reCount}></td>
 				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 				<td th:text="${#dates.format(job.closeDt, 'yyyy/MM/dd')}"></td>
-				<td th:text="|${job.remain} 일전|"></td>
+				
+				<th:block th:if="${job.remain > 0}">
+					<td  th:text="|${job.remain} 일전|"></td>
+				</th:block>
+				<th:block th:unless="${job.remain > 0} ">
+					<td th:text="마감"></td>
+				</th:block>
+
 				<td th:text=${job.see}></td>
 			</tr>
 		</tbody>
+		
+		
 	</table>
+	
 	<div class="row mt-5">
 		 <div class="col text-center">
 			<div class="block-27">
@@ -130,11 +140,16 @@
 	</div>	
 	        
 <script>
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+//페이징
 function gopage(i) {
     console.log(i);
     location.href = '/jobList?page=' + i;
 }
-
+//링크
 link1 = 'jobInsert'; //구인등록폼 이동
 function jobInsert(){
 	location.href = link1;
@@ -149,9 +164,6 @@ function jobDetail(jobNo){
 	console.log(jobNo)
 	location.href = link3+jobNo;
 }
-//csrf 설정
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
 
 	//정렬
 	function order(){
