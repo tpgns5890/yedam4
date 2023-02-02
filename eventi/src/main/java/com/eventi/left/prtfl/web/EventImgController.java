@@ -27,7 +27,7 @@ public class EventImgController {
 	@Autowired CodeService codeService;
 	@Autowired FilesService filesService;
 	
-	//행사이미지 리스트 페이지 이동
+	//마이페이지 행사이미지 리스트 페이지 이동
 	@GetMapping("/eventImgList")
 	public String eventImgList(Model model, EventImgVO eventImgVO) {
 		model.addAttribute("nextNo", eventImgService.getSeq());

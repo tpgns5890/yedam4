@@ -102,10 +102,23 @@
 		]]>
 	</select>
 	
+	<!--디자인한건조회 -->
 	<select id="getDesign" resultType="DesignVO">
-		SELECT * FROM DESIGN
-		  WHERE dgn_no = #{dgnNo}
-		order by dt DESC
+		SELECT DGN_NO,
+			   USER_ID,
+			   C_NO,
+			   NAME,
+			   CODE_SELECT(CAREGORY) CAREGORY,
+			   CNTN,
+			   DT,
+			   CENTER_IMG,
+			   PUBC_YN,
+			   SAVE,
+			   (SELECT COUNT(WIN_YN) FROM DESIGN WHERE USER_ID=#{userId} AND WIN_YN = 'Y') CNT,
+			   (SELECT SEV_NM FROM FILES WHERE TARGET_ID=#{userId}) MAINIMG
+		  FROM DESIGN
+		 WHERE dgn_no = #{dgnNo}
+		 ORDER BY DT DESC
 	</select>
 	
 	<insert id="insert">
@@ -143,6 +156,12 @@
 		    save = #{save}
 		where dgn_no = #{dgnNo}
 		and user_id = #{userId}
+	</update>
+	
+	<update id="winnerCheck">
+		UPDATE DESIGN
+		   SET WIN_YN = 'Y'
+		 WHERE DGN_NO = #{dgnNo}
 	</update>
 	
 	<delete id="delete">

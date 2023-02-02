@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eventi.left.prtfl.mapper.McMoveMapper">
+	<!-- 사회자별 동영상 리스트 -->
+	<select id="moveList" resultType="com.eventi.left.prtfl.service.McMoveVO">
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT M.* ,F.SEV_NM AS MOVE
+		  FROM MCMOVE M, FILES F
+		 WHERE M.MOVE_NO = F.TARGET_ID
+           AND USER_ID = #{userId}
+		 <![CDATA[
+		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
+		]]>
+	</select>
+	
+	<!-- 사회자별 동영상 개수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
+		  FROM MCMOVE
+		 WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 동영상 다음 시퀀스 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'MV' || NVL((MAX(TO_NUMBER(SUBSTR(MOVE_NO, 3)))+1), 1) MOVE_NO
+		  FROM MCMOVE
+	</select>
+	
+	<!-- 동영상 추가 -->
+	<insert id="moveInsert">
+		<selectKey keyProperty="moveNo" resultType="String" order="BEFORE">
+				SELECT 'MV' || NVL((MAX(TO_NUMBER(SUBSTR(MOVE_NO, 3)))+1), 1) MOVE_NO
+		  		  FROM MCMOVE
+		</selectKey>
+		INSERT INTO MCMOVE
+		VALUES(#{moveNo}, #{userId}, #{moveTtl})
+	</insert>
+</mapper>

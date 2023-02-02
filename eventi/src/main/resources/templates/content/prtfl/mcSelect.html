@@ -160,7 +160,7 @@
   		<br><br>
   		
   		<div class="box">
-		<img class="profile" th:src="|/fileView/${mcSelect.img}|">
+		<img class="profile" th:src="|/fileView/${file.sevNm}|">
   		</div>
   		
   		<!-- <label style="display:none;"class="label" id="userId" th:text="${mcSelect.userId}"></label><br> -->
@@ -176,7 +176,6 @@
   		</th:block>
   		<button id="btn" type="button" class="btn btn-g btn-round castingUp">의뢰하기</button>
   		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
-  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
 		<hr>
 		
 		<label class="label" th:text="${mcSelect.carrYear} + '년'"></label>

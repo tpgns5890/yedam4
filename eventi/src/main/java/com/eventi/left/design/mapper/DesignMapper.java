@@ -20,7 +20,7 @@ public interface DesignMapper {
 	
 	public List<DesignVO> userDesignList(DesignVO vo); //유저 디자인리스트.
 	
-	public DesignVO getDesign(String dgnNo); // 디자인1건.
+	public DesignVO getDesign(DesignVO vo); // 디자인1건.
 	
 	public int insert(DesignVO vo); //추가
 	 
@@ -33,5 +33,7 @@ public interface DesignMapper {
 	public List<DesignVO> saveGetdesign(DesignVO DesignVO); // 임시저장 1건,디자인파일 여러건조회
 
 	public List<DesignVO> dSave(DesignVO DesignVO); //임시저장 리스트.
+	
+	public int winnerCheck(String dgnNo); //우승작품 Y처리
 	
 }

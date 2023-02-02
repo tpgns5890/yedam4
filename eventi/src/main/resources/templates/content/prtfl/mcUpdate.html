@@ -79,7 +79,7 @@
 			<label class="label" for="imgInp">대표이미지</label> 
 			<input type="file" id="imgInp" name="uploadFile" class="fileShow"/>
 			<div class="">
-				<img id="blah" th:src="|/fileView/${mcSelect.img}|" alt = "your image" width="250px" />
+				<img id="blah" th:src="|/fileView/${file.sevNm}|" alt = "your image" width="250px" />
 				<button type="button" id="cancel" class="btn btn-warning cancel">
 	              <span>Cancel</span>
 	          	</button>
@@ -198,24 +198,6 @@
 	</div>
 	
 	<div class="col-md-12">
-		<div class="form-group" id="addMove">
-			<label class="label" for="movie">동영상등록</label><br>
-			<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
-			<th:block th:each="file : ${files}">
-			<div th:if="${#strings.containsIgnoreCase(file,'.mp4')}">
-			<input type="file" class="videoInp" name="uploadFile" th:text="${file.fNm}"/><span><button type="button" class="cancel">-</button></span>
-			</div>
-			</th:block>
-		</div>
-	</div>
-	
-	<div class="col-md-12">
-		<div class="form-group">
-			<input type="button" id="movieInsert" value="동영상추가" class="btn btn-primary">
-		</div>
-	</div>
-	
-	<div class="col-md-12">
 		<div class="form-group">
 			<input type="submit" id="update" value="수정" class="btn btn-primary">
 		</div>
@@ -320,20 +302,6 @@
     	let tag = `<p><span style="font-size: 14pt; color: rgb(255, 108, 0);"><b><span style="font-size: 12pt;">﻿</span><span style="font-size: 12pt;">&lt;${qna}&gt;</span></b><span style="background-color: rgb(119, 119, 119);"><b>﻿​</b></span></span>&nbsp;</p>`
     	oEditors.getById["selfIntro"].exec("PASTE_HTML", [tag]);
     })
-    
-    //동영상추가버튼
-    $("#movieInsert").on('click', function() {
-    	let tag = `<div><input type="file" class="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
-    	$("#addMove").append(tag);
-    })
-    
-    //동영상삭제
-    $(document).on('click', '.cancel', function() {
-    	console.log($(this));
-    	$(this).parent().parent('div').remove();
-    })
-    
-    
     
     function mcAreaFun(e) {
 		let tagValue = e.options[e.selectedIndex].text;
