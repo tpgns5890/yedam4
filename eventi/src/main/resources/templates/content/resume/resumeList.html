@@ -74,12 +74,31 @@
 					</div>
 				</div>
 			</div>
+			
+			 <div class="row mt-5">
+		          <div class="col text-center">
+		            <div class="block-27">
+		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+		            </div>
+		          </div>
+		        </div>
+		        
+		   <div th:each="f : ${file}">
+				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
+				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+			</div>     
 		</div>
 	</section>
 
 	<script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
+
+//페이징
+function gopage(i) {
+    console.log(i);
+    location.href = '/resumeList?page=' + i;
+}
 
 //tr 전체체크시 모든항목 체크되도록 
 let allHire = document.querySelector("#allHire")

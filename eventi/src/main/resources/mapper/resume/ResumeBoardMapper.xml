@@ -14,21 +14,44 @@
 	
 	<!-- 전체간단조회(메인구인게시판) -->
 	<select id="getResumeList" resultType="com.eventi.left.resume.service.ResumeBoardVO">
-		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, J.USER_ID, R.HIRE 
-		FROM RESUME_BOARD R, JOB_BOARD J
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
+				(SELECT SEV_NM 
+                  FROM FILES 
+                   WHERE TARGET_ID = R.RESUME_NO
+                   AND ROWNUM=1) AS R.IMG, J.USER_ID, R.HIRE 
+		FROM (SELECT ROWNUM RN, A.* 
+		        FROM(SELECT * FROM
+		
+		RESUME_BOARD R, JOB_BOARD J
 		WHERE R.JOB_NO = J.JOB_NO 
 		AND J.JOB_NO IN (SELECT JOB_NO 
 						FROM JOB_BOARD
 						WHERE USER_ID = #{seekerId})
+						
+		<![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
+		]]>
 	</select>
 	
 	<!-- 전체간단조회(상세구인게시판) -->
 	<select id="getResumeJob" resultType="com.eventi.left.resume.service.ResumeBoardVO">
-		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, J.USER_ID 
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
+		(SELECT SEV_NM 
+                  FROM FILES 
+                   WHERE TARGET_ID = RESUME_NO
+                   AND ROWNUM=1) AS R.IMG, J.USER_ID 
+        FROM (SELECT ROWNUM RN, A.* 
+		        FROM(SELECT * FROM 
+		        
 		FROM RESUME_BOARD R, JOB_BOARD J
 		WHERE R.JOB_NO = J.JOB_NO 
 		AND J.JOB_NO = #{jobNo}
-	
+		
+		<![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
+		]]>
 	</select>
 	
 	<!-- 게시글 개수 -->
@@ -66,9 +89,9 @@
 		</selectKey>
 	
 		INSERT INTO RESUME_BOARD
-		(RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, FILES, USER_NAME, USER_EMAIL, USER_PHONE) <!-- DB -->
+		(RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, IMG, USER_NAME, USER_EMAIL, USER_PHONE) <!-- DB -->
 		VALUES(#{resumeNo}, #{seekerId}, #{title}, 
-				#{jobNo}, #{cntn}, #{files}, #{userName}, #{userEmail}, #{userPhone}) <!-- VO -->
+				#{jobNo}, #{cntn}, #{img}, #{userName}, #{userEmail}, #{userPhone}) <!-- VO -->
 	</insert>
 	
 	<!-- 구직자 채용 -->

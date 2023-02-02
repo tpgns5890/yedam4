@@ -13,10 +13,10 @@ import com.eventi.left.member.service.MemberVO;
 public interface ResumeService {
 	
 	//구직자 전체조회(메인구인게시판-여러개시글)
-	public List<ResumeBoardVO> getResumeList(ResumeBoardVO resumeBoardVO); 
+	public List<ResumeBoardVO> getResumeList(ResumeBoardVO resumeBoardVO, PagingVO paging); 
 		
 	//구직자 전체조회(상세구인게시판-같은게시글)
-	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO); 
+	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO, PagingVO paging); 
 		
 	//단건조회
 	public ResumeBoardVO getResumeDetail(ResumeBoardVO resumeBoardVO); 

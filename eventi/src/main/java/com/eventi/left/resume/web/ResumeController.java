@@ -1,5 +1,6 @@
 package com.eventi.left.resume.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 import com.eventi.left.member.service.MemberVO;
-import com.eventi.left.promotion.service.PromotionVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 import com.eventi.left.resume.service.ResumeService;
 
@@ -31,7 +31,6 @@ public class ResumeController {
 
 	@Autowired 
 	ResumeService resumeService;
-	
 	@Autowired 
 	JobService jobService;
 	//파일 service
@@ -39,18 +38,45 @@ public class ResumeController {
 	
 	//전체조회(메인구직게시판-회원ID가 작성한 글에 신청한 구직자들 전체조회)
 	@RequestMapping(value = "/resumeList", method=RequestMethod.GET) 
-	public String resumeList(Model model, ResumeBoardVO resumeBoardVO) {
+	public String resumeList(Model model, ResumeBoardVO resumeBoardVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		resumeBoardVO.setSeekerId(user.getUserId());
-		model.addAttribute("resumeList", resumeService.getResumeList(resumeBoardVO));
+		
+		//전체리스트 조회
+		List<ResumeBoardVO> lists = resumeService.getResumeList(resumeBoardVO, paging);
+		model.addAttribute("paging", paging);
+				
+		//사진파일
+		List<FilesVO> files = new ArrayList<>();
+		for(ResumeBoardVO list : lists) {
+			files = filesService.fileList(list.getResumeNo());
+			list.setFiles(files);
+			
+		//model.addAttribute("resumeList", resumeService.getResumeList(resumeBoardVO));
+		}
+		model.addAttribute("resumeList", lists);
 		return "content/resume/resumeList";
-	}
 	
+}
 	
 	//전체조회(구인게시글상세에서조회-같은구직게시글(하나의 글에 대한 구직자들 전체조회))
 	@RequestMapping(value = "/resumeJob", method=RequestMethod.GET) 
-	public String resumeListOne(Model model, ResumeBoardVO resumeBoardVO) {
-		model.addAttribute("resumeJob", resumeService.getResumeJob(resumeBoardVO));
+	public String resumeListOne(Model model, ResumeBoardVO resumeBoardVO, PagingVO paging) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+
+		//전체리스트 조회
+		List<ResumeBoardVO> lists = resumeService.getResumeJob(resumeBoardVO, paging);
+		model.addAttribute("paging", paging);
+				
+		//사진파일
+		List<FilesVO> files = new ArrayList<>();
+		for(ResumeBoardVO list : lists) {
+			files = filesService.fileList(list.getResumeNo());
+			list.setFiles(files);
+			
+		}
+		model.addAttribute("resumeList", lists);
+		//model.addAttribute("resumeJob", resumeService.getResumeJob(resumeBoardVO));
 		return "content/resume/resumeJob";
 	}
 	

@@ -28,8 +28,10 @@ public class ResumeServiceImpl implements ResumeService{
 	
 	//구직자 전체조회(메인구인게시판)
 	@Override
-	public List<ResumeBoardVO> getResumeList(ResumeBoardVO resumeBoardVO) { 
-		// TODO Auto-generated method stub
+	public List<ResumeBoardVO> getResumeList(ResumeBoardVO resumeBoardVO, PagingVO paging) { 
+		paging.setPageUnit(5);
+		resumeBoardVO.setFirst(paging.getFirst());
+		resumeBoardVO.setLast(paging.getLast());
 		return resumeMapper.getResumeList(resumeBoardVO);
 	}
 
@@ -42,8 +44,10 @@ public class ResumeServiceImpl implements ResumeService{
 
 	//구직자 전체조회(상세조회게시판)
 	@Override
-	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO) {
-		// TODO Auto-generated method stub
+	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO, PagingVO paging) {
+		paging.setPageUnit(5);
+		resumeBoardVO.setFirst(paging.getFirst());
+		resumeBoardVO.setLast(paging.getLast());
 		return resumeMapper.getResumeJob(resumeBoardVO);
 	}
 	
@@ -57,6 +61,8 @@ public class ResumeServiceImpl implements ResumeService{
 	//구직신청폼 등록
 	@Override
 	public int ApplyInsert(ResumeBoardVO resumeBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		//사진등록 
 		int r = resumeMapper.ApplyInsert(resumeBoardVO);
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
