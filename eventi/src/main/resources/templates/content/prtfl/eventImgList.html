@@ -256,29 +256,6 @@
 			$("#imageFrm").hide();
 		});
 	   
-/* 	   //모달창에서 이미지등록을 눌렀을 경우
-	   $("#eventInsert").on('click', function() {
-		   let param = $("#event").serialize();
-		   
-		    $.ajax({
-					url : "/eventImg/eventImgInsert",
-					method : 'post',
-					contentType : 'application/x-www-form-urlencoded',
-					data : {param},
-					beforeSend : function(xhr)
-	                {   
-	    				xhr.setRequestHeader(header, token);
-	                },
-					success : function(data) {
-						alert('등록이 완료되었습니다.');
-						location.href='/eventImg/eventImgList';
-					},
-					fail : function(result) {
-						console.log(result)
-					}
-				})
-	   }) */
-	   
 	   //파일 업로드 이미지 미리보기
 		    //파일 INPUT창에 변화가 있을 경우 실행
 		    $("#imgInp").on('change', function() {

@@ -95,8 +95,8 @@ public class DesignServiceImpl implements DesignService {
 	}
 
 	@Override
-	public DesignVO getDesign(String dgnNo) {
-		return mapper.getDesign(dgnNo);
+	public DesignVO getDesign(DesignVO vo) {
+		return mapper.getDesign(vo);
 	}
 
 	@Override

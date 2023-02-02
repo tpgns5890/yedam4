@@ -190,23 +190,7 @@
 			<textarea name="career" class="form-control" id="career" cols="30" rows="4"></textarea>
 		</div>
 	</div>
-	
-	<div class="col-md-12">
-		<div class="form-group">
-			<label class="label" for="movie">동영상등록</label><br>
-			<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
-			<input type="file" id="videoInp" name="uploadFile"/>
-			<div id="addMove">
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-md-12">
-		<div class="form-group">
-			<input type="button" id="movieInsert" value="동영상추가" class="btn btn-primary">
-		</div>
-	</div>
-	
+
 	<div class="col-md-12">
 		<div class="form-group">
 			<input type="submit" id="insert" value="등록" class="btn btn-primary">
@@ -305,18 +289,6 @@
     	oEditors.getById["selfIntro"].exec("PASTE_HTML", [tag]);
     })
     
-    //동영상추가버튼
-    $("#movieInsert").on('click', function() {
-    	let tag = `<div><input type="file" id="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
-    	$("#addMove").append(tag);
-    })
-    
-    //동영상삭제
-    $(document).on('click', '.cancel', function() {
-    	console.log($(this));
-    	$(this).parent().parent('div').remove();
-    })
-    
     function mcAreaFun(e) {
 		let tagText = e.options[e.selectedIndex].text;
 		let tagValue = e.options[e.selectedIndex].value;
@@ -336,7 +308,6 @@
             alert("태그값이 중복됩니다.");
           }
         }
-        //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
       };
       
       function mcTypeFun(e) {

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/myPageSide.css">
+<style>
+	.label {
+		color : black;
+	}
+	
+	#check{
+		min-height : 1000px;
+	}
+	
+	.modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.modal h2 {
+		margin: 0;
+	}
+
+	.modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
+
+	.modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
+
+	.modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.box {
+	    width: 150px;
+	    height: 150px; 
+	    border-radius: 100%;
+	    overflow: hidden;
+	    text-align: center !important;
+	    margin:0 auto;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">사회자동영상리스트</h2>
+                <div class="module-subtitle font-serif">사회자동영상리스트</div>
+              </div>
+            </div>
+          </div>
+        </section>
+    <!-- 현재페이지 myPageSide 적용 -->
+	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+    
+    <div id="check">
+    <button class="btn btn-primary btn-round" type="button" id="videoUp">동영상 등록</button> 
+
+	<div class="container">
+		<div th:each="move : ${moves}" >
+			<video th:src="|/fileView/${move.move}|" width="500px" height="200px" controls></video>
+			<p th:text="${move.moveTtl}"></p>
+        </div> 
+    </div>
+    
+	<!-- 페이징 처리 -->
+	<div class="row mt-5">
+		<div class="col text-center">
+			<div class="block-27">
+				<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+			</div>
+		</div>
+	</div>
+	
+	<!-- 동영상 등록 폼 -->
+	<div id="videoFrm" class="modal">
+			<div class="modal_content">
+				<form action="/move/moveInsert" method="POST" enctype="multipart/form-data" id="event" name="event">
+					<h2>사회동영상 등록</h2>
+					<div id="box">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+						<input type="hidden" id="moveNo" name="moveNo" th:value="${nextNo}" readonly><br>
+						<input type="hidden" id="userId" name="userId" th:value="${session.member != null ? session.member.userId :''}" readonly><br>
+						<label>동영상이름</label>
+						<input type="text" id="moveTtl" name="moveTtl"><br>
+						<label class="label" for="imgInp">동영상 첨부</label> 
+						<input type="file" id="imgInp" name="uploadFile"/>
+						<button type="button" id="cancel">취소</button>
+						<button type="submit" id="eventInsert">동영상등록</button>
+					</div>
+				</form>
+			</div>
+		<div class="modal_layer"></div>
+	</div>
+	</div>
+					     	
+	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		//페이지이동
+		function gopage(i) {
+			location.href = `/move/moveList?userId=${session.member.userId}&page=` + i;
+		}
+		
+		//동영상 등록 폼
+		$('#videoUp').on('click', function() {
+		   console.log('클릭');
+		   $("#videoFrm").show();
+	   })
+	   
+	   //모달창에서 취소를 눌렀을 경우
+	   $("#cancel").on('click', function() {
+			$("#videoFrm").hide();
+		});
+	</script>
+	</div>
+</body>
+</html>

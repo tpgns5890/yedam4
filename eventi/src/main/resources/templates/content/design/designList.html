@@ -192,11 +192,9 @@
 							    <div class="shop-item-detail">
 								   			<h3 class="content-box-title font-serif" th:text="|[${d.caregory}]${d.dgnNo}|"></h3>
 								   			<h3 class="content-box-title font-serif" th:text="|디자이너 : ${d.userId}|"></h3>
-								   			<h3 class="content-box-title font-serif" th:text="|제목: ${d.name}|"></h3>
+								   			<h3 th:id="${d.userId}" class="content-box-title font-serif" th:text="|제목: ${d.name}|"></h3>
 							        <div class="btn btn-round btn-b">
-							        	  <a href="#" class="btn btn-round btn-b">
 							              <span th:id="${d.dgnNo}" class="icon-magnifying-glass" >상세보기</span>
-							              </a>
 						             </div>
 								</div>
 							</div>
@@ -338,12 +336,14 @@
 	//디자인 공개여부 모달창---------------------------------------------------------------
 	 $('#designBox').on("click", "span" ,function(e){
 		let dNo = e.target.id
+		let userId = e.target.parentElement.previousSibling.previousSibling.id
+		console.log(userId);
 		designModel.style.display = "block";
 		
 		$.ajax({
 			url: '/design/ajaxSelect',
 			method: 'post',
-			data: {dgnNo:dNo},
+			data: {dgnNo:dNo, userId:userId},
 			beforeSend: function (xhr) {
 				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 				xhr.setRequestHeader(header, token);
@@ -375,10 +375,10 @@
 			
 			
 			let content = ` <div class="radius">
-							<img class="radius_img" src="/fileView/e0c42fb4-e68c-46ae-bfff-aed02bedb69c_강아지.jpg" style="width: 50px; height: 50px">
+							<img class="radius_img" src="/fileView/${res.mainimg}" style="width: 50px; height: 50px">
 							</div>
 							<h3><small>DESING BY</small> ${user}</h3>
-							<h3><small>우승횟수 2회</small></h3>
+							<h3><small>우승횟수 ${res.cnt}회</small></h3>
 							
 							<hr>
 							${cntn}
@@ -413,7 +413,6 @@
 		$("#designModel").hide();
 	});
 	
-	//수정해야됌 ------------------------------------------------------
 	//공모전 전체하트를 클릭했을 경우 => 나의 좋아요 공모전박스 생성출력.
 	function likeClick(e) {
 		$('input[name=page]').val(1);

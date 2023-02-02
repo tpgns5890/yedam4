@@ -92,20 +92,26 @@ public class DesignController {
 		return "redirect:/design/designMypage";
 	}
 
-	// 디자인응모리스트(마이페이지)
-	@GetMapping("/designMypage")
-	public String designMypage(Model model, DesignVO vo, PagingVO paging) {
+	 // 디자인응모리스트(마이페이지)
+	   @GetMapping("/designMypage")
+	   public String designMypage(Model model, DesignVO vo, PagingVO paging) {
 
-		// 로그인 회원정보
-		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		String sessionId = user.getUserId();
-		vo.setUserId(sessionId);
+	      // 로그인 회원정보
+	      MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+	      String sessionId = user.getUserId();
+	      vo.setUserId(sessionId);
 
-		// 모델담기
-		model.addAttribute("design", service.userDesignList(vo, paging));
-		model.addAttribute("paging", paging);
-		return "content/myPage/myDesignList";
-	}
+	      List<DesignVO>design = service.userDesignList(vo, paging);
+	      if(design.size() == 0){
+	         model.addAttribute("result", "등록한 디자인이 없습니다.");
+	      //등록한 공모전 있는경우
+	      }else {
+	         model.addAttribute("design", design);
+	      }
+	      
+	      model.addAttribute("paging", paging);
+	      return "content/myPage/myDesignList";
+	   }
 
 	// 디자인 수정처리X
 
@@ -119,9 +125,10 @@ public class DesignController {
 	// 1.디자이너 : 응모관리 -> 디자인조회
 	@GetMapping("/select")
 	public String userDesignSelect(Model model, String dgnNo) {
-
+		DesignVO design = new DesignVO();
+		design.setDgnNo(dgnNo);
 		// 디자인 1건조회
-		DesignVO design = service.getDesign(dgnNo);
+		design = service.getDesign(design);
 		List<FilesVO> files = new ArrayList<>();
 
 		// 1건에 대한 파일리스트 받고 디자인vo 세팅 후 모델담기.
@@ -135,9 +142,9 @@ public class DesignController {
 	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회
 	@PostMapping("/ajaxSelect")
 	@ResponseBody
-	public DesignVO designSelect(String dgnNo) {
+	public DesignVO designSelect(DesignVO vo) {		
 		// 디자인 1건조회
-		DesignVO design = service.getDesign(dgnNo);
+		DesignVO design = service.getDesign(vo);
 		List<FilesVO> files = new ArrayList<>();
 
 		// 1건에 대한 파일리스트 받고

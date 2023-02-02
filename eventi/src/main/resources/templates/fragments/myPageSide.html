@@ -43,23 +43,11 @@
 						</ul>
 					</ul>
 					<ul class="big_menu">
-						<li>물품관리<i class="arrow fas fa-angle-right"></i></li>
-						<ul class="small_menu">
-							<li><a href="/rent/rentGdInsert">물품등록</a></li>
-							<li><a href="/rent/rentGdList">물품리스트</a></li>
-						</ul>
-					</ul>
-					<ul class="big_menu">
 						<li>의뢰내역<i class="arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
 								<li><a th:href="|/casting/mcCastingList?userId=${session.member.userId}|">사회요청내역</a></li>
 								<li><a th:href="|/casting/mcCastingList?clientId=${session.member.userId}|">의뢰내역</a></li>
 				
-						</ul>
-					</ul>
-					<ul class="big_menu">
-						<li>메뉴정보<i class="arrow fas fa-angle-right"></i></li>
-						<ul class="small_menu">
 						</ul>
 					</ul>
 					<ul class="big_menu">
@@ -85,8 +73,8 @@
 						<li>사회자포트폴리오<i class="arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
 							<li><a href="/prtfl/mcInsert">사회자포트폴리오 등록</a></li>
-							<li><a href="#">사회자포트폴리오</a></li>
-							<li><a href="#">사회자 동영상</a></li>
+							<li><a th:href="|/prtfl/mcSelect?userId=${session.member.userId}|">사회자포트폴리오</a></li>
+							<li><a th:href="|/move/moveList?userId=${session.member.userId}|">동영상모음</a></li>
 						</ul>
 					</ul>
 					<ul class="big_menu">
@@ -95,7 +83,6 @@
 							<li><a href="/prtfl/dgnerInsert">디자이너포트폴리오 등록</a></li>
 							<li><a th:href="|/prtfl/dgnerSelect?userId=${session.member.userId}|">디자이너포트폴리오</a></li>
 							<li><a href="/design/myDesignInsert">디자인 등록</a></li>
-			
 						</ul>
 					</ul>
 					<ul class="big_menu">
@@ -103,11 +90,10 @@
 						<ul class="small_menu">
 								<li><a href="/prtfl/busiInsert">업체포트폴리오 등록</a></li>
 								<li><a th:href="|/prtfl/busiSelect?userId=${session.member.userId}|">업체포트폴리오</a></li>
+								<li><a href="/rent/rentGdList">물품리스트</a></li>
 								<li><a href="/eventImg/eventImgList">행사사진 리스트</a></li>
 						</ul>
-					</ul>
-					
-					
+					</ul>			
 				</div>
 			</div>
 		</div>
@@ -130,7 +116,6 @@
 			 console.log($('h2').text());
 			$('#mypage_h2').empty();
 			$('#mypage_h2').html($('h2').text());
-			
 		}
 	</script>
 </div>

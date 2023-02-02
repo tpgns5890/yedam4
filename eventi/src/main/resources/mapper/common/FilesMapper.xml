@@ -3,6 +3,12 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.files.mapper.FilesMapper">
+	
+	<sql id="fNo">
+		<if test="fNo != null and fNo != ''">
+			AND F_NO = #{fNo}
+		</if>
+	</sql>
 
 	<insert id="insertFile">
 		insert into
@@ -23,7 +29,7 @@
 		from files
 		where
 		target_id = #{targetId}
-		and f_no = #{fNo}
+		<include refid="fNo" />
 	</select>
 
 	<delete id="deleteFile">

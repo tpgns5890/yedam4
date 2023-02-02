@@ -58,23 +58,19 @@ public class McPrtlController {
 				mc.setUserLike(1);
 			}
 		}
-		
-		System.out.println("======" + mcList);
-
 		model.addAttribute("mcList", mcList);
 		return "content/prtfl/mcList";
 	}
 	
 	//사회자 단건 조회
 	@GetMapping("/mcSelect")
-	public String mcSelect(Model model, McPrtflVO mcPrtflVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO) {
+	public String mcSelect(Model model, McPrtflVO mcPrtflVO, FilesVO filesVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
 		model.addAttribute("mcSelect", mcPrtflService.mcSelect(mcPrtflVO));
-		//사진 및 동영상
-		List<FilesVO> files = new ArrayList<>();
-		files = filesService.fileList(mcPrtflVO.getUserId());
-		model.addAttribute("files", files);
+		//사진가져오기
+		filesVO.setTargetId(mcPrtflVO.getUserId());
+		model.addAttribute("file", filesService.getfile(filesVO));
 		
 		//좋아요 눌렀는지 확인
 		likesVO.setUserId(user.getUserId());
@@ -119,13 +115,12 @@ public class McPrtlController {
 	@PostMapping("/mcInsert")
 	public String mcInsertFrm(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		mcPrtflService.mcInsert(mcPrtflVO, filesVO, uploadFile);
-		String userId = mcPrtflVO.getUserId();
-		return "redirect:/prtfl/mcList";
+		return "redirect:/prtfl/mcSelect?userId=" + mcPrtflVO.getUserId();
 	}
 	
 	//사회자수정폼으로 이동
 	@GetMapping("/mcUpdate")
-	public String mcUpdate(Model model, McPrtflVO mcPrtflVo) {
+	public String mcUpdate(Model model, McPrtflVO mcPrtflVo, FilesVO filesVO) {
 		//option 코드 가져오기
 		model.addAttribute("areas", codeService.getCountry());
 		model.addAttribute("types", codeService.getType());
@@ -133,10 +128,9 @@ public class McPrtlController {
 		
 		//사회자 정보 가져오기
 		model.addAttribute("mcSelect", mcPrtflService.mcSelect(mcPrtflVo));
-		//사진 및 동영상
-		List<FilesVO> files = new ArrayList<>();
-		files = filesService.fileList(mcPrtflVo.getUserId());
-		model.addAttribute("files", files);
+		//사진가져오기
+		filesVO.setTargetId(mcPrtflVo.getUserId());
+		model.addAttribute("file", filesService.getfile(filesVO));		
 		
 		return "content/prtfl/mcUpdate";
 	}
@@ -144,8 +138,6 @@ public class McPrtlController {
 	//사회자 정보 수정
 	@PostMapping("/mcUpdate")
 	public String mcUpdateFrm(McPrtflVO mcPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {
-		System.out.println("mc++++++" + mcPrtflVO);
-		System.out.println("FILE++++++" + uploadFile);
 		mcPrtflService.mcUpdate(mcPrtflVO, filesVO, uploadFile);
 		return "redirect:/prtfl/mcSelect?userId=" + mcPrtflVO.getUserId();
 	}
