@@ -58,7 +58,7 @@
 			             FROM CONTEST
 			             WHERE SAVE = 'N'
 						 <include refid="category" />
-			             <![CDATA[ AND rprt < 5 ]]>
+			             <![CDATA[ AND rprt < 1 ]]>
 						 <choose>
 			                <when test="ing == 'history'"> 
 			                     <![CDATA[ AND NVL2(dt_extns,dt_extns,dt_cls) < sysdate ]]>
@@ -126,7 +126,7 @@
 		FROM CONTEST
 		WHERE SAVE = 'N'
 		<include refid="category" />
-		<![CDATA[ AND rprt < 5 ]]>
+		<![CDATA[ AND rprt < 1 ]]>
 		 <choose>
               <when test="ing == 'history'"> 
                    <![CDATA[ AND NVL2(dt_extns,dt_extns,dt_cls) < sysdate ]]>

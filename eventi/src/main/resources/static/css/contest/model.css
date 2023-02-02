@@ -30,6 +30,8 @@
 	font-size: 28px;
 	font-weight: bold;
 	text-align: right;
+	position: sticky;
+	top: 0;
 }
 
 .close:hover, .close:focus {

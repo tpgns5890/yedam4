@@ -17,14 +17,7 @@
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
 			<div class="contest" >
-			 	<!-- 문의내역이 없을경우 -->
-			 	<div th:if="${#lists.isEmpty(qnaList)}">
-					<h3>문의내역이 없습니다.</h3>
-				</div>	
 			 	
-			 	<!-- 문의내역이 있을경우 -->
-			 	<div th:if="${!#lists.isEmpty(qnaList)}">
-				
 				<!-- 게시글 검색 -->
 				<form id="searchFrm" name="searchFrm">
 					<label>제목</label><input type="text" id="Ttl" name="Ttl" value="">
@@ -33,40 +26,39 @@
 					<button type="submit" class="btn btn-g btn-round inputBtn">검색</button>
 				</form>
 				
-					<!-- 테이블 -->
-						<table id="table">
-							<thead>
-								<tr>
-									<th style=" width: 100px;">문의No</th>
-									<th style=" width: 100px;">게시글No</th>
-									<th >문의사항제목</th>
-									<th >작성일자</th>
-									<th>답변유무</th>
-									<th style=" width: 80px;">조회</th>
-								</tr>
-							</thead>
-							<tbody>
-								<!-- 답변이아닌 문의내용만 출력할것.. -->
-								<tr th:each="q : ${qnaList}" >
-									<td th:text=${q.qNo}></td>
-									<td th:text=${q.targetId}></td>
-									<td th:text=${q.ttl}></td>
-									<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
-									<td th:text=${q.ans}></td>
-									<td><button type="button" class="select btn btn-g btn-round">조회</button></td>
-								</tr>
-							</tbody>
-						</table>
-				
-					<!-- 페이징처리  -->
-					<div class="row mt-5">
-						<div class="col text-center">
-							<div class="block-27">
-								<th:block
-									th:replace="fragments/paging :: component(${paging},'gopage')">
-							</div>
-						</div>
+				<!-- 테이블 -->
+				<table id="table">
+					<thead>
+						<tr>
+							<th style=" width: 100px;">문의No</th>
+							<th style=" width: 100px;">게시글No</th>
+							<th >문의사항제목</th>
+							<th >작성일자</th>
+							<th>답변유무</th>
+							<th style=" width: 80px;">조회</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- 답변이아닌 문의내용만 출력할것.. -->
+						<tr th:each="q : ${qnaList}" >
+							<td th:text=${q.qNo}></td>
+							<td th:text=${q.targetId}></td>
+							<td th:text=${q.ttl}></td>
+							<td th:text="|${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
+							<td th:text=${q.ans}></td>
+							<td><button type="button" class="select btn btn-g btn-round">조회</button></td>
+						</tr>
+					</tbody>
+				</table>
+		
+			<!-- 페이징처리  -->
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
 					</div>
+				</div>
 			</div>
 			
 		<!--문의내역 상세보기 -->
@@ -83,10 +75,19 @@
 			
 		</div>
 		<script>
+		//데이터 없을시 마이페이지 첫화면으로 이동
+		 $(document).ready(function () {
+			  let result = '[[${result}]]';
+		      console.log(result)
+			if (result != '') {
+				alert(result);
+				location.href='/myPage/userMypage'; 
+			}
+		})
+
 		//csrf 설정
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-
 		
 		//페이징 
 		function gopage(i) {

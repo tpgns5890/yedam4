@@ -95,7 +95,7 @@ button {
 <!-- Button trigger modal -->
  	<!-- 비회원 로그인창 띄우기-->		
 <th:block sec:authorize="!isAuthenticated()">			
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop" onclick="login()">제안서 작성</button>
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop" th:onclick="|location.href='@{/loginPage}'|">제안서 작성</button>
  	</th:block>
  	<!-- 로그인된 회원 버튼표시-->	
 <th:block sec:authorize="isAuthenticated()">			

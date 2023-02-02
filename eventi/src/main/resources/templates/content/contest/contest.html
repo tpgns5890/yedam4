@@ -53,7 +53,7 @@
 						
 						<!-- 신고수 및 버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<span onclick="login()" style='font-size: 20px;'>&#128680;</span>
+							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px;'>&#128680;</span>
 							<span th:text=${contest.rprt}></span>
 						</th:block>
 						
@@ -79,7 +79,7 @@
 				
 						<!-- 비회원 하트버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-								<div id="love" class="stage heart" onclick="login()" style="position:relative; top:-70px; right: -65px;">
+								<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position:relative; top:-70px; right: -65px;">
 								</div>
 						</th:block>
 	
@@ -124,7 +124,7 @@
 						<th:block sec:authorize="!isAuthenticated()">
 							<div class="contestBtn">
 								<button type="button" onclick="clip(); return false;" class="w-btn w-btn-gra1">링크복사</button>
-								<button type="button" onclick="login()" class="w-btn w-btn-gra1" >응모하기</button>
+								<button type="button" th:onclick="|location.href='@{/loginPage}'|" class="w-btn w-btn-gra1" >응모하기</button>
 							</div>
 						</th:block>
 
@@ -601,7 +601,7 @@
  			$.ajax({
  	   			url : '/questions/delete',
  	   			method : 'post',
- 	   			data : {qNo,userId},
+ 	   			data : {qNo},
  	   			beforeSend : function(xhr)
  	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
  					xhr.setRequestHeader(header, token);

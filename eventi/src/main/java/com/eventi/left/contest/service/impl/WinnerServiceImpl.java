@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 import com.eventi.left.contest.mapper.WinnerMapper;
 import com.eventi.left.contest.service.WinnerService;
 import com.eventi.left.contest.service.WinnerVO;
+import com.eventi.left.design.mapper.DesignMapper;
 
 @Service
 public class WinnerServiceImpl implements WinnerService {
 
 	@Autowired
 	WinnerMapper mapper;
+	@Autowired
+	DesignMapper dMapper;
 
 	@Override
 	public List<WinnerVO> winnerList(String cNo) {
@@ -45,6 +48,7 @@ public class WinnerServiceImpl implements WinnerService {
 			winners.get(i).setGrade(i + 1);
 			winners.get(i).setUserId(userIdArr[i]);
 			r += mapper.updateWinner(winners.get(i));
+			//dMapper.winnerCheck(dgnNo[i]); //우승정보 디자인테이블에 insert
 		}
 		return r;
 	}
