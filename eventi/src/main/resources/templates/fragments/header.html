@@ -61,7 +61,7 @@
               sec:authorize='!isAuthenticated()' style="margin-top:11px;">회원가입</button>
           </li>
           <li>
-            <button class="btn btn-border-w btn-round btn-xs" sec:authorize='!isAuthenticated()' id="loginBtn"
+            <button class="btn btn-border-w btn-round btn-xs" sec:authorize='!isAuthenticated()' th:onclick="|location.href='@{/loginPage}'|"
               style="margin-top:11px;margin-left:3px;">로그인</button>
           </li>
           <li>
@@ -74,30 +74,6 @@
       </div>
     </div>
   </nav>
-  <div id="header_modal">
-    <div class="header_modal_content">
-      <button id="header_modal_close_btn" type="button">X</button>
-      <form class="form" action="/login" method="post">
-        <h4 class="font-alt">Login</h4>
-        <hr class="divider-w mb-10">
-        <input type="text" class="form-control" name="userid" placeholder="Username">
-        <br>
-        <input type="password" class="form-control" name="password" placeholder="Password">
-        <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
-        <p>
-          <input type="checkbox" name="remember-me"> 자동로그인
-        </p>
-        <div style="float:right;">
-          <input style="width:100%;" class="btn btn-round btn-b" name="submit" type="submit" value="로그인">
-          <br>
-          <a th:href="@{findIdPage}">아이디 찾기</a>
-          <span>|</span>
-          <a th:href="@{findPwPage}">비밀번호 찾기</a>
-        </div>
-      </form>
-    </div>
-    <div class="header_modal_layer"></div>
-  </div>
   
   <!-- 화면 하단 채팅 버튼 -->
 	<div class="chat">
@@ -234,16 +210,6 @@
 	//csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
-  
-  
-    $("#loginBtn").on('click', function () {
-      $("#header_modal").show();
-    })
-
-    /*모달 창 닫기*/
-    $("#header_modal_close_btn").on('click', function () {
-      $("#header_modal").hide();
-    });
     
     //채팅방
     let cId = '';

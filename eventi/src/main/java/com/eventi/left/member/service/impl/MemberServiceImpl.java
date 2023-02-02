@@ -12,7 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -116,8 +116,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	
 	// userdetails
 	@Override
-	public UserDetails loadUserByUsername(String username) throws AuthenticationException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, LockedException {
 		MemberVO vo = mapper.getMember(username);
+		System.out.println(vo);
 		if (vo == null) {
 			throw new UsernameNotFoundException("x");
 		}

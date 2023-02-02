@@ -75,7 +75,8 @@
 				DEPOTR,
 				code_select(BANK) BANK,
 				ACCNT,
-				USER_REGDATE 
+				USER_REGDATE,
+				LOCKED				
 		FROM MEMBERS 
 		WHERE USER_ID = #{userId}
 	</select>
