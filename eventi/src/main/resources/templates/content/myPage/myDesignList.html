@@ -20,9 +20,9 @@
 			
 		<div class="designDiv" >
 		<!-- 리스트 값이 없을경우 -->
-		<div th:if="${#lists.isEmpty(design)}">
+		<th:block th:if="${#lists.isEmpty(design)}">
 			<h3>응모한 디자인이 없습니다.</h3>
-		</div>	
+		</th:block>	
 			
 		<!-- 게시글 검색 -->
 			<form name="designSearchFrm" style="margin-left: 260px;">
@@ -83,6 +83,15 @@
 		<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		/* //데이터 없을시 마이페이지 첫화면으로 이동
+		 $(document).ready(function () {
+			  let result = '[[${result}]]';
+			if (result != '') {
+				alert(result);
+				location.href='/myPage/userMypage'; 
+			}
+		}) */
 		
 		//페이지이동 및 검색
 		//페이징개수 변환 myContest 동적쿼리

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
@@ -219,7 +220,15 @@ public class ContestController {
 	// 나의 공모전게시글관리
 	@GetMapping("/mySelect")
 	public String mySelect(Model model, ContestVO vo, @ModelAttribute("paging") PagingVO paging) {
-		model.addAttribute("contestList", service.myContestList(vo, paging));
+
+		List<ContestVO>list = service.myContestList(vo, paging);
+		//등록한 공모전 없는경우
+		if(list.size() == 0) {
+			model.addAttribute("result","등록한 공모전이 없습니다."); 
+		//등록한 공모전 있는경우
+		}else {
+			model.addAttribute("contestList", list);
+		}
 		return "content/myPage/myCotestList";
 	}
 
@@ -256,7 +265,13 @@ public class ContestController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setUserId(user.getUserId());
 		vo.setCategory("T01");
-		model.addAttribute("qnaList", qService.myQuestionsList(vo, paging));
+		
+		List<QuestionsVO>list = qService.myQuestionsList(vo, paging);
+		if( list.size() == 0) {
+			model.addAttribute("result", "문의내역이 없습니다");
+		}else {
+			model.addAttribute("qnaList", list);
+		}
 		model.addAttribute("paging", paging);
 		return "content/myPage/myQnaList";
 	}

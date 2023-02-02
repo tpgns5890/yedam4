@@ -402,7 +402,7 @@ h2 {
  
  <!-- 비회원 로그인창 띄우기 -->
  <th:block sec:authorize="!isAuthenticated()">			
- <input type="button" value="견적서 보내기" class="submit" onclick="login()">
+ <input type="button" value="견적서 보내기" class="submit" th:onclick="|location.href='@{/loginPage}'|">
  </th:block>
 <!-- 로그인 회원 버튼표시 -->
 <th:block sec:authorize="isAuthenticated()">

@@ -160,7 +160,7 @@
 		<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-25px; right:10px; width: 100px;">
 			<!-- 비회원 좋아요버튼-->
 			<th:block sec:authorize="!isAuthenticated()">
-					<div id="love" class="stage heart" onclick="login()"></div>
+					<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
 			</th:block>
 			
 			<!-- 회원 좋아요버튼-->

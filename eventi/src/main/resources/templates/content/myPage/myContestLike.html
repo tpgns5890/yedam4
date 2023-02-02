@@ -65,7 +65,8 @@
 				
 				//관심 공모전이 없을경우
 				if(res.contest == ''){
-					$('#boxList').append($('<p>').append("관심 공모전 없습니다."));
+					alert("관심 공모전 없습니다.");
+					location.href='/myPage/userMypage';
 				}
 				for (contest of res.contest) {
 					$('#boxList').append(makeBox_map(contest));
