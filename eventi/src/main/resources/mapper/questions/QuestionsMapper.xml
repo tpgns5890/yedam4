@@ -19,10 +19,10 @@
 	<!-- 검색처리 -->
    <sql id="search">
       <if test="ttl != null and ttl != ''">
-         and ttl LIKE '%'||#{ttl}||'%' 
+         	and ${search} LIKE '%'||#{ttl}||'%' 
       </if>
       <if test="cntn != null and cntn != ''">
-         and cntn LIKE '%'||#{cntn}||'%' 
+            and ${search} LIKE '%'||#{cntn}||'%' 
       </if>
    </sql>
 
@@ -42,7 +42,7 @@
 				FROM Questions Q
 				WHERE target_id = #{targetId}
 				AND category = #{category}
-				ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+				ORDER BY TO_NUMBER(SUBSTR(GP,3))DESC , REREP_TGT DESC, WRITING_DT DESC
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
@@ -63,7 +63,7 @@
 				and rerep_tgt is null
 				and USER_ID = #{userId}
 				<include refid="search" />
-				ORDER BY GP DESC , REREP_TGT DESC, WRITING_DT DESC
+				ORDER BY TO_NUMBER(SUBSTR(GP,3))DESC , REREP_TGT DESC, WRITING_DT DESC
 		 <![CDATA[
 			        ) A 
 			    WHERE ROWNUM <= #{last}

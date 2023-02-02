@@ -14,11 +14,12 @@
 	<!-- 검색처리 -->
 	<sql id="search">
 		<if test="ttl != null and ttl != ''">
-			and ttl LIKE '%'||#{ttl}||'%' 
+			and ${search} LIKE '%'||#{ttl}||'%' 
 		</if>
 		<if test="cntn != null and cntn != ''">
-			and cntn LIKE '%'||#{cntn}||'%' 
+			and ${search} LIKE '%'||#{cntn}||'%' 
 		</if>
+		
 	</sql>
 	
 	<!-- 로그인했을경우, 좋아요 체크확인 -->

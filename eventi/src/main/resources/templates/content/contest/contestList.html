@@ -39,6 +39,7 @@ label {
 	}
 .module-small {
     padding: 20px 0;
+    z-index: 1 ;
 }
 .col-sm-3 {
     width: 40%;
@@ -71,7 +72,7 @@ label {
           <div class="container">
           
           	   <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right:-1200px; width: 100px;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right:-1200px; width: 100px;  z-index: 1 ;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
@@ -86,7 +87,7 @@ label {
           	<div id="cotestHeader">
 	              <!-- 공모전 정렬기준 -->
 	              <div class="col-sm-3 mb-sm-20" id="order_check">
-	                <select id="order" name="order" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
+	                <select id="order" name="order" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px; cursor: pointer;">
 						<option value="inq DESC" selected="selected">조회수</option>
 						<option value="likes DESC">좋아요순</option>
 						<option value="pay DESC">금액순</option>
@@ -97,7 +98,7 @@ label {
 	              
 	              
 	              	<!-- 분류별 기준 뽑아오기 -->
-	              	 <div id="catrgory_check" >
+	              	 <div id="catrgory_check">
 	                		<input type="checkbox" name="category" value="D1" onclick="doOpenCheck(this);"><label>현수막</label>
 							<input type="checkbox" name="category" value="D2" onclick="doOpenCheck(this);"><label>배너</label>
 							<input type="checkbox" name="category" value="D3" onclick="doOpenCheck(this);"><label>로고</label>
@@ -119,8 +120,8 @@ label {
 					</th:block>
 					
 					<!-- 마감된 공모전 조회 -->
-					<button type="button" id="history" class="w-btn w-btn-gra1 w-btn-gra-anim   status" >마감 공모전</button>
-					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none;">진행중 공모전</button>
+					<button type="button" id="history" class="w-btn w-btn-gra1 w-btn-gra-anim   status" >마감공모전 조회</button>
+					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none;">진행공모전 조회</button>
 	              </div>
 	           </div>
 	         </div>
@@ -505,13 +506,16 @@ label {
 							//map =>  contest,paging 
 							console.log(res);
 							
-							$('#boxList').empty();
-							$('#cotestHeader').hide();
-							
 							//관심 공모전이 없을경우
 							if(res.contest == ''){
-								$('#boxList').append($('<p>').append("관심 공모전 없습니다."));
+								alert('관심공모전이 없습니다.')
+								$("#love").toggleClass("active");//css 변경
+								checkSelect();
+								return false;
 							}
+							
+							$('#boxList').empty();
+							$('#cotestHeader').hide();
 							for (contest of res.contest) {
 								$('#boxList').append(makeBox_map(contest));
 							}

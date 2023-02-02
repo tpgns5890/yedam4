@@ -21,10 +21,13 @@
 
 		<div class="contest" >
 
-		<!-- 게시글 검색 -->
+			<!-- 게시글 검색 -->
 			<form name="searchFrm" id="search">
-				<label>제목</label><input type="text" name="ttl" value="">
-				<label>내용</label><input type="text" name="cntn" value="">
+			 	<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
+					<option value="ttl" selected="selected">제목</option>
+					<option value="cntn">내용</option>
+                </select>
+                <input type="text" name="ttl" id="input" value="">
 				<input type="hidden" name="page" value="1">
 				<button type="submit" id="searchBtn" class="btn btn-g btn-round inputBtn">검색</button>
 				<button type="button" id="deleteBtn"  class="btn btn-d btn-round delBtn">삭제</button>
@@ -198,15 +201,18 @@
 			}
 		})
 
+		//검색선택
+		//기본 ttl, 변경시 적용.
+		$('select[name="search"]').on("change", function () {
+		    $('#input').attr("name",$(this).val());
+		   
+		})
 		
 		//페이지이동 및 검색---------------------------------------------
 		//페이징개수 변환 myContest 동적쿼리
 		function gopage(i) {
-			//내용초기화
-			$('input[name="ttl"]').val('');
-			$('input[name="cntn"]').val('');
-			searchFrm.page.value = i;
-			searchFrm.submit();
+			$('input[name="page"]').val(i);
+			$("#search").submit();   
 		 }
 
 		// tr 전체체크시 모든항목 체크되도록 -----------------------------------

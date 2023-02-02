@@ -17,7 +17,7 @@ public class QuestionsVO {
 	private String targetId;	//대상자ID or 게시글유형
 	private String Ttl;		//문의제목
 	private String Cntn;		//문의내용
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd  hh:mm")
 	private Date writingDt;		//작성일자
 	private String secretYn = "N";	//비밀글 유무
 	private String category;	//대상구분
@@ -35,5 +35,8 @@ public class QuestionsVO {
 	//페이징 
 	Integer first =1; //첫 페이지
 	Integer last = 4; //마지막 페이지
+	
+	//검색
+	private String search;
 	
 }

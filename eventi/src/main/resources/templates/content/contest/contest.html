@@ -51,15 +51,16 @@
 								<h4 th:text="|#${contest.style}|" style="color: #117bd9"></h4>
 						</th:block>
 						
+					<div>
 						<!-- 신고수 및 버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px;'>&#128680;</span>
+							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
 							<span th:text=${contest.rprt}></span>
 						</th:block>
 						
 						<th:block sec:authorize="isAuthenticated()">
 								<th:block th:if="|${session.member.getUserId()}| != ${contest.writer} ">
-									<span id="modalUp" style='font-size: 20px;'>&#128680;</span>
+									<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
 								</th:block>
 								<th:block th:if="|${session.member.getUserId()}| == ${contest.writer} ">
 									<span style='font-size: 20px;'>&#128680;</span>
@@ -98,7 +99,7 @@
 								</div>
 							</th:block>
 						</th:block>
-						
+					</div>
 						<!-- 마감연장일 있는경우 -->
 						<th:block th:if="${contest.dtExtns} != null">
 							<div><p th:text="|공모기간: ${#dates.format(contest.dtReg, 'yy/MM/dd')} ~ ${#dates.format(contest.dtExtns, 'yy/MM/dd')}|"></p></div>
@@ -137,11 +138,11 @@
 							</div>
 
 							<!-- 공모전 작성자만 -->
-							<th:block class="contestBtn" th:if="|${session.member.getUserId()}| == ${contest.writer} or |${session.member.getUserId()}| eq 'admin' " >
+							<div class="contestBtn" th:if="|${session.member.getUserId()}| == ${contest.writer} or |${session.member.getUserId()}| eq 'admin' " >
 									<button id="updateDate" type="button" class="w-btn w-btn-gra1">마감연장</button>
 									<button id="contestUpdate" type="button" class="w-btn w-btn-gra1">수정</button>
 									<button id="delBtn" type="button" class="w-btn w-btn-gra1">삭제</button>
-							</th:block>
+							</div>
 						</th:block>
 					</div>
 				</div>
@@ -454,8 +455,8 @@
 				p =`<ul class="children" style="list-style: none">
 						<li class="comment">
 						<div class="comment-body" id="${question.qNo}">
-							<h3>${question.userId} : ${question.ttl}</h3>
-				            <div class="meta">${question.writingDt}</div>
+							<h3>${question.ttl}</h3>
+							<div>${question.userId} | ${question.writingDt}</div>
 				            <p>${question.cntn}</p>
 				            ${delBtn} ${upBtn}
 				            ${repInsert}
@@ -486,7 +487,7 @@
 	   				p = `<ul class="children" style="list-style: none">
 			                <li class="comment" >
 				                <div class="comment-body" id="${questionRep.qNo}">
-				                <div class="meta">작성일:${questionRep.writingDt} </div>
+				                <div class="meta"> ${questionRep.writingDt} </div>
 				                  <p>비공개 답변</p>
 				                  ${delBtn} ${upBtn}
 				                </div>
@@ -497,8 +498,7 @@
 					p = `<ul class="children" style="list-style: none">
 		                <li class="comment" >
 			                <div class="comment-body" id="${questionRep.qNo}">
-			                <h3>${questionRep.userId}</h3>
-			                <div class="meta">작성일:${questionRep.writingDt} </div>
+			                <div>ID : ${questionRep.userId} | ${questionRep.writingDt} </div>
 			                  <p>${questionRep.cntn}</p>
 			                  ${delBtn} ${upBtn}
 			                </div>
@@ -532,8 +532,9 @@
 					$("#cotestCntn").append(questionBox());
 				}
 				//리턴값 문의사항이 없으면 출력
-				if(res.questions == 0){
-					$("#cotestCntn").append($('<p>').append("문의사항이 없습니다."))
+				if(res.questions == 0 && userId == writer){
+					alert('문의사항이 없습니다.');
+					location.href='/contest/select?cNo='+cNo;
 				}
 				//문의사항이 있다면
 				for(data of res.questions){
@@ -738,8 +739,8 @@
 				$("#designBox").empty();
 				
 				if(res.design == 0){
-					let p = '참여작이 없습니다.'
-					$("#cotestCntn").append(p); 
+					alert('참여작이 없습니다.');
+					location.href='/contest/select?cNo='+cNo;
 				}
 				for(design of res.design){
 					
