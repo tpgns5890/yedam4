@@ -19,7 +19,7 @@
 			<div class="contest" >
 			 	
 				<!-- 게시글 검색 -->
-				<form id="searchFrm" name="searchFrm">
+				<form id="search" name="searchFrm">
 					<label>제목</label><input type="text" id="Ttl" name="Ttl" value="">
 					<label>내용</label><input type="text" id="Cntn" name="Cntn" value="">
 					<input type="hidden" name="page" value="1">
@@ -94,7 +94,7 @@
 			$('input[name="Ttl"]').val('');
 			$('input[name="Cntn"]').val('');
 			$("input[name='page']").val(i);
-			$("#searchFrm").submit();   
+			$("#search").submit();   
 		}
 		
 		//모달창-----------------------------------------------------------

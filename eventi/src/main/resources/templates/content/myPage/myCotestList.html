@@ -22,7 +22,7 @@
 		<div class="contest" >
 
 		<!-- 게시글 검색 -->
-			<form name="searchFrm">
+			<form name="searchFrm" id="search">
 				<label>제목</label><input type="text" name="ttl" value="">
 				<label>내용</label><input type="text" name="cntn" value="">
 				<input type="hidden" name="page" value="1">
@@ -122,8 +122,7 @@
 			<div class="row mt-5">
 				<div class="col text-center">
 					<div class="block-27">
-						<th:block
-							th:replace="fragments/paging :: component(${paging},'gopage')">
+						<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
 					</div>
 				</div>
 			</div>
@@ -178,7 +177,7 @@
 					
 					<label>후기</label>
 					<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
-					<button type="button" class="cancel" >취소</button>
+					<button type="button" class="cancle" >취소</button>
 					<button type="button" id="review">후기등록</button>
 				</div>
 			<div class="modal_layer"></div>
@@ -261,8 +260,11 @@
 		var winnerModel = document.getElementById("winnerModel");
 	
 			// <span> (x), close the modal
-			$('.close').on("click", function(){
-				winnerModel.style.display = "none";
+			$('.close').on("click", function(e){
+					$('#winnerModel').css('display', 'none');
+			})
+			$('.cancle').on("click", function(e){
+				$('#reviewFrm').css('display', 'none');
 			})
 		
 		//공모전 우승자에 대한 정보출력
@@ -295,7 +297,7 @@
 			
 			//모달창 우승자정보 생성 붙여넣기
 			function makeWinner(data){
-				console.log(data)
+				//console.log(data)
 				$('#coNo').empty();
 				$('#coNo').text("공모전 우승자");
 				let img = null;
@@ -311,7 +313,7 @@
 				let design = ` <div >
 								<img src="/images/${img}.jpg" style="width: 30px; height: 30px;">
 										<span>ID : ${data.userId}</span>
-										<button id="${data.userId}" type="button" onclick="review(this)">후기등록</button>
+										<button type="button" onclick="review('${data.userId}')">후기등록</button>
 							   </div>
 							  `
 					$('#modelSelect').append(design);
@@ -324,14 +326,14 @@
 		   //후기 모달창 띄우기
 		   let userId = '[[${session.member.userId}]]';
 		   let dgnNo;
-		    function review(e) {
-		    	//타겟 값찾기
-// 		    	$(e.target).attr
-				//console.log($(e.target));
+		    function review(data) {
+		    	
+		    	console.log(data);
 			   //모달창에 들어갈 내용 지정
-			   $('#reviewTgt').val()
+			   $('#reviewTgt').val(data)
 			   $('#userId').val(userId);
 			   $("#reviewFrm").show();
+			   $("#winnerModel").hide();
 		   }
 		   
 		   
@@ -360,7 +362,6 @@
 		    				xhr.setRequestHeader(header, token);
 		                },
 						success : function(data) {
-							mcRefund(reviewTgt);
 							alert('후기등록 완료되었습니다.');
 							$("#reviewFrm").hide();
 						},
