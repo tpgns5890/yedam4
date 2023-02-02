@@ -22,7 +22,7 @@ public class BboardVO {
 	@JsonFormat(pattern = "yyyy/MM/dd")
 	private Date dt; //작성일자
 	private String ano = "N"; //익명여부
-	private Integer rprt; //신고건수
+	private int rprt; //신고건수
 	private String type; //게시글유형
 	private String save = "N"; // 저장여부
 	

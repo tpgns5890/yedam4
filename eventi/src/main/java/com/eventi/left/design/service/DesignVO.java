@@ -49,8 +49,9 @@ public class DesignVO {
 	
 	
 	//수정(지은)
-	private Integer cnt; //디자인별 좋아요 개수
+	private Integer cnt;    //디자인별 좋아요 개수
 	private String loginId; //로그인된 아이디
-	private int mylike; //좋아요 구분
+	private int mylike;     //좋아요 구분
 	private String mainimg; //디자이너메인이미지
+	private String order = "dt";   //정렬
 }

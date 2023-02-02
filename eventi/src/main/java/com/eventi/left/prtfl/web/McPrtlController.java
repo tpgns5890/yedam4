@@ -22,6 +22,7 @@ import com.eventi.left.likes.mapper.LikesMapper;
 import com.eventi.left.likes.service.LikesService;
 import com.eventi.left.likes.service.LikesVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.prtfl.service.McMoveVO;
 import com.eventi.left.prtfl.service.McPrtflService;
 import com.eventi.left.prtfl.service.McPrtflVO;
 import com.eventi.left.reply.service.ReplyVO;
@@ -62,9 +63,16 @@ public class McPrtlController {
 		return "content/prtfl/mcList";
 	}
 	
+	//사회자 등록 여부
+	@PostMapping("/checkMc")
+	@ResponseBody
+	public int checkMc(Model model, McPrtflVO mcPrtflVO) {
+		return mcPrtflService.checkMc(mcPrtflVO);
+	}
+	
 	//사회자 단건 조회
 	@GetMapping("/mcSelect")
-	public String mcSelect(Model model, McPrtflVO mcPrtflVO, FilesVO filesVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO) {
+	public String mcSelect(Model model, McPrtflVO mcPrtflVO, FilesVO filesVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO, McMoveVO mcMoveVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
 		model.addAttribute("mcSelect", mcPrtflService.mcSelect(mcPrtflVO));

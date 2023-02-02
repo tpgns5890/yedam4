@@ -42,7 +42,7 @@
    </section>
    
    <!-- 포트폴리오 등록 -->
-   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{mcInsert}'|">포트폴리오 등록하기</button>
+   <button type="button" class="btn btn-primary" th:onclick="checkPrtfl()">나의 포트폴리오</button>
    
    <!-- 정렬순 -->
    <select id="order" name="order">
@@ -99,10 +99,40 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		
+		//페이징 처리
 		function gopage(i) {
 			location.href='/prtfl/mcList?page=' + i;
 		}
 		
+		//나의 포트폴리오 확인
+		function checkPrtfl(){
+			let userId='[[${session.member.userId}]]';
+			$.ajax({
+				url : "/prtfl/checkMc",
+				method : 'post',
+				contentType : 'application/x-www-form-urlencoded',
+				data : {userId:userId},
+				beforeSend : function(xhr)
+                {
+    				xhr.setRequestHeader(header, token);
+                },
+				success : function(data) {
+					if(data<1){
+						if(confirm('등록된 포트폴리오가 없습니다. 등록하시겠습니까?')){
+							location.href='/prtfl/mcInsert';
+						}
+					} else {
+						location.href='/prtfl/mcSelect?userId=[[${session.member.userId}]]';
+						}
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+		}
+		
+		
+		//좋아요 처리
 		 $(".heart").on("click", function() {
 			 $(this).toggleClass("active");
 			 let userId = '[[${session.member.userId}]]';
