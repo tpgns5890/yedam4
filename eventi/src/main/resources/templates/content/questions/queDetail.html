@@ -39,14 +39,7 @@
 					<p th:text=${queDetail[0].category}></p>
 					<p th:text=${queDetail[0].rerepTgt}></p>
 
-				<div class="tag-widget post-tag-container mb-5 mt-5">
-						<div class="tagcloud">
-							<!-- <a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>-->
-						 <a href="#" class="tag-cloud-link" 
-								th:onclick="|location.href='@{delete(qNo=${queDetail[0].qNo})}'|">삭제</a> 
-						</div>
-					</div>
+			<button class="btn btn-g btn-round queDelete" type="button"><i class="fa fa-cog fa-spin"></i>삭제</button>	
 					
 		 <div class="comments"  id=reply th:if="${#lists.size(queDetail)}>1">
                   <h4 class="comment-title font-alt">답변</h4>
@@ -95,6 +88,8 @@
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 
+	
+	
 </script>
 </div>
 </html>
