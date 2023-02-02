@@ -75,15 +75,16 @@
 	<!-- 문의사항 전체조회 -->
 	<select id="qnaList" resultType="QuestionsVO">
 		SELECT B.*,
-		CASE WHEN Q_NO IN (SELECT Q.Q_NO
+				CASE WHEN Q_NO IN (SELECT Q.Q_NO
 							FROM QUESTIONS Q, QUESTIONS A
 							WHERE Q.Q_NO = A.REREP_TGT)  THEN '답변완료'
 														 ELSE '미답변'
 							END AS ANS
-		FROM (SELECT ROWNUM RN, A.*
-				FROM ( SELECT *
-						FROM QUESTIONS QU
-						WHERE USER_ID = #{vo.userId}
+		FROM (SELECT ROWNUM RN, A.* 	FROM ( 
+		            SELECT *
+					FROM QUESTIONS QU
+					WHERE USER_ID = #{vo.userId}
+					AND REREP_TGT IS NULL
 	    <![CDATA[
 			        ) A 
 			    WHERE ROWNUM <= #{paging.last}
@@ -148,11 +149,11 @@
 		WHERE Q_NO = #{qNo}
 		AND USER_ID = #{userId}
 	</update>
-
+	
+	<!-- 게시글 삭제 -->
 	<delete id="questionsDelete">
 		DELETE QUESTIONS
 		WHERE Q_NO = #{qNo}
-		AND USER_ID =#{userId}
 	</delete>
 
 	<!-- 전체 게시글 문의개수 -->

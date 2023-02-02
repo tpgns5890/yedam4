@@ -160,21 +160,21 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">근무시작일</label>
-								<input type="date" name="wSday" id="wSday">
+								<input type="date" class="form-control" name="wSday" id="wSday">
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">근무종료일</label>
-								<input type="date" name="wEday" id="wEday">
+								<input type="date" class="form-control" name="wEday" id="wEday">
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">근무시간</label>
-								<input type="number" name="wHour" id="wHour">
+								<input type="number" class="form-control" name="wHour" id="wHour">
 							</div>
 						</div>
 						
@@ -195,7 +195,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">마감일</label>
-								<input type="date" name="closeDt" id="closeDt">
+								<input type="date" class="form-control" name="closeDt" id="closeDt">
 							</div>
 						</div>
 						
@@ -213,8 +213,7 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="userId">회원ID</label>
-								<input type="text" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>
+								<input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>
 							</div>
 						</div>
 
@@ -302,8 +301,8 @@ $(document).ready(function() {
 			
 		//행사유형: 하나의 값만 넣어야함
 		/* var eTypeList = eTag();
-	    $("eTypeList").val(eTypeList);
-		}) */
+	    $("eTypeList").val(eTypeList);*/
+		}) 
 		
 	    //임시저장 체크박스를 클릭했을 경우
 	    $('#save').click(function(){
@@ -399,7 +398,7 @@ $(document).ready(function() {
 					alert('필수항목을 입력해주세요')
 				}
 	    })
-	    }
+	   }
 	    //스타일태그
 	    function jobStyle(e){
 	    	 let tagText = e.options[e.selectedIndex].text;

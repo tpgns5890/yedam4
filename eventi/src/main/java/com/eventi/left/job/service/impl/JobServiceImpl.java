@@ -1,6 +1,5 @@
 package com.eventi.left.job.service.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class JobServiceImpl implements JobService{
 	@Override
 	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO, PagingVO paging) {
 		paging.setTotalRecord(jobmapper.count(jobBoardVO));
-		paging.setPageUnit(5);
+		paging.setPageUnit(3);
 		jobBoardVO.setFirst(paging.getFirst());
 		jobBoardVO.setLast(paging.getLast());
 		return jobmapper.getJobList(jobBoardVO);

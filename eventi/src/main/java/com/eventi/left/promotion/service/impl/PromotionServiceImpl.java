@@ -51,10 +51,10 @@ public class PromotionServiceImpl implements PromotionService{
 	public int proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		//사진등록
-		int r = proMapper.proInsert(promotionVO, filesVO, uploadFile);
+		int r = proMapper.proInsert(promotionVO);
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadFile, promotionVO.getUserId(), "T02");
+			list = newUp.uploadFiles(uploadFile, promotionVO.getProNo(), "T02");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,7 +69,7 @@ public class PromotionServiceImpl implements PromotionService{
 			promotionVO.setImg(uploadFile[0].getOriginalFilename());
 		}
 		uploadFiles(uploadFile, promotionVO);
-		int r = proMapper.proUpdate(promotionVO, filesVO, uploadFile);
+		int r = proMapper.proUpdate(promotionVO);
 		
 		return r; 
 	}
@@ -78,7 +78,7 @@ public class PromotionServiceImpl implements PromotionService{
 	public void uploadFiles(MultipartFile[] uploadFile, PromotionVO promotionVO) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadFile, promotionVO.getUserId(), "T02");
+			list = newUp.uploadFiles(uploadFile, promotionVO.getProNo(), "T02");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -47,8 +47,8 @@ public class JobBoardController {
 	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
 		
 		List<JobBoardVO> imgs = jobService.getJobList(jobBoardVO, paging);
-		model.addAttribute("jobList", imgs);
 		model.addAttribute("paging", paging);
+		model.addAttribute("jobList", imgs);
 		
 		//사진파일
 		List<FilesVO> files = new ArrayList<>();

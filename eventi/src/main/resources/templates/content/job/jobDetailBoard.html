@@ -136,10 +136,18 @@
               <div class="col-sm-6 col-md-3 col-lg-3">
                 <div class="count-item mb-sm-40">
                   <div class="count-icon"><span class="icon-calendar"></span></div>
+                  
+                   <th:block th:if="${job.remain > 0}">
                   <h3 class="count-to font-alt" th:data-countto="${job.remain}" th:text="|${job.remain} 일전|"></h3>
+                  </th:block>
+                  <th:block th:unless="${job.remain > 0} ">
+					<h3 style="color:red" th:text="마감"></h3>
+				</th:block>
+                  
                   <h5 class="count-title font-serif">마감일</h5>
                 </div>
               </div>
+              
               <div class="col-sm-6 col-md-3 col-lg-3">
                 <div class="count-item mb-sm-40">
                   <div class="count-icon"><span class="icon-heart"></span></div>
@@ -152,36 +160,56 @@
 
 	<table class="table mb-3" >
 	<thead class="thead-dark">
-         <tr>   
-            <th>구인게시글번호</th>
-            	<th>제목</th>
-				<th>내용</th>
-				<th>위치</th>
-				<th>행사유형</th>
-				<th>근무시작일</th>
-				<th>근무종료일</th>
-				<th>근무시간</th>
-				<th>자격</th>
-				<th>우대사항</th>
-				<th>이미지</th>
-				<th>회원ID</th>
-				<th>작성날짜</th>  
-         </tr>
+      
       </thead>
       <tbody>
          <tr>
-         		<td th:text=${job.title}></td>
+             <th>제목</th>
+         	 <td th:text=${job.title}></td>
+         </tr>
+         <tr>
+         	<th>번호</th>		
 				<td id="jobNo" th:text=${job.jobNo}></td>
-				<td th:text=${job.jobCntn}></td>
-				<td th:text=${job.loc}></td>
-				<td th:text=${job.eType}></td>
-				<td th:text="${#dates.format(job.wSday, 'yyyy-MM-dd')}">
-				<td th:text="${#dates.format(job.wEday, 'yyyy-MM-dd')}">
-				<td th:text=${job.wHour}></td>
-				<td th:text=${job.qualification}></td>
-				<td th:text=${job.preference}></td>
-				<td th:text=${job.img}></td>
-				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
+		 </tr>
+         <tr>
+        	 <th>내용</th>		
+				<td th:utext=${job.jobCntn}></td>
+		</tr>
+         <tr>
+         	<th>위치</th>		
+			<td th:text=${job.loc}></td>
+		</tr>
+         <tr>
+         	<th>행사유형</th>		
+			<td th:text=${job.eTypeName}></td>
+		</tr>
+         <tr>
+         	<th>시작일</th>
+			<td th:text="${#dates.format(job.wSday, 'yyyy-MM-dd')}">
+		</tr>
+         <tr>
+         	<th>종료일</th>		
+			<td th:text="${#dates.format(job.wEday, 'yyyy-MM-dd')}">
+		</tr>
+         <tr>
+         	<th>근무시간</th>		
+			<td th:text=${job.wHour}></td>
+		</tr>
+         <tr>
+         	<th>자격</th>		
+			<td th:text=${job.qualification}></td>
+		</tr>
+         <tr>
+         	<th>우대사항</th>		
+			<td th:text=${job.preference}></td>
+		</tr>
+         <tr>
+        	<th>이미지</th>			
+			<td th:text=${job.img}></td>
+		</tr>
+         <tr>	
+         	<th>작성날짜</th>  	
+			<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 			</tr>
       </tbody>
       
