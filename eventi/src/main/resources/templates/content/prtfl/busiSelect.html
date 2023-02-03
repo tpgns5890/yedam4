@@ -158,13 +158,7 @@
    
     <section id="check">
   <nav id="left">
-  	<div class="border">
-  		<!-- <label class="label" th:text="'조회수' + ${busiSelect.inq}"></label>
-  		<span class="label" th:text="좋아요수"></span><label class="label" id ="likeCount" th:text="${busiSelect.cnt}"></label>
-  		<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
-  		<hr>
-  		<br><br> -->
-  		
+  	<div class="border">  		
   		<div class="box">
 		<img class="profile" th:src="|/fileView/${busiSelect.img}|">
   		</div>
@@ -173,11 +167,11 @@
   		<label class="label" id="userName" th:text="${busiSelect.busiTitle}"></label><br>
   		<hr>
   		
-  		<!-- <th:block th:if="${session.member.userId} != ${busiSelect.userId}"> -->
-  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
-  		<!-- </th:block> -->
-  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
-  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
+  		<th:block th:if="${session.member.userId} != ${busiSelect.userId}">
+	  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
+	  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
+	  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
+  		</th:block>
 		<hr>
 
   	</div>

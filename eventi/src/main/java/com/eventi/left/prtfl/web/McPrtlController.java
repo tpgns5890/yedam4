@@ -42,6 +42,7 @@ public class McPrtlController {
 	@GetMapping("/mcList")
 	public String mcList(Model model, McPrtflVO mcPrtflVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String userId = user != null ? user.getUserId() :"";
 		
 		List<McPrtflVO> mcList = mcPrtflService.mcAll(mcPrtflVO, paging);
 		model.addAttribute("paging", paging);
@@ -55,7 +56,7 @@ public class McPrtlController {
 		
 		//좋아요
 		for(McPrtflVO mc : mcList) {
-			if(likesMapper.userlikecheck(mc.getUserId(), "T06", user.getUserId()) == 1) {
+			if(likesMapper.userlikecheck(mc.getUserId(), "T06", userId) == 1) {
 				mc.setUserLike(1);
 			}
 		}
