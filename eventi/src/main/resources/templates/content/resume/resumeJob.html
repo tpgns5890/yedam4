@@ -16,26 +16,6 @@
           </div>
         </section>
 
-	<!-- <table class="table mb-3" >
-	<thead class="thead-dark">
-			<tr>
-				<th>구직신청게시글번호</th>
-				<th>구직자ID</th>
-				<th>제목</th>
-				<th>구인게시글번호</th>
-				
-			</tr>		
-		</thead>
-		<tbody>
-			<tr th:each="res : ${resumeJob}" 
-				th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">
-				<td th:text=${res.resumeNo}></td>
-				<td th:text=${res.seekerId}></td>
-				<td th:text=${res.title}></td>
-				<td th:text=${res.jobNo}></td>
-			</tr>
-		</tbody>
-	</table> -->
 	<section class="module" id="news">
 		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
 		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
@@ -92,11 +72,31 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="row mt-5">
+		          <div class="col text-center">
+		            <div class="block-27">
+		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+		            </div>
+		          </div>
+		        </div>
+		        
+		<!-- 이미지 나타내기 -->	
+					<div th:each="f : ${file}">
+				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
+				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+				   	</div>
 	</section>
 
 <script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
+
+//페이징
+function gopage(i) {
+    console.log(i);
+    location.href = '/resumeJob?page=' + i;
+}
 
 //tr 전체체크시 모든항목 체크되도록 
 let allHire = document.querySelector("#allHire")

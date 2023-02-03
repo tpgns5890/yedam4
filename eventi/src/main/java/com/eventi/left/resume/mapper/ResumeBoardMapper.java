@@ -12,7 +12,7 @@ public interface ResumeBoardMapper {
 	
 	//구직자 전체조회(상세구인게시판-같은게시글)
 	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO); 
-	
+		
 	//단건조회
 	public ResumeBoardVO getResumeDetail(ResumeBoardVO resumeBoardVO); 
 	
