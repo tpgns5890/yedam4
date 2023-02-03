@@ -74,7 +74,7 @@
 		#list-area {
 			position: inherit;
 			width: 98.9%;
-			height: 83.5%;
+			/* height: 83.5%; */
 			margin-top: 10px;
 			background: white;
 			padding: 10px;
@@ -115,13 +115,90 @@
       	background-color: #eee;
   		}
 		#table-div{
-			height:590px;
+			height:570px;
 		}
 		
 		#member-table th,td{
-			padding: 17px;
+			padding: 16px;
 			background-color: rgba(255,255,255,0.2);
 		}
+		#modal {
+			display: none;
+			position: fixed;
+			top: 15em;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			width: 100%;
+		}
+
+		#modal h2 {
+			margin: 0;
+		}
+
+		#modal .modal_content {
+			width: 430px;
+			min-height: 200px;
+			margin: 0 auto;
+			padding: 20px;
+			background: #fff;
+			border: 0.5px solid #666;
+			border-radius: 15px;
+		}
+
+		#modal .modal_layer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+
+		#button_box {
+			display: flex;
+			margin-top: 40px;
+			justify-content: flex-end;
+		}
+
+		#modal_close_btn {
+			position: relative;
+			cursor: pointer;
+			background: 0 0;
+			border: 0 !important;
+			font-size: 25px;
+			color: #000;
+			text-shadow: 0 1px 0 #fff;
+			opacity: .5;
+			float: right;
+			width: auto !important;
+		}
+
+		#modal_close_btn:hover {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+			opacity: 1;
+		}
+		
+		#noneData{
+			display: block;
+    		width: 100%;
+    		height: 100%;
+    		text-align: center;
+    	}
+    	
+    	.cntnTd{
+    		cursor:pointer;
+    		color:blue;
+    		text-decoration:underline;
+    	}
+    	#modalList{
+    		max-height:250px;
+    		overflow:auto;
+    	}
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -145,13 +222,13 @@
 									<option value=""> ===선택=== </option>
 									<option th:each="Cat : ${targetCat}" th:value="${Cat.codeId}" th:text="${Cat.codeName}"></option>
 								</select>
-								<input type="text" name="userId" id="searchArea">
+								<input type="text" name="userId" id="searchArea" placeholder="아이디 검색">
 							</div>
 						</div>
 					</div>
 					
 					<div id="table-div">
-						<table id="cert-table">
+						<table id="member-table">
 							<thead>
 								<tr>
 									<th>글번호</th>
@@ -169,6 +246,7 @@
 							
 							</tbody>
 						</table>
+						<div id="noneData" hidden><img src="/assets/images/no_data_found.jpg" style="height: 500px; margin-top:100px;"></div>
 					</div>
 					
 					<!-- 페이징 처리 -->
@@ -180,6 +258,17 @@
 					
 				</div>
 			</div>
+		</div>
+		<div id="modal">
+			<div class="modal_content">
+				<button id="modal_close_btn" type="button">X</button>
+				<h3 class="font-alt"><b>신고사유</b></h3>
+				<hr>
+				<div id="modalList">
+					
+				</div>
+			</div>
+			<div class="modal_layer"></div>
 		</div>
 		<input type="hidden" name="page" value="1">
 		<script>
@@ -224,9 +313,14 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
+						$("#noneData").hide();
 						$('tbody').empty();
-						for (punish of result.punishBrdList) {
-							$('tbody').append(makeTr(punish));
+						if(result.punishBrdList.length>0){
+							for (punish of result.punishBrdList) {
+								$('tbody').append(makeTr(punish));
+							}
+						}else{
+							$("#noneData").show();
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
 						$('#returnPaging').empty();
@@ -263,7 +357,7 @@
 					<td>${punish.TARGET_CAT}</td>
 					<td>${punish.USER_ID}</td>
 					<td>${punish.DT}</td>
-					<td>${punish.BAN_CNTN}</td>
+					<td onclick="cntnShow(this)" class="cntnTd">${punish.BAN_CNTN}</td>
 					<td id="${punish.WRITER}">${banRslt}</td>
 				</tr>`;
 				return p;
@@ -365,6 +459,20 @@
 				})
 
 			}
+			
+			//신고사유 모달창 열기
+			function cntnShow(element){
+				let cntn = element.innerText;
+				console.log(cntn);
+				$("#modal").show();
+				$("#modalList p").remove();
+				$("#modalList").append($("<p/>").text(cntn));
+			}
+			
+			/*모달 창 닫기*/
+			$("#modal_close_btn").on('click', function () {
+				$("#modal").hide();
+			});
 			
 		</script>
 	</div>

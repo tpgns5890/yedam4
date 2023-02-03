@@ -115,11 +115,11 @@
       	background-color: #eee;
   		}
 		#table-div{
-			height:590px;
+			height:570px;
 		}
 		
 		#member-table th,td{
-			padding: 17px;
+			padding: 16px;
 			background-color: rgba(255,255,255,0.2);
 		}
 		#modal {
@@ -207,7 +207,7 @@
 					</div>
 					
 					<div id="table-div">
-						<table id="cert-table">
+						<table id="member-table">
 							<thead>
 								<tr>
 									<th>공모전ID</th>
@@ -226,6 +226,7 @@
 							
 							</tbody>
 						</table>
+						<div id="noneData" hidden><img src="/assets/images/no_data_found.jpg" style="height: 40%; margin-top:100px;"></div>
 					</div>
 					<!-- 페이징 처리 -->
 					<div class="row mt-5" id="paging">
@@ -289,9 +290,14 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
+						$("#noneData").hide();
 						$('tbody').empty();
-						for (contest of result.contestList) {
-							$('tbody').append(makeTr(contest));
+						if(result.contestList.length>0){
+							for (contest of result.contestList) {
+								$('tbody').append(makeTr(contest));
+							}
+						}else{
+							$("#noneData").show();
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
 						$('#returnPaging').empty();
@@ -423,7 +429,7 @@
 			function makeDiv(winner, i){
 				let p =`
 					<div>
-						<h4 class="font-alt"><b>${i}등 ${winner.moPrice}</b></h4>
+						<h4 class="font-alt"><b>${i}등 상금 ${winner.moPrice}원</b></h4>
 						<h5 class="font-alt">${winner.bankName} ${winner.bankAccount} ${winner.userName}(${winner.userId})</h5>
 					</div>
 				`;

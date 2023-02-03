@@ -27,17 +27,35 @@
 			display: flex;
 		}
 
+		label{
+			margin-bottom:0;
+		}
+		
+		.sidebar {
+		    width: 0px;
+		    height: 0px;
+		    padding: 0px;
+		    margin: 0px;
+		}		
+		
 		.top-button {
 			cursor: pointer;
-			width: 250px;
-			display: flex;
-			height: 100%;
-			margin-right: 10px;
-			background: white;
-			box-shadow: 0 2px 2px 0 rgb(0 0 0/ 20%);
-			align-items: center;
+		    width: 120px;
+		    display: flex;
+		    height: 100%;
+		    margin-right: 3px;
+		    background: white;
+		    text-align: center;
+		    align-items: center;
+		    justify-content: center;
+		    border-top-right-radius: 20px 20px;
+		    background:#ddd;
 		}
-
+		
+		.sidebar:checked + .top-button{
+			background:#fff;
+		}
+		
 		.icon-area {
 			width: 50px;
 			height: 100%;
@@ -75,7 +93,6 @@
 			position: inherit;
 			width: 98.9%;
 			height: 83.5%;
-			margin-top: 10px;
 			background: white;
 			padding: 10px;
 		}
@@ -115,11 +132,11 @@
       	background-color: #eee;
   		}
 		#table-div{
-			height:590px;
+			height:570px;
 		}
 		
 		#member-table th,td{
-			padding: 17px;
+			padding: 16px;
 			background-color: rgba(255,255,255,0.2);
 		}
 	</style>
@@ -137,15 +154,20 @@
 					<b>자격증관리</b>
 				</h3>
 				<div id="head-btn">
-					<div id="headbtn-request" class="headbtns">
-						<span class="headbtn-text">승인대기</span>
-					</div>
-					<div id="headbtn-done" class="headbtns">
-						<span class="headbtn-text">승인완료</span>
-					</div>
-					<div id="headbtn-reject" class="headbtns">
-						<span class="headbtn-text">반려목록</span>
-					</div>
+					<input class="sidebar" id="side1" type="radio" name="sidebar" checked/>
+					<label for="side1" class="top-button" id="headbtn-request">
+							<span class="headbtn-text">승인대기</span>
+					</label>
+					
+					<input class="sidebar" id="side2" type="radio" name="sidebar" />
+					<label for="side2" id="headbtn-done" class="top-button">
+							<span class="headbtn-text">승인완료</span>
+					</label>
+					
+					<input class="sidebar" id="side3" type="radio" name="sidebar" />
+					<label for="side3" id="headbtn-reject" class="top-button">
+							<span class="headbtn-text">반려목록</span>
+					</label>
 				</div>
 				
 				<div id="list-area">
@@ -161,7 +183,7 @@
 					</div>
 					
 					<div id="table-div">
-						<table id="cert-table">
+						<table id="member-table">
 							<thead>
 								<tr>
 									<th>요청자ID</th>
@@ -177,6 +199,7 @@
 							
 							</tbody>
 						</table>
+						<div id="noneData" hidden><img src="/assets/images/no_data_found.jpg" style="height: 40%; margin-top:100px;"></div>
 					</div>
 					
 					<!-- 페이징 처리 -->
@@ -242,15 +265,20 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
+						$("#noneData").hide();
 						$('tbody').empty();
-						for (crtf of result.certList) {
-							if(crtf.accpYN == "R"){
-								$('tbody').append(makeTrR(crtf));
-							}else if(crtf.accpYN == "Y"){
-								$('tbody').append(makeTrY(crtf));
-							}else{
-								$('tbody').append(makeTrN(crtf));
+						if(result.certList.length>0){
+							for (crtf of result.certList) {
+								if(crtf.accpYN == "R"){
+									$('tbody').append(makeTrR(crtf));
+								}else if(crtf.accpYN == "Y"){
+									$('tbody').append(makeTrY(crtf));
+								}else{
+									$('tbody').append(makeTrN(crtf));
+								}
 							}
+						}else{
+							$("#noneData").show();
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
 						$('#returnPaging').empty();
