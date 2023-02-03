@@ -40,6 +40,11 @@
 	.border {
 		border: 1px solid black;
 		border-radius: 5px;
+		padding: 5px;
+	}
+	
+	#videoFrm{
+		padding: 5px;
 	}
 	
 	.label {
@@ -154,7 +159,7 @@
   <nav id="left">
   	<div class="border">
   		<label class="label" th:text="'조회수' + ${mcSelect.inq}"></label>
-  		<label class="label" th:text="'좋아요수' + ${mcSelect.cnt}"></label>
+  		<span class="label" th:text="좋아요수"></span><label class="label" id ="likeCount" th:text="${mcSelect.cnt}"></label>
   		<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
   		<hr>
   		<br><br>
@@ -173,10 +178,10 @@
   		
   		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
   		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
-  		</th:block>
   		<button id="btn" type="button" class="btn btn-g btn-round castingUp">의뢰하기</button>
   		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
 		<hr>
+  		</th:block>
 		
 		<label class="label" th:text="${mcSelect.carrYear} + '년'"></label>
   	</div>
@@ -214,21 +219,29 @@
                     	</div>
             			
             			<br>
-                    	<h5>동영상</h5>
+                    	<h5>동영상<button th:if="${session.member.userId} == ${mcSelect.userId}" type="button" class="btn btn-primary" th:onclick="|location.href='@{/move/moveList(userId=${mcSelect.userId})}'|">동영상추가</button></h5>
                     	<div class="border">
-							<video th:each="file : ${files}" th:if="${#strings.containsIgnoreCase(file,'.mp4')}" th:src="|/fileView/${file.sevNm}|" width="500px" height="200px" controls></video>
+                    		<div id="videoFrm">
+                    		</div>
+							 <!-- //페이징 경로 :: 문자 -->
+							<div class="row mt-5" id="paging">
+								<div class="col text-center">
+									<div class="block-27" id="returnPaging">
+									</div>
+								</div>
+							</div>
                     	</div>
                     	
                     	<br>
                     	<h5>댓글</h5>
                     	<div class="border">
-					        <ul class="comment-list" id=reply></ul>
-					        
 					        <!-- 댓글 작성 -->
 						    <form id="replyInsertFrm">
 						    	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
 						    	<button type="button" id="repInsertBtn">댓글추가</button>
 						    </form>
+						    
+						    <ul class="comment-list" id=reply></ul>
                     	</div>
                     </div>
                     
@@ -314,10 +327,107 @@
    		//csrf 설정
    		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-   		
+   		moveList();
+		
+		function moveList() {
+			let replyTgt = '[[${mcSelect.userId}]]';
+			$.ajax({
+				url: '/move/moveList',
+				method: 'post',
+				data: {
+					userId:replyTgt
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				console.log(res)
+				for(video of res.videos){
+					$('#videoFrm').append(makeVideo(video));
+				}
+				$('#returnPaging').append(makePageing(res.paging));
+			})
+		}
+		
+		//디자인 리스트
+		function makeVideo(video){
+			let tag = `<video src="|/fileView/${video.sevNm}|" width="500px" height="200px" controls></video>>`
+			        
+			 return tag;
+		}
+	
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
+			}
+			
+			let pagination = $("<div/>")
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
+		
+		function gopage(i) {
+			let replyTgt = '[[${mcSelect.userId}]]';
+			let page = i;
+			$.ajax({
+				url: '/move/moveList',
+				method: 'post',
+				data: {
+					userId:replyTgt, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#videoFrm').empty();
+				for(video of res.videos){
+					$('#videoFrm').append(makeVideo(video));
+				}
+				
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging));
+			})
+		}
+		
 		//해당 포트폴리오 작성자에 대한 댓글을 가져오기 위해 replyTag에 작성자ID를 구해준다.
    		let replyTgt = '[[${mcSelect.userId}]]';
-
    		//댓글, 대댓글 불러오는 ajax
    		$.ajax({
    			url : '/replyList',
@@ -383,7 +493,7 @@
    			
    			let p = `<ul class="children">
                 <li class="comment">
-                <div class="comment-body">
+                <div class="comment-body" id="${reply.replyNo}">
                   <h3>${reply.userId}</h3>
                   <div class="meta">${reply.writingDt}</div>
                   <p>${reply.replyCntn}</p>
@@ -412,7 +522,7 @@
 	            }
 	   		}).then(res => {
 	   			//댓글 부분에 등록하기
-	   			$("#reply").append(make(res));
+	   			$("#reply").prepend(make(res));
 	   			$('#replyCntn').val('');
 	   		})
 		});
@@ -433,7 +543,7 @@
 		function makeFrm(rerepTgt) {
 			let form = `<form>
 				<input type="hidden" id="rerepTgt" name="rerepTgt" value="${rerepTgt}">
-	            <textarea class="form-control" id="replyCntn" name="replyCntn" rows="3"></textarea>
+	            <textarea class="form-control" id="reReplyCntn" name="replyCntn" rows="3"></textarea>
 	            <button type="button" id="rerepTgt" class="reply">답변</button>
 	        </form>`
 		    
@@ -442,7 +552,8 @@
 		
 		//대댓글 추가
 		$(document).on('click', '#rerepTgt', function(e){
-			let replyCntn = $('#replyCntn').val();
+			let replyCntn = $('#reReplyCntn').val();
+			console.log(replyCntn)
 			let rerepTgt = $('#rerepTgt').val();
 			let userId = '[[${session.member.userId}]]';
 			
@@ -488,7 +599,7 @@
 		$(document).on('click', '.repUpdate', function(e){
 			let replyNo = $(this).parent("div").attr('id');
 			let p = $(this).parent("div").children("p").text();			
-			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
+			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='upReplyCntn' name='upReplyCntn' value='" + p + "'></input>");
 			
 			$(this).toggleClass("updateBtn");
 		});
@@ -497,8 +608,10 @@
 		$(document).on('click', '.updateBtn', function(e){
 			$(this).toggleClass("updateBtn");
 			let btn = $(this);
-			let replyCntn = $('#replyCntn').val();
+			let replyCntn = $('#upReplyCntn').val();
+			console.log(replyCntn)
 			let replyNo = $('#replyNo').val();
+			console.log(replyNo)
 			let updateBtn = `<button class='repUpdate'>수정</button>`;
 			
 			$.ajax({
@@ -527,7 +640,7 @@
 	    	 //총 좋아요수 처리
 	    	 let likeCount = $('#likeCount').text();
 	    	 $('#likeCount').text(parseInt(likeCount) + 1);
-	    	 
+
 	    	 //post방식으로 좋아요 등록하기
 	    	 $.ajax({
 					url : "/likes/lInsert",

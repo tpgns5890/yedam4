@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/myPageSide.css">
+<style>
+	footer {
+		display: none;
+	}
+
+	* {
+	  box-sizing: border-box;
+	}
+	
+	#check{
+		min-height : 2000px;
+	}
+
+	#left {
+	  float: left;
+	  width: 30%;
+	  height: 300px; /* only for demonstration, should be removed */
+	  padding: 20px;
+	}
+	
+	article {
+	  float: left;
+	  padding: 20px;
+	  width: 70%;
+	  height: 300px; /* only for demonstration, should be removed */
+	}
+	
+	.border {
+		border: 1px solid black;
+		border-radius: 5px;
+	}
+	
+	.label {
+		color : black;
+	}
+	
+	#btn {
+		width: 250px;
+		margin:auto;
+        display:block;
+        margin-bottom: 3px;
+	}
+	
+	.heart {
+	  width: 100px;
+	  height: 100px;
+	  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+	  background-position: 0 0;
+	  cursor: pointer;
+	  transition: background-position 1s steps(28);
+	  transition-duration: 0s;
+	 }
+	 
+	 .active {
+	    transiion-duration: 1s;
+	    background-position: -2800px 0;
+	  }
+	  
+	  #love{
+	  	float: right;
+	  }
+	  
+   <!--공모전 디자인 미리보기 모달-->
+	.modal {
+		display: none; /* Hidden by default */
+		position: fixed; /* Stay in place */
+		z-index: -1; /* Sit on top */
+		padding-top: 100px; /* Location of the box */
+		left: 0;
+		top: 0;
+		width: 100%; /* Full width */
+		height: 100%; /* Full height */
+	 	overflow: auto; /* Enable scroll if needed */ 
+		background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+		box-sizing: border-box;
+	}
+	
+	.img_modal_content {
+		background-color: #fefefe;
+		margin : 70px auto;
+		border: 1px solid #888;
+		width: 60%;
+		height: 90%;
+		text-align: left;
+		
+		/* 이미지 스크롤*/
+		max-height: calc(100vh - 210px);
+	    overflow-y: auto;
+	}
+	
+	/* 스크롤바 지우기 */
+	.img_modal_content::-webkit-scrollbar {
+	    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+	}
+	
+	.close {
+		color: black;
+		float: right;
+		font-size: 40px;
+		font-weight: bold;
+		text-align: right;
+		margin-right: 10px;
+		position: sticky;
+	  	top: 0;
+	}
+	
+	.close:hover, .close:focus {
+		color: #000;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	#modelBtn {
+		text-align: center;
+	}
+	
+	.modelBtn1 {
+		display: inline-block;
+	}
+	
+	.modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
+	
+	.modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.box {
+	    width: 150px;
+	    height: 150px; 
+	    border-radius: 100%;
+	    overflow: hidden;
+	    text-align: center !important;
+	    margin:0 auto;
+	}
+	
+	.profile {
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover;
+	}
+	
+	/*디자인 정렬*/	
+	.imgArray {
+	    margin: 5%;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="content">
+
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">행사사진리스트</h2>
+                <div class="module-subtitle font-serif">행사사진리스트</div>
+              </div>
+            </div>
+          </div>
+        </section>
+    <!-- 현재페이지 myPageSide 적용 -->
+	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+    
+    <div id="check">
+    <button class="btn btn-primary btn-round" type="button" th:onclick="|location.href='@{myDesignInsert}'|">디자인 등록</button>
+    
+    <div class="border" id="designBox">
+                    		<div id="designborder">
+					        </div>
+					        
+				             <!-- //페이징 경로 :: 문자 -->
+							<div class="row mt-5" id="paging">
+								<div class="col text-center">
+									<div class="block-27" id="returnPaging">
+									</div>
+								</div>
+							</div>
+					     </div>
+	</div>
+	
+	<!-- 디자인 상세보기 모달 -->
+	<div id="dseignModel" class="modal">
+		<div class="img_modal_content">
+			<span class="close">&times;</span>
+			<div class="column middle">
+				<h3 id="caregory">분류</h3>
+				<h2 id="ttl">제목</h2>
+				<div id="modelSelect"></div>
+			</div>
+		</div>
+		<div class="modal_layer"></div>
+	</div>
+					     	
+	<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		//물품리스트 불러오기
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		$.ajax({
+			url: '/prtfl/desginList',
+			method: 'post',
+			data: {
+				userId:userId
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+		}).then(res => {
+			for(design of res.designs){
+				$('#designborder').append(makeDesgin(design));
+			}
+			$('#returnPaging').append(makePageing(res.paging));
+		})
+		
+		//디자인 리스트
+		function makeDesgin(design){
+			//로그인 회원의 하트눌려진것만 체크
+			let active = null;
+			if(design.mylike > 0){
+				active = 'active';
+			}
+			
+			let tag = `<div class="col-sm-6 col-md-4 col-lg-4">
+			            <div id="${design.dgnNo}" class="shop-item">
+			            <div class="shop-item-image"><img class="imgArray" src="/fileView/${design.centerImg}" style="width: 300px; height: 300px">
+			              
+			              <div class="shop-item-detail">
+			              <div class="stage">
+		  					<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
+		   					</div>
+			              	<a href="#" class="btn btn-round btn-b">
+			              	<span id="${design.dgnNo}" class="icon-magnifying-glass">상세조회</span></a>
+			              </div>
+			            </div>
+			            <p>${design.name}</p>
+			          </div>
+			        </div>`
+			        
+			 return tag;
+		}
+	
+		// 페이징 만들기
+		function makePageing(page) {
+			if (page.totalRecord == 0) {
+				return;
+			}
+			
+			let pagination = $("<div/>")
+			let ul = $("<ul/>").attr("class","pagination");
+			if (page.startPage > 1) {
+				$(ul).append($("<li/>").html("&laquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage - page.pageSize)
+										}));
+			}
+			
+			//페이지 버튼 생성.
+			for (let i = page.startPage; i <= page.endPage; i++) {
+				if (page.page == i) {
+					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.css("border-radius", " 10% / 50% ")
+											.css("background", "#dce3fd")
+											.attr("class", "page-link active")
+					);
+				} else {
+					$(ul).append($("<li/>").text(i).css("font-size", "20px")
+											.css("padding", "10px")
+											.attr("class", "page-link")
+											.on("click", function () {
+												gopage($(this).text());
+											})); //페이지이동 함수
+				}
+			}
+			if (page.endPage < page.lastPage) {
+				$(ul).append($("<li/>").html("&raquo;")
+										.css("font-size", "30px")
+										.attr("class","page-item")
+										.on("click", function () {
+												gopage(page.startPage + page.pageSize)
+										}));
+			}
+			pagination.append(ul);
+			return pagination;
+		}
+		
+		function gopage(i) {
+			let userId = '[[${session.member != null ? session.member.userId :''}]]'
+			let page = i;
+			$.ajax({
+				url: '/prtfl/desginList',
+				method: 'post',
+				data: {
+					userId:userId, page:page
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				$('#designborder').empty();
+				for(design of res.designs){
+					$('#designborder').append(makeDesgin(design));
+				}
+				
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePageing(res.paging));
+			})
+		}
+		
+		// Get the modal
+		var designModel = document.getElementById("dseignModel");
+		
+		
+		$('.close').on("click", function(){
+			designModel.style.display = "none";
+		})
+	   
+	   //디자인상세조회
+	   $('#designBox').on("click", "span" ,function(e){
+		    let dNo = e.target.id
+			designModel.style.display = "block";
+			
+			$.ajax({
+				url: '/design/ajaxSelect',
+				method: 'post',
+				data: {dgnNo:dNo},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+			}).then(res => {
+				let title = res.name;
+				$('#designModel').empty();
+				$('#dgnerSelect').empty();
+				
+				$('#ttl').text(title);
+				$('#caregory').text(res.caregory);
+				
+				//모달내용을 지운뒤 붙여넣기.
+				for(file of res.files){
+					$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo));
+				}
+				
+			})
+		})
+		
+		//모달창 :디자인 응모작품 생성.
+			function makeDesignModel(fileName,title,dNo){
+				let design = `  <div class="design" id="${dNo}" style="float: left ">
+										<img src="/fileView/${fileName}" style="width: 900px; height: 900px">
+							   </div>
+							  `;
+				return design;
+			}
+			//모달창 숨기기.
+			$("#designCancel").on('click', function() {
+				$("#designModel").hide();
+			});
+	</script>
+	</div>
+</body>
+</html>

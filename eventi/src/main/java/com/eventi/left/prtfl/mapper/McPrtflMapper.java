@@ -12,6 +12,9 @@ public interface McPrtflMapper {
 	//사회자 단건조회
 	public McPrtflVO mcSelect(McPrtflVO mcPrtflVO);
 	
+	//사회자 등록 여부
+	public int checkMc(McPrtflVO mcPrtflVO);
+	
 	//전체 건수
 	public int count(McPrtflVO mcPrtflVO);
 	

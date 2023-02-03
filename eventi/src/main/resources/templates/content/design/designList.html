@@ -147,7 +147,6 @@
          </div>
      </section>
      
-		
 		<!-- 페이징/정렬처리 -->
 		<form id="designFrm" name="designFrm">
 			<label>제목</label><input type="text" name="name" value="">
@@ -176,14 +175,15 @@
 					
 					<div class="col-sm-6 col-md-4 col-lg-4" > 
 						<div class="shop-item">
-							
 							   <th:block th:if="${d.mylike} > 0">
-									<div class="stage heart active" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:90px; z-index: 1;  right: -240px;">
+									<div class="stage heart active" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -280px;">
+									<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -300px;">
 									</div>
 								</th:block>
 								
 								<th:block th:if="${d.mylike} == 0">
-									<div class="stage heart" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:90px; z-index: 1;  right: -240px;">
+									<div class="stage heart" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -280px;">
+									<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -300px;">
 									</div>
 								</th:block>  
 															

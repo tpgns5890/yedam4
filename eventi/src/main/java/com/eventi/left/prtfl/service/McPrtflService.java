@@ -15,6 +15,9 @@ public interface McPrtflService {
 	//사회자 건별 조회
 	public McPrtflVO mcSelect(McPrtflVO mcPrtflVO);
 	
+	//사회자 등록 여부
+	public int checkMc(McPrtflVO mcPrtflVO);
+	
 	//전체 건수
 	public int count(McPrtflVO mcPrtflVO);
 	

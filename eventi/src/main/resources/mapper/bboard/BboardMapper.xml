@@ -41,6 +41,9 @@
 		ON b.b_board_no = l.target_no
 		WHERE TYPE = #{type}
 		AND SAVE = 'N'
+		<![CDATA[
+			AND RPRT < 1
+		]]>
 		<include refid="bSelect" />
 		<include refid="likeSelect" />
 		ORDER BY ${order} DESC

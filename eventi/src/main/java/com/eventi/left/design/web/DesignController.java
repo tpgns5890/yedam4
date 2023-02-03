@@ -223,5 +223,11 @@ public class DesignController {
 		service.insert(vo, filesVO, uploadFile);
 		return "redirect:/design/designList";
 	}
+	
+	//디자인 리스트조회 폼
+	@GetMapping("/myDesignList")
+	public String myDesignList() {
+		return "content/prtfl/myDesignList";
+	}
 
 }

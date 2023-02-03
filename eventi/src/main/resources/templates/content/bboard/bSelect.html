@@ -301,7 +301,7 @@
 		function makeFrm(rerepTgt) {
 			let form = `<form>
 				<input type="hidden" id="rerepTgt" name="rerepTgt" value="${rerepTgt}">
-	            <textarea class="form-control" id="replyCntn" name="replyCntn" rows="3"></textarea>
+	            <textarea class="form-control" id="reReplyCntn" name="replyCntn" rows="3"></textarea>
 	            <button type="button" id="rerepTgt" class="reply">답변</button>
 	        </form>`
 		    
@@ -310,7 +310,7 @@
 		
 		//대댓글 추가
 		$(document).on('click', '#rerepTgt', function(e){
-			let replyCntn = $('#replyCntn').val();
+			let replyCntn = $('#reReplyCntn').val();
 			let rerepTgt = $('#rerepTgt').val();
 			
 			$(this).parent("form").remove();

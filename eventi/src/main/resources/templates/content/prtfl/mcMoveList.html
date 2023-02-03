@@ -132,7 +132,8 @@
 		
 		//페이지이동
 		function gopage(i) {
-			location.href = `/move/moveList?userId=${session.member.userId}&page=` + i;
+			let userId = '[[${session.member.userId}]]';
+			location.href = `/move/moveList?userId=${userId}&page=` + i;
 		}
 		
 		//동영상 등록 폼

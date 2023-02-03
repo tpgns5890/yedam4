@@ -98,4 +98,10 @@ public class McPrtflServiceImpl implements McPrtflService{
 		}
 
 	}
+
+	//사회자 확인
+	@Override
+	public int checkMc(McPrtflVO mcPrtflVO) {
+		return mcPrtflMapper.checkMc(mcPrtflVO);
+	}
 }

@@ -132,7 +132,7 @@
 				<option value="">-- 사회가능지역 선택 --</option>
 				<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
 			</select>
-			<input type="hidden" value="${mcSelect.mcArea}" name="mcArea" id="mcArea" />
+			<input type="hidden" value="${mcSelect.mcAreaCode}" name="mcArea" id="mcArea" />
              <ul id="mcAreaL">
              	<li th:each="area, t : ${#strings.arraySplit(mcSelect.mcArea, ',')}" class='tag-item'>[[${area}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
              </ul>
@@ -148,7 +148,7 @@
 				<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 			</select>
 			
-			<input type="hidden" value="${mcSelect.mcType}" name="mcType" id="mcType" />
+			<input type="hidden" value="${mcSelect.mcTypeCode}" name="mcType" id="mcType" />
             <ul id="mcTypeL">
             	<li th:each="type, t : ${#strings.arraySplit(mcSelect.mcType, ',')}" class='tag-item'>[[${type}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
             </ul>
@@ -164,7 +164,7 @@
 				<option th:each="style : ${mcStyles}" th:value="${style?.codeId}" th:text="${style?.codeName}"></option>
 			</select>
 			
-			<input type="hidden" value="${mcSelect.progStyle}" name="progStyle" id="progStyle" />
+			<input type="hidden" value="${mcSelect.mcProgStyleCode}" name="progStyle" id="progStyle" />
             <ul id="progStyleL">
             	<li th:each="style, t : ${#strings.arraySplit(mcSelect.progStyle, ',')}" class='tag-item'>[[${style}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
             </ul>
@@ -177,8 +177,8 @@
 			<label class="label" for="qna">질문</label> 
 			<select id="qna" name="qna">
 				<option selected>질문을 골라주세요.</option>
-				<option value="Q1">Q.나를 섭외해야되는 이유는?</option>
-				<option value="Q2">Q.나의노하우는?</option>
+				<option value="Q1">나를 섭외해야되는 이유는?</option>
+				<option value="Q2">나의노하우는?</option>
 			</select>
 		</div>
 	</div>
@@ -304,8 +304,9 @@
     })
     
     function mcAreaFun(e) {
-		let tagValue = e.options[e.selectedIndex].text;
-		
+    	 let tagText = e.options[e.selectedIndex].text;
+ 		 let tagValue = e.options[e.selectedIndex].value;
+   	 
 		// 값이 없으면 동작 안합니다.
         if (tagValue !== "") {
 
@@ -315,7 +316,7 @@
             })
           // 태그 중복 검사
           if (result.length == 0) {
-            $("#mcAreaL").append("<li class='tag-item'>" + tagValue + "<span class='area-del-btn' idx='" + areaCounter + "'>x</span></li>");
+            $("#mcAreaL").append("<li class='tag-item'>" + tagText + "<span class='area-del-btn' idx='" + areaCounter + "'>x</span></li>");
             console.log(tagValue);  
             areaAddTag(tagValue);
           } else {
@@ -326,8 +327,8 @@
       };
       
       function mcTypeFun(e) {
-    	 let tagValue = e.options[e.selectedIndex].text;
-    	 
+    	  let tagText = e.options[e.selectedIndex].text;
+  		  let tagValue = e.options[e.selectedIndex].value;
     	// 값이 없으면 동작 안합니다.
          if (tagValue !== "") {
 
@@ -339,7 +340,7 @@
            // 태그 중복 검사
            if (result.length == 0) {
              $("#mcTypeL")
-               .append("<li class='tag-item'>" + tagValue + "<span class='type-del-btn' idx='" + typeCounter + "'>x</span></li>");
+               .append("<li class='tag-item'>" + tagText + "<span class='type-del-btn' idx='" + typeCounter + "'>x</span></li>");
              typeAddTag(tagValue);
            } else {
              alert("태그값이 중복됩니다.");
@@ -349,7 +350,8 @@
       }
       
       function progStyleFun(e){
-    	  let tagValue = e.options[e.selectedIndex].text;
+    	  let tagText = e.options[e.selectedIndex].text;
+  		  let tagValue = e.options[e.selectedIndex].value;
      	 
       	// 값이 없으면 동작 안합니다.
            if (tagValue !== "") {
@@ -362,7 +364,7 @@
              // 태그 중복 검사
              if (result.length == 0) {
                $("#progStyleL")
-                 .append("<li class='tag-item'>" + tagValue + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
+                 .append("<li class='tag-item'>" + tagText + "<span class='style-del-btn' idx='" + styletagCounter + "'>x</span></li>");
                styleAddTag(tagValue);
              } else {
                alert("태그값이 중복됩니다.");
@@ -381,7 +383,7 @@
 		
         //기존에 있던 값 배열에 넣기
         //지역
-        let area = "[[${mcSelect.mcArea}]]";
+        let area = "[[${mcSelect.mcAreaCode}]]";
         
         var values = $("#mcAreaList>option").map(function(){return $(this).val();});
         console.log(values)
@@ -390,12 +392,12 @@
         areaCounter = areatag.length;
         
         //행사스타일
-        let type = "[[${mcSelect.mcType}]]";
+        let type = "[[${mcSelect.mcTypeCode}]]";
         typetag = type.split(",");
         typeCounter = typetag.length;
         
         //사회자 스타일
-        let style = "[[${mcSelect.progStyle}]]";
+        let style = "[[${mcSelect.mcProgStyleCode}]]";
         styletag = type.split(",");
         styletagCounter = styletag.length;
         

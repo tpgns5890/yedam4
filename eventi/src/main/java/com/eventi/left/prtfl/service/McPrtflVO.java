@@ -24,7 +24,11 @@ public class McPrtflVO {
 	private Integer inq;          //조회수
 	private Date dt;              //작성시간
 	private String img;           //대표이미지
-	private String mainimg;         //대표이미지 띄울때 필요
+	private String mainimg;       //대표이미지 띄울때 필요
+	
+	private String mcAreaCode;    //사회가능지역코드
+	private String mcTypeCode;    //세부분야 코드
+	private String mcProgStyleCode;   //진행스타일 코드
 	
 	private int userLike;         //로그인된 계정이 좋아요 누른 건
 	private int cnt;              //게시글당 좋아요 수

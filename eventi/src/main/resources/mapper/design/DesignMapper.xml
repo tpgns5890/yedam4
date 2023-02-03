@@ -37,7 +37,7 @@
 			WHERE SAVE = 'N'
 			AND PUBC_YN = 'N'
 			<include refid="search" />
-			order by dt DESC
+			order by #{order} DESC
 	  	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
 		]]>
