@@ -14,7 +14,7 @@
 	
 	<!-- 전체간단조회(메인구인게시판) -->
 	<select id="getResumeList" resultType="com.eventi.left.resume.service.ResumeBoardVO">
-		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
+	<!-- 	SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
 				(SELECT SEV_NM 
                   FROM FILES 
                    WHERE TARGET_ID = R.RESUME_NO
@@ -31,12 +31,29 @@
 		<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}
-		]]>
+		]]> -->
+		
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (        
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
+						(SELECT F.SEV_NM 
+		                  FROM FILES F
+		                   WHERE F.TARGET_ID = R.RESUME_NO
+		                   AND ROWNUM=1) AS "IMG", J.USER_ID, R.HIRE  
+				
+				FROM RESUME_BOARD R, JOB_BOARD J
+				WHERE R.JOB_NO = J.JOB_NO 
+				AND J.JOB_NO IN (SELECT JOB_NO 
+								FROM JOB_BOARD 
+								WHERE USER_ID = #{seekerId})
+		<![CDATA[
+					   ) A WHERE ROWNUM <= #{last}) 
+			    WHERE RN >= #{first}
+		]]> 
 	</select>
 	
 	<!-- 전체간단조회(상세구인게시판) -->
 	<select id="getResumeJob" resultType="com.eventi.left.resume.service.ResumeBoardVO">
-		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
+		<!-- SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
 		(SELECT SEV_NM 
                   FROM FILES 
                    WHERE TARGET_ID = RESUME_NO
@@ -51,7 +68,23 @@
 		<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}
-		]]>
+		]]> -->
+		
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (                     
+		SELECT R.RESUME_NO, R.SEEKER_ID, R.TITLE, R.JOB_NO, 
+				(SELECT SEV_NM 
+		          FROM FILES 
+		          WHERE TARGET_ID = RESUME_NO
+		         AND ROWNUM=1) AS "IMG", J.USER_ID 
+				        
+				FROM RESUME_BOARD R, JOB_BOARD J
+				WHERE R.JOB_NO = J.JOB_NO 
+				AND J.JOB_NO = #{jobNo}
+				
+				<![CDATA[
+					   ) A WHERE ROWNUM <= #{last}) 
+			    WHERE RN >= #{first}
+			    ]]>
 	</select>
 	
 	<!-- 게시글 개수 -->

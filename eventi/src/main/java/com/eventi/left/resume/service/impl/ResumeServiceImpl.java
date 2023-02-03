@@ -29,6 +29,7 @@ public class ResumeServiceImpl implements ResumeService{
 	//구직자 전체조회(메인구인게시판)
 	@Override
 	public List<ResumeBoardVO> getResumeList(ResumeBoardVO resumeBoardVO, PagingVO paging) { 
+		paging.setTotalRecord(resumeMapper.count(resumeBoardVO));
 		paging.setPageUnit(5);
 		resumeBoardVO.setFirst(paging.getFirst());
 		resumeBoardVO.setLast(paging.getLast());
@@ -45,6 +46,8 @@ public class ResumeServiceImpl implements ResumeService{
 	//구직자 전체조회(상세조회게시판)
 	@Override
 	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO, PagingVO paging) {
+		paging.setTotalRecord(resumeMapper.count(resumeBoardVO));
+		paging.setPageUnit(5);
 		paging.setPageUnit(5);
 		resumeBoardVO.setFirst(paging.getFirst());
 		resumeBoardVO.setLast(paging.getLast());
