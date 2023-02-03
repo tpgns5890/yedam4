@@ -47,9 +47,10 @@ public class SecurityConfig {
 		
 		http.authorizeHttpRequests((requests) -> requests
 				.antMatchers("/mc/**").hasRole("MC") //사회자 권한
-				.antMatchers("/designer/**").hasRole("DESIGNER")  //디자이너권한
+				.antMatchers("/designer/**").hasRole("DES")  //디자이너권한
 				.antMatchers("/busi/**").hasRole("BUSI")	//업체회원권한
 				.antMatchers("/admin/**").hasRole("ADMIN")	//관리자권한
+				.antMatchers("/jobDetail").hasAnyRole("ADMIN","MEM","MC","BUSI","DES")
 				.anyRequest().permitAll()	//그외 모든 url 접근권한 없음
 				);
 		

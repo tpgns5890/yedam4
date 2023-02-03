@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
    layout:decorate="~{layouts/default_layout}">
 <head>
 <style>
@@ -75,13 +76,13 @@
 </form>
 </div>
 
-<button type="button" class="btn btn-outline-primary" onclick="jobInsert()" >구인등록</button>
-<button type="button" class="btn btn-outline-primary" onclick="resumeList()">신청자조회</button>
+<button type="button" class="btn btn-outline-primary" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
+<button type="button" class="btn btn-outline-primary" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
 
 
 <!-- 좋아요 -->	
 <div class="stage">
-  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active"  ></div>
+  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
 </div>	
 	<table class="table mb-3" >
 	<thead class="thead-dark">
@@ -154,8 +155,7 @@ link1 = 'jobInsert'; //구인등록폼 이동
 function jobInsert(){
 	location.href = link1;
 }
-
-link2 = 'resumeList?userId=[[${session.member.userId}]]'; //신청자전체조회
+link2 = 'resumeList?userId=[[${session.member != null ? session.member.userId :''}]]';//신청자전체조회
 function resumeList(userId){
 	location.href = link2;
 }
@@ -226,7 +226,7 @@ function jobDetail(jobNo){
 	     
 	     if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
 	     //좋아요를 추가했을 경우
-	     let userId = '[[${session.member.userId}]]';
+	     let userId = '[[${session.member != null ? session.member.userId :''}]]';
 	     location.href=`/jobList?userId=${userId}&eType=${etype}` //변수넣기 
 	    	
 	     } else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
