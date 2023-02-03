@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:th="http://www.thymeleaf.org"
-   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 <style>
@@ -52,10 +51,19 @@
 		<option value="cnt" th:selected="${mcPrtflVO.order=='cnt'}">좋아요순</option>
 	</select>
 	
-	<!-- 좋아요 -->
-	<div class="stage">
-  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active"></div>
-   	</div>
+	<!-- 비회원 좋아요버튼-->
+	<th:block sec:authorize="!isAuthenticated()">
+		<div class="stage">
+			<div id="logOut" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
+		</div>
+	</th:block>
+	
+	<!-- 회원 좋아요버튼-->
+	<th:block sec:authorize="isAuthenticated()">
+		<div class="stage">
+	  		<div id="love" class="love stage heart" th:classappend="${param.userId} !=null ? active"></div>
+	   	</div>
+   	</th:block>
    
    <section class="module">
 	 <div class="container">
@@ -69,9 +77,18 @@
 
 	            <div class="post-header font-alt">
 	              <h2 class="post-title" th:text=${mc.userId}><a href="#"></a></h2>
-	              <div class="stage">
-			  		<div class="stage heart" th:id="${mc.userId}" th:classappend="${mc.userLike} == 1 ? active"></div>
-			   	  </div>
+	              <th:block sec:authorize="!isAuthenticated()">
+						<div class="stage">
+							<div class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
+						</div>
+				   </th:block>
+				   
+				   <!-- 회원 좋아요버튼-->
+					<th:block sec:authorize="isAuthenticated()">
+						<div class="stage">
+					  		<div class="love stage heart" th:id="${mc.userId}" th:classappend="${mc.userLike} == 1 ? active"></div>
+					   	</div>
+				   	</th:block>
 	              <div class="post-meta"><a th:href="|/prtfl/mcSelect?userId=${mc.userId}|" th:text="${mc.carrYear} + '년 &nbsp;| ' + ${mc.mcArea} +' | 좋아요 ' + ${mc.cnt} + '건 | 조회수 ' + ${mc.inq}"></a>
 	              </div>
 	            </div>
@@ -106,7 +123,7 @@
 		
 		//나의 포트폴리오 확인
 		function checkPrtfl(){
-			let userId='[[${session.member.userId}]]';
+			let userId = '[[${session.member != null ? session.member.userId :''}]]';
 			$.ajax({
 				url : "/prtfl/checkMc",
 				method : 'post',
@@ -122,7 +139,7 @@
 							location.href='/prtfl/mcInsert';
 						}
 					} else {
-						location.href='/prtfl/mcSelect?userId=[[${session.member.userId}]]';
+						location.href='/prtfl/mcSelect?userId=' + userId;
 						}
 				},
 				fail : function(result) {
@@ -133,9 +150,9 @@
 		
 		
 		//좋아요 처리
-		 $(".heart").on("click", function() {
+		 $(".love").on("click", function() {
 			 $(this).toggleClass("active");
-			 let userId = '[[${session.member.userId}]]';
+			 let userId = '[[${session.member != null ? session.member.userId :''}]]';
 			 let targetNo = $(this).attr('id');
 			 let category = 'T06';
 			 
@@ -197,7 +214,7 @@
 		//정렬 리스트 불러오는 함수
 	  	function range() {
 	 		//정렬 기준
-	 		let userId = '[[${session.member.userId}]]'; 
+	 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 			let lclsf = $("input[name=lclsf]:checked").val();
 			let type = 'T06';
 			let order = $("#order option:selected").val();

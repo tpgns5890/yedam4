@@ -213,11 +213,12 @@
   		<hr>
   		
   		<th:block th:if="${session.member.userId} != ${dgnerSelect.userId}">
-  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
+	  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
+	  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
+	  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
+			<hr>
   		</th:block>
-  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
-  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
-		<hr>
+  		
 		
 		
   	</div>
