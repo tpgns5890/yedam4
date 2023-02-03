@@ -28,15 +28,31 @@
 			display: flex;
 		}
 
+		label{
+			margin-bottom:0;
+		}
+		.sidebar {
+		    width: 0px;
+		    height: 0px;
+		    padding: 0px;
+		    margin: 0px;
+		}
+
 		.top-button {
 			cursor: pointer;
-			width: 250px;
-			display: flex;
-			height: 100%;
-			margin-right: 10px;
-			background: white;
-			box-shadow: 0 2px 2px 0 rgb(0 0 0/ 20%);
-			align-items: center;
+		    width: 120px;
+		    display: flex;
+		    height: 100%;
+		    margin-right: 3px;
+		    background: white;
+		    text-align: center;
+		    align-items: center;
+		    justify-content: center;
+		    border-top-right-radius: 20px 20px;
+		    background:#ddd;
+		}
+		.sidebar:checked + .top-button{
+			background:#fff;
 		}
 
 		.icon-area {
@@ -76,7 +92,6 @@
 			position: inherit;
 			width: 98.9%;
 			height: 83.5%;
-			margin-top: 10px;
 			background: white;
 			padding: 10px;
 		}
@@ -116,11 +131,11 @@
       	background-color: #eee;
   		}
 		#table-div{
-			height:590px;
+			height:570px;
 		}
 		
 		#member-table th,td{
-			padding: 17px;
+			padding: 13px;
 			background-color: rgba(255,255,255,0.2);
 		}
 	</style>
@@ -138,15 +153,20 @@
 					<b>회계관리</b>
 				</h3>
 				<div id="head-btn">
-					<div id="headbtn-request" class="headbtns">
-						<span class="headbtn-text">정산요청</span>
-					</div>
-					<div id="headbtn-done" class="headbtns">
-						<span class="headbtn-text">입금내역</span>
-					</div>
-					<div id="headbtn-reject" class="headbtns">
-						<span class="headbtn-text">정산내역</span>
-					</div>
+						<input class="sidebar" id="side1" type="radio" name="sidebar" checked/>
+						<label for="side1" class="top-button" id="headbtn-request">
+								<span class="headbtn-text">정산요청</span>
+						</label>
+						
+						<input class="sidebar" id="side2" type="radio" name="sidebar" />
+						<label for="side2" id="headbtn-done" class="top-button">
+								<span class="headbtn-text">입금내역</span>
+						</label>
+						
+						<input class="sidebar" id="side3" type="radio" name="sidebar" />
+						<label for="side3" id="headbtn-reject" class="top-button">
+								<span class="headbtn-text">정산내역</span>
+						</label>
 				</div>
 				
 				<div id="list-area">
@@ -159,7 +179,7 @@
 					</div>
 					
 					<div id="table-div">
-						<table id="cert-table">
+						<table id="member-table">
 							<thead>
 								<tr>
 									<th>요청자ID</th>
@@ -175,6 +195,7 @@
 							
 							</tbody>
 						</table>
+						<div id="noneData" hidden><img src="/assets/images/no_data_found.jpg" style="height: 40%; margin-top:100px;"></div>
 					</div>
 					
 					<!-- 페이징 처리 -->
@@ -266,24 +287,34 @@
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
 						if(moType=="M2"){
+							$("#noneData").hide();
 							$('thead').empty();
 							$('thead').append(m2Tr);
 							$('tbody').empty();
-							for (money of result.moneyList) {
-								if(settYN == "N"){
-									$('tbody').append(makeTr(money));
-								}else{
-									$('tbody').append(makeTrB(money));
+							if(result.moneyList.length>0){
+								for (money of result.moneyList) {
+									if(settYN == "N"){
+										$('tbody').append(makeTr(money));
+									}else{
+										$('tbody').append(makeTrB(money));
+									}
 								}
+							}else{
+								$("#noneData").show();
 							}
 							$('#returnPaging').empty();
 							$('#returnPaging').append(makePaging(result.paging));
 						}else{
+							$("#noneData").hide();
 							$('thead').empty();
 							$('thead').append(m1Tr);
 							$('tbody').empty();
-							for (money of result.moneyList) {
-								$('tbody').append(makeTrA(money));
+							if(result.moneyList.length>0){
+								for (money of result.moneyList) {
+									$('tbody').append(makeTrA(money));
+								}
+							}else{
+								$("#noneData").show();
 							}
 							$('#returnPaging').empty();
 							$('#returnPaging').append(makePaging(result.paging));

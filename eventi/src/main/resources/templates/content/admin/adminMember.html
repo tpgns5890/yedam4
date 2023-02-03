@@ -117,11 +117,11 @@
       	background-color: #eee;
   		}
 		#table-div{
-			height:590px;
+			height:570px;
 		}
 		
 		#member-table th,td{
-			padding: 17px;
+			padding: 16px;
 			background-color: rgba(255,255,255,0.2);
 		}
 	</style>
@@ -196,6 +196,7 @@
 						</thead>
 						<tbody></tbody>
 					</table>
+					<div id="noneData" hidden><img src="/assets/images/no_data_found.jpg" style="height: 40%; margin-top:100px;"></div>
 					</div>
 					<!-- 페이징 처리 -->
 					<div class="row mt-5" id="paging">
@@ -268,9 +269,14 @@
 					},
 					success: function (result) {
 						//기존 tr 삭제 ->tr생성 붙여넣기
+						$("#noneData").hide();
 						$('tbody').empty();
-						for (member of result.mListAjax) {
-							$('tbody').append(makeTr(member));
+						if(result.mListAjax.length>0){
+							for (member of result.mListAjax) {
+								$('tbody').append(makeTr(member));
+							}
+						}else{
+							$("#noneData").show();
 						}
 						//기존 페이징 삭제 -> 다시붙여넣기
 						$('#returnPaging').empty();
@@ -288,7 +294,7 @@
 					<td>${member.name}</td>
 					<td>${member.userPhone}</td>
 					<td>${member.userMessaging}</td>
-					<td>${member.auth}</td>
+					<td>${member.userGrade}</td>
 					<td>${member.rprt}</td>
 					<td>${member.userRegDate}</td>
 					<td>${member.userState}</td>

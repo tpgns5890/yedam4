@@ -39,6 +39,7 @@ public class MemberVO implements UserDetails {
 	private boolean locked; //계정 제한 구현
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date lockedDt;
+	private String userGrade;
 	
 	private List<CrtfVO> crtfs;
 	private BusiVO busi;
