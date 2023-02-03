@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
@@ -35,6 +34,8 @@ import com.eventi.left.money.service.MoneyService;
 import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
+import com.eventi.left.review.service.ReviewService;
+import com.eventi.left.review.service.ReviewVO;
 
 import groovy.util.logging.Log4j;
 
@@ -66,6 +67,8 @@ public class ContestController {
 	MemberService memberService;
 	@Autowired
 	MoneyService moneyService;
+	@Autowired
+	ReviewService reviewService;
 
 	// 공모전 전체리스트(첫페이지)
 	@GetMapping("/List")
@@ -118,7 +121,7 @@ public class ContestController {
 	@GetMapping("/insert")
 	public String contestInsert(Model model) {
 		model.addAttribute("cNo", service.getSequence()); // 입력할 공모전번호
-		model.addAttribute("styles", codeService.getContestStyle()); //공모전 스타일
+		model.addAttribute("styles", codeService.getContestStyle()); // 공모전 스타일
 		return "content/contest/contestInsertForm";
 	}
 
@@ -132,7 +135,7 @@ public class ContestController {
 			service.insertContest(vo, wvo, uploadFile);
 			return "redirect:/contest/mySelect"; // 나의 공모전리스트.
 		}
-		
+
 		// 결제 후 등록인경우 공모전상세페이지 이동.
 		service.insertContest(vo, wvo, uploadFile);
 		return "redirect:/contest/select?cNo=" + vo.getcNo();
@@ -221,13 +224,14 @@ public class ContestController {
 	@GetMapping("/mySelect")
 	public String mySelect(Model model, ContestVO vo, @ModelAttribute("paging") PagingVO paging) {
 
-		List<ContestVO>list = service.myContestList(vo, paging);
-		//등록한 공모전 없는경우
-		if(list.size() == 0) {
-			model.addAttribute("result","등록한 공모전이 없습니다."); 
-		//등록한 공모전 있는경우
-		}else {
-			model.addAttribute("contestList", list);
+		List<ContestVO> list = service.myContestList(vo, paging);
+		// 등록한 공모전 없는경우
+		if (list.size() == 0) {
+			model.addAttribute("result", "등록한 공모전이 없습니다.");
+		}// 등록한 공모전 있는경우
+		else {
+			model.addAttribute("contestList", list); // 공모리스트
+			MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		}
 		return "content/myPage/myCotestList";
 	}
@@ -265,25 +269,25 @@ public class ContestController {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		vo.setUserId(user.getUserId());
 		vo.setCategory("T01");
-		
-		List<QuestionsVO>list = qService.myQuestionsList(vo, paging);
-		if( list.size() == 0) {
+
+		List<QuestionsVO> list = qService.myQuestionsList(vo, paging);
+		if (list.size() == 0) {
 			model.addAttribute("result", "문의내역이 없습니다");
-		}else {
+		} else {
 			model.addAttribute("qnaList", list);
 		}
 		model.addAttribute("paging", paging);
 		return "content/myPage/myQnaList";
 	}
 
-	// 공모전등록시 결제 완료후 -> insert 
+	// 공모전등록시 결제 완료후 -> insert
 	@PostMapping("requestPay")
 	@ResponseBody
 	public MoneyVO ContestRequestPay(@RequestBody MoneyVO vo) {
 
-		//임시저장한 공모글을 불러오지 않았다면 
-		if(vo.getTargetId() == null || vo.getTargetId() == "") {
-			vo.setTargetId(service.getSequence()); //공모전 결제후 입금(맥시멈 시퀀스값 설정)
+		// 임시저장한 공모글을 불러오지 않았다면
+		if (vo.getTargetId() == null || vo.getTargetId() == "") {
+			vo.setTargetId(service.getSequence()); // 공모전 결제후 입금(맥시멈 시퀀스값 설정)
 		}
 		moneyService.insertMoney(vo);
 		return vo;

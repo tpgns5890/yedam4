@@ -19,9 +19,12 @@
 			<div class="contest" >
 			 	
 				<!-- 게시글 검색 -->
-				<form id="searchFrm" name="searchFrm">
-					<label>제목</label><input type="text" id="Ttl" name="Ttl" value="">
-					<label>내용</label><input type="text" id="Cntn" name="Cntn" value="">
+				<form name="searchFrm" id="search">
+					<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
+						<option value="Ttl" selected="selected">제목</option>
+						<option value="Cntn">내용</option>
+               		</select>
+               		<input type="text" name="ttl" id="input" value="">
 					<input type="hidden" name="page" value="1">
 					<button type="submit" class="btn btn-g btn-round inputBtn">검색</button>
 				</form>
@@ -89,12 +92,17 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		
+		//검색선택
+		//기본 ttl, 변경시 적용.
+		$('select[name="search"]').on("change", function () {
+		    $('#input').attr("name",$(this).val());
+		   
+		})
+		
 		//페이징 
 		function gopage(i) {
-			$('input[name="Ttl"]').val('');
-			$('input[name="Cntn"]').val('');
-			$("input[name='page']").val(i);
-			$("#searchFrm").submit();   
+			$('input[name="page"]').val(i);
+			$("#search").submit();   
 		}
 		
 		//모달창-----------------------------------------------------------

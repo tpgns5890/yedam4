@@ -91,18 +91,11 @@
 								onclick="return false">렌탈업체</li>
 
 							<li><label>행사지역</label>
-								<ul id="busiArea" class="userUlTag">
-									<li
-										th:each="area, t : ${#strings.arraySplit(user.busiArea, ',')}"
-										class='tag-item'>[[${area}]]</li>
-								</ul></li>
+								<input type="text" th:value="${user.busiArea}">
 
 							<li><label>행사스타일</label>
-								<ul id="busiStyle" class="userUlTag">
-									<li
-										th:each="style, t : ${#strings.arraySplit(user.busiStyle, ',')}"
-										class='tag-item'>[[${style}]]</li>
-								</ul></li>
+								<input type="text" th:value="${user.busiStyle}">
+							</li>
 						</ul>
 					</th:block>
 				</ul>

@@ -9,7 +9,8 @@ ul {
 	list-style: none;
 }
 
-.designDiv {
+.designDiv, .contestDiv {
+	height: 100%;
 	margin: 0 auto;
 	margin-top: 100px;
 	margin-left: 140px;
@@ -17,14 +18,19 @@ ul {
 
 .contest, #boxList {
 	margin: 0 auto;
-	margin-top: 100px;
+	margin-top: 50px;
 	margin-left: 270px;
+	margin-bottom: 50px;
 }
 
 /* 페이징 */
-.block-27 {
+.block-27{
 	width: 100%;
 }
+ #paging {
+ 	width: 100%;
+ 	
+ }
 
 /* 테이블 */
 #table  tr:hover {
@@ -66,8 +72,14 @@ ul {
 }
 
 #search {
-	margin-top: 30px;
-	width: 500px;
+	padding-top: 50px;
+	width: 1000px;
+}
+#search .form-control {
+    display: inline-block;
+    width: 10%;
+    height: 35px !important;
+    font-size: 16px !important;
 }
 
 label {

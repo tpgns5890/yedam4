@@ -35,31 +35,32 @@
 				<div class="row" style="padding-top: 20px"> 
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 이미지 출력 -->
-						<div th:if="${contest.img} != null">
-							<img th:src="|/fileView/${contest.img}|" style="width: 500px; height: 600px; margin:0px;">
-						</div>					
-						<div th:if="${contest.img} == null">
-							<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; ">
-						</div>					
+						<th:block th:if="${contest.img} != null">
+							<img th:src="|/fileView/${contest.img}|" style="width: 500px; height: 600px; margin:0px; border-radius: 5%;">
+						</th:block>					
+						<th:block th:if="${contest.img} == null">
+							<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; border-radius: 5%;">
+						</th:block>					
 					</div>
 					<div class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 						<div id="show"></div>
 						<h1 th:text="|[${contest.category}] ${contest.ttl}|"></h1>
 						<h4 th:text="|작성자 ${contest.writer}|"></h4>
 						
-						<div th:if="${contest.style} != null or ${contest.style} != ''">
+						<th:block th:if="${contest.style} != null or ${contest.style} != ''">
 								<h4 th:text="|#${contest.style}|" style="color: #117bd9"></h4>
-						</div>
+						</th:block>
 						
+					<div>
 						<!-- 신고수 및 버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px;'>&#128680;</span>
+							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
 							<span th:text=${contest.rprt}></span>
 						</th:block>
 						
 						<th:block sec:authorize="isAuthenticated()">
 								<th:block th:if="|${session.member.getUserId()}| != ${contest.writer} ">
-									<span id="modalUp" style='font-size: 20px;'>&#128680;</span>
+									<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
 								</th:block>
 								<th:block th:if="|${session.member.getUserId()}| == ${contest.writer} ">
 									<span style='font-size: 20px;'>&#128680;</span>
@@ -86,33 +87,33 @@
 						<!-- 회원 좋아요 하트버튼 -->
 						<th:block sec:authorize="isAuthenticated()">
 							
-							<div th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
+							<th:block th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
 								<!-- 관심공모전인경우 -->
 								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -65px;">
 								</div>
-							</div>
+							</th:block>
 							
-							<div th:if="${likeCheck} == null">
+							<th:block th:if="${likeCheck} == null">
 								<!-- 관심공모전이 아닌경우 -->
 								<div id="love" class="stage heart" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -65px;">
 								</div>
-							</div>
+							</th:block>
 						</th:block>
-						
+					</div>
 						<!-- 마감연장일 있는경우 -->
-						<div th:if="${contest.dtExtns} != null">
+						<th:block th:if="${contest.dtExtns} != null">
 							<div><p th:text="|공모기간: ${#dates.format(contest.dtReg, 'yy/MM/dd')} ~ ${#dates.format(contest.dtExtns, 'yy/MM/dd')}|"></p></div>
-						</div>
+						</th:block>
 
 						<!-- 마감연장일 없는경우 -->
-						<div th:if="${contest.dtExtns} == null">
+						<th:block th:if="${contest.dtExtns} == null">
 							<div><p th:text="|공모기간: ${#dates.format(contest.dtReg, 'yy/MM/dd')} ~ ${#dates.format(contest.dtCls, 'yy/MM/dd')}|"></p></div>
-						</div>
+						</th:block>
 	
 						<!-- 우승금액 -->
-						<div th:each="w : ${winnerList}">
+						<th:block th:each="w : ${winnerList}">
 							<p class="price" th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></p>
-						</div>
+						</th:block>
 
 						<div class="col-sm-6">
 							<div class="input-group col-md-6 d-flex mb-3"></div>
@@ -454,8 +455,8 @@
 				p =`<ul class="children" style="list-style: none">
 						<li class="comment">
 						<div class="comment-body" id="${question.qNo}">
-							<h3>${question.userId} : ${question.ttl}</h3>
-				            <div class="meta">${question.writingDt}</div>
+							<h3>${question.ttl}</h3>
+							<div>${question.userId} | ${question.writingDt}</div>
 				            <p>${question.cntn}</p>
 				            ${delBtn} ${upBtn}
 				            ${repInsert}
@@ -486,7 +487,7 @@
 	   				p = `<ul class="children" style="list-style: none">
 			                <li class="comment" >
 				                <div class="comment-body" id="${questionRep.qNo}">
-				                <div class="meta">작성일:${questionRep.writingDt} </div>
+				                <div class="meta"> ${questionRep.writingDt} </div>
 				                  <p>비공개 답변</p>
 				                  ${delBtn} ${upBtn}
 				                </div>
@@ -497,8 +498,7 @@
 					p = `<ul class="children" style="list-style: none">
 		                <li class="comment" >
 			                <div class="comment-body" id="${questionRep.qNo}">
-			                <h3>${questionRep.userId}</h3>
-			                <div class="meta">작성일:${questionRep.writingDt} </div>
+			                <div>ID : ${questionRep.userId} | ${questionRep.writingDt} </div>
 			                  <p>${questionRep.cntn}</p>
 			                  ${delBtn} ${upBtn}
 			                </div>
@@ -532,8 +532,9 @@
 					$("#cotestCntn").append(questionBox());
 				}
 				//리턴값 문의사항이 없으면 출력
-				if(res.questions == 0){
-					$("#cotestCntn").append($('<p>').append("문의사항이 없습니다."))
+				if(res.questions == 0 && userId == writer){
+					alert('문의사항이 없습니다.');
+					location.href='/contest/select?cNo='+cNo;
 				}
 				//문의사항이 있다면
 				for(data of res.questions){
@@ -575,6 +576,8 @@
  			}else if(Cntn == '' || Ttl  == ''){
  				alert('문의사항을 입력해주세요');
  			//문의사항 등록처리
+ 			}else if(!confirm('문의를 등록하시겠습니까?')){
+					return false;
  			}else{
  				$.ajax({
  	 	   			url : '/questions/insertAjax',
@@ -588,8 +591,13 @@
  	 	   			//문의 부분에 등록하기
  	 	   			console.log(res);
  	 	   			alert('문의등록 완료')
- 	 	   			$("#cotestCntn").children("p").remove();
- 	 	   			$("#cotestCntn").children("ul").before(make(res)); //문의사항 맨앞에 붙이기.
+ 	 	   			
+ 	 	   			console.log($("#cotestCntn").children("p"));
+ 	 	   			console.log($("#cotestCntn").children("ul")[0]);
+ 	 	   			
+ 	 	   			//$("#cotestCntn").children("p").remove();
+ 	 	   			//($("#cotestCntn").children("ul")[0]).before(make(res)); //문의사항 맨앞에 붙이기.
+ 	 	   			$("#cotestCntn").children("button").after(make(res)); ///문의사항 맨앞에 붙이기.
  	 	   		})
  			}
 		});
@@ -597,6 +605,10 @@
 		$("#divCntn").on("click", ".qDelete", function(){
 			let btn = $(this);
 			let qNo = $(this).parent("div").attr('id');
+			
+			if(!confirm('문의를 삭제하시겠습니까?')){
+				return false;
+			}
 			
  			$.ajax({
  	   			url : '/questions/delete',
@@ -608,7 +620,7 @@
  	            },
 				success : function(result){
 						alert('삭제완료');
-						btn.closest(".comment").remove();
+						questions(); //문의 재출력
 				 },
 		           fail: function () {
 		        	   alert('삭제실패');
@@ -629,6 +641,11 @@
 		
 		//문의 수정처리(수정폼에서 추가된 updateBtn)
 		$("#divCntn").on('click', '.updateBtn', function(e){
+			
+			if(!confirm('문의를 수정하시겠습니까?')){
+				return false;
+			}
+			
 			let btn = $(this);
 			let Cntn = $('#qCntn').val();
 			let qNo = $('#qNo').val();
@@ -722,8 +739,8 @@
 				$("#designBox").empty();
 				
 				if(res.design == 0){
-					let p = '참여작이 없습니다.'
-					$("#cotestCntn").append(p); 
+					alert('참여작이 없습니다.');
+					location.href='/contest/select?cNo='+cNo;
 				}
 				for(design of res.design){
 					
