@@ -15,6 +15,11 @@
 		font-weight: blod;
 		margin-bottom: 30px;
 	}
+	.contestBtn, #liCntn,#liQuestions,#lientry{
+		z-index: 1 ;
+	}
+		
+	
 </style>
 </head>
 <body>
@@ -23,8 +28,7 @@
 			<div class="container" >
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h2 class="module-title font-alt">공모전</h2>
-						<div class="module-subtitle font-serif" th:text="|${contest.ttl}|"></div>
+						<h2 class="module-title font-alt" th:text="|${contest.ttl}|"></h2>
 					</div>
 				</div>
 			</div>
@@ -534,7 +538,12 @@
 				//리턴값 문의사항이 없으면 출력
 				if(res.questions == 0 && userId == writer){
 					alert('문의사항이 없습니다.');
-					location.href='/contest/select?cNo='+cNo;
+					//클릭이벤트 발생
+					$('#liCntn').trigger("click");
+					//css 변경
+					$('#liCntn').toggleClass("active");
+					$('#liQuestions').toggleClass("active");
+					$('#liQuestions').children("a").attr("aria-expanded","false");
 				}
 				//문의사항이 있다면
 				for(data of res.questions){
@@ -721,7 +730,7 @@
 			}
 		})
 		//참여작 출력-----------------------------------------------------------
-		function contest(){
+		function contest(e){
 			let page = $('input[name="designPage"]').val();
 			let save="N";
 			$.ajax({
@@ -740,7 +749,12 @@
 				
 				if(res.design == 0){
 					alert('참여작이 없습니다.');
-					location.href='/contest/select?cNo='+cNo;
+					//이벤트실행
+					$('#liCntn').trigger("click");
+					//css 변경
+					$('#liCntn').toggleClass("active");
+					$('#lientry').toggleClass("active");
+					$('#lientry').children("a").attr("aria-expanded","false");
 				}
 				for(design of res.design){
 					
@@ -763,12 +777,12 @@
 		
 		//참여작 생성(공개)
 		function makeDesignNo(design){
-   			let div = `<div class="col-sm-6 col-md-4 col-lg-4" >
+   			let div = `<div class="col-sm-6 col-md-4 col-lg-4">
 				           <div class="shop-item">
 				                <div class="shop-item-image"  >
-				                	<img src="/fileView/${design.sevNm}" style="width: 340px; height: 340px">
+				                	<img src="/fileView/${design.sevNm}" style="width: 340px; height: 340px ;">
 				                </div>
-				                <div class="shop-item-detail">
+				                <div class="shop-item-detail" style="top:100px;">
 				               		 <h3 class="content-box-title font-serif">${design.dgnNo}</h3>
 				                  	<span  id="${design.dgnNo}" class="icon-magnifying-glass btn btn-round btn-b">상세조회</span></a>
 				           	    </div>
@@ -788,7 +802,7 @@
    		}
 		
 		//디자인 공개여부 모달창---------------------------------------------------------------
-		$('#designBox').on("click", function(e){
+		$('#designBox').on("click","span", function(e){
 			let dNo = e.target.id
 			designModel.style.display = "block";
 			

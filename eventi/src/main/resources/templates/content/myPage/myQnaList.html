@@ -83,8 +83,9 @@
 			  let result = '[[${result}]]';
 		      console.log(result)
 			if (result != '') {
-				alert(result);
-				location.href='/myPage/userMypage'; 
+				$('table').remove();
+				$('.pagination').remove();
+				$('form[name="searchFrm"]').after('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">')
 			}
 		})
 

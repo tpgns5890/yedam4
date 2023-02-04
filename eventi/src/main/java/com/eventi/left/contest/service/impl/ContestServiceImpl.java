@@ -324,6 +324,9 @@ public class ContestServiceImpl implements ContestService {
 		public void run() {
 			// 수신동의한 멤버리스트.
 			List<MemberVO> emailList = memberMapper.memberEmail();
+			for(MemberVO email : emailList) {
+				System.out.println(email.getUserEmail());
+			}
 
 			// 처리된결과가 있으면
 			if (insert > 0) {

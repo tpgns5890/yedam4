@@ -84,8 +84,7 @@
 		 $(document).ready(function () {
 			  let result = '[[${result}]]';
 			if (result != '') {
-				alert(result);
-				location.href='/myPage/userMypage'; 
+				$('form[name="designSearchFrm"]').after('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">')
 			}
 		})
 		
