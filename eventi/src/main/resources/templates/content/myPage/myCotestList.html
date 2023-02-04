@@ -13,14 +13,13 @@
 <body>
 
 	<!-- 2.레이아웃 content적용 -->
-	<div layout:fragment="content" class="content">
+	<div layout:fragment="content">
 	<h2 hidden="hidden" class="module-title font-alt">공모전리스트</h2>
 		
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
 		<div class="contest" >
-
 			<!-- 게시글 검색 -->
 			<form name="searchFrm" id="search">
 			 	<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">

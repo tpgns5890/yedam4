@@ -114,9 +114,10 @@
 	change();
 	
 		$(function() {
-			$(".has_sub").click(function() {
+			 $(".has_sub").click(function() {
 				$(".left_sub_menu").fadeToggle(300);
-			});
+				
+			}); 
 			// 왼쪽메뉴 드롭다운
 			$(".sub_menu ul.small_menu").hide();
 			$(".sub_menu ul.big_menu").click(function() {
@@ -125,7 +126,6 @@
 		});
 		
 		 function change(){
-			 console.log($('h2').text());
 			$('#mypage_h2').empty();
 			$('#mypage_h2').html($('h2').text());
 		}

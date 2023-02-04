@@ -26,6 +26,7 @@ public class DesignVO {
 	private String save = "N";
 	
 	private String contestTtl; //공모전제목
+	private String writer; //공모전작성자
 	private String userLike; //회원 좋아요
 	
 	private String sevNm;		//서버내파일명

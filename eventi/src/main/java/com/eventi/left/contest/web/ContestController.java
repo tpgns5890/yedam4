@@ -248,11 +248,12 @@ public class ContestController {
 	// 2.공모전리 -> 상세정보 참여작조회
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
-	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
+	public Map<String, Object> ajaxDesignRead(ContestVO vo, PagingVO paging) {
 
 		// 1건의 공모전에 접수된 디자인리스트
 		DesignVO dVo = new DesignVO();
-		dVo.setcNo(cNo);
+		dVo.setcNo(vo.getcNo());
+		dVo.setCaregory(vo.getCategory());
 		List<DesignVO> designs = dService.contestDesignList(dVo, paging);
 
 		// 리턴할 최종Map

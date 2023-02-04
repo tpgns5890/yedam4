@@ -50,8 +50,13 @@ public class DesignServiceImpl implements DesignService {
 	@Override
 	// 공모전 1건에 지원자리스트!!
 	public List<DesignVO> contestDesignList(DesignVO vo, PagingVO paging) {
+		
+		if(vo.getCaregory() != null && vo.getCaregory().equals("D2")) {
+			paging.setPageUnit(4);
+		}else {
+			paging.setPageUnit(6);
+		}
 		paging.setTotalRecord(mapper.entryDesign(vo.getcNo()));
-		paging.setPageUnit(6); // 4개 출력 (default 10)
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
@@ -87,7 +92,12 @@ public class DesignServiceImpl implements DesignService {
 	@Override
 	public List<DesignVO> userDesignList(DesignVO vo, PagingVO paging) {
 		paging.setTotalRecord(mapper.count(vo));
-		paging.setPageUnit(6);
+		
+		if(vo.getCaregory() != null && vo.getCaregory().equals("D2")) {
+			paging.setPageUnit(4);
+		}else {
+			paging.setPageUnit(6);
+		}
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 

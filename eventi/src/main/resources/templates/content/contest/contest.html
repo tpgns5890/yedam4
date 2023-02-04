@@ -18,6 +18,9 @@
 	.contestBtn, #liCntn,#liQuestions,#lientry{
 		z-index: 1 ;
 	}
+	#menu{
+		    margin-top: 30px;
+	}
 		
 	
 </style>
@@ -77,9 +80,9 @@
 						
 						<!-- 조회수 -->
 						 <span style='font-size: 30px;'>&#128065;</span>
-						 <span th:text=${contest.inq}></span>
+						 <span id="inqNum" th:text=${contest.inq}></span>
 						 <!-- 좋아요수 -->
-						 <span th:text=${contest.likes} style="display:inline-block; width: 50px; text-align: right;"></span>
+						 <span id="likeCount" th:text=${contest.likes} style="display:inline-block; width: 50px; text-align: right;"></span>
 						 
 				
 						<!-- 비회원 하트버튼 -->
@@ -155,7 +158,7 @@
 					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
 						<div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-							<ul class="nav nav-tabs font-alt navbar" role="tablist">
+							<ul id="menu" class="nav nav-tabs font-alt navbar" role="tablist">
 								<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">요청사항</span></a></li>
 								<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">문의사항</span></a></li>
 								<li id="lientry"><a href="#reviews" data-toggle="tab"><span class="icon-tools-2">참여작</span></a></li>
@@ -216,9 +219,17 @@
 		<!-- 디자인 상세보기 모달 -->
 		<div id="designModel" class="modal">
 			<div class="img_modal_content">
-				<span id="designCancel" class="close">&times;</span>
-				<h3 id="title"></h3>
-				<div id="modelSelect"></div>
+				
+				<div class="column middle">
+					<h3 id="title"></h3>
+					<div id="modelSelect"></div>
+				</div>
+				
+				<div class="column side">
+				  	<span id="designCancel" class="close">&times;</span>
+				    <h3 id="dgnerSelect"></h3>
+				</div>
+				
 			</div>
 			<div class="modal_layer"></div>
 		</div>
@@ -236,6 +247,7 @@
 		let cNo = '[[${contest.cNo}]]';
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		let writer = '[[${contest.writer}]]';
+		let category = '[[${contest.categoryCode}]]';
 		
 		//로그인모달창.
 		function login(){
@@ -736,7 +748,7 @@
 			$.ajax({
 	            url:'/contest/ajaxDesignRead',
 	            method:"post",
-	            data : {cNo,page,save},
+	            data : {cNo,page,save,category},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);
@@ -777,13 +789,30 @@
 		
 		//참여작 생성(공개)
 		function makeDesignNo(design){
-   			let div = `<div class="col-sm-6 col-md-4 col-lg-4">
+			let img;
+			let size;
+			
+			//배너
+			if(category =='D2'){
+				size = `<div class="col-sm-6 col-md-4 col-lg-4"style="width: 24%; height: 650px;  margin-right:3px; margin-left=400px;"> `
+				img = `<img src="/fileView/${design.sevNm}" style="width: 100%; height: 650px;">`
+				
+			//현수막
+			}else if(category =='D1'){
+				size = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 100%; "> `;
+				img = `<img src="/fileView/${design.sevNm}" style="style=width: 100%; height: 200px;">`
+			//그외
+			}else{
+				size = `<div class="col-sm-6 col-md-4 col-lg-4"> `
+				img = `<img src="/fileView/${design.sevNm}" style="width: 340px; height: 340px ; border-radius: 3%; ">`
+			}
+			
+   			let div = `	   ${size}
 				           <div class="shop-item">
 				                <div class="shop-item-image"  >
-				                	<img src="/fileView/${design.sevNm}" style="width: 340px; height: 340px ;">
+				                	${img}
 				                </div>
 				                <div class="shop-item-detail" style="top:100px;">
-				               		 <h3 class="content-box-title font-serif">${design.dgnNo}</h3>
 				                  	<span  id="${design.dgnNo}" class="icon-magnifying-glass btn btn-round btn-b">상세조회</span></a>
 				           	    </div>
 				    		</div>
@@ -820,30 +849,57 @@
 				let title = res.name;
 				let cntn = res.cntn;
 				
-				$('#title').empty();
-				let content = `<h3>${user} 님의 참여작품 </h3>
-								<p>작품명 : ${title} </p>
-								<p>${cntn} </p>
-							  `
-				
-				$('#title').append(content);
-				
 				//모달내용을 지운뒤 붙여넣기.
+				$('#dgnerSelect').empty();
 				$('#modelSelect').empty();
+				
+				let side = ` <div id="designId">
+								 <div class="radius">
+									<img class="radius_img" src="/images/profile.jpg">
+								 </div>
+									<h3>${user}</h3>
+									<button><a href="/prtfl/dgnerSelect?userId=${user}">포트폴리오 조회</button></a>
+							</div>
+								<hr> 
+							<div>
+								<h3>작품명 : ${title}</h3>
+								<p>${cntn}</p>
+							</div>
+									`;
+				$('#dgnerSelect').append(side);
+				
+				
 				for(file of res.files){
-					makeDesign(file.sevNm,title,dNo);
+					makeDesign(file.sevNm,dNo,category);
 				}
 				
 			})
 		})
 		
 		//모달창 :디자인 응모작품 생성.
-		function makeDesign(fileName,dNo){
-			let design = `  <div class="design" id="${dNo}" style="float: left ">
-									<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
-						   </div>
-						  `
-				$('#modelSelect').append(design);
+		function makeDesign(fileName,dNo,category){
+			let design;
+			//배너
+			if(category =='D2'){
+				design = `	 <div class="design" id="${dNo}" style="width:60%; margin: 10px auto; margin-bottom:20px; ">
+								<img src="/fileView/${fileName}" style="width: 100%; height: 60%;">
+							</div>	
+						`
+				
+			//현수막
+			}else if(category =='D1'){
+				design = `<div class="design " id="${dNo}" style="width:100%; margin-bottom:20px;">
+							   <img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">
+						  </div>`
+			//그외
+			}else{
+				design = `	<div class="design" id="${dNo}" style="width:80%; margin: 0 auto; margin-bottom:20px;">
+							    <img src="/fileView/${fileName}" style="width: 100%; height: 400px; border-radius: 3%;">
+							</div>`
+			}
+			
+			
+			$('#modelSelect').append(design);
 		}
 		//모달창 숨기기.
 		$("#designCancel").on('click', function() {
@@ -862,7 +918,7 @@
 			//하트가 눌렸을 경우 실행
 			if ($(e).hasClass("active")) {
 				$.ajax({
-					url: '../likes/lInsert',
+					url: '/likes/lInsert',
 					method: 'post',
 					data: {targetNo,category},
 					beforeSend: function (xhr) {
@@ -871,8 +927,12 @@
 					},
 				}).then(res => {
 					if(res > 0){
+						console.log(res);
 						alert('관심공모전 추가완료!')
-						location.href='/contest/select?cNo='+cNo;
+						//총 좋아요수 처리
+				    	 let likeCount = $('#likeCount').text();
+				    	 $('#likeCount').text(parseInt(likeCount) + 1);
+						
 						
 					}else{
 						alert('관심공모전 추가실패!')
@@ -882,7 +942,7 @@
 			//하트가 눌리지 않았을 경우 실행
 			} else if (!($(e).hasClass("active"))) {
 					$.ajax({
-						url: '../likes/lDelete',
+						url: '/likes/lDelete',
 						method: 'post',
 						data: {targetNo,category},
 						beforeSend: function (xhr) {
@@ -892,7 +952,9 @@
 					}).then(res => {
 						if(res > 0){
 							alert('관심공모전 취소완료!')
-							location.href='/contest/select?cNo='+cNo;
+							//총 좋아요수 처리
+					    	 let likeCount = $('#likeCount').text();
+					    	 $('#likeCount').text(parseInt(likeCount) - 1);
 						}else{
 							alert('관심공모전 취소실패!')
 						}

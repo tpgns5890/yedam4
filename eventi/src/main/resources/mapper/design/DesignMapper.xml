@@ -9,6 +9,14 @@
 			</if>
 	</sql>
 	<!-- 검색처리 -->
+	<sql id="category">
+		<if test="caregory == null">
+			and caregory = 'D1'
+		</if>
+		<if test="caregory != null and caregory != ''">
+			and caregory = #{caregory} 
+		</if>
+	</sql>
 	<sql id="search">
 			<if test="name != null and name != ''">
 				and name LIKE '%'||#{name}||'%' 
@@ -50,6 +58,7 @@
 		where SAVE = 'N'
 		<include refid="check" /> 
 		<include refid="search" /> 
+		<include refid="category" /> 
 	</select>
 	
 	<!-- 전체디자인 리스트 개수 반환 -->
@@ -65,10 +74,13 @@
 	<select id="contestDesignList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
 			select c.c_no,
+				   d.caregory,
 				   d.dgn_no,
 				   d.user_id user_id,
-				   d.name, d.cntn,
-				   d.dt, d.center_img,
+				   d.name,
+				   d.cntn,
+				   d.dt,
+				   d.center_img,
 				   d.pubc_yn,
 				   f.sev_nm sevNm
 			
@@ -96,6 +108,7 @@
 		and d.center_img = f.f_nm
 		and d.save = 'N'
 		<include refid="search" /> 
+		<include refid="category" /> 
 		order by dt DESC
 	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
@@ -104,20 +117,23 @@
 	
 	<!--디자인한건조회 -->
 	<select id="getDesign" resultType="DesignVO">
-		SELECT DGN_NO,
-			   USER_ID,
-			   C_NO,
-			   NAME,
-			   CODE_SELECT(CAREGORY) CAREGORY,
-			   CNTN,
-			   DT,
-			   CENTER_IMG,
-			   PUBC_YN,
-			   SAVE,
+		SELECT c.writer,
+	           c.ttl contestTtl,
+	           d.DGN_NO,
+	           d.USER_ID,
+	           d.C_NO,
+	           d.NAME,
+	           CODE_SELECT(d.CAREGORY) CAREGORY,
+	           d.CNTN,
+	           d.DT,
+	           d.CENTER_IMG,
+	           d.PUBC_YN,
+	           d.SAVE,
 			   (SELECT COUNT(WIN_YN) FROM DESIGN WHERE USER_ID=#{userId} AND WIN_YN = 'Y') CNT,
 			   (SELECT SEV_NM FROM FILES WHERE TARGET_ID=#{userId}) MAINIMG
-		  FROM DESIGN
-		 WHERE dgn_no = #{dgnNo}
+		  FROM DESIGN d join contest c
+                        on d.c_no = c.c_no                
+		 and dgn_no = #{dgnNo}
 		 ORDER BY DT DESC
 	</select>
 	

@@ -6,22 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.common.service.CodeService;
 import com.eventi.left.contest.service.ContestService;
-import com.eventi.left.contest.service.ContestVO;
-import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.service.DesignService;
 import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.service.FilesService;
@@ -80,7 +78,7 @@ public class DesignController {
 
 	// 디자인 응모 처리(마이페이지 응모리스트 페이지.)
 	@PostMapping("/designInsert")
-	public String designInsert(Model model, DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
+	public String designInsert(Model model, DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile, RedirectAttributes rttr) {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
@@ -89,12 +87,20 @@ public class DesignController {
 
 		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
 		service.insert(vo, filesVO, uploadFile);
+		// 기본 현수막 조회로 인해 카테고리 정보를 넘겨주어야 등록된 디자인을 확인가능.
+		rttr.addAttribute("category",vo.getCaregory());
+		
 		return "redirect:/design/designMypage";
 	}
 
 	 // 디자인응모리스트(마이페이지)
 	   @GetMapping("/designMypage")
-	   public String designMypage(Model model, DesignVO vo, PagingVO paging) {
+	   public String designMypage(Model model, DesignVO vo, PagingVO paging, String category) {
+		   
+		   //등록된 카테고리를 담아서 마이페이지 이동.
+		   if(category!=null) {
+			   vo.setCaregory(category);
+		   }
 
 	      // 로그인 회원정보
 	      MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
@@ -107,6 +113,7 @@ public class DesignController {
 	      //등록한 공모전 있는경우
 	      }else {
 	         model.addAttribute("design", design);
+	         model.addAttribute("catagory", design.get(0).getCaregory());
 	      }
 	      
 	      model.addAttribute("paging", paging);
