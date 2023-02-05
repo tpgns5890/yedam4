@@ -36,13 +36,15 @@ public class MemberController {
 
 	// 일반회원 가입페이지 이동
 	@RequestMapping(value = "/memNormalSignUp")
-	public String normalSignUpPage() {
+	public String normalSignUpPage(Model model) {
+		model.addAttribute("bankCode", service.getBankCode());
 		return "content/member/normalSignUp";
 	}
 
 	// 업체회원 가입페이지 이동
 	@RequestMapping(value = "/memBusiSignUp")
 	public String busiSignUpPage(Model model, CodeVO codeVO) {
+		model.addAttribute("bankCode", service.getBankCode());
 		model.addAttribute("busiArea", service.getCountry());
 		model.addAttribute("busiStyle", service.getType());
 		
@@ -112,15 +114,16 @@ public class MemberController {
 		service.insertMember(memberVO);
 		return "redirect:/login";
 	}
+	
 	//업체회원가입 처리
-		@PostMapping("/insertBusiMember")
-		@ResponseBody
-		public String insertBusiMember(@RequestBody MemberVO memberVO) {
-			memberVO.setUserPassword(passwordEncoder.encode(memberVO.getPassword()));
-			System.out.println(memberVO);
-			service.insertBusiMember(memberVO);
-			return "redirect:/login";
-		}
+	@PostMapping("/insertBusiMember")
+	@ResponseBody
+	public String insertBusiMember(@RequestBody MemberVO memberVO) {
+		memberVO.setUserPassword(passwordEncoder.encode(memberVO.getPassword()));
+		System.out.println(memberVO);
+		service.insertBusiMember(memberVO);
+		return "redirect:/login";
+	}
 	
 	//로그인페이지 이동
 	@RequestMapping(value="/loginPage")

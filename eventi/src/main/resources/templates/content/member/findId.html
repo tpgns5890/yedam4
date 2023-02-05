@@ -78,13 +78,12 @@
 		}
 
 		#form_area {
-			width: 25%;
-			height: 250px;
-			margin: 0 auto;
-			padding: 30px;
-			color: gray;
-			background: rgba(255, 255, 255, 0.8);
-			border-radius: 15px;
+			position: absolute;
+    		width: 25%;
+    		padding: 30px;
+    		top: 50%;
+    		left: 50%;
+    		transform: translate(-50%, -50%);
 		}
 	</style>
 
@@ -92,23 +91,24 @@
 
 <body>
 	<div layout:fragment="content">
-		<section class="home-section home-full-height bg-dark bg-gradient" id="home"
-			data-background="assets/images/section-11.jpg"
-			style="height: 937px; background-image: url(&quot;assets/images/section-11.jpg&quot;);">
+		<section class="home-section home-full-height bg-dark" id="home"
+			data-background="/assets/images/findId.jpg"
+			style="height: 937px; background-image: url(&quot;/assets/images/findId.jpg&quot;);">
 			<div class="titan-caption">
 				<div class="caption-content">
-					<div class="font-alt mb-40 titan-title-size-4">"Forgot ID?"</div>
 					<div id="form_area">
 						<form style="text-align: left;">
-							이름<input type="text" class="form-control" name="name" id="name" placeholder="Name"> <br>
-							이메일주소<input type="text" class="form-control" name="userEmail" id="email"
-								placeholder="example@email">
+							<label>이름</label><input type="text" class="form-control" name="name" id="name" placeholder="홍길동"> <br>
+							<label>이메일주소</label><input type="text" class="form-control" name="userEmail" id="email"
+								placeholder="eventi@eventi.com">
 							<div>
 								<font id="find_feedback" size="2"></font>
 							</div>
 							<br>
-							<button style="float: right;" id="findBtn" class="btn btn-border-d btn-round"
-								type="button">아이디찾기</button>
+							<button type="button" id="modal_login_btn" class="btn btn-w btn-round"
+										th:onclick="|location.href='@{loginPage}'|"><b>이전</b></button>
+							<button style="float: right;" id="findBtn" class="btn btn-w btn-round"
+								type="button"><b>아이디찾기</b></button>
 						</form>
 						<div id="modal">
 							<div class="modal_content">

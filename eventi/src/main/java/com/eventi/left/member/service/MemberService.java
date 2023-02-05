@@ -48,4 +48,6 @@ public interface MemberService{
 	
 	public List<CrtfVO> crtfSelect(String userId); // 회원의 자격증 조회
 
+	public List<CodeVO> getBankCode();
+
 }

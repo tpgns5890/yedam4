@@ -201,7 +201,7 @@
 					<div id="list-head">
 						<div id="list-head-right">
 							<div id="searchArea">
-								<input type="text" name="ttl">
+								<input type="text" name="ttl" placeholder="제목 검색">
 							</div>
 						</div>
 					</div>
@@ -278,11 +278,13 @@
 			//비동기 통신
 			function ajaxList(thispage) {
 				let page = $('input[name="page"]').val();
+				let ttl = $('input[name="ttl"]').val();
 				$.ajax({
 					url: "/admin/contestAjax",
 					method: 'post',
 					data: {
-						page
+						page,
+						ttl
 					},
 					beforeSend: function (xhr) {
 						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/

@@ -17,15 +17,21 @@
 							 USER_PASSWORD, 
 							 USER_EMAIL, 
 							 USER_NAME,
+							 USER_PHONE,
 							 USER_MESSAGING, 
 							 USER_GRADE, 
+							 BANK,
+							 ACCNT,
 							 USER_REGDATE)
 		VALUES(#{userId}, 
 			   #{userPassword}, 
 			   #{userEmail}, 
 			   #{name}, 
+			   #{userPhone},
 			   #{userMessaging},
 			   #{auth}, 
+			   #{bank},
+			   #{accnt},
 			   SYSDATE)
 	</insert>
 	
@@ -109,12 +115,14 @@
 	SELECT CODE_ID, CODE_NAME
 	FROM MNCODE 
 	WHERE CL_ID = 'A'
+	AND CODE_ID != 'A00'
 	</select>
 	
 	<select id="getType" resultType="CodeVO">
 	SELECT CODE_ID, CODE_NAME
 	FROM MNCODE 
 	WHERE CL_ID = 'E'
+	AND CODE_ID != 'E00'
 	</select>
 	
 	<!-- 수신동의 회원의 이메일리스트 -->
@@ -196,4 +204,9 @@
 		WHERE USER_ID = #{userId}
 	</select>
 	
+	<select id="getBankCode" resultType="CodeVO">
+		SELECT * 
+		FROM MNCODE
+		WHERE CL_ID = 'B'
+	</select>
 </mapper>

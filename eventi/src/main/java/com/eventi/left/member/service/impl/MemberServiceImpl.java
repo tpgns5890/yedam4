@@ -234,4 +234,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return mapper.crtfSelect(userId);
 	}
 
+	//은행사 코드 가져오기
+	@Override
+	public List<CodeVO> getBankCode() {
+		return mapper.getBankCode();
+	}
+
 }

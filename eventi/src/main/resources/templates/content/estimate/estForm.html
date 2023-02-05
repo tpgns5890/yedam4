@@ -294,10 +294,10 @@ h2 {
 <!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
 <h2>행사 날짜를 선택해주세요.</h2>
 <div class="form-group">
-<input type="date" name="eventDate" value="" class="form-control"><br>
+<input type="date" name="eventDt" value="" class="form-control"><br>
 </div>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" id="eventDate" class="next">
+ <input type="button" value="다음" id="eventDt" class="next">
 </div><!-- end of bodyContents -->
 
  <!-- 행사시작시간 선택 -->
@@ -328,43 +328,43 @@ h2 {
 <table id="customers">
   <tr>
     <td><label class="checkList">1시간
-  <input type="radio"  name="eventDuration" value="1">
+  <input type="radio"  name="expectedDuration" value="1">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="checkList">2시간
-  <input type="radio"  name="eventDuration" value="2">
+  <input type="radio"  name="expectedDuration" value="2">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="checkList">3시간
-  <input type="radio"  name="eventDuration" value="3">
+  <input type="radio"  name="expectedDuration" value="3">
   <span class="checkmark"></span>
 </label></td>
   </tr>
   <tr>
    <td><label class="checkList">4시간
-  <input type="radio"  name="eventDuration" value="4">
+  <input type="radio"  name="expectedDuration" value="4">
   <span class="checkmark"></span>
 </label></td>
   </tr>
    <tr>
    <td><label class="checkList">하루 이상
-  <input type="radio"  name="eventDuration" value="24">
+  <input type="radio"  name="expectedDuration" value="24">
   <span class="checkmark"></span>
 </label></td>
   </tr>
    <tr>
    <td><label class="checkList">기타
-  <input type="radio"  name="eventDuration" class="etc" id="eventDurationEtc">
+  <input type="radio"  name="expectedDuration" class="etc" id="expectedDurationEtc">
   <span class="checkmark"></span>
 </label></td>
   </tr>
 </table>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="eventDuration">
+ <input type="button" value="다음" class="next" id="expectedDuration">
  </div><!-- end of bodyContents -->
  
   <!-- 행사지역 선택 -->
@@ -372,7 +372,7 @@ h2 {
 <!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
 <h2>행사 예상 지역을 선택해주세요.</h2>
 <div class="form-group">
-<select name="expectedLocal" class="form-control">
+<select name="expectedLcal" class="form-control">
 	<option value="A00">==지역선택==</option>
 	<option value="A01">서울</option>
 	<option value="A02">인천</option>
@@ -390,7 +390,7 @@ h2 {
 </select>
 </div>
  <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="expectedLocal">
+ <input type="button" value="다음" class="next" id="expectedLcal">
 </div><!-- end of bodyContents -->
 
  <!-- 행사 희망사항 입력 -->
@@ -453,7 +453,7 @@ $('.next').click(function() {
 	case "expectedPl" :
 	case "pats" : 
 	case "eventTime" :
-	case "eventDuration" :
+	case "expectedDuration" :
 		var checked = $('input:radio[name='+name+']:checked');
 		if(!checked.length) {
 		$('p').remove()
@@ -467,8 +467,8 @@ $('.next').click(function() {
 			$(this).parent().next().removeClass('hidden');
 		break;
 		
-	case "expectedLocal" :
-		if($("[name=expectedLocal] > option:selected").val() == 'A00'){
+	case "expectedLcal" :
+		if($("[name=expectedLcal] > option:selected").val() == 'A00'){
 			$('p').remove()
 			 var p = document.createElement('p')
 			 p.setAttribute('id', 'p')
@@ -480,8 +480,8 @@ $('.next').click(function() {
 			$(this).parent().next().removeClass('hidden');
 		break;
 		
-	case "eventDate" :
-		var date = $('input[name=eventDate]').val();
+	case "eventDt" :
+		var date = $('input[name=eventDt]').val();
 		if(date == "") {
 			$('p').remove()
 			 var p = document.createElement('p')
@@ -507,7 +507,7 @@ $('.prev').click(function() {
 var now_utc = Date.now()
 var timeOff = new Date().getTimezoneOffset()*60000;
 var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-document.getElementById('eventDate').setAttribute("min", today);
+document.getElementById('eventDt').setAttribute("min", today);
 
 //견적요청서 등록
 $('.submit').click(function() {

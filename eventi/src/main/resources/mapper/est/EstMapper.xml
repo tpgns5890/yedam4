@@ -56,8 +56,8 @@
 		</selectKey>
 		INSERT INTO ESTIMATE
 		VALUES('ES'||eno_seq.nextval, #{userId}, #{eventType}, #{pats},
-		#{expectedPl}, #{eventDate}, #{eventTime}, #{eventDuration},
-		#{expectedLocal}, #{wishes}, sysdate, 'N')
+		#{expectedPl}, #{eventDt}, #{eventTime}, #{expectedDuration},
+		#{expectedLcal}, #{wishes}, sysdate, 'N')
 	</insert>
 
 	<!-- 업체 제안서 채택/후기수 조회 -->
