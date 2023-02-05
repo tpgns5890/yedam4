@@ -3,16 +3,31 @@
 	display: none;
 }
 
-h3 {
+.contestContainer h3, #user h3 {
 	font-weight: bold;
 	text-align: center;
 }
 
 .contestContainer {
-	padding-top: 30px;
-	width: 800px;
-	margin: 0 auto;
-	min-height: 1600px
+	border: 1px solid;
+	padding: 20px 40px 20px 40px;
+	width: 43%;
+	margin: 20px auto;
+}
+.contestContainer h3 {
+	font-weight: bolder;
+	text-align: center;
+}
+
+
+#contestCheck {
+	margin-bottom: 20px;
+}
+
+#saveFile {
+	float: right;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 ul {
@@ -36,7 +51,7 @@ input[type=radio] {
 label {
 	display: inline-block;
 	text-align: left;
-	width: 100px;
+	width: 70px;
 	font-weight: bold;
 	font-size: 18px;
 }
@@ -50,6 +65,19 @@ ul li.tag-item {
 	border-radius: 10px;
 	background-color: pink;
 	color: #000;
+}
+
+/* 등록폼 버튼정렬 */
+.contestBtn {
+	width: 40%;
+	margin: 0 auto 0px;
+	
+}
+
+.contestBtn button {
+	margin-right: 10px;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 .tag-item:hover {

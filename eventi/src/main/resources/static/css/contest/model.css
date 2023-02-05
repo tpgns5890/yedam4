@@ -44,8 +44,12 @@
 	cursor: pointer;
 }
 
-#modelBtn {
+#modelBtn  {
 	text-align: center;
+}
+.modelBtn{
+	width: 40%;
+	margin: 0 auto;
 }
 
 .modelBtn1 {
@@ -76,6 +80,22 @@
 	/* 	둥글게,그림자 효과 */
 	border-radius: 3%;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+}
+.dank_modal_content {
+	width: 20%;
+	min-height: 200px;
+	background: #fff;
+	border: 0.5px solid #666;
+	border-radius: 15px;
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 250px;
+	/* 	둥글게,그림자 효과 */
+	border-radius: 3%;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+}
+.dank_modal_content h3{
+	text-align: center;
 }
 
 .bannerModel {

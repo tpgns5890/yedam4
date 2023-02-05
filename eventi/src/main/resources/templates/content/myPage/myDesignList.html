@@ -186,6 +186,7 @@
 					let cNo = res.cNo
 					let contestTtl = res.contestTtl;
 					let writer = res.writer;
+					let cntn = res.cntn;
 
 					//모달내용을 지운뒤 붙여넣기.
 					$('#dgnerSelect').empty();
@@ -196,9 +197,12 @@
 									<img class="radius_img" src="/images/profile.jpg">
 								 </div>
 									<h3>${writer}</h3>
-									<a href="/contest/select?cNo=${cNo}"><h3>[${category}]${contestTtl}</h3></a>
+									<div onclick="location.href='/contest/select?cNo=${cNo}'" style="cursor: pointer;">
+									<h3>[${category}]${contestTtl}</h3>
+									</div>
 							</div>
 								<hr> 
+								<p>${cntn}</p>
 							<div>
 							</div>
 									`;

@@ -18,7 +18,7 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
-		<div class="contest">
+		<div class="designReadList">
 		<!-- 지원자 수 -->
 		<h3 id="count"></h3>
 
@@ -202,17 +202,17 @@
 			//분류별 이미지 크기설정
 			//배너
 			if(category =='D2'){
-				size = `<div id="${dNo}" class="col-sm-6 col-md-4 col-lg-4 design"style="width: 24%; height: 650px;  margin-right:3px; margin-left=400px;"> `
+				size = `<div id="${dNo}" class="col-sm-6 col-md-4 col-lg-4 design"style="width: 16%; height: 650px;  margin-right:3px;"> `
 				img = `<img src="/fileView/${fileName}" style="width: 100%; height: 650px;">`
 				
 			//현수막
 			}else if(category =='D1'){
-				size = `<div id="${dNo}" class="col-sm-6 col-md-4 col-lg-4 design" style="width: 80%; "> `;
-				img = `<img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">`
+				size = `<div id="${dNo}" class="col-sm-6 col-md-4 col-lg-4 design" style="width: 70%; margin-left:150px"> `;
+				img = `<img src="/fileView/${fileName}" style="style=width: 100%; height: 180px;">`
 			//그외
 			}else{
-				size = `<div id="${dNo}" class="col-sm-6 col-md-4 col-lg-4 design style="width: 400px; height: 400px ;"> `
-				img = `<img src="/fileView/${fileName}" style="width: 400px; height: 400px ; border-radius: 3%; class="img-fluid">`
+				size = `<div id="${dNo}" class="col-sm-6 col-md-4 col-lg-4 design" style="width: 22%;" > `
+				img = `<img src="/fileView/${fileName}" style="width: 430px; height: 430px ; border-radius: 3%; class="img-fluid">`
 			}
 
 			let design = ` ${size}
@@ -299,16 +299,15 @@
 				$('#dgnerSelect').empty();
 				$('#modelSelect').empty();
 				
-				let side = ` <div id="designId">
+				let side = ` <div id="designId" style="cursor: pointer;" onclick="location.href='/prtfl/dgnerSelect?userId=${user}'">
 								 <div class="radius">
 									<img class="radius_img" src="/images/profile.jpg">
 								 </div>
 									<h3>${user}</h3>
-									<button><a href="/prtfl/dgnerSelect?userId=${user}">포트폴리오 조회</button></a>
 							</div>
 								<hr> 
 							<div>
-								<h3>작품명 : ${title}</h3>
+								<h4>작품명 : ${title}</h4>
 								<p>${cntn}</p>
 							</div>
 									`;
@@ -340,7 +339,7 @@
 						  </div>`
 			//그외
 			}else{
-				design = `	<div class="design" id="${dNo}" style="width:80%; margin: 0 auto; margin-bottom:20px;">
+				design = `	<div class="design" id="${dNo}" style="width:70%; margin: 0 auto; margin-bottom:20px;">
 							    <img src="/fileView/${fileName}" style="width: 100%; height: 400px; border-radius: 3%;">
 							</div>`
 			}
