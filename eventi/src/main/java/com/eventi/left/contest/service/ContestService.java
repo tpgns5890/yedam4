@@ -13,7 +13,7 @@ public interface ContestService {
 
 	public ContestVO getContest(String cVo); // 공모전 1건에 대한 등록조회
 	
-	public List<ContestVO> saveGetContest(ContestVO contestVO); // 임시저장 1건,우승자1~3등 조회
+	public ContestVO saveGetContest(ContestVO contestVO); // 임시저장 1건,우승자1~3등 조회
 
 	public int updateContest(ContestVO vo, MultipartFile[] uploadFile); // 수정
 	

@@ -20,91 +20,93 @@
 			
 			<div id="user">
 			<h3 >회원정보 수정</h3>
-			<ul>
-				<li><label>가입일</label><input type="text" th:value="|${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|" disabled="disabled"></li>
-				<!-- 회원등급 -->
-				<li th:if="${user.auth} == 'ROLE_ADMIN'" ><label>회원등급</label><input type="text" disabled="disabled" value="관리자"></li>
-				<li th:if="${user.auth} == 'ROLE_MEM'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원1"></li>
-				<li th:if="${user.auth} == 'ROLE_MEMBER'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원2"></li>
-				<li th:if="${user.auth} == 'ROLE_BUSI'" ><label>회원등급</label><input type="text" disabled="disabled" value="업체"></li>
-				
-				<li><label>아이디</label><input type="text" readonly="readonly" th:value="${user.userId}"></li>
-				<li><label>이메일</label><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
-				<li><label>성 명</label><input type="text" id="userName" name="userName"  th:value="${user.name}"></li>
-				<li><label>연락처</label><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
-			
-				<!-- 수신여부 -->
-				<li>
-					<label>수신여부</label>
-					<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</span>
-					<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</span>
-					<span><input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</span>
-					<span><input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S3">메일,휴대폰</span>
-				</li>
-
-				<!-- 회원계좌번호 -->
-				<li>
-					<label>예금주</label><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
-				</li>
-				<li>
-					<label>은행사</label>
-							<select id="bank" name="bank" >
-								<option value="" >=== 은행코드 ====</option>
-								<option value="004" th:selected="${user.bank eq '국민은행'}">국민은행</option>
-								<option value="003" th:selected="${user.bank eq '기업은행'}">기업은행</option>
-								<option value="011" th:selected="${user.bank eq '농협은행'}">농협은행</option>
-								<option value="031" th:selected="${user.bank eq '대구은행'}">대구은행</option>
-							</select>
+			<div class="box">
+				<ul>
+					<li><label>가입일</label><input type="text" th:value="|${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|" disabled="disabled"></li>
+					<!-- 회원등급 -->
+					<li th:if="${user.auth} == 'ROLE_ADMIN'" ><label>회원등급</label><input type="text" disabled="disabled" value="관리자"></li>
+					<li th:if="${user.auth} == 'ROLE_MEM'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원1"></li>
+					<li th:if="${user.auth} == 'ROLE_MEMBER'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원2"></li>
+					<li th:if="${user.auth} == 'ROLE_BUSI'" ><label>회원등급</label><input type="text" disabled="disabled" value="업체"></li>
 					
-				</li>
-				<li>
-					<label>계좌번호</label>
-					<input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
-				</li>
-			</ul>
+					<li><label>아이디</label><input type="text" readonly="readonly" th:value="${user.userId}"></li>
+					<li><label>이메일</label><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
+					<li><label>성 명</label><input type="text" id="userName" name="userName"  th:value="${user.name}"></li>
+					<li><label>연락처</label><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
 				
-				<th:block th:if="${user.busiNum} != null">
-				<ul >
-					<li><label>사업자번호</label><input id="busiNum" name="busiNum" type="text" th:value="${user.busiNum}|" readonly="readonly"></li>
-					<li><label>사업자명</label><input id="busiTitle" name="busiTitle" type="text" th:value="${user.busiTitle}|"></li>
-					
-					<li><label>업체유형</label>
-						<input type="radio" name="busiType" value="U1" th:checked="${user.busiType eq '기획'}">기획업체
-						<input type="radio" name="busiType" value="U2" th:checked="${user.busiType eq '렌탈'}">렌탈업체
-					</li>
- 					
- 					<li>
-						<label>행사지역</label> 
-						<select id="areaCheck" name="busiArea" onchange="busiAreaFun(this)">
-							<option value="">-- 행사가능지역 선택 --</option>
-							<option th:each="area : ${busiArea}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
-						</select>
-						<br>
- 						
- 						<input id="busiAreaInput" name="busiArea" type="hidden">
- 						<ul id="busiArea" class="userUlTag">
- 							<li th:each="area, t : ${#strings.arraySplit(user.busiArea, ',')}" class='tag-item'>[[${area}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
- 						</ul>
- 					</li>
- 					
+					<!-- 수신여부 -->
 					<li>
-						<label>행사스타일</label> 
-						<select id="busiCheck" name="busiStyle" onchange="busiStyleFun(this)">
-							<option value="">-- 행사스타일 선택 --</option>
-							<option th:each="area : ${busiStyle}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
-						</select>
-						<br>
+						<label>수신여부</label>
+						<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</span>
+						<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</span>
+						<span><input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</span>
+						<span><input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S3">메일,휴대폰</span>
+					</li>
+	
+					<!-- 회원계좌번호 -->
+					<li>
+						<label>예금주</label><input id="depotr" name="depotr"  type="text" th:value="${user.depotr}">
+					</li>
+					<li>
+						<label>은행사</label>
+								<select id="bank" name="bank" >
+									<option value="" >=== 은행코드 ====</option>
+									<option value="004" th:selected="${user.bank eq '국민은행'}">국민은행</option>
+									<option value="003" th:selected="${user.bank eq '기업은행'}">기업은행</option>
+									<option value="011" th:selected="${user.bank eq '농협은행'}">농협은행</option>
+									<option value="031" th:selected="${user.bank eq '대구은행'}">대구은행</option>
+								</select>
 						
-						<input id="busiStyleInput" name="busiStyle" type="hidden">
- 						<ul id="busiStyle" class="userUlTag">
- 							<li th:each="style, t : ${#strings.arraySplit(user.busiStyle, ',')}" class='tag-item'>[[${style}]]<span class='style-del-btn' th:idx="${t.index}">x</span></li>
- 						</ul>
+					</li>
+					<li>
+						<label>계좌번호</label>
+						<input id="accnt" name="accnt" type="text" th:value="${user.accnt}">
 					</li>
 				</ul>
-				</th:block>
-				<div  style="position:relative; top:20px; left: 335px;">
-					<button type="button" class="w-btn w-btn-gra1" onclick="location.href='/myPage/userMypage'" >취소</button>
-					<button type="button" id="update" class="w-btn w-btn-gra1" >수정</button>
+					
+					<th:block th:if="${user.busiNum} != null">
+					<ul >
+						<li><label>사업자번호</label><input id="busiNum" name="busiNum" type="text" th:value="${user.busiNum}|" readonly="readonly"></li>
+						<li><label>사업자명</label><input id="busiTitle" name="busiTitle" type="text" th:value="${user.busiTitle}|"></li>
+						
+						<li><label>업체유형</label>
+							<input type="radio" name="busiType" value="U1" th:checked="${user.busiType eq '기획'}">기획업체
+							<input type="radio" name="busiType" value="U2" th:checked="${user.busiType eq '렌탈'}">렌탈업체
+						</li>
+	 					
+	 					<li>
+							<label>행사지역</label> 
+							<select id="areaCheck" name="busiArea" onchange="busiAreaFun(this)">
+								<option value="">-- 행사가능지역 선택 --</option>
+								<option th:each="area : ${busiArea}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+							</select>
+							<br>
+	 						
+	 						<input id="busiAreaInput" name="busiArea" type="hidden">
+	 						<ul id="busiArea" class="userUlTag">
+	 							<li th:each="area, t : ${#strings.arraySplit(user.busiArea, ',')}" class='tag-item'>[[${area}]]<span class='area-del-btn' th:idx="${t.index}">x</span></li>
+	 						</ul>
+	 					</li>
+	 					
+						<li>
+							<label>행사스타일</label> 
+							<select id="busiCheck" name="busiStyle" onchange="busiStyleFun(this)">
+								<option value="">-- 행사스타일 선택 --</option>
+								<option th:each="area : ${busiStyle}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+							</select>
+							<br>
+							
+							<input id="busiStyleInput" name="busiStyle" type="hidden">
+	 						<ul id="busiStyle" class="userUlTag">
+	 							<li th:each="style, t : ${#strings.arraySplit(user.busiStyle, ',')}" class='tag-item'>[[${style}]]<span class='style-del-btn' th:idx="${t.index}">x</span></li>
+	 						</ul>
+						</li>
+					</ul>
+					</th:block>
+					<div class="userBtn">
+						<button type="button" class="w-btn w-btn-gra1" onclick="location.href='/myPage/userMypage'" >취소</button>
+						<button type="button" id="update" class="w-btn w-btn-gra1" >수정</button>
+					</div>
 				</div>
 			</div>
 		<script>

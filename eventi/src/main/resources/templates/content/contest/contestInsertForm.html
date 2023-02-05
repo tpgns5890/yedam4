@@ -451,17 +451,26 @@ input[type=number]{
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
+						
 								$('input[name="cntn"]').text("");
-								$("#cNo").val(data[0].cNo);
-								$("#ttl").val(data[0].ttl);
-								$("input:radio[name='category']:radio[value='"+data[0].category+"']").attr('checked', true);
-								oEditors.getById["cntn"].exec("PASTE_HTML", [data[0].cntn]);
+								$("#cNo").val(data.cNo);
+								$("#ttl").val(data.ttl);
+								$("input:radio[name='category']:radio[value='"+data.category+"']").attr('checked', true);
+								oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
+								
+								
+								//from 업데이트로 변경.
+								$("#contestfrm").attr("action", "/contest/saveUpdate");
+								
+								if(data.img != null){
+							    	imgReader(data.img);
+								}
 								
 								//등록된 스타일이 있을경우
-								if(data[0].style != null){
+								if(data.style != null){
 									
 							        //태그생성.
-							        let style = data[0].style;
+							        let style = data.style;
 							        styletag = style.split(",");
 							        styletagCounter = styletag.length;
 							        for(let i=0; i<styletagCounter; i++){
@@ -475,18 +484,20 @@ input[type=number]{
 							        }
 									
 								}
+// 								console.log(data.winnerVO)
+// 								console.log($('input[name="winnerPay[]"'))
+// 								console.log($('input[name="winnerPay[]"')[0].value)
 								//등록된 상금내역 불러오기
-							 	$('input[name="winnerPay[]"]').each(function (i) {
-									if(data[i].wpay != null){
-										$(this).val(data[i].wpay);
-									}
-								}) 
-								
-								if(data[0].img != null){
-							    	imgReader(data[0].img);
-								}
-								//from 업데이트로 변경.
-								$("#contestfrm").attr("action", "/contest/saveUpdate");
+									
+									$('input[name="winnerPay[]"]').each(function (i) {
+										
+				                           if(data.winnerVO[i].grade != null){
+				                              $(this).val((data.winnerVO[i].wPay));
+				                           }else{
+												console.log("왜안돼?")
+												console.log($(this))
+											}
+				                        }) 
 					
 					},
 					fail : function(result) {

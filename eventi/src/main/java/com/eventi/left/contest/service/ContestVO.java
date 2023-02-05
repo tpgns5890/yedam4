@@ -65,7 +65,7 @@ public class ContestVO {
 	//D-day
 	private int dDay;
 	
-	
+	private List<WinnerVO> winnerVO;
 	private int wPay;
 	private String categoryCode;
 	

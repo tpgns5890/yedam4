@@ -3,16 +3,10 @@
 	padding: 70px 0;
 }
 
-/* // */
 .content-box-title {
 	margin: 0 auto !important;
 }
 
-#user h3 {
-	text-align: center;
-	width: 60%;
-	padding-bottom: 10px;
-}
 
 ul {
 	padding: 0px;
@@ -31,37 +25,44 @@ ul {
 	margin: 100px 20px 0 20px;
 }
 
-.contest{
+.contest {
 	margin: 100px auto;
 	margin-left: 270px;
 	margin-bottom: 50px;
 }
-.designReadList{
-	width:100%;
+
+.designReadList {
+	width: 100%;
 	margin: 120px auto;
 	margin-left: 170px;
 	margin-bottom: 50px;
 }
-.contestLikeDiv{
+
+.contestLikeDiv {
 	margin: 50px 50px 50px 270px;
 }
+
 #boxList {
 	margin: 0 auto;
 	margin-top: 50px;
 	margin-left: 370px;
 	margin-bottom: 50px;
 }
+
 #contestDList {
 	margin: 10px auto 0 150px;
 }
+
 #designList {
 	margin: 10px auto 50px 320px;
 }
-#d2_margin{
+
+#d2_margin {
 	margin-left: 50px;
 }
+
 #likeList {
-	margin: 10px auto 50px 370px;
+	margin: 30px auto 100px 400px;
 }
 
 /* 페이징 */
@@ -113,7 +114,7 @@ ul {
 }
 
 #search {
-	padding-top: 50px;
+	padding-top: 10px;
 	width: 1000px;
 }
 
@@ -297,4 +298,9 @@ ol, ul {
 
 .hide_sidemenu {
 	display: none;
+}
+
+/* 페이징 */
+.page-link {
+	cursor: pointer;
 }

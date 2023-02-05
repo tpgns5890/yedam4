@@ -3,7 +3,7 @@
 	display: none;
 }
 
-.contestContainer h3, #user h3 {
+.contestContainer h3, #user h3, #userUpgrade h3{
 	font-weight: bold;
 	text-align: center;
 }
@@ -14,11 +14,11 @@
 	width: 43%;
 	margin: 20px auto;
 }
+
 .contestContainer h3 {
 	font-weight: bolder;
 	text-align: center;
 }
-
 
 #contestCheck {
 	margin-bottom: 20px;
@@ -71,7 +71,6 @@ ul li.tag-item {
 .contestBtn {
 	width: 40%;
 	margin: 0 auto 0px;
-	
 }
 
 .contestBtn button {
@@ -96,16 +95,71 @@ ul li.tag-item {
 	margin-left: 110px;
 }
 /* 회원정보 폼 */
-.userUlTag {
-	margin-left: 110px;
-}
-
 #user {
 	width: 80%;
 	margin: 0 auto;
-	margin-left: 30%;
 	margin-bottom: 60px;
 	margin-top: 140px;
+}
+
+#user input[type=text], #user select {
+	width: 70%;
+	padding: 12px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: vertical;
+}
+
+#userUpgrade {
+	width: 80%;
+	margin: 0 auto;
+	margin-top: 140px;
+}
+
+.box {
+	padding: 40px 40px 40px 40px;
+	width: 60%;
+	margin: 0px auto 70px;
+	border-radius: 20px;
+	background: #f2f7fc;
+}
+
+.box li {
+	width: 80%;
+	margin: 0px auto;
+}
+.userBtn{
+	width: 30%;
+	margin: 0px auto;
+}
+
+#user h3, #userUpgrade h3 {
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+#upgrade {
+	display: flex;
+	flex-wrap: nowrap;
+	margin-bottom: 10px;
+}
+
+#upgrade label {
+	line-height: 65px;
+}
+
+#upgrade button {
+	height: 40px;
+	margin-top: 14px;
+}
+
+#userUpgrade input[type="text"] {
+	width: 20%;
+}
+
+.userUlTag {
+	margin-left: 110px;
 }
 
 #signIn-right label {

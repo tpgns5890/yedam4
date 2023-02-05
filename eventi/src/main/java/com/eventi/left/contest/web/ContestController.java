@@ -191,7 +191,7 @@ public class ContestController {
 	// 임시저장된 게시글 상세들고오기
 	@PostMapping("/saveSelect")
 	@ResponseBody
-	public List<ContestVO> saveSelect(ContestVO vo) {
+	public ContestVO saveSelect(ContestVO vo) {
 		return service.saveGetContest(vo);
 	}
 
@@ -239,6 +239,7 @@ public class ContestController {
 	// 나의공모전관리 지원자조회페이지 이동
 	@GetMapping("/designRead")
 	public String designRead(Model model, String cNo) {
+		
 		model.addAttribute("contest", service.getContest(cNo));
 		model.addAttribute("winner", wService.winnerList(cNo));
 		return "content/contest/cotestDesignList";

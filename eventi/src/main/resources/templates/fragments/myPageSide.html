@@ -25,7 +25,9 @@
 						<li>내정보관리<i class="fa arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
 							<li><a href="/myPage/userMypage">회원정보조회</a></li>
-							<li><a href="/myPage/userUpgradeForm">승급신청</a></li>
+							<th:block sec:authorize="hasAnyRole('MEM')">
+								<li><a href="/myPage/userUpgradeForm">승급신청</a></li>
+							</th:block>
 						</ul>
 					</ul>
 					<ul class="big_menu">

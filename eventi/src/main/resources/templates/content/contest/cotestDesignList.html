@@ -7,8 +7,28 @@
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
 <link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
-<link rel="stylesheet" href="/css/contest/cotestForm.css">
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+<style>
+input[type=text]{
+	width: 130px;
+	padding: 12px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: vertical;
+	
+}
+form div{
+	width: 75%;
+	margin : 0 auto;
+}
+.btnCenter{
+    font-size: 16px;
+    font-weight: bold;
+    width: 35%;
+    margin: 10px auto
+}
+</style>
 </head>
 <body>
 	<!-- 2.레이아웃 content적용 -->
@@ -56,8 +76,8 @@
 		<th:block th:if="${contest.ing} == '마감' ">
 			<div th:if="${winner[0].dNo} == null">
 					<!-- 우승자 등록 -->
-					<div id="winnerInput">
-						<h4 class="font-alt mb-0">우승자 등록</h4>
+					<div id="winnerInput" style="width: 30%; margin: 0 auto;">
+						<h3 class="font-alt mb-0" style="text-align: center">우승자 등록</h3>
 						<hr class="divider-w mt-10 mb-20">
 						<div>
 							<form class="form" role="form" action="/winner/update" name="winnerfrm" method="post" onsubmit="return check();">
@@ -97,9 +117,10 @@
 											회원ID<input type="text" name="userIdArr[]">
 										</div>
 									</th:block>
-		
-									<button type="reset" class="w-btn w-btn-gra1">초기화</button>
-									<button type="submit" class="w-btn w-btn-gra1">등록</button>
+									<div class="btnCenter">
+									<button type="reset" class="btn btn-g btn-round">초기화</button>
+									<button type="submit" class="btn btn-g btn-round">등록</button>
+									</div>
 							</form>
 						</div>
 					</div>
@@ -188,12 +209,14 @@
 			
 			let ing = '[[${contest.ing}]]'
 			let winnerCheck ='[[${winner[0].dNo}]]'
+			console.log(ing)
+			console.log(winnerCheck)
 			let img;
 			let size;
 			let div;
 			
 			//마감과 진행중 우승자등록여부 표시
-			if(ing == '마감' && winnerCheck == null){
+			if(ing == '마감' && winnerCheck == ''){
 				div = `<span id="${dNo}" class="icon-trophy winner">우승자등록</span>`;
 			}else{
 				div = `<span id="${dNo}" class="select">상세보기</span>`
