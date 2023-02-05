@@ -8,10 +8,12 @@
 <!-- csrf 설정 -->
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
 	.label {
 		color : black;
+		font-size: 14px;
+		padding: 0;
 	}
 	
 	#check{
@@ -22,7 +24,7 @@
 			display : none !important;
 	}
 	
-	ul {
+	.hashtag {
   		padding: 16px 0;
 	}
 	
@@ -54,8 +56,19 @@
 	  font-weight: bold;
 	  cursor: pointer;
 	  margin-left: 8px;
-	}
-		
+	}	
+	
+  select {
+  	height: 30px;
+  	width: 200px;
+  	margin-top: 20px
+  }
+  
+  #insert{
+  	width: 100px;
+    margin: auto;
+    display: block;
+  }
 </style>
 </head>
 
@@ -71,12 +84,13 @@
      </div>
    </section>
    
+   <div class="container"> 
    <form action="/prtfl/mcInsert" method="POST" id="mcForm" name="mcForm" class="contactForm" enctype="multipart/form-data">
    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
    <div id="check">
    <div class="col-md-12">
 		<div class="form-group">
-			<label class="label" for="imgInp">대표이미지</label> 
+			<label class="label" for="imgInp">대표이미지 <small>[프로필에 등록할 이미지 한개를 등록해주세요.]</small></label> 
 			<input type="file" id="imgInp" name="uploadFile"/>
 			<div class="fileShow">
 				<img id="blah" src="#" alt = "your image" width="250px" />
@@ -92,14 +106,14 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="userName">이름</label> 
-			<input type="text" class="form-control" name="userName" id="userNmae">
+			<input type="text" class="form-control" name="userName" id="userNmae" placeholder="사회자님 이름을 입력해주세요.">
 		</div>
 	</div>
 	
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="oneIntro">한줄소개</label> 
-			<input type="text" class="form-control" name="oneIntro" id="oneIntro" placeholder="나를 한줄로 표현해보세요.">
+			<input type="text" class="form-control" name="oneIntro" id="oneIntro" placeholder="사회자님을 한줄로 표현한다면?">
 		</div>
 	</div>
 	
@@ -133,7 +147,7 @@
 				<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
 			</select>
 			<input type="hidden" value="" name="mcArea" id="mcArea" />
-             <ul id="mcAreaL"></ul>
+             <ul class="hashtag" id="mcAreaL"></ul>
 		</div>
 	</div>
 	
@@ -147,7 +161,7 @@
 			</select>
 			
 			<input type="hidden" value="" name="mcType" id="mcType" />
-            <ul id="mcTypeL"></ul>
+            <ul class="hashtag" id="mcTypeL"></ul>
 		</div>
 	</div>
 	
@@ -161,16 +175,16 @@
 			</select>
 			
 			<input type="hidden" value="" name="progStyle" id="progStyle" />
-            <ul id="progStyleL"></ul>
+            <ul class="hashtag" id="progStyleL"></ul>
 		</div>
 	</div>
 	
 	<!-- option 사회가능지역 -->
 	<div class="col-md-6">
 		<div class="form-group">
-			<label class="label" for="qna">질문</label> 
+			<label class="label" for="qna">자기소개서 질문</label> 
 			<select id="qna" name="qna">
-				<option selected>질문을 골라주세요.</option>
+				<option selected>질문을 선택해주세요.</option>
 				<option value="Q1">나를 섭외해야되는 이유는?</option>
 				<option value="Q2">나의노하우는?</option>
 			</select>
@@ -193,11 +207,13 @@
 
 	<div class="col-md-12">
 		<div class="form-group">
-			<input type="submit" id="insert" value="등록" class="btn btn-primary">
+			<input type="submit" id="insert" value="등록" class="find-trigger btn-15 btnSize">
 		</div>
 	</div>	
 	</div>
+		
 	</form>
+</div>
 	
 	<script>
 	//csrf 설정

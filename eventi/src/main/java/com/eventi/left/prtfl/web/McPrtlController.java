@@ -61,6 +61,11 @@ public class McPrtlController {
 			}
 		}
 		model.addAttribute("mcList", mcList);
+		
+		//option 코드 가져오기
+		model.addAttribute("areas", codeService.getCountry());
+		model.addAttribute("types", codeService.getType());
+		model.addAttribute("mcStyles", codeService.getMcStyle());
 		return "content/prtfl/mcList";
 	}
 	

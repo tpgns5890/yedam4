@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,10 +17,12 @@ public class ReviewVO {
 	private String reviewTgt;	//후기대상(id or 게시글번호)
 	private Double star;		//별점
 	private String reviewCntn;	//후기내용
-	@DateTimeFormat(pattern = "yyyy-MM-dd") 
+	@JsonFormat(pattern = "yyyy/MM/dd") 
 	private Date writingDt;		//작성일자
 	private String img;			//이미지
 	private String category;	//대상구분
+	
+	private String order="writing_dt";   //정렬
 	
 	//별 유무
 	private Integer fullstar;   //채워진 별 개수
