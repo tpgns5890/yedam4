@@ -233,6 +233,39 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.countVisit();
 	}
 
+	//일별 정보 조회
+	@Override
+	public List<HashMap<String, Object>> getDailyInfo() {
+		return adminMapper.getDailyInfo();
+	}
+
+	//관리자 문의사항 조회
+	@Override
+	public List<HashMap<String, Object>> getQnaList() {
+		return adminMapper.getQnaList();
+	}
+
+	@Override
+	public int getCrtf() {
+		return adminMapper.getCrtf();
+	}
+	@Override
+	public int getCont() {
+		return adminMapper.getCont();
+	}
+	@Override
+	public int getBmem() {
+		return adminMapper.getBmem();
+	}
+	@Override
+	public int getBbrd() {
+		return adminMapper.getBbrd();
+	}
+	@Override
+	public int getMon() {
+		return adminMapper.getMon();
+	}
+
 	
 
 }

@@ -163,15 +163,15 @@
 				<div id="toDoSection">
 					<div id="toDoUp">
 						<span><b>오늘의 할일</b></span>
-						<div id="toDoCountAll">90</div>
+						<div id="toDoCountAll" th:text="${countCrtf}+${countCont}+${countBmem}+${countBbrd}+${countMon}"></div>
 					</div>
 					<div id="toDoDown">
 						<ul>
-							<li class="toDoli">자격증승인<div class="toDoCount">90</div></li>
-							<li class="toDoli">공모전우승<div class="toDoCount">90</div></li>
-							<li class="toDoli">신고회원<div class="toDoCount">90</div></li>
-							<li class="toDoli">신고게시글<div class="toDoCount">90</div></li>
-							<li class="toDoli">정산요청<div class="toDoCount">90</div></li>
+							<li class="toDoli">자격증승인<div class="toDoCount" th:text="${countCrtf}">90</div></li>
+							<li class="toDoli">공모전우승<div class="toDoCount" th:text="${countCont}">90</div></li>
+							<li class="toDoli">신고회원<div class="toDoCount" th:text="${countBmem}">90</div></li>
+							<li class="toDoli">신고게시글<div class="toDoCount" th:text="${countBbrd}">90</div></li>
+							<li class="toDoli">정산요청<div class="toDoCount" th:text="${countMon}">90</div></li>
 						</ul>
 					</div>
 				</div>
@@ -182,8 +182,8 @@
 							<div id="leftTopUp">
 								<span><b>방문자 현황</b></span>
 							</div>
-							<div>
-								<canvas id="line-chart" style="height:250px; width:710px;"></canvas>
+							<div style="padding:20px;">
+								<canvas id="line-chart" style="height:250px; width:750px;"></canvas>
 							</div>
 						</div>
 						<div id="leftBot">
@@ -199,7 +199,10 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
+									<tr th:each="QnA : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${QnA.Q_NO})}'|" style="cursor:pointer;">
+										<td th:text="${QnA.USER_ID}"></td>
+										<td th:text="${QnA.TTL}"></td>
+										<td th:text="${QnA.WRITING_DT}"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -221,7 +224,12 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
+									<tr th:each="daily : ${dailyInfo}">
+										<td th:text="${daily.DAILYDT}"></td>
+										<td th:text="${daily.DAILYMOIN}"></td>
+										<td th:text="${daily.DAILYMOOUT}"></td>
+										<td th:text="${daily.VISITOR}"></td>
+										<td th:text="${daily.REGISTER}"></td>
 									</tr>
 								</tbody>
 							</table>
