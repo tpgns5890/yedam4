@@ -1586,8 +1586,8 @@ Google map
 }
 
 .content-box-title {
-  font-weight: 400;
-  font-size: 18px;
+  font-weight: bold;
+  font-size: 20px;
   color: #111;
   margin: 16px 0 15px;
 }
@@ -2508,13 +2508,16 @@ Google map
   opacity: 0;
   z-index: 2;
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
   color: #aaa;
 }
-
+.shop-item-detail span{
+	font-size: 16px;
+	font-weight: 500;
+}
 .shop-item-title {
   font-weight: 400;
-  font-size: 14px;
+  font-size: 20px;
   color: #111;
   margin: 15px 0 5px;
 }

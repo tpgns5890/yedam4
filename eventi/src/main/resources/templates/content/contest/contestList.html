@@ -4,7 +4,6 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<link rel="stylesheet" href="/css/model.css">
 <link rel="stylesheet" href="/css/heart.css">
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 <link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
@@ -14,7 +13,7 @@
 	margin-bottom: 40px;
 }
 .container {
-    width: 75%;
+    width: 78%;
 }
 label {
 	font-weight:bold;
@@ -27,9 +26,10 @@ label {
 #boxList{
 	margin-left: 70px;
 }
- #order_check  {
- 	width: 20%;
-	margin: 7px 10px;
+#order_check {
+	font-size: 20px;
+    width: 17%;
+    margin: 7px 10px;
 }
 .col-md-4{
     top: -100px !important;
@@ -51,16 +51,22 @@ label {
 	flex-direction: row;
     align-items: center;
 }
+#history{
+	 width: 180px;
+}
+#now{
+	 width: 180px;
+}
 
 </style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/gold_01.gif" style="background-image: url(&quot;/images/gold_01.gif&quot;);">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">공모전 전체리스트</h2>
+                <h2 class="module-title font-alt" style="margin: 0;">공모전 전체리스트</h2>
               </div>
             </div>
           </div>
@@ -71,7 +77,7 @@ label {
           <div class="container">
           
           	   <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right:-1200px; width: 100px;  z-index: 1 ;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right:-1205px; width: 100px;  z-index: 1 ;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>

@@ -95,7 +95,27 @@
 	border-radius: 3%;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
-
+.rprt_modal_content {
+	width: 350px;
+	min-height: 200px;
+	background: #fff;
+	border: 0.5px solid #666;
+	border-radius: 15px;
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 250px;
+	/* 	둥글게,그림자 효과 */
+	border-radius: 3%;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+}
+#rprtBox{
+	    width: 90%;
+    margin: 0 auto;
+}
+.rprt_modal_content h2{
+ font-weight: bold;
+	text-align: center;
+ }
 #pwModel label {
 	width: 100px;
 	text-align: left;
@@ -186,4 +206,10 @@
 /* 스크롤바 지우기 */
 .img_modal_content::-webkit-scrollbar {
 	display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+label {
+	display: inline-block;
+	text-align: left;
+	width: 70px;
+	font-size: 14px;
 }
