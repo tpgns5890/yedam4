@@ -4,6 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 	<link rel="stylesheet" href="/assets/css/adminSideBar.css">
 	<style>
 		#admin-container {
@@ -19,9 +20,135 @@
 		#admin-contents {
 			height: 100%;
 			padding-left: 16%;
-			padding-top: 50px;
+			padding-top: 60px;
 			background: #eeeeee;
 		}
+		#toDoSection{
+			width:99%;
+			height:150px;
+			background:white;
+		}
+		#mainContent{
+			display: flex;
+		    margin-top: 10px;
+		    width: 99%;
+		    height: 80%;
+		    justify-content: space-between;
+		}
+		#mainCleft{
+			width: 49.5%;
+		    height: 100%;
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: space-between;
+
+		}
+		#leftTop{
+			width:100%;
+			height:49%;
+			background:white;
+		}
+		
+		#leftBot{
+			width:100%;
+			height:49%;
+			background:white;
+		}
+		#mainCright{
+			width:49.5%;
+			height:100%;
+			background:white;
+		}
+		#toDoUp{
+			position: relative;
+		    width: 100%;
+		    height: 35%;
+		    display: flex;
+		    flex-direction: row;
+		    border-bottom: 0.1px solid #eee;
+		    padding-left: 20px;
+		    align-items: center;
+		}
+		
+		#mainCright div{
+			position: relative;
+		    width: 100%;
+		    height: 7%;
+		    display: flex;
+		    flex-direction: row;
+		    border-bottom: 0.1px solid #eee;
+		    padding-left: 20px;
+		    align-items: center;
+		}
+		
+		#leftTopUp{
+			position: relative;
+		    width: 100%;
+		    height: 14.2%;
+		    display: flex;
+		    flex-direction: row;
+		    border-bottom: 0.1px solid #eee;
+		    padding-left: 20px;
+		    align-items: center;
+		}
+		
+		#leftBot div{
+			position: relative;
+		    width: 100%;
+		    height: 14.2%;
+		    display: flex;
+		    flex-direction: row;
+		    border-bottom: 0.1px solid #eee;
+		    padding-left: 20px;
+		    align-items: center;
+		}
+		
+		#toDoUp span{
+			font-size: 1.3em;
+		}
+		
+		#toDoDown{
+			position:relative;
+			width:100%;
+			height:65%;
+			display: flex;
+			padding-left: 20px;
+    		align-items: center;
+		}
+		
+		#toDoDown ul{
+			list-style: none;
+			padding:0;
+			
+		}
+		#toDoDown li{
+			float:left;
+			margin-right:35px;
+			font-weight:bold;
+		}
+		
+		#toDoCountAll{
+			width: auto;
+			position:relative;
+			border-radius:6px;
+			background:#55dbc2;
+			color:white;
+			padding: 0 5px;
+			margin-left:3px;
+			font-weight:bold;
+		}
+		.toDoCount{
+			width: auto;
+			position:relative;
+			border-radius:6px;
+			color:#55dbc2;
+			padding: 0 5px;
+			font-weight:bold;
+		}
+		.toDoli{
+			display:flex;
+		}
+		
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -33,9 +160,119 @@
 		<div id="admin-container">
 			<th:block th:replace="fragments/adminPageSide :: adminSideFragment"></th:block>
 			<div id="admin-contents">
-			관리자페이지 메인
+				<div id="toDoSection">
+					<div id="toDoUp">
+						<span><b>오늘의 할일</b></span>
+						<div id="toDoCountAll">90</div>
+					</div>
+					<div id="toDoDown">
+						<ul>
+							<li class="toDoli">자격증승인<div class="toDoCount">90</div></li>
+							<li class="toDoli">공모전우승<div class="toDoCount">90</div></li>
+							<li class="toDoli">신고회원<div class="toDoCount">90</div></li>
+							<li class="toDoli">신고게시글<div class="toDoCount">90</div></li>
+							<li class="toDoli">정산요청<div class="toDoCount">90</div></li>
+						</ul>
+					</div>
+				</div>
+				
+				<div id="mainContent">
+					<div id="mainCleft">
+						<div id="leftTop">
+							<div id="leftTopUp">
+								<span><b>방문자 현황</b></span>
+							</div>
+							<div>
+								<canvas id="line-chart" style="height:250px; width:710px;"></canvas>
+							</div>
+						</div>
+						<div id="leftBot">
+							<div>
+								<span><b>문의사항</b></span>
+							</div>
+							<table style="width:100%;text-align-last: center;margin-top:5px;">
+								<thead>
+									<tr>
+										<th>작성자</th>
+										<th>제목</th>
+										<th>작성일자</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<div id="mainCright">
+					<div>
+						<span><b>일자별 현황</b></span>
+					</div>
+					<table style="width:100%;text-align-last: center;margin-top:5px;">
+								<thead>
+									<tr>
+										<th>일자</th>
+										<th>입금액</th>
+										<th>정산액</th>
+										<th>방문자</th>
+										<th>가입</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+									</tr>
+								</tbody>
+							</table>
+					</div>
+					
+				</div>
 			</div>
 		</div>
+
+		<script>
+			getGraph();
+
+			function getGraph(){
+				let timeList=[];
+				let visitList=[];
+
+				$.ajax({
+					url:"/admin/getVisitor",
+					type:"get",
+					dataType:"json",
+					success:function(result){
+						for(let i=0; i<result.length;i++){
+							timeList.push(result[i].visitDate);
+							visitList.push(result[i].visitCount);
+						}
+						new Chart(document.getElementById("line-chart"),{
+							type:'line',
+							data:{
+								labels: timeList,
+								datasets:[{
+									data: visitList,
+									label: "방문자수",
+									borderColor: "#3e95cd",
+									fill:false
+								}]
+							},
+							options:{
+								responsive: false,
+								title:{
+									display:true,
+									test:'주간 방문자 수'
+								}
+							}
+						}); //그래프
+					},error:function(){
+						alert("서버 연결 실패");
+					}
+				}) //ajax
+				
+			} //getGraph
+		</script>
 		</div>
 </body>
 

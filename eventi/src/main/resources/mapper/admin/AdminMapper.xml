@@ -449,4 +449,12 @@
 			        SYSDATE
 	       		 )
 	</insert>
+	
+	<select id="countVisit" resultType="VisitorVO">
+		SELECT TO_CHAR(VISIT_DATE,'YY/MM/DD') VISIT_DATE, COUNT(*) VISIT_COUNT
+		FROM VISITOR
+		WHERE VISIT_DATE BETWEEN TO_CHAR(SYSDATE - 7) AND SYSDATE
+		GROUP BY TO_CHAR(VISIT_DATE,'YY/MM/DD')
+		ORDER BY VISIT_DATE
+	</select>
 </mapper>

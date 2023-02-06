@@ -209,4 +209,13 @@
 		FROM MNCODE
 		WHERE CL_ID = 'B'
 	</select>
+	
+	<insert id="visitCount">
+		INSERT INTO VISITOR(VISIT_NO,
+							VISIT_DATE)
+		VALUES	(VISIT_SEQ.NEXTVAL,
+				SYSDATE)
+	</insert>
+	
+	
 </mapper>
