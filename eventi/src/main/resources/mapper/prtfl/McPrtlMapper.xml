@@ -8,6 +8,26 @@
 			</if>
 	</sql>
 	
+	<!-- 전체 리스트에서 정렬 조건 -->
+	<sql id="mcSelect">
+		<!-- 대분류 정렬 -->
+		<if test="minyear !=null and minyear != ''">
+			AND M.CARR_YEAR >= #{minyear}
+		</if>
+
+		<if test="mcArea !=null and mcArea != ''">
+			AND M.MC_AREA LIKE ('%${mcArea}%')
+		</if>
+		
+		<if test="mcType !=null and mcType != ''">
+			AND M.MC_TYPE LIKE ('%${mcType}%')
+		</if>
+		
+		<if test="progStyle !=null and progStyle != ''">
+			AND M.PROG_STYLE LIKE ('%${progStyle}%')
+		</if>
+	</sql>
+	
 	<!-- 사회자 전체조회 -->
 	<select id="mcAll" resultType="com.eventi.left.prtfl.service.McPrtflVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
@@ -19,6 +39,7 @@
 		WHERE M.USER_ID = L.TARGET_NO(+)
         AND M.USER_ID = F.TARGET_ID(+)
 		<include refid="likeSelect" />
+		<include refid="mcSelect" />
 		ORDER BY ${order} DESC
 		<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}

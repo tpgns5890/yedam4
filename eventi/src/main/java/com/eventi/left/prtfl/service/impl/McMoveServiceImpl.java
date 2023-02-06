@@ -24,7 +24,7 @@ public class McMoveServiceImpl implements McMoveService{
 	@Override
 	public List<McMoveVO> moveList(McMoveVO mcMoveVO, PagingVO paging) {
 		paging.setTotalRecord(mcMoveMapper.count(mcMoveVO));
-		paging.setPageUnit(2);
+		paging.setPageUnit(4);
 		mcMoveVO.setFirst(paging.getFirst());
 		mcMoveVO.setLast(paging.getLast());
 		

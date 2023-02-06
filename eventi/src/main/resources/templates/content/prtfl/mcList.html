@@ -4,28 +4,8 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<style>
-.heart {
-  width: 100px;
-  height: 100px;
-  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
-  background-position: 0 0;
-  cursor: pointer;
-  transition: background-position 1s steps(28);
-  transition-duration: 0s;
-  }
-  
-  .module .heart{
-  	  position: absolute;
-	  top : -15px;
-	  left : 290px;
-  }
-  
-  .active {
-    transition-duration: 1s;
-    background-position: -2800px 0;
-  }
-</style>
+<link rel="stylesheet" href="/css/prtfl/mcPrtfl.css">
+<link rel="stylesheet" href="/css/prtfl/button.css">
 </head>
 
 <div layout:fragment="content">
@@ -39,9 +19,10 @@
        </div>
      </div>
    </section>
-   
-   <!-- 포트폴리오 등록 -->
-   <button type="button" class="btn btn-primary" th:onclick="checkPrtfl()">나의 포트폴리오</button>
+      
+   <div class="container right">    
+   <!-- 포트폴리오 -->
+   <button type="button" class="find-trigger btn-15" th:onclick="checkPrtfl()">나의 포트폴리오</button>
    
    <!-- 정렬순 -->
    <select id="order" name="order">
@@ -50,6 +31,8 @@
 		<option value="inq" th:selected="${mcPrtflVO.order=='inq'}">조회순</option>
 		<option value="cnt" th:selected="${mcPrtflVO.order=='cnt'}">좋아요순</option>
 	</select>
+	
+	<button class="find-trigger btn-15" data-target="#finds" data-toggle="modal">상세조회</button>
 	
 	<!-- 비회원 좋아요버튼-->
 	<th:block sec:authorize="!isAuthenticated()">
@@ -64,6 +47,7 @@
 	  		<div id="love" class="love stage heart" th:classappend="${param.userId} !=null ? active"></div>
 	   	</div>
    	</th:block>
+   	</div>
    
    <section class="module">
 	 <div class="container">
@@ -72,11 +56,11 @@
 	          <div class="post">
 
 	            <div class="post-thumbnail"><a th:href="|/prtfl/mcSelect?userId=${mc.userId}|">
-	            <img th:src="|/fileView/${mc.img}|" alt="Blog-post Thumbnail"></a>
+	            	<img th:src="|/fileView/${mc.img}|" alt="Blog-post Thumbnail" style="border-radius: 70%"></a>
 	            </div>
 
 	            <div class="post-header font-alt">
-	              <h2 class="post-title" th:text=${mc.userId}><a href="#"></a></h2>
+	              <h2 class="post-title" th:text=${mc.userName}><a th:href="|/prtfl/mcSelect?userId=${mc.userId}|"></a></h2>
 	              <th:block sec:authorize="!isAuthenticated()">
 						<div class="stage">
 							<div class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
@@ -99,9 +83,59 @@
 	          </div>
 	        </div>   
 		</div>
-		
       </div>
     </section>
+    
+    
+<!-- 상세조회 모달 -->
+<div id="finds" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    
+    <div class="modal-content">
+      <div class="modal-body">
+        <button data-dismiss="modal" class="close">&times;</button>
+        <h4>상세검색</h4>
+        <form id="searchForm">          
+		  <label>경력</label>
+			  <select class="sizeLabel form-control" id="minyear" name="minyear">
+					<option value="">-- 경력 --</option>
+					<option value="">-- 경력없음 --</option>
+					<option th:value="1" th:text="1년이상"></option>
+					<option th:value="2" th:text="2년이상"></option>
+					<option th:value="3" th:text="3년이상"></option>
+					<option th:value="4" th:text="4년이상"></option>
+					<option th:value="5" th:text="5년이상"></option>
+					<option th:value="10" th:text="10년이상"></option>
+			  </select>
+        
+          <label>지역선택</label>          
+          <select class="form-control" id="mcArea" name="mcArea">
+				<option value="">-- 지역을 선택해 주세요. --</option>
+				<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+		  </select>
+		  
+		  <label>분야</label>
+		  <select class="form-control" id="mcType" name="mcType">
+				<option value="">-- 행사분야를 선택해 주세요. --</option>
+				<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
+		  </select>
+		  
+		  <label>진행스타일</label>
+		  <div class="form_toggle row-vh d-flex flex-row justify-content-between" >
+          <div class="form_radio_btn">
+          	<th:block th:each="style : ${mcStyles}">
+				<input th:id="${style?.codeId}" type="radio" name="progStyle" th:value="${style?.codeId}">
+			 	<label th:for="${style?.codeId}" th:text="${style?.codeName}"></label>
+		 	</th:block>
+		  </div>
+          </div>
+		  
+          <input id="find" class="btn find" type="submit" value="조회" />
+        </form>
+      </div>
+    </div>
+  </div>  
+</div>
 
    <!-- 페이징 처리 -->
 		<div class="row mt-5">
@@ -226,6 +260,10 @@
 				location.href=`/prtfl/mcList?order=${order}`
 			}
 	  	} 
+		
+		$('#find').on('click', function(){
+			let find = $("#searchForm").serialize()
+		})
 	</script>
 </div>
 </html>

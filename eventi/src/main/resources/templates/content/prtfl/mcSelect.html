@@ -9,7 +9,7 @@
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <link href="/css/star.css" rel="stylesheet">
-
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
 	footer {
 		display: none;
@@ -26,8 +26,19 @@
 	#left {
 	  float: left;
 	  width: 30%;
-	  height: 300px; /* only for demonstration, should be removed */
-	  padding: 20px;
+	  height: 500px; /* only for demonstration, should be removed */
+	  padding: 0;
+	  position: sticky; 
+	  top: 31%;
+	}
+	
+	#detail{
+		background-color:white;
+		border: 2px solid #DEDADA;
+		border-radius: 10px;
+		z-index: 2;
+	    top: -35%;
+	    position: relative; 
 	}
 	
 	article {
@@ -38,9 +49,10 @@
 	}
 	
 	.border {
-		border: 1px solid black;
+		border: 1px solid #D8D8D8;
 		border-radius: 5px;
-		padding: 5px;
+		padding: 10px;
+		margin-bottom: 3%;
 	}
 	
 	#videoFrm{
@@ -51,7 +63,7 @@
 		color : black;
 	}
 	
-	#btn {
+	.btnSize {
 		width: 250px;
 		margin:auto;
         display:block;
@@ -69,7 +81,7 @@
 	 }
 	 
 	 .active {
-	    transiion-duration: 1s;
+	    transition-duration: 1s;
 	    background-position: -2800px 0;
 	  }
 	  
@@ -129,100 +141,214 @@
 	}
 	
 	.profile {
-	    width: 100%;
-	    height: 100%;
+	    width: 65%;
+	    height: 65%;
 	    object-fit: cover;
+	    border-radius: 70%;
+	    overflow: hidden;
+	    margin : 15px auto;
+	    z-index: 3;
+	    right:-17%;
+	    position: relative;   
+	}
+	
+	h3{
+		font-weight: bold;
+		text-align: center;
+		margin-top: 0;
+	}
+	
+	h4{
+		font-weight: bold;
+		margin-top: 0;
+	}
+	
+	.pSize{
+		font-size: 15px; 
+		font-weight: bold; 
+	}
+	
+	
+	.item{
+		display: flex;
+	    flex-shrink: 0;
+	    -webkit-box-flex: 0;
+	    flex-grow: 0;
+	    -webkit-box-align: center;
+	    align-items: center;
+	     margin-bottom: 5px;
+	}
+	
+	.item > .item__emoji{
+		font-weight: 400;
+	    font-size: 18px;
+	    line-height: 26px;
+	    width: 18px;
+	    margin-right: 7px;
+		}
+	
+	.caption1{
+		font-size: 15px;
+	    letter-spacing: -0.25px;
+	    line-height: 17px;
+	    font-weight: bold;
+	}
+	.item .value{
+	    margin-left: auto;
+	    font-weight: bold;
+	}
+	
+	.detail_tr{
+	display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    border-bottom: none;
+    padding: 3px 0;
+    flex-direction: row;
+    align-items: center;
+	}
+	.detail_th {
+    min-width: 100px;
+    padding: 0 20px 0 0;
+    font-size: 1.06em;
+    line-height: 1.5em;
+    color: #999;
+	}
+	.detail_td {
+	    font-size: 1.06em;
+	    line-height: 1.5em;
+	    color: #555;
+	}
+	
+	#videoFrm{
+	text-align: center;
+	}
+	
+	.videoSize{
+	   width:360px; 
+	   height: 200px;
+	   padding: 5px;
+	}
+	
+	.replyBtn{
+		background-color: transparent;
+		border: 0;
+		color: rgba(2,126,251,1);
+	}
+	
+	#repInsertBtn{
+		background-color: transparent;
+		border: 1px solid rgba(2,126,251,1);
+		color: rgba(2,126,251,1);
+		float: right;
+		margin-top: 3px;
+		width: 60px;
+		height: 32px;
+		padding: 0;
 	}
 </style>
 </head>
 
 <div layout:fragment="content">
-
-    <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-     <div class="container">
-       <div class="row">
-         <div class="col-sm-6 col-sm-offset-3">
-           <h2 class="module-title font-alt">사회자포트폴리오</h2>
-           <div class="module-subtitle font-serif">사회자포트폴리오</div>
-         </div>
-       </div>
-     </div>
-   </section>
    
+   <img th:src="@{/images/title.png}">
+   
+   <div class="container">
    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-   <th:block th:if="${session.member.userId} == ${mcSelect.userId}">
-	   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
-	   <button type="button" class="btn btn-primary" th:onclick="">글 삭제하기</button>
-   </th:block>
    
-    <section id="check">
-  <nav id="left">
-  	<div class="border">
-  		<label class="label" th:text="'조회수' + ${mcSelect.inq}"></label>
-  		<span class="label" th:text="좋아요수"></span><label class="label" id ="likeCount" th:text="${mcSelect.cnt}"></label>
-  		<div id="love" class="stage heart" th:classappend="${like} != null ? active"></div>
-  		<hr>
-  		<br><br>
-  		
-  		<div class="box">
+   
+   <section id="check">
+	 <nav id="left">
+	  <div id="detail">
+	    <div id="love" class="stage heart" th:classappend="${like} != null ? active" style="position:relative; z-index: 2; right: -20px;"> </div>
 		<img class="profile" th:src="|/fileView/${file.sevNm}|">
-  		</div>
   		
-  		<!-- <label style="display:none;"class="label" id="userId" th:text="${mcSelect.userId}"></label><br> -->
-  		<label class="label" id="userName" th:text="${mcSelect.userName}"></label><br>
-  		<label class="label" id="mcArea" th:text="${mcSelect.mcArea}"></label>
-  		<hr>
-  		
-  		<label class="label" th:text="${mcSelect.oneIntro}"></label>
-  		<hr>
+  		<label style="display:none;"class="label" id="userId" th:text="${mcSelect.userId}"></label>
+  		<h3 id="userName" th:text="|${mcSelect.userName}님|"></h3>
+  		<p style="font-size: 13px; font-weight: bold; text-align: center; margin: 15px 44px;" th:text="${mcSelect.oneIntro}"></p>
   		
   		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
-  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
-  		<button id="btn" type="button" class="btn btn-g btn-round castingUp">의뢰하기</button>
-  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
-		<hr>
-  		</th:block>
+	  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize">1:1대화</button>
+	  		<button type="button" class="find-trigger btn-1 btnSize">의뢰하기</button>
+		</th:block>
+		<th:block th:if="${session.member.userId} == ${mcSelect.userId}">
+		   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
+		   <button type="button" class="find-trigger btn-1 btnSize" th:onclick="">글 삭제하기</button>
+   		</th:block>
 		
-		<label class="label" th:text="${mcSelect.carrYear} + '년'"></label>
+		<hr>
+		<div style="margin: 15px 44px;">
+	  		<p style="font-size: 16px; font-weight: bold;">활동내역</p>
+	  		<div class="item">
+		  		<span class="item__emoji">🚗</span>
+		  		<div class="caption1">활동지역</div> 
+		  		<div class="value" id="mcArea" th:text="${mcSelect.mcArea}"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">👓</span>
+		  		<div class="caption1">조회수</div> 
+		  		<div class="value" th:text="|${mcSelect.inq}회|"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">😍</span>
+		  		<div class="caption1">좋아요</div> 
+		  		<div class="value" id ="likeCount" th:text="|${mcSelect.cnt}건|"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">🎙</span>
+		  		<div class="caption1">경력</div> 
+		  		<div class="value" th:text="|${mcSelect.carrYear}년|"></div>
+	  		</div>
+  		</div>
   	</div>
   </nav>
   
   <article>
     <div role="tabpanel">
                   <ul class="nav nav-tabs font-alt" role="tablist">
-                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-tools-2"></span>포트폴리오</a></li>
-                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-tools-2"></span>후기</a></li>
+                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-pictures"></span>포트폴리오</a></li>
+                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>후기</a></li>
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="support">
                     	<div class="border">
-							<label class="label">세부분야</label> 
-							<label class="label" th:text="${mcSelect.mcType}"></label><br>
-							<label class="label">진행스타일</label> 
-							<label class="label" th:text="${mcSelect.progStyle}"></label><br>
-							<label class="label">자격증</label> 
-							<label class="label">레크리에이션지도자1급</label><br>
-							<label class="label">섭외비</label> 
-							<label class="label" th:text="${mcSelect.castingPrice}+'원'"></label> 
+							<div class="detail_tr">
+							<p class="detail_th">세부분야</p> 
+							<p class="detail_td" th:text="${mcSelect.mcType}"></p>
+							</div>
+							<div class="detail_tr">
+							<p class="detail_th">진행스타일</p> 
+							<p class="detail_td" th:text="${mcSelect.progStyle}"></p>
+							</div>
+							<div class="detail_tr">
+							<p class="detail_th">자격증</p> 
+							<p class="detail_td">레크리에이션지도자1급</p>
+							</div>
+							<div class="detail_tr">
+							<p class="detail_th">섭외비</p> 
+							<p class="detail_td" th:text="|${#numbers.formatInteger(mcSelect.castingPrice, 0, 'COMMA')}원|"></p>
+							</div>
+                    	</div>
+
+                    	<h4>자기소개</h4>
+                    	<div class="border">
+							<p th:utext="${mcSelect.selfIntro}"></p>
                     	</div>
                     	
-                    	<br>
-                    	<h5>자기소개</h5>
+                    	<h4>경력사항</h4>
                     	<div class="border">
-							<label class="label" th:utext="${mcSelect.selfIntro}"></label><br>
+							<p th:utext="${mcSelect.career}"></p>
                     	</div>
-                    	
-                    	<br>
-                    	<h5>경력사항</h5>
-                    	<div class="border">
-							<label class="label" th:utext="${mcSelect.career}"></label><br>
-                    	</div>
-            			
-            			<br>
-                    	<h5>동영상<button th:if="${session.member.userId} == ${mcSelect.userId}" type="button" class="btn btn-primary" th:onclick="|location.href='@{/move/moveList(userId=${mcSelect.userId})}'|">동영상추가</button></h5>
+
+                    	<h4>동영상<button th:if="${session.member.userId} == ${mcSelect.userId}" type="button" class="find-trigger btn-1" style="height: 30px; padding: 5px; margin:5px; font-size: 13px;" th:onclick="|location.href='@{/move/moveList(userId=${mcSelect.userId})}'|">동영상추가</button>
+                    	</h4>
                     	<div class="border">
                     		<div id="videoFrm">
                     		</div>
+                    		
 							 <!-- //페이징 경로 :: 문자 -->
 							<div class="row mt-5" id="paging">
 								<div class="col text-center">
@@ -232,49 +358,68 @@
 							</div>
                     	</div>
                     	
-                    	<br>
-                    	<h5>댓글</h5>
+                    	<h4>댓글</h4>
                     	<div class="border">
 					        <!-- 댓글 작성 -->
 						    <form id="replyInsertFrm">
-						    	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
+						    	<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
 						    	<button type="button" id="repInsertBtn">댓글추가</button>
 						    </form>
 						    
-						    <ul class="comment-list" id=reply></ul>
+						    <div id=reply>
+  							</div>
                     	</div>
                     </div>
                     
                     <!-- 후기카테고리 -->
                     <div class="tab-pane" id="sales">
                     	<div class="tab-pane active" id="reviews">
-	                    
 	                    <th:block th:if="${recount.reavg} != null">
-	                    <div class="border">
+	                    <div class="starDiv">
+	                    	<div id="starAge">
 	                    	<h3>총 평점</h3>
-	                    	<span th:each="num: ${#numbers.sequence(1, recount.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${recount.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${recount.laststar == 1}"><i class="fa fa-star-o star"></i></span>
-	                    	<p th:text="|${recount.reavg} / 5|"><p>
+	                    	<div class="starSize"><span th:each="num: ${#numbers.sequence(1, recount.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${recount.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${recount.laststar == 1}"><i class="fa fa-star-o star"></i></span></div>
+	                    	<p style="font-size: 16px; font-weight: bold;" th:text="|${recount.reavg} / 5|"><p>
+	                    	</div>
 	                    	
+	                    	<div id="starCount">
 	                    	<h3>전체 후기수</h3>
-	                    	<i class="fa  fa-group"></i>
-	                    	<p th:text="|${recount.recount}개|"><p>
+	                    	<i class="starSize">📝</i>
+	                    	<p style="font-size: 16px; font-weight: bold;" th:text="|${recount.recount}개|"><p>
+	                    	</div>
 	                    </div>
 	                    
-                    	<div class="border">
-		                    <div class="comments reviews" th:each="re : ${reviews}">
+	                    <!-- 정렬순 -->
+	                   <div class="right">
+					   <select id="order" name="order">
+					   		<option value="">==========</option>
+							<option value="writing_dt">작성일순</option>
+							<option value="star">별점높은순</option>
+							<option value="minStar">별점낮은순</option>
+						</select>
+						</div>
+						
+						<div id="newStar">
+                    	<div class="starList" th:each="re : ${reviews}">
+		                    <div class="comments reviews">
 		                      <div class="comment clearfix">
+		                      <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
 		                        <div class="comment-content clearfix">
-		                          <div class="comment-author font-alt" th:text="${re.userId}"></div>
+		                          <div class="comment-author font-alt">
+		                          <!--별점처리-->
+		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${re.laststar == 1}"><i class="fa fa-star-o star"></i></span>
+		                          </div>
 		                          <div class="comment-body">
 		                            <p th:text="${re.reviewCntn}"></p>
 		                          </div>
-		                          <div class="comment-meta font-alt"><span  th:text="${#dates.format(re.writingDt, 'yyyy/MM/dd')}"></span>-
-		                          		<!--별점처리-->
-		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${re.laststar == 1}"><i class="fa fa-star-o star"></i></span>
+		                          <div class="comment-meta font-alt">
+		                          	<span th:text="${re.userId}"></span> - <span th:text="${#dates.format(re.writingDt, 'yyyy/MM/dd')}"></span>
+		                          		
 		                          </div>
 		                        </div>
 		                      </div>
 	                    	</div>
+	                    </div>
 	                    </div>
 	                    </th:block>
 	                    
@@ -289,7 +434,8 @@
                 </div>
   </article>
 </section>
-	
+</div>
+
 	<!-- 의뢰하기 폼 -->
 	<div id="castingFrm" class="modal">
 			<div class="modal_content">
@@ -349,9 +495,9 @@
 			})
 		}
 		
-		//디자인 리스트
+		//비디오 리스트
 		function makeVideo(video){
-			let tag = `<video src="|/fileView/${video.sevNm}|" width="500px" height="200px" controls></video>>`
+			let tag = `<video class="videoSize" src="|/fileView/${video.sevNm}|" controls></video>`
 			        
 			 return tag;
 		}
@@ -457,21 +603,26 @@
 			let userId = '[[${session.member != null ? session.member.userId :''}]]';
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
-			if(reply.userId ==userId){
-				delBtn = `<button class='repDelete'>삭제</button>`;
-				upBtn = `<button class='repUpdate'>수정</button>`;
+			if(reply.userId == userId){
+				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
+				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
 			}
 			
    			let p = `
-                  <li class="comment">
-                    <div class="comment-body"  id="${reply.replyNo}">
-                      <h3>${reply.userId}</h3>
-                      <div class="meta">${reply.writingDt}</div>
-                      <p>${reply.replyCntn}</p>
-                      <button type="button" class="reply">Reply</button>
-                      ${delBtn} ${upBtn}
-                    </div>
-                   </li>
+   				<div class="comment clearfix">
+                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                <div id="${reply.replyNo}">
+                <div class="comment-content clearfix">
+                  <div class="comment-author font-alt">${reply.userId}</div>
+                  <div class="comment-body">
+                    <p>${reply.replyCntn}</p>
+                  </div>
+                  <div class="comment-meta font-alt">${reply.writingDt} - <button class="reply replyBtn">Reply</button>${delBtn}${upBtn}
+                  </div>
+                </div>
+                </div>
+</div>
+</div>
                 `
    			return p;
    		}
@@ -484,23 +635,26 @@
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
 			if(reply.userId ==userId){
-				delBtn = `<button class='repDelete'>삭제</button>`;
-				upBtn = `<button class='repUpdate'>수정</button>`;
+				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
+				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
 			}
    			
    			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
-   			$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+   			$("#" + reply.rerepTgt).children().children().children('button:eq(0)').remove();
    			
-   			let p = `<ul class="children">
-                <li class="comment">
-                <div class="comment-body" id="${reply.replyNo}">
-                  <h3>${reply.userId}</h3>
-                  <div class="meta">${reply.writingDt}</div>
-                  <p>${reply.replyCntn}</p>
-                  ${delBtn} ${upBtn}
+   			let p = `<div class="comment clearfix">
+                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                <div id="${reply.replyNo}">
+                <div class="comment-content clearfix">
+                  <div class="comment-author font-alt">${reply.userId}</div>
+                  <div class="comment-body">
+                    <p>${reply.replyCntn}</p>
+                  </div>
+                  <div class="comment-meta font-alt" id="${reply.replyNo}">${reply.writingDt} - ${delBtn}${upBtn}
+                  </div>
                 </div>
-              </li>
-            </ul>`
+                </div>
+              </div>`
             
             return p;
    		}
@@ -531,7 +685,7 @@
 		$(document).on('click', '.reply', function(e){
 		    e.preventDefault();
 		    //대댓글을 작성할 replyNo 구하기
-		    let rerepTgt = $(this).parent("div").attr('id');
+		    let rerepTgt = $(this).parent().parent().parent("div").attr('id');
 		    //대댓글 입력할 수 있는 폼 생성
 		  	$(this).parent("div").append(makeFrm(rerepTgt));
 		  	
@@ -553,7 +707,6 @@
 		//대댓글 추가
 		$(document).on('click', '#rerepTgt', function(e){
 			let replyCntn = $('#reReplyCntn').val();
-			console.log(replyCntn)
 			let rerepTgt = $('#rerepTgt').val();
 			let userId = '[[${session.member.userId}]]';
 			
@@ -576,7 +729,7 @@
 		//댓글 삭제
 		$(document).on('click', '.repDelete', function(e){
 			let btn=$(this);
-			let replyNo = $(this).parent("div").attr('id');
+			let replyNo = $(this).parent().parent().parent("div").attr('id');
 			$.ajax({
 				url : '/replyDelete',
 				type : 'POST',
@@ -597,9 +750,9 @@
 		
 		//댓글 수정 폼으로 변경
 		$(document).on('click', '.repUpdate', function(e){
-			let replyNo = $(this).parent("div").attr('id');
-			let p = $(this).parent("div").children("p").text();			
-			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='upReplyCntn' name='upReplyCntn' value='" + p + "'></input>");
+			let replyNo = $(this).parent().parent().parent("div").attr('id');
+			let p = $(this).parent().parent("div").children("div:eq(1)").children("p").text()
+			$(this).parent().parent("div").children("div:eq(1)").children("p").replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='upReplyCntn' name='upReplyCntn' value='" + p + "'></input>");
 			
 			$(this).toggleClass("updateBtn");
 		});
@@ -609,9 +762,7 @@
 			$(this).toggleClass("updateBtn");
 			let btn = $(this);
 			let replyCntn = $('#upReplyCntn').val();
-			console.log(replyCntn)
 			let replyNo = $('#replyNo').val();
-			console.log(replyNo)
 			let updateBtn = `<button class='repUpdate'>수정</button>`;
 			
 			$.ajax({
@@ -624,12 +775,12 @@
 					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
 				},
 				success : function(result){
-					btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
+					btn.parent().parent("div").children("div:eq(1)").replaceWith("<p>" + result.replyCntn + "</p>");
 				}		
 			})
 		});
    		
-   	 $(".heart").on("click", function() {
+   	 $("#love").on("click", function() {
 		 $(this).toggleClass("active");
 		 let userId = '[[${session.member.userId}]]';
 		 let targetNo = '[[${mcSelect.userId}]]';
@@ -852,6 +1003,77 @@
 				$(".chatbox").hide();
 			}
 		});
+	   
+	   //별점 정렬
+	   $('#order').change(function() {
+		   let order = $("#order option:selected").val();
+		   let reviewTgt = '[[${mcSelect.userId}]]';
+		   console.log(reviewTgt)
+		   let category = 'T06';
+		   $.ajax({
+				url : "/review/List",
+				method : 'post',
+				contentType : 'application/x-www-form-urlencoded',
+				data : JSON.stringify({order:order, reviewTgt:reviewTgt, category:category}),
+	   			contentType : "application/json",
+				beforeSend : function(xhr)
+               {
+   				xhr.setRequestHeader(header, token);
+               },
+				success : function(data) {
+					$('#newStar').empty();
+					for(d of data){
+						$('#newStar').append(newStarList(d));
+					}
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+	   })
+	   
+	   function newStarList(data){
+		   let star=``;
+		   for(let i=0; i<data.fullstar; i++){
+			  star += `<i class="fa fa-star star"></i>`;
+		   }
+		   
+		   if(data.halfstar > 0){
+			   for(let i=0; i<1; i++){
+					  star += `<i class="fa fa-star-half-full star"></i>`;
+				}
+		   }
+		   
+		   if(data.laststar >= 1){
+			   for(let i=0; i<data.laststar; i++){
+					  star += `<i class="fa fa-star-o star"></i>`;
+				}
+		    }
+		   
+		   
+		   let tag = `<div class="starList">
+               <div class="comments reviews">
+               <div class="comment clearfix">
+               <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                 <div class="comment-content clearfix">
+                   <div class="comment-author font-alt">
+                   <!--별점처리-->
+                   		<span>${star}</span>
+                   </div>
+                   <div class="comment-body">
+                     <p>${data.reviewCntn}</p>
+                   </div>
+                   <div class="comment-meta font-alt">
+                   	<span>${data.userId}</span> - <span>${data.writingDt}</span>
+                   		
+                   </div>
+                 </div>
+               </div>
+         	</div>
+         </div>`
+		  
+        return tag;
+	   }
    </script>
 </div>
 </html>

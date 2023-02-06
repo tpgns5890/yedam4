@@ -1,0 +1,108 @@
+.heart {
+  width: 100px;
+  height: 100px;
+  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  transition: background-position 1s steps(28);
+  transition-duration: 0s;
+  }
+  
+  .module .heart{
+  	  position: absolute;
+	  top : -15px;
+	  left : 290px;
+  }
+  
+  .active {
+    transition-duration: 1s;
+    background-position: -2800px 0;
+  }
+  
+  .module {
+  	padding: 0;
+  }
+  
+  .right{
+  	display: flex;
+  	justify-content: flex-end;
+  	padding : 10px 0;
+  }
+  
+  select {
+  	height: 50px;
+  	width: 150px;
+  	margin-top: 20px
+  }
+  
+	.form_radio_btn input[type=radio] {
+		display: none;
+	}
+	.form_radio_btn label {
+			width:130px;
+   		border-radius: 30px;
+   		text-align: center;
+   		height: 50px;
+   		line-height: 50px;
+	    margin: 5px 0;
+	}
+	 
+	/* Checked */
+	.form_radio_btn input[type=radio]:checked + label {
+		background: #184DA0;
+		color: #fff;
+	}
+	 
+	/* Hover */
+	.form_radio_btn label:hover {
+		color: #666;
+	}
+	 
+	/* Disabled */
+	.form_radio_btn input[type=radio] + label {
+		background: #F9FAFC;
+		color: #666;
+	}
+	
+/*Modal*/
+h4 {
+  font-weight: bold;
+  color: black;
+  text-align: center;
+}
+.close {
+  color: black;
+  transform: scale(1.2)
+}
+.modal-content {
+  font-weight: bold;
+  background: linear-gradient(160deg, white,#ADD3F5);
+}
+.form-control {
+  margin: 1em 0;
+}
+
+.sizeLabel {
+  width: 40%;
+}
+
+.form-control:hover, .form-control:focus {
+  box-shadow: none;  
+  border-color: black;
+}
+.find {
+  padding: 6px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(0,172,223,1) 0%, rgba(2,126,300,1) 100%);
+  border: 2px solid rgba(0,172,223,1);
+  color: #fff;
+  font-weight: bold;
+  transition: all .5s;
+  margin-top: 1em;
+}
+.find:hover {
+  border: 2px solid rgba(2,126,251,1);
+  border-radius:10px;
+  color: rgba(2,126,251,1);
+  background: white;
+}

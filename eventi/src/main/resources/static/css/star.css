@@ -1,3 +1,4 @@
+<!--리뷰 모달창 사용 css-->
 .starpoint_wrap{display:inline-block;}
 .starpoint_box{position:relative;background:url(https://ido-archive.github.io/svc/etc/element/img/sp_star.png) 0 0 no-repeat;font-size:0;}
 .starpoint_box .starpoint_bg{display:block;position:absolute;top:0;left:0; height:18px; background:url(https://ido-archive.github.io/svc/etc/element/img/sp_star.png) 0 -20px no-repeat;pointer-events:none;}
@@ -25,3 +26,59 @@
 .starpoint_box .star_radio:nth-of-type(10):checked ~ .starpoint_bg{width:100%;}
 
 .blind{position:absolute;clip:rect(0 0 0 0);margin:-1px;width:1px;height: 1px;overflow:hidden;}
+
+	<!--포트폴리오 후기 부분 css-->
+	#replyInsertFrm{
+		margin-bottom: 32px;
+	}
+	
+	.starDiv #starAge {
+        width: 50%;
+        float: left;
+        box-sizing: border-box;
+        text-align:center;
+        height: 180px;
+        margin: 0 auto;
+        padding-top: 5%;
+    }
+    .starDiv #starCount {
+        width: 50%;
+        float: right;
+        box-sizing: border-box;
+        text-align:center;
+        height: 180px;
+        margin: 0 auto;
+        padding-top: 5%;
+    }
+    
+    .starDiv{
+    	border: 1px solid #D8D8D8;
+		border-radius: 5px;
+		padding: 10px 50px;
+		margin-bottom: 3%;
+		height: 200px;
+    }
+    
+    .starSize{
+    	font-size: 30px;
+    }
+    
+    .starList{
+    	padding: 10px 30px;
+    	border: 1px solid #D8D8D8;
+    	border-radius: 5px;
+    	margin-bottom: 10px;
+    }
+    
+    /*정렬 */
+    .right{
+  	display: flex;
+  	justify-content: flex-end;
+  	padding : 10px 0;
+  	}
+  	
+  	select {
+  	height: 40px;
+  	width: 150px;
+  	margin-top: 20px
+  }

@@ -74,7 +74,10 @@
 	right:110px;
 	z-index:9000;
 	display:none;
-
+	
+	background: #7F7FD5;
+	background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+	background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
 }
 
 /* *******************************
