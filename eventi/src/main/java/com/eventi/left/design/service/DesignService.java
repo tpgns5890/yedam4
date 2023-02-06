@@ -17,6 +17,8 @@ public interface DesignService {
 	public List<DesignVO> userDesignList(DesignVO vo,PagingVO paging); // 회원의 대한 디자인리스트.
 
 	public DesignVO getDesign(DesignVO vo); // 디자인1건.
+	
+	public DesignVO oneDesign(DesignVO vo); //디자인 포트폴리오에서 사용
 
 	public int insert(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile); // 추가
 

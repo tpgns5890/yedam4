@@ -26,6 +26,12 @@
 			</if>
 	</sql>
 	
+	<sql id="likeDesign">
+		<if test="likeDesign != null and likeDesign != ''">
+			AND L.USER_ID = #{likeDesign}
+		</if>
+	</sql>
+	
 	<!-- 로그인했을경우, 좋아요 체크확인 -->
 	<sql id="loginLikeCheck">
 		<if test="userId != null and userId != ''">
@@ -35,16 +41,19 @@
 	
 	<select id="designList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-			SELECT dgn_no,user_id,c_no,name,cntn,win_yn,dt,pubc_yn,save,code_select(caregory)caregory,
+			SELECT d.dgn_no,d.user_id,d.c_no,d.name,d.cntn,d.win_yn,d.dt,d.pubc_yn,d.save,code_select(d.caregory)caregory,
                     (select sev_nm 
                       from files 
                       where target_id = dgn_no
                       and f_nm = center_img) AS center_img
                        <include refid="loginLikeCheck" />
-			FROM design
-			WHERE SAVE = 'N'
-			AND PUBC_YN = 'N'
+			FROM design d, likes l
+			WHERE d.dgn_no = l.target_no(+)
+            AND d.SAVE = 'N'
+			AND d.PUBC_YN = 'N'
 			<include refid="search" />
+			<include refid="category" />
+			<include refid="likeDesign" />
 			order by #{order} DESC
 	  	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
@@ -58,16 +67,18 @@
 		where SAVE = 'N'
 		<include refid="check" /> 
 		<include refid="search" /> 
-		<include refid="category" /> 
 	</select>
 	
 	<!-- 전체디자인 리스트 개수 반환 -->
 	<select id="allCount" resultType="int">
 		SELECT COUNT(*)
-		FROM DESIGN
-		where SAVE = 'N'
+		FROM DESIGN d, likes l
+		WHERE d.dgn_no = l.target_no(+)
+		AND SAVE = 'N'
 		AND PUBC_YN = 'N'
 		<include refid="search" /> 
+		<include refid="category" /> 
+		<include refid="likeDesign" />
 	</select>
 	
 	<!-- 공모전1건에 대한 디자인리스트중에서 1번째 대표이미지와 같은 파일명가져오기. -->
@@ -134,6 +145,25 @@
 		  FROM DESIGN d join contest c
                         on d.c_no = c.c_no                
 		 and dgn_no = #{dgnNo}
+		 ORDER BY DT DESC
+	</select>
+	
+	<select id="oneDesign" resultType="com.eventi.left.design.service.DesignVO">
+		SELECT 
+	           d.DGN_NO,
+	           d.USER_ID,
+	           d.C_NO,
+	           d.NAME,
+	           CODE_SELECT(d.CAREGORY) CAREGORY,
+	           d.CNTN,
+	           d.DT,
+	           d.CENTER_IMG,
+	           d.PUBC_YN,
+	           d.SAVE,
+			   (SELECT COUNT(WIN_YN) FROM DESIGN WHERE USER_ID=#{userId} AND WIN_YN = 'Y') CNT,
+			   (SELECT SEV_NM FROM FILES WHERE TARGET_ID=#{userId}) MAINIMG
+		  FROM DESIGN d           
+         where dgn_no = #{dgnNo}
 		 ORDER BY DT DESC
 	</select>
 	

@@ -4,10 +4,11 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 <head>
 <link rel="stylesheet" href="/css/heart.css">
-<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+<link rel="stylesheet" href="/css/prtfl/button.css">
+<link rel="stylesheet" href="/css/prtfl/mcPrtfl.css">
 <style>
 	.col-md-4{
-    top: -50px !important;
+    top: -100px !important;
 	margin-bottom: -90px !important;
 	}
 	
@@ -132,6 +133,29 @@
 		height: 100%;
 		object-fit:cover;
 	}	
+	
+  .right{
+  	display: flex;
+  	justify-content: flex-end;
+  	padding: 10px 0;
+    z-index: 1 ;
+  }
+  
+  .btn-15 {
+  	margin-top: 25px;
+  }
+  
+  #love{
+ 	z-index: 1;
+  }
+  
+  select{
+  	z-index: 1;
+  	height: 50px;
+  	width: 150px;
+  	margin-top: 25px
+  }
+	
 </style>
 </head>   
 
@@ -148,15 +172,18 @@
      </section>
      
 		<!-- 페이징/정렬처리 -->
-		<form id="designFrm" name="designFrm">
-			<label>제목</label><input type="text" name="name" value="">
-			<label>내용</label><input type="text" name="cntn" value="">
-			<input type="hidden" name="page" value="1">
-			<button type="submit" class="btn btn-g btn-round inputBtn">검색</button>
-		</form>
+		<div class="container right">
+			<select name="caregory" id="caregory">
+				<option value="D1" th:selected="${designVO.caregory == 'D1'}">현수막</option>
+				<option value="D2" th:selected="${designVO.caregory == 'D2'}">배너</option>
+				<option value="D3" th:selected="${designVO.caregory == 'D3'}">로고</option>
+				<option value="D4" th:selected="${designVO.caregory == 'D4'}">포스터</option>
+				<option value="D5" th:selected="${designVO.caregory == 'D5'}">기타</option>
+	        </select>
 		
-		<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-		<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-25px; right:10px; width: 100px;">
+			<button type="submit" class="find-trigger btn-15">검색</button>
+		
+			<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
 			<!-- 비회원 좋아요버튼-->
 			<th:block sec:authorize="!isAuthenticated()">
 					<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
@@ -164,10 +191,9 @@
 			
 			<!-- 회원 좋아요버튼-->
 			<th:block sec:authorize="isAuthenticated()">
-					<div id="love" class="stage heart" onclick="likeClick(this)"></div>
+				<div id="love" class="stage heart" th:classappend="${param.likeDesign} !=null ? active" onclick="likeClick(this)"></div>
 			</th:block>
 		</div>
-	
 		<!-- 디자인 리스트 반복 실행 -->
 	<div class="container">
 			<div class="row multi-columns-row" id="designBox">
@@ -202,8 +228,7 @@
 					</div>
 				</div>
 			</div>
-	</div>
-					
+	</div>			
 	
 	<div class="row mt-5" id="paging">
          <div class="col text-center">
@@ -257,9 +282,15 @@
 		if ($("#love").hasClass("active")) { 
 			likeSelect();
 		}else{
-			$("#designFrm").submit();   
+			let caregory = $("#caregory option:selected").val();
+			location.href='/design/designList?page=' + i + '&caregory='+ caregory; 
 		}
 	 }
+	
+	//종류별
+	$('#caregory').change(function(){
+		likeSelect();
+	})
 	
 	// Get the modal
 	var designModel = document.getElementById("dseignModel");
@@ -272,7 +303,6 @@
 	//DB좋아요 추가,삭제
 	//하트클릭시 DB입력(등록,취소)
 	function likeCheck(e,targetNo) {
-		
 		$(e).toggleClass("active");//css 변경
 		let category = 'T09';
 		
@@ -341,7 +371,7 @@
 		designModel.style.display = "block";
 		
 		$.ajax({
-			url: '/design/ajaxSelect',
+			url: '/design/oneSelect',
 			method: 'post',
 			data: {dgnNo:dNo, userId:userId},
 			beforeSend: function (xhr) {
@@ -349,7 +379,7 @@
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			console.log(res);
+			$('#dgnerSelect').empty();
 			
 			let user = res.userId;
 			let title = res.name;
@@ -390,10 +420,9 @@
 			
 			$('#dgnerSelect').append(content);
 			
+			$('#modelSelect').empty();
 			//모달내용을 지운뒤 붙여넣기.
 			for(file of res.files){
-				console.log(file);
-				
 				$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo));
 			}
 			
@@ -408,6 +437,7 @@
 					  `;
 		return design;
 	}
+	
 	//모달창 숨기기.
 	$("#designCancel").on('click', function() {
 		$("#designModel").hide();
@@ -415,132 +445,21 @@
 	
 	//공모전 전체하트를 클릭했을 경우 => 나의 좋아요 공모전박스 생성출력.
 	function likeClick(e) {
-		$('input[name=page]').val(1);
 		$(e).toggleClass("active"); 
 		likeSelect();
 	}
 
 	function likeSelect(){
-		let page = $('input[name=page]').val();
-		
 		if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
-
-			$.ajax({
-				url: '/design/ajaxlike',
-				method: 'post',
-				data:{page},
-				beforeSend: function (xhr) {
-					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-					xhr.setRequestHeader(header, token);
-				},
-			}).then(res => {
-				console.log(res);
-				
-				//기존 디자인리스트 지우기
-				$('#designBox').empty();
-				$('#paging').empty();
-				//페이징 지우고, 재생성
-				$('#returnPaging').empty();
-				
-				//관심 공모전이 없을경우
-				if(res.design == ''){
-					alert("관심 디자인이 없습니다.");
-					location.href = "/design/designList";
-				}
-				for (design of res.design) {
-					$('#designBox').append(makeDesign(design));
-				}
-
-				$('#returnPaging').append(makePageing(res.paging)); 
-
-			})
+			let likeDesign = '[[${session.member != null ? session.member.userId :''}]]';
+			let caregory = $("#caregory option:selected").val();
+			location.href='/design/designList?caregory='+ caregory + '&likeDesign=' + likeDesign; 
+		
 		} else if (!$("#love").hasClass("active")) { //하트가 눌리지 않았을 경우 실행
-			location.href = "/design/designList";
+			let caregory = $("#caregory option:selected").val();
+			location.href = "/design/designList?caregory="+ caregory;
 		}
-	}
-	
-	function makeDesign(data){
-		console.log(data)
-		let div = `
-					 <div>
-				        <div class="col-sm-6 col-md-4 col-lg-4" >
-				            <div class="shop-item">
-				                <div>
-				                    <div class="stage heart active" onclick="likeCheck(this,'${data.DGN_NO}')"
-				                        style="position:relative; top:90px; z-index: 1;  right: -240px;">
-				                    </div>
-				                    <div class="shop-item-image">
-				                        <img src="/fileView/${data.CENTER_IMG}" style="width: 360px; height: 400px;" class="img-fluid">
-				                        <div class="shop-item-detail">
-				                            <div>
-				                                <h3 class="content-box-title font-serif">[${data.CAREGORY}]${data.DGN_NO}</h3>
-				                                <h3 class="content-box-title font-serif">디자이너 : ${data.USER_ID}</h3>
-				                                <h3 class="content-box-title font-serif">제목: ${data.NAME}</h3>
-				                            </div>
-				                            <div class="btn btn-round btn-b">
-				                                <a href="#" class="btn btn-round btn-b">
-				                                    <span id="${data.DGN_NO}" class="icon-magnifying-glass">상세보기</span>
-				                                </a>
-				                            </div>
-				                        </div>
-				                    </div>
-				                </div>
-				            </div>
-				        </div>
-				    </div>
-				  `;
-	 return div;
-	} 
-	
-	// 페이징 만들기
-	function makePageing(page) {
-		if (page.totalRecord == 0) {
-			return;
-		}
-		let pagination = $("<div/>")
-		let ul = $("<ul/>").attr("class","pagination");
-		if (page.startPage > 1) {
-			$(ul).append($("<li/>").html("&laquo;")
-									.css("font-size", "30px")
-									.attr("class","page-item")
-									.on("click", function () {
-											gopage(page.startPage - page.pageSize)
-									}));
-		}
-
-		//페이지 버튼 생성.
-		for (let i = page.startPage; i <= page.endPage; i++) {
-			if (page.page == i) {
-				$(ul).append($("<li/>") .text(i).css("font-size", "20px")
-										.css("padding", "10px")
-										.css("border-radius", " 10% / 50% ")
-										.css("background", "#dce3fd")
-										.attr("class", "page-link active")
-				);
-			} else {
-				$(ul).append($("<li/>").text(i).css("font-size", "20px")
-										.css("padding", "10px")
-										.attr("class", "page-link")
-										.on("click", function () {
-											gopage($(this).text());
-										})); //페이지이동 함수
-			}
-		}
-		if (page.endPage < page.lastPage) {
-			$(ul).append($("<li/>").html("&raquo;")
-									.css("font-size", "30px")
-									.attr("class","page-item")
-									.on("click", function () {
-											gopage(page.startPage + page.pageSize)
-									}));
-		}
-		pagination.append(ul);
-		return pagination;
-	}
-
-
+	}	
 </script>
 </div>
 </html>
-
-

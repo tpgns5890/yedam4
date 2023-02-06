@@ -112,6 +112,12 @@ public class DesignServiceImpl implements DesignService {
 	public DesignVO getDesign(DesignVO vo) {
 		return mapper.getDesign(vo);
 	}
+	
+	//디자인 포트폴리오 한건 조회
+	@Override
+	public DesignVO oneDesign(DesignVO vo) {
+		return mapper.oneDesign(vo);
+	}
 
 	@Override
 	public List<DesignVO> saveGetDesign(DesignVO DesignVO) {
@@ -149,5 +155,4 @@ public class DesignServiceImpl implements DesignService {
 		}
 
 	}
-
 }
