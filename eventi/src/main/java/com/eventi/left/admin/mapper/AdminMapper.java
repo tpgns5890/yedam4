@@ -3,6 +3,7 @@ package com.eventi.left.admin.mapper;
 import java.util.HashMap;
 import java.util.List;
 
+import com.eventi.left.admin.service.VisitorVO;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerVO;
@@ -76,4 +77,6 @@ public interface AdminMapper {
 	public int insertMoney(MoneyVO money);
 
 	public void updateContest(WinnerVO winnerVO); 
+	
+	public List<VisitorVO> countVisit();
 }

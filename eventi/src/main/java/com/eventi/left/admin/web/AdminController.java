@@ -1,6 +1,7 @@
 package com.eventi.left.admin.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventi.left.admin.service.AdminService;
+import com.eventi.left.admin.service.VisitorVO;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
@@ -34,6 +36,13 @@ public class AdminController {
 	@RequestMapping(value = "/adminMain")
 	public String adminMain() {
 		return "content/admin/adminMain";
+	}
+	//방문자수 ajax
+	@RequestMapping(value="/getVisitor")
+	public @ResponseBody List<VisitorVO> countVisit(Model model){
+		List<VisitorVO> visit = service.countVisit();
+		model.addAttribute("visit", visit);
+		return visit;
 	}
 	
 	// 자격증승인페이지 이동

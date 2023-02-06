@@ -2,6 +2,7 @@ package com.eventi.left.member.mapper;
 
 import java.util.List;
 
+import com.eventi.left.admin.service.VisitorVO;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.member.service.BusiVO;
 import com.eventi.left.member.service.CrtfVO;
@@ -44,5 +45,7 @@ public interface MemberMapper {
 	public List<CrtfVO>crtfSelect(String userId); // 회원의 자격증리스트 조회
 
 	public List<CodeVO> getBankCode(); //은행사 코드 가져오기
+	
+	public int visitCount();
 
 }

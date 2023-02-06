@@ -44,6 +44,8 @@ public interface AdminService {
 
 	public int sendToMoney(WinnerVO winnerVO);
 
+	public List<VisitorVO> countVisit();
+
 
 
 }

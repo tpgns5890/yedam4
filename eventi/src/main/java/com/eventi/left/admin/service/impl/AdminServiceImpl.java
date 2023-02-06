@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.eventi.left.admin.mapper.AdminMapper;
 import com.eventi.left.admin.service.AdminService;
+import com.eventi.left.admin.service.VisitorVO;
 import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.contest.service.ContestVO;
@@ -225,6 +226,11 @@ public class AdminServiceImpl implements AdminService{
 		}
 		adminMapper.updateContest(winnerVO);
 		return i;
+	}
+
+	@Override
+	public List<VisitorVO> countVisit() {
+		return adminMapper.countVisit();
 	}
 
 	
