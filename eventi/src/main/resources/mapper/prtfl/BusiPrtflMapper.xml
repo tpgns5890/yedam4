@@ -4,7 +4,19 @@
 	
 	<!-- 전체조회 -->
 	<select id="busiList" resultType="com.eventi.left.prtfl.service.BusiPrtflVO">
-		SELECT *
+		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+		SELECT R.USER_ID, R.INTRO, R.TEL, R.DT, R.BUSI_TITLE, F.SEV_NM IMG
+		FROM BUSI_PRTFL R, FILES F
+		WHERE R.USER_ID = F.TARGET_ID(+)
+		ORDER BY DT DESC
+		<![CDATA[
+			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		]]>
+	</select>
+	
+	<!-- 업체 총 건수 -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*)
 		FROM BUSI_PRTFL
 	</select>
 	
@@ -23,10 +35,23 @@
 		VALUES(#{userId}, #{busiTitle}, #{tel}, #{intro}, SYSDATE, #{img})
 	</insert>
 	
+	<!-- 업체 등록 확인여부 -->
+	<select id="checkBusi" resultType="int">
+		SELECT COUNT(*)
+		FROM BUSI_PRTFL
+		WHERE USER_ID = #{userId}
+	</select>
+	
 	<!-- 조회수 +1 -->
 	<update id="inqUpdate">
 		UPDATE BUSI_PRTFL
 		   SET INQ = INQ + 1
 		 WHERE USER_ID = #{userId}
 	</update>
+	
+	<!-- 업체 삭제 -->
+	<delete id="busiDelete">
+		DELETE FROM BUSI_PRTFL
+		WHERE USER_ID = #{userId}
+	</delete>
 </mapper>

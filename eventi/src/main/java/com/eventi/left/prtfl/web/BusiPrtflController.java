@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberService;
@@ -26,8 +28,9 @@ public class BusiPrtflController {
 	
 	//업체 전체리스트
 	@RequestMapping("/busiList")
-	public String busiList(Model model, BusiPrtflVO busiPrtflVO) {
-		model.addAttribute("busiList", busiPrtflService.busiList(busiPrtflVO));
+	public String busiList(Model model, BusiPrtflVO busiPrtflVO, PagingVO paging) {
+		model.addAttribute("busiList", busiPrtflService.busiList(busiPrtflVO, paging));
+		model.addAttribute("paging", paging);
 		return "content/prtfl/busiList";
 	}
 	
@@ -45,6 +48,13 @@ public class BusiPrtflController {
 		model.addAttribute("recount", reviewService.getReviewAvg(reviewVO));		
 		
 		return "content/prtfl/busiSelect";
+	}
+	
+	//업체 등록 여부
+	@PostMapping("/checkBusi")
+	@ResponseBody
+	public int checkBusi(BusiPrtflVO busiPrtflVO) {
+		return busiPrtflService.checkBusi(busiPrtflVO);
 	}
 	
 	//업체 포트폴리오 등록 페이지 이동

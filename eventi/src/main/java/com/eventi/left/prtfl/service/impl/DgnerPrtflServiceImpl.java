@@ -42,6 +42,12 @@ public class DgnerPrtflServiceImpl implements DgnerPrtflService{
 		return dgnerPrtflmapper.desginList(designVO);
 	}
 	
+	//디자이너 등록 여부
+	@Override
+	public int checkDgner(DgnerPrtflVO dgnerPrtflVO) {
+		return dgnerPrtflmapper.checkDgner(dgnerPrtflVO);
+	}
+	
 	//디자이너 포트폴리오 입력
 	@Override
 	public int dgnerInsert(DgnerPrtflVO dgnerPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {

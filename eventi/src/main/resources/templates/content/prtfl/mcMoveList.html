@@ -86,10 +86,14 @@
 	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
     <div id="check">
-    <button class="btn btn-primary btn-round" type="button" id="videoUp">동영상 등록</button> 
-
+    <button class="btn btn-primary btn-round" type="button" id="videoUp">동영상 등록</button>
+    <button class="btn btn-primary btn-round" type="button" id="deleteBtn">동영상 삭제</button> 
+	<input type="checkBox" value="삭제" class="delete" id="allDelete">
+	
 	<div class="container">
 		<div th:each="move : ${moves}" >
+			<input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()">
+			<input type="hidden" th:value="${move.moveNo}">
 			<video th:src="|/fileView/${move.move}|" width="500px" height="200px" controls></video>
 			<p th:text="${move.moveTtl}"></p>
         </div> 
@@ -146,6 +150,34 @@
 	   $("#cancel").on('click', function() {
 			$("#videoFrm").hide();
 		});
+		
+		// 전체체크시 모든항목 체크 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
+		})
+		
+		//동영상 삭제
+		document.querySelector('#deleteBtn').addEventListener('click', deleteMove);
+
+		function deleteMove(deleteCheck){
+			let trs = document.querySelectorAll('div>video');
+			console.log(trs);
+			if(!confirm('동영상을 삭제하시겠습니까?')){
+				return false;
+			} else {
+				for(let i = 0; i<trs.length; i++){
+					if(trs[i].parentNode.children[0].checked) {
+						let moveNo = trs[i].parentNode.children[1].value;
+						location.href = `/move/moveDelete?moveNo=${moveNo}`;
+					}
+				}
+			}
+		}
 	</script>
 	</div>
 </body>

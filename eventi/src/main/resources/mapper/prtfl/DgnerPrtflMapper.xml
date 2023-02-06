@@ -49,6 +49,13 @@
 		WHERE USER_ID = #{userId}
 	</select>
 	
+	<!-- 디자이너 등록 확인여부 -->
+	<select id="checkDgner" resultType="int">
+		SELECT COUNT(*)
+		FROM DGNER_PRTFL
+		WHERE USER_ID = #{userId}
+	</select>
+	
 	<!-- 조회수 +1 -->
 	<update id="inqUpdate">
 		UPDATE DGNER_PRTFL
@@ -61,4 +68,10 @@
 		INSERT INTO DGNER_PRTFL(user_id, user_name, one_intro, carr_year, work_price, work_dt, style, career, dt, img)
 		VALUES(#{userId}, #{userName}, #{oneIntro}, #{carrYear}, #{workPrice}, #{workDt}, #{style}, #{career}, SYSDATE, #{img})
 	</insert>
+	
+	<!-- 디자이너 삭제 -->
+	<delete id="dgnerDelete">
+		DELETE FROM DGNER_PRTFL
+		WHERE USER_ID = #{userId}
+	</delete>
 </mapper>

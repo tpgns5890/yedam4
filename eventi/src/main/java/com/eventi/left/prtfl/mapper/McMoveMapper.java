@@ -16,4 +16,7 @@ public interface McMoveMapper {
 	
 	//동영상추가
 	public int moveInsert(McMoveVO mcMoveVO);
+	
+	//동영상 삭제
+	public int moveDelete(McMoveVO mcMoveVO);
 }

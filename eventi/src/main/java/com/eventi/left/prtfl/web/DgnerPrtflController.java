@@ -81,6 +81,13 @@ public class DgnerPrtflController {
 		return "content/prtfl/dgnerInsert";
 	}
 	
+	//디자이너 등록 여부
+	@PostMapping("/checkDgner")
+	@ResponseBody
+	public int checkDgner(DgnerPrtflVO dgnerPrtflVO) {
+		return dgnerPrtflservice.checkDgner(dgnerPrtflVO);
+	}
+	
 	//디자이너 입력
 	@PostMapping("/dgnerInsert")
 	public String dgnerInsertFrm(DgnerPrtflVO dgnerPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile) {

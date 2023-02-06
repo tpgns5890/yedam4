@@ -72,7 +72,7 @@ public class McPrtlController {
 	//사회자 등록 여부
 	@PostMapping("/checkMc")
 	@ResponseBody
-	public int checkMc(Model model, McPrtflVO mcPrtflVO) {
+	public int checkMc(McPrtflVO mcPrtflVO) {
 		return mcPrtflService.checkMc(mcPrtflVO);
 	}
 	
@@ -156,4 +156,10 @@ public class McPrtlController {
 		return "redirect:/prtfl/mcSelect?userId=" + mcPrtflVO.getUserId();
 	}
 	
+	//사회자 삭제
+	@GetMapping("/mcDelete")
+	public String mcDelete(McPrtflVO mcPrtflVO) {
+		mcPrtflService.mcDelete(mcPrtflVO);
+		return "redirect:/prtfl/mcList";
+	}
 }

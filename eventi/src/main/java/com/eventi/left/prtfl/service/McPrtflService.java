@@ -32,4 +32,7 @@ public interface McPrtflService {
 	
 	//사회자 수정
 	public int mcUpdate(McPrtflVO mcPrtlVO, FilesVO filesVO, MultipartFile[] uploadFile);
+
+	//사회자 삭제
+	public int mcDelete(McPrtflVO mcPrtlVO);
 }

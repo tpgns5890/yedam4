@@ -49,7 +49,10 @@
 	<!-- 사회자포트폴리오 총 건수 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
-		FROM MC_PRTFL
+		FROM MC_PRTFL M, LIKES l
+		WHERE M.USER_ID = L.TARGET_NO(+)
+		<include refid="likeSelect" />
+		<include refid="mcSelect" />
 	</select>
 	
 	<!-- 사회자 등록 확인여부 -->
@@ -99,4 +102,9 @@
 		WHERE USER_ID = #{userId}
 	</update>
 	
+	<!-- 사회자 삭제 -->
+	<delete id="mcDelete">
+		DELETE FROM MC_PRTFL
+		WHERE USER_ID = #{userId}
+	</delete>
 </mapper>

@@ -90,10 +90,11 @@
 	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
     <div id="check">
-    <button class="btn btn-primary btn-round" type="button" id="imgUp">이미지 등록</button> 
+    <button class="btn btn-primary btn-round" type="button" id="imgUp">이미지 등록</button>
+    <button class="btn btn-primary btn-round" type="button" id="deleteBtn">이미지 삭제</button> 
+	<input type="checkBox" value="삭제" class="delete" id="allDelete">
 
 	<div class="container">
-
             <ul class="works-grid works-grid-gut works-grid-3 works-hover-w" id="works-grid" style="position: relative; height: 672.375px;">
               
             </ul>
@@ -162,7 +163,8 @@
 		})
 		
 		function makeDesgin(img){
-			let tag = `<li class="work-item illustration webdesign" style="position: absolute; left: 0px; top: 0px;">
+			let tag = `<li class="work-item illustration webdesign" style="position: absolute; left: 0px; top: 0px;" if="${img.eventNo}">
+							<input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()">
 							<a href="portfolio_single_featured_image1.html">
 				                <div class="work-image"><img src="/fileView/${img.img}" alt="Portfolio Item"></div>
 				                <div class="work-caption font-alt">

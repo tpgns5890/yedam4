@@ -19,4 +19,7 @@ public interface McMoveService {
 	
 	//동영상추가
 	public int moveInsert(McMoveVO mcMoveVO, FilesVO filesVO, MultipartFile[] uploadFile);
+
+	//동영상 삭제
+	public int moveDelete(McMoveVO mcMoveVO);
 }
