@@ -4,44 +4,47 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 <head>
+<link rel="stylesheet" href="/css/contest/model.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
 <style>
 .fileDown{
 	display : none;
 }
-.contestContainer {
-	padding: 20px;
-	margin: auto;
-	float: center;
-}
 ul{
 	list-style: none;
+}label{
+	text-align: center;
+}#ptext{
+	color: red;
+	font-size: 18px;
+	text-align: center;
+	margin-top: 10px
 }
 </style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/gold_01.gif" style="background-image: url(&quot;/images/gold_01.gif&quot;);">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">공모전</h2>
-                <div class="module-subtitle font-serif" >공모전 수정</div>
+                <h2 class="module-title font-alt" style="margin: 0;">공모전 수정</h2>
               </div>
             </div>
           </div>
         </section>
         
+		<p id="ptext">*중요사항은 참가작품에 영향을 끼칠수 있기때문에 수정에 제한적입니다.</p>
 		<div class="contestContainer">
 			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" >
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-					<p style="color: red">*공모전에 중요사항은 참가작품에 영향을 끼칠수 있기때문에 수정에 제한적입니다.</p>
 				<ul>
-					<li><div th:text="|분류 : ${contest.category}|"></div></li>
-					<li><div th:text="|작성자 :  ${contest.writer}"></div></li>
-					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li>
-					  <th:block th:each="w : ${winnerList}">
-					  	<li><div th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></div></li>
-					  </th:block>
+<!-- 					<li><div th:text="|분류 : ${contest.category}|"></div></li> -->
+<!-- 					<li><div th:text="|작성자 :  ${contest.writer}"></div></li> -->
+<!-- 					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li> -->
+<!-- 					  <th:block th:each="w : ${winnerList}"> -->
+<!-- 					  	<li><div th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></div></li> -->
+<!-- 					  </th:block> -->
 					
 					<li><input hidden="hidden" type="text" name="cNo" th:value="${contest.cNo}"><br /></li> <li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
@@ -64,8 +67,8 @@ ul{
                      </div>
                   </div>
 
-					<button type="submit" id="updateBtn">수정</button>
-					<button type="button" id="cancleBtn" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
+					<button type="submit" id="updateBtn" class="btn btn-g btn-round">수정</button>
+					<button type="button" id="cancleBtn" class="btn btn-g btn-round" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
 			</form>
 		</div>
 	<script>

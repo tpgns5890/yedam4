@@ -9,19 +9,17 @@
 }
 
 .contestContainer {
-	border: 1px solid;
-	padding: 20px 40px 20px 40px;
-	width: 43%;
-	margin: 20px auto;
-}
-
-.contestContainer h3 {
-	font-weight: bolder;
-	text-align: center;
+	background-color:#f7f6f6;
+	margin: 40px auto 40px;
+	padding: 20px 50px 20px 50px;
+	width: 48%;
+	border-radius: 20px;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
 
 #contestCheck {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
+    margin-right: 5px;
 }
 
 #saveFile {
@@ -29,7 +27,11 @@
 	font-size: 16px;
 	font-weight: bold;
 }
-
+#checkbox_div{
+    width: 150px;
+    margin: 3px auto;
+    font-weight: bolder;
+}
 ul {
 	padding: 0px;
 	list-style: none;
@@ -69,8 +71,8 @@ ul li.tag-item {
 
 /* 등록폼 버튼정렬 */
 .contestBtn {
-	width: 40%;
-	margin: 0 auto 0px;
+    width: 30%;
+    margin: 0 auto 0px;
 }
 
 .contestBtn button {
@@ -123,6 +125,7 @@ ul li.tag-item {
 	margin: 0px auto 70px;
 	border-radius: 20px;
 	background: #f2f7fc;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
 
 .box li {

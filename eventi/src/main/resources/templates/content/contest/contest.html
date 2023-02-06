@@ -13,6 +13,7 @@
 .container {
     width: 60% !important;
 }
+
 p{
 	font-size: 18px;
 	font-weight: blod;
@@ -30,11 +31,11 @@ p{
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-			<div class="container" >
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/gold_01.gif" style="background-image: url(&quot;/images/gold_01.gif&quot;);">
+          <div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h2 class="module-title font-alt" th:text="|${contest.ttl}|"></h2>
+						<h2  class="module-title font-alt" th:text="|${contest.ttl}|"></h2>
 					</div>
 				</div>
 			</div>
@@ -61,7 +62,7 @@ p{
 								<h4 th:text="|#${contest.style}|" style="color: #117bd9"></h4>
 						</th:block>
 						
-					<div>
+					<div style="height: 50px;">
 						<!-- 신고수 및 버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
 							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
@@ -203,17 +204,16 @@ p{
 		
 		<!-- 신고 등록 폼 -->
 	    <div id="rprtModal" class="modal">
-				<div class="modal_content">
+				<div class="rprt_modal_content">
 					<h2>신고</h2>
-					<div id="box">
+					<div id="rprtBox">
 						<label>신고게시글</label>
 						<input type="text" id="targetId" name="targetId" th:value="${contest.cNo}" readonly><br>
 						<label>신고자</label>
 						<input type="text" id="userId" name="userId" th:value="${sessionId}"><br>
-						<label>신고사유</label>
-						<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
-						<button type="button" id="cancel">취소</button>
-						<button type="button" id="punish">신고</button>
+						<textarea rows="5" cols="33" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+						<button type="button" class="btn btn-g btn-round btn-lg" id="cancel">취소</button>
+						<button type="button" class="btn btn-g btn-round btn-lg" id="punish">신고</button>
 					</div>
 				</div>
 			<div class="modal_layer"></div>

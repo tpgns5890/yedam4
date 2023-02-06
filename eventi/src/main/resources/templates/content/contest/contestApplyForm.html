@@ -14,21 +14,20 @@
 <body>
 	<div layout:fragment="content" class="content">
 
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/gold_01.gif" style="background-image: url(&quot;/images/gold_01.gif&quot;);">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">공모전</h2>
-                <div class="module-subtitle font-serif" >공모전 응모신청</div>
+                <h2 class="module-title font-alt" style="margin: 0;">공모전 응모</h2>
               </div>
             </div>
           </div>
-        </section>		
+        </section>	
 		
 		<div class="contestContainer">
 		<button type="button" id="saveFile" >불러오기</button>
 		<h3>[콘테스트 참여 약관 동의]</h3>
-			<textarea rows="9" cols="100">
+			<textarea rows="9" cols="108">
 1. 로고,일러스트 콘테스트에는 어떠한 스톡이미지, 프리백터,클럽아트도 사용해서는 안됩니다.
   상업적 사용이 제한되는 폰트, 스톡이미지의 사용 규정 및 범위를 위반할 시, 계정이 영구적으로 삭제될 수 있습니다. 작품에 유료 폰트,스톡이미지,프리백터 등을 사용한 경우에는 반드시 의뢰자에게 저작권 문제가 없을을 명시해야한 합니다.
 2. 이벤티의 판단하에 본 디자인이 다른 디자이너의 작품을 도용한 것으로 판단되는 경우, 이벤티는 해당 디자이너의 활동을 제지 혹은 금지할 수 있습니다.
@@ -39,8 +38,9 @@
 5. 이벤티는 실제 상업적으로 사용될 디자인을 위뢰하는 경우 전문 디자이너 플랫폼입니다.
    동일 디자이너의 사연에 대해 의뢰자의 불만이 지속적으로 발생 시, 이벤티 내부 검수를 통해 참여가 제한될 수 있습니다.
 </textarea>
-			<br> <input type="checkbox" id="contestCheck">약관에 동의합니다.<br>
-		
+			<div id="checkbox_div" >
+				<input type="checkbox" id="contestCheck">약관에 동의합니다.<br>
+			</div>
 		
 			<!-- 공모전등록 입력폼 -->
 			<form action="/design/designInsert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post" onsubmit="return check();">
