@@ -7,14 +7,40 @@
 	<where>
 		<!-- 검색창 입력 시 -->
 		<if test="faqTtl !=null and faqTtl != ''">
-			AND ( FAQ_TTL LIKE '%${faqTtl}%' OR FAQ_ANS LIKE '%${faqTtl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			AND ( FAQ_TTL LIKE '%${faqTtl}%' OR FAQ_ANS LIKE '%${faqTtl}%' ) 
 		</if>
 	</where>	
-</sql>		
+</sql>	
+	
+	<!-- 게시글 전체조회 -->
 	<select id="getFaqList" resultType="FaqVO">
 		SELECT FAQ_NO, FAQ_TTL, FAQ_ANS   
 		FROM FAQ
 		<include refid="fSelect" />
 	</select>
-
+	
+	<!-- 게시글 시퀀스번호 찾기 -->
+	<select id="getSeq" resultType="String">
+		SELECT 'NO' || (MAX(TO_NUMBER(SUBSTR(FAQ_NO,3)))+1) FAQ_NO
+		FROM FAQ
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="faqInsert">
+		<selectKey keyProperty="faqNo" resultType="String" order="BEFORE">
+			SELECT 'NO' || NVL((MAX(TO_NUMBER(SUBSTR(FAQ_NO,3)))+1),1) FAQ_NO
+			FROM FAQ
+		</selectKey>
+		
+		INSERT INTO FAQ
+		(FAQ_NO, FAQ_TTL, FAQ_ANS) <!-- DB -->
+		VALUES(#{faqNo}, #{faqTtl}, #{faqAns}) <!-- VO -->
+	</insert>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="faqDelete">
+		DELETE FROM FAQ
+		WHERE FAQ_NO=#{faqNo}
+	</delete>
+	
 </mapper>
