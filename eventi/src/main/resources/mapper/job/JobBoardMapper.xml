@@ -45,7 +45,10 @@
 				W_HOUR,
 				QUALIFICATION,
 				PREFERENCE,
-				IMG,
+				(SELECT SEV_NM 
+                  FROM FILES 
+                   WHERE TARGET_ID = JOB_NO
+                   AND ROWNUM=1) AS IMG,
 				USER_ID,
 				DT,
 				CLOSE_DT,
@@ -93,7 +96,10 @@
 				W_HOUR,
 				QUALIFICATION,
 				PREFERENCE,
-				IMG,
+				(SELECT SEV_NM 
+                  FROM FILES 
+                   WHERE TARGET_ID = JOB_NO
+                   AND ROWNUM=1) AS IMG,
 				USER_ID,
 				DT,
 				CLOSE_DT,

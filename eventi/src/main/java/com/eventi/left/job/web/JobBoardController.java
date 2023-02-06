@@ -48,22 +48,22 @@ public class JobBoardController {
 		
 		List<JobBoardVO> imgs = jobService.getJobList(jobBoardVO, paging);
 		model.addAttribute("paging", paging);
-		model.addAttribute("jobList", imgs);
 		
 		//사진파일
 		List<FilesVO> files = new ArrayList<>();
 		for(JobBoardVO img : imgs) {
 			files = filesService.fileList(img.getJobNo());
-					
+			img.setFiles(files);
+			
 			//파일리스트 저장된 파일정보가 홍보번호와 같다면 이미지셋팅.
-			for(FilesVO file : files) {
-				if(file.getTargetId().equals(img.getJobNo())) {
-					img.setImg(file.getSevNm());
-				}
-			}
+			/*
+			 * for(FilesVO file : files) { if(file.getTargetId().equals(img.getJobNo())) {
+			 * img.setImg(file.getSevNm()); } }
+			 */
 		}
+		model.addAttribute("jobList", imgs);
 		//이미지
-		model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
+		//model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
 		return "content/job/jobList";
 	}
 	
@@ -77,7 +77,7 @@ public class JobBoardController {
 	
 	//구인등록폼이동
 	@RequestMapping(value = "/jobInsert", method=RequestMethod.GET) 
-	public String jobUpload(Model model, JobBoardVO jobBoardVO) {
+	public String jobUpload(Model model, JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		model.addAttribute("types", codeService.getType());
 		return "content/job/jobInsertForm";
 	}
@@ -125,16 +125,21 @@ public class JobBoardController {
 	@RequestMapping(value = "/jobUpdate", method=RequestMethod.GET) 
 	public String jobUpdate(Model model, JobBoardVO jobBoardVO) {
 		model.addAttribute("update", jobService.getJob(jobBoardVO));
+		
+		//사진 및 동영상
+		List<FilesVO> files = new ArrayList<>();
+		files = filesService.fileList(jobBoardVO.getJobNo());
+		model.addAttribute("files", files);
 		//이미지
-		model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
+		//model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
 		return "content/job/jobUpdateForm";
 	}
 	
 	//게시글 수정
 	@PostMapping("/jobUpdate")
 	@ResponseBody //ajax방식
-	public int jobUpdate(JobBoardVO jobBoardVO, MultipartFile[] uploadFile) {
-		return jobService.getJobUpdate(jobBoardVO, uploadFile);
+	public int jobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		return jobService.getJobUpdate(jobBoardVO, filesVO, uploadFile);
 			//rttr.addFlashAttribute("result", "게시글 수정 완료!");
 	}
 	

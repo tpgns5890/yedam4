@@ -1,8 +1,11 @@
 package com.eventi.left.job.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.eventi.left.files.service.FilesVO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,4 +49,7 @@ public class JobBoardVO {
 	private Integer rprt;
 	//임시저장
 	private String save = "N";
+	
+	//파일리스트
+	private List<FilesVO> files;
 }

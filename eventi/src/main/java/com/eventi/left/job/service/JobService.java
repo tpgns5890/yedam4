@@ -22,7 +22,7 @@ public interface JobService {
 	public int jobInsert(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile); 
 	
 	//게시글수정
-	public int getJobUpdate(JobBoardVO jobBoardVO, MultipartFile[] uploadFile); 
+	public int getJobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile); 
 	
 	//게시글 삭제
 	public int jobDelete(JobBoardVO jobBoardVO);
