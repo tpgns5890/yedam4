@@ -49,10 +49,16 @@
                     <button class="search-btn" type="submit" id="find" value="찾기"><i class="fa fa-search"></i></button>
                   </div>
                 </form>
+                <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqInsert}'|">글등록</button>
+                <!--  <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqDelete(faqNo=${faq.faqNo})}'|">삭제</button>-->
+                
+                
               </div> 
             </div>
             <div class="row" >
+            	
               <div class="col-sm-8 col-sm-offset-2" >
+             	<input type="checkBox"  class="hire" id="allDelete" value="선택채용">
                 <div role="tabpanel" >
                   <ul class="nav nav-tabs font-alt" role="tablist">
                     <li class="active"><a href="#support" data-toggle="tab"><span class="icon-tools-2"></span>support</a></li>
@@ -61,6 +67,7 @@
                     <div class="tab-pane active" id="support">
                       <div class="panel-group" id="accordion">
                         <div class="panel panel-default" th:each="faq, number : ${faqList}">
+
                           <div class="panel-heading">
                             <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" th:href="|#support${number.count}|" aria-expanded="true" class="" th:text=${faq.faqTtl}>Support Question 1</a></h4>
                           </div>
@@ -77,6 +84,9 @@
             </div>
           </div>
 <script>
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
 
 	$('.heading').on('click', function (ev){
 		ev.target.nextElementSibling.classList.toggle("ans")

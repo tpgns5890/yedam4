@@ -4,8 +4,45 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
 
-<div layout:fragment="content">
+<head>
+<script src="https://kit.fontawesome.com/a532c3d0aa.js" crossorigin="anonymous"></script>
+<style>
+.fa-user{
+font-size: 35px;
+}
+.bubble
+{
+    position: relative;
+    width: 300px;
+    height: 120px;
+    padding: 15px;
+    background: #eee;
+    border-radius: 10px;
+    margin-left: 25px;
 
+}
+#replyInsert{
+	display: flex;
+    align-items: center;
+}
+.bubble:after
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 16px 15px 16px 0;
+border-color: transparent #eee;
+display: block;
+width: 0;
+z-index: 1;
+left: -15px;
+top: 42px;
+}
+</style>
+</head>   
+   
+   
+<div layout:fragment="content">
 	<section class="module bg-dark-60 gallery-page-header parallax-bg"
 		data-background="assets/images/gallery_bg.jpg"
 		style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -42,20 +79,26 @@
 			<button class="btn btn-g btn-round queDelete" type="button" th:data-qno="${queDetail[0].qNo}"><i class="fa fa-cog fa-spin"></i>삭제</button>	
 					
 		 <div class="comments"  id=reply th:if="${#lists.size(queDetail)}>1">
-                  <h4 class="comment-title font-alt">답변</h4>
-                  <div class="comment clearfix">
-                    <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
-                    <div class="comment-content clearfix">
-                      <div class="comment-author font-alt" th:text=${queDetail[1].ttl}><a href="#">관리자</a></div>
-                      <form action="replyInsert">
-						<textarea name="replyCntn" id="replyCntn" rows="3" cols="90" th:utext=${queDetail[1].cntn}></textarea>
-						<button type="button" id="replyInsertBtn">댓글작성</button>
-                      Today, 14:55 - 
-                    	</form>
-                      </div>
-                    </div>
-                  </div>	
-                  
+                  <h4 class="comment-title font-alt">Leave a Comment</h4>
+                 
+
+ 
+
+ 		<form action="replyInsert" id="replyInsert">
+ 		<div class="icon"><i class="fa-solid fa-user"></i></div>
+ 		<div class="bubble"> 
+			<p name="replyCntn" id="replyCntn" th:utext=${queDetail[1].cntn}></p>
+			</div>
+			
+		</form>
+      
+     
+		<div class="comment-content clearfix">
+          <!--    <div class="comment-author font-alt" th:text=${queDetail[1].ttl}><a href="#">관리자</a></div> -->
+                    	
+          </div>
+	</div>	
+                   
                   
    <form action="/questions/insertQna" method="POST" id="questionsInsert" name="questionsInsert">
    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
@@ -63,22 +106,22 @@
    <input type="hidden" name="category" th:value="T14">
     <input type="hidden"  name="targetId" th:value="QN123"> 
    <input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>      
-			         <div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">답변</label>
-								<textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" ></textarea>
-							</div>
-						</div>
-						
-			         <div class="col-md-12">
-							<div class="form-group">
-								<input type="submit" id="insert" value="등록" class="btn btn-primary">
-								<div class="submitting"></div>
-							</div>
-						</div>
+		<div class="col-md-12">
+			<div class="form-group">
+				<label class="label" for="#">답변</label>
+				<textarea name="cntn" class="form-control" id="cntn" cols="30" rows="4" ></textarea>
+			</div>
+		</div>
+			
+		 <div class="col-md-12">
+			<div class="form-group">
+			<button class="btn btn-d btn-round" type="submit"  id="insert"><i class="fa fa-comments-o"></i> 답변등록</button>
+				<!-- <input type="submit" id="insert" value="등록" class="btn btn-primary"> -->
+				<div class="submitting"></div>
+			</div>
+		</div> 
 	</form>					
-						
-		
+
 				</div>
 			</div>
 		</div>

@@ -20,5 +20,23 @@ public class FaqServiceImpl implements FaqService{
 	public List<FaqVO> getFaqList(FaqVO faqVO) {
 		return faqmapper.getFaqList(faqVO);
 	}
+	//등록
+	@Override
+	public int faqInsert(FaqVO faqVO) {
+		// TODO Auto-generated method stub
+		return faqmapper.faqInsert(faqVO);
+	}
+	//시퀀스
+	@Override
+	public String getSeq() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	//삭제
+	@Override
+	public int faqDelete(FaqVO faqVO) {
+		// TODO Auto-generated method stub
+		return faqmapper.faqDelete(faqVO);
+	}
 
 }
