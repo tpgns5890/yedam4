@@ -246,6 +246,10 @@
 		height: 32px;
 		padding: 0;
 	}
+	
+	#replyInsertFrm{
+		height: 120px;
+	}
 </style>
 </head>
 
@@ -268,7 +272,7 @@
   		<p style="font-size: 13px; font-weight: bold; text-align: center; margin: 15px 44px;" th:text="${mcSelect.oneIntro}"></p>
   		
   		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
-	  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize">1:1대화</button>
+	  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize chattingUp">1:1대화</button>
 	  		<button type="button" class="find-trigger btn-1 btnSize">의뢰하기</button>
 		</th:block>
 		<th:block th:if="${session.member.userId} == ${mcSelect.userId}">
@@ -392,8 +396,7 @@
 	                    <!-- 정렬순 -->
 	                   <div class="right">
 					   <select id="order" name="order">
-					   		<option value="">==========</option>
-							<option value="writing_dt">작성일순</option>
+							<option value="writing_dt" selected>작성일순</option>
 							<option value="star">별점높은순</option>
 							<option value="minStar">별점낮은순</option>
 						</select>
@@ -790,7 +793,8 @@
 	     if($(this).hasClass("active")){
 	    	 //총 좋아요수 처리
 	    	 let likeCount = $('#likeCount').text();
-	    	 $('#likeCount').text(parseInt(likeCount) + 1);
+	    	 let likePlus = parseInt(likeCount) + 1
+	    	 $('#likeCount').text(likePlus + '건');
 
 	    	 //post방식으로 좋아요 등록하기
 	    	 $.ajax({
@@ -811,7 +815,8 @@
 	     } else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
 	    	 //총 좋아요수 처리
 	    	 let likeCount = $('#likeCount').text();
-	    	 $('#likeCount').text(parseInt(likeCount) - 1);
+	    	 let likeMin = parseInt(likeCount) - 1
+	    	 $('#likeCount').text(likeMin + '건');
 	    	 
 	    	//post방식으로 좋아요 취소하기
 	    	 $.ajax({

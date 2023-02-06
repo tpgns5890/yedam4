@@ -149,9 +149,24 @@ public class DesignController {
 	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회
 	@PostMapping("/ajaxSelect")
 	@ResponseBody
-	public DesignVO designSelect(DesignVO vo) {		
+	public DesignVO designSelect(DesignVO vo) {	
 		// 디자인 1건조회
 		DesignVO design = service.getDesign(vo);
+		List<FilesVO> files = new ArrayList<>();
+
+		// 1건에 대한 파일리스트 받고
+		files = fService.fileList(design.getDgnNo());
+		design.setFiles(files);
+
+		return design;
+	}
+	
+	//디자인 포트폴리오 상세보기
+	@PostMapping("/oneSelect")
+	@ResponseBody
+	public DesignVO oneSelect(DesignVO vo) {
+		// 디자인 1건조회
+		DesignVO design = service.oneDesign(vo);
 		List<FilesVO> files = new ArrayList<>();
 
 		// 1건에 대한 파일리스트 받고

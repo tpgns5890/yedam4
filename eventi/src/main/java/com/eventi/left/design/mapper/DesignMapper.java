@@ -22,6 +22,8 @@ public interface DesignMapper {
 	
 	public DesignVO getDesign(DesignVO vo); // 디자인1건.
 	
+	public DesignVO oneDesign(DesignVO vo); //디자인 포트폴리오에서 사용
+	
 	public int insert(DesignVO vo); //추가
 	 
 	public int update(DesignVO vo); //수정
