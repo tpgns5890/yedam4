@@ -36,5 +36,5 @@ mvnw.cmd
 bin/
 .mvn/
 
-application.properties
-/eventi/src/main/java/com/eventi/left/common/ResourceHandlerConfig.java
+!**/src/resources/application.properties
+!**/src/main/**/common/ResourceHandlerConfig.java
