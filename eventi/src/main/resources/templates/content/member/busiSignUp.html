@@ -38,7 +38,6 @@
 
 #submitArea {
 	margin-top: 20px;
-	margin-bottom: 20px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
@@ -49,7 +48,7 @@
 }
 
 .formLabel {
-	width: 130px;
+	width: 100px;
 	margin-top: 40px;
 }
 
@@ -58,8 +57,8 @@
 }
 
 #inputEmailChk {
-	width: 150px;
-	margin-left: 280px;
+	width: 140px;
+    margin-left: 263px;
 }
 
 .inputRadio {
@@ -67,8 +66,8 @@
 }
 
 #inputEmailChk {
-	width: 150px;
-	margin-left: 280px;
+	width: 140px;
+	margin-left: 263px;
 }
 
 .busiArea {
@@ -86,7 +85,7 @@
 .chkArea {
 	width: 115px;
 	height: 200px;
-	overflow: scroll;
+	overflow: auto;
 	border: 0.3px solid black;
 	line-height: 1.5em;
 }
@@ -151,69 +150,66 @@
 
 <body>
 	<div layout:fragment="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg"
-			data-background="assets/images/gallery_bg.jpg"
-			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
-						<h2 class="module-title font-alt">업체회원 회원가입</h2>
-						<div class="module-subtitle font-serif">Business Member
-							SignIn</div>
-					</div>
-				</div>
-			</div>
-		</section>
+		<div style="background-image: url(&quot;/assets/images/signUpBusi.jpg&quot;);padding-top: 60px;">
 		<div id="container">
 			<div id="signInBox">
 				<form id="signIn" name="signIn">
 					<div id="signIn-left">
-						<h3 class="mb-4 billing-heading">기본정보(필수)</h3>
-						<label for="userId" class="formLabel">아이디</label><input
-							type="text" class="formInput" name="userId" id="inputId">
+						<h3 class="mb-4 billing-heading" align="center"><b>기본정보</b>(필수)</h3>
+						
+						<label for="userId" class="formLabel">아이디</label>
+						<input type="text" class="formInput" name="userId" id="inputId" maxLength="12" placeholder="최대 12글자의 영문자,숫자 조합">
 						<div>
 							<font id="id_feedback" size="2" value="1"></font>
 						</div>
-						<label for="userPassword" class="formLabel">비밀번호</label><input
-							type="password" class="formInput" name="userPassword" id="pw1"
-							placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
+						
+						<label for="userPassword" class="formLabel">비밀번호</label>
+						<input type="password" class="formInput" name="userPassword" id="pw1" maxLength="12" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
 						<div>
 							<font id="pwc_feedback" size="2" value="1"></font>
 						</div>
-						<label for="passwordchk" class="formLabel">비밀번호확인</label><input
-							type="password" class="formInput" name="passwordchk" id="pw2">
+						
+						<label for="passwordchk" class="formLabel">비밀번호확인</label>
+						<input type="password" class="formInput" name="passwordchk" id="pw2">
 						<div>
 							<font id="pw_feedback" size="2" value="1"></font>
 						</div>
-						<label for="name" class="formLabel">성명</label><input type="text"
-							class="formInput" name="name" id="inputName"><br> <label
-							for="userEmail" class="formLabel">이메일주소</label><input type="text"
-							class="formInput" name="userEmail" id="inputEmail">
-						<button type='button' id="sendEmail">인증번호전송</button>
-						<br> <span class="mail_input_box_warn"></span> <input
-							id="inputEmailChk" type="text">
+						
+						<label for="name" class="formLabel">성명</label>
+						<input type="text" class="formInput" name="name" id="inputName" placeholder="홍길동"><br>
+						
+						<label for="userEmail" class="formLabel">이메일주소</label>
+						<input type="email" class="formInput" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
+						<button type='button' id="sendEmail"><b>인증번호전송</b></button><br>
+						<span class="mail_input_box_warn"></span>
+						<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
 						<div>
 							<font id="email_feedback" size="2" value="1"></font>
 						</div>
+						
+						<label for="inputPhone" class="formLabel">전화번호</label>
+						<input type="tel" name="userPhone" class="formInput" id="inputPhone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" maxlength="11" placeholder=" - 제외 11자리 (010XXXXXXXX)"><br>
+						<label for="bankCode" class="formLabel">은행사</label>
+						<select th:name="bank" id="bankCode" style="width:80px;height:48px;" required>
+							<option value=""> 은행사 </option>
+							<option th:each="bankCode : ${bankCode}" th:value="${bankCode.codeId}" th:text="${bankCode.codeName}"></option>
+						</select>
+						<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="accnt" id="inputAccnt" placeholder="- 제외 숫자만" style="width:213px;" ><br>
 						<div class="busiTypeR">
-							메일 알림수신 <label class="labelRadio"><input type="radio"
-								name="userMessaging" value="S1" checked>수신동의</label> <label
-								class="labelRadio"><input type="radio"
-								name="userMessaging" value="S0">수신거부</label>
+							<label>메일 알림수신</label> 
+							<label class="labelRadio"><input type="radio" name="userMessaging" value="S1" checked>수신동의</label>
+							<label class="labelRadio"><input type="radio" name="userMessaging" value="S0">수신거부</label>
 						</div>
 					</div>
 
 					<div id="signIn-right">
-						<h3 class="mb-4 billing-heading">사업자정보</h3>
-						<div class="busiTypeR">
-							업체유형 <input type="radio" name="busiType" value="U1" checked><label>기획업체</label>
-							<input type="radio" name="busiType" value="U2"><label>렌탈업체</label>
-						</div>
+						<h3 class="mb-4 billing-heading" align="center"><b>사업자정보</b>(필수)</h3>
+						<input type="hidden" name="Type" id="busiType" value="U1">
 						<label for="b_nm" class="formLabel">상호명</label><input type="text"
-							name="busiTitle" class="formInput" id="busiTitle"><br>
+							name="Title" class="formInput" id="busiTitle"><br>
 						<label for="BNo" class="formLabel">사업자등록번호</label><input
-							type="text" name="busiNum" class="formInput" id="inputBno">
-						<button type='button' id="busiChk">사업자인증</button>
+							type="text" name="Num" class="formInput" id="inputBno" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxLength="10" placeholder=" - 제외 숫자 10자리(ex: 1011012345)">
+						<button type='button' id="busiChk"><b>사업자인증</b></button>
 						<br>
 						<div>
 							<font id="busi_feedback" size="2" value="1"></font>
@@ -221,21 +217,21 @@
 						<br>
 						<div id="chkArea">
 							<div>
-								행사가능지역
+								<b>행사가능지역</b>
 								<div class="chkArea">
 									<div th:each="area : ${busiArea}">
 										<input type="checkbox" th:id="${area.codeId}"
-											th:value="${area.codeId}" name="busiArea"> <label
+											th:value="${area.codeId}" name="Area"> <label
 											th:text="${area.codeName}" th:for="${area.codeId}"></label>
 									</div>
 								</div>
 							</div>
 							<div>
-								행사유형
+								<b>행사유형</b>
 								<div class="chkArea">
 									<div th:each="type : ${busiStyle}">
 										<input type="checkbox" th:id="${type.codeId}"
-											th:value="${type.codeId}" name="busiStyle"> <label
+											th:value="${type.codeId}" name="Style"> <label
 											th:text="${type.codeName}" th:for="${type.codeId}"></label>
 									</div>
 								</div>
@@ -243,11 +239,12 @@
 						</div>
 					</div>
 				</form>
-			</div>
 			<div id="submitArea">
-				<button type="button" id="busiSignUp"
-					class="btn btn-border-d btn-round">회원가입</button>
+				<button type='reset'><b>초기화</b></button>
+				<button type='button' id="BusiSignUp"><b>회원가입</b></button>
 			</div>
+			</div>
+		</div>
 		</div>
 		<div id="modal">
 			<div class="modal_content">
@@ -269,31 +266,37 @@
 			/* 아이디 중복 확인 */
 			$('#inputId').keyup(function() {
 				var inputId = $('#inputId').val(); //입력한 ID
-				$.ajax({
-					url : "/memIdCheck",
-					type : "post",
-					data : {
-						inputId : inputId
-					},
-					datatype : 'json',
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader(header, token);
-					},
-					success : function(result) {
-						if (result == 1) {
-							$("#id_feedback").html('이미 사용중인 아이디입니다.');
-							$("#id_feedback").attr('color', '#dc3545');
-							$("#id_feedback").attr('value', '1');
-						} else {
-							$("#id_feedback").html('사용할 수 있는 아이디입니다.');
-							$("#id_feedback").attr('color', '#2fb380');
-							$("#id_feedback").attr('value', '0');
+				if(!idFormCheck(inputId)){
+					$("#id_feedback").html('사용할 수 없는 아이디 형식입니다.');
+					$("#id_feedback").attr('color', '#dc3545');
+					$("#id_feedback").attr('value', '1');
+				}else{
+					$.ajax({
+						url : "/memIdCheck",
+						type : "post",
+						data : {
+							inputId : inputId
+						},
+						datatype : 'json',
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success : function(result) {
+							if (result == 1) {
+								$("#id_feedback").html('이미 사용중인 아이디입니다.');
+								$("#id_feedback").attr('color', '#dc3545');
+								$("#id_feedback").attr('value', '1');
+							} else {
+								$("#id_feedback").html('사용할 수 있는 아이디입니다.');
+								$("#id_feedback").attr('color', '#2fb380');
+								$("#id_feedback").attr('value', '0');
+							}
+						},
+						error : function() {
+							alert("서버 요청 실패");
 						}
-					},
-					error : function() {
-						alert("서버 요청 실패");
-					}
-				})
+					})
+				}
 			})
 
 			//비밀번호 유효성 검사
@@ -309,7 +312,13 @@
 					$("#pwc_feedback").attr('value', '1');
 				}
 			})
-
+			
+			//아이디 형식 검사 메소드
+			function idFormCheck(p1) {
+				var form = /^[A-Za-z0-9]{6,12}$/;
+				;
+				return form.test(p1);
+			}
 			//비밀번호 형식 검사 메소드
 			function pwFormCheck(p1) {
 				var form = /^[A-Za-z0-9]{6,12}$/;
@@ -389,6 +398,9 @@
 				var busiCheck = $("#busi_feedback").attr('value');
 				var name = $("#inputName").val();
 				var vTitle = $("#busiTitle").val();
+				var phone = $("#inputPhone").attr('value');
+				var accnt = $("#inputAccnt").attr('value');
+				
 
 				if (idCheck == 1) {
 					alert("아이디 중복체크 검사는 필수입니다.");
@@ -403,6 +415,10 @@
 				} else if (name == "") {
 					alert("이름을 입력해 주세요.");
 					$("#inputName").focus();
+				} else if (phone == "") {
+					alert("전화번호를 입력해 주세요.");
+				} else if (accnt == "") {
+					alert("계좌번호를 입력해 주세요.");
 				} else if (vTitle == "") {
 					alert("상호명을 입력해 주세요.");
 					$("#busiTitle").focus();
@@ -420,9 +436,9 @@
 				var id = $('#inputId').val()
 				var busiNum = $('#inputBno').val();
 				var busiTitle = $('#busiTitle').val();
-				var busiType = $('input:radio[name="busiType"]:checked').val();
-				var areaChecked = $('input:checkbox[name="busiArea"]:checked');
-				var styleChecked = $('input:checkbox[name="busiStyle"]:checked');
+				var busiType = $('#busiType').val();
+				var areaChecked = $('input:checkbox[name="Area"]:checked');
+				var styleChecked = $('input:checkbox[name="Style"]:checked');
 				for (var i = 0; i < areaChecked.length; i++) {
 					busiAreaArr.push(areaChecked.eq(i).val())
 				}

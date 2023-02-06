@@ -43,4 +43,6 @@ public interface MemberMapper {
 	
 	public List<CrtfVO>crtfSelect(String userId); // 회원의 자격증리스트 조회
 
+	public List<CodeVO> getBankCode(); //은행사 코드 가져오기
+
 }

@@ -149,6 +149,12 @@
             		ELSE DT_CLS
                END <![CDATA[) < SYSDATE]]>
 	</select>
+	<sql id="conSelect">
+		<if test="ttl != null and ttl !=''">
+			AND TTL = #{ttl}
+		</if>
+	</sql>
+	
 	
 	<!-- 공모전 list -->
 	<select id="contestList" resultType="hashmap">
@@ -178,7 +184,9 @@
 								FROM CONTEST c, WINNER w
 								WHERE c.C_NO = w.CO_NO 
 								AND w.USER_ID IS NOT NULL
-								AND c.SETT_YN != 'Y')
+								AND c.SETT_YN != 'Y'
+								<include refid="conSelect" />
+								)
 								<![CDATA[) A 
 			  	WHERE ROWNUM <= #{last}) 
 		WHERE RN >= #{first}]]>
@@ -382,6 +390,13 @@
 			<if test="settYN != null and settYN !=''">
 				and SETT_YN = #{settYN}
 			</if>
+			<if test="userId != null and userId !=''">
+				and USER_ID = #{userId}
+			</if>
+			<if test="targetId != null and targetId !=''">
+				and TARGET_ID = #{targetId}
+			</if>
+			
 		</where>
 	</sql>
 	
