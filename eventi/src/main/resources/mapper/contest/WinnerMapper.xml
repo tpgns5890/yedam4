@@ -8,6 +8,7 @@
 		FROM CONTEST a join winner b
 		on a.c_no = b.co_no
 		WHERE a.C_NO = #{coNo}
+		order by grade
 	</select>
 
 	<select id="getWinner" resultType="WinnerVO">

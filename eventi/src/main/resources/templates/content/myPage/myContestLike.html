@@ -17,9 +17,9 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
-		<div class="contestDiv">
+		<div>
 			<!-- 공모전 리스트 -->
-			<div class="row multi-columns-row" id="boxList"> </div>
+			<div class="row multi-columns-row" id="likeList"> </div>
 			<!-- end -->
 	
 			<!-- //페이징 경로 :: 문자 -->
@@ -39,6 +39,7 @@
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	likeSelect();
+	
 	
 	function gopage(i) {
 		let page = $('input[name="page"]').val(i);
@@ -60,15 +61,14 @@
 			}).then(res => {
 				console.log(res);
 				//map =>  contest,paging 
-				$('#boxList').empty();
+				$('#likeList').empty();
 				
 				//관심 공모전이 없을경우
 				if(res.contest == ''){
-					alert("관심 공모전 없습니다.");
-					location.href='/myPage/userMypage';
+				  $('.contestDiv').append('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:0px 0px 50px 250px;">')
 				}
 				for (contest of res.contest) {
-					$('#boxList').append(makeBox_map(contest));
+					$('#likeList').append(makeBox_map(contest));
 				}
 
 				$('#returnPaging').empty();
@@ -82,9 +82,9 @@
 					 let dDay = 'D-'+contest.DDAY;
 					 
 					 if(contest.IMG == null){
-							img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 400px; height: 400px; ">`
+							img =  `<img src="/images/public.jpg" class=" icon-lock" style="width: 400px; height: 400px; border-radius: 5%;">`
 						}else{
-							img = `<img src="/fileView/${contest.IMG}" style="width: 400px; height:400px; ">`
+							img = `<img src="/fileView/${contest.IMG}" style="width: 400px; height:400px; border-radius: 5%;">`
 						}
 					// 마감된 공고문 리스트 생성
 					//숫자 문자형 변환 -> - 제거
@@ -124,7 +124,7 @@
 
 			
 	//하트클릭시 DB입력(등록,취소)
-	$('#boxList').on("click",".shop-item" ,function(){
+	$('#likeList').on("click",".shop-item" ,function(){
 		let cNo = $(this).attr("id");
 		
 	})

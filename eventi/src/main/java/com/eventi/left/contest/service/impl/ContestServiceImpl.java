@@ -264,8 +264,11 @@ public class ContestServiceImpl implements ContestService {
 
 	// 공모전 임시저장 1건 조회.
 	@Override
-	public List<ContestVO> saveGetContest(ContestVO contestVO) {
-		return mapper.saveGetContest(contestVO);
+	public ContestVO saveGetContest(ContestVO vo) {
+		
+		vo = mapper.saveGetContest(vo);
+		vo.setWinnerVO(wMapper.winnerList(vo.getcNo()));
+		return vo;
 	}
 
 	// 메소드--------------------------------------------------------------------
@@ -324,6 +327,9 @@ public class ContestServiceImpl implements ContestService {
 		public void run() {
 			// 수신동의한 멤버리스트.
 			List<MemberVO> emailList = memberMapper.memberEmail();
+			for(MemberVO email : emailList) {
+				System.out.println(email.getUserEmail());
+			}
 
 			// 처리된결과가 있으면
 			if (insert > 0) {

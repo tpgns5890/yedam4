@@ -18,24 +18,27 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
-		<div id="user"style="min-height: 700px;">
-			<div id="signIn-right">
+		<div id="userUpgrade" >
+			<h3>회원등급 승급신청</h3>
+			<div class="box">
 					<label>사회자</label><input type="radio" name="crtfType" value="MC">
 					<label>디자이너</label><input type="radio" name="crtfType" value="DESIGNER"><br>
-					<label>자격증명</label> <input type="text" id="crtfName" name="crtfName"><br>
-					<label>발급번호</label> <input type="text" id="crtfNum" name="crtfNum">
-					<button type='button' class="w-btn w-btn-gra1" id="qPlus">승급신청</button>
-			</div>
+					<div id="upgrade">
+						<label>자격증명</label> <input type="text" id="crtfName" name="crtfName"><br>
+						<label>발급번호</label> <input type="text" id="crtfNum" name="crtfNum">
+						<button type='button'  id="qPlus" class="btn btn-g btn-round">승급신청</button>
+					</div>
 			
-			<div id="userCrtf">
-				<div th:if="${userCrtf} != null">
-					<div th:each="data : ${userCrtf}">
-						<ul id="qList" style="list-style: none;">
-						<li class="qualLi">
-							<span th:id="${data.crtfId}" th:text="|자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}|"></span>
-							<button type="button" class="quDelBtn">X</button>
-						</li>
-					 </ul>						
+				<div id="userCrtf">
+					<div th:if="${userCrtf} != null">
+						<div th:each="data : ${userCrtf}">
+							<ul id="qList" style="list-style: none;">
+							<li class="qualLi">
+								<span th:id="${data.crtfId}" th:text="|자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}|"></span>
+								<button type="button" class="btn btn-g btn-round quDelBtn">X</button>
+							</li>
+						 </ul>						
+						</div>
 					</div>
 				</div>
 			</div>

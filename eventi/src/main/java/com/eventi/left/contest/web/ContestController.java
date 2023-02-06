@@ -191,7 +191,7 @@ public class ContestController {
 	// 임시저장된 게시글 상세들고오기
 	@PostMapping("/saveSelect")
 	@ResponseBody
-	public List<ContestVO> saveSelect(ContestVO vo) {
+	public ContestVO saveSelect(ContestVO vo) {
 		return service.saveGetContest(vo);
 	}
 
@@ -239,6 +239,7 @@ public class ContestController {
 	// 나의공모전관리 지원자조회페이지 이동
 	@GetMapping("/designRead")
 	public String designRead(Model model, String cNo) {
+		
 		model.addAttribute("contest", service.getContest(cNo));
 		model.addAttribute("winner", wService.winnerList(cNo));
 		return "content/contest/cotestDesignList";
@@ -248,11 +249,12 @@ public class ContestController {
 	// 2.공모전리 -> 상세정보 참여작조회
 	@PostMapping("/ajaxDesignRead")
 	@ResponseBody
-	public Map<String, Object> ajaxDesignRead(String cNo, PagingVO paging) {
+	public Map<String, Object> ajaxDesignRead(ContestVO vo, PagingVO paging) {
 
 		// 1건의 공모전에 접수된 디자인리스트
 		DesignVO dVo = new DesignVO();
-		dVo.setcNo(cNo);
+		dVo.setcNo(vo.getcNo());
+		dVo.setCaregory(vo.getCategory());
 		List<DesignVO> designs = dService.contestDesignList(dVo, paging);
 
 		// 리턴할 최종Map

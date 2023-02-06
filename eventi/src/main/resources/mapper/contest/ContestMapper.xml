@@ -113,7 +113,7 @@
               FROM CONTEST c
 			    WHERE writer = #{writer}
 				<include refid="search" />
-         	  order by dt_reg DESC
+         	   ORDER BY TO_NUMBER(SUBSTR(c_no,3))DESC
          
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
@@ -172,29 +172,24 @@
 		WHERE  C_NO = #{cNo}
 	</select>
 	
-	<!-- 공모전 1건 상세조회 -->
+	<!-- 임시저장 공모전 1건 상세조회 -->
 	<select id="saveGetContest" resultType="ContestVO">
-		SELECT c.c_no,
-		       c.writer,
-		       c.ttl,
-		       c.cntn,
-		       c.dt_reg,
-		       c.dt_cls,
-		       c.pay,
-		       c.save,
-		       c.category,
-		       c.style,
-		       w.grade,
-		       w.w_pay wPay,
+		SELECT c_no,
+			   writer,
+		       ttl,
+		       cntn,
+		       dt_reg,
+		       dt_cls,
+		       pay,
+		       save,
+		       category,
+		       style,
 		       (select sev_nm
 		         from files
 		         where target_Id = c_no) AS img
-
-		FROM CONTEST c 
-		join winner w   on c.c_no = w.co_no
-
-		and c.C_NO = #{cNo}
-		and c.save = 'Y'
+		FROM CONTEST
+		WHERE C_NO = #{cNo}
+		AND SAVE = 'Y'
 	</select>
 	
 	<!-- 상세조회 조회수 업데이트 -->
@@ -250,7 +245,6 @@
             SAVE = #{save},
             STYLE = #{style}
 		where c_no = #{cNo}
-		and writer = #{writer}
 	</update>
 	
 	<!-- 공모전 마감연장일 업데이트 -->

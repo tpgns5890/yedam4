@@ -21,45 +21,105 @@
 		<div class="designDiv" >
 			
 		<!-- 게시글 검색 -->
-			<form name="designSearchFrm" style="margin-left: 260px;">
-				<div th:if="${!#lists.isEmpty(design)}">
+			<form id="search" name="designSearchFrm" style="margin:30px 0px 20px 330px;">
+					<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
+						<option value="D1" th:selected="${catagory eq 'D1'}">현수막</option>
+						<option value="D2" th:selected="${catagory eq 'D2'}">배너</option>
+						<option value="D3" th:selected="${catagory eq 'D3'}">로고</option>
+						<option value="D4" th:selected="${catagory eq 'D4'}">포스터</option>
+						<option value="D5" th:selected="${catagory eq 'D5'}">기타</option>
+                	</select>
 					디자인명<input type="text" name="name" value="">
 					<input type="hidden" name="page" value="1">
+					<input type="hidden" name="caregory" value="">
 					<button type="submit">검색</button>
-				</div>
 			</form>		
 			
 			
-			<div class="row multi-columns-row" id="boxList">
+			<div class="row multi-columns-row" id="designList">
 				<div th:each="d: ${design} " >
-					<div class="col-sm-6 col-md-4 col-lg-4"style="width: 400px; margin-right:5px"> 
-						<div class="shop-item">
-							<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px;"  class="img-fluid">
-							    <div class="shop-item-detail">
-									<div>
-								   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
-								   			<h3 class="content-box-title font-serif dNo" th:text="${d.dgnNo}"></h3>
-								   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
-							        </div>
-							        <div class="btn btn-round btn-b">
-							              <span class="select" th:id="${d.dgnNo}">상세보기</span>
-						             </div>
+							
+							<!-- 현수막 -->
+							<th:block th:if="${d.caregory} eq 'D1'">
+								<div class="col-sm-6 col-md-4 col-lg-4" style="width: 80%; margin-left: 30px; "> 
+									<div class="shop-item">
+									<div class="shop-item-image"> <img th:src="|/fileView/${d.sevNm}|" style="width: 100%; height: 200px; "  class="img-fluid">
+									  <div class="shop-item-detail">
+											<div>
+										   			<span class="content-box-title font-serif dNo" th:text="|${d.name}|"></span>
+											        <span class="btn btn-round btn-b select" th:id="${d.dgnNo}">상세보기</span>
+									        </div>
+										</div>
+									</div>
+									</div>
 								</div>
+							</th:block>
+							
+							
+							<!-- 배너 -->
+							<th:block th:if="${d.caregory} eq 'D2'">
+								<div id="d2_margin">
+									<div class="col-sm-6 col-md-4 col-lg-4"style="width: 20%; height: 650px;  margin-right:5px; margin-left=400px;"> 
+										<div class="shop-item">
+											<div class="shop-item-image"> <img th:src="|/fileView/${d.sevNm}|" class="img-fluid" style="width: 100%; height: 650px;">
+											  <div class="shop-item-detail">
+													<div>
+												   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
+												   			<h3 class="content-box-title font-serif dNo" th:text="${d.dgnNo}"></h3>
+												   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
+											        </div>
+										       		 <div class="btn btn-round btn-b">
+											              <span class="select" th:id="${d.dgnNo}">상세보기</span>
+										            </div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</th:block>
+								
+								
+							<!-- 일반 -->
+							<th:block th:unless="${d.caregory} eq 'D1' or ${d.caregory} eq 'D2'">
+								<div class="col-sm-6 col-md-4 col-lg-4"style="width: 400px;"> 
+									<div class="shop-item">
+											<div class="shop-item-image"><img th:src="|/fileView/${d.sevNm}|" style="width: 400px; height: 400px; border-radius: 3%;"  class="img-fluid">
+											    <div class="shop-item-detail">
+													<div>
+												   			<h3 class="content-box-title font-serif dNo" th:text="|공모전 : ${d.cNo}|"></h3>
+												   			<h3 class="content-box-title font-serif dNo" th:text="${d.dgnNo}"></h3>
+												   			<h3 class="content-box-title font-serif" th:text="|제목:${d.name}|"></h3>
+											        </div>
+											        <div class="btn btn-round btn-b">
+											              <span class="select" th:id="${d.dgnNo}">상세보기</span>
+										             </div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</th:block>
+							    
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
+		</div>
 		
 		<!-- 디자인 상세보기 모달 -->
-			<div id="designModel" class="modal">
-				<div class="img_modal_content">
-					<span class="close">&times;</span>
+		<div id="designModel" class="modal">
+			<div class="img_modal_content">
+				
+				<div class="column middle">
 					<h3 id="title"></h3>
 					<div id="modelSelect"></div>
 				</div>
-				<div class="modal_layer"></div>
+				
+				<div class="column side">
+				  	<span id="designCancel" class="close">&times;</span>
+				    <h3 id="dgnerSelect"></h3>
+				</div>
+				
 			</div>
+			<div class="modal_layer"></div>
+		</div>
 			
 			<!-- 페이징처리 -->
 			<div th:if="${!#lists.isEmpty(design)}">
@@ -73,7 +133,6 @@
 				</div>
 			</div>
 			
-		</div>
 				 
 		
 		<script>
@@ -84,17 +143,25 @@
 		 $(document).ready(function () {
 			  let result = '[[${result}]]';
 			if (result != '') {
-				alert(result);
-				location.href='/myPage/userMypage'; 
+				$('form[name="designSearchFrm"]').after('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">')
 			}
+		})
+		
+		//검색선택
+		//카테고리 변경시 적용.
+		$('select[name="search"]').on("change", function () {
+			$('input[name="caregory"]').val($(this).val());
+		   
 		})
 		
 		//페이지이동 및 검색
 		//페이징개수 변환 myContest 동적쿼리
 		function gopage(i) {
-			$('input[name="name"]').val('');
-			designSearchFrm.page.value = i;
-			designSearchFrm.submit();
+			 let category = $("#search option:selected").val();
+			 console.log(category)
+		 	$('input[name="caregory"]').val(category);
+			$('input[name="page"]').val(i);
+			$('form[name="designSearchFrm"]').submit();
 		 }
 		 
 		 
@@ -114,37 +181,67 @@
 						xhr.setRequestHeader(header, token);
 					},
 				}).then(res => {
-					let user = res.userId;
-					let title = res.name;
+					//공모전정보
+					let category = res.caregory;
+					let cNo = res.cNo
+					let contestTtl = res.contestTtl;
+					let writer = res.writer;
 					let cntn = res.cntn;
-					let cNo = res.cNo;
-					
-					$('#title').empty();
-					let content = `<h3>${user} 님의 참여작품 </h3>
-									<p>${cNo}</p>
-									<p>작품명 : ${title} </p>
-									<p>${cntn} </p>
-								  `
-					
-					$('#title').append(content);
-					
+
 					//모달내용을 지운뒤 붙여넣기.
+					$('#dgnerSelect').empty();
 					$('#modelSelect').empty();
+					
+					let side = ` <div id="designId">
+								 <div class="radius">
+									<img class="radius_img" src="/images/profile.jpg">
+								 </div>
+									<h3>${writer}</h3>
+									<div onclick="location.href='/contest/select?cNo=${cNo}'" style="cursor: pointer;">
+									<h3>[${category}]${contestTtl}</h3>
+									</div>
+							</div>
+								<hr> 
+								<p>${cntn}</p>
+							<div>
+							</div>
+									`;
+					
+					$('#dgnerSelect').append(side);
+					//모달내용을 지운뒤 붙여넣기.
 					for(file of res.files){
-						makeDesign(file.sevNm,title,dNo);
+						makeDesign(file.sevNm,dNo,category);
 					}
 					
 				})
 			})
 			
 			//모달창 :디자인 응모작품 생성.
-			function makeDesign(fileName,dNo){
-				let design = `  <div class="design" id="${dNo}" style="float: left; margin:10px">
-										<img src="/fileView/${fileName}" style="width: 500px; height: 500px">
-							   </div>
-							  `
-					$('#modelSelect').append(design);
+			function makeDesign(fileName,dNo,catagory){
+				console.log(catagory);
+				let design;
+				//배너
+				if(catagory =='배너'){
+					design = `	 <div class="design" id="${dNo}" style="width:60%; margin: 10px auto; margin-bottom:20px; ">
+									<img src="/fileView/${fileName}" style="width: 100%; height: 60%;">
+								</div>	
+							`
+					
+				//현수막
+				}else if(catagory =='현수막'){
+					design = `<div class="design " id="${dNo}" style="width:100%; margin-bottom:20px;">
+								   <img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">
+							  </div>`
+				//그외
+				}else{
+					design = `	<div class="design" id="${dNo}" style="width:80%; margin: 0 auto; margin-bottom:20px; ">
+								    <img src="/fileView/${fileName}" style="width: 100%; height: 400px; ">
+								</div>`
+				}
 				
+				
+				$('#modelSelect').append(design);
+					
 			}
 			
 			// Get the modal
