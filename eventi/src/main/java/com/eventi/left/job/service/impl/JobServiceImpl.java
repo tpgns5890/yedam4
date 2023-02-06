@@ -17,6 +17,7 @@ import com.eventi.left.job.mapper.JobBoardMapper;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.promotion.service.PromotionVO;
 
 @Service
 public class JobServiceImpl implements JobService{
@@ -59,18 +60,24 @@ public class JobServiceImpl implements JobService{
 	
 	//게시글수정
 	@Override
-	public int getJobUpdate(JobBoardVO jobBoardVO, MultipartFile[] uploadFile) {
-		//List<FileDto> list = new ArrayList<FileDto>();
-		//사진등록
-		/*
-		 * String realFolder = "/files/job"; File dir = new File(realFolder);
-		 * if(!dir.isDirectory()) { dir.mkdirs(); } //파일 이름 저장 try { list =
-		 * newUp.uploadFiles(uploadFile, jobBoardVO.getJobNo(), "T03"); }catch(Exception
-		 * e){ e.printStackTrace(); } String img = uploadFile.getOriginalFilename();
-		 * 
-		 * //VO에 IMG 부분에 파일 이름 저장 jobBoardVO.setImg(img);
-		 */
-		return jobmapper.getJobUpdate(jobBoardVO);
+	public int getJobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO,MultipartFile[] uploadFile) {
+		//사진첨부 
+		if(uploadFile[0].getOriginalFilename() !="") {
+			jobBoardVO.setImg(uploadFile[0].getOriginalFilename());
+		}
+		uploadFiles(uploadFile, jobBoardVO);
+		int r = jobmapper.getJobUpdate(jobBoardVO);
+			return r;
+	}
+	
+	//파일 업로드
+	public void uploadFiles(MultipartFile[] uploadFile, JobBoardVO jobBoardVO) {
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.uploadFiles(uploadFile, jobBoardVO.getJobNo(), "T03");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//게시글삭제

@@ -124,7 +124,7 @@ public class PromotionController {
 			model.addAttribute("proUpdate", proService.proDetail(promotionVO));
 			//사진 및 동영상
 			List<FilesVO> files = new ArrayList<>();
-			files = filesService.fileList(promotionVO.getUserId());
+			files = filesService.fileList(promotionVO.getProNo());
 			model.addAttribute("files", files);
 			/* model.addAttribute("file", filesService.fileList(promotionVO.getProNo())); */
 			return "content/promotion/proUpdate";

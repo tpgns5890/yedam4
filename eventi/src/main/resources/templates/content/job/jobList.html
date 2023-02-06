@@ -25,9 +25,9 @@
 
 .border {
 	border: 1px solid black;
-	border-radius: 5px;
 	padding: 5px;
 	width: 15%;
+	height: 20%;
 }
 .like{
 	float:right;	
@@ -51,54 +51,7 @@
             </div>
           </div>
         </section>
-   
-<div >
-<form id="searchForm">
-<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
-<label>행사유형</label>
-	<select id="etype" name="eType"  onchange="order()">
-		<option value="" selected>------</option>
-		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
-		<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
-		<option value="E02" th:selected="${jobBoardVO.eType=='E02'}" >돌잔치</option>
-		<option value="E03" th:selected="${jobBoardVO.eType=='E03'}" >개인행사</option>
-		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
-		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
-		<option value="E06" th:selected="${jobBoardVO.eType=='E06'}" >기념식</option>
-		<option value="E07" th:selected="${jobBoardVO.eType=='E07'}" >가요제</option>
-		<option value="E08" th:selected="${jobBoardVO.eType=='E08'}" >플리마켓</option>
-		<option value="E09" th:selected="${jobBoardVO.eType=='E09'}" >체육대회</option>
-		<option value="E10" th:selected="${jobBoardVO.eType=='E10'}" >단합행사</option>
-		<option value="E11" th:selected="${jobBoardVO.eType=='E11'}" >세미나</option>
-		<option value="E12" th:selected="${jobBoardVO.eType=='E12'}" >포럼</option>
-		<option value="E13" th:selected="${jobBoardVO.eType=='E13'}" >워크샵</option>
-		<option value="E14" th:selected="${jobBoardVO.eType=='E14'}" >전시회</option>
-		<option value="E15" th:selected="${jobBoardVO.eType=='E15'}" >박람회</option>
-		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
-	</select> 
-	
-<!-- 게시글 정렬기준 -->
-<label>정렬기준</label>
-	<select id="see" name="orderCol" onchange="order()">
-		<option value="" selected>------</option>
-		<option value="dt">작성순</option>
-		<option value="see">조회수</option>
-		<option value="cnt">좋아요순</option>
-	</select>
-	<!-- 게시글 검색 -->
-	<input type="text" name="title">
-	<input type="button" id="find" value="찾기" onclick="order()">
-</form>
-</div>
 
-<button type="button" class="btn btn-outline-primary" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
-<button type="button" class="btn btn-outline-primary" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
-
-
-<!-- 좋아요 -->	
-<div class="stage">
-  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
-</div>	
 <!--	<table class="table mb-3" >
 	<thead class="thead-dark">
 			<tr>
@@ -122,7 +75,7 @@
 				<td th:text=${job.title}></td>
 				<td th:text=${job.eType}></td>
 				<td th:text=${job.userId}></td>
-				<td th:utext=${job.cnt}></td>
+				<td th:text=${job.cnt}></td>
 				<td th:text=${job.reCount}></td>
 				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
 				<td th:text="${#dates.format(job.closeDt, 'yyyy/MM/dd')}"></td>
@@ -277,81 +230,106 @@
 				
 				
 	<section class="module" id="news">
-          <div class="container">
+		<form id="searchForm">
+<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
+<label>행사유형</label>
+	<select id="etype" name="eType"  onchange="order()">
+		<option value="" selected>------</option>
+		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
+		<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
+		<option value="E02" th:selected="${jobBoardVO.eType=='E02'}" >돌잔치</option>
+		<option value="E03" th:selected="${jobBoardVO.eType=='E03'}" >개인행사</option>
+		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
+		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
+		<option value="E06" th:selected="${jobBoardVO.eType=='E06'}" >기념식</option>
+		<option value="E07" th:selected="${jobBoardVO.eType=='E07'}" >가요제</option>
+		<option value="E08" th:selected="${jobBoardVO.eType=='E08'}" >플리마켓</option>
+		<option value="E09" th:selected="${jobBoardVO.eType=='E09'}" >체육대회</option>
+		<option value="E10" th:selected="${jobBoardVO.eType=='E10'}" >단합행사</option>
+		<option value="E11" th:selected="${jobBoardVO.eType=='E11'}" >세미나</option>
+		<option value="E12" th:selected="${jobBoardVO.eType=='E12'}" >포럼</option>
+		<option value="E13" th:selected="${jobBoardVO.eType=='E13'}" >워크샵</option>
+		<option value="E14" th:selected="${jobBoardVO.eType=='E14'}" >전시회</option>
+		<option value="E15" th:selected="${jobBoardVO.eType=='E15'}" >박람회</option>
+		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
+	</select> 
+	
+<!-- 게시글 정렬기준 -->
+<label>정렬기준</label>
+	<select id="see" name="orderCol" onchange="order()">
+		<option value="" selected>------</option>
+		<option value="dt">작성순</option>
+		<option value="see">조회수</option>
+		<option value="cnt">좋아요순</option>
+	</select>
+	<!-- 게시글 검색 -->
+	<input type="text" name="title">
+	<input type="button" id="find" value="찾기" onclick="order()">
+	
+	<button type="button" class="btn btn-outline-primary" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
+<button type="button" class="btn btn-outline-primary" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
+	
+	<!-- 좋아요 -->	
+<div class="stage">
+  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+</div>
+	
+	
+</form>
+	
+<!--           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">Our News</h2>
               </div>
             </div>
             <div class="row multi-columns-row post-columns wo-border">
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-40">
+              <div class="col-sm-6 col-md-4 col-lg-4" th:each="job : ${jobList}">
+                <div class="post mb-40" >
                   <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">Receipt of the new collection</a></h2>
+                    <h2 class="post-title" th:text=${job.title}><a href="#">Receipt of the new collection</a></h2>
                   </div>
+                  <div class="post-meta" >By&nbsp;<span th:text=${job.userId}>Andy River</span>&nbsp;| 좋아요수:<span th:text=${job.cnt}></span> | 지원자수: <span th:text=${job.reCount}></span>
+                    </div>               
                   <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
+                  	<th:block th:if="${job.remain > 0}">
+					<td  th:text="|${job.remain} 일전|"></td>
+				</th:block>
+				<th:block th:unless="${job.remain > 0} ">
+					<td th:text="마감"></td>
+				</th:block>
                   </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-40">
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">Sale of summer season</a></h2>
-                  </div>
-                  <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-40">
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">New lookbook</a></h2>
-                  </div>
-                  <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-40">
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">Receipt of the new collection</a></h2>
-                  </div>
-                  <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-40">
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">Sale of summer season</a></h2>
-                  </div>
-                  <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-40">
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">New lookbook</a></h2>
-                  </div>
-                  <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
+                  <div class="post-more" th:myName = "${job.jobNo}" th:onclick="jobDetail(this.getAttribute('myName'))"><a class="more-link" href="#">Read more</a></div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
+          
+		<div class="rows">
+	<div class="border" th:each="job : ${jobList}" th:myName = "${job.jobNo}"
+			th:onclick="jobDetail(this.getAttribute('myName'))">
+	
+		<div class="like">
+			<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+		</div>
+		<p class="logo"><span> <img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></span></p>
+		<p class="name" th:text=${job.title}>테스</p>
+		<p class="cntn" th:text=${job.eType}>내</p>
+		
+	
+		<div class="etc"></div>
+			<th:block th:if="${job.remain > 0}">
+					<td  th:text="|${job.remain} 일전|"></td>
+				</th:block>
+				<th:block th:unless="${job.remain > 0} ">
+					<td th:text="마감"></td>
+				</th:block>
+			<p class="right" th:text="|${job.reCount}명 지원|">야야</p>
+	</div>		
+	</div>	         
+          
+          
+          
         </section>			
 				
 				
