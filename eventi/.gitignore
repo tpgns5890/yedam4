@@ -35,6 +35,3 @@ mvnw
 mvnw.cmd
 bin/
 .mvn/
-
-!**/src/resources/application.properties
-!**/src/main/**/common/ResourceHandlerConfig.java
