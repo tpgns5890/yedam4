@@ -42,14 +42,17 @@ label {
     z-index: 1 ;
 }
 .col-sm-3 {
-    width: 40%;
+     width: 430px;
     display: flex;
     flex-direction: row;
 }
 #cotestHeader{
-	display:flex;
-	flex-direction: row;
+	background-color:white;
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    margin: 0 auto;
+    width: 70%;
 }
 #history{
 	 width: 180px;
@@ -62,6 +65,8 @@ label {
 </head>
 <body>
 	<div layout:fragment="content" class="content">
+	
+	<div class="module-small">
 		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/gold_01.gif" style="background-image: url(&quot;/images/gold_01.gif&quot;);">
           <div class="container">
             <div class="row">
@@ -71,13 +76,9 @@ label {
             </div>
           </div>
         </section>
-
-
-		<section class="module-small">
-          <div class="container">
-          
-          	   <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right:-1205px; width: 100px;  z-index: 1 ;">
+		
+		 <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right: -1460px; width: 100px;  z-index: 1 ;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
@@ -129,9 +130,9 @@ label {
 					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none;">진행공모전 조회</button>
 	              </div>
 	           </div>
-	         </div>
-        </section>
-           
+	     </div>
+
+          
 
 			<div class="container">
 				<!-- 공모전 리스트 -->

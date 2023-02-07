@@ -41,6 +41,7 @@ input[type=number]{
 			<!-- 공모전등록 입력폼 -->
 			<form action="/contest/insert" enctype="multipart/form-data" id="contestfrm" name="contestfrm" method="post">
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+				<input type="hidden" name="cNo" id="cNo">
 				<ul>
 					<li id="radioBox">
 						<input type="radio" name="category" value="D1" checked><label>현수막</label>
@@ -50,8 +51,6 @@ input[type=number]{
 						<input type="radio" name="category" value="D5"><label>기타</label>
 					</li> 
 						
-						
-					
 					<li><label>작성자</label><input type="text" name="writer" th:value="|${session.member.getUserId()}|" readonly="readonly"><br /></li>
 					<li><label>제  목</label><input type="text" id="ttl" name="ttl" required="required"><br /></li>
 					<li><label>등록일</label><input type="date" name="dtReg" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}" readonly><br /></li>
@@ -99,7 +98,7 @@ input[type=number]{
 			<!-- 결제정보 모달 -->
 			<div id="myModal" class="modal">
 				<!-- Modal content -->
-				<div class="modal_content">
+				<div class="pay_modal_content">
 					<span class="close">&times;</span>
 					<h3>공모전 결제정보</h3>
 					<ul id="contestPay">

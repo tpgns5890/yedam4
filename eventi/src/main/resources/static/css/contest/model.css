@@ -56,47 +56,26 @@
 
 .modal_content {
 	width: 300px;
-	min-height: 200px;
-	background: #fff;
-	border: 0.5px solid #666;
-	border-radius: 15px;
-	padding: 20px;
-	margin: 0 auto;
-	margin-top: 250px;
-	/* 	둥글게,그림자 효과 */
-	border-radius: 3%;
-	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
 
 .dank_modal_content {
 	width: 20%;
-	min-height: 200px;
-	background: #fff;
-	border: 0.5px solid #666;
-	border-radius: 15px;
-	padding: 20px;
-	margin: 0 auto;
-	margin-top: 250px;
-	/* 	둥글게,그림자 효과 */
-	border-radius: 3%;
-	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
 
 .pw_modal_content {
 	width: 400px;
-	min-height: 200px;
-	background: #fff;
-	border: 0.5px solid #666;
-	border-radius: 15px;
-	padding: 20px;
-	margin: 0 auto;
-	margin-top: 250px;
-	/* 	둥글게,그림자 효과 */
-	border-radius: 3%;
-	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
+
 .rprt_modal_content {
 	width: 350px;
+}
+
+.pay_modal_content {
+	width: 400px;
+}
+
+.modal_content, .dank_modal_content, .pw_modal_content,
+	.rprt_modal_content, .pay_modal_content {
 	min-height: 200px;
 	background: #fff;
 	border: 0.5px solid #666;
@@ -107,15 +86,18 @@
 	/* 	둥글게,그림자 효과 */
 	border-radius: 3%;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+
 }
-#rprtBox{
-	    width: 90%;
-    margin: 0 auto;
+#rprtBox {
+	width: 90%;
+	margin: 0 auto;
 }
-.rprt_modal_content h2{
- font-weight: bold;
+
+.rprt_modal_content h2 {
+	font-weight: bold;
 	text-align: center;
- }
+}
+
 #pwModel label {
 	width: 100px;
 	text-align: left;
@@ -207,6 +189,7 @@
 .img_modal_content::-webkit-scrollbar {
 	display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
+
 label {
 	display: inline-block;
 	text-align: left;

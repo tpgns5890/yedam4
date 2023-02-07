@@ -72,6 +72,9 @@
 								<option value="003" th:selected="${user.bank eq '기업은행'}">기업은행</option>
 								<option value="011" th:selected="${user.bank eq '농협은행'}">농협은행</option>
 								<option value="031" th:selected="${user.bank eq '대구은행'}">대구은행</option>
+								<option value="002" th:selected="${user.bank eq '산업은행'}">산업은행</option>
+								<option value="005" th:selected="${user.bank eq '하나은행'}">하나은행</option>
+								<option value="021" th:selected="${user.bank eq '신한은행'}">신한은행</option>
 						</select></li>
 						<li><label>계좌번호</label> <input id="accnt" name="accnt"
 							type="text" th:value="${user.accnt}" readonly="readonly">

@@ -80,8 +80,8 @@ ul {
 }
 
 #table {
-	margin-top: 10px;
-	width: 95%;
+	margin: 10px auto;
+	width: 90%;
 	text-align-last: center;
 	border-collapse: collapse;
 }
@@ -115,7 +115,8 @@ ul {
 
 #search {
 	padding-top: 10px;
-	width: 1000px;
+	margin: 10px auto;
+	width: 90%;
 }
 
 #search .form-control {
