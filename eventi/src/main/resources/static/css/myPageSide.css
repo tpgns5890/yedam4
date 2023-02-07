@@ -7,7 +7,6 @@
 	margin: 0 auto !important;
 }
 
-
 ul {
 	padding: 0px;
 	list-style: none;
@@ -76,7 +75,7 @@ ul {
 
 /* 테이블 */
 #table  tr:hover {
-	background: silver;
+	background: #f2f7fc;
 }
 
 #table {
@@ -87,7 +86,7 @@ ul {
 }
 
 #table thead th {
-	background-color: #ddd;
+	background-color: #cfe7fb;
 	padding: 7px 0px;
 	text-align: center;
 	font-weight: border;

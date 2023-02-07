@@ -105,7 +105,7 @@ h4 {
 				
 						<!-- 비회원 하트버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-								<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position:relative; top:-70px; right: -65px;">
+								<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position:relative; top:-70px; right: -55px;">
 								</div>
 						</th:block>
 	
@@ -114,7 +114,7 @@ h4 {
 							
 							<th:block th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
 								<!-- 관심공모전인경우 -->
-								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -65px;">
+								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -55px;">
 								</div>
 							</th:block>
 							

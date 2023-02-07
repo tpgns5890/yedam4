@@ -2524,10 +2524,11 @@ Google map
 
 /* Shop item hover */
 .shop-item:hover .shop-item-image:after {
-/*   background: rgba(255, 255, 255, 0.94); */
-  margin-left:18px;
-  width: 402px;
-  background: #f2f7fc;
+   background: rgba(255, 255, 255, 0.9); 
+   width:100%;
+/*   margin-left:18px; */
+/*   width: 402px; */
+/*   background: #f2f7fc; */
   border-radius: 3%;
 }
 
@@ -2921,4 +2922,8 @@ Google map
   .works-grid-5 .work-item {
     width: 100%;
   }
+}
+
+.page-link{
+	cursor: pointer;
 }

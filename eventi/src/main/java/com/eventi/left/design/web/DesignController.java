@@ -98,9 +98,9 @@ public class DesignController {
 	   public String designMypage(Model model, DesignVO vo, PagingVO paging, String category) {
 		   
 		   //등록된 카테고리를 담아서 마이페이지 이동.
-		   if(category!=null) {
-			   vo.setCaregory(category);
-		   }
+		   System.out.println("===================");
+		   System.out.println(vo.getCaregory());
+		   System.out.println("===================");
 
 	      // 로그인 회원정보
 	      MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");

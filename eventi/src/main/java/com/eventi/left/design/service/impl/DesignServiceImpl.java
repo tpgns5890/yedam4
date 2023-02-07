@@ -58,7 +58,7 @@ public class DesignServiceImpl implements DesignService {
 		} else {
 			paging.setPageUnit(8);
 		}
-		paging.setTotalRecord(mapper.entryDesign(vo.getcNo()));
+		paging.setTotalRecord(mapper.entryDesign(vo));
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
@@ -93,6 +93,7 @@ public class DesignServiceImpl implements DesignService {
 
 	@Override
 	public List<DesignVO> userDesignList(DesignVO vo, PagingVO paging) {
+
 		paging.setTotalRecord(mapper.count(vo));
 
 		if (vo.getCaregory() != null && vo.getCaregory().equals("D2")) {

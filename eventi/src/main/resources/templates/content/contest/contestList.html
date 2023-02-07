@@ -47,6 +47,7 @@ label {
     flex-direction: row;
 }
 #cotestHeader{
+    padding: 30px 0px 20px;
 	background-color:white;
     display: flex;
     flex-direction: row;
@@ -78,7 +79,7 @@ label {
         </section>
 		
 		 <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top:-13px; right: -1460px; width: 100px;  z-index: 1 ;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top: 18px; right: -1420px; width: 100px;  z-index: 1 ;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>

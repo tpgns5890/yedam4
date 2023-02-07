@@ -66,6 +66,7 @@
 		FROM DESIGN
 		where SAVE = 'N'
 		<include refid="check" /> 
+		<include refid="category" />
 		<include refid="search" /> 
 	</select>
 	
@@ -169,7 +170,7 @@
 	
 	<insert id="insert">
 		<selectKey keyProperty="dgnNo" resultType="String" order="BEFORE">
-			SELECT NVL('DE'||(MAX(TO_NUMBER(SUBSTR(DGN_NO,3)))+1),1) dgnNo
+			SELECT 'DE'||NVL(MAX(TO_NUMBER(SUBSTR(DGN_NO,3))+1),1) dgnNo
 			FROM DESIGN
 		</selectKey>
 		INSERT INTO DESIGN(DGN_NO,
@@ -225,6 +226,7 @@
 		  from design
 		where c_no =#{cNo}
 		AND SAVE = 'N'
+		<include refid="category" /> 
 	</select>
 	
 	<select id="saveGetdesign" resultType="DesignVO">
