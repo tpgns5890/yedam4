@@ -50,6 +50,9 @@ public class ContestVO {
 	//공모전 접수된 디자인 개수
 	private int designCount; 
 	
+	//공모전 문의개수
+	private int questionCount;
+	
 	//공모전 파일
 	private String img;
 	

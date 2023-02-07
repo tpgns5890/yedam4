@@ -66,11 +66,13 @@
 			
 		<!--문의내역 상세보기 -->
 		<div id="qnaModal" class="modal">
-			<div class="modal_content">
+			<div class="qna_modal_content">
 				<span class="close">&times;</span>
-				<h3 style="text-align: center;">문의내역</h3>
-				<div id="qna"></div>
-				<div id="qnaRep"></div>
+				<h3>문의내역</h3>
+				<div id="qnaBox">
+					<div id="qna"></div>
+					<div id="qnaRep"></div>
+				</div>
 			</div>
 			<div class="modal_layer"></div>
 		</div>
@@ -147,8 +149,11 @@
 				$('#qnaRep').empty();
 				
 				$('#qna').append(make(res[0]));
+				$('#qnaRep').hide();
+				
 					if(res[1] !=null && res[1].rerepTgt != null){ 
 						$('#qnaRep').append(makeRep(res[1]));
+						$('#qnaRep').show();
 					}					
 				})
 	        })

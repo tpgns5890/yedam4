@@ -3,11 +3,15 @@
 	font-weight: bold;
 	margin-bottom: 30px;
 }
+.modal h4 {
+	text-align: center;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
 
 .img_modal_content {
 	background-color: #fefefe;
 	margin: 70px auto;
-	border: 1px solid #888;
 	width: 55%;
 	height: 70%;
 	text-align: left;
@@ -60,6 +64,21 @@
 	border-radius: 5px;
 }
 
+.modal_content, .dank_modal_content, .pw_modal_content,
+	.rprt_modal_content, .pay_modal_content, .winner_modal_content,
+	.review_modal_content, .qna_modal_content {
+	min-height: 200px;
+	border: 0.5px solid #666;
+	border-radius: 15px;
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 250px;
+	/* 	둥글게,그림자 효과 */
+	background: #fff;
+	border-radius: 3%;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+}
+
 .modal_content {
 	width: 300px;
 }
@@ -101,28 +120,46 @@
 	margin-bottom: 10px;
 }
 
-#reviewBtn {
-    display: flex;
-    width: 45%;
-    margin: 10px auto;
-}
-#reviewCntn{
-	width: 100%;
+.qna_modal_content {
+	width: 35%;
+	height: 35%;
+	/* 스크롤*/
+	max-height: calc(100vh - 210px);
+	overflow-y: auto;
 }
 
-.modal_content, .dank_modal_content, .pw_modal_content,
-	.rprt_modal_content, .pay_modal_content, .winner_modal_content,
-	.review_modal_content {
-	min-height: 200px;
-	background: #fff;
-	border: 0.5px solid #666;
-	border-radius: 15px;
-	padding: 20px;
+#qnaBox {
+	display: flex;
+}
+.qna_modal_content #qna {
+	width: 40%;
 	margin: 0 auto;
-	margin-top: 250px;
-	/* 	둥글게,그림자 효과 */
-	border-radius: 3%;
-	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+	margin-bottom: 10px;
+	padding: 20px;
+	background-color: #f7f6f6;
+	border-radius: 20px;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .1);
+}
+
+
+.qna_modal_content #qnaRep {
+	width: 40%;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	padding: 20px;
+	background-color: #fdfbdd;
+	border-radius: 20px;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .1);
+}
+
+#reviewBtn {
+	display: flex;
+	width: 45%;
+	margin: 10px auto;
+}
+
+#reviewCntn {
+	width: 100%;
 }
 
 .starbox {
@@ -228,7 +265,8 @@
 	margin-left: 10px;
 }
 /* 스크롤바 지우기 */
-.img_modal_content::-webkit-scrollbar {
+.img_modal_content::-webkit-scrollbar, .qna_modal_content::-webkit-scrollbar
+	{
 	display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 

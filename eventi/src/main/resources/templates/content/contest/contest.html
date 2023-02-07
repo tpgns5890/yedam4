@@ -451,11 +451,13 @@ h4 {
 		//문의사항 관련 생성 함수 --------------------------------------------------------
 		//문의사항 박스 생성
 		function questionBox(){
+			
 			let box = `	<input type="text" name="Ttl" required="required" placeholder=" 문의제목 " style="width: 320px;"><br>
 						<textarea name="cntn" class="form-control" id="Cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea>
 						<input type="checkbox" id="secretYn" name="secretYn">비밀글 
 						<button type="button" id="insertBtn" class="btn btn-g btn-round btn-lg">등록</button>
 					`;
+			
 			
 			return box;
 		} 
@@ -481,8 +483,7 @@ h4 {
 			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
 			if(question.secretYn == 'Y' && question.userId != userId 
 										&& writer != userId 
-										&& userId != "admin"
-										&& userId == "" ){
+										&& userId != "admin" ){
 				p =`<ul class="children" style="list-style: none">
 						<li class="comment">
 						<div class="comment-body" id="${question.qNo}">
@@ -531,8 +532,7 @@ h4 {
 			 
 				if(questionRep.secretYn == 'Y' && questionRep.userId != userId 
 												&& writer != userId 
-												&& userId != "admin"
-												&& userId == "" ){
+												&& userId != "admin"){
 	   				p = `<ul class="children" style="list-style: none">
 			                <li class="comment" >
 				                <div class="comment-body" id="${questionRep.qNo}">
@@ -626,7 +626,7 @@ h4 {
  			console.log(Ttl)
  			
  			if(userId == ''){
- 				login() //로그인모달창.
+ 				location.href='/loginPage'//로그인.
  			//내용이 없고 등록버튼을 눌렀을경우
  			}else if(Cntn == '' || Ttl  == ''){
  				alert('문의사항을 입력해주세요');

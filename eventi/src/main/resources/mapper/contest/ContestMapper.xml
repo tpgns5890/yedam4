@@ -98,6 +98,9 @@
                         from design d
                         where d.c_no = c.c_no
                         and save = 'N')designCount,
+                     (select count(*) 
+                        from questions q
+                        where q.target_id = c.c_no)questionCount,
                      
                       CASE WHEN save = 'Y'  THEN '임시저장'
                       	  WHEN dt_extns IS NOT NULL  THEN 

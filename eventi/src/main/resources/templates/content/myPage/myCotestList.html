@@ -44,8 +44,9 @@
 						<th style="width:30%;">진행기간</th>
 						<th>진행</th>
 						<th>지원수</th>
-						<th>디자인조회</th>
-						<th>상세조회</th>
+						<th>조회/등록</th>
+						<th>공모전</th>
+						<th>문의내역</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -85,14 +86,14 @@
 							<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
 								<td th:text="${contest.ing}"></td>
 								<td th:text="${contest.designCount}"></td>
-								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">등록</button></td>
 							</th:block>
 							
 							<th:block th:if="${contest.winnerCheck} > 0">
 								<td th:text="종료"></td>
 								<td th:text="${contest.designCount}"></td>
 								<th:block th:if=" ${contest.designCount} > 0 " >
-									<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+									<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
 									<td><button class="btn btn-g btn-round" type="button" th:attr="onclick=|winnerList('${contest.cNo}')|">후기등록</button></td>
 								</th:block>
 								<th:block th:if=" ${contest.designCount} == 0 " >
@@ -109,14 +110,21 @@
 							<td th:text="${contest.designCount}"></td>
 						
 							<th:block th:if=" ${contest.designCount} > 0 " >
-								<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
 							</th:block>
 							<th:block th:if=" ${contest.designCount} == 0 " >
 								<td></td>
 							</th:block>
-								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">상세조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">조회</button></td>
 						</th:block>
-						
+							
+						<!-- 문의내역 조회 -->
+						<th:block th:if=" ${contest.questionCount} == 0 " >
+							<td></td>
+						</th:block>
+						<th:block th:if=" ${contest.questionCount} > 0 " >
+							<td><button class="btn btn-g btn-round" type="button">조회</button></td>
+						</th:block>
 					</tr>
 				</tbody>
 			</table>

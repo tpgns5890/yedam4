@@ -13,10 +13,10 @@ input, textarea {
 }
 
 .contestContainer {
-	background-color: #f7f6f6;
 	margin: 40px auto 40px;
 	padding: 20px 70px;
 	width: 48%;
+	background-color: #f7f6f6;
 	border-radius: 20px;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
