@@ -42,6 +42,7 @@ public class PromotionController {
 		//paging.setPageSize(4);
 		//promotionVO.setOrderCol("see");
 		
+		
 		//전체리스트 조회
 		List<PromotionVO> contents = proService.proList(promotionVO, paging);
 		model.addAttribute("paging", paging);
@@ -60,10 +61,18 @@ public class PromotionController {
 			 */
 		}
 		model.addAttribute("proList", contents);
+		
+		promotionVO.setOrderCol("see");
+		
+		List<PromotionVO> posts = proService.proList(promotionVO, paging);
+		 model.addAttribute("contents", posts);
 		//이미지
 		//model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 		return "content/promotion/proList";
 	}
+	
+	
+	
 	
 	//정렬 전체 조회
 	@PostMapping("/proList")

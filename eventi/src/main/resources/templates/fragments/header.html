@@ -44,6 +44,8 @@
               <li class="dropdown"><a class="dropdown" href="/bboard/bList?type=T05">멘토링게시판</a></li>
             </ul>
           </li>
+          
+          <th:block sec:authorize="hasAnyRole('MC','DES')">
           <li class="dropdown"><a href="/proList">홍보게시판</a></li>
           <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">공지사항</a>
             <ul class="dropdown-menu" role="menu">
@@ -52,6 +54,7 @@
               <li class="dropdown"><a class="dropdown" href="/faqList">FAQ</a></li>
             </ul>
           </li>
+          </th:block>
           <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a href="/admin/adminMain" class="nav-link">사이트관리</a>
           </li>
           <li class="nav-item" sec:authorize="isAuthenticated()"><a href="/myPage/userMypage" class="nav-link" th:text="${session.member.userId}"></a>

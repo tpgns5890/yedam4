@@ -4,7 +4,8 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
    
-   <head>
+<head>
+<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 <style>
 .modal {
 	display: none;
@@ -117,6 +118,22 @@
 	</div>
 	
 </th:block>	
+		 <section class="module-small">
+          <div class="container">
+            <form class="row">
+             
+           
+              <div class="col-sm-3">
+              	<button type="button" class="w-btn w-btn-gra1" 
+						th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
+              </div>
+               <div class="col-sm-3">
+              	<button type="button" class="w-btn w-btn-gra1" id="modalUp">신고하기</button>
+              </div>
+            </form>
+          </div>
+        </section>
+        
           <div class="container">
             <div class="row multi-columns-row">
               <div class="col-sm-6 col-md-3 col-lg-3">
@@ -157,6 +174,8 @@
               </div>
             </div>
           </div>
+
+	 <hr class="divider-w">
 
 	<table class="table mb-3" >
 	<thead class="thead-dark">

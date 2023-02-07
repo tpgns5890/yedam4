@@ -112,15 +112,15 @@
 	
 	<!-- 게시글 시퀀스번호 찾기 -->
 	<select id="getSeq" resultType="String">
-		SELECT 'BB' || (MAX(TO_NUMBER(SUBSTR(B_BOARD_NO,3)))+1) B_BOARD_NO
+		SELECT 'BB' || NVL((MAX(TO_NUMBER(SUBSTR(B_BOARD_NO,3)))+1),1) B_BOARD_NO
 		FROM B_BOARD
 	</select>
 	
 	<!-- 게시글 등록 -->
 	<insert id="bboardInsert">
 		<selectKey keyProperty="bBoardNo" resultType="String" order="BEFORE">
-			SELECT 'BB' || (MAX(TO_NUMBER(SUBSTR(B_BOARD_NO,3)))+1) B_BOARD_NO
-			FROM B_BOARD
+			SELECT 'BB' || NVL((MAX(TO_NUMBER(SUBSTR(B_BOARD_NO,3)))+1),1) B_BOARD_NO
+			  FROM B_BOARD
 		</selectKey>
 	
 		INSERT INTO B_BOARD(B_BOARD_NO, WRITER, TTL, LCLSF, MCLSF, CNTN, ANO, TYPE, SAVE)

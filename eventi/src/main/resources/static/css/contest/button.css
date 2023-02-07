@@ -1,8 +1,18 @@
-.contestBtn {
-    width: 650px;
-    position: relative;
-    left: -190px;
-    top: 70px;
+
+.contestBtn_writer {
+   position: absolute;
+   display: flex;
+   width: 780px;
+   top: 450px;
+}
+
+.contestBtn_user {
+   position: absolute;
+   display: flex;
+   width: 300px;
+   right: 120px;
+   top: 450px;
+
 }
 button {
 	margin: 15px;

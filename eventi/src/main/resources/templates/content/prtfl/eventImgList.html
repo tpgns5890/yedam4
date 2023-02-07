@@ -13,10 +13,6 @@
 		color : black;
 	}
 	
-	#check{
-		min-height : 1000px;
-	}
-	
 	.fileShow{
 			display : none !important;
 	}
@@ -71,25 +67,26 @@
 	    text-align: center !important;
 	    margin:0 auto;
 	}
+	
+	.fullSize{
+		margin-left: 250px;
+		min-height: 600px;
+	}
+	
+	.contentSize{
+		margin: 100px 20px;
+	}
 </style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">행사사진리스트</h2>
-                <div class="module-subtitle font-serif">행사사진리스트</div>
-              </div>
-            </div>
-          </div>
-        </section>
+    <h2 hidden="hidden" class="module-title font-alt">행사사진리스트</h2>
+ 
     <!-- 현재페이지 myPageSide 적용 -->
 	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
-    <div id="check">
+    <div class="fullSize">
+    <div class="contentSize">
     <button class="btn btn-primary btn-round" type="button" id="imgUp">이미지 등록</button>
     <button class="btn btn-primary btn-round" type="button" id="deleteBtn">이미지 삭제</button> 
 	<input type="checkBox" value="삭제" class="delete" id="allDelete">
@@ -137,6 +134,7 @@
 				</form>
 			</div>
 		<div class="modal_layer"></div>
+	</div>
 	</div>
 	</div>
 					     	
