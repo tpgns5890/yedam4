@@ -1,92 +1,132 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:th="http://www.thymeleaf.org"
-   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
-   <div layout:fragment="content" id="layout">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+    integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+    integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+  <link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
+  <script src="/assets/jquery-ui/jquery-ui.min.js"></script>
 <!-- csrf 설정 -->
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
 <meta charset="UTF-8">
 <style>
 /* table */
 #customers {
-  border-collapse: collapse;
-  margin: 50px auto;
+	border-collapse: collapse;
+	margin: 30px auto;
+}
+.btn-warning{
+	background-color: #FFDE59;
+    border-color: #FFDE59;
+    color: #555;
+    font-weight: 700;
 }
 
+.btn-warning:hover{
+	background-color: #FAB955;
+	border-color: #FAB955;
+    color: #555;
+    font-weight: 700;
+}
+.btn-warning:active.focus{
+	background-color: #F18949;
+	border-color: #F18949;
+    font-weight: 700;
+}
+.btn-warning:active{
+	background-color: #F18949;
+	border-color: #F18949;
+    font-weight: 700;
+}
+.btn-warning:focus{
+	background-color: #F18949;
+	border-color: #F18949;
+    font-weight: 700;
+}
 #customers td, #customers th {
-  border: 1px solid #ddd;
-  padding: 8px;
+	border: 1px solid #eee;
+	padding: 8px;
 }
 
 #customers th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
 }
+
 #customers td {
-   width: 600px;
+	width: 600px;
+	padding:15px;
 }
 /* The container */
 .checkList {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	cursor: pointer;
+	font-size: 1.1em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 /* Hide the browser's default radio button */
 .checkList input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
 }
 
 /* Create a custom radio button */
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 50%;
-}css checked 라벨글씨
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
+	border-radius: 50%;
+}
 
-/* On mouse-over, add a grey background color */
+css checked 라벨글씨 /* On mouse-over, add a grey background color */  
 .checkList:hover input ~ .checkmark {
-  background-color: #ccc;
+	background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
 .checkList input:checked ~ .checkmark {
-  background-color: #2196F3;
+	background-color: #FFDE59;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
 .checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
+	content: "";
+	position: absolute;
+	display: none;
 }
 
 /* 체크시 하얀 동그라미 표시 */
 .checkList input:checked ~ .checkmark:after {
-  display: block;
+	display: block;
 }
 
 /* 체크시 나타나는 하얀동그라미 스타일 */
 .checkList .checkmark:after {
- 	top: 9px;
+	top: 9px;
 	left: 9px;
 	width: 8px;
 	height: 8px;
@@ -95,494 +135,494 @@
 }
 
 h2 {
-  text-align: center;
+	text-align: center;
 }
+
 #p {
 	color: red;
 }
+
 .hidden {
-  display: none;
+	display: none;
 }
+
 .etcVal {
 	margin-left: 20px;
 }
 /* 선택박스창 */
 #bodyContents {
-  position: relative; 
-  top: -35px;
-  height: auto;
-  width: 700px;
-  margin: auto;
-  border: 2px solid #ccc;
-  background-color: white;
-  overflow: hidden;
+	position: absolute;
+    width: 27%;
+    min-height: 60%;
+    padding: 30px;
+    top: 50%;
+    left: 35%;
+    color:black;
+    transform: translate(-50%, -50%);
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	background-color: white;
+	overflow: hidden;
 }
-/* 상태바 
+
 .progress-bar {
-  width: 10%;
-  height: 20px;
-  background-color: green;
-  transition: width 0.5s linear;
-}*/
+	background-color: #FFDE59;
+}
+
+.btnArea{
+	right: 30px;
+    position: absolute;
+    bottom: 30px;
+}
 </style>
 </head>
 <body>
- <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Big Title</h2>
-                <div class="module-subtitle font-serif">Small Title</div>
-              </div>
-            </div>
-          </div>
-        </section>
- <!-- 행사유형 선택 -->
- <form id="insertFrm" name="insertFrm">
-<div id="bodyContents">
+<div layout:fragment="content">
+	<section class="home-section home-full-height bg-dark" id="home" data-background="/assets/images/estiBack.jpg" style="height: 937px; background-image: url(&quot;/assets/images/estiBack.jpg&quot;);">
+		<div class="titan-caption">
+			<!-- 행사유형 선택 -->
+			<form id="insertFrm" name="insertFrm">
+				<div id="bodyContents">
+					<div class="progress" style="height:4px;">
+                 		<div class="progress-bar" aria-valuenow="9" role="progressbar" aria-valuemin="0" aria-valuemax="100" ></div>
+               		</div>
+					<h4><b>어떤 행사를 기획중이신가요?</b></h4>
+					<table id="customers">
+						<tr>
+							<td>
+								<label class="checkList">기념식
+									<input type="radio" name="eventType" value="기념식" class="input-radio">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="checkList">축제/가요제/플리마켓
+									<input type="radio" name="eventType" value="축제/가요제/플리마켓">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="checkList">체육대회/단합행사
+									<input type="radio" name="eventType" value="체육대회/단합행사">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="checkList">세미나/포럼/워크샵
+									<input type="radio" name="eventType" value="세미나/포럼/워크샵">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="checkList">전시회/박람회
+									<input type="radio" name="eventType" value="전시회/박람회">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="checkList">신년회/송년회
+									<input type="radio" name="eventType" value="신년회/송년회">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+					</table>
+					<div class="btnArea">
+						<input type="button" value="다음" class="btn btn-warning btn-round next" id="eventType">
+					</div>
+				</div>
+				<!-- end of bodyContents -->
 
-<!-- 상태바 -->
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>어떤 행사를 기획중이신가요?</h2>
-<table id="customers">
-  <tr>
-    <td><label for="radio1" class="checkList">기념식
-  <input type="radio" name="eventType" value="기념식" id="radio1" class="input-radio">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">축제/가요제/플리마켓
-  <input type="radio" name="eventType" value="축제/가요제/플리마켓">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">체육대회/단합행사
-  <input type="radio" name="eventType" value="체육대회/단합행사">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">세미나/포럼/워크샵
-  <input type="radio" name="eventType" value="세미나/포럼/워크샵">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">전시회/박람회
-  <input type="radio" name="eventType" value="전시회/박람회">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-    <tr>
-   <td><label class="checkList">신년회/송년회
-  <input type="radio" name="eventType" value="신년회/송년회">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-</table>
-   <input type="button" value="다음" class="next" id="eventType">
-</div><!-- end of bodyContents -->
+				<!-- 행사장소 선택 -->
+				<div id="bodyContents" class="hidden">
+					<div class="progress" style="height:4px;">
+                 			<div class="progress-bar" aria-valuenow="22" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 9%;"></div>
+               		</div>
+					<h4><b>행사 예정 장소는 어디인가요?</b></h4>
+					<table id="customers">
+						<tr>
+							<td>
+								<label class="checkList">호텔
+									<input type="radio" name="expectedPl" value="호텔">
+									<span class="checkmark"></span>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td><label class="checkList">이벤트/컨벤션홀 <input
+									type="radio" name="expectedPl" value="이벤트/컨벤션홀"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">주거 공간(주택,빌라 등) <input
+									type="radio" name="expectedPl" value="주거 공간"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">사내 공간(강당, 사무실, 로비 등)
+									<input type="radio" name="expectedPl" value="사내 공간">
+									<span class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">기타 실내(극장, 공연장, 클럽 등)
+									<input type="radio" name="expectedPl" value="기타 실내">
+									<span class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">기타 야외(체육관, 공원, 캠핌장 등)
+									<input type="radio" name="expectedPl" value="기타 야외">
+									<span class="checkmark"></span>
+							</label></td>
+						</tr>
+					</table>
+					<div class="btnArea">
+					<input type="button" value="이전" class="btn btn-default btn-round prev"> <input
+						type="button" value="다음" class="btn btn-warning btn-round next" id="expectedPl">
+					</div>
+				</div>
+				<!-- end of bodyContents -->
 
- <!-- 행사장소 선택 -->
-<div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 예정 장소는 어디인가요?</h2>
-<table id="customers">
-  <tr>
-    <td><label class="checkList">호텔
-  <input type="radio"  name="expectedPl" value="호텔">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">이벤트/컨벤션홀
-  <input type="radio"  name="expectedPl" value="이벤트/컨벤션홀">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">주거 공간(주택,빌라 등)
-  <input type="radio"  name="expectedPl" value="주거 공간">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">사내 공간(강당, 사무실, 로비 등)
-  <input type="radio"  name="expectedPl" value="사내 공간">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">기타 실내(극장, 공연장, 클럽 등)
-  <input type="radio"  name="expectedPl" value="기타 실내">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">기타 야외(체육관, 공원, 캠핌장 등)
-  <input type="radio"  name="expectedPl" value="기타 야외">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">미정
-   <input type="radio" name="expectedPl" value="미정">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td class="etc"><label class="checkList" >기타
-  <input type="radio" name="expectedPl" id="expectedPlEtc">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-</table>
- <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="expectedPl">
-</div><!-- end of bodyContents -->
+				<!-- 행사규모 선택 -->
+				<div id="bodyContents" class="hidden">
+					<div class="progress" style="height:4px;">
+                 			<div class="progress-bar" aria-valuenow="35" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 22%;"></div>
+               		</div>
+					<h4><b>행사 규모는 어느정도인가요?</b></h4>
+					<table id="customers">
+						<tr>
+							<td><label class="checkList">30명 미만 <input
+									type="radio" name="pats" value="30"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">50명 미만 <input
+									type="radio" name="pats" value="50"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">100명 미만 <input
+									type="radio" name="pats" value="100"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">200명 미만 <input
+									type="radio" name="pats" value="200"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">300명 미만 <input
+									type="radio" name="pats" value="300"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr class="etc">
+							<td><label class="checkList">400명 이상 <input
+									type="radio" name="pats" value="400"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+					</table>
+					<div class="btnArea">
+					<input type="button" value="이전" class="btn btn-default btn-round prev"> <input
+						type="button" value="다음" class="btn btn-warning btn-round next" id="pats">
+					</div>
+				</div>
+				<!-- end of bodyContents -->
 
- <!-- 행사규모 선택 -->
-<div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 규모는 어느정도인가요?</h2>
-<table id="customers">
-  <tr>
-    <td><label class="checkList">30명 미만
-  <input type="radio" name="pats" value="30">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">50명 미만
-  <input type="radio" name="pats" value="50">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">100명 미만
-  <input type="radio" name="pats" value="100">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">200명 미만
-  <input type="radio" name="pats" value="200">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">300명 미만
-  <input type="radio" name="pats" value="300">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-    <tr class="etc">
-   <td><label class="checkList">400명 이상
-  <input type="radio" name="pats" value="400">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-</table>
- <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="pats">
-</div><!-- end of bodyContents -->
+				<!-- 행사날짜 선택 -->
+				<div id="bodyContents" class="hidden">
+					<div class="progress" style="height:4px;">
+                 			<div class="progress-bar" aria-valuenow="48" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 35%;"></div>
+               		</div>
+					<h4><b>행사 날짜를 선택해주세요.</b></h4>
+					<div class="form-group">
+						<input name="eventDt" value="" class="datepicker"><br>
+					</div>
+					
+					<h4><b>행사 시작 시간은 언제인가요?</b></h4>
+					<table id="customers">
+						<tr>
+							<td><label class="checkList">오전 <input
+									type="radio" name="eventTime" value="am"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">오후 <input
+									type="radio" name="eventTime" value="pm"> <span
+									class="checkmark"></span>
+							</label></td>
+					</table>
+					<div class="btnArea">
+					<input type="button" value="이전" class="btn btn-default btn-round prev"> <input
+						type="button" value="다음" class="btn btn-warning btn-round next" id="eventTime">
+						</div>
+				</div>
+				<!-- end of bodyContents -->
 
- <!-- 행사날짜 선택 -->
-<div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 날짜를 선택해주세요.</h2>
-<div class="form-group">
-<input type="date" name="eventDt" value="" class="form-control"><br>
-</div>
- <input type="button" value="이전" class="prev">
- <input type="button" value="다음" id="eventDt" class="next">
-</div><!-- end of bodyContents -->
+				<!-- 행사소요시간 선택 -->
+				<div id="bodyContents" class="hidden">
+					<div class="progress" style="height:4px;">
+                 			<div class="progress-bar" aria-valuenow="74" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+               		</div>
+					<h4><b>행사 예상 소요시간을 선택해주세요</b></h4>
+					<table id="customers">
+						<tr>
+							<td><label class="checkList">1시간 <input
+									type="radio" name="expectedDuration" value="1"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">2시간 <input
+									type="radio" name="expectedDuration" value="2"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">3시간 <input
+									type="radio" name="expectedDuration" value="3"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">4시간 <input
+									type="radio" name="expectedDuration" value="4"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+						<tr>
+							<td><label class="checkList">하루 이상 <input
+									type="radio" name="expectedDuration" value="24"> <span
+									class="checkmark"></span>
+							</label></td>
+						</tr>
+					</table>
+					<div class="btnArea">
+					<input type="button" value="이전" class="btn btn-default btn-round prev"> <input
+						type="button" value="다음" class="btn btn-warning btn-round next" id="expectedDuration">
+						</div>
+				</div>
+				<!-- end of bodyContents -->
 
- <!-- 행사시작시간 선택 -->
-<div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 시작 시간은 언제인가요?</h2>
-<table id="customers">
-  <tr>
-    <td><label class="checkList">오전
-  <input type="radio"  name="eventTime" value="am">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">오후
-  <input type="radio"  name="eventTime" value="pm">
-  <span class="checkmark"></span>
-</label></td>
-</table>
- <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="eventTime">
-</div><!-- end of bodyContents -->
+				<!-- 행사지역 선택 -->
+				<div id="bodyContents" class="hidden">
+					<div class="progress" style="height:4px;">
+                 			<div class="progress-bar" aria-valuenow="87" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 55%;"></div>
+               		</div>
+					<h4><b>행사 예상 지역을 선택해주세요.</b></h4>
+					<div class="form-group">
+						<select name="expectedLcal" class="form-control">
+							<option value="A00">==지역선택==</option>
+							<option value="A01">서울</option>
+							<option value="A02">인천</option>
+							<option value="A03">대구</option>
+							<option value="A04">광주</option>
+							<option value="A05">대전</option>
+							<option value="A06">울산</option>
+							<option value="A07">부산</option>
+							<option value="A08">경기도</option>
+							<option value="A09">강원도</option>
+							<option value="A10">충청도</option>
+							<option value="A11">전라도</option>
+							<option value="A12">경상도</option>
+							<option value="A13">제주도</option>
+						</select>
+					</div>
+					<div class="btnArea">
+					<input type="button" value="이전" class="btn btn-default btn-round prev">
+					<input type="button" value="다음" class="btn btn-warning btn-round next" id="expectedLcal">
+					</div>
+				</div>
+				<!-- end of bodyContents -->
 
- <!-- 행사소요시간 선택 -->
-<div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 예상 소요시간을 선택해주세요</h2>
-<table id="customers">
-  <tr>
-    <td><label class="checkList">1시간
-  <input type="radio"  name="expectedDuration" value="1">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">2시간
-  <input type="radio"  name="expectedDuration" value="2">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">3시간
-  <input type="radio"  name="expectedDuration" value="3">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-  <tr>
-   <td><label class="checkList">4시간
-  <input type="radio"  name="expectedDuration" value="4">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-   <tr>
-   <td><label class="checkList">하루 이상
-  <input type="radio"  name="expectedDuration" value="24">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-   <tr>
-   <td><label class="checkList">기타
-  <input type="radio"  name="expectedDuration" class="etc" id="expectedDurationEtc">
-  <span class="checkmark"></span>
-</label></td>
-  </tr>
-</table>
- <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="expectedDuration">
- </div><!-- end of bodyContents -->
- 
-  <!-- 행사지역 선택 -->
- <div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 예상 지역을 선택해주세요.</h2>
-<div class="form-group">
-<select name="expectedLcal" class="form-control">
-	<option value="A00">==지역선택==</option>
-	<option value="A01">서울</option>
-	<option value="A02">인천</option>
-	<option value="A03">대구</option>
-	<option value="A04">광주</option>
-	<option value="A05">대전</option>
-	<option value="A06">울산</option>
-	<option value="A07">부산</option>
-	<option value="A08">경기도</option>
-	<option value="A09">강원도</option>
-	<option value="A10">충청도</option>
-	<option value="A11">전라도</option>
-	<option value="A12">경상도</option>
-	<option value="A13">제주도</option>
-</select>
-</div>
- <input type="button" value="이전" class="prev">
- <input type="button" value="다음" class="next" id="expectedLcal">
-</div><!-- end of bodyContents -->
+				<!-- 행사 희망사항 입력 -->
+				<div id="bodyContents" class="hidden">
+					<div class="progress" style="height:4px;">
+                 			<div class="progress-bar" aria-valuenow="100" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
+               		</div>
+					<h4><b>행사 관련 희망사항을 알려주세요.</b></h4>
+					<textarea rows="5" cols="33" name="wishes" placeholder="행사 내용 및 콘셉트 등" style="border: 1px solid #ccc;height: 370px; width: 100%;"></textarea><br>
+					<div class="btnArea">
+					<input type="button" value="이전" class="btn btn-default btn-round prev">
+					
 
- <!-- 행사 희망사항 입력 -->
-<div id="bodyContents" class="hidden">
-<!-- <progress id="progress-Bar" value="0" max="100"></progress> -->
-<h2>행사 관련 희망사항을 알려주세요.</h2>
-<input name="wishes" placeholder="행사 내용 및 콘셉트 등애 대해 남겨주세요"><br>
- <input type="button" value="이전" class="prev">
- 
- <!-- 비회원 로그인창 띄우기 -->
- <th:block sec:authorize="!isAuthenticated()">			
- <input type="button" value="견적서 보내기" class="submit" th:onclick="|location.href='@{/loginPage}'|">
- </th:block>
-<!-- 로그인 회원 버튼표시 -->
-<th:block sec:authorize="isAuthenticated()">
-<input type="button" value="견적서 보내기" class="submit">
-<input type="hidden" th:value="${session.member.userId}" name="userId" /> 
-</th:block> 
-
-</div>
-<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-</form>
-<script>
-
-//페이지 벗어나기전 알림
- var checkUnload = true;
- $(window).on("beforeunload", function(){
-	 if(checkUnload) return "이 페이지를 벗어나면 작성된 내용은 저장되지 않습니다.";
-});
-
-//기타 입력값 radio value에 입력
-$('body').on('change','[id$="etcVal"]', function() {
-	$(this).closest('td').find('[type="radio"]').val($(this).val())
-})
-//기타 체크시 텍스트박스 생성
-$('input:radio').click(function() {
-	
-	var name =$(this).attr('name')
-	
-	if($('#'+name+'Etc').is(":checked")) {
-		$('#'+name+'etcVal').remove()
-		var input = document.createElement('input');
-		input.setAttribute('id', name+'etcVal')
-		//input.setAttribute('name', name+'etcVal')
-		
-		$(this).parent().parent().append(input)
-	} else {
-		$('#'+name+'etcVal').remove()
-	} 
+					<!-- 비회원 로그인창 띄우기 -->
+					<th:block sec:authorize="!isAuthenticated()">
+						<input type="button" value="견적서 보내기" class="btn btn-warning btn-round submit"
+							th:onclick="|location.href='@{/loginPage}'|">
+					</th:block>
+					<!-- 로그인 회원 버튼표시 -->
+					<th:block sec:authorize="isAuthenticated()">
+						<input type="button" value="견적서 보내기" class="btn btn-warning btn-round submit">
+						<input type="hidden" th:value="${session.member.userId}"
+							name="userId" />
+					</th:block>
+					</div>
+				</div>
+				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}" />
+			</form>
+		</div>
+	</section>
+	<script>
+	var now_utc = Date.now();
+	var timeOff = new Date().getTimezoneOffset() * 60000;
+	var today = new Date(now_utc - timeOff).toISOString()
+			.split("T")[0];
+	$.datepicker.setDefaults({
+		dateFormat: 'yy-mm-dd',
+		prevText: '이전 달',
+		nextText: '다음 달',
+		monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+		monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+		dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+		dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+		dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+		showMonthAfterYear: true,
+		yearSuffix: '년',
+		minDate: new Date(today)
 	});
 	
-//다음 버튼 클릭 시
-$('.next').click(function() {
+	$('.datepicker').datepicker();
+	
+	//페이지 벗어나기전 알림
+	var checkUnload = true;
+	$(window).on("beforeunload", function() {
+		if (checkUnload)
+			return "이 페이지를 벗어나면 작성된 내용은 저장되지 않습니다.";
+	});
 
-	var name = $(this).attr('id');
-
-	//선택항목 별 선택여부 체크
-	switch(name){
-	case "eventType" :
-	case "expectedPl" :
-	case "pats" : 
-	case "eventTime" :
-	case "expectedDuration" :
-		var checked = $('input:radio[name='+name+']:checked');
-		if(!checked.length) {
-		$('p').remove()
-		 var p = document.createElement('p')
-		 p.setAttribute('id', 'p')
-		 p.textContent = '옵션을 선택해주세요.';
-		 $(this).parent().append(p)
-		 return false;
+	//기타 입력값 radio value에 입력
+	$('body').on('change','[id$="etcVal"]',function() {
+		$(this).closest('td').find('[type="radio"]').val($(this).val());
+	})
+	//기타 체크시 텍스트박스 생성
+	$('input:radio').click(function() {
+		var name = $(this).attr('name')
+		if ($('#' + name + 'Etc').is(":checked")) {
+			$('#' + name + 'etcVal').remove()
+			var input = document.createElement('input');
+			input.setAttribute('id', name + 'etcVal')
+			//input.setAttribute('name', name+'etcVal')
+			$(this).parent().parent().append(input)
+		} else {
+			$('#' + name + 'etcVal').remove()
 		}
-			$(this).parent().attr('class','hidden')
-			$(this).parent().next().removeClass('hidden');
-		break;
-		
-	case "expectedLcal" :
-		if($("[name=expectedLcal] > option:selected").val() == 'A00'){
-			$('p').remove()
-			 var p = document.createElement('p')
-			 p.setAttribute('id', 'p')
-			 p.textContent = '옵션을 선택해주세요.';
-			 $(this).parent().append(p)
-		      return false;
+	});
+
+	//다음 버튼 클릭 시
+	$('.next').click(function() {
+		var name = $(this).attr('id');
+		//선택항목 별 선택여부 체크
+		switch (name) {
+		case "eventType":
+		case "expectedPl":
+		case "pats":
+		case "eventTime":
+		case "expectedDuration":
+			var checked = $('input:radio[name=' + name
+					+ ']:checked');
+			if (!checked.length) {
+				$('p').remove()
+				var p = document.createElement('p')
+				p.setAttribute('id', 'p')
+				p.textContent = '옵션을 선택해주세요.';
+				$(this).parent().parent().append(p)
+				return false;
 			}
-			$(this).parent().attr('class','hidden')
-			$(this).parent().next().removeClass('hidden');
-		break;
-		
-	case "eventDt" :
-		var date = $('input[name=eventDt]').val();
-		if(date == "") {
-			$('p').remove()
-			 var p = document.createElement('p')
-			 p.setAttribute('id', 'p')
-			 p.textContent = '옵션을 선택해주세요.';
-			 $(this).parent().append(p)
-		      return false;
+			$(this).parent().parent().attr('class', 'hidden')
+			$(this).parent().parent().next().removeClass('hidden');
+			break;
+
+		case "expectedLcal":
+			if ($("[name=expectedLcal] > option:selected")
+					.val() == 'A00') {
+				$('p').remove()
+				var p = document.createElement('p')
+				p.setAttribute('id', 'p')
+				p.textContent = '옵션을 선택해주세요.';
+				$(this).parent().parent().append(p)
+				return false;
+			}
+			$(this).parent().parent().attr('class', 'hidden')
+			$(this).parent().parent().next().removeClass('hidden');
+			break;
+
+		case "eventDt":
+			var date = $('input[name=eventDt]').val();
+			if (date == "") {
+				$('p').remove()
+				var p = document.createElement('p')
+				p.setAttribute('id', 'p')
+				p.textContent = '옵션을 선택해주세요.';
+				$(this).parent().parent().append(p)
+				return false;
+			}
+			$(this).parent().parent().attr('class', 'hidden')
+			$(this).parent().parent().next().removeClass('hidden');
+			break;
 		}
-		$(this).parent().attr('class','hidden')
-		$(this).parent().next().removeClass('hidden');
-		break;
-	}
-});
-
-//이전 버튼 클릭 시 
-$('.prev').click(function() {
-	  $('p').remove()
-	  $(this).parent().attr('class','hidden')
-	  $(this).parent().prev().removeClass('hidden');
 	});
-	
-//오늘 이전날짜 선택불가
-var now_utc = Date.now()
-var timeOff = new Date().getTimezoneOffset()*60000;
-var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-document.getElementById('eventDt').setAttribute("min", today);
 
-//견적요청서 등록
-$('.submit').click(function() {
-	var userId = '[[${session.member != null ? session.member.userId :''}]]';
-	console.log(userId)
-	if(userId == ""){
-		alert("로그인 후 이용해주세요.")
-		login();
-		return false;
-	}
-	checkUnload = false; //페이지 벗어날 때 alert 제한
-	//csrf 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-	
-	var data = $("form[name=insertFrm]").serializeObject();
-	console.log(data)
-  	//견적요청서 등록
- 	$.ajax({
-		url: "/insertEst",
-		method: "POST",
-		contentType: 'application/json',
-		data: JSON.stringify(data),
-		beforeSend : function(xhr)
-        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-        xhr.setRequestHeader(header, token);
-        },
-		success: function (data) {
-			console.log(data)
-			location.href="/estFormDone?eno=" + data;
-         },
-         error: function () {
+	//이전 버튼 클릭 시 
+	$('.prev').click(function() {
+		$('p').remove()
+		$(this).parent().parent().attr('class', 'hidden')
+		$(this).parent().parent().prev().removeClass('hidden');
+	});
+
+	//견적요청서 등록
+	$('.submit').click(function() {
+		var userId = '[[${session.member != null ? session.member.userId :''}]]';
+		console.log(userId)
+		if (userId == "") {
+			alert("로그인 후 이용해주세요.");
+			return false;
+		}
+		checkUnload = false; //페이지 벗어날 때 alert 제한
+		//csrf 
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var data = $("form[name=insertFrm]").serializeObject();
+		console.log(data)
+		//견적요청서 등록
+		$.ajax({
+			url : "/insertEst",
+			method : "POST",
+			contentType : 'application/json',
+			data : JSON.stringify(data),
+			beforeSend : function(xhr) { /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(data) {
+				console.log(data)
+				location.href = "/estFormDone?eno="+ data;
+			},
+			error : function() {
 				alert("서버 요청 실패");
 			}
-    });
+		});
 	});
-//비회원 로그인창 띄우기
-function login(){
-	 $("#header_modal").show();
-}
-//선택된 항목의 글씨체 변경
-/*	$(document).ready(function() {
-		  $('input[type="radio"]').on("change", function() {
-			  if($('input[type="radio"]:checked').is(':checked')){
-				  console.log($('input[type="radio"]:checked').is(':checked'))
-				  $(this).closest('label').css('color', 'red');
-			  }
-			  else if(!$('input[type="radio"]:checked').is(':checked')){
-				  $('input[type="radio"]').closest('label').css('color', 'black');
-			  }
-		   
-		   
-		  });
-		});*/
-//상태바 제어
-/* const prevButton = $(".prev");
-const nextButton = $(".next");
-const progressBar = $("#progress-Bar");
-
-nextButton.click(function() {
-  let currentValue = progressBar.val();
-  if (currentValue >= 100) {
-    currentValue = 0;
-  }
-  progressBar.val(currentValue + 10);
-});
-
-previousButton.click(function() {
-  let currentValue = progressBar.val();
-  if (currentValue <= 0) {
-    currentValue = 100;
-  }
-  progressBar.val(currentValue - 10);
-}); */
-</script>
-</div>
+	</script>
+	</div>
 </body>
 </html>

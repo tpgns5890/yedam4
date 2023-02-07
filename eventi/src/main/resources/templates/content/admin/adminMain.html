@@ -32,7 +32,7 @@
 			display: flex;
 		    margin-top: 10px;
 		    width: 99%;
-		    height: 80%;
+		    height: 73vh;
 		    justify-content: space-between;
 		}
 		#mainCleft{
@@ -148,7 +148,27 @@
 		.toDoli{
 			display:flex;
 		}
-		
+		#chartWrap{
+			height:80%;
+			width:100%;
+		}
+		table {
+			margin-top: 10px;
+			width: 100%;
+			text-align-last: center;
+			border-collapse: collapse;
+		}
+		table thead{
+			background-color: #ddd;
+		}
+		table tbody tr:hover{
+      	background-color: #eee;
+  		}
+
+		table th,td{
+			padding: 16px;
+			background-color: rgba(255,255,255,0.2);
+		}
 	</style>
 	<!-- csrf 설정 -->
 	<meta name="_csrf" th:content="${_csrf.token}" />
@@ -182,8 +202,8 @@
 							<div id="leftTopUp">
 								<span><b>방문자 현황</b></span>
 							</div>
-							<div style="padding:20px;">
-								<canvas id="line-chart" style="height:250px; width:750px;"></canvas>
+							<div id="chartWrap">
+								<canvas id="line-chart"></canvas>
 							</div>
 						</div>
 						<div id="leftBot">
@@ -199,7 +219,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="QnA : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${QnA.Q_NO})}'|" style="cursor:pointer;">
+									<tr th:each="QnA : ${qnaList}" th:onclick="|location.href='@{/questions/queDetail(qNo=${QnA.Q_NO})}'|" style="cursor:pointer;">
 										<td th:text="${QnA.USER_ID}"></td>
 										<td th:text="${QnA.TTL}"></td>
 										<td th:text="${QnA.WRITING_DT}"></td>
@@ -267,7 +287,7 @@
 								}]
 							},
 							options:{
-								responsive: false,
+								maintainAspectRatio :false,
 								title:{
 									display:true,
 									test:'주간 방문자 수'

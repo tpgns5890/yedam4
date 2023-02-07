@@ -98,16 +98,16 @@
 				<div class="caption-content">
 					<div id="form_area">
 						<form style="text-align: left;">
-							아이디<input type="text" class="form-control" name="id" id="id" placeholder="UserId"><br>
-							이름<input type="text" class="form-control" name="name" id="name" placeholder="홍길동"><br>
-							이메일주소<input type="text" class="form-control" name="userEmail" id="email"
+							<label>아이디</label><input type="text" class="form-control" name="id" id="id" placeholder="UserId"><br>
+							<label>이름</label><input type="text" class="form-control" name="name" id="name" placeholder="홍길동"><br>
+							<label>이메일주소</label><input type="text" class="form-control" name="userEmail" id="email"
 								placeholder="eventi@eventi.com">
-							<div>
+							<div style="margin-bottom:10px;">
 								<font id="find_feedback" size="2" style="color:#bbb;">임시비밀번호가 메일로 전송됩니다.</font>
 							</div>
 							<button type="button" id="modal_login_btn" class="btn btn-w btn-round"
 										th:onclick="|location.href='@{loginPage}'|">이전</button>
-							<button style="float: right;" id="findBtn" class="btn btn-w btn-round"
+							<button style="float: right; font-weight:700;" id="findBtn" class="btn btn-warning btn-round"
 								type="button">전송</button>
 						</form>
 						<div id="modal">

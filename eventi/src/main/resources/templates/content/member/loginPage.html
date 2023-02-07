@@ -47,12 +47,12 @@
 							<input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}" />
 							<font th:if="error" id="valid" style="color: red; font-size: 12px;"><a
 									th:text="${exception}"></a></font>
-							<p>
-								<input type="checkbox" name="remember-me"> 자동로그인
+							<p style="color:grey;display:flex;">
+								<input type="checkbox" name="remember-me" style="margin:0 5px 0 0;"> 자동로그인
 							</p>
 							<div style="float: right;">
-								<input style="width: 100%;" class="btn btn-w btn-round" name="submit" type="submit"
-									value="로그인"> <br> <a th:href="@{findIdPage}">아이디 찾기</a> <span>|</span> <a
+								<input style="width: 100%;font-weight:700;" class="btn btn-warning btn-round" name="submit" type="submit"
+									value="LOGIN"> <br> <a th:href="@{findIdPage}">아이디 찾기</a> <span>|</span> <a
 									th:href="@{findPwPage}">비밀번호 찾기</a>
 							</div>
 						</form>

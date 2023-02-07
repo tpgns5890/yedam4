@@ -8,68 +8,72 @@
 input[type=text]{
   width: 100%;
   padding: 12px 20px;
+  color:#777;
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-weight: 600;
 }
 #estfrm {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-  width: 50%;
-  margin: 0 auto;
-}
-label {
- color: gray;
+  	position: absolute;
+    width: 27%;
+    padding: 20px;
+    top: 54%;
+    left: 37%;
+    color: black;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
 }
 button {
  float: right;
- margin-right: 50px;
+ margin-top:5px;
+ margin-right: 10px;
+}
+#estfrm label{
+	font-size:1.1em;
+	color:#666;
+}
+.btn-warning{
+	background:#FAB955;
 }
 </style>
 </head>
 <body>
 <div layout:fragment="content">
-   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Big Title</h2>
-                <div class="module-subtitle font-serif">Small Title</div>
-              </div>
-            </div>
-          </div>
-        </section>
-   <h2>견적요청서 작성이 완료되었습니다.
-   		새로운 제안서가 등록되면 문자나 이메일로 알려드릴게요.</h2>
-      <div id=estfrm>
-<h3>견적요청서</h3>
-<hr>
-<!-- 선택폼 -->
-  <form>
-    <label for="title" id="title">어떤 행사를 계획중이신가요?</label>
-    <input type="text" id="eventType" name="eventType" th:value="${est.eventType}" readonly>
-        <label for="title" id="title" >행사 규모는 어느정도이신가요?</label>
-    <input type="text" id="pats" name="pats" th:value="${est.pats}" readonly>
-        <label for="title" id="title">행사 예정 장소는 어디인가요?</label>
-    <input type="text" id="expectedPl" name="expectedPl" th:value="${est.expectedPl}" readonly>
-        <label for="title" id="title">행사 날짜를 선택해주세요.</label>
-    <input type="text" id="eventDt" name="eventDt" th:value="${est.eventDt}" readonly>
-        <label for="title" id="title">행사 시작시간은 언제인가요?</label>
-    <input type="text" id="eventTime" name="eventTime" th:value="${est.eventTime}" readonly>
-        <label for="title" id="title">행사 예상 소요시간을 선택해주세요.</label>
-    <input type="text" id="expectedDuration" name="expectedDuration" th:value="${est.expectedDuration}" readonly>
-        <label for="title" id="title">행사 예정지역을 선택해주세요.</label>
-    <input type="text" id="expectedLcal" name="expectedLcal" th:value="${est.expectedLcal}" readonly>
-        <label for="title" id="title">행사 관련 희망사항을 알려주세요.</label>
-    <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
-  </form>
-  <button onclick="location.href='/'">홈으로</button>
-  <button onclick="location.href='/prtfl/mcList'">사회자 보러가기</button>
-  <button onclick="location.href='/jobList'">구인구직 보러가기</button>
-</div>
+	<section class="home-section home-full-height bg-dark" id="home"
+		data-background="/assets/images/estiDone.jpg"
+		style="height: 937px; background-image: url(&quot;/assets/images/estiDone.jpg&quot;);">
+		<div class="titan-caption">
+      		<div id=estfrm>
+				<!-- 선택폼 -->
+				  <form>
+				    <label>행사 유형</label>
+				    <input type="text" id="eventType" name="eventType" th:value="${est.eventType}" readonly>
+				        <label>행사 규모</label>
+				    <input type="text" id="pats" name="pats" th:value="${est.pats}" readonly>
+				        <label>예정 장소</label>
+				    <input type="text" id="expectedPl" name="expectedPl" th:value="${est.expectedPl}" readonly>
+				        <label>날짜</label>
+				    <input type="text" id="eventDt" name="eventDt" th:value="${est.eventDt}" readonly>
+				        <label>오전 / 오후</label>
+				    <input type="text" id="eventTime" name="eventTime" th:value="${est.eventTime}" readonly>
+				        <label>예상 소요시간</label>
+				    <input type="text" id="expectedDuration" name="expectedDuration" th:value="${est.expectedDuration}" readonly>
+				        <label>예정지역</label>
+				    <input type="text" id="expectedLcal" name="expectedLcal" th:value="${est.expectedLcal}" readonly>
+				        <label>희망사항</label>
+				    <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
+				  </form>
+				  <button onclick="location.href='/'" class="btn btn-warning btn-round"><b>MAIN</b></button>
+				  <button onclick="location.href='/prtfl/mcList'" class="btn btn-default btn-round">사회자 보러가기</button>
+				  <button onclick="location.href='/jobList'" class="btn btn-default btn-round">구인구직 보러가기</button>
+			</div>
+		</div>
+	</section>
 </div><!-- end of layout:fragment -->
 </body>
 </html>

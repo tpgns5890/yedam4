@@ -5,7 +5,7 @@
 <head>
 	<style>
 		#container {
-			width: 65%;
+			width: 70%;
 			margin: 0 auto;
 		}
 
@@ -101,7 +101,14 @@
 			border: 0.2px solid black;
 			border-radius: 5px;
 		}
-
+		
+		.btn-warning {
+		    color: #333;
+		    font-weight:700;
+		    background-color: #FAB955;
+		    border-color: #eea236;
+		}
+		
 		#modal .modal_content {
 			width: 350px;
 			min-height: 200px;
@@ -166,7 +173,7 @@
 						
 						<label for="inputEmail">이메일주소</label>
 						<input type="email" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
-						<button type='button' id="sendEmail"><b>인증번호전송</b></button>
+						<button type='button' id="sendEmail" class="btn btn-default btn-round"><b>인증번호전송</b></button>
 						<br> <span class="mail_input_box_warn"></span>
 						<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
 						<div>
@@ -199,15 +206,15 @@
 					</div>
 					<label for="inputQna">자격증명</label><input type="text" id="inputQna"><br>
 					<label for="inputQno">자격증발급번호</label><input type="text" id="inputQno">
-					<button type='button' id="qPlus"><b>추가</b></button>
+					<button type='button' class="btn btn-default btn-round" id="qPlus"><b>추가</b></button>
 					<br>
 					<br>
 					<ul id="qList">
 					</ul>
 				</div>
 				<div id="submitArea">
-					<button type='reset'><b>초기화</b></button>
-					<button type='button' id="normalSignIn"><b>회원가입</b></button>
+					<button type='reset' class="btn btn-g btn-round btn-lg"><b>초기화</b></button>
+					<button type='button' id="normalSignIn" class="btn btn-warning btn-round btn-lg"><b>회원가입</b></button>
 				</div>
 			</div>
 		</div>
