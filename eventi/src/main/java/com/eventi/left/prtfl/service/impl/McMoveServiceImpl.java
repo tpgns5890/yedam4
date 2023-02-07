@@ -58,6 +58,10 @@ public class McMoveServiceImpl implements McMoveService{
 	public String getSeq() {
 		return mcMoveMapper.getSeq();
 	}
-	
-	
+
+	//동영상 삭제
+	@Override
+	public int moveDelete(McMoveVO mcMoveVO) {
+		return mcMoveMapper.moveDelete(mcMoveVO);
+	}
 }

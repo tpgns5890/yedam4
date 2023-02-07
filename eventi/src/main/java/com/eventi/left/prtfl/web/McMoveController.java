@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eventi.left.common.PagingVO;
+import com.eventi.left.common.SessionUtil;
 import com.eventi.left.files.service.FilesService;
 import com.eventi.left.files.service.FilesVO;
+import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.prtfl.service.McMoveService;
 import com.eventi.left.prtfl.service.McMoveVO;
 
@@ -50,5 +52,16 @@ public class McMoveController {
 	public String moveInsert(McMoveVO mcMoveVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		mcMoveService.moveInsert(mcMoveVO, filesVO, uploadFile);
 		return "redirect:/move/moveList?userId=" + mcMoveVO.getUserId();
+	}
+	
+	//동영상 삭제
+	@GetMapping("/moveDelete")
+	public String moveDelete(McMoveVO mcMoveVO, FilesVO filesVO) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		
+		String targetId = mcMoveVO.getMoveNo();
+		filesService.deleteFile(targetId);
+		mcMoveService.moveDelete(mcMoveVO);
+		return "redirect:/move/moveList?userId=" + user.getUserId();
 	}
 }

@@ -29,4 +29,7 @@ public interface McPrtflMapper {
 	
 	//사회자 수정
 	public int mcUpdate(McPrtflVO mcPrtlVO);
+	
+	//사회자 삭제
+	public int mcDelete(McPrtflVO mcPrtlVO);
 }

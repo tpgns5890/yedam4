@@ -104,4 +104,10 @@ public class McPrtflServiceImpl implements McPrtflService{
 	public int checkMc(McPrtflVO mcPrtflVO) {
 		return mcPrtflMapper.checkMc(mcPrtflVO);
 	}
+	
+	//사회자 삭제
+	@Override
+	public int mcDelete(McPrtflVO mcPrtlVO) {
+		return mcPrtflMapper.mcDelete(mcPrtlVO);
+	}
 }

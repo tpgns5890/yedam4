@@ -22,7 +22,9 @@
       
    <div class="container right">    
    <!-- 포트폴리오 -->
+   <th:block sec:authorize="hasAnyRole('MC')">
    <button type="button" class="find-trigger btn-15" th:onclick="checkPrtfl()">나의 포트폴리오</button>
+   </th:block>
    
    <!-- 정렬순 -->
    <select id="order" name="order">
@@ -174,10 +176,10 @@
 						}
 					} else {
 						location.href='/prtfl/mcSelect?userId=' + userId;
-						}
+					}
 				},
 				fail : function(result) {
-					alert('필수항목을 입력해주세요')
+					console.log(result)
 				}
 			})
 		}

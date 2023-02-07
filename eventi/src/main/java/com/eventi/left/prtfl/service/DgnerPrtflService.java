@@ -15,6 +15,9 @@ public interface DgnerPrtflService {
 	//디자이너별 디자인 리스트
 	public List<DesignVO> desginList(DesignVO designVO, PagingVO paging);
 	
+	//디자이너 등록 여부
+	public int checkDgner(DgnerPrtflVO dgnerPrtflVO);
+	
 	//디자이너 포트폴리오 입력
 	public int dgnerInsert(DgnerPrtflVO dgnerPrtflVO, FilesVO filesVO, MultipartFile[] uploadFile);
 }

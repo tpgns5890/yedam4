@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.eventi.left.common.PagingVO;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.service.FilesVO;
@@ -21,7 +22,11 @@ public class BusiPrtflServiceImpl implements BusiPrtflService{
 	
 	//전체조회
 	@Override
-	public List<BusiPrtflVO> busiList(BusiPrtflVO busiPrtflVO) {
+	public List<BusiPrtflVO> busiList(BusiPrtflVO busiPrtflVO, PagingVO paging) {
+		paging.setTotalRecord(busiPrtflMapper.count(busiPrtflVO));
+		paging.setPageUnit(6);
+		busiPrtflVO.setFirst(paging.getFirst());
+		busiPrtflVO.setLast(paging.getLast());
 		return busiPrtflMapper.busiList(busiPrtflVO);
 	}
 	
@@ -48,5 +53,11 @@ public class BusiPrtflServiceImpl implements BusiPrtflService{
 		}
 		
 		return r;
+	}
+	
+	//업체 등록여부 확인
+	@Override
+	public int checkBusi(BusiPrtflVO busiPrtflVO) {
+		return busiPrtflMapper.checkBusi(busiPrtflVO);
 	}
 }

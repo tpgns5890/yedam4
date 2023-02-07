@@ -38,4 +38,10 @@ public class ChattingsController {
 	public String chatInsert(@RequestBody List<ChattingsVO> list) {
 		return chattingsService.chatRoomInsert(list);
 	}
+	
+	//test
+	@GetMapping("/chatTest")
+	public String chat() {
+		return "content/chatting/messageTest";
+	}
 }

@@ -20,6 +20,10 @@
       </div>
    </section>
    
+   <th:block sec:authorize="hasAnyRole('BUSI')">
+   <button type="button" class="find-trigger btn-15" th:onclick="checkPrtfl()">나의 포트폴리오</button>
+   </th:block>
+   
     <table>
       <thead>
          <tr>
@@ -40,6 +44,47 @@
          </tr>
       </tbody>
    </table>
+   
+   	<!-- 페이징 처리 -->
+	<div class="row mt-5">
+        <div class="col text-center">
+          <div class="block-27">
+             <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+          </div>
+        </div>
+      </div>
+   
+   <script>
+	//나의 포트폴리오 확인
+ 	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");	
+ 
+	function checkPrtfl(){
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		$.ajax({
+			url : "/prtfl/checkBusi",
+			method : 'post',
+			contentType : 'application/x-www-form-urlencoded',
+			data : {userId:userId},
+			beforeSend : function(xhr)
+           {
+				xhr.setRequestHeader(header, token);
+           },
+			success : function(data) {
+				if(data<1){
+					if(confirm('등록된 포트폴리오가 없습니다. 등록하시겠습니까?')){
+						location.href='/prtfl/busiInsert';
+					}
+				} else {
+					location.href='/prtfl/busiSelect?userId=' + userId;
+				}
+			},
+			fail : function(result) {
+				console.log(result)
+			}
+		})
+	}
+   </script>
 </div>
 
 </html>

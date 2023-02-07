@@ -35,4 +35,10 @@
 		INSERT INTO MCMOVE
 		VALUES(#{moveNo}, #{userId}, #{moveTtl})
 	</insert>
+	
+	<!-- 동영상 삭제 -->
+	<delete id="moveDelete">
+		DELETE FROM MCMOVE
+		WHERE MOVE_NO = #{moveNo}
+	</delete>
 </mapper>

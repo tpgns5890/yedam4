@@ -277,7 +277,7 @@
 		</th:block>
 		<th:block th:if="${session.member.userId} == ${mcSelect.userId}">
 		   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
-		   <button type="button" class="find-trigger btn-1 btnSize" th:onclick="">글 삭제하기</button>
+		   <button type="button" class="find-trigger btn-1 btnSize" th:attr="onclick=|deleteCheck('${mcSelect.userId}')|">글 삭제하기</button>
    		</th:block>
 		
 		<hr>
@@ -500,7 +500,7 @@
 		
 		//비디오 리스트
 		function makeVideo(video){
-			let tag = `<video class="videoSize" src="|/fileView/${video.sevNm}|" controls></video>`
+			let tag = `<video class="videoSize" src="/fileView/${video.move}" controls></video>`
 			        
 			 return tag;
 		}
@@ -1078,6 +1078,14 @@
          </div>`
 		  
         return tag;
+	   }
+	   
+	   function deleteCheck(userId) {
+		   if(!confirm('정말 삭제하시겠습니까?')){
+			   return false;
+		   } else {
+			   location.href='/prtfl/mcDelete?userId='+userId;
+		   }
 	   }
    </script>
 </div>

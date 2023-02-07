@@ -114,7 +114,7 @@
 															<button class="nav-link active" id="Open-tab"
 																data-bs-toggle="tab" data-bs-target="#Open"
 																type="button" role="tab" aria-controls="Open"
-																aria-selected="true">Open</button>
+																aria-selected="true">Chatting Room</button>
 														</li>
 													</ul>
 												</div>
@@ -152,7 +152,6 @@
 															<div class="d-flex align-items-center">
 																<div class="flex-grow-1 ms-3">
 																	<h3 id="toName">Mehedi Hasan</h3>
-																	<p>front end developer</p>
 																</div>
 															</div>
 														</div>
@@ -223,22 +222,42 @@
 	//채팅버튼을 눌렀을 때
 	$(".chat").on("click", function () {
 		$(".chat").toggleClass("active");
+		let toId = 'admin';
 		
-		
-		function makeList(r){
-			let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
-							<div class="flex-grow-1 ms-3">
-								<h3 id=${r.cid}>${r.toId}</h3>
-								<p>front end developer</p>
-							</div>
-						</a>`;
-						
-			return list;
+		//채팅방 구독 생성
+		function createChatRoom() {
+			console.log("1 채팅방 생성");
+			let chatroomDataList = new Array();
+			let chatroomData1 = {
+					toId : toId,
+					fromId : fromId
+			};
+			chatroomDataList.push(chatroomData1);
+			let chatroomData2 = {
+					toId : fromId,
+					fromId : toId
+			};
+			chatroomDataList.push(chatroomData2);
+			
+			console.log(JSON.stringify(chatroomDataList));
+			
+			$.ajax({
+	   			url : '/chatInsert',
+	   			method : 'post',
+	   			data : JSON.stringify(chatroomDataList),
+	   			contentType : "application/json; charset=UTF-8",
+	   			beforeSend : function(xhr)
+	            {  
+					xhr.setRequestHeader(header, token);
+	            }
+	   		}).then(res => {
+	   			console.log("2 채팅방 생성 번호: " + cId);
+	   			cId = res;
+	   			chattingList()
+	   		})
 		}
-
-		//채팅화면이 나타난다.
-		if ($(".chat").hasClass("active")) {
-				
+		
+		function chattingList(){
 			$.ajax({
 				url : '/chatSelect',
 				method : 'post',
@@ -249,16 +268,66 @@
 						xhr.setRequestHeader(header, token);
 			         }
 		   		}).then(res => {
-		   			if(res.length >= 1){
 		   				$(".chat-list").empty();
 		   				for(r of res){
 		   					console.log('r' + r);
 		   					$(".chat-list").append(makeList(r));
-		   				}
 		   			}
 		   		})
-		   		
-			  $(".chat-popup").show();
+	   	}
+		
+		function makeList(r){
+			let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+							<div class="flex-grow-1 ms-3">
+								<h3 id=${r.cid}>${r.toId}</h3>
+							</div>
+						</a>`;
+						
+			return list;
+		}
+
+		//채팅화면이 나타난다.
+		if ($(".chat").hasClass("active")) {
+			if(fromId != 'admin'){
+				$.ajax({
+					url : '/checkChat',
+					method : 'post',
+		   			data : JSON.stringify({toId:toId, fromId:fromId}),
+		   			contentType : "application/json; charset=UTF-8",
+		   			beforeSend : function(xhr)
+		            {   
+						xhr.setRequestHeader(header, token);
+		            }
+		   		}).then(res => {
+		   			if(res != ''){
+		   				console.log('res.cId:', res.cid);
+		   				chattingList(res.cid);
+		   			} else {
+		   				createChatRoom();
+		   			}
+		   		})
+			} else {
+				$.ajax({
+					url : '/chatSelect',
+					method : 'post',
+			   		data : JSON.stringify({fromId:fromId}),
+			   		contentType : "application/json; charset=UTF-8",
+			   		beforeSend : function(xhr)
+				         {   
+							xhr.setRequestHeader(header, token);
+				         }
+			   		}).then(res => {
+			   			if(res.length >= 1){
+			   				$(".chat-list").empty();
+			   				for(r of res){
+			   					console.log('r' + r);
+			   					$(".chat-list").append(makeList(r));
+			   				}
+			   			}
+			   		})
+			}
+			
+			$(".chat-popup").show();
 		}
 	
 		//채팅화면이 사라진다.

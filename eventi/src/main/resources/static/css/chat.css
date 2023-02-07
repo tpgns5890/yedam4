@@ -61,20 +61,13 @@
 }
 
 .chat-popup{
-	/* display: none;
-	position: fixed;
-	top: 60px;
-	left: 700px;
-	width: 700px;
-	height: 500px; */
 	z-index: 9000;
 	background: white;
 	position:fixed;
-	bottom:50px;
+	bottom:10px;
 	right:110px;
 	z-index:9000;
 	display:none;
-	
 	background: #7F7FD5;
 	background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
 	background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
@@ -86,16 +79,15 @@ message-area
 
 
 .message-area {
-  height: 600px;
+  height: 100%;
   overflow: hidden;
-  padding: 30px 0;
+  padding: 15px 0;
   width: 700px;
 }
 
 .chat-area {
   position: relative;
   width: 100%;
-  background-color: #fff;
   border-radius: 0.3rem;
   height: 90vh;
   overflow: hidden;
@@ -105,22 +97,32 @@ message-area
 
 .chatlist {
   outline: 0;
-  height: 400px;
+  height: 100%;
   overflow: hidden;
   width: 200px;
   float: left;
-  padding: 15px;
+  padding: 0 5px;
 }
 
 .chat-area .modal-content {
   border: none;
-  border-radius: 0;
+  border-radius: 5px;
   outline: 0;
   height: 100%;
+  overflow: auto;
+}
+
+.modal-content {
+	box-shadow: 4px 5px 10px 0px rgb(0 0 0 / 50%);
+	background-color: rgb(255 255 255 / 79%);;
 }
 
 .chat-area .modal-dialog-scrollable {
   height: 100% !important;
+}
+
+.modal-dialog-scrollable {
+	padding: 5px;
 }
 
 .chatbox {
@@ -128,7 +130,6 @@ message-area
   width: 500px;
   overflow: hidden;
   height: 100%;
-  border-left: 1px solid #ccc;
 }
 
 .chatbox .modal-dialog,
@@ -209,13 +210,18 @@ a.add img {
   isolation: isolate;
 }
 
+.chat-list{
+	border: 1px solid rgb(200, 200, 200);
+	border-radius: 5px;
+}
+
 .chat-list h3 {
   color: #222;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
   text-transform: capitalize;
-  margin-bottom: 0;
+  margin: 5px;
 }
 
 .chat-list p {
@@ -267,6 +273,7 @@ a.add img {
 .msg-head {
   padding: 15px;
   border-bottom: 1px solid #ccc;
+  margin: 0 10px;
 }
 
 .moreoption {
@@ -446,7 +453,6 @@ li.repaly .time {
 
 .send-box {
   padding: 15px;
-  border-top: 1px solid #ccc;
 }
 
 .send-box form {

@@ -16,4 +16,7 @@ public class BusiPrtflVO {
 	private String img;       //대표이미지
 	private String busiArea;  //행사가능지역
 	private String busiStyle; //행사 진행 스타일
+	
+	Integer first = 1;        //첫페이지
+	Integer last = 6;         //마지막페이지
 }

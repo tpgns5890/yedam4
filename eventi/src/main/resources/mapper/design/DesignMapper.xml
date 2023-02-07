@@ -169,7 +169,7 @@
 	
 	<insert id="insert">
 		<selectKey keyProperty="dgnNo" resultType="String" order="BEFORE">
-			SELECT 'DE'||(MAX(TO_NUMBER(SUBSTR(DGN_NO,3)))+1) dgnNo
+			SELECT NVL('DE'||(MAX(TO_NUMBER(SUBSTR(DGN_NO,3)))+1),1) dgnNo
 			FROM DESIGN
 		</selectKey>
 		INSERT INTO DESIGN(DGN_NO,
