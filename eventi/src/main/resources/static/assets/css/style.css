@@ -2,6 +2,13 @@
 	Common
 --------------------------------------------------------------*/
 
+.pagination .active,
+.pagination .active .page-link{
+background-color:  #FFDE59 !important;
+border : 0px;
+color: black;
+font-weight: bolder;
+}
 
 
 html {
@@ -684,8 +691,8 @@ a,
 }
 
 .btn.btn-g {
-  background: #e5e5e5;
-  color: #111;
+   background: #e5e5e5; 
+    color: #111;
 }
 
 .btn.btn-g:hover,
@@ -2526,10 +2533,6 @@ Google map
 .shop-item:hover .shop-item-image:after {
    background: rgba(255, 255, 255, 0.9); 
    width:100%;
-/*   margin-left:18px; */
-/*   width: 402px; */
-/*   background: #f2f7fc; */
-  border-radius: 3%;
 }
 
 .shop-item:hover .shop-item-detail {

@@ -61,9 +61,16 @@ ul {
 }
 
 #likeList {
-	margin: 30px auto 100px 400px;
+	margin: 0px auto;
+	width: 1270px;
 }
 
+#likeList .shop-item {
+	position: relative;
+	text-align: center;
+	margin: 0 0 50px;
+	top: -80px;
+}
 /* 페이징 */
 .block-27 {
 	width: 100%;
@@ -86,7 +93,7 @@ ul {
 }
 
 #table thead th {
-	background-color: #cfe7fb;
+	background-color: #FAB955;
 	padding: 7px 0px;
 	text-align: center;
 	font-weight: border;
@@ -139,6 +146,7 @@ input[type="text"] {
 	margin: px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
+	height: 35px;
 }
 
 .inputBtn, .delBtn, #searchBtn {

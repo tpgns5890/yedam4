@@ -13,7 +13,7 @@
 	margin-bottom: 40px;
 }
 .container {
-    width: 78%;
+    width: 1400px;
 }
 label {
 	font-weight:bold;
@@ -38,8 +38,8 @@ label {
 	
 	}
 .module-small {
-    padding: 20px 0;
     z-index: 1 ;
+    padding: 10px 0;
 }
 .col-sm-3 {
      width: 430px;
@@ -53,7 +53,7 @@ label {
     flex-direction: row;
     align-items: center;
     margin: 0 auto;
-    width: 70%;
+   width: 1300px;
 }
 #history{
 	 width: 180px;
@@ -66,8 +66,8 @@ label {
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-	
-	<div class="module-small">
+		
+		<div class="module-small">
 		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/gold_01.gif" style="background-image: url(&quot;/images/gold_01.gif&quot;);">
           <div class="container">
             <div class="row">
@@ -79,7 +79,7 @@ label {
         </section>
 		
 		 <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top: 18px; right: -1420px; width: 100px;  z-index: 1 ;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top: 18px; right: -1415px; width: 100px;  z-index: 1 ;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
@@ -131,8 +131,7 @@ label {
 					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none;">진행공모전 조회</button>
 	              </div>
 	           </div>
-	     </div>
-
+			</div>
           
 
 			<div class="container">
@@ -491,6 +490,7 @@ label {
 				function likeClick(e) {
 					$('input[name=page]').val(1);
 					$(e).toggleClass("active"); 
+					
 					likeSelect();
 				}
 
@@ -558,7 +558,7 @@ label {
 						}
 					
 					let p = ` 
-						<div class="col-sm-6 col-md-4 col-lg-4">
+						<div class="col-sm-6 col-md-4 col-lg-4" style="margin-top: 130px;">
 			                <div class="shop-item">
 		  					<div id="${contest.C_NO}" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:90px; z-index: 1;  right: -310px;"></div>
 			                  <div class="shop-item-image">${img}

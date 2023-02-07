@@ -21,6 +21,7 @@ import com.eventi.left.contest.service.ContestService;
 import com.eventi.left.contest.service.ContestVO;
 import com.eventi.left.contest.service.WinnerVO;
 import com.eventi.left.design.mapper.DesignMapper;
+import com.eventi.left.design.service.DesignVO;
 import com.eventi.left.files.FileDto;
 import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
@@ -206,7 +207,10 @@ public class ContestServiceImpl implements ContestService {
 		ContestVO contest = mapper.getContest(vo.getcNo());
 
 		// 응모한 디자인이 있으면 삭제불가.
-		if (dMapper.entryDesign(vo.getcNo()) > 0) {
+		DesignVO desing = new DesignVO();
+		desing.setcNo(vo.getcNo());
+		
+		if (dMapper.entryDesign(desing) > 0) {
 			return 0;
 		}
 		LikesVO like = new LikesVO();

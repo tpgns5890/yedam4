@@ -30,10 +30,10 @@
 						<option value="D5" th:selected="${catagory eq 'D5'}">기타</option>
                 	</select>
                 	
-					디자인명<input type="text" name="name" value="">
+					<input type="text" name="name" value="" placeholder="제목">
 					<input type="hidden" name="page" value="1">
 					<input type="hidden" name="caregory" th:value="${catagory}">
-					<button type="submit">검색</button>
+					<button type="submit" class="btn btn-g btn-round">검색</button>
 			</form>		
 			
 			
@@ -193,9 +193,10 @@
 					$('#dgnerSelect').empty();
 					$('#modelSelect').empty();
 					
+					
 					let side = ` <div id="designId">
 								 <div class="radius">
-									<img class="radius_img" src="/images/profile.jpg">
+								 <img class="radius_img" src="/images/profile.jpg">
 								 </div>
 									<h3>${writer}</h3>
 									<div onclick="location.href='/contest/select?cNo=${cNo}'" style="cursor: pointer;">

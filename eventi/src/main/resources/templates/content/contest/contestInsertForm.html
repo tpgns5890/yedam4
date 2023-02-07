@@ -239,7 +239,7 @@ input[type=number]{
 					
 					}else if($('input[name="ttl"]').val() == "" || $('input[name="ttl"]').val() == null){
 						alert('제목을 입력해주세요.')
-					}else if(cntn == "<p>&nbsp;</p>"){
+					}else if(cntn == "<p>&nbsp;</p>" || cntn == null){
 						alert('요청사항을 입력해주세요.')
 					}else if($('input[name="dtCls"]').val() == null || $('input[name="dtCls"]').val() == ""){ 
 						alert('마감일을 입력해주세요.')

@@ -75,7 +75,8 @@ ul li.tag-item {
 
 /* 등록폼 버튼정렬 */
 .contestBtn {
-	width: 30%;
+	top: 150px;
+	width: 650px;
 	margin: 0 auto 0px;
 }
 
@@ -112,7 +113,7 @@ ul li.tag-item {
 
 .box {
 	padding: 40px 40px 40px 40px;
-	width: 60%;
+	width: 750px;
 	margin: 0px auto 70px;
 	border-radius: 20px;
 	background: #f2f7fc;
@@ -146,7 +147,7 @@ ul li.tag-item {
 
 
 .userBtn {
-	width: 30%;
+	width: 300px;
 	margin: 0px auto;
 }
 
