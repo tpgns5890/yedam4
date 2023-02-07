@@ -13,36 +13,32 @@
 		color : black;
 	}
 	
-	#check{
-		min-height : 3000px;
-	}
-	
 	.fileShow{
 			display : none !important;
+	}
+	
+	.fullSize{
+		margin-left: 250px;
+		min-height: 600px;
+	}
+	
+	.contentSize{
+		margin: 100px 20px;
 	}
 </style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
-
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">물품등록</h2>
-                <div class="module-subtitle font-serif">물품등록</div>
-              </div>
-            </div>
-          </div>
-        </section>		
+    <h2 hidden="hidden" class="module-title font-alt">물품등록</h2>
+  	
         
         <!-- 현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
-		
+		<div class="fullSize">
+		<div class="contentSize">
 		<form action="/rent/rentGdInsert" enctype="multipart/form-data" id="myrentGdfrm" name="myrentGdfrm" method="post">
 			<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-			<div id="check">
 			<input type="hidden" id="goodsNo" name="goodsNo" th:value="${nextNo}" readonly="readonly"><br />
 			<input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member != null ? session.member.userId :''}">
 			
@@ -97,10 +93,9 @@
 					<input type="submit" id="insert" value="등록" class="btn btn-primary">
 				</div>
 			</div>
-					
-			</div>
 		</form>
-		
+		</div>
+		</div>
 		<script>
 			//csrf설정
 			var token = $("meta[name='_csrf']").attr("content");

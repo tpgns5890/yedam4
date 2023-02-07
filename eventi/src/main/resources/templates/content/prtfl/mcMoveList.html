@@ -13,10 +13,6 @@
 		color : black;
 	}
 	
-	#check{
-		min-height : 1000px;
-	}
-	
 	.modal {
 		display: none;
 		position: fixed;
@@ -67,6 +63,15 @@
 	    text-align: center !important;
 	    margin:0 auto;
 	}
+	
+	.fullSize{
+		margin-left: 250px;
+		min-height: 600px;
+	}
+	
+	.contentSize{
+		margin: 100px 20px;
+	}
 </style>
 </head>
 <body>
@@ -85,7 +90,8 @@
     <!-- 현재페이지 myPageSide 적용 -->
 	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
-    <div id="check">
+    <div class="fullSize">
+    <div class="contentSize">
     <button class="btn btn-primary btn-round" type="button" id="videoUp">동영상 등록</button>
     <button class="btn btn-primary btn-round" type="button" id="deleteBtn">동영상 삭제</button> 
 	<input type="checkBox" value="삭제" class="delete" id="allDelete">
@@ -127,6 +133,7 @@
 				</form>
 			</div>
 		<div class="modal_layer"></div>
+	</div>
 	</div>
 	</div>
 					     	

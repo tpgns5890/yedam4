@@ -8,10 +8,16 @@
 <!-- csrf 설정 -->
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
+	p{
+		margin:  0;
+	}
+
 	.label {
 		color : black;
+		font-size: 14px;
+		padding: 0;
 	}
 	
 	#check{
@@ -55,6 +61,22 @@
 	  cursor: pointer;
 	  margin-left: 8px;
 	}
+	
+	.blueBtn{
+		background-color: transparent;
+		border: 1px solid rgba(2,126,251,1);
+		color: rgba(2,126,251,1);
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 70px;
+		height: 32px;
+		padding: 0;
+	}
+	
+	.blueBtn:hover {
+		background-color: rgba(2,126,251,1);
+		color: white;
+}
 		
 </style>
 </head>
@@ -71,6 +93,7 @@
      </div>
    </section>
    
+   <div class="container">
    <form action="/prtfl/busiInsert" method="POST" id="busiForm" name="busiForm" class="contactForm" enctype="multipart/form-data">
    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
    <div id="check">
@@ -99,14 +122,15 @@
 	<div class="col-md-6">
 		<div class="form-group">
 			<label class="label" for="tel">업체번호</label> 
-			<input type="text" class="form-control" name="tel" id="tel" th:value="${busi.busiNum}" readonly>
+			<input type="text" class="form-control" name="tel" id="tel" th:value="${busi.userPhone}" readonly>
 		</div>
 	</div><br/>
 	
 	<!-- option 지역 -->
 	<div class="col-md-12">
 		<div class="form-group">
-			<label class="label" for="busiArea">진행 가능 지역</label> 
+			<label class="label" for="busiArea">진행 가능 지역</label>  <input type="button" value="지역수정" class="blueBtn" th:onclick="|location.href='/myPage/userMypage'|">
+            <p><small>지역은 <span style="color: red;">마이페이지 수정</span>부분에서 변경할 수 있습니다.</small></p>
             <ul id="busiArea">
             	<li th:each="area : ${#strings.arraySplit(busi.busiArea, ',')}" class='tag-item'>[[${area}]]</li>
             </ul>
@@ -116,7 +140,8 @@
 	<!-- option 업체스타일 -->
 	<div class="col-md-12">
 		<div class="form-group">
-			<label class="label" for="busiStyle">업체 스타일</label> 
+			<label class="label" for="busiStyle">업체 스타일</label> <input type="button" value="스타일수정" class="blueBtn" th:onclick="|location.href='/myPage/userMypage'|">
+            <p><small>스타일은 <span style="color: red;">마이페이지 수정</span>부분에서 변경할 수 있습니다.</small></p>
             <ul id="busiStyle">
             	<li th:each="style : ${#strings.arraySplit(busi.busiStyle, ',')}" class='tag-item'>[[${style}]]</li>
             </ul>
@@ -137,6 +162,7 @@
 	</div>	
 	</div>
 	</form>
+	</div>
 	
 	<script>
 	//csrf 설정
