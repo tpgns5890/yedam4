@@ -122,9 +122,8 @@
 	<insert id="questionsInsert">
 		<selectKey keyProperty="qNo" resultType="String"
 			order="BEFORE">
-			SELECT 'QU'||(MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1) q_no
-			FROM
-			QUESTIONS
+			 SELECT 'QU'||NVL((MAX(TO_NUMBER(SUBSTR(Q_NO,3)))+1),1)q_no
+         FROM QUESTIONS
 		</selectKey>
 
 		INSERT INTO

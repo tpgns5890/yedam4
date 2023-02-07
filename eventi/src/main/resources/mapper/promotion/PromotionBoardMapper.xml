@@ -44,6 +44,26 @@
 		]]>
 	</select>
 	
+	<!-- 인기게시물 조회 -->
+	<select id="popularList" resultType="com.eventi.left.promotion.service.PromotionVO">
+		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO,
+		code_select(E_TYPE) E_TYPE, ENTRANCE, ACCOMMODATE, 
+		(SELECT SEV_NM 
+                  FROM FILES 
+                   WHERE TARGET_ID = PRO_NO
+                   AND ROWNUM=1) AS IMG, SEE, DT
+		 FROM (SELECT ROWNUM RN, A.* 
+		        FROM(SELECT * FROM PROMOTION_BOARD
+		<include refid="pSelect" />
+			 <if test="orderCol !=null and orderCol != ''">
+                ORDER BY ${orderCol} desc
+             </if>
+	<![CDATA[
+			   ) A WHERE ROWNUM <= #{last}) 
+	    WHERE RN >= #{first}
+		]]>
+	</select>
+	
 	<!-- 게시글 개수 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)

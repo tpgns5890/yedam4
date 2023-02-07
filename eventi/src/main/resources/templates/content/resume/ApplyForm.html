@@ -105,7 +105,7 @@
 
 					<div class="col-md-12">
 						<div class="form-group">
-							<input type="submit" id="insert" value="등록" class="btn btn-primary">
+							<input type="button" id="insert" value="등록" class="btn btn-primary">
 							<div class="submitting"></div>
 						</div>
 					</div>
@@ -122,6 +122,12 @@
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	
+    //글자스타일 -태그를 db에 저장해줌	
+	$('#insert').on('click', function insert() {
+		oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", []) 
+		let intro = document.getElementById("cntn").value //태그 생성 
+	})
+	
 		//submit 유효성검사
 		$('#insert').on('click', function () {
 			let check = $('input[type="checkbox"]').is(':checked');
@@ -134,12 +140,11 @@
 			}else if(check==false){
 				alert('유의사항을 확인하세요.');
 				return false;
-			}else if(!cntn){
+			}else if(cntn=='<p>&nbsp;</p>' || cntn ==''){
 				alert('자기소개서를 입력해주세요.');
 				return false;
 			} else {
-				return true;
-				
+				ApplyJob.submit();				
 			}
 		})
 
@@ -192,11 +197,7 @@ $(document).ready(function() {
 	    	$("#imgInp").val('');
 	    })
 	    
-	    //글자스타일 -태그를 db에 저장해줌	
-		$('#insert').on('click', function insert() {
-				 oEditors.getById["cntn"].exec("UPDATE_CONTENTS_FIELD", []) 
-				let intro = document.getElementById("cntn").value //태그 생성 
-		})
+
 	</script>
 </div>
 </html>
