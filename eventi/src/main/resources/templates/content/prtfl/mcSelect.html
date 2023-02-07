@@ -273,7 +273,7 @@
   		
   		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
 	  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize chattingUp">1:1대화</button>
-	  		<button type="button" class="find-trigger btn-1 btnSize">의뢰하기</button>
+	  		<button type="button" class="find-trigger btn-1 btnSize castingUp">의뢰하기</button>
 		</th:block>
 		<th:block th:if="${session.member.userId} == ${mcSelect.userId}">
 		   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>

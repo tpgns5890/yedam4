@@ -159,6 +159,7 @@ public class McPrtlController {
 	//사회자 삭제
 	@GetMapping("/mcDelete")
 	public String mcDelete(McPrtflVO mcPrtflVO) {
+		filesService.deleteFile(mcPrtflVO.getUserId());
 		mcPrtflService.mcDelete(mcPrtflVO);
 		return "redirect:/prtfl/mcList";
 	}
