@@ -1,3 +1,9 @@
+.modal h3 {
+	text-align: center;
+	font-weight: bold;
+	margin-bottom: 30px;
+}
+
 .img_modal_content {
 	background-color: #fefefe;
 	margin: 70px auto;
@@ -74,8 +80,39 @@
 	width: 400px;
 }
 
+.winner_modal_content {
+	width: 400px;
+	height: 280px;
+	padding-top: 40px;
+}
+
+#modelSelect {
+	margin: 0 auto;
+	width: 75%;
+	font-size: 18px;
+}
+
+.review_modal_content {
+	width: 400px;
+	height: 450px;
+}
+
+.review_modal_content lable, input {
+	margin-bottom: 10px;
+}
+
+#reviewBtn {
+    display: flex;
+    width: 45%;
+    margin: 10px auto;
+}
+#reviewCntn{
+	width: 100%;
+}
+
 .modal_content, .dank_modal_content, .pw_modal_content,
-	.rprt_modal_content, .pay_modal_content {
+	.rprt_modal_content, .pay_modal_content, .winner_modal_content,
+	.review_modal_content {
 	min-height: 200px;
 	background: #fff;
 	border: 0.5px solid #666;
@@ -86,8 +123,13 @@
 	/* 	둥글게,그림자 효과 */
 	border-radius: 3%;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
-
 }
+
+.starbox {
+	display: flex;
+	padding: 5px 0 0 0;
+}
+
 #rprtBox {
 	width: 90%;
 	margin: 0 auto;

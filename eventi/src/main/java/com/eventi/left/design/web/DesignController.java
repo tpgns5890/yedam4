@@ -88,19 +88,19 @@ public class DesignController {
 		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
 		service.insert(vo, filesVO, uploadFile);
 		// 기본 현수막 조회로 인해 카테고리 정보를 넘겨주어야 등록된 디자인을 확인가능.
-		rttr.addAttribute("category",vo.getCaregory());
+		rttr.addAttribute("caregory",vo.getCaregory());
 		
 		return "redirect:/design/designMypage";
 	}
 
 	 // 디자인응모리스트(마이페이지)
 	   @GetMapping("/designMypage")
-	   public String designMypage(Model model, DesignVO vo, PagingVO paging, String category) {
+	   public String designMypage(Model model, DesignVO vo, PagingVO paging, String caregory) {
 		   
 		   //등록된 카테고리를 담아서 마이페이지 이동.
 		   System.out.println("===================");
-		   System.out.println(vo.getCaregory());
-		   System.out.println("===================");
+		   System.out.println(caregory); if(caregory != null || caregory !="") {vo.setCaregory(caregory);} //등록한 디자인카테고리 vo세팅
+		   System.out.println("=================== " + vo.getCaregory());
 
 	      // 로그인 회원정보
 	      MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
@@ -113,7 +113,7 @@ public class DesignController {
 	      //등록한 공모전 있는경우
 	      }else {
 	         model.addAttribute("design", design);
-	         model.addAttribute("catagory", design.get(0).getCaregory());
+	         model.addAttribute("caregory", design.get(0).getCaregory());
 	      }
 	      
 	      model.addAttribute("paging", paging);
