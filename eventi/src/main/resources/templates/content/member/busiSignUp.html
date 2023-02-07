@@ -7,7 +7,7 @@
 <head>
 <style>
 #container {
-	width: 65%;
+	width: 70%;
 	margin: 0 auto;
 }
 
@@ -83,11 +83,17 @@
 }
 
 .chkArea {
-	width: 115px;
-	height: 200px;
-	overflow: auto;
-	border: 0.3px solid black;
-	line-height: 1.5em;
+	width: 180px;
+    height: 300px;
+    overflow: auto;
+    padding: 5px;
+    line-height: 1.5em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: stretch;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.6);
 }
 
 .busiTypeR input {
@@ -180,7 +186,7 @@
 						
 						<label for="userEmail" class="formLabel">이메일주소</label>
 						<input type="email" class="formInput" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
-						<button type='button' id="sendEmail"><b>인증번호전송</b></button><br>
+						<button type='button' id="sendEmail" class="btn btn-default btn-round"><b>인증번호전송</b></button><br>
 						<span class="mail_input_box_warn"></span>
 						<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
 						<div>
@@ -209,7 +215,7 @@
 							name="Title" class="formInput" id="busiTitle"><br>
 						<label for="BNo" class="formLabel">사업자등록번호</label><input
 							type="text" name="Num" class="formInput" id="inputBno" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxLength="10" placeholder=" - 제외 숫자 10자리(ex: 1011012345)">
-						<button type='button' id="busiChk"><b>사업자인증</b></button>
+						<button type='button' id="busiChk" class="btn btn-default btn-round"><b>사업자인증</b></button>
 						<br>
 						<div>
 							<font id="busi_feedback" size="2" value="1"></font>
@@ -240,8 +246,8 @@
 					</div>
 				</form>
 			<div id="submitArea">
-				<button type='reset'><b>초기화</b></button>
-				<button type='button' id="BusiSignUp"><b>회원가입</b></button>
+				<button type='reset' class="btn btn-g btn-round btn-lg"><b>초기화</b></button>
+				<button type='button' id="busiSignUp" class="btn btn-warning btn-round btn-lg"><b>회원가입</b></button>
 			</div>
 			</div>
 		</div>
@@ -391,6 +397,7 @@
 
 			//유효성 최종 검사 후 회원가입 처리
 			$("#busiSignUp").click(function() {
+				console.log('hey');
 				var idCheck = $("#id_feedback").attr('value');
 				var pwCheck = $("#pw_feedback").attr('value');
 				var pwcCheck = $("#pwc_feedback").attr('value');
