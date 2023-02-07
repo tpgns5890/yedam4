@@ -1,3 +1,4 @@
+
 .contestBtn_writer {
    position: absolute;
    display: flex;
@@ -11,6 +12,7 @@
    width: 300px;
    right: 120px;
    top: 450px;
+
 }
 button {
 	margin: 15px;

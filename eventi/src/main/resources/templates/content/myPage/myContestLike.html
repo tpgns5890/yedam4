@@ -17,20 +17,23 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
-		<div>
-			<!-- 공모전 리스트 -->
-			<div class="row multi-columns-row" id="likeList"> </div>
-			<!-- end -->
-	
-			<!-- //페이징 경로 :: 문자 -->
-			<div class="row mt-5" id="paging">
-				<div class="col text-center">
-					<div class="block-27" id="returnPaging"> </div>
+		<div class="contest">
+			<div id="contestDiv">
+			
+				<!-- 공모전 리스트 -->
+				<div class="row multi-columns-row" id="likeList"> </div>
+				<!-- end -->
+		
+				<!-- //페이징 경로 :: 문자 -->
+				<div class="row mt-5" id="paging">
+					<div class="col text-center">
+						<div class="block-27" id="returnPaging"> </div>
+					</div>
 				</div>
+						
+				<!-- 페이징 -->
+				<input type="hidden" name="page" value="1">
 			</div>
-					
-			<!-- 페이징 -->
-			<input type="hidden" name="page" value="1">
 		</div>
 	
 

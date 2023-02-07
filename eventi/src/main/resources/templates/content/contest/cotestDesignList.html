@@ -143,7 +143,6 @@ form div{
 		
 		//등록된 우승자가 없을경우만 우승자등록.
 		function check(e){
-			
 			$.ajax({
 		           url:"/winner/check",
 		           method: 'post',
@@ -302,7 +301,7 @@ form div{
 		// 전체 파일리스트+ 정보출력.
 		$('#contestDList').on("click", ".design" , function(e){
 			let dNo = $(this).attr("id");
-	
+			//let userId = $(this).next();
 			
 			$.ajax({
 				url: '/design/ajaxSelect',
@@ -317,6 +316,8 @@ form div{
 				let user = res.userId;
 				let title = res.name;
 				let cntn = res.cntn;
+				let img = res.mainimg;
+				console.log("img : " + img)
 				
 				//모달내용을 지운뒤 붙여넣기.
 				$('#dgnerSelect').empty();
@@ -346,7 +347,7 @@ form div{
 		
 		//모달창 :디자인 응모작품 생성.
 		function makeDesign(fileName,dNo,category){
-			console.log(fileName);
+			//console.log(fileName);
 			let design;
 			//배너
 			if(category =='D2'){

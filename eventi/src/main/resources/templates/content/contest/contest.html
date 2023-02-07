@@ -33,9 +33,11 @@ h4 {
     box-shadow: 2px 10px 9px 5px rgb(0 0 0 / 4%);
     border-radius: 20px;
     padding-top: 20px;
+    height: 610px;
 }
 #showBox{
 	padding: 5px 50px;
+	 height: 610px;
 }
 .btn.btn-g {
     margin: 0px 5px;
@@ -61,10 +63,10 @@ h4 {
 					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 						<!-- 이미지 출력 -->
 						<th:block th:if="${contest.img} != null">
-							<img th:src="|/fileView/${contest.img}|" style="width: 500px; height: 600px; margin:0px; border-radius: 5%;">
+							<img th:src="|/fileView/${contest.img}|" style="width: 500px; height: 530px; margin:0px; border-radius: 5%;">
 						</th:block>					
 						<th:block th:if="${contest.img} == null">
-							<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 500px; border-radius: 5%;">
+							<img src="/images/public.jpg" class=" icon-lock" style="width: 500px; height: 530px; border-radius: 5%;">
 						</th:block>					
 					</div>
 					<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
@@ -105,7 +107,7 @@ h4 {
 				
 						<!-- 비회원 하트버튼 -->
 						<th:block sec:authorize="!isAuthenticated()">
-								<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position:relative; top:-70px; right: -65px;">
+								<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position: absolute; top: 148px; right: 318px;">
 								</div>
 						</th:block>
 	
@@ -114,7 +116,7 @@ h4 {
 							
 							<th:block th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
 								<!-- 관심공모전인경우 -->
-								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position:relative; top:-70px; right: -65px;">
+								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position: absolute; top: 148px; right: 318px">
 								</div>
 							</th:block>
 							
@@ -148,7 +150,7 @@ h4 {
 
 						<!-- 비회원 -->
 						<th:block sec:authorize="!isAuthenticated()">
-							<div class="contestBtn">
+							<div class="contestBtn_user">
 								<button type="button" onclick="clip(); return false;" class="w-btn w-btn-gra1">링크복사</button>
 								<button type="button" th:onclick="|location.href='@{/loginPage}'|" class="w-btn w-btn-gra1" >응모하기</button>
 							</div>
@@ -156,14 +158,14 @@ h4 {
 
 						<!-- 공모전 작성자 제외 일반회원 -->
 						<th:block sec:authorize="isAuthenticated()">
-							<div class="contestBtn" th:if="|${session.member.getUserId()}| != ${contest.writer} ">
+							<div class="contestBtn_user" th:if="|${session.member.getUserId()}| != ${contest.writer} ">
 									<button type="button" onclick="clip(); return false;" class="w-btn w-btn-gra1">링크복사</button>
 									<!-- 공모게시글에 대한 응모하기 버튼 -->
 									<button type="button" th:onclick="|location.href='@{/design/designInsertForm(cNo=${contest.cNo})}'|" class="w-btn w-btn-gra1" >응모하기</button> 
 							</div>
 
 							<!-- 공모전 작성자만 -->
-							<div class="contestBtn" th:if="|${session.member.getUserId()}| == ${contest.writer} or |${session.member.getUserId()}| eq 'admin' " >
+							<div class="contestBtn_writer" th:if="|${session.member.getUserId()}| == ${contest.writer} or |${session.member.getUserId()}| eq 'admin' " >
 									<button id="updateDate" type="button" class="w-btn w-btn-gra1">마감연장</button>
 									<button id="contestUpdate" type="button" class="w-btn w-btn-gra1">수정</button>
 									<button id="delBtn" type="button" class="w-btn w-btn-gra1">삭제</button>
@@ -432,6 +434,8 @@ h4 {
 			}).then(res => {
 				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
+				$("#designBox").empty();
+				
 				$("#cotestCntn").append(res.cntn);
 			})
 			
@@ -440,7 +444,7 @@ h4 {
 		//문의사항 관련 생성 함수 --------------------------------------------------------
 		//문의사항 박스 생성
 		function questionBox(){
-			let box = `	 <label>제목</label><input type="text" name="Ttl" required="required" ><br>
+			let box = `	<input type="text" name="Ttl" required="required" ><br>
 						<textarea name="cntn" class="form-control" id="Cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea>
 						<input type="checkbox" id="secretYn" name="secretYn">비밀글 
 						<button type="button" id="insertBtn" class="btn btn-g btn-round btn-lg">등록</button>
