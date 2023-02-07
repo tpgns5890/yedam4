@@ -67,7 +67,8 @@
 		SELECT m.user_id, m.one_intro, m.carr_year,
        		   m.casting_price, m.mc_area mcAreaCode, codeArr_select(m.mc_area) mc_area, m.mc_type mcTypeCode, codeArr_select(m.mc_type) mc_type, 
        		   m.prog_style mcProgStyleCode, codeArr_select(m.prog_style) prog_style, m.self_intro, m.career, m.inq, m.dt,
-       		   m.user_name, (select count(*) from likes where target_no = m.user_id) AS cnt, F.SEV_NM img
+       		   m.user_name, (select count(*) from likes where target_no = m.user_id) AS cnt, F.SEV_NM img,
+       		   (SELECT RPRT FROM MEMBERS WHERE USER_ID = #{userId}) RPRT
           FROM MC_PRTFL M, FILES F
 		 WHERE M.USER_ID = F.TARGET_ID(+)
 		   AND M.IMG=F.F_NM(+)

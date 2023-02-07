@@ -69,7 +69,7 @@
 	z-index:9000;
 	display:none;
 	background: #7F7FD5;
-	background-image: linear-gradient(to right, #f9d423 0%, #ff4e50 100%);
+	background-image: linear-gradient(134deg, #F9D976 0%, #F39F86 80%);
 }
 
 /* *******************************
@@ -209,18 +209,18 @@ a.add img {
   isolation: isolate;
 }
 
-.chat-list{
-	border: 1px solid rgb(200, 200, 200);
-	border-radius: 5px;
-}
-
 .chat-list h3 {
   color: #222;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
-  text-transform: capitalize;
-  margin: 5px;
+  border: 1px solid rgb(200, 200, 200);
+  width: 150px;
+  height: 30px;
+  margin: 0;
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .chat-list p {
