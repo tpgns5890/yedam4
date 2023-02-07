@@ -19,7 +19,8 @@
 							 USER_NAME,
 							 USER_PHONE,
 							 USER_MESSAGING, 
-							 USER_GRADE, 
+							 USER_GRADE,
+							 DEPOTR, 
 							 BANK,
 							 ACCNT,
 							 USER_REGDATE)
@@ -30,6 +31,7 @@
 			   #{userPhone},
 			   #{userMessaging},
 			   #{auth}, 
+			   #{name},
 			   #{bank},
 			   #{accnt},
 			   SYSDATE)
@@ -54,7 +56,7 @@
 	<!-- 자격증 승인신청 -->
 	<insert id="insertCrtf">
 		<selectKey keyProperty="crtfId" resultType="String" order="BEFORE">
-			SELECT 'CE'||(MAX(TO_NUMBER(SUBSTR(CRTF_ID,3)))+1) crtf_id
+			SELECT 'CE'||NVL(MAX(TO_NUMBER(SUBSTR(CRTF_ID,3)))+1),1) crtf_id
 			FROM CERTIFICATE
 		</selectKey>
 		INSERT INTO CERTIFICATE
@@ -92,7 +94,7 @@
 		SELECT USER_ID
 		FROM MEMBERS
 		WHERE USER_NAME = #{name}
-		AND USER_EMAIL = #{email}
+		AND USER_EMAIL = #{userEmail}
 	</select>
 	
 	<!-- 비밀번호 찾기 -->

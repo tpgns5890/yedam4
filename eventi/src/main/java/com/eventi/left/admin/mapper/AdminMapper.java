@@ -89,4 +89,6 @@ public interface AdminMapper {
 	public int getBmem();
 	public int getBbrd();
 	public int getMon();
+
+	public void updateMember(MemberVO memberVO);
 }

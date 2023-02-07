@@ -218,7 +218,7 @@
     
     //채팅방
     let cId = '';
-    let fromId = '[[${session.member != null ? session.member.userId :''}]]';
+    let fromId = '[[${session.member != null ? session.member.userId :""}]]';
        
     if(fromId != ''){
     	$(".chat").show();

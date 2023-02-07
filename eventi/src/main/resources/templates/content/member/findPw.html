@@ -110,23 +110,29 @@
 							<button style="float: right; font-weight:700;" id="findBtn" class="btn btn-warning btn-round"
 								type="button">전송</button>
 						</form>
-						<div id="modal">
-							<div class="modal_content">
-								<button id="modal_close_btn" type="button">X</button>
-								<h2 class="font-alt">전송완료!</h2>
-								<h4 class="font-alt">임시비밀번호를 이용하여 로그인 해주세요.</h4>
-								<div id="button_box">
-									<button type="button" id="modal_login_btn" class="btn btn-success btn-circle"
-										th:onclick="|location.href='@{loginPage}'|">로그인</button>
-								</div>
-							</div>
-							<div class="modal_layer"></div>
-						</div>
 					</div>
 				</div>
 			</div>
 		</section>
+		<div id="modal">
+			<div class="modal_content">
+				<button id="modal_close_btn" type="button">X</button>
+				<h2 class="font-alt">전송완료!</h2>
+				<h4 class="font-alt">임시비밀번호를 이용하여 로그인 해주세요.</h4>
+				<div id="button_box">
+					<button type="button" id="modal_login_btn" class="btn btn-success btn-circle"
+						th:onclick="|location.href='@{loginPage}'|">로그인</button>
+				</div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
 		<script>
+		$(function () {
+			var session = '[[${session.member != null? session.member.userId:""}]]';
+			if (session != '') {
+				window.location.href = '/'
+			}
+		})
 			/*모달 창 닫기*/
 			$("#modal_close_btn").on('click', function () {
 				$("#modal").hide();
@@ -137,7 +143,7 @@
 				'click',
 				function () {
 					var id = $("#id").val();
-					var name = $("#name").val();
+					var name = $('input:text[name="name"]').val();
 					var email = $("#email").val();
 					$.ajax({
 						url: "findPw?id=" + id + "&name=" + name +

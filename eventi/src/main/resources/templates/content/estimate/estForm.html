@@ -592,7 +592,7 @@ h2 {
 
 	//견적요청서 등록
 	$('.submit').click(function() {
-		var userId = '[[${session.member != null ? session.member.userId :''}]]';
+		var userId = '[[${session.member != null ? session.member.userId :""}]]';
 		console.log(userId)
 		if (userId == "") {
 			alert("로그인 후 이용해주세요.");

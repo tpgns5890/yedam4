@@ -325,7 +325,7 @@
 					<td>${crtf.crtfType}</td>
 					<td>${crtf.reqDate}</td>
 					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'N')" value="${crtf.crtfId}">거부</button><td>
+					<td>[승인]</td>
 				</tr>`;
 				return p;
 			}
@@ -342,7 +342,7 @@
 					<td>${crtf.crtfType}</td>
 					<td>${crtf.reqDate}</td>
 					<td>${accpDate}</td>
-					<td><button type="button" onclick="updateCrtf(this, 'Y')" value="${crtf.crtfId}">승인</button><td>
+					<td><button type="button" onclick="updateCrtf(this,'Y')" value="${crtf.crtfId}">승인</button></td>
 				</tr>`;
 				return p;
 			}
@@ -394,16 +394,21 @@
 				return pagination;
 			}
 			
-			//승인,거부 버튼
+			//승인버튼
 			function updateCrtf(element, value){
 				let crtfId = element.value;
 				let accpYN = value;
+				let userId = element.parentElement.parentElement.children.item(0).innerText;
+				let crtfType = element.parentElement.parentElement.children.item(3).innerText;
+				console.log(crtfType);
 				$.ajax({
 					url:"/admin/crtfUpdate",
 					method: 'post',
 					data: {
 						crtfId,
-						accpYN
+						userId,
+						accpYN,
+						crtfType
 					},
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader(header, token);

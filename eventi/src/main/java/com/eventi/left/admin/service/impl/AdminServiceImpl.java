@@ -64,7 +64,15 @@ public class AdminServiceImpl implements AdminService{
 
 	//자격증 업테이트
 	@Override
-	public int crtfUpdate(CrtfVO crtfVO) {
+	public int crtfUpdate(CrtfVO crtfVO, MemberVO memberVO) {
+		memberVO.setUserId(crtfVO.getUserId());
+		if(crtfVO.getCrtfType().equals("DESIGNER")) {
+			memberVO.setAuth("ROLE_DES");
+		}else {
+			memberVO.setAuth("ROLE_MC");
+		}
+		adminMapper.updateMember(memberVO);
+		
 		return adminMapper.crtfUpdate(crtfVO);
 	}
 

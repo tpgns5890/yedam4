@@ -27,7 +27,7 @@ public interface AdminService {
 	public List<CodeVO> getMemberCat(CodeVO codeVO); //회원 카테고리
 	public List<CodeVO> getBoardCat(CodeVO codeVO); //게시물 카테고리
 
-	public int crtfUpdate(CrtfVO crtfVO); //자격증 승인
+	public int crtfUpdate(CrtfVO crtfVO, MemberVO memberVO); //자격증 승인
 
 	public int banMemAccept(PunishVO punishVO); //회원신고 승인
 	public int banBrdAccept(PunishVO punishVO); //게시글신고 승인

@@ -60,8 +60,9 @@ public class MemberController {
 	//아이디 찾기 메소드
 	@RequestMapping(value= "/findId")
 	@ResponseBody
-	public String findid(String name, String email) {
-		String result = service.findId(name, email);
+	public String findid(MemberVO memberVO) {
+		System.out.println(memberVO);
+		String result = service.findId(memberVO);
 		return result;
 	}
 	

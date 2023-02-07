@@ -232,6 +232,12 @@
 		</div>
 
 		<script>
+		$(function () {
+			var session = '[[${session.member != null? session.member.userId:""}]]';
+			if (session != '') {
+				window.location.href = '/'
+			}
+		})
 			//csrf 설정
 			var header = $("meta[name='_csrf_header']").attr("content");
 			var token = $("meta[name='_csrf']").attr("content");
