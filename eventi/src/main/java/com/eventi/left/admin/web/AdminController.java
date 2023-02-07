@@ -34,7 +34,15 @@ public class AdminController {
 
 	// 관리자페이지 이동
 	@RequestMapping(value = "/adminMain")
-	public String adminMain() {
+	public String adminMain(Model model) {
+		model.addAttribute("dailyInfo",service.getDailyInfo());
+		model.addAttribute("qnaList", service.getQnaList());
+		model.addAttribute("countCrtf", service.getCrtf());
+		model.addAttribute("countCont", service.getCont());
+		model.addAttribute("countBmem", service.getBmem());
+		model.addAttribute("countBbrd", service.getBbrd());
+		model.addAttribute("countMon", service.getMon());
+		
 		return "content/admin/adminMain";
 	}
 	//방문자수 ajax

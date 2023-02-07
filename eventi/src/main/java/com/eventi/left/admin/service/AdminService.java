@@ -46,6 +46,16 @@ public interface AdminService {
 
 	public List<VisitorVO> countVisit();
 
+	public List<HashMap<String,Object>> getDailyInfo();
+
+	public List<HashMap<String, Object>> getQnaList();
+
+	public int getCrtf();
+	public int getCont();
+	public int getBmem();
+	public int getBbrd();
+	public int getMon();
+
 
 
 }
