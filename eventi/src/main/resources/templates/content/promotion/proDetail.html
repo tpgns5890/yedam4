@@ -4,7 +4,16 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="~{layouts/default_layout}">
-
+<head>
+<style>
+.sidebar{
+	position: fixed;
+    right: 30px;
+    top: 310px;
+    z-index: 10;
+}
+</style>
+</head>
 <div layout:fragment="content">
 
 	<section class="module bg-dark-60 gallery-page-header parallax-bg"
@@ -85,21 +94,6 @@
                   </div>
                 </div>
                 <div class="post">
-                  <div class="post-video embed-responsive embed-responsive-16by9">
-                  	<video th:each="file : ${files}" th:if="${#strings.containsIgnoreCase(file,'.mp4')}" th:src="|/fileView/${file.sevNm}|" width="500px" height="200px" controls></video>
-                   <!--  <iframe class="embed-responsive-item" src="//www.youtube.com/embed/Jkk0VHiCnKY" frameborder="0" allowfullscreen="allowfullscreen"></iframe> -->
-                  </div>
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">Post with video</a></h2>
-                    <div class="post-meta">By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Marketing, </a><a href="#">Web Design</a>
-                    </div>
-                  </div>
-                  <div class="post-entry">
-                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine.</p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="#">Read more</a></div>
-                </div>
-                
                 <!-- 댓글 -->
                  <div class="comments"  id=reply sec:authorize="isAuthenticated()">
                   <h4 class="comment-title font-alt">There are comments</h4>
@@ -118,16 +112,30 @@
               </div>
               
               <!-- 사이드바 -->
-              <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
-                <div class="widget">
-                  <form role="form">
-                    <div class="search-box">
-                      <input class="form-control" type="text" placeholder="Search...">
-                      <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
-                    </div>
-                  </form>
+        <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">      
+          <section class="module" id="pricing">
+          <div class="container">     
+            <div class="row multi-columns-row">
+              <div class="col-sm-6 col-md-3 col-lg-3">
+                <div class="price-table font-alt">
+                  <h4>Light</h4>
+                  <div class="borderline"></div>
+                  <p class="price"><span><img src="images/sidebar.jpg"></span>
+                  </p>
+                  <ul class="price-details">
+                    <li>Free Support</li>
+                    <li>15 Demos Included</li>
+                    <li><span>Newsletter</span></li>
+                    <li><span>Working Contact Form</span></li>
+                    <li><span>Unlimited Domains</span></li>
+                  </ul><a class="btn btn-d btn-round" href="#">Sign Up</a>
                 </div>
-                <div class="widget">
+              </div>   
+            </div>
+          </div>
+        </section>
+      
+                <!-- <div class="widget">
                   <h5 class="widget-title font-alt">Blog Categories</h5>
                   <ul class="icon-list">
                     <li><a href="#">Photography - 7</a></li>
@@ -136,10 +144,10 @@
                     <li><a href="#">Marketing - 1</a></li>
                     <li><a href="#">Wordpress - 16</a></li>
                   </ul>
-                </div>
+                </div> -->
                 
                 <!-- 인기게시물 조회 -->
-                <div class="widget">
+                <!-- <div class="widget">
                   <h5 class="widget-title font-alt">Popular Posts</h5>
                   <ul class="widget-posts" th:each="post : ${contents}">
                     <li class="clearfix">
@@ -150,15 +158,18 @@
                       </div>
                     </li>
                   </ul>
-                </div>
-                <div class="widget">
+                </div> -->
+                
+               <!--  <div class="widget">
                   <h5 class="widget-title font-alt">Tag</h5>
                   <div class="tags font-serif"><a href="#" rel="tag">Blog</a><a href="#" rel="tag">Photo</a><a href="#" rel="tag">Video</a><a href="#" rel="tag">Image</a><a href="#" rel="tag">Minimal</a><a href="#" rel="tag">Post</a><a href="#" rel="tag">Theme</a><a href="#" rel="tag">Ideas</a><a href="#" rel="tag">Tags</a><a href="#" rel="tag">Bootstrap</a><a href="#" rel="tag">Popular</a><a href="#" rel="tag">English</a>
                   </div>
-                </div>
-                <div class="widget">
+                </div> -->
+                
+        <!--         <div class="widget">
                   <h5 class="widget-title font-alt">Text</h5>The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators.
                 </div>
+                
                 <div class="widget">
                   <h5 class="widget-title font-alt">Recent Comments</h5>
                   <ul class="icon-list">
@@ -168,7 +179,7 @@
                     <li>Jack on <a href="#">Bottle Mockup</a></li>
                     <li>Mark on <a href="#">Our trip to the Alps</a></li>
                   </ul>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
