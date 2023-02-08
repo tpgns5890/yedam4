@@ -235,10 +235,9 @@ table {
 }
 </style>
 </head>
-
+<body>
 
 <div layout:fragment="content">
-
 <section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" 
 		data-background="/images/promotion.jpeg" style="background-image: url(&quot;assets/images/promotion.jpeg&quot;); background-size: 100%;">
           <div class="container">
@@ -249,50 +248,10 @@ table {
             </div>
           </div>
 </section>
-
-
-<section class="module" id="team">
-  <!-- 게시글 검색 -->
-  <form action="/proList" id="searchForm">
-	<!--<input type="text" name="eName" >
-	<input type="submit" id="find" value="찾기">-->
-
-<!--<label>행사유형</label>
-<select id="etype" name="eType"  onchange="order()">
-		<option value="" selected>------</option>
-		<option value="E00" th:selected="${promotionVO.eType=='E00'}" >기타</option>
-		<option value="E01" th:selected="${promotionVO.eType=='E01'}" >결혼식</option>
-		<option value="E02" th:selected="${promotionVO.eType=='E02'}" >돌잔치</option>
-		<option value="E03" th:selected="${promotionVO.eType=='E03'}" >개인행사</option>
-		<option value="E04" th:selected="${promotionVO.eType=='E04'}" >기업행사</option>
-		<option value="E05" th:selected="${promotionVO.eType=='E05'}" >각종축제</option>
-		<option value="E06" th:selected="${promotionVO.eType=='E06'}" >기념식</option>
-		<option value="E07" th:selected="${promotionVO.eType=='E07'}" >가요제</option>
-		<option value="E08" th:selected="${promotionVO.eType=='E08'}" >플리마켓</option>
-		<option value="E09" th:selected="${promotionVO.eType=='E09'}" >체육대회</option>
-		<option value="E10" th:selected="${promotionVO.eType=='E10'}" >단합행사</option>
-		<option value="E11" th:selected="${promotionVO.eType=='E11'}" >세미나</option>
-		<option value="E12" th:selected="${promotionVO.eType=='E12'}" >포럼</option>
-		<option value="E13" th:selected="${promotionVO.eType=='E13'}" >워크샵</option>
-		<option value="E14" th:selected="${promotionVO.eType=='E14'}" >전시회</option>
-		<option value="E15" th:selected="${promotionVO.eType=='E15'}" >박람회</option>
-		<option value="E00" th:selected="${promotionVO.eType=='E00'}" >기타</option>
-	</select> -->
-
-<!-- 게시글 정렬기준 -->
-<!--<label>정렬기준</label>
-	<select id="see" name="orderCol" onchange="order()">
-		<option value="" selected>------</option>
-		<option value="dt">작성순</option>
-		<option value="see">조회수</option>
-	</select>-->	
-	</form>
 	
-	
-  <!--<button class="btn btn-d btn-circle" type="button" onclick="proInsert()"><i class="fa fa-heart" ></i> 게시글등록</button>-->
-<body>
     <main>
         <div class="content-wrap">
+        	<form action="/proList" id="searchForm">
             <div class="option-area">
                 <div class="filtering-area">
                     <!-- 필터링 영역 -->
@@ -339,55 +298,21 @@ table {
 					</select>
                 </div>
             </div>
-    
-            <!-- 카드 영역 -->
-<!--            <div class="card-area">
-                <ul class="card-wrap">
-                    <li class="card" th:each="job : ${jobList}" th:myName = "${job.jobNo}"
-									 th:onclick="jobDetail(this.getAttribute('myName'))">
-                        <div class="card-image-wrap">
-                        	<i class="material-symbols-outlined">favorite</i>
-                            <img
-                                src="https://4.img-dpreview.com/files/p/E~TS590x0~articles/3925134721/0266554465.jpeg"
-                                alt="구인글 이미지"
-                            />
-                        </div>
-                        <div class="card-info-wrap">
-                            <h3 th:text=${job.title}>설날 행사 스텝 모집합니다</h3>
-                            <ul class="card-detail-wrap">
-                                <li>
-                                	<label>마감상황</label>
-                                	<th:block th:if="${job.remain > 0}">
-										<td  th:text="|${job.remain} 일전|"></td>
-									</th:block>
-									<th:block th:unless="${job.remain > 0} ">
-										<td th:text="마감"></td>
-									</th:block>
-                                
-                                </li>
-                                <li>
-                                    <label >지원</label>
-                                    <span th:text="|${job.reCount}명|">10명</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>-->
+			</form>
         </div>
     </main>
-</body>
-   
+    
+  <!-- 인기게시물 -->
 		<section class="module sliding-portfolio">
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
               <h3 class="module-title font-alt">인기게시물</h3>
             </div>
           </div>
-     
           <div class="container-fluid">
             <div class="row" >
               <div class="owl-carousel text-center" data-items="4" data-pagination="false" data-navigation="false">
+
                 <div class="owl-item" th:each="post : ${contents}">
                   <div class="col-sm-12">
                     <div class="work-item"><a href="#">
@@ -413,10 +338,11 @@ table {
                 <div class="module-subtitle font-serif">원하는 유형의 글을 조회하고 참여해보세요.</div>
               </div>
             </div>
+            
             <div class="row">
               <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" th:each="pro : ${proList}" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
                 <div class="team-item" id="check" > 
-                  <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|"> <img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
+                  <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|"><img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
                     <div class="team-detail" > 										
                       <h5 class="font-alt" th:text=${pro.proNo}>Hi all</h5>
                       <p class="font-serif" th:text=${pro.eType}></p>
@@ -427,12 +353,9 @@ table {
                     <div class="team-role" th:text=${pro.eName}>Art Director</div>
                     <div class="team-name" th:text=${pro.see}>조회수</div>
                   </div>
-                  
                 </div>
               </div>
-             
             </div>
-          
           
           <div class="row mt-5">
 		          <div class="col text-center">
@@ -444,12 +367,9 @@ table {
 		        
 		<!-- 이미지 나타내기 -->	
 					<div th:each="f : ${file}">
-				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
 				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 				   	</div>
           
-        </section>
-    <!--</section>-->
 <script>
 //정렬
 function order(){
@@ -521,5 +441,5 @@ function gopage(i) {
 	
 </script>	
 </div>
-
+</body>
 </html>

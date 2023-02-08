@@ -187,11 +187,8 @@ $(document).ready(function() {
 })
 
 $('#update').on('click', function update() {
-	alert("클릭")
 	oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", [])
 	let jobCntn = document.getElementById("jobCntn").value;
-	alert(jobCntn)
-	
 	let jobNo = document.getElementById("jobNo").value;
 
 	var data = $('form[name="jobUpdate"]').serializeArray();

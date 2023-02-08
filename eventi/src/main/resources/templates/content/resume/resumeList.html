@@ -138,20 +138,19 @@ table {
           </div>
 </section>
 
+<div class="container" id="none">
 	<section class="module" id="news">
 		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
 		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
 		<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
-		<div class="container">
+		
 			<div class="row">
-			
 				<div class="col-sm-6 col-sm-offset-3">
 					<h2 class="module-title font-alt">구직자 한눈에 보기</h2>
 					<div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을
 						누르세요.</div>
 				</div>
 			</div>
-			
 			<div class="row multi-columns-row post-columns" id="check">
 				<div class="col-sm-6 col-md-4 col-lg-4"
 					th:each="res : ${resumeList}">
@@ -175,24 +174,24 @@ table {
 							</h2>
 							<div class="post-meta" th:text="|작성자: ${res.seekerId}|"><a href="#"></a></div>
 						</div>
-						<div class="post-entry">
-						</div>
 						<div class="post-more">
 							<a class="more-link" href="#" th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">Read more</a>
 						</div>
+						
 						<div th:if="${res.hire} == 'Y'">채용</div>
 						<div th:unless="${res.hire} == 'Y'">미채용</div>
 						
-						<button class="btn btn-border-d btn-round hireBtn" type="button"
-							id="hireBtn" th:data-resumeno='${res.resumeNo}'>
+						<button class="btn btn-border-d btn-round hireBtn " type="button"
+							id="hireBtn" th:data-resumeno='${res.resumeNo}' style="background-color:#FAB955" >
 							<i class="fa fa-child"></i>채용
 						</button>
 						<button class="btn btn-border-d btn-round unHireBtn" type="button"
-							id="unHireBtn" th:data-resumeno='${res.resumeNo}'>
+							id="unHireBtn" th:data-resumeno='${res.resumeNo}' style="background-color:#FFDE59">
 							<i class="fa fa-child"></i> 미채용
 						</button>
 
 					</div>
+					<div class="post-entry"></div>
 				</div>
 			</div>
 			
@@ -208,12 +207,21 @@ table {
 				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
 				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 			</div>     
-		</div>
 	</section>
+</div>
 
-	<script>
+<script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
+
+//데이터 없을시 이미지 띄우기 
+$(document).ready(function () {
+	  let result = '[[${result}]]';
+	if (result != '') {
+		$('#none').empty();
+		$('#none').after('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">')
+	}
+})
 
 //페이징
 function gopage(i) {
@@ -236,7 +244,7 @@ $('.allHire').on('click', function (e){
 	let checks = [];
  	
 	 $("[name='allHire']:checked").each(function(i, checkbox){
-		 let obj ={resumeNo:checkbox.value};
+		 let obj ={resumeNo:checkbox.valu+e};
 		 checks.push(obj);
 	})
 	console.log(checks)

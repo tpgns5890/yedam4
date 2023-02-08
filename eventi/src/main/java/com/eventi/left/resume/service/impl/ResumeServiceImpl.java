@@ -30,7 +30,7 @@ public class ResumeServiceImpl implements ResumeService{
 	@Override
 	public List<ResumeBoardVO> getResumeList(ResumeBoardVO resumeBoardVO, PagingVO paging) { 
 		paging.setTotalRecord(resumeMapper.count(resumeBoardVO));
-		paging.setPageUnit(5);
+		paging.setPageUnit(6);
 		resumeBoardVO.setFirst(paging.getFirst());
 		resumeBoardVO.setLast(paging.getLast());
 		return resumeMapper.getResumeList(resumeBoardVO);
