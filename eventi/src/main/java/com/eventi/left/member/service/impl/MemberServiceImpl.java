@@ -127,8 +127,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	// 아이디 찾기
 	@Override
-	public String findId(String name, String email) {
-		return mapper.findId(name, email);
+	public String findId(MemberVO memberVO) {
+		return mapper.findId(memberVO);
 	}
 
 	// 비밀번호 찾기

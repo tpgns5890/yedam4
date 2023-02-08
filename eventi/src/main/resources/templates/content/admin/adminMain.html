@@ -245,11 +245,11 @@
 								</thead>
 								<tbody>
 									<tr th:each="daily : ${dailyInfo}">
-										<td th:text="${daily.DAILYDT}"></td>
-										<td th:text="${daily.DAILYMOIN}"></td>
-										<td th:text="${daily.DAILYMOOUT}"></td>
-										<td th:text="${daily.VISITOR}"></td>
-										<td th:text="${daily.REGISTER}"></td>
+										<td>[[${daily.DAILYDT}]]</td>
+										<td>[[${daily.DAILYMOIN}]]₩</td>
+										<td>[[${daily.DAILYMOOUT}]]₩</td>
+										<td>[[${daily.VISITOR}]]</td>
+										<td>[[${daily.REGISTER}]]</td>
 									</tr>
 								</tbody>
 							</table>

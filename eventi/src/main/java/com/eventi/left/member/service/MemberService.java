@@ -24,7 +24,7 @@ public interface MemberService{
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, LockedException;
 
-	public String findId(String name, String email); //아이디 찾기
+	public String findId(MemberVO memberVO); //아이디 찾기
 
 	public String findPw(String id, String name, String email); //비밀번호 찾기
 

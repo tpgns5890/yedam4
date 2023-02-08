@@ -119,8 +119,8 @@ public class AdminController {
 	//자격증 업데이트
 	@PostMapping("/crtfUpdate")
 	@ResponseBody
-	public int crtfAccept(CrtfVO vo) {
-		int r = service.crtfUpdate(vo);
+	public int crtfAccept(CrtfVO vo, MemberVO memberVO) {
+		int r = service.crtfUpdate(vo, memberVO);
 		return r;
 	}
 	

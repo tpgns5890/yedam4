@@ -39,6 +39,7 @@
 			background: #fff;
 			border: 0.5px solid #666;
 			border-radius: 15px;
+			color:black;
 		}
 
 		#modal .modal_layer {
@@ -98,7 +99,8 @@
 				<div class="caption-content">
 					<div id="form_area">
 						<form style="text-align: left;">
-							<label>이름</label><input type="text" class="form-control" name="name" id="name" placeholder="홍길동"> <br>
+							<label>이름</label>
+							<input type="text" class="form-control" name="name" placeholder="홍길동"> <br>
 							<label>이메일주소</label><input type="text" class="form-control" name="userEmail" id="email"
 								placeholder="eventi@eventi.com">
 							<div>
@@ -110,24 +112,30 @@
 							<button style="float: right;" id="findBtn" class="btn btn-warning btn-round"
 								type="button"><b>아이디찾기</b></button>
 						</form>
-						<div id="modal">
-							<div class="modal_content">
-								<button id="modal_close_btn" type="button">X</button>
-								<h2 class="font-alt">등록된 아이디</h2>
-								<br>
-								<h4 class="font-alt"></h4>
-								<div id="button_box">
-									<button type="button" id="modal_login_btn" class="btn btn-warning btn-round"
-										th:onclick="|location.href='@{loginPage}'|">로그인</button>
-								</div>
-							</div>
-							<div class="modal_layer"></div>
-						</div>
 					</div>
 				</div>
 			</div>
 		</section>
+		<div id="modal">
+			<div class="modal_content">
+				<button id="modal_close_btn" type="button">X</button>
+				<h2 class="font-alt">등록된 아이디</h2>
+				<br>
+				<h4 class="font-alt"></h4>
+				<div id="button_box">
+					<button type="button" id="modal_login_btn" class="btn btn-warning btn-round"
+						th:onclick="|location.href='@{loginPage}'|">로그인</button>
+				</div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
 		<script>
+		$(function () {
+			var session = '[[${session.member != null? session.member.userId:""}]]';
+			if (session != '') {
+				window.location.href = '/'
+			}
+		})
 			/*모달 창 닫기*/
 			$("#modal_close_btn").on('click', function () {
 				$("#modal").hide();
@@ -135,10 +143,11 @@
 
 			/* 아이디 찾기 */
 			$("#findBtn").on('click', function () {
-				var name = $("#name").val();
+				var name = $('input:text[name="name"]').val();
 				var email = $("#email").val();
+				console.log(name);
 				$.ajax({
-					url: "findId?name=" + name + "&email=" + email,
+					url: "findId?name=" + name + "&userEmail=" + email,
 					type: "GET",
 					success: function (result) {
 						if (result) {

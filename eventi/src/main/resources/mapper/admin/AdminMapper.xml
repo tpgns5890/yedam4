@@ -131,6 +131,12 @@
 		<include refid="cSelectw" />
 	</select>
 	
+	<!-- 회원등급수정 -->
+	<update id="updateMember">
+		UPDATE MEMBERS
+		SET USER_GRADE = #{auth}
+		WHERE USER_ID = #{userId}
+	</update>
 	<!-- 자격증 update -->
 	<update id="crtfUpdate">
 		UPDATE CERTIFICATE
@@ -464,8 +470,8 @@
 	<!-- 일별 정보 조회 -->
 	<select id="getDailyInfo" resultType="hashmap">
 		SELECT  D.DAILYDT DAILYDT,
-		        TO_CHAR(NVL(D.DAILYMOIN,0),'999,999,999L') DAILYMOIN,
-		        TO_CHAR(NVL(D.DAILYMOOUT,0),'999,999,999L') DAILYMOOUT,
+		        TO_CHAR(NVL(D.DAILYMOIN,0),'999,999,999') DAILYMOIN,
+		        TO_CHAR(NVL(D.DAILYMOOUT,0),'999,999,999') DAILYMOOUT,
 		        NVL(D.VISITOR,0) VISITOR,
 		        NVL(M.REGISTER,0) REGISTER
 		FROM    (SELECT M.DAILYDT DAILYDT,
@@ -511,7 +517,7 @@
 						REREP_TGT
 				FROM QUESTIONS
 				ORDER BY WRITING_DT)
-		<![CDATA[WHERE ROWNUM <= 5]]>
+		<![CDATA[WHERE ROWNUM <= 4]]>
 		AND REREP_TGT IS NULL
 	</select>
 	

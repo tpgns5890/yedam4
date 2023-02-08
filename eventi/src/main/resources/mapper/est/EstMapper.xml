@@ -49,15 +49,34 @@
 
 	<!-- 견적요청서 등록 -->
 	<insert id="insertEst">
-	<selectKey keyProperty="eno" resultType="String" order="AFTER">
-			SELECT
-			'ES'||(MAX(TO_NUMBER(SUBSTR(E_NO,3)))) ENO
+		<selectKey keyProperty="eno" resultType="String" order="BEFORE">
+			SELECT 'ES'||NVL(MAX(TO_NUMBER(SUBSTR(E_NO,3))+1),1) eno
 			FROM ESTIMATE
 		</selectKey>
-		INSERT INTO ESTIMATE
-		VALUES('ES'||eno_seq.nextval, #{userId}, #{eventType}, #{pats},
-		#{expectedPl}, #{eventDt}, #{eventTime}, #{expectedDuration},
-		#{expectedLcal}, #{wishes}, sysdate, 'N')
+		INSERT INTO ESTIMATE 	(E_NO,
+								USER_ID,
+								EVENT_TYPE,
+								PATS,
+								EXPECTED_PL,
+								EVENT_DT,
+								EVENT_TIME,
+								EXPECTED_DURATION,
+								EXPECTED_LCAL,
+								WISHES,
+								WRITING_DT,
+								ADOPTION_YN)
+		VALUES	(#{eno},
+				 #{userId}, 
+				 #{eventType}, 
+				 #{pats},
+				 #{expectedPl}, 
+				 #{eventDt}, 
+				 #{eventTime}, 
+				 #{expectedDuration},
+				 #{expectedLcal}, 
+				 #{wishes}, 
+				 sysdate, 
+				 'N')
 	</insert>
 
 	<!-- 업체 제안서 채택/후기수 조회 -->
