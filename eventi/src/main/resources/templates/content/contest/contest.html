@@ -40,8 +40,14 @@ h4 {
 	 height: 610px;
 }
 .btn.btn-g {
-    margin: 0px 5px;
+    margin: 10px 5px;
    }
+.col-sm-12{
+ border-radius: 20px;
+	margin-bottom: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 2px 10px 9px 5px rgb(0 0 0 / 4%);
+}
 	
 </style>
 </head>
@@ -435,6 +441,7 @@ h4 {
 				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
 				$("#designBox").empty();
+				$("#cotestCntn").show();
 				
 				$("#cotestCntn").append(res.cntn);
 			})
@@ -444,11 +451,13 @@ h4 {
 		//문의사항 관련 생성 함수 --------------------------------------------------------
 		//문의사항 박스 생성
 		function questionBox(){
-			let box = `	<input type="text" name="Ttl" required="required" ><br>
+			
+			let box = `	<input type="text" name="Ttl" required="required" placeholder=" 문의제목 " style="width: 320px;"><br>
 						<textarea name="cntn" class="form-control" id="Cntn" cols="20" rows="4" placeholder="문의사항 입력해주세요." required="required"></textarea>
 						<input type="checkbox" id="secretYn" name="secretYn">비밀글 
 						<button type="button" id="insertBtn" class="btn btn-g btn-round btn-lg">등록</button>
 					`;
+			
 			
 			return box;
 		} 
@@ -474,8 +483,7 @@ h4 {
 			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
 			if(question.secretYn == 'Y' && question.userId != userId 
 										&& writer != userId 
-										&& userId != "admin"
-										&& userId == "" ){
+										&& userId != "admin" ){
 				p =`<ul class="children" style="list-style: none">
 						<li class="comment">
 						<div class="comment-body" id="${question.qNo}">
@@ -524,8 +532,7 @@ h4 {
 			 
 				if(questionRep.secretYn == 'Y' && questionRep.userId != userId 
 												&& writer != userId 
-												&& userId != "admin"
-												&& userId == "" ){
+												&& userId != "admin"){
 	   				p = `<ul class="children" style="list-style: none">
 			                <li class="comment" >
 				                <div class="comment-body" id="${questionRep.qNo}">
@@ -568,6 +575,7 @@ h4 {
 				$('#returnPaging').empty();
 				$("#cotestCntn").empty();
 				$("#designBox").empty();
+				$("#cotestCntn").show();
 				
 				//작성자가 아니면 문의사항 입력박스 출력
 				if(userId != writer){
@@ -618,7 +626,7 @@ h4 {
  			console.log(Ttl)
  			
  			if(userId == ''){
- 				login() //로그인모달창.
+ 				location.href='/loginPage'//로그인.
  			//내용이 없고 등록버튼을 눌렀을경우
  			}else if(Cntn == '' || Ttl  == ''){
  				alert('문의사항을 입력해주세요');
@@ -639,6 +647,8 @@ h4 {
  	 	   			console.log(res);
  	 	   			alert('문의등록 완료')
  	 	   			
+ 	 	   			$('input[name="Ttl"]').val('');
+ 	 	   			$('textarea[name="cntn"]').val('');
  	 	   			console.log($("#cotestCntn").children("p"));
  	 	   			console.log($("#cotestCntn").children("ul")[0]);
  	 	   			
@@ -729,6 +739,7 @@ h4 {
 		
 		//답변등록 누를경우 생성되는 등록 입력폼
 		$('#divCntn').on("click", ".questionRep", function(){
+			$("#cotestCntn").show();
 			 let qTgt = $(this).parent("div").attr('id');
  			$(this).parent("div").append(makeFrm(qTgt));
  			$(this).remove();
@@ -781,6 +792,7 @@ h4 {
 				console.log(res.design);
 				console.log(res.paging);
 				$("#cotestCntn").empty();
+				$("#cotestCntn").hide();
 				$("#designBox").empty();
 				
 				if(res.design == 0){

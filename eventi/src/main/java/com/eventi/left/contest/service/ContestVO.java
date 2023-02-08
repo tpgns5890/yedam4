@@ -35,7 +35,7 @@ public class ContestVO {
 	private String settYN; //상금정산여부
 	
 	//정렬,검색
-	private String order = "inq DESC"; //기본 정렬기준
+	private String order = "dt_reg DESC"; //기본 정렬기준
 	private String search;
 	
 	//가격 콤마변환
@@ -49,6 +49,9 @@ public class ContestVO {
 	
 	//공모전 접수된 디자인 개수
 	private int designCount; 
+	
+	//공모전 문의개수
+	private int questionCount;
 	
 	//공모전 파일
 	private String img;

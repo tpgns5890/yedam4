@@ -15,7 +15,7 @@
 .container {
     width: 1400px;
 }
-label {
+label {  
 	font-weight:bold;
 	font-size: 20px;
 	display:inline-block;
@@ -95,11 +95,12 @@ label {
 	              <!-- 공모전 정렬기준 -->
 	              <div class="col-sm-3 mb-sm-20" id="order_check">
 	                <select id="order" name="order" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px; cursor: pointer;">
-						<option value="inq DESC" selected="selected">조회수</option>
+						<option value="inq DESC" >조회수</option>
 						<option value="likes DESC">좋아요순</option>
 						<option value="pay DESC">금액순</option>
 						<option value="dDay">마감일 빠른순</option>
 						<option value="dDay DESC">마감 느린순</option>
+						<option value="dt_reg DESC" selected="selected">등록순</option>
 	                </select>
 	              </div>
 	              

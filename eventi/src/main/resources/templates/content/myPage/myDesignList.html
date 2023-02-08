@@ -23,16 +23,16 @@
 		<!-- 게시글 검색 -->
 			<form id="search" name="designSearchFrm" style="margin:30px 0px 20px 330px;">
 					<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
-						<option value="D1" th:selected="${catagory eq 'D1'}">현수막</option>
-						<option value="D2" th:selected="${catagory eq 'D2'}">배너</option>
-						<option value="D3" th:selected="${catagory eq 'D3'}">로고</option>
-						<option value="D4" th:selected="${catagory eq 'D4'}">포스터</option>
-						<option value="D5" th:selected="${catagory eq 'D5'}">기타</option>
+						<option value="D1" th:selected="${caregory eq 'D1'}">현수막</option>
+						<option value="D2" th:selected="${caregory eq 'D2'}">배너</option>
+						<option value="D3" th:selected="${caregory eq 'D3'}">로고</option>
+						<option value="D4" th:selected="${caregory eq 'D4'}">포스터</option>
+						<option value="D5" th:selected="${caregory eq 'D5'}">기타</option>
                 	</select>
                 	
 					<input type="text" name="name" value="" placeholder="제목">
 					<input type="hidden" name="page" value="1">
-					<input type="hidden" name="caregory" th:value="${catagory}">
+					<input type="hidden" name="caregory" th:value="${caregory}">
 					<button type="submit" class="btn btn-g btn-round">검색</button>
 			</form>		
 			
@@ -110,7 +110,7 @@
 				
 				<div class="column middle">
 					<h3 id="title"></h3>
-					<div id="modelSelect"></div>
+					<div id="modelSelect" style="margin-top: 60px;"></div>
 				</div>
 				
 				<div class="column side">
@@ -159,8 +159,8 @@
 		//페이지이동 및 검색
 		//페이징개수 변환 myContest 동적쿼리
 		function gopage(i) {
-			 let category = $("#search option:selected").val();
-		 	$('input[name="caregory"]').val(category);
+			 let caregory = $("#search option:selected").val();
+		 	$('input[name="caregory"]').val(caregory);
 			$('input[name="page"]').val(i);
 			$('form[name="designSearchFrm"]').submit();
 		 }
@@ -183,7 +183,7 @@
 					},
 				}).then(res => {
 					//공모전정보
-					let category = res.caregory;
+					let caregory = res.caregory;
 					let cNo = res.cNo
 					let contestTtl = res.contestTtl;
 					let writer = res.writer;
@@ -200,7 +200,7 @@
 								 </div>
 									<h3>${writer}</h3>
 									<div onclick="location.href='/contest/select?cNo=${cNo}'" style="cursor: pointer;">
-									<h3>[${category}]${contestTtl}</h3>
+									<h3>[${caregory}]${contestTtl}</h3>
 									</div>
 							</div>
 								<hr> 
@@ -212,32 +212,32 @@
 					$('#dgnerSelect').append(side);
 					//모달내용을 지운뒤 붙여넣기.
 					for(file of res.files){
-						makeDesign(file.sevNm,dNo,category);
+						makeDesign(file.sevNm,dNo,caregory);
 					}
 					
 				})
 			})
 			
 			//모달창 :디자인 응모작품 생성.
-			function makeDesign(fileName,dNo,catagory){
-				console.log(catagory);
+			function makeDesign(fileName,dNo,caregory){
+				console.log(caregory);
 				let design;
 				//배너
-				if(catagory =='배너'){
+				if(caregory =='배너'){
 					design = `	 <div class="design" id="${dNo}" style="width:60%; margin: 10px auto; margin-bottom:20px; ">
 									<img src="/fileView/${fileName}" style="width: 100%; height: 60%;">
 								</div>	
 							`
 					
 				//현수막
-				}else if(catagory =='현수막'){
+				}else if(caregory =='현수막'){
 					design = `<div class="design " id="${dNo}" style="width:100%; margin-bottom:20px;">
 								   <img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">
 							  </div>`
 				//그외
 				}else{
 					design = `	<div class="design" id="${dNo}" style="width:80%; margin: 0 auto; margin-bottom:20px; ">
-								    <img src="/fileView/${fileName}" style="width: 100%; height: 400px; ">
+								    <img src="/fileView/${fileName}" style="width: 100%; height: 500px; ">
 								</div>`
 				}
 				

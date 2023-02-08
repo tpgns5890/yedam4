@@ -44,8 +44,9 @@
 						<th style="width:30%;">진행기간</th>
 						<th>진행</th>
 						<th>지원수</th>
-						<th>디자인조회</th>
-						<th>상세조회</th>
+						<th>조회/등록</th>
+						<th>공모전</th>
+						<th>문의내역</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -85,14 +86,14 @@
 							<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
 								<td th:text="${contest.ing}"></td>
 								<td th:text="${contest.designCount}"></td>
-								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">우승자등록</button></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">등록</button></td>
 							</th:block>
 							
 							<th:block th:if="${contest.winnerCheck} > 0">
 								<td th:text="종료"></td>
 								<td th:text="${contest.designCount}"></td>
 								<th:block th:if=" ${contest.designCount} > 0 " >
-									<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+									<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
 									<td><button class="btn btn-g btn-round" type="button" th:attr="onclick=|winnerList('${contest.cNo}')|">후기등록</button></td>
 								</th:block>
 								<th:block th:if=" ${contest.designCount} == 0 " >
@@ -109,14 +110,21 @@
 							<td th:text="${contest.designCount}"></td>
 						
 							<th:block th:if=" ${contest.designCount} > 0 " >
-								<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">지원자조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
 							</th:block>
 							<th:block th:if=" ${contest.designCount} == 0 " >
 								<td></td>
 							</th:block>
-								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">상세조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">조회</button></td>
 						</th:block>
-						
+							
+						<!-- 문의내역 조회 -->
+						<th:block th:if=" ${contest.questionCount} == 0 " >
+							<td></td>
+						</th:block>
+						<th:block th:if=" ${contest.questionCount} > 0 " >
+							<td><button class="btn btn-g btn-round" type="button">조회</button></td>
+						</th:block>
 					</tr>
 				</tbody>
 			</table>
@@ -132,7 +140,7 @@
 
 		<!-- 후기등록 우승자선택 모달 -->
 		<div id="winnerModel" class="modal">
-			<div class="modal_content">
+			<div class="winner_modal_content">
 				<span id="winnerCancel" class="close">&times;</span>
 				<h3 id="coNo"></h3>
 				<div id="modelSelect"></div>
@@ -142,46 +150,51 @@
 		
 		<!-- 후기 폼 -->
 	    <div id="reviewFrm" class="modal">
-				<div class="modal_content">
-					<label>대상</label>
-					<input type="text" id="reviewTgt" name="reviewTgt" readonly><br>
-					
-					<label>의뢰자</label>
-					<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
-					
-					<label>별점</label>
-					<div class="starpoint_wrap">
-					  <div class="starpoint_box">
-					    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
-					    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1</span></label>
-					    <label for="starpoint_3" class="label_star" title="1.5"><span class="blind">1.5</span></label>
-					    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2</span></label>
-					    <label for="starpoint_5" class="label_star" title="2.5"><span class="blind">2.5</span></label>
-					    <label for="starpoint_6" class="label_star" title="3"><span class="blind">3</span></label>
-					    <label for="starpoint_7" class="label_star" title="3.5"><span class="blind">3.5</span></label>
-					    <label for="starpoint_8" class="label_star" title="4"><span class="blind">4</span></label>
-					    <label for="starpoint_9" class="label_star" title="4.5"><span class="blind">4.5</span></label>
-					    <label for="starpoint_10" class="label_star" title="5"><span class="blind">5</span></label>
-					    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio">
-					    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio">
-					    <span class="starpoint_bg"></span>
-					  </div>
-					</div>
+				<div class="review_modal_content">
+					<div style="width: 80%; margin: 0 auto;">
+						<h3>후기등록</h3>
+						<label>대상</label>
+						<input type="text" id="reviewTgt" name="reviewTgt" readonly><br>
+						
+						<label>의뢰자</label>
+						<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
+						<div class="starbox">
+							<label>별점</label>
+							<div class="starpoint_wrap">
+							  <div class="starpoint_box">
+							    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
+							    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1</span></label>
+							    <label for="starpoint_3" class="label_star" title="1.5"><span class="blind">1.5</span></label>
+							    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2</span></label>
+							    <label for="starpoint_5" class="label_star" title="2.5"><span class="blind">2.5</span></label>
+							    <label for="starpoint_6" class="label_star" title="3"><span class="blind">3</span></label>
+							    <label for="starpoint_7" class="label_star" title="3.5"><span class="blind">3.5</span></label>
+							    <label for="starpoint_8" class="label_star" title="4"><span class="blind">4</span></label>
+							    <label for="starpoint_9" class="label_star" title="4.5"><span class="blind">4.5</span></label>
+							    <label for="starpoint_10" class="label_star" title="5"><span class="blind">5</span></label>
+							    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio">
+							    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio">
+							    <span class="starpoint_bg"></span>
+							  </div>
+							</div>
+						</div>
 					<br>
 					
-					<label>후기</label>
 					<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
-					<button type="button" class="cancle" >취소</button>
-					<button type="button" id="review">후기등록</button>
+					<div id="reviewBtn">
+						<button type="button" class="cancle btn btn-g btn-round" >취소</button>
+						<button type="button" class="btn btn-g btn-round" id="review">등록</button>
+					</div>
 				</div>
+			</div>
 			<div class="modal_layer"></div>
 		</div>
 	
@@ -318,7 +331,7 @@
 				let design = ` <div >
 								<img src="/images/${img}.jpg" style="width: 30px; height: 30px;">
 										<span>ID : ${data.userId}</span>
-										<button type="button" onclick="review('${data.userId}')">후기등록</button>
+										<button type="button" class="btn btn-g btn-round" onclick="review('${data.userId}')">후기등록</button>
 							   </div>
 							  `
 					$('#modelSelect').append(design);
