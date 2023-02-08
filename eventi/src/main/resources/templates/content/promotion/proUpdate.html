@@ -173,11 +173,8 @@ $(document).ready(function() {
 })
 		
 $('#update').on('click', function update() {
-	alert("클릭")
 	oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", [])
 	let intro = document.getElementById("intro").value;
-	alert(intro)
-	
 	let proNo = document.getElementById("proNo").value;
 
 	var data = $('form[name="proUpdate"]').serializeArray();

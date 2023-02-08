@@ -3,7 +3,6 @@
 
 <mapper namespace="com.eventi.left.promotion.mapper.PromotionBoardMapper">
 <sql id="pSelect">
-	
 		<!-- 검색창 입력 시 -->
 		<where>
 		<if test="eName !=null and eName != ''">

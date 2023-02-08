@@ -56,125 +56,65 @@ h4 {
             </div>
           </div>
 </section>
-          <div class="container">
-          		<div class="row topBox"> 
-					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
-						<!-- 이미지 출력 -->
-						 <img th:src="|/fileView/${proDetail.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">		
-					</div>
-					<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
-						<div id="show"></div>
-						<h2 th:text=${proDetail.eName}></h2>
-						<h4 th:text="|글번호: ${proDetail.proNo}|" id="proNo"></h4>
-						<h4 th:text="|작성자: ${proDetail.userId}|"></h4>
-					<div style="height: 50px;">
-					
-						<!-- 조회수 -->
-						 <span style='font-size: 30px;'>&#128065;</span>
-						 <span id="see" th:text="${proDetail.see}"></span>
-					</div>
-					<div>
-						<p th:text="|행사유형: ${proDetail.eType}|"></p>
-					</div>
-					<div>
-						<p th:text="|작성날짜: ${proDetail.dt}|"></p>
-					</div>
-          	         <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-  				 <th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
-						<div class="promotionBtn_user">
-							<a href="#" class="w-btn w-btn-gra1"
-								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
-							<a href="#" class="w-btn w-btn-gra1"
-								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
-					</div>
-				</th:block>	
+
+	<!-- 게시물 -->
+	<div class="container">
+    	<div class="row topBox"> 
+			<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
+			<!-- 이미지 출력 -->
+			 <img th:src="|/fileView/${proDetail.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">		
 			</div>
-         </div>        
-<!--                   <div class="post-entry" >
-                    <p th:text=${proDetail.userId}> 작성자</p>
-                    <p th:text=${proDetail.eType}>행사유형.</p>
-                      <p th:utext=${proDetail.intro}>Lorem </p>
-                    <ul>
-                      <li th:text="${#dates.format(proDetail.eSday, 'yyyy-MM-dd')}">The European languages are members of the same family.</li>
-                      <li th:text="${#dates.format(proDetail.eEday, 'yyyy-MM-dd')}">Their separate existence is a myth.</li>
-                      <li th:text=${proDetail.loc}>For science, music, sport, etc, Europe uses the same vocabulary.</li>
-                      <li th:text=${proDetail.entrance}>Their separate existence is a myth.</li>
-                      <li th:text=${proDetail.accommodate}>Their separate existence is a myth.</li>
-                    </ul>
-                    <p th:text=${proDetail.see}>관심수.</p>-->
-                    
-                    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-  				<!-- <th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
-                    <div class="tag-widget post-tag-container mb-5 mt-5">
-						<div class="tagcloud">
-							<a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
-							<a href="#" class="tag-cloud-link"
-								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
-						</div>
-					</div>
-				</th:block>	-->
-
-              
-               
-               	<div class="row mt-5" >
-					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
-						<div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-
-							<ul id="menu" class="nav nav-tabs font-alt navbar" role="tablist">
-								<!--<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">내용</span></a></li>-->
-								<!--<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">댓글</span></a></li>-->
-							</ul>
-						</div>
-					
-						
-				<div class="comments"  id=reply sec:authorize="isAuthenticated()">
-                  <h4 class="comment-title font-alt">There are comments</h4>
-                  <div class="comment clearfix">
-                    <div class="comment-avatar"><div class="icon"><i class="fa-solid fa-user"></i></div></div>
-                    <div class="comment-content clearfix">
-                      <div class="comment-author font-alt"><a href="#">댓글을 입력하세요.</a></div>
-                      <form action="replyInsert">
+		<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+			<div id="show"></div>
+				<h2 th:text=${proDetail.eName}></h2>
+				<h4 th:text="|글번호: ${proDetail.proNo}|" id="proNo"></h4>
+				<h4 th:text="|작성자: ${proDetail.userId}|"></h4>
+		<div style="height: 50px;">
+		
+		<!-- 조회수 -->
+			<span style='font-size: 30px;'>&#128065;</span>
+			<span id="see" th:text="${proDetail.see}"></span>
+		</div>
+		
+		<div>
+			<p th:text="|행사유형: ${proDetail.eType}|"></p>
+		</div>
+		<div>
+			<p th:text="|작성날짜: ${proDetail.dt}|"></p>
+		</div>
+      	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+			<th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
+				<div class="promotionBtn_user">
+					<a href="#" class="w-btn w-btn-gra1"
+						th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
+					<a href="#" class="w-btn w-btn-gra1"
+						th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
+				</div>
+			</th:block>	
+		</div>
+	</div>        
+    
+	<!-- 댓글작성란 -->					
+	<div class="comments"  id=reply sec:authorize="isAuthenticated()">
+		<h4 class="comment-title font-alt">There are comments</h4>
+         <div class="comment clearfix">
+              <div class="comment-avatar"><div class="icon"><i class="fa-solid fa-user"></i></div></div>
+             	 <div class="comment-content clearfix">
+	                <div class="comment-author font-alt"><a href="#">댓글을 입력하세요.</a></div>
+	                <form action="replyInsert">
 						<textarea name="replyCntn" id="replyCntn" rows="4" cols="80"></textarea>
 						<button class="button post-button "type="button" id="replyInsertBtn">작성</button>
-                    	</form>
-                      </div>
-                    </div>
-                  </div> 
-                  
-						<!--<div class="col-sm-12">
-							<div class="tab-content" role="tabpanel"
-								aria-labelledby="day-1-tab">
-								<div id="divCntn" class="tab-pane active">
-									<div th:if="${proDetail.intro} != null">
-										<div id="cotestCntn" th:utext=${proDetail.intro}></div>
-										<div id="designBox"></div>
-									</div>
-								</div>
-							</div>
-						</div>-->
-						<div>
-							<div class="block-27" id="returnPaging" style="width: 100px; margin: 0 auto"></div>
-						</div>
-					</div>
-				</div>
-                <!-- 댓글 -->
-<!--             <div class="comments"  id=reply sec:authorize="isAuthenticated()">
-                  <h4 class="comment-title font-alt">There are comments</h4>
-                  <div class="comment clearfix">
-                    <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
-                    <div class="comment-content clearfix">
-                      <div class="comment-author font-alt"><a href="#">John Doe</a></div>
-                      <form action="replyInsert">
-						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
-						<button type="button" id="replyInsertBtn">댓글작성</button>
-                    	</form>
-                      </div>
-                    </div>
-                  </div>   -->
-              </div>  
-          </div>
-	<script>
+	              	</form>
+                </div>
+              </div>
+    </div> 
+    
+		<div>
+			<div class="block-27" id="returnPaging" style="width: 100px; margin: 0 auto"></div>
+		</div>
+		</div>
+	</div>
+<script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");

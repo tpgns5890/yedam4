@@ -91,6 +91,7 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM RESUME_BOARD
+		WHERE JOB_NO = #{jobNo}
 	</select>
 	
 	<!-- 상세조회 -->

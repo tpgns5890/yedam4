@@ -7,7 +7,7 @@
 	
 		<!-- 검색창 입력 시 -->
 		<if test="title !=null and title != ''">
-			AND (TITLE LIKE '%${title}%' OR JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			AND (J.TITLE LIKE '%${title}%' OR J.JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
 		</if>
 		<!-- option 선택 시-->
 		<if test="eType !=null and eType != ''">

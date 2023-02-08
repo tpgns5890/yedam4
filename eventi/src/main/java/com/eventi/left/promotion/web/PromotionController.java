@@ -42,7 +42,6 @@ public class PromotionController {
 		//paging.setPageSize(4);
 		//promotionVO.setOrderCol("see");
 		
-		
 		//전체리스트 조회
 		List<PromotionVO> contents = proService.proList(promotionVO, paging);
 		model.addAttribute("paging", paging);
@@ -52,20 +51,14 @@ public class PromotionController {
 		for(PromotionVO content : contents) {
 			files = filesService.fileList(content.getUserId());
 			content.setFiles(files);
-			
-			//파일리스트 저장된 파일정보가 홍보번호와 같다면 이미지셋팅.
-			/*
-			 * for(FilesVO file : files) {
-			 * if(file.getTargetId().equals(content.getUserId())) {
-			 * content.setImg(file.getSevNm()); } }
-			 */
 		}
 		model.addAttribute("proList", contents);
+		//인기게시물 조회 
+		PromotionVO promotionVO2 = new PromotionVO();
+		promotionVO2.setOrderCol("see");
 		
-		promotionVO.setOrderCol("see");
-		
-		List<PromotionVO> posts = proService.proList(promotionVO, paging);
-		 model.addAttribute("contents", posts);
+		List<PromotionVO> posts = proService.proList(promotionVO2, paging);
+		model.addAttribute("contents", posts);
 		//이미지
 		//model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 		return "content/promotion/proList";
@@ -90,14 +83,6 @@ public class PromotionController {
 		promotionVO.setFirst(1);
 		promotionVO.setOrderCol("see");
 		
-		/*
-		 * List<PromotionVO> contents = proService.proList(promotionVO, paging);
-		 * model.addAttribute("contents", contents);
-		 */
-		
-		//조회수
-		proService.seeUp(promotionVO);
-		
 		//상세내용
 		model.addAttribute("proDetail", proService.proDetail(promotionVO));
 		
@@ -105,7 +90,6 @@ public class PromotionController {
 		List<FilesVO> files = new ArrayList<>();
 		files = filesService.fileList(promotionVO.getUserId());
 		model.addAttribute("files", files);
-		/* model.addAttribute("file", filesService.fileList(promotionVO.getProNo())); */
 		return "content/promotion/proDetail";
 	}
 		

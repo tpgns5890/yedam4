@@ -13,16 +13,14 @@
 
 <style>
 .heart {
-	width: 100px;
-	height: 100px;
-	background:
-		url("https://cssanimation.rocks/images/poszts/steps/heart.png")
-		no-repeat;
-	background-position: 0 0;
-	cursor: pointer;
-	transition: background-position 1s steps(28);
-	transition-duration: 0s;
-}
+  width: 100px;
+  height: 100px;
+  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  transition: background-position 1s steps(28);
+  transition-duration: 0s;
+  }
 
 .active {
 	transition-duration: 1s;
@@ -265,12 +263,9 @@ table {
 }
 
 </style>
-
 </head>
-
+<body>
 <div layout:fragment="content">
-
-
  <section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/job.jpeg" style="background-image: url(&quot;assets/images/job.jpeg&quot;); background-size: 100%;">
           <div class="container">
             <div class="row">
@@ -279,122 +274,10 @@ table {
               </div>
             </div>
           </div>
-        </section>
-   
-<div >
-<form id="searchForm">
-<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
-<!--<label>행사유형</label>
-	<select id="etype" name="eType"  onchange="order()">
-		<option value="" selected>------</option>
-		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
-		<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
-		<option value="E02" th:selected="${jobBoardVO.eType=='E02'}" >돌잔치</option>
-		<option value="E03" th:selected="${jobBoardVO.eType=='E03'}" >개인행사</option>
-		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
-		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
-		<option value="E06" th:selected="${jobBoardVO.eType=='E06'}" >기념식</option>
-		<option value="E07" th:selected="${jobBoardVO.eType=='E07'}" >가요제</option>
-		<option value="E08" th:selected="${jobBoardVO.eType=='E08'}" >플리마켓</option>
-		<option value="E09" th:selected="${jobBoardVO.eType=='E09'}" >체육대회</option>
-		<option value="E10" th:selected="${jobBoardVO.eType=='E10'}" >단합행사</option>
-		<option value="E11" th:selected="${jobBoardVO.eType=='E11'}" >세미나</option>
-		<option value="E12" th:selected="${jobBoardVO.eType=='E12'}" >포럼</option>
-		<option value="E13" th:selected="${jobBoardVO.eType=='E13'}" >워크샵</option>
-		<option value="E14" th:selected="${jobBoardVO.eType=='E14'}" >전시회</option>
-		<option value="E15" th:selected="${jobBoardVO.eType=='E15'}" >박람회</option>
-		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
-	</select> -->
-	
-<!-- 게시글 정렬기준 -->
-<!--<label>정렬기준</label>
-	<select id="see" name="orderCol" onchange="order()">
-		<option value="" selected>------</option>
-		<option value="dt">작성순</option>
-		<option value="see">조회수</option>
-		<option value="cnt">좋아요순</option>
-	</select>-->
-	<!-- 게시글 검색 -->
-<!--	<input type="text" name="title">
-	<input type="button" id="find" value="찾기" onclick="order()">-->
-</form>
-</div>
+</section>
 
-<!--<button type="button" class="btn btn-outline-primary" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
-<button type="button" class="btn btn-outline-primary" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>-->
-
-
-<!-- 좋아요 -->	
-<div class="stage">
-  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
-</div>	
-        </section>  
-<!--	<table class="table mb-3" >
-	<thead class="thead-dark">
-			<tr>
-				<th>구인게시글번호</th>
-				<th>제목</th>
-				<th>행사유형</th>
-				<th>회원ID</th>
-				<th>좋아요수</th>
-				<th>지원자수</th>
-				<th>작성날짜</th>
-				<th>마감일</th>
-				<th>남은 마감일</th>
-				<th>조회수</th>
-				
-			</tr>		
-		</thead>
-		<tbody id="check">
-			<tr th:each="job : ${jobList}" th:myName = "${job.jobNo}"
-			th:onclick="jobDetail(this.getAttribute('myName'))">
-				<td th:text=${job.jobNo}></td>
-				<td th:text=${job.title}></td>
-				<td th:text=${job.eType}></td>
-				<td th:text=${job.userId}></td>
-				<td th:utext=${job.cnt}></td>
-				<td th:text=${job.reCount}></td>
-				<td th:text="${#dates.format(job.dt, 'yyyy/MM/dd')}"></td>
-				<td th:text="${#dates.format(job.closeDt, 'yyyy/MM/dd')}"></td>
-				
-				<th:block th:if="${job.remain > 0}">
-					<td  th:text="|${job.remain} 일전|"></td>
-				</th:block>
-				<th:block th:unless="${job.remain > 0} ">
-					<td th:text="마감"></td>
-				</th:block>
-
-				<td th:text=${job.see}></td>
-			</tr>
-		</tbody>
-	
-	</table>
-	-->
-<!--<div class="rows">
-	<div class="border" th:each="job : ${jobList}" th:myName = "${job.jobNo}"
-			th:onclick="jobDetail(this.getAttribute('myName'))">
-	
-		<div class="like">
-			<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
-		</div>
-		<p class="logo"><span><img src=""></span></p>
-		<p class="name" th:text=${job.title}>테스</p>
-		<p class="cntn">내</p>
-		
-	
-		<div class="etc"></div>
-			<th:block th:if="${job.remain > 0}">
-					<td  th:text="|${job.remain} 일전|"></td>
-				</th:block>
-				<th:block th:unless="${job.remain > 0} ">
-					<td th:text="마감"></td>
-				</th:block>
-			<p class="right" th:text="|${job.reCount}명 지원|">야야</p>
-	</div>		
-	</div>	-->	
-<body>
-    <main>
-        <div class="content-wrap">
+<div class="content-wrap">
+        <form id="searchForm">
             <div class="option-area">
                 <div class="filtering-area">
                     <!-- 필터링 영역 -->
@@ -424,13 +307,19 @@ table {
 
                     <!-- 검색, 버튼 영역 -->
                     <div class="search-area">
-                        <div class="searchbox">
+                        <div class="searchbox" style="margin-top:35px">
                         <input type="text" name="title" placeholder="검색어를 입력해주세요">
 						
                             <i class="material-symbols-outlined" id="find" onclick="order()">search</i>
                         </div>
-                        <button type="button" class="button user-search-button" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
-                        <button type="button" class="button post-button" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
+                        <button type="button" style="margin-top:35px" class="button user-search-button" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
+                        <button type="button"  style="margin-top:35px" class="button post-button" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
+                        
+                    <!-- 좋아요 -->	
+					<div class="stage" style="margin-top: 5px;">
+						<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+					</div>
+										
                     </div>
                 </div>
                 <!-- 정렬 영역 -->
@@ -443,14 +332,14 @@ table {
 					</select>
                 </div>
             </div>
-    
+    	</form>
+    	
             <!-- 카드 영역 -->
             <div class="card-area">
                 <ul class="card-wrap">
-                    <li class="card" th:each="job : ${jobList}" th:myName = "${job.jobNo}"
-									 th:onclick="jobDetail(this.getAttribute('myName'))">
+                    <li class="card" th:each="job : ${jobList}" th:myName = "${job.jobNo}" th:onclick="jobDetail(this.getAttribute('myName'))">
                         <div class="card-image-wrap">
-                        	<i class="material-symbols-outlined">favorite</i>
+                        	<div th:id="${job.jobNo}" style="position: absolute; right: -9px; top: -9px; z-index: 3;" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
                             <img
                                 src="https://4.img-dpreview.com/files/p/E~TS590x0~articles/3925134721/0266554465.jpeg"
                                 alt="구인글 이미지"
@@ -479,82 +368,7 @@ table {
                 </ul>
             </div>
         </div>
-    </main>
-</body>
-				
-	<section class="module" id="news">
-		<form id="searchForm">
-<!-- option 게시글별 조회수, 작성일순 정렬기준 -->
-<!--<label>행사유형</label>
-	<select id="etype" name="eType"  onchange="order()">
-		<option value="" selected>------</option>
-		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
-		<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
-		<option value="E02" th:selected="${jobBoardVO.eType=='E02'}" >돌잔치</option>
-		<option value="E03" th:selected="${jobBoardVO.eType=='E03'}" >개인행사</option>
-		<option value="E04" th:selected="${jobBoardVO.eType=='E04'}" >기업행사</option>
-		<option value="E05" th:selected="${jobBoardVO.eType=='E05'}" >각종축제</option>
-		<option value="E06" th:selected="${jobBoardVO.eType=='E06'}" >기념식</option>
-		<option value="E07" th:selected="${jobBoardVO.eType=='E07'}" >가요제</option>
-		<option value="E08" th:selected="${jobBoardVO.eType=='E08'}" >플리마켓</option>
-		<option value="E09" th:selected="${jobBoardVO.eType=='E09'}" >체육대회</option>
-		<option value="E10" th:selected="${jobBoardVO.eType=='E10'}" >단합행사</option>
-		<option value="E11" th:selected="${jobBoardVO.eType=='E11'}" >세미나</option>
-		<option value="E12" th:selected="${jobBoardVO.eType=='E12'}" >포럼</option>
-		<option value="E13" th:selected="${jobBoardVO.eType=='E13'}" >워크샵</option>
-		<option value="E14" th:selected="${jobBoardVO.eType=='E14'}" >전시회</option>
-		<option value="E15" th:selected="${jobBoardVO.eType=='E15'}" >박람회</option>
-		<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
-	</select> 
-	
-<!-- 게시글 정렬기준 -->
-<!--<label>정렬기준</label>
-	<select id="see" name="orderCol" onchange="order()">
-		<option value="" selected>------</option>
-		<option value="dt">작성순</option>
-		<option value="see">조회수</option>
-		<option value="cnt">좋아요순</option>
-	</select>-->
-	<!-- 게시글 검색 -->
-	<!--<input type="text" name="title">
-	<input type="button" id="find" value="찾기" onclick="order()">
-	
-	<button type="button" class="btn btn-outline-primary" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
-<button type="button" class="btn btn-outline-primary" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>-->
-	
-	<!-- 좋아요 -->	
-<!--<div class="stage">
-  		<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
-</div>
-</form>-->
 
-<!--<div class="rows">
-	<div class="border" th:each="job : ${jobList}" th:myName = "${job.jobNo}"
-			th:onclick="jobDetail(this.getAttribute('myName'))">
-	
-		<div class="like">
-			<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
-		</div>
-		<p class="logo"><span> <img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></span></p>
-		<p class="name" th:text=${job.title}>테스</p>
-		<p class="cntn" th:text=${job.eType}>내</p>
-		
-	
-		<div class="etc"></div>
-			<th:block th:if="${job.remain > 0}">
-					<td  th:text="|${job.remain} 일전|"></td>
-				</th:block>
-				<th:block th:unless="${job.remain > 0} ">
-					<td th:text="마감"></td>
-				</th:block>
-			<p class="right" th:text="|${job.reCount}명 지원|">야야</p>
-	</div>		
-	</div>	 -->        
-          
-          
-          
-        </section>			
-				
 	<div class="row mt-5">
 		 <div class="col text-center">
 			<div class="block-27">
@@ -565,38 +379,35 @@ table {
 		        
 	<!-- 이미지 나타내기 -->	
 	<div th:each="f : ${file}">
-	<!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
 		<img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 	</div>	
 	        
 <script>
-//csrf 설정
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
-
-//페이징
-function gopage(i) {
-    console.log(i);
-    location.href = '/jobList?page=' + i;
-}
-//링크
-link1 = 'jobInsert'; //구인등록폼 이동
-function jobInsert(){
-	location.href = link1;
-}
-link2 = 'resumeList?userId=[[${session.member != null ? session.member.userId :''}]]';//신청자전체조회
-function resumeList(userId){
-	location.href = link2;
-}
-link3 = 'jobDetail?jobNo='; //게시글 상세조회
-function jobDetail(jobNo){
-	console.log(jobNo)
-	location.href = link3+jobNo;
-}
-
+	//csrf 설정
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	//페이징
+	function gopage(i) {
+	    console.log(i);
+	    location.href = '/jobList?page=' + i;
+	}
+	//링크
+	link1 = 'jobInsert'; //구인등록폼 이동
+	function jobInsert(){
+		location.href = link1;
+	}
+	link2 = 'resumeList?userId=[[${session.member != null ? session.member.userId :''}]]';//신청자전체조회
+	function resumeList(userId){
+		location.href = link2;
+	}
+	link3 = 'jobDetail?jobNo='; //게시글 상세조회
+	function jobDetail(jobNo){
+		console.log(jobNo)
+		location.href = link3+jobNo;
+	}
 	//정렬
 	function order(){
-		//let etype = $("#etype").val(); //공통으로 씀
 		let param = $("#searchForm").serialize()
 		location.href=`/jobList?${param}`
 	}
@@ -622,10 +433,7 @@ function jobDetail(jobNo){
 		
 		//tbody에 들어갈 tr 생성
 		for(r of res){ //제목, 내용 검색 시
-			//if(r.title.includes(search) || r.jobCntn.includes(search)){
-				//alert(r.loc)
-				$("#check").append(makeTr(r));
-   			//}
+			$("#check").append(makeTr(r));
 		}
 	})
 		
@@ -642,28 +450,54 @@ function jobDetail(jobNo){
 					<td>${r.userId}</td>
 			  </tr>`
 	return tr;
-}
+	}
 	
 	//좋아요를 눌렀을 경우
-	    $(".heart").on("click", function() {
-		 let etype = $("#etype").val();
-		 
-		 //클래스가 없을 경우 생성, 클래스가 있을 경우 삭제
-	     $(this).toggleClass("active");
-	     //controller에 job이 없음, 두가지로 좋아요한 게시물 정렬 
-	     let category = "T03";
-	     
-	     if($("#love").hasClass("active")){ //하트가 눌렸을 경우 실행
-	     //좋아요를 추가했을 경우
-	     let userId = '[[${session.member != null ? session.member.userId :''}]]';
-	     location.href=`/jobList?userId=${userId}&eType=${etype}` //변수넣기 
-	    	
-	     } else if (!$("#love").hasClass("active")){ //하트가 눌리지 않았을 경우 실행
-	    	 location.href=`/jobList?eType=${etype}`
-	     }
-	   });
-  
-</script>
-</div>
-
+	$(".heart").on("click", function(e) {
+		$(this).toggleClass("active");
+		let etype = $("#etype").val();
+		let userId = '[[${session.member.userId}]]';
+		let targetNo = $(this).attr('id');
+		let category = "T03";
+		e.stopImmediatePropagation(); 
+		
+	//좋아요를 추가했을 경우 
+	if($(this).hasClass("active")){
+   	 $.ajax({
+		url : "/likes/lInsert",
+		method : 'post',
+		contentType : 'application/x-www-form-urlencoded',
+		data : {userId:userId, targetNo:targetNo, category:category},
+		beforeSend : function(xhr)
+             {  
+ 				xhr.setRequestHeader(header, token);
+             },
+		success : function(data) {
+		},
+		fail : function(result) {
+			alert('필수항목을 입력해주세요')
+		}
+		})
+	} else if (!$(this).hasClass("active")){ //좋아요를 취소했을 경우
+    	//post방식으로 좋아요 취소하기
+    	 $.ajax({
+				url : "/likes/lDelete",
+				method : 'post',
+				contentType : 'application/x-www-form-urlencoded',
+				data : {userId:userId, targetNo:targetNo, category:category},
+				beforeSend : function(xhr)
+                {
+    				xhr.setRequestHeader(header, token);
+                },
+				success : function(data) {
+				},
+				fail : function(result) {
+					alert('필수항목을 입력해주세요')
+				}
+			})
+    	}		
+	});
+		</script>
+		</div>
+	</body>
 </html>

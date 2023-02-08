@@ -105,7 +105,7 @@ public class PromotionServiceImpl implements PromotionService{
 		return proMapper.getSeq();
 	}
 	
-	//조회
+	//조회수
 	@Override
 	public int seeUp(PromotionVO promotionVO) {
 		// TODO Auto-generated method stub

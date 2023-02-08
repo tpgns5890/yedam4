@@ -45,16 +45,20 @@ public class ResumeController {
 		//전체리스트 조회
 		List<ResumeBoardVO> lists = resumeService.getResumeList(resumeBoardVO, paging);
 		model.addAttribute("paging", paging);
-				
-		//사진파일
-		List<FilesVO> files = new ArrayList<>();
-		for(ResumeBoardVO list : lists) {
-			files = filesService.fileList(list.getResumeNo());
-			list.setFiles(files);
-			
-		//model.addAttribute("resumeList", resumeService.getResumeList(resumeBoardVO));
+		
+		// 등록한 글 없는경우
+		if (lists.size() == 0) {
+			model.addAttribute("result", "등록된 글이 없습니다.");
+		}// 등록한 글 있는경우
+		else {
+			model.addAttribute("resumeList", lists); // 구직리스트
+			//사진파일
+			List<FilesVO> files = new ArrayList<>();
+			for(ResumeBoardVO list : lists) {
+				files = filesService.fileList(list.getResumeNo());
+				list.setFiles(files);
 		}
-		model.addAttribute("resumeList", lists);
+	}
 		return "content/resume/resumeList";
 	
 }
@@ -68,15 +72,19 @@ public class ResumeController {
 		List<ResumeBoardVO> lists = resumeService.getResumeJob(resumeBoardVO, paging);
 		model.addAttribute("paging", paging);
 				
-		//사진파일
-		List<FilesVO> files = new ArrayList<>();
-		for(ResumeBoardVO list : lists) {
-			files = filesService.fileList(list.getResumeNo());
-			list.setFiles(files);
-			
+		// 등록한 글 없는경우
+		if (lists.size() == 0) {
+			model.addAttribute("result", "등록된 글이 없습니다.");
+		}// 등록한 글 있는경우
+			else {
+			model.addAttribute("resumeJob", lists); // 구직리스트
+			//사진파일
+			List<FilesVO> files = new ArrayList<>();
+			for(ResumeBoardVO list : lists) {
+				files = filesService.fileList(list.getResumeNo());
+				list.setFiles(files);
+			}
 		}
-		model.addAttribute("resumeList", lists);
-		//model.addAttribute("resumeJob", resumeService.getResumeJob(resumeBoardVO));
 		return "content/resume/resumeJob";
 	}
 	
