@@ -74,7 +74,7 @@ h4 {
   color: black;
   transform: scale(1.2)
 }
-.modal-content {
+.modal-mcContent {
   font-weight: bold;
   background: linear-gradient(160deg, white,#ADD3F5);
 }

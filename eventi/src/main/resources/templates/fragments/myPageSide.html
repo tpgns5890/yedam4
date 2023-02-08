@@ -49,7 +49,7 @@
 						<li>의뢰내역<i class="fa arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
 								<li><a th:href="|/casting/mcCastingList?userId=${session.member.userId}|">사회요청내역</a></li>
-								<li><a th:href="|/casting/mcCastingList?clientId=${session.member.userId}|">의뢰내역</a></li>
+								<li><a th:href="|/casting/mcCastingList?clientId=${session.member.userId}|">사회의뢰내역</a></li>
 				
 						</ul>
 					</ul>
@@ -81,7 +81,7 @@
 						<li>사회자포트폴리오<i class="fa arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
 							<li><a th:onclick="checkMcPrtfl()">사회자포트폴리오</a></li>
-							<li><a th:href="|/move/moveList?userId=${session.member.userId}|">동영상모음</a></li>
+							<li><a th:href="|/move/moveList?userId=${session.member.userId}|">동영상리스트</a></li>
 						</ul>
 					</ul>
 					</th:block>
@@ -91,7 +91,7 @@
 						<li>디자이너포트폴리오<i class="fa arrow fas fa-angle-right"></i></li>
 						<ul class="small_menu">
 							<li><a th:onclick="checkDgnerPrtfl()">디자이너포트폴리오</a></li>
-							<li><a href="/design/myDesignList">디자인 등록</a></li>
+							<li><a href="/design/myDesignList">디자인 리스트</a></li>
 						</ul>
 					</ul>
 					</th:block>

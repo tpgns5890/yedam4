@@ -7,7 +7,7 @@
   display:none;
 }
 .background {
-  background-color: #1950ff;
+  background-color: #FFDE59;
   border-radius: 50%;
   box-shadow: 0 2.1px 1.3px rgba(0, 0, 0, 0.044),
     0 5.9px 4.2px rgba(0, 0, 0, 0.054), 0 12.6px 9.5px rgba(0, 0, 0, 0.061),
@@ -28,7 +28,7 @@
 }
 .line {
   fill: none;
-  stroke: #ffffff;
+  stroke: rgb(0, 0, 0);
   stroke-width: 2.75;
   stroke-linecap: round;
   transition: stroke-dashoffset 500ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -42,7 +42,7 @@
   stroke-dashoffset: -18;
 }
 .circle {
-  fill: #ffffff;
+  fill: rgb(0, 0, 0);
   stroke: none;
   transform-origin: 50%;
   transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -75,7 +75,6 @@
 /* *******************************
 message-area
 ******************************** */
-
 
 .message-area {
   height: 100%;
@@ -327,7 +326,7 @@ a.add img {
   height: 0;
   border-style: solid;
   border-width: 0 12px 15px 12px;
-  border-color: transparent transparent #f5f5f5 transparent;
+  border-color: transparent transparent white transparent;
   -webkit-transform: rotate(-37deg);
   -ms-transform: rotate(-37deg);
   transform: rotate(-37deg);
@@ -339,7 +338,7 @@ a.add img {
   line-height: 1.5;
   font-weight: 400;
   padding: 15px;
-  background: #f5f5f5;
+  background: white;
   display: inline-block;
   border-bottom-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -373,19 +372,19 @@ a.add img {
   height: 0;
   border-style: solid;
   border-width: 0 12px 15px 12px;
-  border-color: transparent transparent #4b7bec transparent;
+  border-color: transparent transparent #FFDE59 transparent;
   -webkit-transform: rotate(37deg);
   -ms-transform: rotate(37deg);
   transform: rotate(37deg);
 }
 
 .msg-body ul li.repaly p {
-  color: #fff;
+  color: black;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
   padding: 15px;
-  background: #4b7bec;
+  background: #FFDE59;
   display: inline-block;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -481,9 +480,9 @@ li.repaly .time {
 
 .send-box button {
   border: none;
-  background: #3867d6;
+  background: #FFDE59;
   padding: 0.375rem 5px;
-  color: #fff;
+  color: black;
   border-radius: 0.25rem;
   font-size: 14px;
   font-weight: 400;

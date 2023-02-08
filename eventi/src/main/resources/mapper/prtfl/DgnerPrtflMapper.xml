@@ -33,9 +33,9 @@
 		       (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = D.DGN_NO) AS CNT 
 		       <include refid="loginLikeCheck" />
 		  FROM DESIGN D, FILES F, LIKES L
-		 WHERE D.CENTER_IMG = F.F_NM
-		   AND D.DGN_NO = F.TARGET_ID
-		   AND D.USER_ID = L.TARGET_NO
+		 WHERE D.CENTER_IMG = F.F_NM(+)
+		   AND D.DGN_NO = F.TARGET_ID(+)
+		   AND D.USER_ID = L.TARGET_NO(+)
 		   AND D.USER_ID = #{userId}
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
