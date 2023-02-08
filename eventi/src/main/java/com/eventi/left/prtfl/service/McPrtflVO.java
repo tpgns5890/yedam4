@@ -34,6 +34,7 @@ public class McPrtflVO {
 	private int cnt;              //게시글당 좋아요 수
 	private String order = "dt";  //정렬
 	private Integer minyear;      //경력조회
+	private Integer rprt;         //신고건수
 	
 	private List<FilesVO> files;  //파일리스트
 	

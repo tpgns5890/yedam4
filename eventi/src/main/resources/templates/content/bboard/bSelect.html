@@ -93,8 +93,10 @@
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo}, type=${bSelect.type})}'|">글 삭제하기</button>
    </th:block>
    
+   <th:block th:if="${session.member.userId} != ${bSelect.writer}">
    <!-- 신고하기 -->
    <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
+   </th:block>
    
    <!-- 해당 게시글에 좋아요를 눌렀을 경우에는 채워진 하트가 나타남 -->
    <th:block th:if="${like == null}">

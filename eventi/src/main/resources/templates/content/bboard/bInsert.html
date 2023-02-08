@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿OCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -342,7 +342,6 @@
 					xhr.setRequestHeader(header, token);
 	            },
 				success : function(data) {
-					console.log(data);
 							$("#bBoardNo").val("");
 							$("#bBoardNo").val(data.bboardNo);
 							$("#ttl").val(data.ttl);
@@ -351,8 +350,8 @@
 							if(data.mclsf != null){
 								$("#mclsf").val(data.mclsf).attr("selected", true);
 							}
-							
-							oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]);
+							oEditors.getById["cntn"].exec("SET_IR", [""]); //내용초기화
+							oEditors.getById["cntn"].exec("PASTE_HTML", [data.cntn]); //내용밀어넣기
 							
 							$("#bBoardForm").attr("action", "/bboard/bUpdate");
 						},

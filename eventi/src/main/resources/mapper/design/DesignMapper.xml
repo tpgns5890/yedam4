@@ -32,6 +32,12 @@
 		</if>
 	</sql>
 	
+	<sql id="winDesign">
+		<if test="winYn != null and winYn != ''">
+			AND WIN_YN = #{winYn}
+		</if>
+	</sql>
+	
 	<!-- 로그인했을경우, 좋아요 체크확인 -->
 	<sql id="loginLikeCheck">
 		<if test="userId != null and userId != ''">
@@ -41,7 +47,7 @@
 	
 	<select id="designList" resultType="DesignVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-			SELECT d.dgn_no,d.user_id,d.c_no,d.name,d.cntn,d.win_yn,d.dt,d.pubc_yn,d.save,code_select(d.caregory)caregory,
+			SELECT DISTINCT d.dgn_no,d.user_id,d.c_no,d.name,d.cntn,d.win_yn,d.dt,d.pubc_yn,d.save,code_select(d.caregory)caregory,
                     (select sev_nm 
                       from files 
                       where target_id = dgn_no
@@ -54,6 +60,7 @@
 			<include refid="search" />
 			<include refid="category" />
 			<include refid="likeDesign" />
+			<include refid="winDesign" />
 			order by #{order} DESC
 	  	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
@@ -67,7 +74,7 @@
 		where SAVE = 'N'
 		<include refid="check" /> 
 		<include refid="category" />
-		<include refid="search" /> 
+		<include refid="search" />
 	</select>
 	
 	<!-- 전체디자인 리스트 개수 반환 -->
@@ -80,6 +87,7 @@
 		<include refid="search" /> 
 		<include refid="category" /> 
 		<include refid="likeDesign" />
+		<include refid="winDesign" />
 	</select>
 	
 	<!-- 공모전1건에 대한 디자인리스트중에서 1번째 대표이미지와 같은 파일명가져오기. -->

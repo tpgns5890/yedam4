@@ -250,17 +250,17 @@
 	#replyInsertFrm{
 		height: 120px;
 	}
+	
+	#backImg{
+		width: 300vh;
+	}
 </style>
 </head>
 
 <div layout:fragment="content">
-   
-   <img th:src="@{/images/title.png}">
+   <img id="backImg" th:src="@{/images/title.png}">
    
    <div class="container">
-   <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-   
-   
    <section id="check">
 	 <nav id="left">
 	  <div id="detail">
@@ -271,10 +271,12 @@
   		<h3 id="userName" th:text="|${mcSelect.userName}님|"></h3>
   		<p style="font-size: 13px; font-weight: bold; text-align: center; margin: 15px 44px;" th:text="${mcSelect.oneIntro}"></p>
   		
+  		<!-- 현재 로그인된 id와 작성자id가 다를 경우 버튼 나타남 -->
   		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
 	  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize chattingUp">1:1대화</button>
 	  		<button type="button" class="find-trigger btn-1 btnSize castingUp">의뢰하기</button>
 		</th:block>
+		<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
 		<th:block th:if="${session.member.userId} == ${mcSelect.userId}">
 		   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
 		   <button type="button" class="find-trigger btn-1 btnSize" th:attr="onclick=|deleteCheck('${mcSelect.userId}')|">글 삭제하기</button>
@@ -305,6 +307,12 @@
 		  		<span class="item__emoji">🎙</span>
 		  		<div class="caption1">경력</div> 
 		  		<div class="value" th:text="|${mcSelect.carrYear}년|"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">🚨</span>
+		  		<div class="caption1">신고건수</div> 
+		  		<div class="value" th:text="|${mcSelect.rprt}건|"></div>
 	  		</div>
   		</div>
   	</div>
@@ -972,8 +980,7 @@
 			function makeList(r){
 				let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
 								<div class="flex-grow-1 ms-3">
-									<h3>${r.toId}</h3>
-									<p>front end developer</p>
+									<h3>🔔${r.toId}</h3>
 								</div>
 							 </a>`;
 				return list;

@@ -4,13 +4,12 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 <head>
 <link rel="stylesheet" href="/css/heart.css">
-<link rel="stylesheet" href="/css/prtfl/button.css">
 <link rel="stylesheet" href="/css/prtfl/mcPrtfl.css">
 <style>
-	.col-md-4{
-    top: -100px !important;
-	margin-bottom: -90px !important;
-	}
+ 	.col-md-4{ 
+     top: -100px !important; 
+ 	 margin-bottom: 20px !important; 
+ 	}
 	
 	<!--디자인 상세보기 모달-->
 	.modal {
@@ -141,10 +140,6 @@
     z-index: 1 ;
   }
   
-  .btn-15 {
-  	margin-top: 25px;
-  }
-  
   #love{
  	z-index: 1;
   }
@@ -155,7 +150,29 @@
   	width: 150px;
   	margin-top: 25px
   }
-	
+  
+  .multi-columns-row{
+    margin: 0 auto;
+    width: 1300px;
+  }
+  
+  .shop-item {
+     text-align: center;
+     margin: 0 auto;
+}
+
+input[type="checkbox"]{
+	margin-top: 35px;
+	z-index: 3;
+	width: 30px;
+	height: 30px;
+	margin-right: 3px;
+}
+
+/*체크박스*/
+input[type="checkbox"]:checked {
+   accent-color: #FFDE59;
+}
 </style>
 </head>   
 
@@ -173,6 +190,15 @@
      
 		<!-- 페이징/정렬처리 -->
 		<div class="container right">
+			<th:block th:if="${designVO.winYn} == null">
+				<input type="checkbox" name="winYn" id="winYn" value=''>
+			</th:block>
+			<th:block th:if="${designVO.winYn} != null">
+				<input type="checkbox" name="winYn" id="winYn" th:value="Y" checked="checked">
+			</th:block>
+			
+			<label for="winYn" style="margin-top: 37px; height: 20px; z-index: 3; font-size: 18px; margin-right: 20px;">우승작품</label>
+		
 			<select name="caregory" id="caregory">
 				<option value="D1" th:selected="${designVO.caregory == 'D1'}">현수막</option>
 				<option value="D2" th:selected="${designVO.caregory == 'D2'}">배너</option>
@@ -180,13 +206,11 @@
 				<option value="D4" th:selected="${designVO.caregory == 'D4'}">포스터</option>
 				<option value="D5" th:selected="${designVO.caregory == 'D5'}">기타</option>
 	        </select>
-		
-			<button type="submit" class="find-trigger btn-15">검색</button>
-		
+
 			<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
 			<!-- 비회원 좋아요버튼-->
 			<th:block sec:authorize="!isAuthenticated()">
-					<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
+				<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
 			</th:block>
 			
 			<!-- 회원 좋아요버튼-->
@@ -194,28 +218,28 @@
 				<div id="love" class="stage heart" th:classappend="${param.likeDesign} !=null ? active" onclick="likeClick(this)"></div>
 			</th:block>
 		</div>
-		<!-- 디자인 리스트 반복 실행 -->
-	<div class="container">
+		
+		<div class="container">
 			<div class="row multi-columns-row" id="designBox">
-				<div th:each="d : ${designList}">
-					
-					<div class="col-sm-6 col-md-4 col-lg-4" > 
-						<div class="shop-item">
-							   <th:block th:if="${d.mylike} > 0">
-									<div class="stage heart active" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -280px;">
-									<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -300px;">
-									</div>
-								</th:block>
-								
-								<th:block th:if="${d.mylike} == 0">
-									<div class="stage heart" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -280px;">
-									<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -300px;">
-									</div>
-								</th:block>  
-															
-							<div class="shop-item-image">
-							<img th:src="|/fileView/${d.centerImg}|" style="width: 360px; height: 400px;" class="img-fluid">
-							    <div class="shop-item-detail">
+				<div th:each="d: ${designList}">
+					<!-- 현수막 -->
+					<th:block th:if="${d.caregory} eq '현수막'">
+						<div class="col-sm-6 col-md-4 col-lg-4" style="width: 85%; margin-left: 30px; "> 
+							<th:block th:if="${d.mylike} > 0">
+								<div class="stage heart active" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -1000px;">
+								<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -940px;">
+								</div>
+							</th:block>
+							
+							<th:block th:if="${d.mylike} == 0">
+								<div class="stage heart" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -1000px;">
+								<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -940px;">
+								</div>
+							</th:block>
+							
+							<div class="shop-item">
+							<div class="shop-item-image"> <img th:src="|/fileView/${d.centerImg}|" style="width: 1200px; height: 200px;"  class="img-fluid">
+							  <div class="shop-item-detail">
 								   			<h3 class="content-box-title font-serif" th:text="|[${d.caregory}]${d.dgnNo}|"></h3>
 								   			<h3 class="content-box-title font-serif" th:text="|디자이너 : ${d.userId}|"></h3>
 								   			<h3 th:id="${d.userId}" class="content-box-title font-serif" th:text="|제목: ${d.name}|"></h3>
@@ -224,35 +248,94 @@
 						             </div>
 								</div>
 							</div>
+							</div>
 						</div>
-					</div>
+					</th:block>
+					
+					<!-- 배너 -->
+					<th:block th:if="${d.caregory} eq '배너'">
+						<div id="d2_margin">
+							<div class="col-sm-6 col-md-4 col-lg-4" style="width: 28%; height: 650px;  margin-right:5px;"> 
+								<th:block th:if="${d.mylike} > 0">
+									<div class="stage heart active" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -260px;">
+									<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -160px;">
+									</div>
+								</th:block>
+								
+								<th:block th:if="${d.mylike} == 0">
+									<div class="stage heart" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -260px;">
+									<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -250px;">
+									</div>
+								</th:block>
+								
+								<div class="shop-item">
+									<div class="shop-item-image"> <img th:src="|/fileView/${d.centerImg}|" class="img-fluid" style="width: 100%; height: 650px;">
+									  <div class="shop-item-detail">
+											<div>
+											   	<h3 class="content-box-title font-serif" th:text="|[${d.caregory}]${d.dgnNo}|"></h3>
+									   			<h3 class="content-box-title font-serif" th:text="|디자이너 : ${d.userId}|"></h3>
+									   			<h3 th:id="${d.userId}" class="content-box-title font-serif" th:text="|제목: ${d.name}|"></h3>
+									        </div>
+								       		 <div class="btn btn-round btn-b">
+									              <span class="icon-magnifying-glass" th:id="${d.dgnNo}">상세보기</span>
+								            </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</th:block>
+					
+					<!-- 일반 -->
+					<th:block th:unless="${d.caregory} eq '현수막' or ${d.caregory} eq '배너'">
+						<div class="col-sm-6 col-md-4 col-lg-4"style="width: 30%;">
+							<th:block th:if="${d.mylike} > 0">
+								<div class="stage heart active" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -270px;">
+								<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -250px;">
+								</div>
+							</th:block>
+							
+							<th:block th:if="${d.mylike} == 0">
+								<div class="stage heart" th:attr="onclick=|likeCheck(this,'${d.dgnNo}')|" style="position:relative; top:80px; z-index: 1;  right: -270px;">
+								<img th:if="${d.winYn} == Y" th:src="@{/images/winner.png}" style="width: 30px; height: 30px; position:relative; top:37px; z-index: 1;  left: -250px;">
+								</div>
+							</th:block>
+							
+							<div class="shop-item">
+									<div class="shop-item-image"><img th:src="|/fileView/${d.centerImg}|" style="width: 400px; height: 400px; border-radius: 3%;"  class="img-fluid">
+									    <div class="shop-item-detail">
+											<div>
+										   		<h3 class="content-box-title font-serif" th:text="|[${d.caregory}]${d.dgnNo}|"></h3>
+									   			<h3 class="content-box-title font-serif" th:text="|디자이너 : ${d.userId}|"></h3>
+									   			<h3 th:id="${d.userId}" class="content-box-title font-serif" th:text="|제목: ${d.name}|"></h3>
+									        </div>
+									        <div class="btn btn-round btn-b">
+									              <span class="select" th:id="${d.dgnNo}">상세보기</span>
+								             </div>
+										</div>
+									</div>
+								</div>
+							</div>
+					</th:block>
 				</div>
 			</div>
-	</div>			
-	
-	<div class="row mt-5" id="paging">
+		
+	   <!-- //페이징 경로 :: 문자 -->
+		<div class="row mt-5" id="paging">
          <div class="col text-center">
            <div class="block-27">
               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
            </div>
          </div>
-    </div>	
-    
-   <!-- //페이징 경로 :: 문자 -->
-	<div class="row mt-5" >
-		<div class="col text-center">
-			<div class="block-27" id="returnPaging">
-			</div>
-		</div>
+    	</div>	
 	</div>
-	
 
 	<!-- 디자인 상세보기 모달 -->
 	<div id="dseignModel" class="modal">
 		<div class="img_modal_content">
 			
 			<div class="column middle">
-				<h3 id="caregory">분류</h3>
+				<h3 id="category">분류</h3>
 				<h2 id="ttl">제목</h2>
 				<div id="modelSelect"></div>
 			</div>
@@ -283,7 +366,8 @@
 			likeSelect();
 		}else{
 			let caregory = $("#caregory option:selected").val();
-			location.href='/design/designList?page=' + i + '&caregory='+ caregory; 
+			let winYn = $("input[name=winYn]").val();
+			location.href='/design/designList?page=' + i + '&caregory='+ caregory + '&winYn=' + winYn; 
 		}
 	 }
 	
@@ -295,6 +379,15 @@
 	// Get the modal
 	var designModel = document.getElementById("dseignModel");
 	
+	$('#winYn').on("click", function(){
+		if($("input[name=winYn]").val() == ''){
+			$("input[name=winYn]").val('Y');
+			likeSelect();
+		} else {
+			$("input[name=winYn]").val('');
+			likeSelect();
+		}
+	})
 	
 	$('.close').on("click", function(){
 		designModel.style.display = "none";
@@ -318,7 +411,7 @@
 				},
 			}).then(res => {
 				if(res > 0){
-					alert('관심 디자인 추가완료!')
+// 					alert('관심 디자인 추가완료!')
 						//전체하트가 눌려진 상태로 재실행
 						if ($("#love").hasClass("active")) { 
 							loveClick();
@@ -345,7 +438,7 @@
 					}
 				}).then(res => {
 					if(res > 0){
-						alert('관심 디자인 취소완료!')
+// 						alert('관심 디자인 취소완료!')
 
 						//전체하트가 눌려진 상태로 재실행
 						if ($("#love").hasClass("active")) { 
@@ -379,17 +472,19 @@
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
+			console.log(res)
 			$('#dgnerSelect').empty();
 			
 			let user = res.userId;
 			let title = res.name;
 			let cntn = '';
 			let contest='';
+			let category = res.caregory;
 			$('#designModel').empty();
 			$('#dgnerSelect').empty();
 			
 			$('#ttl').text(title);
-			$('#caregory').text(res.caregory);
+			$('#category').text(res.caregory);
 			
 			
 			if(res.cNo != null){
@@ -412,7 +507,7 @@
 							
 							<hr>
 							${cntn}
-							<button type="button" onclick="checkPrtfl(user)">${user}님의 포트폴리오 이동</button>
+							<button type="button" onclick="checkPrtfl('${user}')">${user}님의 포트폴리오 이동</button>
 							${contest}
 						  `
 			
@@ -421,18 +516,29 @@
 			$('#modelSelect').empty();
 			//모달내용을 지운뒤 붙여넣기.
 			for(file of res.files){
-				$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo));
+				$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo,category));
 			}
 			
 		})
 	}) 
 	
 	//모달창 :디자인 응모작품 생성.
-	function makeDesignModel(fileName,title,dNo){
-		let design = `  <div class="design" id="${dNo}" style="float: left ">
-								<img src="/fileView/${fileName}" style="width: 900px; height: 900px">
-					   </div>
-					  `;
+	function makeDesignModel(fileName,title,dNo,category){
+		let design;
+		//배너
+		if(category =='배너'){
+			design = `<div class="design" id="${dNo}" style="width:60%; margin: 10px auto; margin-bottom:20px;">
+							<img src="/fileView/${fileName}" style="width: 100%; height: 60%;">
+					  </div>`
+		}else if(category =='현수막'){
+			design = `<div class="design " id="${dNo}" style="width:100%; margin-bottom:20px;">
+						   <img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">
+					  </div>`
+		} else {
+			design = `<div class="design" id="${dNo}" style="float: left ">
+							<img src="/fileView/${fileName}" style="width: 1000px; height: 900px">
+					  </div>`
+		}
 		return design;
 	}
 	
@@ -448,14 +554,24 @@
 	}
 
 	function likeSelect(){
+		let caregory = $("#caregory option:selected").val();
+		let winYn = $("input[name=winYn]").val();
+		
 		if ($("#love").hasClass("active")) { //하트가 눌렸을 경우 실행
-			let likeDesign = '[[${session.member != null ? session.member.userId :''}]]';
-			let caregory = $("#caregory option:selected").val();
-			location.href='/design/designList?caregory='+ caregory + '&likeDesign=' + likeDesign; 
+			let likeDesign = '[[${session.member != null ? session.member.userId :""}]]';
+			
+			if(winYn == ''){
+				location.href='/design/designList?caregory='+ caregory + '&likeDesign=' + likeDesign
+			} else {
+				location.href='/design/designList?caregory='+ caregory + '&likeDesign=' + likeDesign + '&winYn=' + winYn;
+			}
 		
 		} else if (!$("#love").hasClass("active")) { //하트가 눌리지 않았을 경우 실행
-			let caregory = $("#caregory option:selected").val();
-			location.href = "/design/designList?caregory="+ caregory;
+			if(winYn == ''){
+				location.href = "/design/designList?caregory="+ caregory;
+			}else{
+				location.href = "/design/designList?caregory="+ caregory + '&winYn=' + winYn;	
+			}
 		}
 	}
 	
