@@ -152,22 +152,6 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="movie">동영상등록</label><br>
-								<span>동영상URL을 입력해주세요.(Youtube지원)</span><br>
-								<input type="file" id="videoInp" name="uploadFile"/>
-								<div id="addMove">
-								</div>
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="button" id="movieInsert" value="동영상추가" class="btn btn-primary">
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
 								<input type="submit" id="insert" value="등록" class="btn btn-primary">
 								<div class="submitting"></div>
 							</div>
@@ -235,24 +219,8 @@ $(document).ready(function() {
 		$('#insert').on('click', function insert() {
 				 oEditors.getById["intro"].exec("UPDATE_CONTENTS_FIELD", []) 
 				let intro = document.getElementById("intro").value //태그 생성 
-		
-		//행사유형
-		/* var eTypeList = eTag();
-		$("eTypeList").val(eTypeList); */
-	
 		})
 		
-		//동영상추가버튼
-	    $("#movieInsert").on('click', function() {
-	    	let tag = `<div><input type="file" id="videoInp" name="uploadFile"/><span><button type="button" class="cancel">-</button></span></div>`
-	    	$("#addMove").append(tag);
-	    })
-	    
-	    //동영상삭제
-	    $(document).on('click', '.cancel', function() {
-	    	console.log($(this));
-	    	$(this).parent().parent('div').remove();
-	    })
 		
 	    //스타일태그
 	    function proStyle(e){

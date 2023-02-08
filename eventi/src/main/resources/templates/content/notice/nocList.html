@@ -97,8 +97,9 @@ thead {
             </div>
           </div>
 </section>
-	<button type="button" class="btn btn-outline-primary" 
-	th:onclick="|location.href='@{nocInsert}'|">공지사항등록</button>
+<th:block sec:authorize="hasAnyRole('ADMIN')">
+	<button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{nocInsert}'|">공지사항등록</button>
+</th:block>
 	
 	<!-- 게시글 검색 -->
 	<form action="/nocList">

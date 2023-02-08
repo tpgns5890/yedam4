@@ -22,23 +22,6 @@
           </div>
 </section>
  
-
-<!--<form method="post">
-
-
-		<input type="text" title="검색">
-		<input type="submit" value="검색">
-
-<ul id="ul">
-<th:block  th:each="faq : ${faqList}">
-				<li><label th:text=${faq.faqNo}></label> 
-				  	<label th:text=${faq.faqTtl} class="ttl"></label>
-				  	<textarea cols="30" rows="5" th:text=${faq.faqAns} class="ans"  ></textarea>
-				 </li>		
-</th:block>
-</ul>
-</form>-->
-
 		<div class="container">
             <div class="row mb-60">
               <div class="col-sm-8 col-sm-offset-2">
@@ -49,10 +32,9 @@
                     <button class="search-btn" type="submit" id="find" value="찾기"><i class="fa fa-search"></i></button>
                   </div>
                 </form>
+                <th:block sec:authorize="hasAnyRole('ADMIN')">
                 <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqInsert}'|">글등록</button>
-                <!--  <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqDelete(faqNo=${faq.faqNo})}'|">삭제</button>-->
-                
-                
+                </th:block>
               </div> 
             </div>
             <div class="row" >

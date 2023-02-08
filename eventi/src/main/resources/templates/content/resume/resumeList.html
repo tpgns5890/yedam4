@@ -165,9 +165,16 @@ table {
 					</th:block>
 
 					<div class="post mb-20">
-						<div class="post-thumbnail">
-							<a href="#"><img th:src="|/fileView/${res.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-						</div>
+						<th:block th:if="${res.img} == null">
+							<div class="post-thumbnail">
+								<a href="#"><img th:src="@{/images/public.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+							</div>
+						</th:block>
+						<th:block th:if="${res.img} != null">
+							<div class="post-thumbnail">
+								<a href="#"><img th:src="|/fileView/${res.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+							</div>
+						</th:block>
 						<div class="post-header font-alt">
 							<h2 class="post-title">
 								<a href="#" th:text=${res.title}> </a>
@@ -195,6 +202,7 @@ table {
 				</div>
 			</div>
 			
+			<!-- 페이징 -->
 			 <div class="row mt-5">
 		          <div class="col text-center">
 		            <div class="block-27">
@@ -203,10 +211,9 @@ table {
 		          </div>
 		        </div>
 		        
-		   <div th:each="f : ${file}">
-				     <!-- <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg"> --> 
-				       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-			</div>     
+		<div th:each="f : ${file}">
+			<img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+		</div>     
 	</section>
 </div>
 
