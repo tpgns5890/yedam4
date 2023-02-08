@@ -18,9 +18,9 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 		
-		<div id="userUpgrade" >
+		<div id="userUpgrade"  >
 			<h3>회원등급 승급신청</h3>
-			<div class="box">
+			<div class="box" style="background-color: #fdf9e7">
 					<label>사회자</label><input type="radio" name="crtfType" value="MC">
 					<label>디자이너</label><input type="radio" name="crtfType" value="DESIGNER"><br>
 					<div id="upgrade">
@@ -34,8 +34,15 @@
 						<div th:each="data : ${userCrtf}">
 							<ul id="qList" style="list-style: none;">
 							<li class="qualLi">
-								<span th:id="${data.crtfId}" th:text="|자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}|"></span>
-								<button type="button" class="btn btn-g btn-round quDelBtn">X</button>
+								<th:block th:if="${data.accpYN} != 'Y'">
+									<span  th:text="|자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}|"></span>
+									<span class="userStatus">승인대기</span>
+									<button th:id="${data.crtfId}" type="button" class="btn btn-g btn-round quDelBtn">X</button>
+								</th:block>
+								<th:block th:unless="${data.accpYN} != 'Y'">
+									<span th:id="${data.crtfId}" th:text="|자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum} |"></span>
+									<span class="userStatus">승인완료</span>
+								</th:block>
 							</li>
 						 </ul>						
 						</div>
@@ -76,6 +83,7 @@
 	 					xhr.setRequestHeader(header, token);
 	 	            },
 					success : function(result){
+						console.log(result)
 				      if(result != null){
 				    	  $('#userCrtf').append(makeli(result));
 						  alert('신청완료');
@@ -95,7 +103,6 @@
 		});
 		
 		function makeli(data){
-			console.log(data);
 			let p = `<ul id="qList" style="list-style: none;">
 						<li class="qualLi">
 							<span id="${data.crtfId}">자격증명: ${data.crtfName}, 자격증발급번호: ${data.crtfNum}</span>
@@ -106,6 +113,39 @@
 					
 			return p;
 		}
+		
+		
+		//승급신청 취소
+		$('.quDelBtn').on("click", function(){
+			
+			let li = $(this).parent();
+			let crtfId = $(this).attr("id");
+			if(!confirm('승급신청을 취소하시겠습니까?')){
+				 return false;
+			}
+			
+			$.ajax({
+	 	   			url : '/myPage/userDeleteCrtf',
+	 	   			method : 'post',
+		            data:{crtfId},
+	 	   			beforeSend : function(xhr)
+	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 					xhr.setRequestHeader(header, token);
+	 	            },
+					success : function(result){
+				      if(result > 0){
+						  alert('취소성공');
+						  li.remove();
+							
+				     }else {
+							alert('취소실패')	
+				     }
+					 },
+			        fail: function () {
+			           }
+					})
+			
+		})
 	</script>
 	</div>
 </body>

@@ -62,13 +62,13 @@
 					xhr.setRequestHeader(header, token);
 				},
 			}).then(res => {
-				console.log(res);
 				//map =>  contest,paging 
 				$('#likeList').empty();
 				
 				//관심 공모전이 없을경우
-				if(res.contest == ''){
-				  $('.contestDiv').append('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:0px 0px 50px 250px;">')
+				if(res.contest == 0){
+					console.log('gg')
+				  $('#contestDiv').append('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">');
 				}
 				for (contest of res.contest) {
 					$('#likeList').append(makeBox_map(contest));
@@ -152,7 +152,7 @@
 				}).then(res => {
 					if(res > 0){
 						alert('관심공모전 취소완료!')
-							$(e).parent().parent().remove(); //확인해보기
+						likeSelect();
 					}else{
 						alert('관심공모전 취소실패!')
 					}

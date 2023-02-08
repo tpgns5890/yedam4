@@ -123,5 +123,11 @@ public class MyPageController {
 		service.insertCrtf(crVO);
 		return crVO;
 	}
+	// 승급신청 자격증삭제(요청중인 상태만)
+	@PostMapping("userDeleteCrtf")
+	@ResponseBody
+	public int userDeleteCrtf(String crtfId) {
+		return service.crtfDelete(crtfId);
+	}
 
 }

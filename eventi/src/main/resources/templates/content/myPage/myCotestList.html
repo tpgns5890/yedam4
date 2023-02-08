@@ -14,34 +14,37 @@
 
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content">
-	<h2 hidden="hidden" class="module-title font-alt">공모전리스트</h2>
-		
+		<h2 hidden="hidden" class="module-title font-alt">공모전리스트</h2>
+
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
-		<div class="contest" >
+		<div class="contest">
 			<!-- 게시글 검색 -->
 			<form name="searchFrm" id="search">
-			 	<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
+				<select name="search" class="form-control"
+					style="font-size: 18px; font-weight: bold; height: 40px">
 					<option value="ttl" selected="selected">제목</option>
 					<option value="cntn">내용</option>
-                </select>
-                <input type="text" name="ttl" id="input" value="">
-				<input type="hidden" name="page" value="1">
-				<button type="submit" id="searchBtn" class="btn btn-g btn-round inputBtn">검색</button>
-				<button type="button" id="deleteBtn"  class="btn btn-d btn-round delBtn">삭제</button>
+				</select> <input type="text" name="ttl" id="input" value=""> <input
+					type="hidden" name="page" value="1">
+				<button type="submit" id="searchBtn"
+					class="btn btn-g btn-round inputBtn">검색</button>
+				<button type="button" id="deleteBtn"
+					class="btn btn-d btn-round delBtn">삭제</button>
 			</form>
-			
-			
+
+
 			<!-- 테이블 -->
 			<table id="table" class="table mb-3">
 				<thead class="thead-dark">
 					<tr>
-						<th><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
+						<th><input type="checkBox" value="삭제" class="delete"
+							id="allDelete"></th>
 						<th>no</th>
 						<th>분류별</th>
-						<th style="width:30%;">제목</th>
-						<th style="width:30%;">진행기간</th>
+						<th style="width: 30%;">제목</th>
+						<th style="width: 30%;">진행기간</th>
 						<th>진행</th>
 						<th>지원수</th>
 						<th>조회/등록</th>
@@ -51,79 +54,95 @@
 				</thead>
 				<tbody>
 					<tr th:each="contest : ${contestList} ">
-						<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
-						
+						<td><input class="check delete" type="checkBox"
+							value="delete" onkeyup="myFunction()"></td>
+
 						<td th:text=${contest.cNo}></td>
 						<td th:text=${contest.category}></td>
 						<td th:text=${contest.ttl}></td>
-						
+
 						<!-- 마감기한만 있을경우 -->
 						<th:block th:if="${contest.dtExtns} == null">
-							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}"></td>
+							<td
+								th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}"></td>
 						</th:block>
-						
+
 						<!-- 마감연장 1회 한경우 -->
 						<th:block th:if="${contest.dtExtns} != null">
-							<td th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}"></td>
+							<td
+								th:text="|${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtExtns, 'yyyy-MM-dd')}"></td>
 						</th:block>
-						
+
 						<!-- 임시저장 한경우 -->
 						<th:block th:if="${contest.ing} eq '임시저장'">
 							<td th:text="${contest.ing}"></td>
 							<td th:text="${contest.designCount}"></td>
 							<td></td>
-							<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
+							<td><button class="btn btn-g btn-round" type="button"
+									id="selete"
+									th:onclick="|location.href='@{insert(cNo=${contest.cNo})}'|">공모전등록</button></td>
 						</th:block>
-						
+
 						<!-- 공모전 등록한 경우 -->
 						<th:block th:if="${contest.ing} eq '마감'">
-							<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} == 0">
+							<th:block
+								th:if="${contest.winnerCheck} == 0 and ${contest.designCount} == 0">
 								<td th:text="${contest.ing}"></td>
 								<td th:text="${contest.designCount}"></td>
 								<td></td>
 							</th:block>
 
-							<th:block th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
+							<th:block
+								th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
 								<td th:text="${contest.ing}"></td>
 								<td th:text="${contest.designCount}"></td>
-								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">등록</button></td>
+								<td><button class="btn btn-g btn-round" type="button"
+										id="selete"
+										th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">등록</button></td>
 							</th:block>
-							
+
 							<th:block th:if="${contest.winnerCheck} > 0">
 								<td th:text="종료"></td>
 								<td th:text="${contest.designCount}"></td>
-								<th:block th:if=" ${contest.designCount} > 0 " >
-									<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
-									<td><button class="btn btn-g btn-round" type="button" th:attr="onclick=|winnerList('${contest.cNo}')|">후기등록</button></td>
+								<th:block th:if=" ${contest.designCount} > 0 ">
+									<td><button class="btn btn-g btn-round" type="button"
+											id="selete"
+											th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
+									<td><button class="btn btn-g btn-round" type="button"
+											th:attr="onclick=|winnerList('${contest.cNo}')|">후기등록</button></td>
 								</th:block>
-								<th:block th:if=" ${contest.designCount} == 0 " >
+								<th:block th:if=" ${contest.designCount} == 0 ">
 									<td></td>
 									<td></td>
 								</th:block>
 							</th:block>
-							
+
 							<td></td>
 						</th:block>
-						
+
 						<th:block th:if="${contest.ing} eq '진행'">
 							<td th:text="${contest.ing}"></td>
 							<td th:text="${contest.designCount}"></td>
-						
-							<th:block th:if=" ${contest.designCount} > 0 " >
-								<td><button class="btn btn-g btn-round" type="button"  id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
+
+							<th:block th:if=" ${contest.designCount} > 0 ">
+								<td><button class="btn btn-g btn-round" type="button"
+										id="selete"
+										th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
 							</th:block>
-							<th:block th:if=" ${contest.designCount} == 0 " >
+							<th:block th:if=" ${contest.designCount} == 0 ">
 								<td></td>
 							</th:block>
-								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">조회</button></td>
+							<td><button class="btn btn-g btn-round" type="button"
+									th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">조회</button></td>
 						</th:block>
-							
+
 						<!-- 문의내역 조회 -->
-						<th:block th:if=" ${contest.questionCount} == 0 " >
+						<th:block th:if=" ${contest.questionCount} == 0 ">
 							<td></td>
 						</th:block>
-						<th:block th:if=" ${contest.questionCount} > 0 " >
-							<td><button class="btn btn-g btn-round questionsList" type="button" >조회</button></td>
+						<th:block th:if=" ${contest.questionCount} > 0 ">
+							<td><button class="btn btn-g btn-round questionsList"
+									type="button">조회</button></td>
 						</th:block>
 					</tr>
 				</tbody>
@@ -132,22 +151,24 @@
 			<div class="row mt-5">
 				<div class="col text-center">
 					<div class="block-27">
-						<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+						<th:block
+							th:replace="fragments/paging :: component(${paging},'gopage')">
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- 공모전 1건에 대한 문의리스트 모달 -->
 		<div id="questionsModel" class="modal">
 			<div class="question_modal_content">
 				<span id="questionCancel" class="close">&times;</span>
 				<h3 id="coNo">공모전 문의내역</h3>
 				<div id="modelSelect"></div>
+				<div id="qBtn"></div>
 			</div>
 			<div class="modal_layer"></div>
 		</div>
-		
+
 		<!-- 후기등록 우승자선택 모달 -->
 		<div id="winnerModel" class="modal">
 			<div class="winner_modal_content">
@@ -157,58 +178,68 @@
 			</div>
 			<div class="modal_layer"></div>
 		</div>
-		
+
 		<!-- 후기 폼 -->
-	    <div id="reviewFrm" class="modal">
-				<div class="review_modal_content">
-					<div style="width: 80%; margin: 0 auto;">
-						<h3>후기등록</h3>
-						<label>대상</label>
-						<input type="text" id="reviewTgt" name="reviewTgt" readonly><br>
-						
-						<label>의뢰자</label>
-						<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
-						<div class="starbox">
-							<label>별점</label>
-							<div class="starpoint_wrap">
-							  <div class="starpoint_box">
-							    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
-							    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1</span></label>
-							    <label for="starpoint_3" class="label_star" title="1.5"><span class="blind">1.5</span></label>
-							    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2</span></label>
-							    <label for="starpoint_5" class="label_star" title="2.5"><span class="blind">2.5</span></label>
-							    <label for="starpoint_6" class="label_star" title="3"><span class="blind">3</span></label>
-							    <label for="starpoint_7" class="label_star" title="3.5"><span class="blind">3.5</span></label>
-							    <label for="starpoint_8" class="label_star" title="4"><span class="blind">4</span></label>
-							    <label for="starpoint_9" class="label_star" title="4.5"><span class="blind">4.5</span></label>
-							    <label for="starpoint_10" class="label_star" title="5"><span class="blind">5</span></label>
-							    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio">
-							    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio">
-							    <span class="starpoint_bg"></span>
-							  </div>
+		<div id="reviewFrm" class="modal">
+			<div class="review_modal_content">
+				<div style="width: 80%; margin: 0 auto;">
+					<h3>후기등록</h3>
+					<label>대상</label> <input type="text" id="reviewTgt"
+						name="reviewTgt" readonly><br> <label>의뢰자</label> <input
+						type="text" id="userId" name="userId"
+						th:value="${session.member.userId}" readonly><br>
+					<div class="starbox">
+						<label>별점</label>
+						<div class="starpoint_wrap">
+							<div class="starpoint_box">
+								<label for="starpoint_1" class="label_star" title="0.5"><span
+									class="blind">0.5</span></label> <label for="starpoint_2"
+									class="label_star" title="1"><span class="blind">1</span></label>
+								<label for="starpoint_3" class="label_star" title="1.5"><span
+									class="blind">1.5</span></label> <label for="starpoint_4"
+									class="label_star" title="2"><span class="blind">2</span></label>
+								<label for="starpoint_5" class="label_star" title="2.5"><span
+									class="blind">2.5</span></label> <label for="starpoint_6"
+									class="label_star" title="3"><span class="blind">3</span></label>
+								<label for="starpoint_7" class="label_star" title="3.5"><span
+									class="blind">3.5</span></label> <label for="starpoint_8"
+									class="label_star" title="4"><span class="blind">4</span></label>
+								<label for="starpoint_9" class="label_star" title="4.5"><span
+									class="blind">4.5</span></label> <label for="starpoint_10"
+									class="label_star" title="5"><span class="blind">5</span></label>
+								<input type="radio" name="starpoint" id="starpoint_1"
+									class="star_radio"> <input type="radio"
+									name="starpoint" id="starpoint_2" class="star_radio"> <input
+									type="radio" name="starpoint" id="starpoint_3"
+									class="star_radio"> <input type="radio"
+									name="starpoint" id="starpoint_4" class="star_radio"> <input
+									type="radio" name="starpoint" id="starpoint_5"
+									class="star_radio"> <input type="radio"
+									name="starpoint" id="starpoint_6" class="star_radio"> <input
+									type="radio" name="starpoint" id="starpoint_7"
+									class="star_radio"> <input type="radio"
+									name="starpoint" id="starpoint_8" class="star_radio"> <input
+									type="radio" name="starpoint" id="starpoint_9"
+									class="star_radio"> <input type="radio"
+									name="starpoint" id="starpoint_10" class="star_radio">
+								<span class="starpoint_bg"></span>
 							</div>
 						</div>
+					</div>
 					<br>
-					
-					<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
+
+					<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn"
+						placeholder="후기를 작성해주세요."></textarea>
 					<div id="reviewBtn">
-						<button type="button" class="cancle btn btn-g btn-round" >취소</button>
+						<button type="button" class="cancle btn btn-g btn-round">취소</button>
 						<button type="button" class="btn btn-g btn-round" id="review">등록</button>
 					</div>
 				</div>
 			</div>
 			<div class="modal_layer"></div>
 		</div>
-	
-		
+
+
 		<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
@@ -223,7 +254,7 @@
 			}
 		})
 		
-		//문의사항 버튼 누를시 리스트 모달창 띄우기
+		//문의내역 조회버튼 누를시 리스트 모달창 띄우기
 		$('.questionsList').on("click", function(){
 			let cNo = $(this).parent().siblings(':eq(1)').text()
 			$.ajax({
@@ -236,11 +267,12 @@
 				},
 				success: function (result) {
 					$('#modelSelect').empty();
+					$('#qBtn').empty();
 	        		 for(data of result){
-		        	   	makeQuestionList(data);
+	        			 $('#modelSelect').append(`<p>[${data.qNo}] ${data.ttl}</p>`);
 	        	   	} 
-	        		$('#modelSelect').append(makeQuestionList(data)); 
-	        		$('#questionsModel').css('display', 'block');
+	        		 $('#qBtn').append(`<button class="btn btn-g btn-round yBtn" type="button" onclick="location.href='/contest/select?cNo=${cNo}'">답변등록폼 이동</button>`)
+	        		 $('#questionsModel').css('display', 'block');
 	        	   	
 		        },
 		        fail: function () {
@@ -255,22 +287,6 @@
 			$('#questionsModel').css('display', 'none');
 		})
 		
-		
-		//공모전 문의리스트 모달창 붙여넣기
-		function makeQuestionList(data){	
-			let quesetion = `<span>${data.ttl}</span>
-							 <button id="${data.qNo}" class="qInsert">답변등록</button><br>`;
-			return quesetion;
-		}
-		
-		//문의리스트 답변등록버튼 누를시
-		/* $('.qInsert').on("click", function(e){
-			console.log('gg');
-			console.log(e.target.id)
-			console.log(e)
-		}) */
-		
-		//--------------------------------------------------------
 		
 
 		//검색선택
@@ -451,7 +467,7 @@
 			
 		
 	</script>
-	
+
 	</div>
 </body>
 </html>
