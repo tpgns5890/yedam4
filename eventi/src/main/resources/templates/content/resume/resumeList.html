@@ -3,33 +3,155 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
+<head>
+ <link rel="stylesheet" href="index.css" />
+ <link rel="stylesheet" href="eventi.css" />
+</head>
+<style>
+content-wrap {
+    width: 1400px;
+    margin: 60px auto 0;
+}
+.option-area,
+.card-area {
+    padding: 0 16px;
+}
+.filtering-area {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--light-gray);
+}
+/* 검색, 버튼 영역 */
+.search-area {
+    display: flex;
+    gap: 6px;
+}
+.searchbox,
+.button {
+    display: inline-block;
+    height: 40px;
+    padding: 12px;
+    border-radius: 3px;
+}
+.searchbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    border: 1px solid var(--light-gray);
+}
+.searchbox > input {
+    width: 100%;
+    margin-right: 12px;
+    border: none;
+    outline: none;
+}
+.searchbox > input::placeholder {
+    color: var(--light-gray);
+}
+.searchbox > i {
+    color: var(--main-color);
+    cursor: pointer;
+}
 
+.button {
+    cursor: pointer;
+}
+.user-search-button {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+}
+.post-button {
+    background: var(--main-color);
+    border: none;
+    color: #fff;
+}
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+
+:root {
+	--main-color: #FAB955;
+	--light-gray: #dbdbdb;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video,
+textarea {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body * {
+	font-family: 'Pretendard';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+ol, ul, li {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* 검색, 버튼 영역 끝 */    
+</style>
 <div layout:fragment="content">
-	<section class="module bg-dark-60 gallery-page-header parallax-bg"
-		data-background="assets/images/gallery_bg.jpg"
-		style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-6 col-sm-offset-3">
-					<h2 class="module-title font-alt">구직자 리스트</h2>
-					<div class="module-subtitle font-serif">Small Title</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	
+<section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/job.jpeg" style="background-image: url(&quot;assets/images/job.jpeg&quot;); background-size: 100%;">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt" style="margin: 0;">지원자조회</h2>
+              </div>
+            </div>
+          </div>
+</section>
+
 	<section class="module" id="news">
 		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
 		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
 		<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
 		<div class="container">
 			<div class="row">
+			
 				<div class="col-sm-6 col-sm-offset-3">
 					<h2 class="module-title font-alt">구직자 한눈에 보기</h2>
 					<div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을
 						누르세요.</div>
 				</div>
 			</div>
+			
 			<div class="row multi-columns-row post-columns" id="check">
 				<div class="col-sm-6 col-md-4 col-lg-4"
 					th:each="res : ${resumeList}">
@@ -49,11 +171,11 @@
 						</div>
 						<div class="post-header font-alt">
 							<h2 class="post-title">
-								<a href="#" th:text=${res.jobNo}> </a>
+								<a href="#" th:text=${res.title}> </a>
 							</h2>
-							<div class="post-meta" th:text=${res.seekerId}><a href="#"></a></div>
+							<div class="post-meta" th:text="|작성자: ${res.seekerId}|"><a href="#"></a></div>
 						</div>
-						<div class="post-entry" th:text=${res.title}>
+						<div class="post-entry">
 						</div>
 						<div class="post-more">
 							<a class="more-link" href="#" th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">Read more</a>

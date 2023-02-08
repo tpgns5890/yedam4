@@ -5,50 +5,94 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="~{layouts/default_layout}">
 <head>
+<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+<script src="https://kit.fontawesome.com/a532c3d0aa.js" crossorigin="anonymous"></script>
 <style>
-.sidebar{
-	position: fixed;
-    right: 30px;
-    top: 310px;
-    z-index: 10;
+.fa-user{
+font-size: 35px;
 }
+.container {
+    width: 60% !important;
+}
+p{
+	font-size: 18px;
+	font-weight: blod;
+	margin-bottom: 30px;
+}
+h4 {
+    margin: 30px 0 20px;
+}
+.promotionBtn,#liCntn,#liQuestions,#lientry{
+	z-index: 1 ;
+}
+#menu{
+    margin-top: 30px;
+}
+.container .topBox{
+    padding: 20px;
+    box-shadow: 2px 10px 9px 5px rgb(0 0 0 / 4%);
+    border-radius: 20px;
+    padding-top: 20px;
+    height: 610px;
+}
+#showBox{
+	padding: 5px 50px;
+	 height: 610px;
+}
+/* 버튼 */
+
 </style>
 </head>
+<body>
 <div layout:fragment="content">
 
-	<section class="module bg-dark-60 gallery-page-header parallax-bg"
-		data-background="assets/images/gallery_bg.jpg"
-		style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-6 col-sm-offset-3">
-					<h2 class="module-title font-alt"></h2>
-					<div class="module-subtitle font-serif"></div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-	<th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
-	</th:block>
-       <section class="module">
+<section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" 
+		data-background="/images/promotion.jpeg" style="background-image: url(&quot;assets/images/promotion.jpeg&quot;); background-size: 100%;">
           <div class="container">
             <div class="row">
-              <div class="col-sm-8">
-                <div class="post">
-                  
-				 <img th:src="|/fileView/${proDetail.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></div><div>
-				 
-                  <div class="post-header font-alt">
-                    <h1 class="post-title" th:text=${proDetail.eName}>Our trip to the Alps</h1>
-                    <div class="post-meta" th:text=${proDetail.proNo} id="proNo"  >By&nbsp;<a href="#">Mark Stone</a>| 23 November | 3 Comments | <a href="#">Photography, </a><a href="#">Web Design</a>
-                    </div>
-                  </div>
-                 
-                   <div class="post-entry" >
-                    <p th:text=${proDetail.userId}> The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
-                    <p th:text=${proDetail.eType}>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt" style="margin: 0;">홍보게시판</h2>
+              </div>
+            </div>
+          </div>
+</section>
+          <div class="container">
+          		<div class="row topBox"> 
+					<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
+						<!-- 이미지 출력 -->
+						 <img th:src="|/fileView/${proDetail.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">		
+					</div>
+					<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
+						<div id="show"></div>
+						<h2 th:text=${proDetail.eName}></h2>
+						<h4 th:text="|글번호: ${proDetail.proNo}|" id="proNo"></h4>
+						<h4 th:text="|작성자: ${proDetail.userId}|"></h4>
+					<div style="height: 50px;">
+					
+						<!-- 조회수 -->
+						 <span style='font-size: 30px;'>&#128065;</span>
+						 <span id="see" th:text="${proDetail.see}"></span>
+					</div>
+					<div>
+						<p th:text="|행사유형: ${proDetail.eType}|"></p>
+					</div>
+					<div>
+						<p th:text="|작성날짜: ${proDetail.dt}|"></p>
+					</div>
+          	         <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+  				 <th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
+						<div class="promotionBtn_user">
+							<a href="#" class="w-btn w-btn-gra1"
+								th:onclick="|location.href='@{proUpdate(proNo=${proDetail.proNo})}'|">수정</a>
+							<a href="#" class="w-btn w-btn-gra1"
+								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
+					</div>
+				</th:block>	
+			</div>
+         </div>        
+<!--                   <div class="post-entry" >
+                    <p th:text=${proDetail.userId}> 작성자</p>
+                    <p th:text=${proDetail.eType}>행사유형.</p>
                       <p th:utext=${proDetail.intro}>Lorem </p>
                     <ul>
                       <li th:text="${#dates.format(proDetail.eSday, 'yyyy-MM-dd')}">The European languages are members of the same family.</li>
@@ -57,10 +101,10 @@
                       <li th:text=${proDetail.entrance}>Their separate existence is a myth.</li>
                       <li th:text=${proDetail.accommodate}>Their separate existence is a myth.</li>
                     </ul>
-                    <p th:text=${proDetail.see}>The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                    <p th:text=${proDetail.see}>관심수.</p>-->
                     
                     <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-  				 <th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
+  				<!-- <th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
                     <div class="tag-widget post-tag-container mb-5 mt-5">
 						<div class="tagcloud">
 							<a href="#" class="tag-cloud-link"
@@ -69,33 +113,53 @@
 								th:onclick="|location.href='@{proDelete(proNo=${proDetail.proNo})}'|">삭제</a>
 						</div>
 					</div>
-				</th:block>	
-				
-                  </div>
-                </div>
-                
-                <div class="post #">
-                  <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="Post with text only">Mark Stone</a></h2>
-                    <div class="post-meta">By&nbsp;<a href="#">| 23 November | 3 Comments | </a>Marketing, ,Web Design<a href="#">A</a><a href="#"> </a><a href="#">w</a><a href="#">o</a><a href="#">n</a><a href="#">d</a><a href="#">e</a><a href="#">r</a><a href="#">f</a><a href="#">u</a><a href="#">l</a><a href="#"> </a><a href="#">s</a><a href="#">e</a><a href="#">r</a><a href="#">e</a><a href="#">n</a><a href="#">i</a><a href="#">t</a><a href="#">y</a><a href="#"> </a><a href="#">h</a><a href="#">a</a><a href="#">s</a><a href="#"> </a><a href="#">t</a><a href="#">a</a><a href="#">k</a><a href="#">e</a><a href="#">n</a><a href="#"> </a><a href="#">p</a><a href="#">o</a><a href="#">s</a><a href="#">s</a><a href="#">e</a><a href="#">s</a><a href="#">s</a><a href="#">i</a><a href="#">o</a><a href="#">n</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">m</a><a href="#">y</a><a href="#"> </a><a href="#">e</a><a href="#">n</a><a href="#">t</a><a href="#">i</a><a href="#">r</a><a href="#">e</a><a href="#"> </a><a href="#">s</a><a href="#">o</a><a href="#">u</a><a href="#">l</a><a href="#">,</a><a href="#"> </a><a href="#">l</a><a href="#">i</a><a href="#">k</a><a href="#">e</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">e</a><a href="#">s</a><a href="#">e</a><a href="#"> </a><a href="#">s</a><a href="#">w</a><a href="#">e</a><a href="#">e</a><a href="#">t</a><a href="#"> </a><a href="#">m</a><a href="#">o</a><a href="#">r</a><a href="#">n</a><a href="#">i</a><a href="#">n</a><a href="#">g</a><a href="#">s</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">s</a><a href="#">p</a><a href="#">r</a><a href="#">i</a><a href="#">n</a><a href="#">g</a><a href="#"> </a><a href="#">w</a><a href="#">h</a><a href="#">i</a><a href="#">c</a><a href="#">h</a><a href="#"> </a><a href="#">I</a><a href="#"> </a><a href="#">e</a><a href="#">n</a><a href="#">j</a><a href="#">o</a><a href="#">y</a><a href="#"> </a><a href="#">w</a><a href="#">i</a><a href="#">t</a><a href="#">h</a><a href="#"> </a><a href="#">m</a><a href="#">y</a><a href="#"> </a><a href="#">w</a><a href="#">h</a><a href="#">o</a><a href="#">l</a><a href="#">e</a><a href="#"> </a><a href="#">h</a><a href="#">e</a><a href="#">a</a><a href="#">r</a><a href="#">t</a><a href="#">.</a><a href="#"> </a><a href="#">I</a><a href="#"> </a><a href="#">a</a><a href="#">m</a><a href="#"> </a><a href="#">a</a><a href="#">l</a><a href="#">o</a><a href="#">n</a><a href="#">e</a><a href="#">,</a><a href="#"> </a><a href="#">a</a><a href="#">n</a><a href="#">d</a><a href="#"> </a><a href="#">f</a><a href="#">e</a><a href="#">e</a><a href="#">l</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">e</a><a href="#"> </a><a href="#">c</a><a href="#">h</a><a href="#">a</a><a href="#">r</a><a href="#">m</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">e</a><a href="#">x</a><a href="#">i</a><a href="#">s</a><a href="#">t</a><a href="#">e</a><a href="#">n</a><a href="#">c</a><a href="#">e</a><a href="#"> </a><a href="#">i</a><a href="#">n</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">i</a><a href="#">s</a><a href="#"> </a><a href="#">s</a><a href="#">p</a><a href="#">o</a><a href="#">t</a><a href="#">,</a><a href="#"> </a><a href="#">w</a><a href="#">h</a><a href="#">i</a><a href="#">c</a><a href="#">h</a><a href="#"> </a><a href="#">w</a><a href="#">a</a><a href="#">s</a><a href="#"> </a><a href="#">c</a><a href="#">r</a><a href="#">e</a><a href="#">a</a><a href="#">t</a><a href="#">e</a><a href="#">d</a><a href="#"> </a><a href="#">f</a><a href="#">o</a><a href="#">r</a><a href="#"> </a><a href="#">t</a><a href="#">h</a><a href="#">e</a><a href="#"> </a><a href="#">b</a><a href="#">l</a><a href="#">i</a><a href="#">s</a><a href="#">s</a><a href="#"> </a><a href="#">o</a><a href="#">f</a><a href="#"> </a><a href="#">s</a><a href="#">o</a><a href="#">u</a><a href="#">l</a><a href="#">s</a><a href="#"> </a><a href="#">l</a><a href="#">i</a><a href="#">k</a><a href="#">e</a><a href="#"> </a><a href="#">m</a><a href="#">i</a><a href="#">n</a><a href="#">e</a><a href="#">.</a>
+				</th:block>	-->
+
+              
+               
+               	<div class="row mt-5" >
+					<div class="col-md-12 nav-link-wrap" id="find" style="min-height: 500px;">
+						<div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+							<ul id="menu" class="nav nav-tabs font-alt navbar" role="tablist">
+								<!--<li id="liCntn" class="active"><a href="#description" data-toggle="tab"><span class="icon-tools-2">내용</span></a></li>-->
+								<!--<li id="liQuestions"><a href="#data-sheet" data-toggle="tab"><span class="icon-tools-2">댓글</span></a></li>-->
+							</ul>
+						</div>
+					
+						
+				<div class="comments"  id=reply sec:authorize="isAuthenticated()">
+                  <h4 class="comment-title font-alt">There are comments</h4>
+                  <div class="comment clearfix">
+                    <div class="comment-avatar"><div class="icon"><i class="fa-solid fa-user"></i></div></div>
+                    <div class="comment-content clearfix">
+                      <div class="comment-author font-alt"><a href="#">댓글을 입력하세요.</a></div>
+                      <form action="replyInsert">
+						<textarea name="replyCntn" id="replyCntn" rows="4" cols="80"></textarea>
+						<button class="button post-button "type="button" id="replyInsertBtn">작성</button>
+                    	</form>
+                      </div>
                     </div>
-                  </div>
-                  <div class="post-entry">
-                    <p></p>
-                  </div>
-                  <div class="post-more"><a class="more-link" href="Post with text only">Read more</a></div>
-                </div>
-                <div class="post">
-                  <div class="post-quote">
-                    <blockquote class="font-serif">
-                      <p>" The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. "</p>
-                      <p class="font-inc font-uppercase">- Thomas Anderson</p>
-                    </blockquote>
-                  </div>
-                </div>
-                <div class="post">
+                  </div> 
+                  
+						<!--<div class="col-sm-12">
+							<div class="tab-content" role="tabpanel"
+								aria-labelledby="day-1-tab">
+								<div id="divCntn" class="tab-pane active">
+									<div th:if="${proDetail.intro} != null">
+										<div id="cotestCntn" th:utext=${proDetail.intro}></div>
+										<div id="designBox"></div>
+									</div>
+								</div>
+							</div>
+						</div>-->
+						<div>
+							<div class="block-27" id="returnPaging" style="width: 100px; margin: 0 auto"></div>
+						</div>
+					</div>
+				</div>
                 <!-- 댓글 -->
-                 <div class="comments"  id=reply sec:authorize="isAuthenticated()">
+<!--             <div class="comments"  id=reply sec:authorize="isAuthenticated()">
                   <h4 class="comment-title font-alt">There are comments</h4>
                   <div class="comment clearfix">
                     <div class="comment-avatar"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg" alt="avatar"></div>
@@ -104,86 +168,12 @@
                       <form action="replyInsert">
 						<textarea name="replyCntn" id="replyCntn" rows="4" cols="30"></textarea>
 						<button type="button" id="replyInsertBtn">댓글작성</button>
-                      Today, 14:55 - 
                     	</form>
                       </div>
                     </div>
-                  </div>
-              </div>
-              
-              <!-- 사이드바 -->
-        <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">      
-          <section class="module" id="pricing">
-          <div class="container">     
-            <div class="row multi-columns-row">
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="price-table font-alt">
-                  <h4>Light</h4>
-                  <div class="borderline"></div>
-                  <p class="price"><span><img src="images/sidebar.jpg"></span>
-                  </p>
-                  <ul class="price-details">
-                    <li>Free Support</li>
-                    <li>15 Demos Included</li>
-                    <li><span>Newsletter</span></li>
-                    <li><span>Working Contact Form</span></li>
-                    <li><span>Unlimited Domains</span></li>
-                  </ul><a class="btn btn-d btn-round" href="#">Sign Up</a>
-                </div>
-              </div>   
-            </div>
+                  </div>   -->
+              </div>  
           </div>
-        </section>
-      
-                <!-- <div class="widget">
-                  <h5 class="widget-title font-alt">Blog Categories</h5>
-                  <ul class="icon-list">
-                    <li><a href="#">Photography - 7</a></li>
-                    <li><a href="#">Web Design - 3</a></li>
-                    <li><a href="#">Illustration - 12</a></li>
-                    <li><a href="#">Marketing - 1</a></li>
-                    <li><a href="#">Wordpress - 16</a></li>
-                  </ul>
-                </div> -->
-                
-                <!-- 인기게시물 조회 -->
-                <!-- <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts" th:each="post : ${contents}">
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title" th:text=${post.eName}><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta" th:text=${post.see}>23 january</div>
-                      </div>
-                    </li>
-                  </ul>
-                </div> -->
-                
-               <!--  <div class="widget">
-                  <h5 class="widget-title font-alt">Tag</h5>
-                  <div class="tags font-serif"><a href="#" rel="tag">Blog</a><a href="#" rel="tag">Photo</a><a href="#" rel="tag">Video</a><a href="#" rel="tag">Image</a><a href="#" rel="tag">Minimal</a><a href="#" rel="tag">Post</a><a href="#" rel="tag">Theme</a><a href="#" rel="tag">Ideas</a><a href="#" rel="tag">Tags</a><a href="#" rel="tag">Bootstrap</a><a href="#" rel="tag">Popular</a><a href="#" rel="tag">English</a>
-                  </div>
-                </div> -->
-                
-        <!--         <div class="widget">
-                  <h5 class="widget-title font-alt">Text</h5>The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators.
-                </div>
-                
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Recent Comments</h5>
-                  <ul class="icon-list">
-                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
-                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
-                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
-                    <li>Jack on <a href="#">Bottle Mockup</a></li>
-                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
-                  </ul>
-                </div> -->
-              </div>
-            </div>
-          </div>
-        </section>
 	<script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
@@ -391,4 +381,5 @@
 	});
 </script>
 </div>
+</body>
 </html>

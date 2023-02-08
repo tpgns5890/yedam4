@@ -5,7 +5,12 @@
    layout:decorate="~{layouts/default_layout}">
    
 <head>
-<link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+	<link rel="stylesheet" href="/css/contest/button.css">
+	 <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="detail.css" />
+	 <!-- 구글 폰트 아이콘 -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
 <style>
 .modal {
 	display: none;
@@ -74,51 +79,308 @@
     background-position: -2800px 0;
   }
 
+/* 레이아웃 */
+.detail-header,.tabs,.detail-main {
+    width: 1000px;
+    margin: 60px auto;
+}
+.section {
+    padding: 32px;
+}
+.sub-title {
+    font-size: 20px;
+    margin-bottom: 24px;
+}
+.list > li {
+    margin: 14px 0;
+}
+.list > li > label {
+    display: inline-block;
+    width: 80px;
+    color: var(--main-yellow);
+}
+
+/* 상단 영역 */
+.detail-header {
+    border: 1px solid var(--light-gray);
+}
+
+/* 제목 영역 */
+.title-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--light-gray);
+}
+.title-wrap {
+    width: 75%;
+    border-right: 1px solid var(--light-gray);
+}
+.title-wrap > h3 {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+.title-wrap > h1 {
+    font-weight: bold;
+    font-size: 28px;
+}
+.company-image-wrap {
+    width: 200px;
+    height: 100px;
+    overflow: hidden;
+}
+.company-image-wrap > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 아이콘 영역 */
+.icon-wrap {
+    display: flex;
+    justify-content: space-evenly;
+}
+.icon-wrap > li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.icon-wrap > li > i {
+    margin-bottom: 10px;
+    padding: 16px;
+    border: 1px solid var(--main-yellow);
+    border-radius: 50%;
+    color: var(--main-yellow);
+}
+.icon-wrap > li > span {
+    font-size: 14px;
+}
+
+/* 탭 메뉴 */
+.tabs {
+    display: flex;
+    justify-content: space-evenly;
+}
+.tab {
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    border: 1px solid var(--light-gray);
+}
+.tab:nth-of-type(2) {
+    border-left: none;
+    border-right: none;
+}
+.tab:first-of-type {
+    border: 1px solid var(--main-yellow);
+    color: var(--main-yellow);
+    font-weight: bold;
+}
+
+/* 상세 영역 */
+.detail-section {
+    padding: 60px 0; 
+    border-bottom: 1px solid var(--light-gray);
+}
+.detail-section:first-of-type {
+    padding-top: 0;
+}
+.detail-image-wrap {
+    text-align: center;
+}
+
+/* 조건 영역 레이아웃 */
+.summary-area,
+.recruitment-condition-area {
+    border-bottom: 1px solid var(--light-gray);
+}
+.header-detail-layout {
+    display: flex;
+}
+.header-detail-layout > .left {
+    width: 700px;
+    border-right: 1px solid var(--light-gray);
+}
+.header-detail-layout > .right {
+    width: 300px;
+}
+
+/* 지원 버튼 영역 */
+.apply-button-wrap {
+    padding: 0 32px;
+    text-align: center;
+}
+.apply-button-wrap > button {
+    width: 100%;
+    height: 50px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+}
+.apply-button-wrap > button:first-of-type {
+    margin-bottom: 8px;
+    border: none;
+    background-color: var(--main-yellow);
+    color: #fff;
+}
+.apply-button-wrap > button:last-of-type {
+    border: 1px solid var(--main-yellow);
+    background-color: #fff;
+    color: var(--main-yellow);
+}
+
+/* 채용기업정보 */
+.detail-section > .company-image-wrap {
+    float: left;
+}
+.detail-section > .list {
+    margin-left: 200px;
+    padding-left: 32px;
+    border-left: 1px solid var(--light-gray);
+}
+.option-area,
+.card-area {
+    padding: 0 16px;
+}
+.filtering-area {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+/* 검색, 버튼 영역 */
+.search-area {
+    display: flex;
+    gap: 6px;
+}
+.button {
+    display: inline-block;
+    height: 40px;
+    padding: 12px;
+    border-radius: 3px;
+}
+.button {
+    cursor: pointer;
+}
+.user-search-button {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+}
+.post-button {
+    background: var(--main-color);
+    border: none;
+    color: #fff;
+}
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+
+:root {
+	--main-color: #FAB955;
+	--light-gray: #dbdbdb;
+}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video,
+textarea {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body * {
+	font-family: 'Pretendard';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+ol, ul, li {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* 검색, 버튼 영역 끝 */
 </style>
 </head>
 
 <div layout:fragment="content">
-<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+
+<section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/job.jpeg" style="background-image: url(&quot;assets/images/job.jpeg&quot;); background-size: 100%;">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">게시판 상세조회</h2>
-                <div class="module-subtitle font-serif">Small Title</div>
+                <h2 class="module-title font-alt" style="margin: 0;">상세게시판</h2>
               </div>
             </div>
           </div>
-        </section>
+</section>
         <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-	<th:block th:if="${session.member.userId} == ${job.userId}">
-	<button type="button" class="btn btn-outline-primary" 
+	<!--<th:block th:if="${session.member.userId} == ${job.userId}">-->
+	<!--<button type="button" class="btn btn-outline-primary" 
 			th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
 			
 	<button type="button" class="btn btn-outline-primary" 
 			th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
 			 
 	<button type="button" class="btn btn-outline-primary" 
-			th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		
-	</th:block>
+			th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>		-->
+	<!--</th:block>-->
+	
 <!-- 구직신청 -->	
-	<button type="button" class="btn btn-outline-primary" 
-			th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
+	<!--<button type="button" class="btn btn-outline-primary" 
+			th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>-->
 <!-- 신고하기 -->
-   <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
+   <!--<button type="button" class="btn btn-primary" id="modalUp">신고하기</button>-->
 
 <!-- 해당 게시글에 좋아요를 눌렀을 경우에는 채워진 하트가 나타남 -->   
 	<th:block th:if ="${like == null}">		
-	<div class="stage">
-	  		<div id="love" class="stage heart"></div>
-	</div>
-	</th:block>
-
-	<th:block th:if ="${like != null}">		
-	<div class="stage">
-	  		<div id="love" class="stage heart active"></div>
-	</div>
+		<div class="stage">
+		  		<div id="love" class="stage heart"></div>
+		</div>
+		</th:block>
 	
-</th:block>	
-		 <section class="module-small">
+		<th:block th:if ="${like != null}">		
+		<div class="stage">
+		  		<div id="love" class="stage heart active"></div>
+		</div>
+		
+	</th:block>	
+
+		 <!--<section class="module-small">
           <div class="container">
             <form class="row">
              
@@ -132,9 +394,9 @@
               </div>
             </form>
           </div>
-        </section>
-        
-          <div class="container">
+        </section>   --> 
+        <!-- <div class="container">
+         
             <div class="row multi-columns-row">
               <div class="col-sm-6 col-md-3 col-lg-3">
                 <div class="count-item mb-sm-40">
@@ -143,6 +405,7 @@
                   <h5 class="count-title font-serif">수당</h5>
                 </div>
               </div>
+              
               <div class="col-sm-6 col-md-3 col-lg-3">
                 <div class="count-item mb-sm-40">
                   <div class="count-icon"><span class="icon-profile-male"></span></div>
@@ -150,6 +413,7 @@
                   <h5 class="count-title font-serif">지원자수</h5>
                 </div>
               </div>
+              
               <div class="col-sm-6 col-md-3 col-lg-3">
                 <div class="count-item mb-sm-40">
                   <div class="count-icon"><span class="icon-calendar"></span></div>
@@ -173,11 +437,250 @@
                 </div>
               </div>
             </div>
-          </div>
+            
+          </div>-->
 
-	 <hr class="divider-w">
+	
+<body>
+    <main>
+    	<div class="option-area">
+                <div class="filtering-area">
+                    <!-- 검색, 버튼 영역 -->
+                    <div class="search-area">
+                    <!--<th:block th:if="${session.member.userId} == ${job.userId}">-->
+                        <button type="button" class="button user-search-button" 
+						th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
+						<button type="button" class="button post-button" 
+								th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
+								 
+						<button type="button" class="button post-button" 
+								th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>
+						<!--</th:block>-->	
+                    </div>
+                </div>              
+            </div>
+        <!-- 상단 영억 -->
+        <div class="detail-header">
+            <div class="section summary-area">
+                <!-- 제목 영역 -->
+                <div class="title-area">
+                    <div class="title-wrap">
+                        <h3>제목</h3>
+                        <h1 th:text=${job.title}>이벤트 행사 단기 스텝 채용합니다</h1>
+                    </div>
+                    <div class="company-image-wrap">
+                        <img
+                            src="https://img.freepik.com/free-vector/branding-identity-corporate-vector-logo-design_460848-8717.jpg"
+                            alt="기업 로고"
+                        />
+                    </div>
+                </div>
 
-	<table class="table mb-3" >
+                <!-- 아이콘 영역 -->
+                <div class="icon-wrap">
+		              <div class="col-sm-6 col-md-3 col-lg-3">
+		                <div class="count-item mb-sm-40">
+		                  <div class="count-icon"><span class="icon-wallet"></span></div>
+		                  	<h3 class="count-to font-alt" th:data-countto="${job.pay}" th:text="${job.pay}"></h3>
+		                  	<h5 class="count-title font-serif">수당</h5>
+		                </div>
+		              </div>
+		              
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+			                <div class="count-item mb-sm-40">
+			                  <div class="count-icon"><span class="icon-profile-male"></span></div>
+			                  	<h3 class="count-to font-alt" th:data-countto="${job.reCount}" th:text="${job.reCount}"></h3>
+			                  	<h5 class="count-title font-serif">지원자수</h5>
+			                </div>
+		              </div>
+		              
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+			                <div class="count-item mb-sm-40">
+			                  <div class="count-icon"><span class="icon-calendar"></span></div>
+			                   <th:block th:if="${job.remain > 0}">
+			                  	<h3 class="count-to font-alt" th:data-countto="${job.remain}" th:text="|${job.remain} 일전|"></h3>
+			                  </th:block>
+			                  <th:block th:unless="${job.remain > 0} ">
+								<h3 style="color:red" th:text="마감"></h3>
+							</th:block>
+			                  <h5 class="count-title font-serif">마감일</h5>
+			                </div>
+		              </div>
+                   
+                       <div class="col-sm-6 col-md-3 col-lg-3">
+		                <div class="count-item mb-sm-40">
+			            	<div class="count-icon"><span class="icon-heart"></span></div>
+			                  <h3 class="count-to font-alt" th:data-countto="${job.cnt}"  th:text=${job.cnt}></h3>
+			                 <h5 class="count-title font-serif">좋아요수</h5>
+		                </div>
+		              </div>
+                    
+                </div>
+            </div>
+
+            <div class="header-detail-layout">
+                <div class="left">
+                    <!-- 모집조건 섹션 -->
+                    <div class="section recruitment-condition-area">
+                        <h2 class="sub-title">모집조건</h2>
+                        <ul class="list">
+                            <li>
+                                <label>내용</label>
+                                <span th:utext=${job.jobCntn}>2023.02.07</span>
+                            </li>
+                            <li>
+                                <label>자격</label>
+                                <span th:text=${job.qualification}>무관</span>
+                            </li>
+                            <li>
+                                <label>우대사항</label>
+                                <span th:text=${job.preference}>무관</span>
+                            </li>
+                            <li>
+                                <label>행사유형</label>
+                                <span th:text=${job.eTypeName}>무관</span>
+                            </li>
+                        </ul>
+                    </div>
+        
+                    <!-- 근무조건 섹션 -->
+                    <div class="section">
+                        <h2 class="sub-title">근무조건</h2>
+                        <ul class="list">
+                            <li>
+                                <label>수당</label>
+                                <span th:text="${job.pay}">120,000원</span>
+                            </li>
+                            <li>
+                                <label>근무시간</label>
+                                <span th:text=${job.wHour}>6개월 ~ 1년</span>
+                            </li>
+                            <li>
+                                <label>근무시작일</label>
+                                <span th:text="${#dates.format(job.wSday, 'yyyy-MM-dd')}">행사</span>
+                            </li>
+                            <li>
+                                <label>근무종료일</label>
+                                <span th:text="${#dates.format(job.wEday, 'yyyy-MM-dd')}">정규직</span>
+                            </li>
+                            <li>
+                                <label>복리후생</label>
+                                <span>중식제공, 석식제공</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+    
+                <div class="right">
+                    <div class="section manager-info-area">
+                        <h2 class="sub-title">구직신청</h2>
+                        <ul class="list">
+                            <li>
+                            	<!-- 조회수 -->
+                            	<span style='font-size: 30px;'>&#128065;</span>
+						 		<span id="inqNum" th:text="${job.see}"></span>
+                                <!-- 신고수 및 버튼 -->
+								<th:block sec:authorize="!isAuthenticated()">
+									<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+									<span th:text=${job.rprt}></span>
+								</th:block>
+								
+								<th:block sec:authorize="isAuthenticated()">
+										<th:block th:if="|${session.member.getUserId()}| != ${job.userId} ">
+											<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+										</th:block>
+										<th:block th:if="|${session.member.getUserId()}| == ${job.userId} ">
+											<span style='font-size: 20px;'>&#128680;</span>
+										</th:block>
+										<span th:text=${job.rprt}></span>
+								</th:block>
+								
+								<th:block th:if ="${like == null}">		
+									<div class="stage">
+									  	<div id="love" class="stage heart"></div></div>
+									</th:block>
+									<th:block th:if ="${like != null}">		
+									<div class="stage">
+									  	<div id="love" class="stage heart active"></div></div>
+								</th:block>	
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <!-- 지원 버튼 영역 -->
+                    <div class="apply-button-wrap">
+			            <form class="row">
+			            <img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
+			              <div class="col-sm-3">
+			              	<button type="button" class="w-btn w-btn-gra1" 
+									th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
+			              </div>
+			            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <ul class="tabs">
+            <li class="tab">
+                <a href="#location">근무지역</a>
+            </li>
+            <li class="tab">
+                <a href="#detail">상세모집요강</a>
+            </li>
+            <li class="tab">
+                <a href="#company">채용기업정보</a>
+            </li>
+        </ul>
+        <!-- 상세 영역 -->
+        <div class="detail-main">
+            <!-- 근무지역 -->
+            <div class="detail-section location-area">
+                <h2 class="sub-title" id="location">근무지역</h2>
+                <p th:text=${job.loc}>서울 송파구 백제고분로12길 12 1층</p>
+            </div>
+            
+            <!-- 상세모집요강 -->
+            <div class="detail-section">
+                <h2 class="sub-title" id="detail">상세모집요강</h2>
+                <div class="detail-image-wrap">
+                    <img
+                        src="https://cdn.imweb.me/upload/S202012142df41e7544ce6/c7f2e61e3ecef.jpg"
+                        alt="상세모집요강 이미지"    
+                    />
+                </div>
+            </div>
+
+            <!-- 채용기업정보 -->
+            <div class="detail-section">
+                <h2 class="sub-title" id="company">채용기업정보</h2>
+                <div class="company-image-wrap">
+                    <img
+                        src="https://img.freepik.com/free-vector/branding-identity-corporate-vector-logo-design_460848-8717.jpg"
+                        alt="기업 로고"
+                    />
+                </div>
+                <ul class="list">
+                    <li>
+                        <label>대표자</label>
+                        <span>홍길동</span>
+                    </li>
+                    <li>
+                        <label>회사주소</label>
+                        <span>서울 중구 충무로1가 11길 1층</span>
+                    </li>
+                    <li>
+                        <label>사업내용</label>
+                        <span>행사지원/기획</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>		
+
+<!--	<table class="table mb-3" >
 	<thead class="thead-dark">
       
       </thead>
@@ -232,7 +735,10 @@
 			</tr>
       </tbody>
       
-   </table>
+   </table>-->
+   
+   
+   
    <!-- 등록 폼 -->
    <div id="modal" class="modal">
 		<div class="modal_content">
