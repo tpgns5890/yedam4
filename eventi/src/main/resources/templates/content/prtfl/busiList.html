@@ -1,50 +1,64 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:th="http://www.thymeleaf.org"
-   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<link rel="stylesheet" href="/css/prtfl/mcPrtfl.css">
+<link rel="stylesheet" href="/css/prtfl/button.css">
+
+<style>
+	#imgSize{
+		 width:800px; 
+		 height:300px;
+	}
+	
+	.post-columns .post{
+		margin:0;
+	}
+	
+	.container{
+		padding: 30px 0px;
+	}
+</style>
+</head>
 
 <div layout:fragment="content">
-   <section class="hero-wrap hero-wrap-2"
-      style="background-image: url(&quot;/images/bg_2.jpg&quot;); background-position: 50% 0%;"
-      data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-         <div
-            class="row no-gutters slider-text align-items-end justify-content-center">
-            <div
-               class="col-md-9 ftco-animate mb-5 text-center fadeInUp ftco-animated">
-               <h2 class="mb-0 bread">업체 포트폴리오</h2>
-            </div>
+   <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+     <div class="container">
+       <div class="row">
+         <div class="col-sm-6 col-sm-offset-3">
+           <h2 class="module-title font-alt">업체포트폴리오</h2>
+           <div class="module-subtitle font-serif">업체포트폴리오</div>
          </div>
-      </div>
+       </div>
+     </div>
    </section>
    
-   <th:block sec:authorize="hasAnyRole('BUSI')">
-   <button type="button" class="find-trigger btn-15" th:onclick="checkPrtfl()">나의 포트폴리오</button>
-   </th:block>
+   <div class="container right">
+	   <th:block sec:authorize="hasAnyRole('BUSI')">
+	   	<button type="button" class="find-trigger btn-15" th:onclick="checkPrtfl()">나의 포트폴리오</button>
+	   </th:block>
+   </div>
    
-    <table>
-      <thead>
-         <tr>
-            <th>사용자ID</th>   
-            <th>한줄소개</th>   
-            <th>전화번호</th> 
-            <th>작성일자</th>
-            <th>이미지</th>  
-         </tr>
-      </thead>
-      <tbody>
-         <tr th:each="busi : ${busiList}" th:onclick="|location.href='@{busiSelect(userId=${busi.userId})}'|">
-            <td th:text=${busi.userId}></td>
-            <td th:text=${busi.intro}></td>
-            <td th:text=${busi.tel}></td>
-            <td th:text=${busi.dt}></td>
-            <td><img th:src="@{/images/}+${busi.img}"></td>
-         </tr>
-      </tbody>
-   </table>
-   
+	 <div class="container">
+   		<div class="row multi-columns-row post-columns">
+	        <div class="col-sm-6 col-md-4 col-lg-4" th:each="busi : ${busiList}">
+	          <div class="post">
+
+	            <div class="post-thumbnail"><a th:href="|/prtfl/busiSelect?userId=${busi.userId}|">
+	            	<img id="imgSize" th:src="|/fileView/${busi.img}|" alt="Blog-post Thumbnail"></a>
+	            </div>
+
+	            <div class="post-header font-alt">
+	              <h2 class="post-title" th:text=${busi.busiTitle}><a th:href="|/prtfl/busiSelect?userId=${busi.userId}|"></a></h2>
+	              </div>
+	            </div>
+	            <div class="post-more"><a class="more-link" th:href="|/prtfl/busiSelect?userId=${busi.userId}|">Read more</a></div>
+	          </div>
+	        </div>   
+		</div>
+    
    	<!-- 페이징 처리 -->
 	<div class="row mt-5">
         <div class="col text-center">

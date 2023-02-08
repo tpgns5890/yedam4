@@ -26,6 +26,8 @@ public class DgnerPrtflVO {
 	private String cnt;           //좋아요수
 	
 	private List<FilesVO> files;  //파일리스트
+	private String winYn;         //우승작품
+	private String caregory;      //디자인 분류
 	
 	Integer first = 1;            //첫페이지
 	Integer last = 3;             //마지막페이지

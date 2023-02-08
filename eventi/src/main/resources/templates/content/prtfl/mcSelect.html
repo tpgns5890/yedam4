@@ -8,8 +8,8 @@
 <!-- csrf 설정 -->
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-<link href="/css/star.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/prtfl/button.css">
+<link href="/css/star.css" rel="stylesheet">
 <style>
 	footer {
 		display: none;
@@ -162,13 +162,7 @@
 		font-weight: bold;
 		margin-top: 0;
 	}
-	
-	.pSize{
-		font-size: 15px; 
-		font-weight: bold; 
-	}
-	
-	
+
 	.item{
 		display: flex;
 	    flex-shrink: 0;
@@ -236,7 +230,7 @@
 		color: rgba(2,126,251,1);
 	}
 	
-	#repInsertBtn{
+	#repInsertBtn, #logRepBtn{
 		background-color: transparent;
 		border: 1px solid rgba(2,126,251,1);
 		color: rgba(2,126,251,1);
@@ -249,6 +243,10 @@
 	
 	#replyInsertFrm{
 		height: 120px;
+	}
+	
+	.font-alt{
+		font-size: 13px;
 	}
 	
 	#backImg{
@@ -264,22 +262,31 @@
    <section id="check">
 	 <nav id="left">
 	  <div id="detail">
-	    <div id="love" class="stage heart" th:classappend="${like} != null ? active" style="position:relative; z-index: 2; right: -20px;"> </div>
+	    <!-- 비회원 좋아요버튼-->
+	  	<th:block sec:authorize="!isAuthenticated()">
+	    	<div id="love" class="stage heart" th:classappend="${like} != null ? active" style="position:relative; z-index: 2; right: -20px;" th:onclick="|location.href='@{/loginPage}'|"></div>
+		</th:block>
+		<!-- 회원 좋아요버튼-->
+		<th:block sec:authorize="isAuthenticated()">
+	    	<div id="love" class="stage heart" th:classappend="${like} != null ? active" style="position:relative; z-index: 2; right: -20px;"></div>
+		</th:block>
 		<img class="profile" th:src="|/fileView/${file.sevNm}|">
   		
   		<label style="display:none;"class="label" id="userId" th:text="${mcSelect.userId}"></label>
   		<h3 id="userName" th:text="|${mcSelect.userName}님|"></h3>
   		<p style="font-size: 13px; font-weight: bold; text-align: center; margin: 15px 44px;" th:text="${mcSelect.oneIntro}"></p>
   		
+  		<th:block sec:authorize="isAuthenticated()">
   		<!-- 현재 로그인된 id와 작성자id가 다를 경우 버튼 나타남 -->
-  		<th:block th:if="${session.member.userId} != ${mcSelect.userId}">
+  		<th:block th:if="|${session.member.getUserId()}| != ${mcSelect.userId}">
 	  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize chattingUp">1:1대화</button>
 	  		<button type="button" class="find-trigger btn-1 btnSize castingUp">의뢰하기</button>
 		</th:block>
 		<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-		<th:block th:if="${session.member.userId} == ${mcSelect.userId}">
-		   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">글 수정하기</button>
-		   <button type="button" class="find-trigger btn-1 btnSize" th:attr="onclick=|deleteCheck('${mcSelect.userId}')|">글 삭제하기</button>
+		<th:block th:if="|${session.member.getUserId()}| == ${mcSelect.userId}">
+		   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{mcUpdate(userId=${mcSelect.userId})}'|">수정하기</button>
+		   <button type="button" class="find-trigger btn-1 btnSize" th:attr="onclick=|deleteCheck('${mcSelect.userId}')|">삭제하기</button>
+   		</th:block>
    		</th:block>
 		
 		<hr>
@@ -322,26 +329,26 @@
     <div role="tabpanel">
                   <ul class="nav nav-tabs font-alt" role="tablist">
                     <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-pictures"></span>포트폴리오</a></li>
-                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>후기</a></li>
+                    <li><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>후기</a></li>
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="support">
                     	<div class="border">
 							<div class="detail_tr">
-							<p class="detail_th">세부분야</p> 
-							<p class="detail_td" th:text="${mcSelect.mcType}"></p>
+								<p class="detail_th">세부분야</p> 
+								<p class="detail_td" th:text="${mcSelect.mcType}"></p>
 							</div>
 							<div class="detail_tr">
-							<p class="detail_th">진행스타일</p> 
-							<p class="detail_td" th:text="${mcSelect.progStyle}"></p>
+								<p class="detail_th">진행스타일</p> 
+								<p class="detail_td" th:text="${mcSelect.progStyle}"></p>
 							</div>
 							<div class="detail_tr">
-							<p class="detail_th">자격증</p> 
-							<p class="detail_td">레크리에이션지도자1급</p>
+								<p class="detail_th">자격증</p> 
+								<p class="detail_td">레크리에이션지도자1급</p>
 							</div>
 							<div class="detail_tr">
-							<p class="detail_th">섭외비</p> 
-							<p class="detail_td" th:text="|${#numbers.formatInteger(mcSelect.castingPrice, 0, 'COMMA')}원|"></p>
+								<p class="detail_th">섭외비</p> 
+								<p class="detail_td" th:text="|${#numbers.formatInteger(mcSelect.castingPrice, 0, 'COMMA')}원|"></p>
 							</div>
                     	</div>
 
@@ -355,7 +362,10 @@
 							<p th:utext="${mcSelect.career}"></p>
                     	</div>
 
-                    	<h4>동영상<button th:if="${session.member.userId} == ${mcSelect.userId}" type="button" class="find-trigger btn-1" style="height: 30px; padding: 5px; margin:5px; font-size: 13px;" th:onclick="|location.href='@{/move/moveList(userId=${mcSelect.userId})}'|">동영상추가</button>
+                    	<h4>동영상
+                    	<th:block sec:authorize="isAuthenticated()">
+                    	<button th:if="|${session.member.getUserId()}| == ${mcSelect.userId}" type="button" class="find-trigger btn-1" style="height: 30px; padding: 5px; margin:5px; font-size: 13px;" th:onclick="|location.href='@{/move/moveList(userId=${mcSelect.userId})}'|">동영상추가</button>
+                    	</th:block>
                     	</h4>
                     	<div class="border">
                     		<div id="videoFrm">
@@ -374,8 +384,15 @@
                     	<div class="border">
 					        <!-- 댓글 작성 -->
 						    <form id="replyInsertFrm">
-						    	<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
-						    	<button type="button" id="repInsertBtn">댓글추가</button>
+						    	<th:block sec:authorize="!isAuthenticated()">
+						    		<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="로그인 후 등록 가능합니다." readonly="readonly"></textarea>
+						    		<button type="button" id="logRepBtn">댓글추가</button>
+						    	</th:block>
+						    
+						    	<th:block sec:authorize="isAuthenticated()">
+						    		<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
+						    		<button type="button" id="repInsertBtn">댓글추가</button>
+						    	</th:block>
 						    </form>
 						    
 						    <div id=reply>
@@ -457,7 +474,9 @@
 						<label>사회자</label>
 						<input type="text" id="userId" name="userId" th:value="${mcSelect.userId}" readonly><br>
 						<label>의뢰자</label>
-						<input type="text" id="clientId" name="clientId" th:value="${session.member.userId}"><br>
+						<th:block sec:authorize="isAuthenticated()">
+						<input type="text" id="clientId" name="clientId" th:value="|${session.member.getUserId()}|"><br>
+						</th:block>
 						<label>행사분야</label>
 						<select id="eType" name="eType">
 							<option value="">-- 행사분야 선택 --</option>
@@ -609,9 +628,16 @@
    		
    		//댓글 tr생성
    		function make(reply){
+   			let replyBtn = '';
    			let delBtn = '';
 			let upBtn = '';
-			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
+			let mc = '[[${mcSelect.userId}]]'
+			
+			//포트폴리오 작성자만 대댓글 등록 가능
+			if(mc == userId){
+				replyBtn = `<button class="reply replyBtn">Reply</button>`;
+			}
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
 			if(reply.userId == userId){
@@ -621,19 +647,19 @@
 			
    			let p = `
    				<div class="comment clearfix">
-                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
-                <div id="${reply.replyNo}">
-                <div class="comment-content clearfix">
-                  <div class="comment-author font-alt">${reply.userId}</div>
-                  <div class="comment-body">
-                    <p>${reply.replyCntn}</p>
-                  </div>
-                  <div class="comment-meta font-alt">${reply.writingDt} - <button class="reply replyBtn">Reply</button>${delBtn}${upBtn}
-                  </div>
-                </div>
-                </div>
-</div>
-</div>
+	                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+	                <div id="${reply.replyNo}">
+	                <div class="comment-content clearfix">
+	                  <div class="comment-author font-alt">${reply.userId}</div>
+	                  <div class="comment-body">
+	                    <p style="font-size: 16px; font-weight: bold;">${reply.replyCntn}</p>
+	                  </div>
+	                  <div class="comment-meta font-alt">${reply.writingDt} ${replyBtn}${delBtn}${upBtn}
+	                  </div>
+	                </div>
+	                </div>
+					</div>
+				</div>
                 `
    			return p;
    		}
@@ -642,7 +668,7 @@
    		function makeRe(reply){
    			let delBtn = '';
 			let upBtn = '';
-			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
 			if(reply.userId ==userId){
@@ -659,9 +685,9 @@
                 <div class="comment-content clearfix">
                   <div class="comment-author font-alt">${reply.userId}</div>
                   <div class="comment-body">
-                    <p>${reply.replyCntn}</p>
+                    <p style="font-size: 16px; font-weight: bold;">${reply.replyCntn}</p>
                   </div>
-                  <div class="comment-meta font-alt" id="${reply.replyNo}">${reply.writingDt} - ${delBtn}${upBtn}
+                  <div class="comment-meta font-alt" id="${reply.replyNo}">${reply.writingDt} ${delBtn}${upBtn}
                   </div>
                 </div>
                 </div>
@@ -672,9 +698,10 @@
    		
    	//댓글 추가
 		$("#repInsertBtn").on("click", function() {
+			console.log('클릭')
 			//textarea에 있는 값 들고 오기
 			let replyCntn = $('#replyCntn').val();
-			let userId = '[[${session.member.userId}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
 			
 			$.ajax({
 	   			url : '/replyInsert',
@@ -719,7 +746,7 @@
 		$(document).on('click', '#rerepTgt', function(e){
 			let replyCntn = $('#reReplyCntn').val();
 			let rerepTgt = $('#rerepTgt').val();
-			let userId = '[[${session.member.userId}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
 			
 			$(this).parent("form").remove();
 			$.ajax({
@@ -793,7 +820,7 @@
    		
    	 $("#love").on("click", function() {
 		 $(this).toggleClass("active");
-		 let userId = '[[${session.member.userId}]]';
+		 let userId = '[[${session.member != null ? session.member.userId :""}]]';
 		 let targetNo = '[[${mcSelect.userId}]]';
 		 let category = 'T06';
 		 
@@ -863,7 +890,7 @@
 		   let targetId = '[[${mcSelect.userId}]]';
 		   let targetCat = 'T06';
 		   let banCntn = $("#banCntn").val();
-		   let userId = '[[${session.member.userId}]]';
+		   let userId = '[[${session.member != null ? session.member.userId :""}]]';
 		   let banType = 'P2';
 		    $.ajax({
 					url : "/punishInsert",
@@ -1020,7 +1047,6 @@
 	   $('#order').change(function() {
 		   let order = $("#order option:selected").val();
 		   let reviewTgt = '[[${mcSelect.userId}]]';
-		   console.log(reviewTgt)
 		   let category = 'T06';
 		   $.ajax({
 				url : "/review/List",

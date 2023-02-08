@@ -80,6 +80,7 @@ public class McPrtlController {
 	@GetMapping("/mcSelect")
 	public String mcSelect(Model model, McPrtflVO mcPrtflVO, FilesVO filesVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO, McMoveVO mcMoveVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String userId = user != null ? user.getUserId() :"";
 		
 		model.addAttribute("mcSelect", mcPrtflService.mcSelect(mcPrtflVO));
 		//사진가져오기
@@ -87,7 +88,7 @@ public class McPrtlController {
 		model.addAttribute("file", filesService.getfile(filesVO));
 		
 		//좋아요 눌렀는지 확인
-		likesVO.setUserId(user.getUserId());
+		likesVO.setUserId(userId);
 		likesVO.setTargetNo(mcPrtflVO.getUserId());
 		likesVO.setCategory("T06");
 		model.addAttribute("like", likesMapper.getLike(likesVO));

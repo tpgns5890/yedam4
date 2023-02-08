@@ -33,10 +33,8 @@ public class DgnerPrtflServiceImpl implements DgnerPrtflService{
 	//디자이너별 디자인 리스트
 	@Override
 	public List<DesignVO> desginList(DesignVO designVO, PagingVO paging) {
-		System.out.println("========" + paging);
-		
 		paging.setTotalRecord(dgnerPrtflmapper.count(designVO));
-		paging.setPageUnit(3);
+		paging.setPageUnit(6);
 		designVO.setFirst(paging.getFirst());
 		designVO.setLast(paging.getLast());
 		return dgnerPrtflmapper.desginList(designVO);
