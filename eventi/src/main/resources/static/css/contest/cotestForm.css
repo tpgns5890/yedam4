@@ -1,4 +1,9 @@
 /* 공모전 등록,응모 폼 */
+#saveFile{
+	background-color:  #FAB955 !important;
+	border-radius: 5px;
+}
+
 .fileDown {
 	display: none;
 }
@@ -10,6 +15,8 @@ input, textarea {
 .contestContainer h3, #user h3, #userUpgrade h3 {
 	font-weight: bold;
 	text-align: center;
+	width:50%;
+	margin: 0 auto 20px;
 }
 
 .contestContainer {
@@ -66,6 +73,10 @@ label {
 	width: 70px;
 	font-weight: bold;
 	font-size: 18px;
+}
+#user label {
+	
+	width: 100px;
 }
 
 ul li.tag-item {
@@ -127,36 +138,48 @@ ul li.tag-item {
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .1);
 }
 
-.box li {
-	width: 80%;
-	margin: 0px auto;
+
+#userCrtf {
+	margin-top: 20px;
+}
+
+#userCrtf li {
+	margin: 0;
+}
+
+.quDelBtn {
+	background-color: #FAB955 !important;
 }
 
 
-#user input[type=text], #user select {
-	width: 70%;
-	padding: 12px;
-	margin: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	resize: vertical;
-}
-.user_select input, .user_select  select{
+.user_select input, .user_select  select {
 	border: 0px !important;
 }
 
-.userBtn {
-	width: 300px;
+#user .userBtn {
+	width: 350px;
+	margin: 0px auto;
+}
+
+#user .userUpBtn {
+	width: 200px;
 	margin: 0px auto;
 }
 
 #user h3 {
 	text-align: center;
-	padding-bottom: 10px;
+}
+
+#userUpgrade h3 {
+	padding-bottom: 20px;
 }
 
 .userUlTag {
 	margin-left: 110px;
+}
+
+.userStatus {
+	color: orange;
 }
 
 #signIn-right label {

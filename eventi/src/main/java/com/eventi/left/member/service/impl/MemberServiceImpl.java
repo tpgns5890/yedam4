@@ -245,4 +245,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return mapper.updatePw(id, passwordEncoder.encode(password));
 	}
 
+	@Override
+	public int crtfDelete(String crtfId) {
+		return mapper.crtfDelete(crtfId);
+	}
+
 }

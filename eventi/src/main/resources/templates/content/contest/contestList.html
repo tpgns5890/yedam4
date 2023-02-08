@@ -79,7 +79,7 @@ label {
         </section>
 		
 		 <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top: 18px; right: -1415px; width: 100px;  z-index: 1 ;">
+				<div class="col-sm-3 mb-sm-20"  style="position:relative; top: 18px; right: -1450px; width: 100px;  z-index: 1 ;">
 					<!-- 비회원 좋아요버튼-->
 					<th:block sec:authorize="!isAuthenticated()">
 							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
@@ -515,6 +515,7 @@ label {
 							//관심 공모전이 없을경우
 							if(res.contest == ''){
 								alert('관심공모전이 없습니다.')
+								$('#cotestHeader').show();
 								$("#love").toggleClass("active");//css 변경
 								checkSelect();
 								return false;
@@ -610,14 +611,6 @@ label {
 						}).then(res => {
 							if(res > 0){
 								alert('관심 공모전 추가완료!')
-									//전체하트가 눌려진 상태로 재실행
-									if ($("#love").hasClass("active")) { 
-										loveClick();
-									//기본 정렬리스트 재실행
-									}else{
-										checkSelect();
-									}
-								
 							}else{
 								alert('관심 공모전 추가실패!')
 							}

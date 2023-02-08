@@ -18,7 +18,9 @@ ul {
 	margin-top: 100px;
 	margin-left: 140px;
 }
-
+.winnerDir{
+	margin-left: 200px;
+}
 .designDiv {
 	height: 100vh;
 	margin: 100px 20px 0 20px;
@@ -29,6 +31,14 @@ ul {
 	margin: 100px auto;
 	margin-left: 270px;
 	margin-bottom: 50px;
+}
+.content{
+	margin: 150px auto;
+	height: 100vh;
+}
+.content{
+	margin: 115px auto;
+	height: 100vh;
 }
 
 .designReadList {

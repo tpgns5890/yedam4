@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
 <style>
 input[type=text]{
-	width: 130px;
+    width: 320px;
 	padding: 12px;
 	margin: 10px;
 	border: 1px solid #ccc;
@@ -19,14 +19,21 @@ input[type=text]{
 	
 }
 form div{
-	width: 75%;
-	margin : 0 auto;
+	width: 90%;
+	margin : 20px auto;
 }
 .btnCenter{
-    font-size: 16px;
+     font-size: 18px;
     font-weight: bold;
-    width: 35%;
-    margin: 10px auto
+    width: 18%;
+    margin: 10px auto;
+}
+#winnerInput h3{
+    background-color: #FAB955;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-weight: bolder;
 }
 </style>
 </head>
@@ -37,96 +44,96 @@ form div{
 
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
-
-		<div class="designReadList">
-		<!-- 지원자 수 -->
-		<h3 id="count"></h3>
-
-		<!-- 지원자 디자인 리스트 -->
-			<div class="row multi-columns-row" id="contestDList"></div>
-			<!-- end -->
-
-			<!-- //페이징 경로 :: 문자 -->
-			<div class="row mt-5" id="paging">
-				<div class="col text-center">
-					<div class="block-27" id="returnPaging"></div>
-				</div>
-			</div>
-
-			<!-- 디자인 상세보기 모달 -->
-			<div id="designModel" class="modal">
-				<div class="img_modal_content">
-					
-					<div class="column middle">
-						<h3 id="title"></h3>
-						<div id="modelSelect"></div>
+	
+		<div class="designDiv">
+			<div class="designReadList">
+			<!-- 지원자 수 -->
+			<h3 id="count"></h3>
+	
+			<!-- 지원자 디자인 리스트 -->
+				<div class="row multi-columns-row" id="contestDList"></div>
+				<!-- end -->
+	
+				<!-- //페이징 경로 :: 문자 -->
+				<div class="row mt-5" id="paging">
+					<div class="col text-center">
+						<div class="block-27" id="returnPaging"></div>
 					</div>
-					
-					<div class="column side">
-					  	<span id="designCancel" class="close">&times;</span>
-					    <h3 id="dgnerSelect"></h3>
-					</div>
-					
 				</div>
-				<div class="modal_layer"></div>
-			</div>
-			
-		</div>
-		<!--마감이면서 우승자등록이 되어있지 않은경우만 -->
-		<th:block th:if="${contest.ing} == '마감' ">
-			<div th:if="${winner[0].dNo} == null">
-					<!-- 우승자 등록 -->
-					<div id="winnerInput" style="width: 30%; margin: 0 auto;">
-						<h3 class="font-alt mb-0" style="text-align: center">우승자 등록</h3>
-						<hr class="divider-w mt-10 mb-20">
-						<div>
-							<form class="form" role="form" action="/winner/update" name="winnerfrm" method="post" onsubmit="return check();">
-									<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-									<input type="hidden" th:name="coNo" th:value="${contest.cNo}" />
-		
-									<!-- 공모전작성자가 입력한 등수만  출력 -->
-									<th:block th:if="${winner.size} == 1">
-										<div>
-											1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
-											회원ID<input type="text" name="userIdArr[]">
-										</div>
-									</th:block>
-		
-									<th:block th:if="${winner.size} == 2">
-										<div>
-											1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
-											회원ID<input type="text"name="userIdArr[]">
-										</div>
-										<div>
-											2등<input type="text" id="grade_02" name="dgnNo[]">
-											회원ID<input type="text" name="userIdArr[]">
-										</div>
-									</th:block>
-		
-									<th:block th:if="${winner.size} == 3">
-										<div>
-											1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
-											회원ID<input type="text" name="userIdArr[]">
-										</div>
-										<div>
-											2등<input type="text" id="grade_02" name="dgnNo[]">
-											회원ID<input type="text" name="userIdArr[]">
-										</div>
-										<div>
-											3등<input type="text" id="grade_03" name="dgnNo[]">
-											회원ID<input type="text" name="userIdArr[]">
-										</div>
-									</th:block>
-									<div class="btnCenter">
-									<button type="reset" class="btn btn-g btn-round">초기화</button>
-									<button type="submit" class="btn btn-g btn-round">등록</button>
-									</div>
-							</form>
+	
+				<!-- 디자인 상세보기 모달 -->
+				<div id="designModel" class="modal">
+					<div class="img_modal_content">
+						
+						<div class="column middle">
+							<h3 id="title"></h3>
+							<div id="modelSelect"></div>
 						</div>
+						
+						<div class="column side">
+						  	<span id="designCancel" class="close">&times;</span>
+						    <div id="dgnerSelect"></div>
+						</div>
+						
 					</div>
+					<div class="modal_layer"></div>
+				</div>
+				
 			</div>
-		</th:block>
-		
+			<!--마감이면서 우승자등록이 되어있지 않은경우만 -->
+			<th:block th:if="${contest.ing} == '마감' ">
+				<div class="winnerDir" th:if="${winner[0].dNo} == null">
+						<!-- 우승자 등록 -->
+						<div id="winnerInput" style="width: 50%; margin: 0 auto;">
+							<h3 class="font-alt mb-0" style="text-align: center">우승자 등록</h3>
+							<div>
+								<form class="form" role="form" action="/winner/update" name="winnerfrm" method="post" onsubmit="return check();">
+										<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+										<input type="hidden" th:name="coNo" th:value="${contest.cNo}" />
+			
+										<!-- 공모전작성자가 입력한 등수만  출력 -->
+										<th:block th:if="${winner.size} == 1">
+											<div>
+												1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+												회원ID<input type="text" name="userIdArr[]">
+											</div>
+										</th:block>
+			
+										<th:block th:if="${winner.size} == 2">
+											<div>
+												1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+												회원ID<input type="text"name="userIdArr[]">
+											</div>
+											<div>
+												2등<input type="text" id="grade_02" name="dgnNo[]">
+												회원ID<input type="text" name="userIdArr[]">
+											</div>
+										</th:block>
+			
+										<th:block th:if="${winner.size} == 3">
+											<div>
+												1등<input type="text" id="grade_01" name="dgnNo[]" required="required">
+												회원ID<input type="text" name="userIdArr[]">
+											</div>
+											<div>
+												2등<input type="text" id="grade_02" name="dgnNo[]">
+												회원ID<input type="text" name="userIdArr[]">
+											</div>
+											<div>
+												3등<input type="text" id="grade_03" name="dgnNo[]">
+												회원ID<input type="text" name="userIdArr[]">
+											</div>
+										</th:block>
+										<div class="btnCenter">
+										<button type="reset" class="btn btn-g btn-round">초기화</button>
+										<button type="submit" class="btn btn-g btn-round">등록</button>
+										</div>
+								</form>
+							</div>
+						</div>
+				</div>
+			</th:block>
+		</div>
 		
 		<div>
 			<!-- 페이지처리를 위한 히든인풋. -->
@@ -330,10 +337,8 @@ form div{
 									<h3>${user}</h3>
 							</div>
 								<hr> 
-							<div>
 								<h4>작품명 : ${title}</h4>
 								<p>${cntn}</p>
-							</div>
 									`;
 				$('#dgnerSelect').append(side);
 				
@@ -357,14 +362,14 @@ form div{
 						`
 				
 			//현수막
-			}else if(category =='D2'){
+			}else if(category =='D1'){
 				design = `<div class="design " id="${dNo}" style="width:100%; margin-bottom:20px;">
 							   <img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">
 						  </div>`
 			//그외
 			}else{
-				design = `	<div class="design" id="${dNo}" style="width:70%; margin: 0 auto; margin-bottom:20px;">
-							    <img src="/fileView/${fileName}" style="width: 100%; height: 400px; border-radius: 3%;">
+				design = `	<div class="design" id="${dNo}" style="width:100%; margin: 0 auto; margin-bottom:20px;">
+							    <img src="/fileView/${fileName}" style="width: 100%; height: 700px; border-radius: 3%;">
 							</div>`
 			}
 			

@@ -51,5 +51,7 @@ public interface MemberService{
 	public List<CrtfVO> crtfSelect(String userId); // 회원의 자격증 조회
 
 	public List<CodeVO> getBankCode();
+	
+	public int crtfDelete(String crtfId); //승급신청 삭제(요청중인경우만)
 
 }

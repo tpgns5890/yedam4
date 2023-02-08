@@ -56,7 +56,7 @@
 	<!-- 자격증 승인신청 -->
 	<insert id="insertCrtf">
 		<selectKey keyProperty="crtfId" resultType="String" order="BEFORE">
-			SELECT 'CE'||NVL(MAX(TO_NUMBER(SUBSTR(CRTF_ID,3)))+1),1) crtf_id
+			SELECT 'CE'||NVL(MAX((TO_NUMBER(SUBSTR(CRTF_ID,3)))+1),1) crtf_id
 			FROM CERTIFICATE
 		</selectKey>
 		INSERT INTO CERTIFICATE
@@ -219,5 +219,10 @@
 				SYSDATE)
 	</insert>
 	
+	<delete id="crtfDelete">
+		delete CERTIFICATE
+		where crtf_id = #{crtfId}
+		and accp_yn = 'R'
+	</delete>
 	
 </mapper>

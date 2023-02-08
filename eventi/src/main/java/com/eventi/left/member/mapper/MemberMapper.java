@@ -46,5 +46,7 @@ public interface MemberMapper {
 	public List<CodeVO> getBankCode(); //은행사 코드 가져오기
 	
 	public int visitCount();
+	
+	public int crtfDelete(String crtfId); //승급신청 삭제(요청중인경우만)
 
 }

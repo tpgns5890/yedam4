@@ -14,13 +14,13 @@
 	<div layout:fragment="content" class="content">
     <h2 hidden="hidden" class="module-title font-alt">회원정보 수정</h2>
 		
-		<div style="min-height: 700px">
 			<!-- 3.현재페이지 myPageSide 적용 -->
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
+		<div class="content">
 			
 			<div id="user">
 			<h3 >회원정보 수정</h3>
-			<div class="box" style="background-color: #f1f0fe">
+			<div class="box" style="background-color: #f1f0fe; height:auto">
 				<ul>
 					<li><label>가입일</label><input type="text" th:value="|${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|" disabled="disabled"></li>
 					<!-- 회원등급 -->
@@ -103,7 +103,7 @@
 						</li>
 					</ul>
 					</th:block>
-					<div class="userBtn">
+					<div class="userUpBtn">
 						<button type="button"  class="btn btn-g btn-round"  onclick="location.href='/myPage/userMypage'" >취소</button>
 						<button type="button" id="update"  class="btn btn-g btn-round"  >수정</button>
 					</div>
