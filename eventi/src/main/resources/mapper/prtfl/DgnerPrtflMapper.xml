@@ -9,6 +9,22 @@
 		</if>
 	</sql>
 	
+	<!-- 디자인정렬처리 -->
+	<sql id="category">
+		<if test="caregory == null">
+			and caregory = 'D1'
+		</if>
+		<if test="caregory != null and caregory != ''">
+			and caregory = #{caregory} 
+		</if>
+	</sql>
+	
+	<sql id="winDesign">
+		<if test="winYn != null and winYn != ''">
+			AND WIN_YN = #{winYn}
+		</if>
+	</sql>
+	
 	<!-- 디자이너 상세 조회 -->
 	<select id="dgnerSelect" resultType="com.eventi.left.prtfl.service.DgnerPrtflVO">
 		SELECT DISTINCT D.USER_ID, D.USER_NAME, D.ONE_INTRO, 
@@ -37,6 +53,9 @@
 		   AND D.DGN_NO = F.TARGET_ID(+)
 		   AND D.USER_ID = L.TARGET_NO(+)
 		   AND D.USER_ID = #{userId}
+		   <include refid="category" />
+		   <include refid="winDesign" />
+		   order by D.DT DESC
 		<![CDATA[
 		) A WHERE ROWNUM <= #{last}) WHERE RN >=#{first}
 		]]>
@@ -47,6 +66,8 @@
 		SELECT COUNT(*)
 		FROM DESIGN
 		WHERE USER_ID = #{userId}
+		<include refid="category" />
+		<include refid="winDesign" />
 	</select>
 	
 	<!-- 디자이너 등록 확인여부 -->

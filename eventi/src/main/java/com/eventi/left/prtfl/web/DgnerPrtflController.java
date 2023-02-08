@@ -39,15 +39,16 @@ public class DgnerPrtflController {
 	@Autowired LikesMapper likesMapper;
 	@Autowired ReviewService reviewService;
 	
-	//디자이너 상세조회(수정해야됨)
+	//디자이너 상세조회
 	@GetMapping("/dgnerSelect")
 	public String dgnerList(Model model, DgnerPrtflVO dgnerPrtflVO, ReplyVO replyVO, LikesVO likesVO, ReviewVO reviewVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String userId = user != null ? user.getUserId() :"";
 		
 		model.addAttribute("dgnerSelect", dgnerPrtflservice.dgnerSelect(dgnerPrtflVO));
-		System.out.println("=============="+ user.getUserId());
+		
 		//좋아요 눌렀는지 확인
-		likesVO.setUserId(user.getUserId());
+		likesVO.setUserId(userId);
 		likesVO.setTargetNo(dgnerPrtflVO.getUserId());
 		likesVO.setCategory("T07");
 		model.addAttribute("like", likesMapper.getLike(likesVO));

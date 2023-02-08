@@ -9,7 +9,7 @@
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <link href="/css/star.css" rel="stylesheet">
-
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
 	footer {
 		display: none;
@@ -26,8 +26,42 @@
 	#left {
 	  float: left;
 	  width: 30%;
-	  height: 300px; /* only for demonstration, should be removed */
-	  padding: 20px;
+	  height: 500px; /* only for demonstration, should be removed */
+	  padding: 0;
+	  position: sticky; 
+	  top: 31%;
+	}
+	
+	#detail{
+		background-color:white;
+		border: 2px solid #DEDADA;
+		border-radius: 10px;
+		z-index: 2;
+	    top: -35%;
+	    position: relative; 
+	}
+	
+	/*대표이미지*/
+	#backImg{
+		width: 300vh;
+	}
+	
+	.btnSize {
+		width: 250px;
+		margin:auto;
+        display:block;
+        margin-bottom: 3px;
+	}
+	
+	h3{
+		font-weight: bold;
+		text-align: center;
+		margin-top: 0;
+	}
+	
+	h4{
+		font-weight: bold;
+		margin-top: 0;
 	}
 	
 	article {
@@ -38,9 +72,10 @@
 	}
 	
 	.border {
-		border: 1px solid black;
+		border: 1px solid #D8D8D8;
 		border-radius: 5px;
-		padding: 5px;
+		padding: 10px;
+		margin-bottom: 3%;
 	}
 	
 	.label {
@@ -65,7 +100,7 @@
 	 }
 	 
 	 .active {
-	    transiion-duration: 1s;
+	    transition-duration: 1s;
 	    background-position: -2800px 0;
 	  }
 	  
@@ -134,78 +169,123 @@
 	.imgArray {
 	    margin: 5%;
 	}
+	
+	/*세부 정보*/
+	.detail_tr{
+	display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    border-bottom: none;
+    padding: 3px 0;
+    flex-direction: row;
+    align-items: center;
+	}
+	.detail_th {
+    min-width: 100px;
+    padding: 0 20px 0 0;
+    font-size: 1.06em;
+    line-height: 1.5em;
+    color: #999;
+	}
+	.detail_td {
+	    font-size: 1.06em;
+	    line-height: 1.5em;
+	    color: #555;
+	}
+	
+	/*댓글*/
+	#replyInsertFrm{
+		height: 120px;
+	}
+	
+	.replyBtn{
+		background-color: transparent;
+		border: 0;
+		color: rgba(2,126,251,1);
+	}
+	
+	#repInsertBtn, #logRepBtn{
+		background-color: transparent;
+		border: 1px solid rgba(2,126,251,1);
+		color: rgba(2,126,251,1);
+		float: right;
+		margin-top: 3px;
+		width: 60px;
+		height: 32px;
+		padding: 0;
+	}
+	
+	#replyInsertFrm{
+		height: 120px;
+	}
+	
+	.font-alt{
+		font-size: 13px;
+	}
 </style>
 </head>
 
 <div layout:fragment="content">
-
-    <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-     <div class="container">
-       <div class="row">
-         <div class="col-sm-6 col-sm-offset-3">
-           <h2 class="module-title font-alt">디자이너포트폴리오</h2>
-           <div class="module-subtitle font-serif">디자이너포트폴리오</div>
-         </div>
-       </div>
-     </div>
-   </section>
+   <img id="backImg" th:src="@{/images/title.png}">
    
-   <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-   <th:block th:if="${session.member.userId} == ${busiSelect.userId}">
-	   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{busiUpdate(userId=${busiSelect.userId})}'|">글 수정하기</button>
-	  <button type="button" class="btn btn-primary" th:onclick="">글 삭제하기</button>
-	</th:block>
-   
+   <div class="container">
     <section id="check">
-  <nav id="left">
-  	<div class="border">  		
-  		<div class="box">
+	  <nav id="left">
+	  <div id="detail">		
 		<img class="profile" th:src="|/fileView/${busiSelect.img}|">
-  		</div>
+	  	
+	  	<label style="display:none;"class="label" id="userId" th:text="${busiSelect.userId}"></label>
+	  	<h3 id="userName" th:text="|${busiSelect.busiTitle}업체|"></h3>
   		
-  		<label style="display:none;"class="label" id="userId" th:text="${busiSelect.userId}"></label><br>
-  		<label class="label" id="userName" th:text="${busiSelect.busiTitle}"></label><br>
-  		<hr>
-  		
-  		<th:block th:if="${session.member.userId} != ${busiSelect.userId}">
-	  		<button id="btn" type="button" class="btn btn-primary chattingUp">1:1대화</button>
-	  		<button id="btn" type="button" class="btn btn-primary punishModalUp">신고하기</button>
-	  		<button id="btn" type="button" class="btn btn-g btn-round reviewModalUp">리뷰</button>
+  		<th:block sec:authorize="isAuthenticated()">
+	  		<!-- 현재 로그인된 id와 작성자id가 다를 경우 버튼 나타남 -->
+	  		<th:block th:if="${session.member.userId} != ${busiSelect.userId}">
+		  		<button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize chattingUp">1:1대화</button>
+	  		</th:block>
+	  		<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
+		    <th:block th:if="${session.member.userId} == ${busiSelect.userId}">
+			   <button style="margin-top: 20px;" type="button" class="find-trigger btn-15 btnSize" th:onclick="|location.href='@{busiUpdate(userId=${busiSelect.userId})}'|">글 수정하기</button>
+			   <button type="button" class="find-trigger btn-1 btnSize" th:onclick="">글 삭제하기</button>
+			</th:block>
   		</th:block>
-		<hr>
-
-  	</div>
-  </nav>
+	  	</div>
+	  </nav>
   
   <article>
     <div role="tabpanel">
                   <ul class="nav nav-tabs font-alt" role="tablist">
-                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-tools-2"></span>포트폴리오</a></li>
-                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-tools-2"></span>후기</a></li>
+                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-pictures"></span>포트폴리오</a></li>
+                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>후기</a></li>
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="support">
                     	<div class="border">
-							<label class="label">작업물분위기</label> 
-							<label class="label" th:text="${busiSelect.busiStyle}"></label><br>
-							<label class="label">가능지역</label> 
-							<label class="label" th:text="${busiSelect.busiArea}"></label> <br>
+	                    	<div class="detail_tr">
+									<p class="detail_th">주 행사분야</p> 
+									<p class="detail_td" th:text="${busiSelect.busiStyle}"></p>
+							</div>
+							
+							<div class="detail_tr">
+									<p class="detail_th">주 행사지역</p> 
+									<p class="detail_td" th:text="${busiSelect.busiArea}"></p>
+							</div>
                     	</div>
-                    	
-                    	<br>
-                    	<h5>업체소개</h5>
+
+                    	<h4>업체소개</h4>
                     	<div class="border">	
-  							<label class="label" th:utext="${busiSelect.intro}"></label>
+  							<p th:utext="${busiSelect.intro}"></p>
                     	</div>
             			
-            			<br>
-                    	<h5>보유물품</h5>
+                    	<h4>보유물품
+	                    	<th:block sec:authorize="isAuthenticated()">
+	                    		<button th:if="${session.member.userId} == ${busiSelect.userId}" type="button" class="find-trigger btn-1" style="height: 30px; padding: 5px; margin:5px; font-size: 13px;" th:onclick="|location.href='@{/rent/rentGdList(userId=${busiSelect.userId})}'|">물품추가</button>
+	                    	</th:block>
+                    	</h4>
                     	<div class="border">
                     		    <!-- 게시글 리스트 -->
-								<table class="table mb-3">
-									<thead class="thead-dark">
+								<table>
+									<thead>
 										<tr>
-										    <th><input type="checkBox"></th>
 											<th>카테고리</th>
 											<th>물품이미지</th>
 											<th>물품이름</th>
@@ -228,7 +308,11 @@
 							</div>
 					     </div>
 					     
-					     <h5>행사사진</h5>
+					     <h4>행사사진
+					     	<th:block sec:authorize="isAuthenticated()">
+	                    		<button th:if="${session.member.userId} == ${busiSelect.userId}" type="button" class="find-trigger btn-1" style="height: 30px; padding: 5px; margin:5px; font-size: 13px;" th:onclick="|location.href='@{/eventImg/eventImgList(userId=${busiSelect.userId})}'|">이미지추가</button>
+	                    	</th:block>
+					     </h4>
                     	<div class="border">
 
 				          <div class="container">
@@ -248,15 +332,23 @@
 						</div>
 					       
                     	<br>
-                    	<h5>댓글</h5>
+                    	<h4>댓글</h4>
                     	<div class="border">
-					        <ul class="comment-list" id=reply></ul>
-					        
 					        <!-- 댓글 작성 -->
 						    <form id="replyInsertFrm">
-						    	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
-						    	<button type="button" id="repInsertBtn">댓글추가</button>
+						    	<th:block sec:authorize="!isAuthenticated()">
+						    		<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="로그인 후 등록 가능합니다." readonly="readonly"></textarea>
+						    		<button type="button" id="logRepBtn">댓글추가</button>
+						    	</th:block>
+						    
+						    	<th:block sec:authorize="isAuthenticated()">
+						    		<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
+						    		<button type="button" id="repInsertBtn">댓글추가</button>
+						    	</th:block>
 						    </form>
+						    
+						    <div id=reply>
+  							</div>
                     	</div>
                     </div>
                     
@@ -304,68 +396,6 @@
                 </div>
   </article>
 </section>
-	
-	<!-- 신고 폼 -->
-	<div id="punishFrm" class="modal">
-			<div class="modal_content">
-				<h2>신고</h2>
-				<div id="box">
-					<label>신고대상자</label>
-					<input type="text" id="targetId" name="targetId" th:value="${busiSelect.userId}" readonly><br>
-					<label>신고자</label>
-					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
-					<label>신고사유</label>
-					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
-					<button type="button" class="cancel">취소</button>
-					<button type="button" id="punish">신고</button>
-				</div>
-			</div>
-		<div class="modal_layer"></div>
-	</div>
-    
-    <!-- 후기 폼 -->
-    <div id="reviewFrm" class="modal">
-			<div class="modal_content">
-				<label>대상</label>
-				<input type="text" id="reviewTgt" name="reviewTgt" th:value="${busiSelect.userId}" readonly><br>
-				
-				<label>의뢰자</label>
-				<input type="text" id="userId" name="userId" th:value="${session.member.userId}" readonly><br>
-				
-				<label>별점</label>
-				<div class="starpoint_wrap">
-				  <div class="starpoint_box">
-				    <label for="starpoint_1" class="label_star" title="0.5"><span class="blind">0.5</span></label>
-				    <label for="starpoint_2" class="label_star" title="1"><span class="blind">1</span></label>
-				    <label for="starpoint_3" class="label_star" title="1.5"><span class="blind">1.5</span></label>
-				    <label for="starpoint_4" class="label_star" title="2"><span class="blind">2</span></label>
-				    <label for="starpoint_5" class="label_star" title="2.5"><span class="blind">2.5</span></label>
-				    <label for="starpoint_6" class="label_star" title="3"><span class="blind">3</span></label>
-				    <label for="starpoint_7" class="label_star" title="3.5"><span class="blind">3.5</span></label>
-				    <label for="starpoint_8" class="label_star" title="4"><span class="blind">4</span></label>
-				    <label for="starpoint_9" class="label_star" title="4.5"><span class="blind">4.5</span></label>
-				    <label for="starpoint_10" class="label_star" title="5"><span class="blind">5</span></label>
-				    <input type="radio" name="starpoint" id="starpoint_1" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_2" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_3" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_4" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_5" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_6" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_7" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_8" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_9" class="star_radio">
-				    <input type="radio" name="starpoint" id="starpoint_10" class="star_radio">
-				    <span class="starpoint_bg"></span>
-				  </div>
-				</div>
-				<br>
-				
-				<label>후기</label>
-				<textarea rows="5" cols="30" id="reviewCntn" name="reviewCntn" placeholder="후기를 작성해주세요."></textarea>
-				<button type="button" class="cancel">취소</button>
-				<button type="button" id="review">후기등록</button>
-			</div>
-		<div class="modal_layer"></div>
 	</div>
 	
    <script>
@@ -391,7 +421,7 @@
    		$.ajax({
    			url : '/replyList',
    			method : 'post',
-   			data : JSON.stringify({replyTgt:replyTgt, boardCat:'T07'}),
+   			data : JSON.stringify({replyTgt:replyTgt, boardCat:'T08'}),
    			contentType : "application/json",
    			beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
@@ -411,26 +441,37 @@
    		
    		//댓글 tr생성
    		function make(reply){
+   			let replyBtn = '';
    			let delBtn = '';
 			let upBtn = '';
-			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
+			let busi = '[[${busiSelect.userId}]]'
+			
+			if(busi == userId){
+				replyBtn = `<button class="reply replyBtn">Reply</button>`;
+			}
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
-			if(reply.userId ==userId){
-				delBtn = `<button class='repDelete'>삭제</button>`;
-				upBtn = `<button class='repUpdate'>수정</button>`;
+			if(reply.userId == userId){
+				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
+				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
 			}
 			
    			let p = `
-                  <li class="comment">
-                    <div class="comment-body"  id="${reply.replyNo}">
-                      <h3>${reply.userId}</h3>
-                      <div class="meta">${reply.writingDt}</div>
-                      <p>${reply.replyCntn}</p>
-                      <button type="button" class="reply">Reply</button>
-                      ${delBtn} ${upBtn}
-                    </div>
-                   </li>
+   				<div class="comment clearfix">
+                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                <div id="${reply.replyNo}">
+                <div class="comment-content clearfix">
+                  <div class="comment-author font-alt">${reply.userId}</div>
+                  <div class="comment-body">
+                    <p style="font-size: 16px; font-weight: bold;">${reply.replyCntn}</p>
+                  </div>
+                  <div class="comment-meta font-alt">${reply.writingDt} ${replyBtn}${delBtn}${upBtn}
+                  </div>
+                </div>
+                </div>
+				</div>
+				</div>
                 `
    			return p;
    		}
@@ -439,27 +480,30 @@
    		function makeRe(reply){
    			let delBtn = '';
 			let upBtn = '';
-			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
 			if(reply.userId ==userId){
-				delBtn = `<button class='repDelete'>삭제</button>`;
-				upBtn = `<button class='repUpdate'>수정</button>`;
+				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
+				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
 			}
    			
    			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
-   			$("#" + reply.rerepTgt).children('p:eq(1)').remove();
+   			$("#" + reply.rerepTgt).children().children().children('button:eq(0)').remove();
    			
-   			let p = `<ul class="children">
-                <li class="comment">
-                <div class="comment-body">
-                  <h3>${reply.userId}</h3>
-                  <div class="meta">${reply.writingDt}</div>
-                  <p>${reply.replyCntn}</p>
-                  ${delBtn} ${upBtn}
+   			let p = `<div class="comment clearfix">
+                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                <div id="${reply.replyNo}">
+                <div class="comment-content clearfix">
+                  <div class="comment-author font-alt">${reply.userId}</div>
+                  <div class="comment-body">
+                    <p style="font-size: 16px; font-weight: bold;">${reply.replyCntn}</p>
+                  </div>
+                  <div class="comment-meta font-alt" id="${reply.replyNo}">${reply.writingDt} ${delBtn}${upBtn}
+                  </div>
                 </div>
-              </li>
-            </ul>`
+                </div>
+              </div>`
             
             return p;
    		}
@@ -468,7 +512,7 @@
 		$("#repInsertBtn").on("click", function() {
 			//textarea에 있는 값 들고 오기
 			let replyCntn = $('#replyCntn').val();
-			let userId = '[[${session.member.userId}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
 			
 			$.ajax({
 	   			url : '/replyInsert',
@@ -490,7 +534,7 @@
 		$(document).on('click', '.reply', function(e){
 		    e.preventDefault();
 		    //대댓글을 작성할 replyNo 구하기
-		    let rerepTgt = $(this).parent("div").attr('id');
+		    let rerepTgt = $(this).parent().parent().parent("div").attr('id');
 		    //대댓글 입력할 수 있는 폼 생성
 		  	$(this).parent("div").append(makeFrm(rerepTgt));
 		  	
@@ -502,7 +546,7 @@
 		function makeFrm(rerepTgt) {
 			let form = `<form>
 				<input type="hidden" id="rerepTgt" name="rerepTgt" value="${rerepTgt}">
-	            <textarea class="form-control" id="replyCntn" name="replyCntn" rows="3"></textarea>
+	            <textarea class="form-control" id="reReplyCntn" name="replyCntn" rows="3"></textarea>
 	            <button type="button" id="rerepTgt" class="reply">답변</button>
 	        </form>`
 		    
@@ -511,9 +555,9 @@
 		
 		//대댓글 추가
 		$(document).on('click', '#rerepTgt', function(e){
-			let replyCntn = $('#replyCntn').val();
+			let replyCntn = $('#reReplyCntn').val();
 			let rerepTgt = $('#rerepTgt').val();
-			let userId = '[[${session.member.userId}]]';
+			let userId = '[[${session.member != null ? session.member.userId :""}]]';
 			
 			$(this).parent("form").remove();
 			$.ajax({
@@ -534,7 +578,7 @@
 		//댓글 삭제
 		$(document).on('click', '.repDelete', function(e){
 			let btn=$(this);
-			let replyNo = $(this).parent("div").attr('id');
+			let replyNo = $(this).parent().parent().parent("div").attr('id');
 			$.ajax({
 				url : '/replyDelete',
 				type : 'POST',
@@ -555,9 +599,9 @@
 		
 		//댓글 수정 폼으로 변경
 		$(document).on('click', '.repUpdate', function(e){
-			let replyNo = $(this).parent("div").attr('id');
-			let p = $(this).parent("div").children("p").text();			
-			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
+			let replyNo = $(this).parent().parent().parent("div").attr('id');
+			let p = $(this).parent().parent("div").children("div:eq(1)").children("p").text()		
+			$(this).parent().parent("div").children("div:eq(1)").children("p").replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='upReplyCntn' name='upReplyCntn' value='" + p + "'></input>");
 			
 			$(this).toggleClass("updateBtn");
 		});
@@ -566,7 +610,7 @@
 		$(document).on('click', '.updateBtn', function(e){
 			$(this).toggleClass("updateBtn");
 			let btn = $(this);
-			let replyCntn = $('#replyCntn').val();
+			let replyCntn = $('#upReplyCntn').val();
 			let replyNo = $('#replyNo').val();
 			let updateBtn = `<button class='repUpdate'>수정</button>`;
 			
@@ -580,7 +624,7 @@
 					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
 				},
 				success : function(result){
-					btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
+					btn.parent().parent("div").children("div:eq(1)").replaceWith("<p>" + result.replyCntn + "</p>");
 				}		
 			})
 		});
@@ -665,7 +709,6 @@
 		//물품정보리스트
 		function makeGd(gd){
 			let tag = `<tr id=${gd.goodsNo}>
-							<td><input type="checkBox"></td>
 							<td>${gd.caregory}</td>
 							<td><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
 							<td>${gd.goodsNm}</td>
