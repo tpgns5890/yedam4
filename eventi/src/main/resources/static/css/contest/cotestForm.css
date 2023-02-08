@@ -132,16 +132,6 @@ ul li.tag-item {
 	margin: 0px auto;
 }
 
-#userUpgrade {
-	width: 80%;
-	margin: 0 auto;
-	margin: 140px 250px;
-}
-
-#userUpgrade  box {
-	width: 800px;
-	margin: 0px auto 50px;
-}
 
 #user input[type=text], #user select {
 	width: 70%;
@@ -151,34 +141,18 @@ ul li.tag-item {
 	border-radius: 4px;
 	resize: vertical;
 }
+.user_select input, .user_select  select{
+	border: 0px !important;
+}
 
 .userBtn {
 	width: 300px;
 	margin: 0px auto;
 }
 
-#user h3, #userUpgrade h3 {
+#user h3 {
 	text-align: center;
 	padding-bottom: 10px;
-}
-
-#upgrade {
-	display: flex;
-	flex-wrap: nowrap;
-	margin-bottom: 10px;
-}
-
-#upgrade label {
-	line-height: 65px;
-}
-
-#upgrade button {
-	height: 40px;
-	margin-top: 14px;
-}
-
-#userUpgrade input[type="text"] {
-	width: 20%;
 }
 
 .userUlTag {

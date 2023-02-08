@@ -35,7 +35,6 @@ import com.eventi.left.money.service.MoneyVO;
 import com.eventi.left.questions.service.QuestionsService;
 import com.eventi.left.questions.service.QuestionsVO;
 import com.eventi.left.review.service.ReviewService;
-import com.eventi.left.review.service.ReviewVO;
 
 import groovy.util.logging.Log4j;
 
@@ -228,7 +227,7 @@ public class ContestController {
 		// 등록한 공모전 없는경우
 		if (list.size() == 0) {
 			model.addAttribute("result", "등록한 공모전이 없습니다.");
-		}// 등록한 공모전 있는경우
+		} // 등록한 공모전 있는경우
 		else {
 			model.addAttribute("contestList", list); // 공모리스트
 			MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
@@ -239,7 +238,7 @@ public class ContestController {
 	// 나의공모전관리 지원자조회페이지 이동
 	@GetMapping("/designRead")
 	public String designRead(Model model, String cNo) {
-		
+
 		model.addAttribute("contest", service.getContest(cNo));
 		model.addAttribute("winner", wService.winnerList(cNo));
 		return "content/contest/cotestDesignList";
@@ -293,6 +292,16 @@ public class ContestController {
 		}
 		moneyService.insertMoney(vo);
 		return vo;
+	}
+
+	// 공모전 1건의 문의내역 리스트 출력
+	@PostMapping("questionList")
+	@ResponseBody
+	public List<QuestionsVO> ContestQuestionList(ContestVO vo, PagingVO paging) {
+		QuestionsVO question = new QuestionsVO();
+		question.setTargetId(vo.getcNo());
+		question.setCategory("T01");
+		return qService.questionsList(question, paging);
 	}
 
 }

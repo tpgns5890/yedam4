@@ -88,6 +88,14 @@ public class MyPageController {
 	public boolean userPwCheck(MemberVO vo) {
 		return service.memberPwCheck(vo);
 	}
+	//회원비밀번호 변경
+	@PostMapping("/userPwUpdate")
+	@ResponseBody
+	public int userPwUpdate(String userId, String passwd) {
+		System.out.println(passwd);
+		System.out.println(userId);
+		return service.userPwUpdate(userId, passwd);
+	}
 
 	// 회원탈퇴(권한변경)
 	@PostMapping("/userStateUpdate")

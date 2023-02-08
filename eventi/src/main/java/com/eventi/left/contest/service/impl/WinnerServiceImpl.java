@@ -48,7 +48,7 @@ public class WinnerServiceImpl implements WinnerService {
 			winners.get(i).setGrade(i + 1);
 			winners.get(i).setUserId(userIdArr[i]);
 			r += mapper.updateWinner(winners.get(i));
-			//dMapper.winnerCheck(dgnNo[i]); //우승정보 디자인테이블에 insert
+			dMapper.winnerCheck(dgnNo[i]); //우승정보 디자인테이블에 insert
 		}
 		return r;
 	}

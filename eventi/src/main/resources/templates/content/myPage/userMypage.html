@@ -19,7 +19,7 @@
 			<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 
 
-			<div id="user" >
+			<div id="user" class="user_select" >
 					<h3 >회원정보 조회</h3>
 				<div class="box">
 					<ul >
@@ -47,19 +47,10 @@
 							type="text" th:value="${user.userPhone}" readonly="readonly"></li>
 	
 						<!-- 수신여부 -->
-						<li><label>수신여부</label> <span><input
-								th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'"
-								type="radio" name="userMessaging" value="S0"
-								onclick="return false">수신거부</span> <span><input
-								th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'"
-								type="radio" name="userMessaging" value="S1"
-								onclick="return false">메일</span> <span><input
-								th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'"
-								type="radio" name="userMessaging" value="S2"
-								onclick="return false">휴대폰</span> <span><input
-								th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'"
-								type="radio" name="userMessaging" value="S3"
-								onclick="return false">메일,휴대폰</span></li>
+						<li><label>수신여부</label> 
+							<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" onclick="return false">수신거부</span>
+							<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1" onclick="return false">메일</span> 
+						</li>
 						<!-- 회원계좌번호 -->
 						<li><label>예금주</label><input id="depotr" name="depotr"
 							type="text" th:value="${user.depotr}" readonly="readonly">
@@ -104,8 +95,9 @@
 						</th:block>
 					</ul>
 					<div class="userBtn">
-						<button type="button" id="update" class="w-btn w-btn-gra1">수정</button>
-						<button type="button" id="delete" class="w-btn w-btn-gra1">탈퇴</button>
+						<button type="button" id="update_pW" class="btn btn-g btn-round" >비번변경</button>
+						<button type="button" id="update"  class="btn btn-g btn-round" >정보수정</button>
+						<button type="button" id="delete"  class="btn btn-g btn-round" >탈퇴</button>
 					</div>
 				</div>
 			</div>
@@ -120,7 +112,23 @@
 				<label>비밀번호확인</label><input type="text" id="passwordchk" name="passwordchk" required="required"><br>
 				<font id="pw_feedback" size="2"></font>
 				<div id="checkDiv">
-					<button id="check" class="modelBtn1" style="width: 50px;" type="button">확인</button>
+					<button id="check" class="btn btn-g btn-round modelBtn"  type="button">확인</button>
+				</div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
+		
+		<!-- 비밀번호 변경창. -->
+		<div id="pwUpdateModel" class="modal">
+			<div class="pwUpdat_modal_content">
+				<span id="pw_close" class="close">&times;</span>
+				<h3>비밀번호 변경</h3>
+				<label>기존 비밀번호</label><input type="text" name="prevPassword" ><br> 
+				<label>비밀번호</label><input type="text"  id="pw1" name="userPassword" ><br> 
+				<label>비밀번호확인</label><input type="text"   id="pw2" name="passwordchk" ><br>
+				<font id="pw_feedback" size="2"></font>
+				<div id="checkDiv">
+					<button id="updatePW" class="btn btn-g btn-round modelBtn1" type="button">변경</button>
 				</div>
 			</div>
 			<div class="modal_layer"></div>
@@ -148,6 +156,10 @@
 				$('#passwordchk').val('');
 				$("#pw_feedback").html('');
 			}
+			
+			$('#pw_close').on("click", function(){
+				$('#pwUpdateModel').css('display', 'none');
+			})
 
 			// When the user clicks anywhere outside of the modal, close it
 			window.onclick = function(event) {
@@ -155,6 +167,88 @@
 					modal.style.display = "none";
 				}
 			}
+			
+			//비밀번호 수정버튼 -> 모달폼.
+			//수정하기 버튼 누를시
+			$('#update_pW').on("click", function() {
+				if (!confirm('비밀번호를 변경하시겠습니까?')) {
+					return false;
+				}
+				else {
+					// 모달창 띄우기.
+					 $('#pwUpdateModel').css('display', 'block');
+				}
+			})
+			
+			//패스워드 입력후 수정버튼
+			$('#updatePW').on("click", function(){
+				
+				let pwChekc = $('input[name="prevPassword"]').val();
+				let pw1 = $('#pw1').val();
+				let pw2 = $('#pw2').val();
+				
+				console.log(pwChekc)
+				console.log(pw1)
+				console.log(pw2)
+				
+				
+				if(pwChekc == '' || pw1 == '' || pw2 == '' ){
+					alert('정보를 입력해주세요.');
+					return false;
+				}
+				if(pw1 != pw2){
+					alert('변경비밀번호를 확인해주세요.');
+					return false;
+				}else if(pwChekc == pw1 || pwChekc == pw2){
+					alert('기존비밀번호와 변경비밀번호가 같습니다.');
+					return false;
+				}
+			
+				$.ajax({
+	 	   			url : '/myPage/userPwCheck',
+	 	   			method : 'post',
+	 	   			data : {userId,userPassword:pwChekc},
+	 	   			beforeSend : function(xhr)
+	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 					xhr.setRequestHeader(header, token);
+	 	            }
+	 	   			,success : function(result){
+	 	   			      if(result == true){
+	 	   			    	userId = '[[${session.member != null ? session.member.userId :''}]]';
+	 	   			    	$.ajax({
+	 	   	 	   			url : '/myPage/userPwUpdate',
+	 	   	 	   			method : 'post',
+	 	   	 	   			data : {userId,passwd:pw1},
+	 	   	 	   			beforeSend : function(xhr)
+	 	   	 	            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+	 	   	 					xhr.setRequestHeader(header, token);
+	 	   	 	            },
+	 	   					success : function(result){
+	 	   					      if(result > 0){
+	 	   								//모달숨기기
+	 	   								$('#pwUpdateModel').css('display', 'none');
+	 	   								alert('비밀번호 변경 완료')
+	 	   					     }else {
+	 	   								alert('비밀번호 변경 실패')	
+	 	   					     }
+	 	   					  		
+	 	   					 },fail: function () {
+	 	 	   					alert('요청실패')	
+		 	   		         }
+			 	   				})
+	 	   			     }else {
+	 	   						alert('비밀번호가 일치하지 않습니다.')	
+	 	   			     }
+	 	   			}
+	 	   			,fail: function () {
+	 	   					alert('요청실패')	
+	 	   		         }
+	 	   			})
+			})
+			
+			
+			
+			//-------------------------------------------------------------------
 			
 
 			//수정하기 버튼 누를시
@@ -201,6 +295,7 @@
 	 					xhr.setRequestHeader(header, token);
 	 	            }
 	 	   			,success : function(result){
+	 	   				console.log(result + "결과값")
 	 	   			      if(result == true){
 	 	   			    	location.href='/myPage/userUpdateForm'; 
 	 	   			     }else {

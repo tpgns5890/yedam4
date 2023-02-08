@@ -35,12 +35,9 @@
 					<li><label>연락처</label><input id="userPhone" name="userPhone" type="text" th:value="${user.userPhone}"></li>
 				
 					<!-- 수신여부 -->
-					<li>
-						<label>수신여부</label>
-						<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" >수신거부</span>
-						<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1">메일</span>
-						<span><input th:attr="checked=${user.userMessaging} == 'S2'?'true' : 'false'" type="radio" name="userMessaging" value="S2">휴대폰</span>
-						<span><input th:attr="checked=${user.userMessaging} == 'S3'?'true' : 'false'" type="radio" name="userMessaging" value="S3">메일,휴대폰</span>
+					<li><label>수신여부</label> 
+						<span><input th:attr="checked=${user.userMessaging} == 'S0'?'true' : 'false'" type="radio" name="userMessaging" value="S0" onclick="return false">수신거부</span>
+						<span><input th:attr="checked=${user.userMessaging} == 'S1'?'true' : 'false'" type="radio" name="userMessaging" value="S1" onclick="return false">메일</span> 
 					</li>
 	
 					<!-- 회원계좌번호 -->
@@ -107,8 +104,8 @@
 					</ul>
 					</th:block>
 					<div class="userBtn">
-						<button type="button" class="w-btn w-btn-gra1" onclick="location.href='/myPage/userMypage'" >취소</button>
-						<button type="button" id="update" class="w-btn w-btn-gra1" >수정</button>
+						<button type="button"  class="btn btn-g btn-round"  onclick="location.href='/myPage/userMypage'" >취소</button>
+						<button type="button" id="update"  class="btn btn-g btn-round"  >수정</button>
 					</div>
 				</div>
 			</div>

@@ -77,8 +77,6 @@ public class ContestServiceImpl implements ContestService {
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 
-		System.out.println("vo===" + vo);
-
 		return mapper.contestList(vo);
 	}
 
@@ -106,7 +104,7 @@ public class ContestServiceImpl implements ContestService {
 				System.out.println(i + 1 + "등 : " + array[i] + "원");
 				wvo.setGrade(i + 1); // 등수
 				wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
-				// hap += Integer.parseInt(array[i]); // 합계계산
+				hap += Integer.parseInt(array[i]); // 합계계산
 				wMapper.insertWinner(wvo);
 			}
 		}
