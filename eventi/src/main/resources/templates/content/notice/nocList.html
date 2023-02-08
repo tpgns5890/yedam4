@@ -5,87 +5,166 @@
    layout:decorate="~{layouts/default_layout}">
    
 <head>
-</head>
+	<link rel="stylesheet" href="index.css" />
+   	<link rel="stylesheet" href="eventi.css" />
+   	<!-- 구글 폰트 아이콘 -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <style>
-body {
-  padding:1.5em;
-  background: #f5f5f5
+
+tbody>tr:hover {
+	background-color: #ddd;
+}
+.main{
+	padding:40px; 
+}
+#content{
+	width: 70%;
+	margin:0 auto;
 }
 
-table {
-  border: 1px #a39485 solid;
-  font-size: .9em;
-  box-shadow: 0 2px 5px rgba(0,0,0,.25);
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 5px;
-  overflow: hidden;
+#estiLeft{
+	width:20%;
+	padding:15px;
 }
-
-th {
-  text-align: left;
+#estiRight{
+	width:75%;
 }
-  
-thead {
-  font-weight: bold;
-  color: #fff;
-  background: #73685d;
+/* 필터링 영역 */
+.filtering-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
- 
- td, th {
-  padding: 1em .5em;
-  vertical-align: middle;
-}
-  
- td {
-  border-bottom: 1px solid rgba(0,0,0,.1);
-  background: #fff;
-}
-
-  
- @media all and (max-width: 768px) {
-    
-  table, thead, tbody, th, td, tr {
-    display: block;
-  }
-  
-  th {
-    text-align: right;
-  }
-  
-  table {
-    position: relative; 
-    padding-bottom: 0;
-    border: none;
-    box-shadow: 0 0 10px rgba(0,0,0,.2);
-  }
-  
-  thead {
-    float: left;
-    white-space: nowrap;
-  }
-  
-  tbody {
-    overflow-x: auto;
-    overflow-y: hidden;
-    position: relative;
-    white-space: nowrap;
-  }
-  
-  tr {
+.filteringbox > h2,
+.selectbox {
     display: inline-block;
-    vertical-align: top;
-  }
-  
-  th {
-    border-bottom: 1px solid #a39485;
-  }
-  
-  td {
-    border-bottom: 1px solid #e5e5e5;
-  }
-}  
+    font-size: 20px;
+}
+.filteringbox > h2 {
+    margin-right: 16px;
+    font-weight: normal;
+}
+.selectbox {
+    border: none;
+    outline: none;
+    font-weight: bold;
+    color: var(--main-color);
+    cursor: pointer;
+}
+.select-item {
+    font-size: 14px;
+    margin: 100px;
+    color: #000;
+    cursor: pointer;
+}
+/* 필터링 영역 끝 */ 
+/* 검색, 버튼 영역 */
+.search-area {
+    display: flex;
+    gap: 6px;
+}
+.searchbox,
+.button {
+    display: inline-block;
+    height: 40px;
+    padding: 12px;
+    border-radius: 3px;
+}
+.searchbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    border: 1px solid var(--light-gray);
+}
+.searchbox > input {
+    width: 100%;
+    margin-right: 12px;
+    border: none;
+    outline: none;
+}
+.searchbox > input::placeholder {
+    color: var(--light-gray);
+}
+.searchbox > i {
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.button {
+    cursor: pointer;
+}
+.user-search-button {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+}
+.post-button {
+    background: var(--main-color);
+    border: none;
+    color: #fff;
+}
+/* 검색, 버튼 영역 끝 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+
+:root {
+	--main-color: #FAB955;
+	--light-gray: #dbdbdb;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video,
+textarea {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body * {
+	font-family: 'Pretendard';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+ol, ul, li {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 </style>
+</head>
 <div layout:fragment="content">
 <section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" 
 		data-background="/images/notice.jpeg" style="background-image: url(&quot;assets/images/notice.jpeg&quot;); background-size: 100%;">
@@ -97,34 +176,56 @@ thead {
             </div>
           </div>
 </section>
-<th:block sec:authorize="hasAnyRole('ADMIN')">
-	<button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{nocInsert}'|">공지사항등록</button>
-</th:block>
 	
-	<!-- 게시글 검색 -->
-	<form action="/nocList">
-	<input type="text" name="ttl">
-	<input type="submit" id="find" value="찾기">
-	</form>
 	
-	<table>
-	<thead>
-			<tr>
-				<th>공지사항번호</th>
-				<th>공지사항제목</th>
-				<th>작성일자</th>
-				<th>조회수</th>
-			</tr>			
-		</thead>
-		<tbody>
-			<tr th:each="noc : ${nocList}" th:onclick="|location.href='@{nocDetail(noticeNo=${noc.noticeNo})}'|">
-				<td th:text=${noc.noticeNo}></td>
-				<td th:text=${noc.ttl}></td>
-				<td th:text=${noc.dt}></td>
-				<td th:text=${noc.see}></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="main">
+      	<div id="content">
+      		<h2><b>공지사항</b></h2> 
+      		
+      		<!-- 게시글 검색 -->
+      	<div class="filtering-area">
+			<div class="search-area">
+                        <div class="searchbox" style="margin-top:35px">
+                        <input type="text" name="title" placeholder="검색어를 입력해주세요">
+                            <i class="material-symbols-outlined" id="find">search</i>
+                        </div>
+                    </div>
+			</div>	
+		
+      		<hr>
+      		<div id="estiContent" style="display: flex;justify-content: space-between;">
+      			<div id="estiLeft">
+      			<div class="apply-button-wrap">
+      				<th:block sec:authorize="hasAnyRole('ADMIN')">
+						<button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{nocInsert}'|">공지사항등록</button>
+					</th:block>
+				</div>
+				<h4 id="estiAll" style="border-bottom:1px solid grey;padding:10px;">전체</h4>
+				</div>	
+	      		<div id="estiRight">
+					<table class="table mb-3">
+						<thead class="thead-dark">
+							<tr>
+								<th>공지사항번호</th>
+								<th>공지사항제목</th>
+								<th>작성일자</th>
+								<th>조회수</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="noc : ${nocList}" th:onclick="|location.href='@{nocDetail(noticeNo=${noc.noticeNo})}'|">
+								<td th:text=${noc.noticeNo}></td>
+								<td th:text=${noc.ttl}></td>
+								<td th:text=${noc.dt}></td>
+								<td th:text=${noc.see}></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+	</div>	
 	
 	<!-- 페이징 처리 -->
 		<div class="row mt-5">

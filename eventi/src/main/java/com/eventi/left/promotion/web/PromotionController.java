@@ -59,13 +59,8 @@ public class PromotionController {
 		
 		List<PromotionVO> posts = proService.proList(promotionVO2, paging);
 		model.addAttribute("contents", posts);
-		//이미지
-		//model.addAttribute("file", filesService.fileList(promotionVO.getProNo()));
 		return "content/promotion/proList";
 	}
-	
-	
-	
 	
 	//정렬 전체 조회
 	@PostMapping("/proList")
@@ -106,7 +101,6 @@ public class PromotionController {
 		@PostMapping("/proInsert")
 		public String proInsert(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 			proService.proInsert(promotionVO, filesVO, uploadFile); //값이 vo자동으로 저장
-			//String userId = promotionVO.getUserId();
 			return "redirect:/proList";
 		}		
 	

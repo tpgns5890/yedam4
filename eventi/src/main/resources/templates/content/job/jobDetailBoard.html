@@ -365,11 +365,7 @@ table {
           </div>
 </section>
 
-<!-- 구직신청 -->	
-	<!--<button type="button" class="btn btn-outline-primary" 
-			th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>-->
-<!-- 신고하기 -->
-   <!--<button type="button" class="btn btn-primary" id="modalUp">신고하기</button>-->
+
 
 	<div class="content-wrap">
     	<div class="option-area">
@@ -399,10 +395,7 @@ table {
 		                 <h1 th:text=${job.title}>이벤트 행사 단기 스텝 채용합니다</h1>
                     </div>
                     <div class="company-image-wrap">
-                        <img
-                            src="https://img.freepik.com/free-vector/branding-identity-corporate-vector-logo-design_460848-8717.jpg"
-                            alt="기업 로고"
-                        />
+                    	<img src="@{/image/logo.jpeg}" alt="기업로고">
                     </div>
                 </div>
 
@@ -525,28 +518,27 @@ table {
 										<span th:text=${job.rprt}></span>
 								</th:block>
 								
+								<!-- 좋아요 -->
 								<th:block th:if ="${like == null}">		
-									<div class="stage">
-									  	<div id="love" class="stage heart"></div></div>
-									</th:block>
-									<th:block th:if ="${like != null}">		
-									<div class="stage">
-									  	<div id="love" class="stage heart active"></div></div>
+									
+									  	<div id="love" class="stage heart"></div>
+								</th:block>
+								<th:block th:if ="${like != null}">		
+									  	<div id="love" class="stage heart active"></div>
 								</th:block>	
+								
+								<!-- 이미지 -->
+								<img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
+								<!-- 버튼 영역 -->
+			                    <div class="apply-button-wrap">
+			                    <button type="button" th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
+			                    <!-- 신고하기 -->
+   								<!--<button type="button" class="btn btn-primary "id="modalUp">신고하기</button>-->
+			                    </div>
                             </li>
                         </ul>
                     </div>
     
-                    <!-- 지원 버튼 영역 -->
-                    <div class="apply-button-wrap">
-			            <form class="row">
-			            <img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
-			              <div class="col-sm-3">
-			              	<button type="button" class="w-btn w-btn-gra1" 
-									th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-			              </div>
-			            </form>
-                    </div>
                 </div>
             </div>
         </div>
@@ -584,12 +576,9 @@ table {
 
             <!-- 채용기업정보 -->
             <div class="detail-section">
-                <h2 class="sub-title" id="company">채용기업정보</h2>
+                <h2 class="sub-title" id="company">홈페이지정보</h2>
                 <div class="company-image-wrap">
-                    <img
-                        src="https://img.freepik.com/free-vector/branding-identity-corporate-vector-logo-design_460848-8717.jpg"
-                        alt="기업 로고"
-                    />
+                    <img src="@{/image/logo.jpeg}" alt="기업로고">
                 </div>
                 <ul class="list">
                     <li>
@@ -598,7 +587,7 @@ table {
                     </li>
                     <li>
                         <label>회사주소</label>
-                        <span>서울 중구 충무로1가 11길 1층</span>
+                        <span>예담컴퍼니</span>
                     </li>
                     <li>
                         <label>사업내용</label>

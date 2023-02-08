@@ -43,6 +43,12 @@
 	  cursor: pointer;
 	  margin-left: 8px;
 	}
+	#ptext{
+	color: red;
+	font-size: 18px;
+	text-align: center;
+	margin-top: 10px
+	}
 </style>
 </head>
 <div layout:fragment="content">
@@ -66,9 +72,10 @@
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<input type="hidden" id="proNo" name="proNo" th:value="${nextNo}">
 					<div class="row">
-					
+						
+						<p id="ptext">*이미지 제외 모두 입력하세요.</p>
 						<div class="col-md-12">
-								<div class="form-group">
+								<div class="form-group" hidden="hidden">
 									<label class="label" for="userId">회원ID</label>
 									<input type="text" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>
 								</div>

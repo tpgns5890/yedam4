@@ -4,14 +4,257 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
 <head>
+<link href="/css/star.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
 .label{
 	color: black;
 	font-size: 18px;
 }
+footer {
+		display: none;
+	}
 
+	* {
+	  box-sizing: border-box;
+	}
+	
+	#check{
+		min-height : 2000px;
+	}
+
+	#left {
+	  float: left;
+	  width: 30%;
+	  height: 500px; /* only for demonstration, should be removed */
+	  padding: 0;
+	  position: sticky; 
+	  top: 31%;
+	}
+	
+	#detail{
+		background-color:white;
+		border: 2px solid #DEDADA;
+		border-radius: 10px;
+		z-index: 2;
+	    top: -35%;
+	    position: relative; 
+	}
+	
+	article {
+	  float: left;
+	  padding: 20px;
+	  width: 70%;
+	  height: 300px; /* only for demonstration, should be removed */
+	}
+	
+	.border {
+		border: 1px solid #D8D8D8;
+		border-radius: 5px;
+		padding: 10px;
+		margin-bottom: 3%;
+	}
+	
+	#videoFrm{
+		padding: 5px;
+	}
+	
+	.label {
+		color : black;
+	}
+	
+	.btnSize {
+		width: 250px;
+		margin:auto;
+        display:block;
+        margin-bottom: 3px;
+	}
+	
+	.heart {
+	  width: 100px;
+	  height: 100px;
+	  background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+	  background-position: 0 0;
+	  cursor: pointer;
+	  transition: background-position 1s steps(28);
+	  transition-duration: 0s;
+	 }
+	 
+	 .active {
+	    transition-duration: 1s;
+	    background-position: -2800px 0;
+	  }
+	  
+	  #love{
+	  	float: right;
+	  }
+	  
+   .modal {
+		display: none;
+		position: fixed;
+		top: 25em;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.modal h2 {
+		margin: 0;
+	}
+
+	.modal button {
+		display: inline-block;
+		width: 100px;
+		border: 0.2px solid black;
+		border-radius: 5px;
+	}
+
+	.modal .modal_content {
+		width: 350px;
+		min-height: 200px;
+		margin: 0 auto;
+		padding: 20px;
+		background: #fff;
+		border: 0.5px solid #666;
+		border-radius: 15px;
+	}
+
+	.modal .modal_layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+	}
+	
+	.box {
+	    width: 150px;
+	    height: 150px; 
+	    border-radius: 100%;
+	    overflow: hidden;
+	    text-align: center !important;
+	    margin:0 auto;
+	}
+	
+	.profile {
+	    width: 65%;
+	    height: 65%;
+	    object-fit: cover;
+	    border-radius: 70%;
+	    overflow: hidden;
+	    margin : 15px auto;
+	    z-index: 3;
+	    right:-17%;
+	    position: relative;   
+	}
+	
+	h3{
+		font-weight: bold;
+		text-align: center;
+		margin-top: 0;
+	}
+	
+	h4{
+		font-weight: bold;
+		margin-top: 0;
+	}
+	
+	.pSize{
+		font-size: 15px; 
+		font-weight: bold; 
+	}
+	
+	
+	.item{
+		display: flex;
+	    flex-shrink: 0;
+	    -webkit-box-flex: 0;
+	    flex-grow: 0;
+	    -webkit-box-align: center;
+	    align-items: center;
+	     margin-bottom: 5px;
+	}
+	
+	.item > .item__emoji{
+		font-weight: 400;
+	    font-size: 18px;
+	    line-height: 26px;
+	    width: 18px;
+	    margin-right: 7px;
+		}
+	
+	.caption1{
+		font-size: 15px;
+	    letter-spacing: -0.25px;
+	    line-height: 17px;
+	    font-weight: bold;
+	}
+	.item .value{
+	    margin-left: auto;
+	    font-weight: bold;
+	}
+	
+	.detail_tr{
+	display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    border-bottom: none;
+    padding: 3px 0;
+    flex-direction: row;
+    align-items: center;
+	}
+	.detail_th {
+    min-width: 100px;
+    padding: 0 20px 0 0;
+    font-size: 1.06em;
+    line-height: 1.5em;
+    color: #999;
+	}
+	.detail_td {
+	    font-size: 1.06em;
+	    line-height: 1.5em;
+	    color: #555;
+	}
+	
+	#videoFrm{
+	text-align: center;
+	}
+	
+	.videoSize{
+	   width:360px; 
+	   height: 200px;
+	   padding: 5px;
+	}
+	
+	.replyBtn{
+		background-color: transparent;
+		border: 0;
+		color: rgba(2,126,251,1);
+	}
+	
+	#repInsertBtn{
+		background-color: transparent;
+		border: 1px solid rgba(2,126,251,1);
+		color: rgba(2,126,251,1);
+		float: right;
+		margin-top: 3px;
+		width: 60px;
+		height: 32px;
+		padding: 0;
+	}
+	
+	#replyInsert{
+		height: 120px;
+	}
+	
+	#backImg{
+		width: 300vh;
+	}
 </style>
-
 </head>
 <div layout:fragment="content">
 <section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/images/job.jpeg" style="background-image: url(&quot;assets/images/job.jpeg&quot;); background-size: 100%;">
@@ -24,56 +267,295 @@
           </div>
 </section>
 
-<div class="container">
-<div class="row no-gutters">
-		<div class="col-md-7">
-			<div class="contact-wrap w-100 p-md-5 p-4">
-				<form action="/resumeDetail" method="POST" id="resumeDetail" name="resumeDetail"
-					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
-					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="ttl">구직신청게시글번호</label> 
-									<input type="text" class="form-control" name="resumeNo" id="resumeNo" th:value=${detail.resumeNo}>
-							</div>
-						</div>
+   <div class="container">
+   <section id="check">
+	 <nav id="left">
+	  <div id="detail">
+		<!--<img class="profile" th:src="|/fileView/${file.sevNm}|">-->
+  		
+  		<label style="display:none;"class="label" id="seekerId" th:text="${detail.seekerId}"></label>
+  		<h3 id="userName" th:text="|이름: ${detail.userName}|"></h3>
 
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">구직자ID</label>
-								<input type="text" class="form-control" name="seekerId" id="seekerId" th:value=${detail.seekerId}>
+		<hr>
+		<div style="margin: 15px 44px;">
+	  		<p style="font-size: 16px; font-weight: bold;">개인정보</p>
+	  		<div class="item">
+		  		<span class="item__emoji">👩🏻‍💻</span>
+		  		<div class="caption1">이름</div> 
+		  		<div class="value" id="mcArea" th:text="${detail.userName}"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">📧</span>
+		  		<div class="caption1">이메일</div> 
+		  		<div class="value" th:text="${detail.userEmail}"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">📞</span>
+		  		<div class="caption1">전화번호</div> 
+		  		<div class="value" id ="likeCount" th:text="${detail.userPhone}"></div>
+	  		</div>
+	  		
+	  		<div class="item">
+		  		<span class="item__emoji">🔎</span>
+		  		<div class="caption1">채용여부</div> 
+		  		<div class="value" id ="likeCount" th:text="${detail.hire}"></div>
+	  		</div>
+  		</div>
+  	</div>
+  </nav>
+  <article>
+    <div role="tabpanel">
+                  <ul class="nav nav-tabs font-alt" role="tablist">
+                    <li class="active"><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-pictures"></span>포트폴리오</a></li>
+                    <li class=""><a href="#sales" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>후기</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="support">
+                    
+                    	<h4>제목</h4>
+                    	<div class="border">
+							<p th:utext="${detail.title}"></p>
+                    	</div>
+
+                    	<h4>자기소개</h4>
+                    	<div class="border">
+							<p th:utext="${detail.cntn}"></p>
+                    	</div>
+                    	
+                    	<h4>이미지</h4>
+                    	<div class="border">
+							<p th:utext="${detail.img}"></p>
+                    	</div>
+
+							 <!-- //페이징 경로 :: 문자 -->
+							<div class="row mt-5" id="paging">
+								<div class="col text-center">
+									<div class="block-27" id="returnPaging">
+									</div>
+								</div>
 							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">제목</label>
-								<div th:utext=${detail.title}></div>
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">자기소개서</label>
-								<div th:utext=${detail.cntn}></div>
-							</div>
-						</div>
-						
-						<!-- <div>
-						  <img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
-						  </div> -->
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+							
+						<h4>댓글</h4>
+                    	<div class="border">
+					        <!-- 댓글 작성 -->
+						    <form id="replyInsert">
+						    	<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
+						    	<button type="button" id="repInsertBtn">댓글추가</button>
+						    </form>
+						    
+						    <div id=reply>
+  							</div>
+                    	</div>	
+							
+                    	</div>
+                    </div>
+               </div>
+  </article>
+</section>
+</div>
+<script>
+	//csrf 설정
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 	
+	let userId = '[[${session.member != null ? session.member.userId :''}]]'; //누가 작성했는지 db에 보냄
+	let resumeNo = '[[${detail.resumeNo}]]';
+	let boardCat = 'T13';
 	
-	<!-- 이미지 나타내기 -->	
-	<div th:each="f : ${file}">
-		<img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-	</div>	
-	</div>
+	//댓글 불러오는 ajax
+	 $.ajax({
+		url : '/replyList', //controller에서 설정한 경로
+		method : 'post',
+		data : JSON.stringify({replyTgt:resumeNo, boardCat:boardCat}),
+		contentType : "application/json",
+		beforeSend : function(xhr)
+       {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+			xhr.setRequestHeader(header, token);
+       }
+	}).then(res => {
+		for(reply of res){
+			console.log(reply)
+			//댓글일 경우
+			if(reply.rerepTgt == null){
+				$("#reply").append(make(reply));
+			} else { //대댓글일 경우
+				$("#" + reply.rerepTgt).append(makeRe(reply));
+			}
+		}
+	})
+	
+	 //댓글 tr생성
+	function make(reply){
+		let delbtn = '';
+		let upBtn = '';
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		
+		if(reply.userId ==userId){
+			delbtn = `<button class='repDelete' >삭제</button>`;
+			upBtn = `<button class='repUpdate'>수정</button>`;
+		}
+		
+		let p =`
+			<li class="comment">
+				<div class="comment-body" id="${reply.replyNo}">
+				<h3>${reply.userId}</h3>
+	            <div class="meta">${reply.writingDt}</div>
+	            <p>${reply.replyCntn}</p>
+	            <button type="button" class="reply">Reply</button>
+	            ${delbtn} ${upBtn}
+				</div>
+			</li>`
+		
+		return p;
+	}
+	//대댓글 tr생성
+	function makeRe(reply){
+		let delBtn = '';
+		let upBtn = '';
+		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		
+		//댓글 작성자일 경우에만 삭제 버튼 생성
+		if(reply.userId ==userId){
+			delbtn = `<button class='repDelete'>삭제</button>`;
+			upBtn = `<button class='repUpdate'>수정</button>`;
+		}
+		//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
+		$("#" + reply.rerepTgt).children('button:eq(0)').remove();
+		
+		let p = `<ul class="children">
+	       <li class="comment">
+	       <div class="comment-body"  id="${reply.replyNo}">
+	         <p>${reply.replyCntn}</p>
+	         <div class="meta">${reply.writingDt}</div>
+	         ${delBtn} ${upBtn}
+	       </div>
+	     </li>
+   </ul>`
+   
+   return p; 
+	}
+	
+	//댓글 추가
+	$("#repInsertBtn").on("click", function(){
+		//textarea에 있는 값 들고 오기
+		let replyCntn = $('#replyCntn').val();
+		
+		$.ajax({
+			url : '/replyInsert', //controller에서 설정한 경로
+			method : 'post',
+			data : JSON.stringify({replyTgt:resumeNo, userId:userId, replyCntn:replyCntn, boardCat:boardCat}),
+			contentType : "application/json",
+			beforeSend : function(xhr)
+	        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+	        }
+		}).then(res => {
+				//댓글등록
+				$('#reply').append(make(res));
+				//내용 비워주기
+				$('#replyCntn').val('');
+		})
+	});
+	
+	//reply버튼을 클릭했을 경우 대댓글 입력 폼 생성
+	$(document).on('click', '.reply', function(e){
+		e.preventDefault();
+		//대댓글을 작성할 replyNo 구하기
+		let rerepTgt = $(this).parent("div").attr('id');
+		//대댓글 폼 생성
+		$(this).parent("div").append(makeFrm(rerepTgt));
+		//reply버튼 숨김
+		$(this).hide();
+	})
+	
+	//대댓글 폼
+	function makeFrm(rerepTgt){
+		let form = 
+			`<form>
+				<input type= "hidden" id="rerepTgt" name="rerepTgt" value="${rerepTgt}">
+				<textarea class="form-control" id="cntn" name="cntn" rows="3"></textarea>
+				<button type="button" id="rerepTgt" class="reply">답변</button>
+			</form>`
+					
+		return form;
+	}	
+	
+	//대댓글 추가
+	$(document).on('click', '#rerepTgt', function(e){
+		let cntn = $('#cntn').val();
+		let rerepTgt = $('#rerepTgt').val();
+		
+		$(this).parent("form").remove();
+		$.ajax({
+  			url : '/replyInsert',
+  			method : 'post',
+  			data : JSON.stringify({replyTgt:resumeNo, userId:userId, replyCntn:cntn, boardCat:boardCat, rerepTgt:rerepTgt}),
+  			contentType : "application/json",
+  			beforeSend : function(xhr)
+           {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+           }
+  		}).then(res => {
+  			
+  			$("#" + res.rerepTgt).append(makeRe(res));
+  		})
+	})
+	
+	//댓글 삭제
+	$(document).on('click', '.repDelete', function(e){
+		let btn=$(this);
+		let replyNo = $(this).parent("div").attr('id');
+		$.ajax({
+			url : '/replyDelete',
+			type : 'POST',
+			data : {
+				replyNo : replyNo
+			},
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+			},
+			success : function(result){
+				if(result ==1){
+				btn.closest(".comment").remove();
+			}
+		}
+	});		
+});
+	
+	//댓글 수정 폼으로 변경
+	$(document).on('click', '.repUpdate', function(e){
+		let replyNo = $(this).parent("div").attr('id');
+		let p = $(this).parent("div").children("p").text();			
+		$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
+		
+		$(this).toggleClass("updateBtn");
+	});
+	
+	//댓글 수정
+	$(document).on('click', '.updateBtn', function(e){
+		$(this).toggleClass("updateBtn");
+		let btn = $(this);
+		let replyCntn = btn.closest(".comment-body").find('#replyCntn').val();
+		let replyNo = $('#replyNo').val();
+		let updateBtn = `<button class='repUpdate'>수정</button>`;
+		
+		$.ajax({
+			url : '/replyUpdate',
+			type : 'POST',
+			data : JSON.stringify({replyNo : replyNo, replyCntn : replyCntn}),
+			contentType : "application/json",
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
+			},
+			success : function(result){
+				btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
+			}		
+		})
+	});
+</script>	
 </div>
 </html>

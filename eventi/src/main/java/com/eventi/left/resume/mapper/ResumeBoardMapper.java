@@ -3,6 +3,7 @@
 import java.util.List;
 
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.reply.service.ReplyVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 
 public interface ResumeBoardMapper {
@@ -16,6 +17,9 @@ public interface ResumeBoardMapper {
 	//단건조회
 	public ResumeBoardVO getResumeDetail(ResumeBoardVO resumeBoardVO); 
 	
+	//댓글 조회
+	public List<ReplyVO> resReply(ReplyVO replyVO);
+		
 	//구직신청폼
 	public ResumeBoardVO getApplyForm(MemberVO memberVO); 
 	

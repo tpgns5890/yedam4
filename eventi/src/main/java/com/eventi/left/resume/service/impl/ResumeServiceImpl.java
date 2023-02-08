@@ -14,6 +14,8 @@ import com.eventi.left.files.UploadFileMethod;
 import com.eventi.left.files.mapper.FilesMapper;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.promotion.service.PromotionVO;
+import com.eventi.left.reply.service.ReplyVO;
 import com.eventi.left.resume.mapper.ResumeBoardMapper;
 import com.eventi.left.resume.service.ResumeBoardVO;
 import com.eventi.left.resume.service.ResumeService;
@@ -39,10 +41,15 @@ public class ResumeServiceImpl implements ResumeService{
 	//구직자 상세조회
 	@Override
 	public ResumeBoardVO getResumeDetail(ResumeBoardVO resumeBoardVO) { 
-		// TODO Auto-generated method stub
 		return resumeMapper.getResumeDetail(resumeBoardVO);
 	}
-
+	
+	//댓글 조회
+	@Override
+	public List<ReplyVO> resReply(ReplyVO replyVO) {
+		return resumeMapper.resReply(replyVO);
+	}
+	
 	//구직자 전체조회(상세조회게시판)
 	@Override
 	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO, PagingVO paging) {
@@ -57,7 +64,6 @@ public class ResumeServiceImpl implements ResumeService{
 	//구직신청폼 이동
 	@Override
 	public ResumeBoardVO getApplyForm(MemberVO memberVO) {
-		// TODO Auto-generated method stub
 		return resumeMapper.getApplyForm(memberVO);
 	}
 	
@@ -74,6 +80,17 @@ public class ResumeServiceImpl implements ResumeService{
 			e.printStackTrace();
 		}
 		return r;
+	}
+	
+	//파일 업로드
+	public void uploadFiles(MultipartFile[] uploadFile, PromotionVO promotionVO) {
+		List<FileDto> list = new ArrayList<FileDto>();
+		try {
+			list = newUp.uploadFiles(uploadFile, promotionVO.getProNo(), "T02");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	//구직자 채용 
 	@Override
@@ -140,4 +157,5 @@ public class ResumeServiceImpl implements ResumeService{
 		// TODO Auto-generated method stub
 		return resumeMapper.applyDelete(resumeBoardVO);
 	}
+	
 }
