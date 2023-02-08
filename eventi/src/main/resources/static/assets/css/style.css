@@ -20,6 +20,7 @@ html {
 body {
   background: #fff;
   font-family: 'IBM Plex Sans KR', sans-serif !important;
+  font-size:18px;
   -webkit-font-smoothing: antialiased;
 }
 

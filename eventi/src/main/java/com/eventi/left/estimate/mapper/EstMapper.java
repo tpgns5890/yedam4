@@ -37,4 +37,8 @@ public interface EstMapper {
 	public int chooesProp(PropVO propVO); //제안서 채택
 	
 	public int count(EstVO estVO); //전체 개수 count
+
+	public int countP(EstVO estVO);
+
+	public List<EstVO> getEstListP(EstVO estVO);
 }

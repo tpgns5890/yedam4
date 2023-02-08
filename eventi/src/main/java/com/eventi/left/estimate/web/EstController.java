@@ -37,10 +37,10 @@ public class EstController {
 	// 견적요청서(ajax)
 	@PostMapping("/estListAjax")
 	@ResponseBody
-	public Map<String, Object> memberListAjax(EstVO estVO, PagingVO paging) {
+	public Map<String, Object> memberListAjax(EstVO estVO, PagingVO paging, String my) {
 		// 리턴할 최종Map(Member,paging VO)
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("eListAjax", estService.getEstList(estVO, paging));
+		result.put("eListAjax", estService.getEstList(estVO, paging, my));
 		result.put("paging", paging);
 		return result;
 	}

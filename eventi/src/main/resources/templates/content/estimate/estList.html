@@ -2,186 +2,259 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <style>
 tbody>tr:hover {
 	background-color: #ddd;
 }
+.main{
+	padding:40px; 
+}
+#content{
+	width: 70%;
+	margin:0 auto;
+}
+
+#estiLeft{
+	width:20%;
+	padding:15px;
+}
+#estiRight{
+	width:75%;
+}
 </style>
 </head>
 <body>
 	<div layout:fragment="content">
-		<section class="module bg-dark-60 gallery-page-header parallax-bg"
-			data-background="/assets/images/gallery_bg.jpg"
-			style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
-						<h2 class="module-title font-alt">견적요청서 게시판</h2>
+		<section class="home-section home-parallax home-fade home-full-height" id="home" style="max-height: 400px !important; top: 0px; overflow:hidden;">
+        <div class="hero-slider">
+          <ul class="slides">
+            <li class="bg-dark-30 bg-dark flex-active-slide" style="background-image: url(&quot;assets/images/esti1.jpg&quot;); width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;" data-thumb-alt="">
+              <div class="titan-caption" style="top: 0px;">
+                <div class="caption-content" style="opacity: 1;">
+                  <div class="font-alt mb-40 titan-title-size-3" style="margin: 0 !important;"><b>행사견적은 EVENTI</b></div>
+                </div>
+              </div>
+            </li>
+            <li class="bg-dark-30 bg-dark" style="background-image: url(&quot;assets/images/esti2.jpg&quot;); width: 100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;" data-thumb-alt="">
+              <div class="titan-caption" style="top: 0px;">
+                <div class="caption-content" style="opacity: 1;">
+                  <div class="font-alt mb-30 titan-title-size-3" style="margin: 0 !important;"><b>비교 견적으로 한번에</b>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="bg-dark-30 bg-dark" style="background-image: url(&quot;assets/images/esti3.jpg&quot;); width: 100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;" data-thumb-alt="">
+              <div class="titan-caption" style="top: 0px;">
+                <div class="caption-content" style="opacity: 1;">
+                  <div class="font-alt mb-40 titan-title-size-3" style="margin: 0 !important;"><b>나만의 행사를 기획하세요</b></div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        <ol class="flex-control-nav flex-control-paging"><li><a href="#" class="flex-active">1</a></li><li><a href="#" class="">2</a></li><li><a href="#" class="">3</a></li></ol><ul class="flex-direction-nav"><li class="flex-nav-prev"><a class="flex-prev" href="#"></a></li><li class="flex-nav-next"><a class="flex-next" href="#"></a></li></ul></div>
+      </section>
+      
+      <div class="main">
+      	<div id="content">
+      		<h2><b>견적문의</b></h2>
+      		<hr>
+      		<div id="estiContent" style="display: flex;justify-content: space-between;">
+      		
+	      		<div id="estiLeft">
+	      			<h4 id="estiAll" style="border-bottom:1px solid grey;padding:10px;">전체</h4>
+	      			<h4 id="estiMyE" style="border-bottom:1px solid grey; padding:10px;" sec:authorize="hasAnyRole('MEM','MC','DES','ADMIN')">나의 견적</h4>
+	      			<h4 id="estiMyP" style="border-bottom:1px solid grey; padding:10px;" sec:authorize="hasAnyRole('BUSI','ADMIN')">나의 제안</h4>
+	      		</div>
+	      		
+	      		<div id="estiRight">
+					<table class="table mb-3">
+						<thead class="thead-dark">
+							<tr>
+								<th>행사유형</th>
+								<th>작성자</th>
+								<th>작성일</th>
+								<th>채택유무</th>
+							</tr>
+						</thead>
+						<tbody id="check">
+						</tbody>
+					</table>
+					<!-- 페이징 처리 -->
+					<div class="row mt-5" id="paging">
+						<div class="col text-center">
+							<div class="block-27" id="returnPaging"></div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</section>
-		<table class="table mb-3">
-			<thead class="thead-dark">
-				<tr>
-					<th>견적서번호</th>
-					<th>행사유형</th>
-					<th>작성일시</th>
-					<th>제안서 채택유무</th>
-				</tr>
-			</thead>
-			<tbody id="check">
-			</tbody>
-		</table>
-		<!-- 페이징 처리 -->
-		<div class="row mt-5" id="paging">
-			<div class="col text-center">
-				<div class="block-27" id="returnPaging"></div>
+				
 			</div>
 		</div>
-		<input type="hidden" id="yn" value="${eList.adoptionYn}">
-		<input type="hidden" name="page" value="1">
-		<script>
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
-ajaxList();
-
-function gopage(i) {
-	let page = $('input[name="page"]').val(i);
-	//정렬 리스트 불러오는 함수
+	</div>
+	<input type="hidden" id="yn" value="${eList.adoptionYn}">
+	<input type="hidden" name="page" value="1">
+	<input type="hidden" name="my" value="E">
+	<script>
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 	ajaxList();
-}
-
-//비동기 통신
-function ajaxList() {
-	let page = $('input[name="page"]').val();
-	$.ajax({
-		url: "/estListAjax",
-		method: 'post',
-		data: {
-			page
-		},
-		beforeSend: function (xhr) {
-			/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-			xhr.setRequestHeader(header, token);
-		},
-		success: function (result) {
-			//기존 tr 삭제 ->tr생성 붙여넣기
-			$('tbody').empty();
-			for (eList of result.eListAjax) {
-				$('tbody').append(makeTr(eList));
-			}
-			//기존 페이징 삭제 -> 다시붙여넣기
-			$('#returnPaging').empty();
-			$('#returnPaging').append(makePaging(result.paging));
-		}
+	
+	function gopage(i) {
+		let page = $('input[name="page"]').val(i);
+		//정렬 리스트 불러오는 함수
+		ajaxList();
+	}
+	
+	$('#estiAll').on('click',function(){
+		let page = $('input[name="page"]').val(1);
+		let my = $("input[name='my']").val("E");
+		ajaxList();
 	})
-}
-
-//tr만들기
-function makeTr(eList) {
-	var yn = `${eList.adoptionYn}`;
-	console.log(yn);
-	let p = "";
-	var member = '[[${session.member != null ? session.member.userId :''}]]';
-	//비회원 클릭시 로그인 창 띄우기
-	if(member == ""){
+	
+	$('#estiMyE').on('click',function(){
+		let userId = '[[${session.member != null ? session.member.userId :""}]]';
+		let my = $("input[name='my']").val("E");
+		ajaxList(userId);
+	})
+	$('#estiMyP').on('click',function(){
+		let userId = '[[${session.member != null ? session.member.userId :""}]]';
+		let my = $("input[name='my']").val("P");
+		ajaxList(userId);
+	})
+	
+	//비동기 통신
+	function ajaxList(userId) {
+		console.log(userId);
+		let page = $('input[name="page"]').val();
+		let my = $('input[name="my"]').val();
+		$.ajax({
+			url: "/estListAjax",
+			method: 'post',
+			data: {
+				page,
+				userId,
+				my
+			},
+			beforeSend: function (xhr) {
+				/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader(header, token);
+			},
+			success: function (result) {
+				//기존 tr 삭제 ->tr생성 붙여넣기
+				$('tbody').empty();
+				for (eList of result.eListAjax) {
+					$('tbody').append(makeTr(eList));
+				}
+				//기존 페이징 삭제 -> 다시붙여넣기
+				$('#returnPaging').empty();
+				$('#returnPaging').append(makePaging(result.paging));
+			}
+		})
+	}
+	
+	//tr만들기
+	function makeTr(eList) {
+		var yn = `${eList.adoptionYn}`;
+		let p = "";
+		var member = '[[${session.member != null ? session.member.userId :""}]]';
+		//비회원 클릭시 로그인 창 띄우기
+		if(member == ""){
+			if(yn == 'N'){
+			p = `
+				<tr onclick="alert('로그인 후 이용해주세요.');login();">
+					<td>${eList.eventType}</td>
+					<td>${eList.userId}</td>
+					<td>${eList.writingDt}</td>
+					<td>채택전</td>
+				</tr>`;
+			return p;
+			}
+			else {
+				p = `
+					<tr onclick="alert('로그인 후 이용해주세요.');login();">
+						<td>${eList.eventType}</td>
+						<td>${eList.userId}</td>
+						<td>${eList.writingDt}</td>
+						<td>채택완료</td>
+					</tr>`;
+				return p;
+			}
+		}
 		if(yn == 'N'){
-		p = `
-			<tr onclick="alert('로그인 후 이용해주세요.');login();">
-				<td>${eList.eno}</td> 
-				<td>${eList.eventType}</td>
-				<td>${eList.writingDate}</td>
-				<td>채택전</td>
-			</tr>`;
+		 p = `
+		<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
+			<td>${eList.eventType}</td>
+			<td>${eList.userId}</td>
+			<td>${eList.writingDt}</td>
+			<td>[채택전]</td>
+		</tr>`;
 		return p;
 		}
 		else {
-			p = `
-				<tr onclick="alert('로그인 후 이용해주세요.');login();">
-					<td>${eList.eno}</td> 
-					<td>${eList.eventType}</td>
-					<td>${eList.writingDate}</td>
-					<td>채택완료</td>
-				</tr>`;
-			return p;
+			 p = `
+					<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
+						<td>${eList.eventType}</td>
+						<td>${eList.userId}</td>
+						<td>${eList.writingDt}</td>
+						<td>[채택완료]</td>
+					</tr>`;
 		}
 	}
-	if(yn == 'N'){
-	 p = `
-	<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
-		<td>${eList.eno}</td> 
-		<td>${eList.eventType}</td>
-		<td>${eList.writingDate}</td>
-		<td>채택전</td>
-	</tr>`;
-	return p;
-	}
-	else {
-		 p = `
-				<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
-					<td>${eList.eno}</td> 
-					<td>${eList.eventType}</td>
-					<td>${eList.writingDate}</td>
-					<td>채택완료</td>
-				</tr>`;
-	}
-}
-
-// 페이징 만들기
-function makePaging(page) {
-	if (page.totalRecord == 0) {
-
-		return;
-	}
-	let pagination = $("<div/>")
-	let ul = $("<ul/>").attr("class", "pagination");
-	if (page.startPage > 1) {
-		$(ul).append($("<li/>").html("&laquo;")
-			.css("font-size", "30px")
-			.attr("class", "page-item")
-			.on("click", function () {
-				gopage(page.startPage - page.pageSize)
-			}));
-	}
-
-	//페이지 버튼 생성.
-	for (let i = page.startPage; i <= page.endPage; i++) {
-		if (page.page == i) {
-			ul.append($("<li/>").text(i).css("font-size", "20px")
-				.css("padding", "10px")
-				.css("border-radius", " 10% / 50% ")
-				.css("background", "#dce3fd")
-				.attr("class", "page-link active")
-			);
-		} else {
-			ul.append($("<li/>").text(i).css("font-size", "20px")
-				.css("padding", "10px")
-				.attr("class", "page-link")
+	
+	// 페이징 만들기
+	function makePaging(page) {
+		if (page.totalRecord == 0) {
+	
+			return;
+		}
+		let pagination = $("<div/>")
+		let ul = $("<ul/>").attr("class", "pagination");
+		if (page.startPage > 1) {
+			$(ul).append($("<li/>").html("&laquo;")
+				.css("font-size", "30px")
+				.attr("class", "page-item")
 				.on("click", function () {
-					gopage($(this).text());
-				})); //페이지이동 함수
+					gopage(page.startPage - page.pageSize)
+				}));
 		}
+	
+		//페이지 버튼 생성.
+		for (let i = page.startPage; i <= page.endPage; i++) {
+			if (page.page == i) {
+				ul.append($("<li/>").text(i).css("font-size", "20px")
+					.css("padding", "10px")
+					.css("border-radius", " 10% / 50% ")
+					.css("background", "#dce3fd")
+					.attr("class", "page-link active")
+				);
+			} else {
+				ul.append($("<li/>").text(i).css("font-size", "20px")
+					.css("padding", "10px")
+					.attr("class", "page-link")
+					.on("click", function () {
+						gopage($(this).text());
+					})); //페이지이동 함수
+			}
+		}
+		if (page.endPage < page.lastPage) {
+			ul.append($("<li/>").html("&raquo;")
+				.css("font-size", "30px")
+				.attr("class", "page-item")
+				.on("click", function () {
+					gopage(page.startPage + page.pageSize)
+				}));
+		}
+		pagination.append(ul);
+		return pagination;
 	}
-	if (page.endPage < page.lastPage) {
-		ul.append($("<li/>").html("&raquo;")
-			.css("font-size", "30px")
-			.attr("class", "page-item")
-			.on("click", function () {
-				gopage(page.startPage + page.pageSize)
-			}));
-	}
-	pagination.append(ul);
-	return pagination;
-}
-
-//로그인 창 띄우기
-function login(){
-	 $("#header_modal").show();
-};
-</script>
+	
+	//로그인 창 띄우기
+	function login(){
+		 $("#header_modal").show();
+	};
+	</script>
 	</div>
 </body>
 </html>

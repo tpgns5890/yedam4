@@ -38,12 +38,21 @@ public class EstServiceImpl implements EstService {
 	}
 	//견적요청서 전체조회
 	@Override
-	public List<EstVO> getEstList(EstVO estVO,PagingVO paging) {
-		paging.setTotalRecord(estMapper.count(estVO));
-		paging.setPageUnit(10);
-		estVO.setFirst(paging.getFirst());
-		estVO.setLast(paging.getLast());
-		return estMapper.getEstList(estVO);
+	public List<EstVO> getEstList(EstVO estVO,PagingVO paging, String my) {
+		if(my.equals("P")) {
+			paging.setTotalRecord(estMapper.countP(estVO));
+			paging.setPageUnit(10);
+			estVO.setFirst(paging.getFirst());
+			estVO.setLast(paging.getLast());
+			return estMapper.getEstListP(estVO);
+		}
+		else {
+			paging.setTotalRecord(estMapper.count(estVO));
+			paging.setPageUnit(10);
+			estVO.setFirst(paging.getFirst());
+			estVO.setLast(paging.getLast());
+			return estMapper.getEstList(estVO);
+		}
 	}
 	//견적요청서 등록
 	@Override

@@ -125,6 +125,12 @@
 			float:left;
 			margin-right:35px;
 			font-weight:bold;
+			cursor:pointer;
+			padding:10px;
+		}
+		#toDoDown li:hover{
+			background:#eee;
+			border-radius:10px;
 		}
 		
 		#toDoCountAll{
@@ -187,11 +193,11 @@
 					</div>
 					<div id="toDoDown">
 						<ul>
-							<li class="toDoli">자격증승인<div class="toDoCount" th:text="${countCrtf}">90</div></li>
-							<li class="toDoli">공모전우승<div class="toDoCount" th:text="${countCont}">90</div></li>
-							<li class="toDoli">신고회원<div class="toDoCount" th:text="${countBmem}">90</div></li>
-							<li class="toDoli">신고게시글<div class="toDoCount" th:text="${countBbrd}">90</div></li>
-							<li class="toDoli">정산요청<div class="toDoCount" th:text="${countMon}">90</div></li>
+							<li class="toDoli" onclick="location.href='/admin/certList'">자격증승인<div class="toDoCount" th:text="${countCrtf}">90</div></li>
+							<li class="toDoli" onclick="location.href='/admin/adminContest'">공모전우승<div class="toDoCount" th:text="${countCont}">90</div></li>
+							<li class="toDoli" onclick="location.href='/admin/adminBanMem'">신고회원<div class="toDoCount" th:text="${countBmem}">90</div></li>
+							<li class="toDoli" onclick="location.href='/admin/adminBanBrd'">신고게시글<div class="toDoCount" th:text="${countBbrd}">90</div></li>
+							<li class="toDoli" onclick="location.href='/admin/adminMoney'">정산요청<div class="toDoCount" th:text="${countMon}">90</div></li>
 						</ul>
 					</div>
 				</div>

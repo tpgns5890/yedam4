@@ -3,24 +3,23 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eventi.left.estimate.mapper.EstMapper">
-	<!-- Join에 자주쓰이는 컬럼설정 -->
-<!-- 	<resultMap type="PropVO" id="PropVO">
-		<result column="user_id" property="userId" />
-	</resultMap>
-	<resultMap type="EstVO" id="EstVO">
-		<result column="e_no" property="eno" />
-		<result column="event_type" property="eventType" />
-		<result column="writing_dt" property="writingDate" />
-		<result column="adoption_yn" property="adoptionYn" />
-		<collection property="propVO" resultMap="PropVO" /> vo에 추가한 join용 변수
-	</resultMap> -->
-
+	
+	<sql id="eSelect">
+		<where>
+			<if test="userId != null and userId != ''">
+				AND USER_ID = #{userId}
+			</if>
+		</where>
+	</sql>
+	
 	<!-- 견적요청서 전체조회 -->
 	<select id="getEstList" resultType="EstVO">
-		SELECT E_NO, EVENT_TYPE, WRITING_DT, ADOPTION_YN
+		SELECT E_NO, EVENT_TYPE, USER_ID, WRITING_DT, ADOPTION_YN
       FROM(select rownum rn, a.*
           from(select *
                from ESTIMATE
+               <include refid="eSelect"/>
+               ORDER BY ADOPTION_YN, WRITING_DT DESC
        <![CDATA[) A 
           WHERE ROWNUM <= #{last}) 
       WHERE RN >= #{first}]]>
@@ -30,6 +29,7 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM ESTIMATE
+		<include refid="eSelect"/>
 	</select>
 	
 	<!-- 견적요청서 단건조회 -->
@@ -107,29 +107,6 @@
 	INSERT INTO PROPOSAL
 	VALUES('PR'||PNO_SEQ.NEXTVAL, #{eno}, #{userId}, #{companyInt}, #{eventExps}, #{totalPrc}, 'N', SYSDATE)
 	</insert>
-	
-	
-<!--  제안서 한건조회 result Map 
-	<resultMap type="PropVO" id="propMap">
-		<result column="p_no" property="pno" />
-		<result column="event_type" property="eventType" />
-		<result column="writing_dt" property="writingDt" />
-		<result column="adoption_yn" property="adoptionYn" />
-		<collection property="propGdList" resultMap="propGdMap" /> vo에 추가한 join용 변수
-	</resultMap>
-	
-	<resultMap type="PropGdVO" id="propGdMap">
-		<result column="goods_nm" property="goodsNm" />
-		<result column="unit_prc" property="unitPrc" />
-		<result column="count" property="count" />
-	</resultMap> 
-	제안서 한건 조회 join
-	<select id="getProp" resultType="PropVO" resultMap="propMap">
-	 SELECT p.p_no, p.company_int, p.event_exps, p.total_prc, p.writing_dt, gd.goods_nm, gd.unit_prc, gd.count
-	 FROM PROPOSAL P LEFT JOIN PROPOSAL_GD gd
-	 ON p.p_no = gd.p_no
-	 WHERE p.p_no = #{pno}
-	</select> -->
 	
 	<!-- 제안서 단건조회 -->
 	<select id="getProp" resultType="PropVO">
