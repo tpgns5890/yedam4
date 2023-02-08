@@ -474,7 +474,7 @@
 		        TO_CHAR(NVL(D.DAILYMOOUT,0),'999,999,999') DAILYMOOUT,
 		        NVL(D.VISITOR,0) VISITOR,
 		        NVL(M.REGISTER,0) REGISTER
-		FROM    (SELECT M.DAILYDT DAILYDT,
+		FROM    (SELECT V.DAILYDT DAILYDT,
 		                M.DAILYMOIN DAILYMOIN,
 		                M.DAILYMOOUT DAILYMOOUT,
 		                V.VISITOR VISITOR
@@ -499,7 +499,7 @@
 		                        COUNT(*) VISITOR
 		                FROM VISITOR
 		                GROUP BY TO_CHAR(VISIT_DATE,'YY/MM/DD')) V
-		        WHERE   M.DAILYDT = V.DAILYDT(+)) D,
+		        WHERE   V.DAILYDT = M.DAILYDT(+)) D,
 		        (SELECT TO_CHAR(USER_REGDATE,'YY/MM/DD') DAILYDT,
 		                COUNT(*) REGISTER
 		        FROM MEMBERS
@@ -508,6 +508,7 @@
 		ORDER BY D.DAILYDT DESC
 	</select>
 	
+	<!-- 문의사항 가져오기-->
 	<select id="getQnaList" resultType="hashmap">
 		SELECT 	*
 		FROM 	(SELECT Q_NO,
@@ -516,18 +517,19 @@
 						TO_CHAR(WRITING_DT,'YY/MM/DD') WRITING_DT,
 						REREP_TGT
 				FROM QUESTIONS
-				ORDER BY WRITING_DT)
+                WHERE CATEGORY = 'T14'
+                AND REREP_TGT IS NULL
+				ORDER BY TO_NUMBER(SUBSTR(Q_NO,3)) DESC)
 		<![CDATA[WHERE ROWNUM <= 4]]>
-		AND REREP_TGT IS NULL
 	</select>
 	
 	<select id="getCrtf" resultType="int">
 		SELECT NVL(COUNT(*),0)
 		FROM CERTIFICATE
-		WHERE ACCP_YN = 'N'
+		WHERE ACCP_YN = 'R'
 	</select>
 	<select id="getCont" resultType="int">
-		SELECT NVL(COUNT(*),0)
+		SELECT NVL(COUNT(DISTINCT C_NO),0)
 		FROM CONTEST C, WINNER W
 		WHERE C.C_NO = W.CO_NO 
 		AND W.USER_ID IS NOT NULL
@@ -537,13 +539,13 @@
 		SELECT NVL(COUNT(*),0)
 		from PUNISH
 		where BAN_RSLT = 'R'
-		and ban_type = 'P1'
+		and ban_type = 'P2'
 	</select>
 	<select id="getBbrd" resultType="int">
 		SELECT NVL(COUNT(*),0)
 		from PUNISH
 		where BAN_RSLT = 'R'
-		and ban_type = 'P2'
+		and ban_type = 'P1'
 	</select>
 	<select id="getMon" resultType="int">
 		SELECT NVL(COUNT(*),0)
