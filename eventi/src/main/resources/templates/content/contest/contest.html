@@ -46,6 +46,7 @@ h4 {
  border-radius: 20px;
 	margin-bottom: 20px;
     background-color: #f9f9f9;
+    min-height: 300px;
     box-shadow: 2px 10px 9px 5px rgb(0 0 0 / 4%);
 }
 	
@@ -729,10 +730,10 @@ h4 {
 		//공모작성자 문의답변 등록,수정,삭제 -----------------------------------------------------------------------
 		//답변등록 입력폼
 		function makeFrm(qTgt) {
-			let form = `<form>
+			let form = `<form style="display: flex; width: 550px;">
 							<input type="hidden" id="qTgt" name="qTgt" value="${qTgt}">
-				            <textarea class="form-control" id="qCntn" name="qCntn" rows="3"></textarea>
-				            <button type="button" id="qTgt" class="questionRepInsert">답변등록</button>
+				            <textarea class="form-control" id="qCntn" name="qCntn" rows="3" cols="10"></textarea>
+				            <button style="height: 40px;" type="button" id="qTgt" class="questionRepInsert btn btn-g btn-round">등록</button>
 				        </form>`
 		    return form;
 		}

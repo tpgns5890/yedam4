@@ -240,4 +240,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return mapper.getBankCode();
 	}
 
+	@Override
+	public int userPwUpdate(String id, String password) {
+		return mapper.updatePw(id, passwordEncoder.encode(password));
+	}
+
 }

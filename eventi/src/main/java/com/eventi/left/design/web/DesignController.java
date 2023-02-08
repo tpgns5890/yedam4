@@ -78,7 +78,8 @@ public class DesignController {
 
 	// 디자인 응모 처리(마이페이지 응모리스트 페이지.)
 	@PostMapping("/designInsert")
-	public String designInsert(Model model, DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile, RedirectAttributes rttr) {
+	public String designInsert(Model model, DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile,
+			RedirectAttributes rttr) {
 
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
@@ -88,37 +89,37 @@ public class DesignController {
 		// 등록처리후, 로그인유저의 디자인내역리스트 이동.
 		service.insert(vo, filesVO, uploadFile);
 		// 기본 현수막 조회로 인해 카테고리 정보를 넘겨주어야 등록된 디자인을 확인가능.
-		rttr.addAttribute("caregory",vo.getCaregory());
-		
+		rttr.addAttribute("caregory", vo.getCaregory());
+
 		return "redirect:/design/designMypage";
 	}
 
-	 // 디자인응모리스트(마이페이지)
-	   @GetMapping("/designMypage")
-	   public String designMypage(Model model, DesignVO vo, PagingVO paging, String caregory) {
-		   
-		   //등록된 카테고리를 담아서 마이페이지 이동.
-		   System.out.println("===================");
-		   System.out.println(caregory); if(caregory != null || caregory !="") {vo.setCaregory(caregory);} //등록한 디자인카테고리 vo세팅
-		   System.out.println("=================== " + vo.getCaregory());
+	// 디자인응모리스트(마이페이지)
+	@GetMapping("/designMypage")
+	public String designMypage(Model model, DesignVO vo, PagingVO paging, String caregory) {
 
-	      // 로그인 회원정보
-	      MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-	      String sessionId = user.getUserId();
-	      vo.setUserId(sessionId);
+		// 등록된 카테고리를 담아서 마이페이지 이동.
+		if (caregory != null || caregory != "") {
+			vo.setCaregory(caregory); // 등록한 디자인카테고리 vo세팅
+		} 
 
-	      List<DesignVO>design = service.userDesignList(vo, paging);
-	      if(design.size() == 0){
-	         model.addAttribute("result", "등록한 디자인이 없습니다.");
-	      //등록한 공모전 있는경우
-	      }else {
-	         model.addAttribute("design", design);
-	         model.addAttribute("caregory", design.get(0).getCaregory());
-	      }
-	      
-	      model.addAttribute("paging", paging);
-	      return "content/myPage/myDesignList";
-	   }
+		// 로그인 회원정보
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		String sessionId = user.getUserId();
+		vo.setUserId(sessionId);
+
+		List<DesignVO> design = service.userDesignList(vo, paging);
+		if (design.size() == 0) {
+			model.addAttribute("result", "등록한 디자인이 없습니다.");
+			// 등록한 공모전 있는경우
+		} else {
+			model.addAttribute("design", design);
+			model.addAttribute("caregory", design.get(0).getCaregory());
+		}
+
+		model.addAttribute("paging", paging);
+		return "content/myPage/myDesignList";
+	}
 
 	// 디자인 수정처리X
 
@@ -149,7 +150,7 @@ public class DesignController {
 	// 1.공모전작성자 : 공모전지원자조회 -> 디자인조회
 	@PostMapping("/ajaxSelect")
 	@ResponseBody
-	public DesignVO designSelect(DesignVO vo) {	
+	public DesignVO designSelect(DesignVO vo) {
 		// 디자인 1건조회
 		DesignVO design = service.getDesign(vo);
 		List<FilesVO> files = new ArrayList<>();
@@ -160,8 +161,8 @@ public class DesignController {
 
 		return design;
 	}
-	
-	//디자인 포트폴리오 상세보기
+
+	// 디자인 포트폴리오 상세보기
 	@PostMapping("/oneSelect")
 	@ResponseBody
 	public DesignVO oneSelect(DesignVO vo) {
@@ -245,8 +246,8 @@ public class DesignController {
 		service.insert(vo, filesVO, uploadFile);
 		return "redirect:/design/designList";
 	}
-	
-	//디자인 리스트조회 폼
+
+	// 디자인 리스트조회 폼
 	@GetMapping("/myDesignList")
 	public String myDesignList() {
 		return "content/prtfl/myDesignList";

@@ -21,7 +21,7 @@ public interface MemberMapper {
 
 	public int findPwCheck(String id, String name, String email);
 
-	public void updatePw(String userId, String userPassword);
+	public int updatePw(String userId, String userPassword);
 
 	public List<CodeVO> getCountry();
 

@@ -123,7 +123,7 @@
 							<td></td>
 						</th:block>
 						<th:block th:if=" ${contest.questionCount} > 0 " >
-							<td><button class="btn btn-g btn-round" type="button">조회</button></td>
+							<td><button class="btn btn-g btn-round questionsList" type="button" >조회</button></td>
 						</th:block>
 					</tr>
 				</tbody>
@@ -137,7 +137,17 @@
 				</div>
 			</div>
 		</div>
-
+		
+		<!-- 공모전 1건에 대한 문의리스트 모달 -->
+		<div id="questionsModel" class="modal">
+			<div class="question_modal_content">
+				<span id="questionCancel" class="close">&times;</span>
+				<h3 id="coNo">공모전 문의내역</h3>
+				<div id="modelSelect"></div>
+			</div>
+			<div class="modal_layer"></div>
+		</div>
+		
 		<!-- 후기등록 우승자선택 모달 -->
 		<div id="winnerModel" class="modal">
 			<div class="winner_modal_content">
@@ -212,6 +222,56 @@
 				$('form[name="searchFrm"]').after('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">')
 			}
 		})
+		
+		//문의사항 버튼 누를시 리스트 모달창 띄우기
+		$('.questionsList').on("click", function(){
+			let cNo = $(this).parent().siblings(':eq(1)').text()
+			$.ajax({
+				url: '/contest/questionList',
+				method: 'post',
+				data:{cNo},
+				beforeSend: function (xhr) {
+					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+					xhr.setRequestHeader(header, token);
+				},
+				success: function (result) {
+					$('#modelSelect').empty();
+	        		 for(data of result){
+		        	   	makeQuestionList(data);
+	        	   	} 
+	        		$('#modelSelect').append(makeQuestionList(data)); 
+	        		$('#questionsModel').css('display', 'block');
+	        	   	
+		        },
+		        fail: function () {
+	        		console.log("실패");
+		        }
+			})
+			
+		})
+		
+		//모달창 닫기.
+		$('#questionCancel').on("click", function(){
+			$('#questionsModel').css('display', 'none');
+		})
+		
+		
+		//공모전 문의리스트 모달창 붙여넣기
+		function makeQuestionList(data){	
+			let quesetion = `<span>${data.ttl}</span>
+							 <button id="${data.qNo}" class="qInsert">답변등록</button><br>`;
+			return quesetion;
+		}
+		
+		//문의리스트 답변등록버튼 누를시
+		/* $('.qInsert').on("click", function(e){
+			console.log('gg');
+			console.log(e.target.id)
+			console.log(e)
+		}) */
+		
+		//--------------------------------------------------------
+		
 
 		//검색선택
 		//기본 ttl, 변경시 적용.

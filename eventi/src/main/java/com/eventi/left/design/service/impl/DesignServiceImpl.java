@@ -67,7 +67,6 @@ public class DesignServiceImpl implements DesignService {
 
 	@Override
 	public int insert(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
-		System.out.println("+++++++++++" + uploadFile[0]);
 		// 대표사진세팅.
 		vo.setCenterImg(uploadFile[0].getOriginalFilename());
 

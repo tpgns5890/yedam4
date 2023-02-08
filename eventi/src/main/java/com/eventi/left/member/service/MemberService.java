@@ -27,6 +27,8 @@ public interface MemberService{
 	public String findId(MemberVO memberVO); //아이디 찾기
 
 	public String findPw(String id, String name, String email); //비밀번호 찾기
+	
+	public int userPwUpdate(String id, String password); //비밀번호 변경.
 
 	public List<CodeVO> getCountry();
 

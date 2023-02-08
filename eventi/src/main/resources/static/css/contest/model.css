@@ -3,6 +3,7 @@
 	font-weight: bold;
 	margin-bottom: 30px;
 }
+
 .modal h4 {
 	text-align: center;
 	font-weight: 700;
@@ -64,9 +65,14 @@
 	border-radius: 5px;
 }
 
+.modal_content {
+	width: 300px;
+}
+
 .modal_content, .dank_modal_content, .pw_modal_content,
 	.rprt_modal_content, .pay_modal_content, .winner_modal_content,
-	.review_modal_content, .qna_modal_content {
+	.review_modal_content, .qna_modal_content, .pwUpdat_modal_content,
+	.question_modal_content {
 	min-height: 200px;
 	border: 0.5px solid #666;
 	border-radius: 15px;
@@ -79,16 +85,16 @@
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
 
-.modal_content {
-	width: 300px;
+.question_modal_content {
+	width: 500px;
 }
 
 .dank_modal_content {
 	width: 20%;
 }
 
-.pw_modal_content {
-	width: 400px;
+.pw_modal_content, .pwUpdat_modal_content {
+	width: 500px;
 }
 
 .rprt_modal_content {
@@ -131,6 +137,7 @@
 #qnaBox {
 	display: flex;
 }
+
 .qna_modal_content #qna {
 	width: 40%;
 	margin: 0 auto;
@@ -140,7 +147,6 @@
 	border-radius: 20px;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .1);
 }
-
 
 .qna_modal_content #qnaRep {
 	width: 40%;
@@ -270,9 +276,26 @@
 	display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 
-label {
+.modal label {
 	display: inline-block;
 	text-align: left;
 	width: 70px;
-	font-size: 14px;
+	font-size: 18px;
+}
+
+.pw_modal_content label, .pwUpdat_modal_content label {
+	display: inline-block;
+	text-align: left;
+	width: 110px;
+	font-size: 18px;
+}
+
+#checkDiv {
+	width: 10%;
+	margin: 10px auto;
+}
+
+#checkDiv button {
+	font-size: 18px;
+	width: 80px;
 }
