@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.reply.service.ReplyVO;
 
 @Service
 public interface ResumeService {
@@ -20,6 +21,9 @@ public interface ResumeService {
 		
 	//단건조회
 	public ResumeBoardVO getResumeDetail(ResumeBoardVO resumeBoardVO); 
+	
+	//댓글 조회
+	public List<ReplyVO> resReply(ReplyVO replyVO);
 		
 	//구직신청폼
 	public ResumeBoardVO getApplyForm(MemberVO memberVO); 

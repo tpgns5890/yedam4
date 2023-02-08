@@ -62,7 +62,7 @@ h4 {
     	<div class="row topBox"> 
 			<div class="col-lg-6 mb-5 ftco-animate fadeInUp ftco-animated">
 			<!-- 이미지 출력 -->
-			 <img th:src="|/fileView/${proDetail.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">		
+			 <img th:src="|/fileView/${proDetail.img}|" style="width: 500px; height: 570px" class="img-fluid" alt="Colorlib Template">		
 			</div>
 		<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 			<div id="show"></div>
@@ -80,7 +80,7 @@ h4 {
 			<p th:text="|행사유형: ${proDetail.eType}|"></p>
 		</div>
 		<div>
-			<p th:text="|작성날짜: ${proDetail.dt}|"></p>
+			<p th:text="|작성날짜: ${#dates.format(proDetail.dt, 'yyyy-MM-dd')}|"></p>
 		</div>
       	<!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
 			<th:block th:if="${session.member} and ${session.member.userId} == ${proDetail.userId}">
@@ -122,8 +122,6 @@ h4 {
 	let userId = '[[${session.member != null ? session.member.userId :''}]]'; //누가 작성했는지 db에 보냄
 	let proNo = '[[${proDetail.proNo}]]';
 	let boardCat = 'T02';
-	
-	
 	
 	//댓글 불러오는 ajax
 	 $.ajax({

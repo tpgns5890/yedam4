@@ -16,29 +16,12 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt" style="margin: 0;">공지사항</h2>
+                <h2 class="module-title font-alt" style="margin: 0;">자주묻는질문</h2>
               </div>
             </div>
           </div>
 </section>
  
-
-<!--<form method="post">
-
-
-		<input type="text" title="검색">
-		<input type="submit" value="검색">
-
-<ul id="ul">
-<th:block  th:each="faq : ${faqList}">
-				<li><label th:text=${faq.faqNo}></label> 
-				  	<label th:text=${faq.faqTtl} class="ttl"></label>
-				  	<textarea cols="30" rows="5" th:text=${faq.faqAns} class="ans"  ></textarea>
-				 </li>		
-</th:block>
-</ul>
-</form>-->
-
 		<div class="container">
             <div class="row mb-60">
               <div class="col-sm-8 col-sm-offset-2">
@@ -49,16 +32,14 @@
                     <button class="search-btn" type="submit" id="find" value="찾기"><i class="fa fa-search"></i></button>
                   </div>
                 </form>
+                <th:block sec:authorize="hasAnyRole('ADMIN')">
                 <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqInsert}'|">글등록</button>
-                <!--  <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqDelete(faqNo=${faq.faqNo})}'|">삭제</button>-->
-                
-                
+                </th:block>
               </div> 
             </div>
             <div class="row" >
             	
               <div class="col-sm-8 col-sm-offset-2" >
-             	<input type="checkBox"  class="hire" id="allDelete" value="선택채용">
                 <div role="tabpanel" >
                   <ul class="nav nav-tabs font-alt" role="tablist">
                     <li class="active"><a href="#support" data-toggle="tab"><span class="icon-tools-2"></span>support</a></li>
@@ -69,10 +50,10 @@
                         <div class="panel panel-default" th:each="faq, number : ${faqList}">
 
                           <div class="panel-heading">
-                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" th:href="|#support${number.count}|" aria-expanded="true" class="" th:text=${faq.faqTtl}>Support Question 1</a></h4>
+                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" th:href="|#support${number.count}|" aria-expanded="true" class=" icon-lightbulb" th:text=${faq.faqTtl}>Support Question 1</a></h4>
                           </div>
                           <div class="panel-collapse collapse " th:id="|support${number.count}|" aria-expanded="true" style="">
-                            <div class="panel-body" th:text=${faq.faqAns} id="ans">.
+                            <div class="panel-body" th:text=${faq.faqAns} id="ans">
                             </div>
                           </div>
                         </div>

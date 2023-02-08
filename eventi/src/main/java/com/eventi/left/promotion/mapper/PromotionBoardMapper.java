@@ -13,10 +13,6 @@ public interface PromotionBoardMapper {
 	//홍보게시판 전체조회
 	public List<PromotionVO> proList(PromotionVO promotionVO);
 	
-	/*
-	 * //인기게시물 조회 public List<PromotionVO> ㅔㅐList(PromotionVO promotionVO);
-	 */
-	
 	//게시물 조회수 
 	public int seeUp(PromotionVO promotionVO);
 	 

@@ -23,6 +23,7 @@ import com.eventi.left.files.service.FilesVO;
 import com.eventi.left.job.service.JobBoardVO;
 import com.eventi.left.job.service.JobService;
 import com.eventi.left.member.service.MemberVO;
+import com.eventi.left.reply.service.ReplyVO;
 import com.eventi.left.resume.service.ResumeBoardVO;
 import com.eventi.left.resume.service.ResumeService;
 
@@ -90,17 +91,24 @@ public class ResumeController {
 	
 	//구직자 상세조회
 	@RequestMapping(value = "/resumeDetail", method=RequestMethod.GET) //단건조회
-	public String resumeDetail(Model model, ResumeBoardVO resumeBoardVO) {
+	public String resumeDetail(Model model, ResumeBoardVO resumeBoardVO, ReplyVO replyVO) {
+		//상세내용
 		model.addAttribute("detail", resumeService.getResumeDetail(resumeBoardVO));
+		
+		//사진 및 동영상
+		List<FilesVO> files = new ArrayList<>();
+		files = filesService.fileList(resumeBoardVO.getResumeNo());
+		model.addAttribute("files", files);
+		
 		return "content/resume/resumeDetail";
 	}
 	
 	//구직신청폼 이동
-		@RequestMapping(value = "/ApplyForm", method=RequestMethod.GET) 
-		public String getJob(Model model, MemberVO memberVO, JobBoardVO jobBoardVO) {
-			model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨
-			model.addAttribute("jobNo", jobBoardVO.getJobNo());
-			return "content/resume/ApplyForm"; //content -html링크
+	@RequestMapping(value = "/ApplyForm", method=RequestMethod.GET) 
+	public String getJob(Model model, MemberVO memberVO, JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨
+		model.addAttribute("jobNo", jobBoardVO.getJobNo());
+		return "content/resume/ApplyForm"; //content -html링크
 	}
 		
 	//구직신청
