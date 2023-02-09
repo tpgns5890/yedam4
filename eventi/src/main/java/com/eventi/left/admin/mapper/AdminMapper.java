@@ -72,6 +72,7 @@ public interface AdminMapper {
 
 	//우승자 모달창 정보 조회
 	public List<MoneyVO> winnerList(WinnerVO winnerVO);
+	public List<MoneyVO> winnerListM(WinnerVO winnerVO);
 
 	//Money테이블 insert
 	public int insertMoney(MoneyVO money);

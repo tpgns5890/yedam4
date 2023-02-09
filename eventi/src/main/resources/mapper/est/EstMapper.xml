@@ -88,7 +88,17 @@
 	
 	<!-- 견적요청서 단건조회 -->
 	<select id="getEst" resultType="EstVO">
-		SELECT *
+		SELECT 	E_NO,
+				USER_ID,
+				CODE_SELECT(EVENT_TYPE) EVENT_TYPE,
+				PATS,
+				EXPECTED_PL,
+				TO_CHAR(EVENT_DT, 'yy/MM/dd') EVENT_DT,
+				EXPECTED_DURATION,
+				CODE_SELECT(EXPECTED_LCAL) EXPECTED_LCAL,
+				WISHES,
+				WRITING_DT,
+				ADOPTION_YN
 		FROM ESTIMATE
 		WHERE E_NO = #{eno}
 	</select>
@@ -113,7 +123,6 @@
 								PATS,
 								EXPECTED_PL,
 								EVENT_DT,
-								EVENT_TIME,
 								EXPECTED_DURATION,
 								EXPECTED_LCAL,
 								WISHES,
@@ -125,7 +134,6 @@
 				 #{pats},
 				 #{expectedPl}, 
 				 #{eventDt}, 
-				 #{eventTime}, 
 				 #{expectedDuration},
 				 #{expectedLcal}, 
 				 #{wishes}, 

@@ -86,7 +86,7 @@
 			align-items: center;
 		}
 
-		#selArea {
+		#searchArea {
 			display: flex;
 			flex-wrap: wrap;
 			flex-direction: row;
@@ -94,7 +94,7 @@
 			margin-right: 5px;
 		}
 		
-		#selArea input{
+		#searchArea input{
 			margin-right:5px;
 		}
 		#list-head-right {
@@ -270,16 +270,17 @@
 				$("#modal").hide();
 			});
 			
+			$("#searchArea").on('change', function(){
+				$('input[name="page"]').val("1");
+				ajaxList();
+			})
+			
 			function gopage(i) {
 				let thispage = $('input[name="page"]').val(i);
 				//정렬 리스트 불러오는 함수
 				ajaxList(thispage);
 			}
 
-			$('#selArea').on('change', function () {
-				$('input[name="page"]').val("1");
-				ajaxList();
-			});
 			
 			//비동기 통신
 			function ajaxList(thispage) {
