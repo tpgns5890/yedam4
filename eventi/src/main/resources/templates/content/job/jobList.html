@@ -307,22 +307,22 @@ table {
                     <!-- 검색, 버튼 영역 -->
                     <div class="search-area">
                         <div class="searchbox" style="margin-top:35px">
-                        <input type="text" name="title" placeholder="검색어를 입력해주세요" th:value="${param.title}">
-					
-                            <i class="material-symbols-outlined" id="find" onclick="gopage(1)">search</i>
-                        <button type="button" style="margin-top:35px" class="button user-search-button" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
-                        <button type="button"  style="margin-top:35px" class="button post-button" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
-                     
-                    <!-- 라디오 버튼 전체 정렬 -->
-                    <input type="radio" name="showAll" value="all" >전체
-                    
-                    <!-- 좋아요 -->	
-					<div class="stage" style="margin-top: 5px;">
-						<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
-					</div>
-										
-                    </div>
-                </div>
+	                        <input type="text" name="title" placeholder="검색어를 입력해주세요" th:value="${param.title}">
+						
+	                            <i class="material-symbols-outlined" id="find" onclick="gopage(1)">search</i>
+	                     </div>
+	                        <button type="button" style="margin-top:35px" class="button user-search-button" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
+	                        <button type="button"  style="margin-top:35px" class="button post-button" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
+	                     
+		                    <!-- 라디오 버튼 전체 정렬 -->
+		                    <input type="radio" name="showAll" value="all" >전체
+		                    
+		                    <!-- 좋아요 -->	
+							<div class="stage" style="margin-top: 5px;">
+								<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+							</div>				
+                	</div>
+            	</div>
                 <!-- 정렬 영역 -->
                 <div class="sorting-area">
 				     <select class="sortingbox" id="see" name="orderCol" onchange="gopage(1)">
@@ -332,7 +332,6 @@ table {
 						<option value="cnt" th:selected="${#strings.equals(param.orderCol, 'cnt')}">좋아요순</option>
 					</select>
                 </div>
-            </div>
             </div>
     	</form>
     	
@@ -399,10 +398,14 @@ table {
 	function jobInsert(){
 		location.href = link1;
 	}
-	link2 = 'resumeList?userId=[[${session.member.userId != null ? session.member.userId :''}]]';//신청자전체조회
+	
+	let userId = '[[${session.member != null ? session.member.userId :''}]]';
+	link2 = 'resumeList?userId=';//신청자전체조회
 	function resumeList(userId){
-		location.href = link2;
+		location.href = link2+userId;
 	}
+	
+	
 	link3 = 'jobDetail?jobNo='; //게시글 상세조회
 	function jobDetail(jobNo){
 		console.log(jobNo)
@@ -464,7 +467,7 @@ table {
 	$(".heart").on("click", function(e) {
 		$(this).toggleClass("active");
 		let etype = $("#etype").val();
-		let userId = '[[${session.member.userId != null ? session.member.userId :''}]]';
+		let userId = '[[${session.member != null ? session.member.userId :""}]]';
 		let targetNo = $(this).attr('id');
 		let category = "T03";
 		e.stopImmediatePropagation(); 
