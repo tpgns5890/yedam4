@@ -296,6 +296,10 @@
 	}
 	
 	/*디자인*/
+	#designborder{
+		width: 65%;
+	}
+	
 	.right{
 	  	display: flex;
 	  	justify-content: flex-end;
@@ -387,8 +391,8 @@
   <article>
     <div role="tabpanel">
                   <ul class="nav nav-tabs font-alt" role="tablist">
-                    <li class="active"><a href="#design" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>디자인</a></li>
-                    <li><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-pictures"></span>포트폴리오</a></li>
+                    <li class="active"><a href="#design" data-toggle="tab" aria-expanded="false"><span class="icon-pictures"></span>디자인</a></li>
+                    <li><a href="#support" data-toggle="tab" aria-expanded="true"><span class="icon-pencil"></span>소개</a></li>
                     <li><a href="#review" data-toggle="tab" aria-expanded="false"><span class="icon-chat"></span>후기</a></li>
                   </ul>
                   <div class="tab-content">
@@ -522,7 +526,9 @@
 					        </select>
                     		</div>
                     		
+                    		<div class="container">
                     		<div id="designborder">
+					        </div>
 					        </div>
 					        
 				             <!-- //페이징 경로 :: 문자 -->
@@ -857,9 +863,9 @@
 			}
 			
 			if(design.caregory == '현수막'){
-				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 95%; margin-left: 30px; "> 
+				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 93%; margin-left: 10px; "> 
 					<div class="shop-item">
-					<div class="shop-item-image"> <img src="/fileView/${design.centerImg}" style="width: 1200px; height: 200px;"  class="img-fluid">
+					<div class="shop-item-image"> <img src="/fileView/${design.centerImg}" style="width: 1200px; height: 200px; padding: 0;"  class="img-fluid">
 					  <div class="shop-item-detail">
 					  <div class="stage">
 						<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
@@ -887,7 +893,7 @@
 							</div>
 						</div>`;
 			}  else {
-				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 33%;"> 
+				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 33%; padding-left: 0;"> 
 					<div class="shop-item">
 					<div class="shop-item-image"> <img src="/fileView/${design.centerImg}" style="width: 250px; height: 250px; border-radius: 3%;" class="img-fluid">
 					  <div class="shop-item-detail">
