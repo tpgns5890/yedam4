@@ -9,8 +9,13 @@
 tbody>tr:hover {
 	background-color: #ddd;
 }
+thead>tr{
+	background:#FAB955;
+	border-radius: 10px;
+}
 .main{
 	padding:40px; 
+	min-height:680px;
 }
 #content{
 	width: 70%;
@@ -70,18 +75,31 @@ tbody>tr:hover {
 	      		</div>
 	      		
 	      		<div id="estiRight">
-					<table class="table mb-3">
-						<thead class="thead-dark">
-							<tr>
-								<th>행사유형</th>
-								<th>작성자</th>
-								<th>작성일</th>
-								<th>채택유무</th>
-							</tr>
-						</thead>
-						<tbody id="check">
-						</tbody>
-					</table>
+	      			<h3 id="tableHead" style="margin:0 0 10px 0;font-weight:700;">전체견적</h3>
+	      			<div id="listTable" style="min-height:410px;">
+						<table class="table mb-3" >
+							<thead class="thead-dark">
+								<tr style="text-align-last: center;">
+									<th width="50%">
+										<select th:name="eventType" id="selType" style="width:auto;background: none;border: 0;">
+											<option value="">행사유형</option>
+											<option th:each="type : ${eventType}" th:value="${type.codeId}" th:text="${type.codeName}"></option>
+										</select>
+									</th>
+									<th width="10%">작성자</th>
+									<th width="10%">
+										<select th:name="expectedLcal" id="selArea" style="width:auto;background: none;border: 0;">
+											<option value="">지역</option>
+											<option th:each="Lcal : ${expectedLcal}" th:value="${Lcal.codeId}" th:text="${Lcal.codeName}"></option>
+										</select>
+									<th width="20%">작성일</th>
+									<th width="10%">채택유무</th>
+								</tr>
+							</thead>
+							<tbody id="check">
+							</tbody>
+						</table>
+					</div>
 					<!-- 페이징 처리 -->
 					<div class="row mt-5" id="paging">
 						<div class="col text-center">
@@ -108,17 +126,31 @@ tbody>tr:hover {
 	}
 	
 	$('#estiAll').on('click',function(){
+		$('#tableHead').text("견적문의")
 		let page = $('input[name="page"]').val(1);
 		let my = $("input[name='my']").val("E");
+		let eventType = $('select[name="eventType"]').val("");
+		let expectedLcal = $('select[name="expectedLcal"]').val("");
 		ajaxList();
 	})
-	
+	$('tr').on('change', function(){
+		let page = $('input[name="page"]').val(1);
+		ajaxList();
+	})
 	$('#estiMyE').on('click',function(){
+		let page = $('input[name="page"]').val(1);
+		$('#tableHead').text("나의 견적문의")
+		let eventType = $('select[name="eventType"]').val("");
+		let expectedLcal = $('select[name="expectedLcal"]').val("");
 		let userId = '[[${session.member != null ? session.member.userId :""}]]';
 		let my = $("input[name='my']").val("E");
 		ajaxList(userId);
 	})
 	$('#estiMyP').on('click',function(){
+		let page = $('input[name="page"]').val(1);
+		let eventType = $('select[name="eventType"]').val("");
+		let expectedLcal = $('select[name="expectedLcal"]').val("");
+		$('#tableHead').text("나의 제안서")
 		let userId = '[[${session.member != null ? session.member.userId :""}]]';
 		let my = $("input[name='my']").val("P");
 		ajaxList(userId);
@@ -126,15 +158,18 @@ tbody>tr:hover {
 	
 	//비동기 통신
 	function ajaxList(userId) {
-		console.log(userId);
 		let page = $('input[name="page"]').val();
 		let my = $('input[name="my"]').val();
+		let eventType = $('select[name="eventType"]').val();
+		let expectedLcal = $('select[name="expectedLcal"]').val();
 		$.ajax({
 			url: "/estListAjax",
 			method: 'post',
 			data: {
 				page,
 				userId,
+				eventType,
+				expectedLcal,
 				my
 			},
 			beforeSend: function (xhr) {
@@ -165,9 +200,10 @@ tbody>tr:hover {
 			p = `
 				<tr onclick="alert('로그인 후 이용해주세요.');login();">
 					<td>${eList.eventType}</td>
-					<td>${eList.userId}</td>
-					<td>${eList.writingDt}</td>
-					<td>채택전</td>
+					<td style="text-align-last: center;">${eList.userId}</td>
+					<td style="text-align-last: center;">${eList.expectedLcal}</td>
+					<td style="text-align-last: center;">${eList.writingDt}</td>
+					<td style="text-align-last: center;">채택전</td>
 				</tr>`;
 			return p;
 			}
@@ -175,31 +211,35 @@ tbody>tr:hover {
 				p = `
 					<tr onclick="alert('로그인 후 이용해주세요.');login();">
 						<td>${eList.eventType}</td>
-						<td>${eList.userId}</td>
-						<td>${eList.writingDt}</td>
-						<td>채택완료</td>
+						<td style="text-align-last: center;">${eList.userId}</td>
+						<td style="text-align-last: center;">${eList.expectedLcal}</td>
+						<td style="text-align-last: center;">${eList.writingDt}</td>
+						<td style="text-align-last: center;">채택완료</td>
 					</tr>`;
 				return p;
 			}
 		}
 		if(yn == 'N'){
 		 p = `
-		<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
-			<td>${eList.eventType}</td>
-			<td>${eList.userId}</td>
-			<td>${eList.writingDt}</td>
-			<td>[채택전]</td>
-		</tr>`;
+			<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
+				<td>${eList.eventType}</td>
+				<td style="text-align-last: center;">${eList.userId}</td>
+				<td style="text-align-last: center;">${eList.expectedLcal}</td>
+				<td style="text-align-last: center;">${eList.writingDt}</td>
+				<td style="text-align-last: center;">[채택전]</td>
+			</tr>`;
 		return p;
 		}
 		else {
 			 p = `
 					<tr onclick="location.href='/estDetail?eno=${eList.eno}'">
 						<td>${eList.eventType}</td>
-						<td>${eList.userId}</td>
-						<td>${eList.writingDt}</td>
-						<td>[채택완료]</td>
+						<td style="text-align-last: center;">${eList.userId}</td>
+						<td style="text-align-last: center;">${eList.expectedLcal}</td>
+						<td style="text-align-last: center;">${eList.writingDt}</td>
+						<td style="text-align-last: center;">[채택완료]</td>
 					</tr>`;
+			 return p;
 		}
 	}
 	

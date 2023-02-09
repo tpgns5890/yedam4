@@ -3,8 +3,8 @@ package com.eventi.left.estimate.service;
 import java.util.List;
 import java.util.Map;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
-import com.eventi.left.member.service.MemberVO;
 import com.eventi.left.rent.service.RentGdVO;
 
 public interface EstService {
@@ -35,5 +35,9 @@ public interface EstService {
 	public int chooesProp(PropVO propVO); //제안서 채택
 	
 	public int count(EstVO estVO); //전체 개수 count
+
+	public List<CodeVO> getLcalCode(CodeVO codeVO);
+
+	public List<CodeVO> getTypeCode(CodeVO codeVO);
 	
 }

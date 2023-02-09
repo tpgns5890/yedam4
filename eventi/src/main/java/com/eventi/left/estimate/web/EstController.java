@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.common.SessionUtil;
 import com.eventi.left.estimate.service.EstService;
@@ -30,7 +31,9 @@ public class EstController {
 
 	// 견적요청서 전체조회
 	@RequestMapping(value = "/estList")
-	public String estList() {
+	public String estList(Model model, CodeVO codeVO) {
+		model.addAttribute("expectedLcal", estService.getLcalCode(codeVO));
+		model.addAttribute("eventType", estService.getTypeCode(codeVO));
 		return "content/estimate/estList";
 	}
 
@@ -47,7 +50,8 @@ public class EstController {
 	
 	// 견적요청서 작성페이지
 	@RequestMapping(value = "/estForm")
-	public String estFormType(Model model) {
+	public String estFormType(Model model, CodeVO codeVO) {
+		model.addAttribute("eventType", estService.getTypeCode(codeVO));
 		return "content/estimate/estForm";
 	}
 
