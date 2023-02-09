@@ -282,7 +282,7 @@ table {
                     <!-- 필터링 영역 -->
                     <div class="filteringbox">
                         <h2>행사 유형</h2>
-                            	<select class="selectbox" id="etype" name="eType"  onchange="order()">
+                            	<select class="selectbox" id="etype" name="eType"  onchange="gopage(1)">
 								<option value="" selected>------</option>
 								<option value="E00" th:selected="${jobBoardVO.eType=='E00'}" >기타</option>
 								<option value="E01" th:selected="${jobBoardVO.eType=='E01'}" >결혼식</option>
@@ -307,13 +307,15 @@ table {
                     <!-- 검색, 버튼 영역 -->
                     <div class="search-area">
                         <div class="searchbox" style="margin-top:35px">
-                        <input type="text" name="title" placeholder="검색어를 입력해주세요">
+                        <input type="text" name="title" placeholder="검색어를 입력해주세요" th:value="${param.title}">
 					
-                            <i class="material-symbols-outlined" id="find" onclick="order()">search</i>
-                        </div>
+                            <i class="material-symbols-outlined" id="find" onclick="gopage(1)">search</i>
                         <button type="button" style="margin-top:35px" class="button user-search-button" onclick="jobInsert()" sec:authorize="isAuthenticated()">구인등록</button>
                         <button type="button"  style="margin-top:35px" class="button post-button" onclick="resumeList()" sec:authorize="isAuthenticated()">지원자조회</button>
-                        
+                     
+                    <!-- 라디오 버튼 전체 정렬 -->
+                    <input type="radio" name="showAll" value="all" >전체
+                    
                     <!-- 좋아요 -->	
 					<div class="stage" style="margin-top: 5px;">
 						<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
@@ -323,13 +325,14 @@ table {
                 </div>
                 <!-- 정렬 영역 -->
                 <div class="sorting-area">
-				     <select class="sortingbox" id="see" name="orderCol" onchange="order()">
-						<option value="" selected>------</option>
-						<option value="dt">작성순</option>
-						<option value="see">조회수</option>
-						<option value="cnt">좋아요순</option>
+				     <select class="sortingbox" id="see" name="orderCol" onchange="gopage(1)">
+						<option value="" th:selected="${#strings.equals(param.orderCol, '')}">------</option>
+						<option value="dt" th:selected="${#strings.equals(param.orderCol, 'dt')}">작성순</option>
+						<option value="see" th:selected="${#strings.equals(param.orderCol, 'see')}">조회수</option>
+						<option value="cnt" th:selected="${#strings.equals(param.orderCol, 'cnt')}">좋아요순</option>
 					</select>
                 </div>
+            </div>
             </div>
     	</form>
     	
@@ -338,7 +341,7 @@ table {
                 <ul class="card-wrap">
                     <li class="card" th:each="job : ${jobList}" th:myName = "${job.jobNo}" th:onclick="jobDetail(this.getAttribute('myName'))">
                         <div class="card-image-wrap">
-                        	<div th:id="${job.jobNo}" style="position: absolute; right: -9px; top: -9px; z-index: 3;" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+                        	<div th:id="${job.jobNo}" style="position: absolute; right: -9px; top: -9px; z-index: 3;" class="stage heart" th:classappend="${job.likes} =='1' ? active" sec:authorize="isAuthenticated()" ></div>
                             <img th:src="|/fileView/${job.img}|" style="width:100%; height:100%; object-fit:cover;" class="img-fluid" alt="Colorlib Template">
                         </div>
                         <div class="card-info-wrap">
@@ -358,12 +361,16 @@ table {
                                     <label >지원</label>
                                     <span th:text="|${job.reCount}명|">10명</span>
                                 </li>
+                                <li>
+                                    <label >작성자</label>
+                                    <span th:text="${job.userId}">10명</span>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </div>
-        
+        </div>
 
 	<div class="row mt-5">
 		 <div class="col text-center">
@@ -375,7 +382,7 @@ table {
 		        
 	<!-- 이미지 나타내기 -->	
 	<div th:each="f : ${file}">
-		<img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+		<a><img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 	</div>	
 	        
 <script>
@@ -385,15 +392,14 @@ table {
 	
 	//페이징
 	function gopage(i) {
-	    console.log(i);
-	    location.href = '/jobList?page=' + i;
+	    location.href = `/jobList?page=${i}&orderCol=${document.querySelector("#see").value}&title=${$("input[name=title]").val()}`;
 	}
 	//링크
 	link1 = 'jobInsert'; //구인등록폼 이동
 	function jobInsert(){
 		location.href = link1;
 	}
-	link2 = 'resumeList?userId=[[${session.member != null ? session.member.userId :''}]]';//신청자전체조회
+	link2 = 'resumeList?userId=[[${session.member.userId != null ? session.member.userId :''}]]';//신청자전체조회
 	function resumeList(userId){
 		location.href = link2;
 	}
@@ -404,23 +410,29 @@ table {
 	}
 	//정렬
 	function order(){
+		console.log('클릭');
 		let param = $("#searchForm").serialize()
 		location.href=`/jobList?${param}`
 	}
 	
+	//라디오 버튼 정렬 클릭시
+	$("input:radio[name=showAll]").click(function () {
+		location.href = `/jobList?`;
+	})
+	
 	//검색 기능
 	$('#find').click(function() {
+		gopage(1);
 		//입력한 값 가져오기
-		let search = $("input[name=search]").val();
+		/* let search = $("input[name=search]").val();
 		
-		//post방식으로 리스트 불러오기
 	$.ajax({
 		url : '/jobList',
 		method : 'post',
 		data : {title:search}, //title = search(title변수안에 data)
 		beforeSend : function(xhr)
         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-			xhr.setRequestHeader(header, token);
+		/* 	xhr.setRequestHeader(header, token);
         }
 	}).then(res => {
 		//tbody밑에 있는 데이터 지우기
@@ -430,10 +442,10 @@ table {
 		//tbody에 들어갈 tr 생성
 		for(r of res){ //제목, 내용 검색 시
 			$("#check").append(makeTr(r));
-		}
-	})
+		} 
+	})*/
 		
-	$("input[name=search]").val('');
+	$("input[name=title]").val(''); 
 	})
 	
 	//tr 생성 함수
@@ -452,7 +464,7 @@ table {
 	$(".heart").on("click", function(e) {
 		$(this).toggleClass("active");
 		let etype = $("#etype").val();
-		let userId = '[[${session.member.userId}]]';
+		let userId = '[[${session.member.userId != null ? session.member.userId :''}]]';
 		let targetNo = $(this).attr('id');
 		let category = "T03";
 		e.stopImmediatePropagation(); 

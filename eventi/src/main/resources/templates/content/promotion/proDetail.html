@@ -69,6 +69,7 @@ h4 {
 				<h2 th:text=${proDetail.eName}></h2>
 				<h4 th:text="|글번호: ${proDetail.proNo}|" id="proNo"></h4>
 				<h4 th:text="|작성자: ${proDetail.userId}|"></h4>
+				<h4 th:utext="|정보: ${proDetail.intro}|"></h4>
 		<div style="height: 50px;">
 		
 		<!-- 조회수 -->
@@ -101,10 +102,10 @@ h4 {
               <div class="comment-avatar"><div class="icon"><i class="fa-solid fa-user"></i></div></div>
              	 <div class="comment-content clearfix">
 	                <div class="comment-author font-alt"><a href="#">댓글을 입력하세요.</a></div>
-	                <form action="replyInsert">
+	                <!-- <form action="replyInsert"> -->
 						<textarea name="replyCntn" id="replyCntn" rows="4" cols="80"></textarea>
-						<button class="button post-button "type="button" id="replyInsertBtn">작성</button>
-	              	</form>
+						<button class="button post-button "type="button" th:id="replyInsertBtn">작성</button>
+	              <!-- 	</form> -->
                 </div>
               </div>
     </div> 
@@ -113,7 +114,6 @@ h4 {
 			<div class="block-27" id="returnPaging" style="width: 100px; margin: 0 auto"></div>
 		</div>
 		</div>
-	</div>
 <script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
@@ -200,6 +200,7 @@ h4 {
 	//댓글 추가
 	$("#replyInsertBtn").on("click", function(){
 		//textarea에 있는 값 들고 오기
+		console.log('클릭')
 		let replyCntn = $('#replyCntn').val();
 		console.log(replyCntn)
 		

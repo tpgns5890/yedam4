@@ -4,16 +4,14 @@
 <mapper namespace="com.eventi.left.job.mapper.JobBoardMapper">
 	<!-- 구인게시글 검색 --> 
 	<sql id="jSelect">
-	
-		<!-- 검색창 입력 시 -->
-		<if test="title !=null and title != ''">
-			AND (J.TITLE LIKE '%${title}%' OR J.JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
-		</if>
-		<!-- option 선택 시-->
-		<if test="eType !=null and eType != ''">
-			AND E_TYPE = #{eType}
-		</if>
-	
+			<!-- 검색창 입력 시 -->
+			<if test="title !=null and title != ''">
+				AND (J.TITLE LIKE '%${title}%' OR J.JOB_CNTN LIKE '%${title}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			</if>
+			<!-- option 선택 시-->
+			<if test="eType !=null and eType != ''">
+				AND E_TYPE = #{eType}
+			</if>
 	</sql>	
 	
 	<sql id="likeSelect">
@@ -56,7 +54,11 @@
 				<!-- 순서대로 컬럼명 쓰기 -->
                 CNT,
                 RECOUNT,
-                SEE              
+                SEE
+                <if test="likes != null and likes != ''">
+					,(select count(*) from likes where user_id = #{likes} and target_no = b.job_No) as likes
+				</if>
+                              
          FROM (SELECT ROWNUM RN, A.* FROM(
 		           SELECT DISTINCT J.*, 
 		                 (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = J.JOB_NO) AS CNT,
@@ -71,7 +73,7 @@
                 ORDER BY ${orderCol} desc
                 </if>
 	  	<![CDATA[
-			   ) A WHERE ROWNUM <= #{last}) 
+			   ) A WHERE ROWNUM <= #{last}) B
 	    WHERE RN >= #{first}
 		]]>
 	</select>
@@ -79,7 +81,10 @@
 	<!-- 게시글 개수 -->
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
-		FROM JOB_BOARD
+		FROM JOB_BOARD j
+		<where>
+			<include refid="jSelect" />
+		</where>
 	</select>
 	
 	<!-- 구인게시글 단건조회 -->

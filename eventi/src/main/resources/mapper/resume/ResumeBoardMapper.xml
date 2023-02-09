@@ -25,7 +25,7 @@
 				WHERE R.JOB_NO = J.JOB_NO 
 				AND J.JOB_NO IN (SELECT JOB_NO 
 								FROM JOB_BOARD 
-								WHERE USER_ID = #{seekerId})
+								WHERE USER_ID = #{jobWriter})
 		<![CDATA[
 					   ) A WHERE ROWNUM <= #{last}) 
 			    WHERE RN >= #{first}
@@ -55,7 +55,17 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM RESUME_BOARD
-		WHERE JOB_NO = #{jobNo}
+		<where>
+		<if test="jobNo != null and jobNo != ''">
+		JOB_NO = #{jobNo}
+		</if>
+		<if test="jobWriter != null and jobWriter != ''">
+		job_No in (select job_No 
+		             from job_board 
+                    where user_id = #{jobWriter})
+		</if>
+		</where>
+	
 	</select>
 	
 	<!-- 상세조회 -->

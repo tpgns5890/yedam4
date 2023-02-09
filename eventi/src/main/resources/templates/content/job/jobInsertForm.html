@@ -185,6 +185,15 @@
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
+
+//등록일 이전날짜 선택불가
+var now_utc = Date.now()
+var timeOff = new Date().getTimezoneOffset()*60000;
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+document.getElementById('wSday').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
+document.getElementById('wEday').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
+document.getElementById('closeDt').setAttribute("min", today); //max로 변경할경우 오늘이후로 선택불가
+
 //네이버 
 let oEditors = []
 
