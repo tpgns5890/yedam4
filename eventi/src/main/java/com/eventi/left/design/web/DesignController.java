@@ -91,6 +91,11 @@ public class DesignController {
 		// 기본 현수막 조회로 인해 카테고리 정보를 넘겨주어야 등록된 디자인을 확인가능.
 		rttr.addAttribute("caregory", vo.getCaregory());
 
+		//임시저장일경우 상세조회 이동
+		if(vo.getSave().equals("Y")) {
+			return "redirect:/contest/select?cNo=" + vo.getcNo();
+		}
+		//등록인경우 나의 응모리스트페이지 이동.
 		return "redirect:/design/designMypage";
 	}
 
@@ -195,6 +200,12 @@ public class DesignController {
 	@PostMapping("/saveUpdate")
 	public String saveUpdateContest(DesignVO vo, FilesVO filesVO, MultipartFile[] uploadFile) {
 		service.saveUpdateDesign(vo, filesVO, uploadFile);
+		
+		//임시저장일경우 상세조회 이동
+		if (vo.getSave().equals("Y")) {
+			return "redirect:/contest/select?cNo=" + vo.getcNo();
+		}
+		// 등록인경우 나의 응모리스트페이지 이동.
 		return "redirect:/design/designMypage";
 	}
 

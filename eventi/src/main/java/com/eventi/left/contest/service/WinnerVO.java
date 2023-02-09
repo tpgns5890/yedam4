@@ -20,6 +20,7 @@ public class WinnerVO {
 	private String[] dgnNo;
 	private String[] userIdArr;
 	
+	private String category;
 	
 	public String getwNo() {
 		return wNo;

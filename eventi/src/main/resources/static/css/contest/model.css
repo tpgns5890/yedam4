@@ -14,20 +14,6 @@
 	margin-bottom: 10px;
 }
 
-.img_modal_content {
-	background-color: #fefefe;
-	margin: 70px auto;
-	width: 55%;
-	height: 70%;
-	text-align: left;
-	/* 이미지 스크롤*/
-	max-height: calc(100vh - 210px);
-	overflow-y: auto;
-	/* 	둥글게,그림자 효과 */
-	border-radius: 3%;
-	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
-}
-
 .close {
 	color: #aaaaaa;
 	float: right;
@@ -65,18 +51,32 @@
 #rprtModal button, #extensionModal button {
 	display: inline-block;
 	width: 100px;
-	border: 0.2px solid black;
 	border-radius: 5px;
 }
 
 .modal_content {
 	width: 300px;
 }
+/* 우승자 디자인모달 */
+.img_modal_content {
+	background-color: #fefefe;
+	margin: 70px auto;
+	width: 55%;
+	height: 70%;
+	text-align: left;
+	/* 이미지 스크롤*/
+	max-height: calc(100vh - 210px);
+	overflow-y: auto;
+	/* 	둥글게,그림자 효과 */
+	border-radius: 3%;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+}
 
 .modal_content, .dank_modal_content, .pw_modal_content,
 	.rprt_modal_content, .pay_modal_content, .winner_modal_content,
 	.review_modal_content, .qna_modal_content, .pwUpdat_modal_content,
-	.question_modal_content {
+	.question_modal_content, .extension_modal_content, .save_modal_content
+	{
 	min-height: 200px;
 	border: 0.5px solid #666;
 	border-radius: 15px;
@@ -88,31 +88,96 @@
 	border-radius: 3%;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
-
-.question_modal_content {
-	width: 600px;
+/* 임시저장 불러오기 모달 */
+.save_modal_content {
+	width: 400px;
+}
+/* 마감연장 모달 */
+.extension_modal_content {
+	height: 300px;
+	width: 350px;
 }
 
+#extension {
+	height: 37px;
+	width: 100px;
+	border: 0;
+}
+
+#updateModel {
+	text-align: center;
+	font-size: 18px;
+}
+/* 결제모달 */
+.pay_modal_content {
+	width: 500px;
+	padding: 40px;
+}
+
+.pay_modal_content #contestPay {
+	width: 80%;
+	margin: 0 auto;
+	font-size: 18px;
+}
+
+#Payment {
+	width: 100px !important;
+}
+
+#contestPay li {
+	margin-top: 5px;
+}
+
+#contestPay li:last-child {
+	text-align: center;
+	font-size: 20px; 
+	font-weight : 800;
+	margin: 20px;
+	font-weight: 800;
+}
+/* 계좌변경모달 */
 .dank_modal_content {
 	width: 20%;
 }
 
+.dank_modal_content h3 {
+	text-align: center;
+}
+
+/* 패스워드변경 및 수정전 비번확인 모달 */
 .pw_modal_content, .pwUpdat_modal_content {
 	width: 500px;
 }
-
+/* 신고모달 */
 .rprt_modal_content {
-	width: 350px;
-}
-
-.pay_modal_content {
 	width: 400px;
+	padding: 35px;
 }
 
+.rprt_modal_content label {
+	width: 100px !important;
+}
+
+#rprtBox {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.rprt_modal_content h2 {
+	font-weight: bold;
+	text-align: center;
+}
+
+/* 우승자 등록 모달 */
 .winner_modal_content {
 	width: 400px;
 	height: 280px;
 	padding-top: 40px;
+}
+
+#winnerCancel {
+	position: sticky;
+	top: 0;
 }
 
 #modelSelect {
@@ -120,7 +185,7 @@
 	width: 70%;
 	font-size: 18px;
 }
-
+/* 리뷰모달 */
 .review_modal_content {
 	width: 400px;
 	height: 450px;
@@ -128,6 +193,25 @@
 
 .review_modal_content lable, input {
 	margin-bottom: 10px;
+}
+
+#reviewBtn {
+	display: flex;
+	width: 45%;
+	margin: 10px auto;
+}
+
+#reviewCntn {
+	width: 100%;
+}
+
+.starbox {
+	display: flex;
+	padding: 5px 0 0 0;
+}
+/* 문의모달 */
+.question_modal_content {
+	width: 600px;
 }
 
 .qna_modal_content {
@@ -177,38 +261,16 @@
 	margin: 0 auto;
 }
 
-#reviewBtn {
-	display: flex;
-	width: 45%;
-	margin: 10px auto;
-}
-
-#reviewCntn {
-	width: 100%;
-}
-
-.starbox {
-	display: flex;
-	padding: 5px 0 0 0;
-}
-
-#rprtBox {
-	width: 90%;
-	margin: 0 auto;
-}
-
-.rprt_modal_content h2 {
-	font-weight: bold;
-	text-align: center;
+.pw_modal_content label, .pwUpdat_modal_content label {
+	display: inline-block;
+	text-align: left;
+	width: 110px;
+	font-size: 18px;
 }
 
 #pwModel label {
 	width: 100px;
 	text-align: left;
-}
-
-.dank_modal_content h3 {
-	text-align: center;
 }
 
 .bannerModel {
@@ -225,6 +287,7 @@
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
 
+/* 모달 전체 레이아웃 */
 .modal_layer {
 	position: fixed;
 	top: 0;
@@ -267,6 +330,7 @@
 	}
 }
 
+/* 사이드 프로필사진 */
 .radius {
 	width: 50px;
 	height: 50px;
@@ -281,6 +345,7 @@
 	object-fit: cover;
 }
 
+/* 디자인 */
 #designId {
 	display: flex;
 	flex-wrap: wrap;
@@ -295,17 +360,11 @@
 	display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 
+/* 모달 전체 라벨 */
 .modal label {
 	display: inline-block;
 	text-align: left;
 	width: 70px;
-	font-size: 18px;
-}
-
-.pw_modal_content label, .pwUpdat_modal_content label {
-	display: inline-block;
-	text-align: left;
-	width: 110px;
 	font-size: 18px;
 }
 
