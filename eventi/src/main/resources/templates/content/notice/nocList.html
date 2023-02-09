@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+   layout:decorate="~{layouts/default_layout}"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
    
 <head>
 	<link rel="stylesheet" href="index.css" />
@@ -190,7 +191,7 @@ table {
                             <i class="material-symbols-outlined" id="find">search</i>
                         </div>
                     </div>
-			</div>	
+		</div>	
 		
       		<hr>
       		<div id="estiContent" style="display: flex;justify-content: space-between;">
@@ -248,30 +249,24 @@ function gopage(i) {
 }
 
 //검색기능
-
 $('#find').click(function() {
 	//입력한 값 가져오기
 	let search = $("input[name=search]").val();
 	
 	$.ajax({
 		url : '/nocList',
-		method : 'post',
-		data : {ttl:search}, //title = search(title변수안에 data)
+		method : 'get',
+		data : {ttl:search}, 
 		beforeSend : function(xhr)
         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 			xhr.setRequestHeader(header, token);
         }
 	}).then(res => {
-		//tbody밑에 있는 데이터 지우기
-		
+		console.log(res.noList)
 		$("#check").empty();
 		
-		//tbody에 들어갈 tr 생성
-		for(r of res){ //제목, 내용 검색 시
-			//if(r.title.includes(search) || r.jobCntn.includes(search)){
-				//alert(r.loc)
-				$("#check").append(makeTr(r));
-   			//}
+		for(r of res){
+			$("#check").append(makeTr(r));
 		}
 	})
 		

@@ -246,10 +246,6 @@ $(document).ready(function() {
 		$('#insert').on('click', function insert() {
 					 oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", []) //글자스타일 -태그를 db에 저장해줌
 					let jobCntn = document.getElementById("jobCntn").value //태그 생성 
-			
-		//행사유형: 하나의 값만 넣어야함
-		/* var eTypeList = eTag();
-	    $("eTypeList").val(eTypeList);*/
 		}) 
 		
 	    //임시저장 체크박스를 클릭했을 경우
@@ -339,6 +335,7 @@ $(document).ready(function() {
 							///행사유형
 	    					$("#eType").val(data.etype).prop("selected", true);
 							
+	    					oEditors.getById["jobCntn"].exec("SET_IR", [""]); //내용초기화
 							oEditors.getById["jobCntn"].exec("PASTE_HTML", [data.jobCntn]);
 							$("#jobInsert").attr("action", "/job/jobUpdate");
 						},

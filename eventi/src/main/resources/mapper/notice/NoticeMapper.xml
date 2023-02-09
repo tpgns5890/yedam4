@@ -43,7 +43,7 @@
 		
 		INSERT INTO NOTICE
 		(NOTICE_NO, TTL, NOTICE_CNTN, DT, IMG, USER_ID) <!-- DB -->
-		VALUES(#{noticeNo}, #{ttl}, #{noticeCntn}, #{dt}, #{img}, #{userId}) <!-- VO -->
+		VALUES(#{noticeNo}, #{ttl}, #{noticeCntn}, sysdate, #{img}, #{userId}) <!-- VO -->
 	</insert>
 	
 	<!-- 게시판 조회수 -->
