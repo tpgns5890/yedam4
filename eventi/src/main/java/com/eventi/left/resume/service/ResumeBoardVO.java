@@ -22,6 +22,7 @@ public class ResumeBoardVO {
 	private String userEmail; //회원이메일
 	private String userPhone; //회원전화번호
 	private String hire; //채용여부
+	private String jobWriter; //채용여부
 	
 	Integer first = 1; //첫 페이지
 	Integer last = 4; //마지막 페이지

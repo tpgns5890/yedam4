@@ -104,7 +104,8 @@
 				DT,
 				CLOSE_DT,
 				SEE,
-				SAVE
+				SAVE,
+				RPRT
 			  ,CLOSE_DT - SYSDATE AS remain
 			  ,(select count(*)
 	              from likes l
