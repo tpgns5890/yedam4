@@ -232,7 +232,7 @@
 						placeholder="후기를 작성해주세요."></textarea>
 					<div id="reviewBtn">
 						<button type="button" class="cancle btn btn-g btn-round">취소</button>
-						<button type="button" class="btn btn-g btn-round" id="review">등록</button>
+						<button type="button" class="btn btn-y btn-round" id="review">등록</button>
 					</div>
 				</div>
 			</div>
@@ -269,7 +269,9 @@
 					$('#modelSelect').empty();
 					$('#qBtn').empty();
 	        		 for(data of result){
-	        			 $('#modelSelect').append(`<p>[${data.qNo}] ${data.ttl}</p>`);
+	        			 if(data.ttl != null){
+	        				 $('#modelSelect').append(`<p>[${data.qNo}] ${data.ttl}</p>`);
+	        			 }
 	        	   	} 
 	        		 $('#qBtn').append(`<button class="btn btn-g btn-round yBtn" type="button" onclick="location.href='/contest/select?cNo=${cNo}'">답변등록폼 이동</button>`)
 	        		 $('#questionsModel').css('display', 'block');
@@ -374,8 +376,7 @@
 					xhr.setRequestHeader(header, token);
 				},
 				success: function (result) {
-					
-					$('#modelSelect').empty();
+					$('.winner_modal_content #modelSelect').empty();
 	        		for(winner of result){
 		        	   	makeWinner(winner);
 	        	   	}
@@ -410,12 +411,11 @@
 										<button type="button" class="btn btn-g btn-round" onclick="review('${data.userId}')">후기등록</button>
 							   </div>
 							  `
-					$('#modelSelect').append(design);
+					$('.winner_modal_content #modelSelect').append(design);
 				
 			}
 			
 			
-		////수정중...-------------------------------------------------------------------
 		   //후기부분
 		   //후기 모달창 띄우기
 		   let userId = '[[${session.member.userId}]]';
@@ -441,7 +441,7 @@
 		   //모달창에서 후기등록 버튼을 눌렀을 경우
 		   $("#review").on('click', function() {
 			   let reviewTgt = $("#reviewTgt").val();
-			   let category = 'T06';
+			   let category = 'T07';
 			   let reviewCntn = $("#reviewCntn").val();
 			   let star = stars;
 			   

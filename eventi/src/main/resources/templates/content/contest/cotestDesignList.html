@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/css/myPageSide.css">
 <link rel="stylesheet" href="/css/contest/model.css"><!-- 모달 스타일 -->
 <link rel="stylesheet" href="/css/contest/button.css"><!--버튼 스타일 -->
+<script src="/assets/js/paging.js"></script><!-- 페이징 -->
 <style>
 input[type=text]{
     width: 320px;
@@ -389,51 +390,6 @@ form div{
 			select();
 		}
 		
-		// 페이징 만들기
-		function makePageing(page) {
-			if (page.totalRecord == 0) {
-				return;
-			}
-			let pagination = $("<div/>")
-			let ul = $("<ul/>").attr("class","pagination");
-			if (page.startPage > 1) {
-				$(ul).append($("<li/>").html("&laquo;")
-										.css("font-size", "30px")
-										.attr("class","page-item")
-										.on("click", function () {
-												gopage(page.startPage - page.pageSize)
-										}));
-			}
-
-			//페이지 버튼 생성.
-			for (let i = page.startPage; i <= page.endPage; i++) {
-				if (page.page == i) {
-					$(ul).append($("<li/>") .text(i).css("font-size", "20px")
-											.css("padding", "10px")
-											.css("border-radius", " 10% / 50% ")
-											.css("background", "#dce3fd")
-											.attr("class", "page-link active")
-					);
-				} else {
-					$(ul).append($("<li/>").text(i).css("font-size", "20px")
-											.css("padding", "10px")
-											.attr("class", "page-link")
-											.on("click", function () {
-												gopage($(this).text());
-											})); //페이지이동 함수
-				}
-			}
-			if (page.endPage < page.lastPage) {
-				$(ul).append($("<li/>").html("&raquo;")
-										.css("font-size", "30px")
-										.attr("class","page-item")
-										.on("click", function () {
-												gopage(page.startPage + page.pageSize)
-										}));
-			}
-			pagination.append(ul);
-			return pagination;
-		}
 		
 		
 			// Get the modal

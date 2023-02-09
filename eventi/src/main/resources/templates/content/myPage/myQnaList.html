@@ -132,6 +132,7 @@
 		  }
 		}
 		
+		//문ㄴ의조회
 		$('.select').on("click", function(){
 			let qNo = $(this).parent().parent().children('td:eq(0)').text();
 			
@@ -144,7 +145,6 @@
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
-				console.log(res);
 				$('#qna').empty();
 				$('#qnaRep').empty();
 				
@@ -153,8 +153,10 @@
 				
 					if(res[1] !=null && res[1].rerepTgt != null){ 
 						$('#qnaRep').append(makeRep(res[1]));
-						$('#qnaRep').show();
+					}else{
+						$('#qnaRep').append(makeRepNull(res[1]));
 					}					
+						$('#qnaRep').show();
 				})
 	        })
 			
@@ -179,6 +181,12 @@
 						</ul>
 					`;
 			return ul;
+		} 
+		//문의답변 생성
+		function makeRepNull(data){
+			let title = `  <h4>답변대기중</h4>
+					`;
+			return title;
 		} 
 		
 			
