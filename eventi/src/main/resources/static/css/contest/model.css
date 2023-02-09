@@ -132,7 +132,7 @@
 
 .qna_modal_content {
 	width: 35%;
-	height: 35%;
+	padding: 35px;
 	/* 스크롤*/
 	max-height: calc(100vh - 210px);
 	overflow-y: auto;

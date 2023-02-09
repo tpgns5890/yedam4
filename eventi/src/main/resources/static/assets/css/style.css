@@ -8,6 +8,7 @@ background-color:  #FFDE59 !important;
 border : 0px;
 color: black;
 font-weight: bolder;
+
 }
 
 
@@ -694,6 +695,14 @@ a,
 .btn.btn-g {
    background: #e5e5e5; 
     color: #111;
+    font-weight: 600;
+    font-size: 16px;
+}
+.btn.btn-y {
+   background: #FAB955; 
+    color: #111;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .btn.btn-g:hover,
