@@ -3,7 +3,7 @@ package com.eventi.left.estimate.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.eventi.left.common.PagingVO;
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.estimate.service.EstVO;
 import com.eventi.left.estimate.service.PropGdVO;
 import com.eventi.left.estimate.service.PropVO;
@@ -41,4 +41,8 @@ public interface EstMapper {
 	public int countP(EstVO estVO);
 
 	public List<EstVO> getEstListP(EstVO estVO);
+
+	public List<CodeVO> getLcalCode(CodeVO codeVO);
+
+	public List<CodeVO> getTypeCode(CodeVO codeVO);
 }

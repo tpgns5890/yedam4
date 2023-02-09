@@ -187,56 +187,18 @@ h2 {
                  		<div class="progress-bar" aria-valuenow="9" role="progressbar" aria-valuemin="0" aria-valuemax="100" ></div>
                		</div>
 					<h4><b>어떤 행사를 기획중이신가요?</b></h4>
+					<div id="listTable" style="max-height: 400px !important; overflow:auto;">
 					<table id="customers">
-						<tr>
+						<tr th:each="type : ${eventType}">
 							<td>
-								<label class="checkList">기념식
-									<input type="radio" name="eventType" value="기념식" class="input-radio">
-									<span class="checkmark"></span>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class="checkList">축제/가요제/플리마켓
-									<input type="radio" name="eventType" value="축제/가요제/플리마켓">
-									<span class="checkmark"></span>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class="checkList">체육대회/단합행사
-									<input type="radio" name="eventType" value="체육대회/단합행사">
-									<span class="checkmark"></span>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class="checkList">세미나/포럼/워크샵
-									<input type="radio" name="eventType" value="세미나/포럼/워크샵">
-									<span class="checkmark"></span>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class="checkList">전시회/박람회
-									<input type="radio" name="eventType" value="전시회/박람회">
-									<span class="checkmark"></span>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class="checkList">신년회/송년회
-									<input type="radio" name="eventType" value="신년회/송년회">
+								<label class="checkList">[[${type.codeName}]]
+									<input type="radio" name="eventType" value="${type.codeId}" class="input-radio">
 									<span class="checkmark"></span>
 								</label>
 							</td>
 						</tr>
 					</table>
+					</div>
 					<div class="btnArea">
 						<input type="button" value="다음" class="btn btn-warning btn-round next" id="eventType">
 					</div>

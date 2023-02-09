@@ -9,12 +9,41 @@
 			<if test="userId != null and userId != ''">
 				AND USER_ID = #{userId}
 			</if>
+			<if test="eventType != null and eventType != ''">
+				AND EVENT_TYPE = #{eventType}
+			</if>
+			<if test="expectedLcal != null and expectedLcal != ''">
+				AND EXPECTED_LCAL = #{expectedLcal}
+			</if>
 		</where>
 	</sql>
+	<sql id="eSelectP">
+			<if test="eventType != null and eventType != ''">
+				AND EVENT_TYPE = #{eventType}
+			</if>
+			<if test="expectedLcal != null and expectedLcal != ''">
+				AND EXPECTED_LCAL = #{expectedLcal}
+			</if>
+	</sql>
+	<!-- 코드 가져오기 -->
+	<select id="getLcalCode" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'A'
+		AND CODE_ID NOT IN ('A00')
+		ORDER BY CODE_ID
+	</select>
+	<select id="getTypeCode" resultType="CodeVO">
+		SELECT CODE_ID, CODE_NAME
+		FROM MNCODE 
+		WHERE CL_ID = 'E'
+		AND CODE_ID NOT IN ('E00')
+		ORDER BY CODE_ID
+	</select>
 	
 	<!-- 견적요청서 전체조회 -->
 	<select id="getEstList" resultType="EstVO">
-		SELECT E_NO, EVENT_TYPE, USER_ID, WRITING_DT, ADOPTION_YN
+		SELECT E_NO, CODE_SELECT(EVENT_TYPE) EVENT_TYPE, USER_ID, CODE_SELECT(EXPECTED_LCAL) EXPECTED_LCAL,WRITING_DT, ADOPTION_YN
       FROM(select rownum rn, a.*
           from(select *
                from ESTIMATE
@@ -30,6 +59,31 @@
 		SELECT COUNT(*)
 		FROM ESTIMATE
 		<include refid="eSelect"/>
+	</select>
+	
+	<!-- 내가쓴제안서 전체조회 -->
+	<select id="getEstListP" resultType="EstVO">
+		SELECT *
+		FROM (SELECT ROWNUM RN, A.*
+				FROM 	(SELECT E.E_NO, CODE_SELECT(E.EVENT_TYPE) EVENT_TYPE, E.USER_ID, CODE_SELECT(E.EXPECTED_LCAL) EXPECTED_LCAL, E.WRITING_DT, E.ADOPTION_YN
+						FROM ESTIMATE E, PROPOSAL P
+						WHERE E.E_NO = P.E_NO
+						AND P.USER_ID = #{userId}
+						<include refid="eSelectP"/>
+						ORDER BY ADOPTION_YN, WRITING_DT DESC
+						<![CDATA[) A
+				WHERE ROWNUM <= #{last})
+		WHERE RN >= #{first}]]>
+	</select>
+	
+	
+	<!-- 내가쓴 제안 총 개수 -->
+	<select id="countP" resultType="int">
+		SELECT COUNT(*)
+		FROM ESTIMATE E, PROPOSAL P
+		WHERE E.E_NO = P.E_NO
+		AND P.USER_ID = #{userId}
+		<include refid="eSelectP"/>
 	</select>
 	
 	<!-- 견적요청서 단건조회 -->

@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.eventi.left.common.CodeVO;
 import com.eventi.left.common.PagingVO;
 import com.eventi.left.estimate.mapper.EstMapper;
 import com.eventi.left.estimate.service.EstService;
@@ -140,5 +141,13 @@ public class EstServiceImpl implements EstService {
 	@Override
 	public int count(EstVO estVO) {
 		return estMapper.count(estVO);
+	}
+	@Override
+	public List<CodeVO> getLcalCode(CodeVO codeVO) {
+		return estMapper.getLcalCode(codeVO);
+	}
+	@Override
+	public List<CodeVO> getTypeCode(CodeVO codeVO) {
+		return estMapper.getTypeCode(codeVO);
 	}
 }
