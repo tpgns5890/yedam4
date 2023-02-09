@@ -33,14 +33,15 @@
 				<p th:text=${nocDetail.userId}></p>
 				<p th:text=${nocDetail.see}></p>
 			
-			
+			<!-- 관리자일 경우에만 버튼 보이기 -->
+			 <th:block th:if="${session.member.userId} == ${job.userId}">
              <div class="tag-widget post-tag-container mb-5 mt-5">
               <div class="tagcloud">
                 <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocUpdate(noticeNo=${nocDetail.noticeNo})}'|">수정</a>
                 <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|">삭제</a>
               </div>
             </div> 
-            
+             </th:block>
         </div>
       </div>
      </div>

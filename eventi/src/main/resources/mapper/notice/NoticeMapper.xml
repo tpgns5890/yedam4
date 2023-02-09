@@ -67,7 +67,7 @@
 		SET 
 		TTL = #{ttl},
 		NOTICE_CNTN = #{noticeCntn},
-		DT = #{dt},
+		DT = sysdate,
 		IMG = #{img}	
 		WHERE NOTICE_NO=#{noticeNo}
 	</update>
