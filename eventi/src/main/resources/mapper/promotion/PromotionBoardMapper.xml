@@ -67,6 +67,7 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM PROMOTION_BOARD
+		<include refid="pSelect" />
 	</select>
 	
 	<!-- 게시판 조회수 -->

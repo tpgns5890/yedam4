@@ -368,12 +368,13 @@ table {
 
 
 	<div class="content-wrap">
+	<!-- 로그인시 신청자조회, 수정, 삭제 버튼 나타남 -->
+        <th:block th:if="${session.member.userId} == ${job.userId}">
     	<div class="option-area">
                 <div class="filtering-area">
                     <!-- 검색, 버튼 영역 -->
                     <div class="search-area">
-					<!-- 로그인시 신청자조회, 수정, 삭제 버튼 나타남 -->
-                    <!--<th:block th:if="${session.member.userId} == ${job.userId}">-->
+					
                         <button type="button" style="margin-top:35px" class="button user-search-button" 
 						th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
 						<button type="button" style="margin-top:35px" class="button post-button" 
@@ -381,17 +382,18 @@ table {
 								 
 						<button type="button" style="margin-top:35px" class="button post-button" 
 								th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>
-						<!--</th:block>-->	
+					
                     </div>
                 </div>              
             </div>
+         </th:block>
         <!-- 상단 영억 -->
         <div class="detail-header">
             <div class="section summary-area">
                 <!-- 제목 영역 -->
                 <div class="title-area">
                     <div class="title-wrap">
-	                   <h3>제목</h3>
+	                   <h3 th:text="|작성자: ${job.userId}|">작성자</h3>
 		                 <h1 th:text=${job.title}>이벤트 행사 단기 스텝 채용합니다</h1>
                     </div>
                     <div class="company-image-wrap">
@@ -472,7 +474,7 @@ table {
                         <ul class="list">
                             <li>
                                 <label>수당</label>
-                                <span th:text="${job.pay}">120,000원</span>
+                                <span th:text="|${#numbers.formatInteger(job.pay, 0, 'COMMA')}원|">120,000원</span>
                             </li>
                             <li>
                                 <label>근무시간</label>
@@ -485,6 +487,10 @@ table {
                             <li>
                                 <label>근무종료일</label>
                                 <span th:text="${#dates.format(job.wEday, 'yyyy-MM-dd')}">정규직</span>
+                            </li>
+                            <li>
+                                <label>위치</label>
+                                <span th:text=${job.loc}>대구</span>
                             </li>
                             <li>
                                 <label>복리후생</label>
@@ -527,8 +533,7 @@ table {
 									  	<div id="love" class="stage heart active"></div>
 								</th:block>	
 								
-								<!-- 이미지 -->
-								<img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
+								
 								<!-- 버튼 영역 -->
 			                    <div class="apply-button-wrap">
 			                    <button type="button" th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
@@ -544,7 +549,7 @@ table {
         </div>
 
         <!-- 탭 메뉴 -->
-        <ul class="tabs">
+      <!--   <ul class="tabs">
             <li class="tab">
                 <a href="#location">근무지역</a>
             </li>
@@ -554,48 +559,25 @@ table {
             <li class="tab">
                 <a href="#company">채용기업정보</a>
             </li>
-        </ul>
+        </ul> -->
         <!-- 상세 영역 -->
-        <div class="detail-main">
-            <!-- 근무지역 -->
+      <!--   <div class="detail-main">
+            근무지역
             <div class="detail-section location-area">
                 <h2 class="sub-title" id="location">근무지역</h2>
                 <p th:text=${job.loc}>서울 송파구 백제고분로12길 12 1층</p>
             </div>
             
-            <!-- 상세모집요강 -->
+            상세모집요강
             <div class="detail-section">
                 <h2 class="sub-title" id="detail">상세모집요강</h2>
                 <div class="detail-image-wrap">
-                    <img
-                        src="https://cdn.imweb.me/upload/S202012142df41e7544ce6/c7f2e61e3ecef.jpg"
-                        alt="상세모집요강 이미지"    
-                    />
+                   이미지
+					<img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
                 </div>
             </div>
-
-            <!-- 채용기업정보 -->
-            <div class="detail-section">
-                <h2 class="sub-title" id="company">홈페이지정보</h2>
-                <div class="company-image-wrap">
-                    <img src="@{/image/logo.jpeg}" alt="기업로고">
-                </div>
-                <ul class="list">
-                    <li>
-                        <label>대표자</label>
-                        <span>홍길동</span>
-                    </li>
-                    <li>
-                        <label>회사주소</label>
-                        <span>예담컴퍼니</span>
-                    </li>
-                    <li>
-                        <label>사업내용</label>
-                        <span>행사지원/기획</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+            
+        </div> -->
 	</div>
    <!-- 등록 폼 -->
    <div id="modal" class="modal">

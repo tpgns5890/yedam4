@@ -41,8 +41,8 @@ public class ResumeController {
 	@RequestMapping(value = "/resumeList", method=RequestMethod.GET) 
 	public String resumeList(Model model, ResumeBoardVO resumeBoardVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
-		resumeBoardVO.setSeekerId(user.getUserId());
-		
+		resumeBoardVO.setJobWriter(user.getUserId());
+
 		//전체리스트 조회
 		List<ResumeBoardVO> lists = resumeService.getResumeList(resumeBoardVO, paging);
 		model.addAttribute("paging", paging);

@@ -39,8 +39,12 @@ public class PromotionController {
 	public String proList(Model model, PromotionVO promotionVO, PagingVO paging) {
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		
-		//paging.setPageSize(4);
-		//promotionVO.setOrderCol("see");
+		//인기게시물 조회 
+		PromotionVO promotionVO2 = new PromotionVO();
+		promotionVO2.setOrderCol("see");
+		
+		List<PromotionVO> posts = proService.proList(promotionVO2, paging);
+		model.addAttribute("contents", posts);
 		
 		//전체리스트 조회
 		List<PromotionVO> contents = proService.proList(promotionVO, paging);
@@ -53,12 +57,7 @@ public class PromotionController {
 			content.setFiles(files);
 		}
 		model.addAttribute("proList", contents);
-		//인기게시물 조회 
-		PromotionVO promotionVO2 = new PromotionVO();
-		promotionVO2.setOrderCol("see");
-		
-		List<PromotionVO> posts = proService.proList(promotionVO2, paging);
-		model.addAttribute("contents", posts);
+
 		return "content/promotion/proList";
 	}
 	

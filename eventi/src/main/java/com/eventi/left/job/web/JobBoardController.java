@@ -45,6 +45,10 @@ public class JobBoardController {
 	//전체조회
 	@RequestMapping(value = "/jobList", method=RequestMethod.GET) 
 	public String jobList(Model model, JobBoardVO jobBoardVO, PagingVO paging) {
+		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		if(user != null) {
+			jobBoardVO.setLikes(user.getUserId());
+		}
 		
 		List<JobBoardVO> imgs = jobService.getJobList(jobBoardVO, paging);
 		model.addAttribute("paging", paging);
