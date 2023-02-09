@@ -94,9 +94,9 @@
 		</selectKey>
 	
 		INSERT INTO RESUME_BOARD
-		(RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, IMG, USER_NAME, USER_EMAIL, USER_PHONE) <!-- DB -->
+		(RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, IMG, USER_NAME, USER_EMAIL, USER_PHONE, JOB_WRITER) <!-- DB -->
 		VALUES(#{resumeNo}, #{seekerId}, #{title}, 
-				#{jobNo}, #{cntn}, #{img}, #{userName}, #{userEmail}, #{userPhone}) <!-- VO -->
+				#{jobNo}, #{cntn}, #{img}, #{userName}, #{userEmail}, #{userPhone}, #{jobWriter}) <!-- VO -->
 	</insert>
 	
 	<!-- 구직자 채용 -->

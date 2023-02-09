@@ -30,14 +30,14 @@
 	
 	<!-- 게시글 시퀀스번호 찾기 -->
 	<select id="getSeq" resultType="String">
-		SELECT 'NO' || NVL(MAX(TO_NUMBER(SUBSTR(NOTICE_NO,3)))+1),1) NOTICE_NO
+		SELECT 'NO' || NVL(MAX(TO_NUMBER(SUBSTR(NOTICE_NO,3))+1),1) NOTICE_NO
 		FROM NOTICE
 	</select>
 	
 	<!-- 게시글 등록 -->
 	<insert id="nocInsert">
 		<selectKey keyProperty="noticeNo" resultType="String" order="BEFORE">
-			SELECT 'NO' || NVL(MAX(TO_NUMBER(SUBSTR(NOTICE_NO,3)))+1),1) NOTICE_NO
+			SELECT 'NO' || NVL(MAX(TO_NUMBER(SUBSTR(NOTICE_NO,3))+1),1) NOTICE_NO
 			FROM NOTICE
 		</selectKey>
 		

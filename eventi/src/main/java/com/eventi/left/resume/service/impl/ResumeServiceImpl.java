@@ -55,7 +55,6 @@ public class ResumeServiceImpl implements ResumeService{
 	public List<ResumeBoardVO> getResumeJob(ResumeBoardVO resumeBoardVO, PagingVO paging) {
 		paging.setTotalRecord(resumeMapper.count(resumeBoardVO));
 		paging.setPageUnit(5);
-		paging.setPageUnit(5);
 		resumeBoardVO.setFirst(paging.getFirst());
 		resumeBoardVO.setLast(paging.getLast());
 		return resumeMapper.getResumeJob(resumeBoardVO);
