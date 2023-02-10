@@ -524,10 +524,10 @@
 	
 	<!-- 문의사항 가져오기-->
 	<select id="getQnaList" resultType="hashmap">
-		SELECT 	*
+		SELECT  *
 		FROM 	(SELECT Q_NO,
 						USER_ID,
-						TTL,
+						NVL(TTL,'제목없음') TTL,
 						TO_CHAR(WRITING_DT,'YY/MM/DD') WRITING_DT,
 						REREP_TGT
 				FROM QUESTIONS

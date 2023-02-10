@@ -200,10 +200,10 @@ input[type="checkbox"]:checked {
 			<label for="winYn" style="margin-top: 37px; height: 20px; z-index: 3; font-size: 18px; margin-right: 20px;">우승작품</label>
 		
 			<select name="caregory" id="caregory">
+				<option value="D4" th:selected="${designVO.caregory == 'D4'}" selected="selected">포스터</option>
 				<option value="D1" th:selected="${designVO.caregory == 'D1'}">현수막</option>
 				<option value="D2" th:selected="${designVO.caregory == 'D2'}">배너</option>
 				<option value="D3" th:selected="${designVO.caregory == 'D3'}">로고</option>
-				<option value="D4" th:selected="${designVO.caregory == 'D4'}">포스터</option>
 				<option value="D5" th:selected="${designVO.caregory == 'D5'}">기타</option>
 	        </select>
 

@@ -5,6 +5,7 @@
 	layout:decorate="~{layouts/default_layout}"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+<!-- 달력.js 링크 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -17,6 +18,8 @@
     
   <link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
   <script src="/assets/jquery-ui/jquery-ui.min.js"></script>
+  <!-- 달력.js 링크 끝-->
+  
 <!-- csrf 설정 -->
 <meta name="_csrf" th:content="${_csrf.token}" />
 <meta name="_csrf_header" th:content="${_csrf.headerName}" />

@@ -84,54 +84,58 @@ h4 {
 								<h4 th:text="|#${contest.style}|" style="color: #117bd9"></h4>
 						</th:block>
 						
-					<div style="height: 50px;">
+					<div style="height: 50px;display: flex;align-items: center;">
 						<!-- 신고수 및 버튼 -->
-						<th:block sec:authorize="!isAuthenticated()">
-							<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
-							<span th:text=${contest.rprt}></span>
-						</th:block>
-						
-						<th:block sec:authorize="isAuthenticated()">
-								<th:block th:if="|${session.member.getUserId()}| != ${contest.writer} ">
-									<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
-								</th:block>
-								<th:block th:if="|${session.member.getUserId()}| == ${contest.writer} ">
-									<span style='font-size: 20px;'>&#128680;</span>
-								</th:block>
-									<span th:text=${contest.rprt}></span>
-						</th:block>
-						
-						
-						
-						
-						<!-- 조회수 -->
-						 <span style='font-size: 30px;'>&#128065;</span>
-						 <span id="inqNum" th:text=${contest.inq}></span>
-						 <!-- 좋아요수 -->
-						 <span id="likeCount" th:text=${contest.likes} style="display:inline-block; width: 50px; text-align: right;"></span>
-						 
-				
-						<!-- 비회원 하트버튼 -->
-						<th:block sec:authorize="!isAuthenticated()">
-								<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position: absolute; top: 148px; right: 329px">
-								</div>
-						</th:block>
-	
-						<!-- 회원 좋아요 하트버튼 -->
-						<th:block sec:authorize="isAuthenticated()">
-							
-							<th:block th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
-								<!-- 관심공모전인경우 -->
-								<div id="love" class="stage heart active" onclick="loveCheck(this)" style="position: absolute; top: 148px; right: 329px">
-								</div>
+						<div style="margin-right: 10px;display: flex;align-items: center;">
+							<th:block sec:authorize="!isAuthenticated()">
+								<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+								<span th:text=${contest.rprt}></span>
 							</th:block>
 							
-							<th:block th:if="${likeCheck} == null">
-								<!-- 관심공모전이 아닌경우 -->
-								<div id="love" class="stage heart" onclick="loveCheck(this)" style="position: absolute; top: 148px; right: 329px">
-								</div>
+							<th:block sec:authorize="isAuthenticated()">
+									<th:block th:if="|${session.member.getUserId()}| != ${contest.writer} ">
+										<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+									</th:block>
+									<th:block th:if="|${session.member.getUserId()}| == ${contest.writer} ">
+										<span style='font-size: 20px;'>&#128680;</span>
+									</th:block>
+										<span th:text=${contest.rprt}></span>
 							</th:block>
-						</th:block>
+						</div>
+						
+						
+						<div style="display: flex;align-items: center;margin-right: 10px;">
+							<!-- 조회수 -->
+							 <span style='font-size: 30px;'>&#128065;</span>
+							 <span id="inqNum" th:text=${contest.inq}></span>
+						</div>
+						
+						<div style="display: flex;align-items: center;">
+							<!-- 비회원 하트버튼 -->
+							<th:block sec:authorize="!isAuthenticated()">
+									<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="margin: -30px;">
+									</div>
+							</th:block>
+						
+							<!-- 회원 좋아요 하트버튼 -->
+							<th:block sec:authorize="isAuthenticated()">
+								
+								<th:block th:if="${likeCheck} != null and  ${likeCheck.targetNo} == ${contest.cNo}">
+									<!-- 관심공모전인경우 -->
+									<div id="love" class="stage heart active" onclick="loveCheck(this)" style="margin: -30px;">
+									</div>
+								</th:block>
+								
+								<th:block th:if="${likeCheck} == null">
+									<!-- 관심공모전이 아닌경우 -->
+									<div id="love" class="stage heart" onclick="loveCheck(this)" style="margin: -30px;">
+									</div>
+								</th:block>
+							</th:block>
+							
+							 <!-- 좋아요수 -->
+							 <span id="likeCount" th:text=${contest.likes} style=""></span>
+						</div>
 					</div>
 						<!-- 마감연장일 있는경우 -->
 						<th:block th:if="${contest.dtExtns} != null">

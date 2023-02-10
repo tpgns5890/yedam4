@@ -53,6 +53,8 @@ public class MemberVO implements UserDetails {
 	private String busiAreaCode;
 	private String busiStyleCode;
 	
+	private String bankCode;
+	
 	
 
 	Integer first; //첫페이지

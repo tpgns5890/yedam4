@@ -252,10 +252,10 @@
 								<tbody>
 									<tr th:each="daily : ${dailyInfo}">
 										<td>[[${daily.DAILYDT}]]</td>
-										<td>[[${daily.DAILYMOIN}]]₩</td>
-										<td>[[${daily.DAILYMOOUT}]]₩</td>
-										<td>[[${daily.VISITOR}]]</td>
-										<td>[[${daily.REGISTER}]]</td>
+										<td style="text-align-last:right;">[[${daily.DAILYMOIN}]]원</td>
+										<td style="text-align-last:right;">[[${daily.DAILYMOOUT}]]원</td>
+										<td style="text-align-last:right;">[[${daily.VISITOR}]]명</td>
+										<td style="text-align-last:right;">[[${daily.REGISTER}]]명</td>
 									</tr>
 								</tbody>
 							</table>
