@@ -18,6 +18,24 @@
 			display : none !important;
 	}
 	
+	.fullSize{
+		margin-left: 250px;
+		min-height: 600px;
+	}
+	
+	.contentSize{
+		margin: 100px 20px;
+	}
+	
+	.table>tbody>tr>td, .table>thead>tr>th {
+		vertical-align: baseline;
+		text-align : center;
+	}
+
+	th{
+		background-color: #FFDE59;
+	}
+	
 	.modal {
 		display: none;
 		position: fixed;
@@ -88,9 +106,12 @@
         </section>
         
         <th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
-        
+        <div class="fullSize">
+        <div class="contentSize">
         <!-- 의뢰 리스트 -->
-	<table class="table mb-3">
+	<!-- 게시글 리스트 -->
+		<table class="table mb-3">
+			<thead class="thead-dark">
 		<thead>
 			<tr>
 			    <th><input type="checkBox"></th>
@@ -126,7 +147,7 @@
 				<th:block th:if="${cast.progress} == '행사전' and ${param.clientId} != null">
 				<td><button type="button" class="clientCancel" th:text="행사취소"></button></td>
 				</th:block>
-				<th:block th:if="${cast.progress} == '행사완료'">
+				<th:block th:if="${cast.progress} == '행사완료' and ${param.clientId} != null">
 				<td><button type="button" class="review" th:text="정산"></button><button type="button" class="noshow" th:text="노쇼"></button></td>
 				</th:block>
 				<th:block th:if="${cast.progress} == '행사취소'">
@@ -135,7 +156,7 @@
 			</tr>
 		</tbody>
 	</table>
-		
+		</div></div>
 	<!-- 후기 폼 -->
     <div id="reviewFrm" class="modal">
 			<div class="modal_content">

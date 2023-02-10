@@ -66,11 +66,11 @@
 	
 	.fullSize{
 		margin-left: 250px;
-		min-height: 600px;
+		min-height: 100%;
 	}
 	
 	.contentSize{
-		margin: 100px 20px;
+		margin: 80px 20px;
 	}
 </style>
 </head>
@@ -96,26 +96,35 @@
     <button class="btn btn-primary btn-round" type="button" id="deleteBtn">동영상 삭제</button> 
 	<input type="checkBox" value="삭제" class="delete" id="allDelete">
 	
-	<div class="container">
-		<div th:each="move : ${moves}" >
-			<input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()">
-			<input type="hidden" th:value="${move.moveNo}">
-			<video th:src="|/fileView/${move.move}|" width="500px" height="200px" controls></video>
-			<p th:text="${move.moveTtl}"></p>
-        </div> 
-    </div>
-    
-	<!-- 페이징 처리 -->
-	<div class="row mt-5">
-		<div class="col text-center">
-			<div class="block-27">
-				<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+		<th:block th:if="${moves.size} >= 1">
+		<div class="container">
+			<div th:each="move : ${moves}" >
+				<h2 th:text="${moves.size}"></h2>
+				<input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()">
+				<input type="hidden" th:value="${move.moveNo}">
+				<video th:src="|/fileView/${move.move}|" width="500px" height="200px" controls></video>
+				<p th:text="${move.moveTtl}"></p>
+	        </div> 
+	    </div>
+	    
+		<!-- 페이징 처리 -->
+		<div class="row mt-5">
+			<div class="col text-center">
+				<div class="block-27">
+					<th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+				</div>
 			</div>
 		</div>
-	</div>
+		</th:block>
+	
+	<th:block th:if="${moves.size} == 0">
+		<div class="container">
+		<img th:src="@{/images/logo.jpeg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
+		</div>
+	</th:block>
 	
 	<!-- 동영상 등록 폼 -->
-	<div id="videoFrm" class="modal">
+	<div id="videoFrm" class="modal" style="Z-INDEX: 3;">
 			<div class="modal_content">
 				<form action="/move/moveInsert" method="POST" enctype="multipart/form-data" id="event" name="event">
 					<h2>사회동영상 등록</h2>

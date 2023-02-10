@@ -355,10 +355,11 @@
 	    cId = chaId;	
 	    //방 구독하기
 	    stompClient.subscribe('/topic/chat/' + cId, function (chat) {  
-	    
 	    //채팅내용 화면출력
 	    var content = JSON.parse(chat.body);
+	    console.log("여기인가")
 	    let tag;
+	    console.log("컨트롤러 갔다온 아이")
 	    if(content.fromId == fromId){
 		    tag = `<li class="repaly">
 				          <p>${content.msgCntn}</p>
@@ -369,13 +370,14 @@
 			        </li>`;
 	    }
                  
-	    $("#greetings").append(tag);
-	    })
+		    $("#greetings").append(tag);
+		    })
 	 	})
 	}
 
 	   //메시지 보내기
 	   $("#send").click(function sendMessage() {
+		    console.log('메시지 보내기')
 			stompClient.send("/app/chat", {}, JSON.stringify({
 				 chaId : cId,
 				 fromId : fromId,
@@ -387,6 +389,10 @@
 	   
 	 //채팅방리스트에서 채팅방을 눌렀을 경우 채팅 내역 불러오기
 		function message(cId){
+		 	if(stompClient !== null){
+		 		stompClient.disconnect();
+		 	}
+		 
 			$("#greetings").empty();
 			chaId = cId;
 			$('#toName').text($("#"+chaId).text());
@@ -403,6 +409,7 @@
 					if(res.length > 0){
 			   			for(r of res){
 			   				if(r.fromId == fromId){
+			   					console.log("message 불러온 아이")
 			   				 	$("#greetings").append(fromTag(r));
 			   				} else {
 			   					$("#greetings").append(toTag(r));
@@ -410,9 +417,9 @@
 			   			}
 					}
 		   		})
-			
-		   	connect(chaId);
+
 			$(".chatbox").show();
+			connect(chaId);
 		}
 		
 		//내가 보낸 메시지
@@ -434,9 +441,6 @@
 			
 			return to;
 		}
-		
-		$(".chatbox").scrollTop($(".chatbox")[0].scrollHeight);
-
   </script>
 </div>
 

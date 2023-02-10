@@ -154,7 +154,8 @@
 		
 		//페이징 처리
 		function gopage(i) {
-			location.href='/prtfl/mcList?page=' + i;
+			let order = $("#order option:selected").val();
+			location.href='/prtfl/mcList?page=' + i + '&order=' + order;
 		}
 		
 		//나의 포트폴리오 확인
