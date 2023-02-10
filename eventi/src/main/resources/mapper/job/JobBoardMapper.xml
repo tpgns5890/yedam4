@@ -246,4 +246,17 @@
 	    WHERE RN >= #{first}
 		]]>
 	</select>
+	
+	<select id ="likeList" resultType="jobBoardVO">
+		SELECT J.TITLE, (J.CLOSE_DT - SYSDATE )AS REMAIN
+		            , (SELECT COUNT(*)
+			              FROM RESUME_BOARD R) AS RE_COUNT, J.USER_ID, F.SEV_NM
+		FROM JOB_BOARD J JOIN RESUME_BOARD R
+		ON J.JOB_NO = R.JOB_NO
+		JOIN LIKES L
+		ON R.JOB_NO = L.TARGET_NO
+		JOIN FILES F
+		ON F.TARGET_ID = L.TARGET_NO
+		WHERE L.USER_ID = #{userId}
+	</select>
 </mapper>

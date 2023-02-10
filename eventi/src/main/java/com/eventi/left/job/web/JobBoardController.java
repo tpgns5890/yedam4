@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,6 +67,28 @@ public class JobBoardController {
 		model.addAttribute("areas", codeService.getCountry());
 		return "content/job/jobList";
 	}
+	
+	//좋아요 목록 전체조회
+	//전체조회
+	@RequestMapping(value = "/likeList", method=RequestMethod.GET)
+	public String likeList(Model model,@RequestParam(value="userId", required = true)String userId, JobBoardVO jobBoardVO, PagingVO paging) {
+		/*
+		 * MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
+		 * if(user != null) { jobBoardVO.setLikes(user.getUserId()); }
+		 * 
+		 * List<JobBoardVO> imgs = jobService.getJobList(jobBoardVO, paging);
+		 * model.addAttribute("paging", paging);
+		 * 
+		 * //사진파일 List<FilesVO> files = new ArrayList<>(); for(JobBoardVO img : imgs) {
+		 * files = filesService.fileList(img.getJobNo()); img.setFiles(files);
+		 * 
+		 * } model.addAttribute("jobList", imgs);
+		 */
+			model.addAttribute("jobList", jobService.likeList(userId));
+			//지역코드 가져오기
+			model.addAttribute("areas", codeService.getCountry());
+			return "content/job/jobList";
+		}
 	
 	//정렬 전체 조회
 	@PostMapping("/jobList")
