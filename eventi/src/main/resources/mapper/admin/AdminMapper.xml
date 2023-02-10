@@ -151,13 +151,14 @@
 		WHERE c.C_NO = w.CO_NO 
 		AND w.USER_ID IS NOT NULL
 		AND c.SETT_YN != 'Y'
+		<include refid="conSelect" />
 		AND (CASE WHEN DT_EXTNS IS NOT NULL THEN DT_EXTNS
             		ELSE DT_CLS
                END <![CDATA[) < SYSDATE]]>
 	</select>
 	<sql id="conSelect">
 		<if test="ttl != null and ttl !=''">
-			AND TTL = #{ttl}
+			AND c.TTL LIKE '%'||#{ttl}||'%'
 		</if>
 	</sql>
 	
@@ -364,7 +365,7 @@
 				PAY_NO,
 				SETT_YN,
 				TARGET_ID,
-				MO_CAT,
+				code_select(MO_CAT) mo_cat,
 				USER_NAME,
 				TO_CHAR(MO_DT, 'YYYY-mm-dd') MO_DT,
 				TO_CHAR(SETT_DT, 'YYYY-mm-dd') SETT_DT
@@ -397,10 +398,8 @@
 				and SETT_YN = #{settYN}
 			</if>
 			<if test="userId != null and userId !=''">
-				and USER_ID = #{userId}
-			</if>
-			<if test="targetId != null and targetId !=''">
-				and TARGET_ID = #{targetId}
+				and (USER_ID LIKE '%'||#{userId}||'%'
+					or TARGET_ID LIKE '%'||#{userId}||'%')
 			</if>
 			
 		</where>
@@ -414,6 +413,21 @@
 				FROM MEMBERS
 				WHERE USER_ID = w.USER_ID) USER_NAME,
 				(SELECT CODE_SELECT(BANK)
+				FROM MEMBERS
+				WHERE USER_ID = w.USER_ID) BANK_NAME,
+				(SELECT ACCNT
+				FROM MEMBERS
+				WHERE USER_ID = w.USER_ID) BANK_ACCOUNT
+		FROM WINNER w
+		WHERE CO_NO = #{coNo}
+	</select>
+	<select id="winnerListM" resultType="MoneyVO">
+		SELECT 	W_PAY MO_PRICE,
+				USER_ID,
+				(SELECT USER_NAME
+				FROM MEMBERS
+				WHERE USER_ID = w.USER_ID) USER_NAME,
+				(SELECT BANK
 				FROM MEMBERS
 				WHERE USER_ID = w.USER_ID) BANK_NAME,
 				(SELECT ACCNT

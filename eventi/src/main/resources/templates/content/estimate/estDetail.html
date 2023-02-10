@@ -2,613 +2,704 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+   layout:decorate="~{layouts/default_layout}"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<style>
-input[type=text]{
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-#estfrm {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-  width: 50%;
-  margin: 0 auto;
-}
-label {
- color: gray;
-}
-button {
- margin-right: 50px;
-}
-#propList {
-  border: 1px solid black;
-  width: 70%;
-  height: auto;
-  margin: 15px auto;
-}
-.list {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+	<style>
+		input[type=text]{
+		  width: 100%;
+		  padding: 12px 20px;
+		  margin: 8px 0;
+		  display: inline-block;
+		  border: 1px solid #ccc;
+		  border-radius: 4px;
+		  box-sizing: border-box;
+		  font-weight:700;
+		}
+		.main{
+			padding:40px; 
+			min-height:680px;
+		}
+		#content{
+			width: 70%;
+			margin:0 auto;
+		}
+		#content-left{
+			width:50%;
+			margin:0 auto;
 
-.list td, .list th {
-  border: 1px solid #ddd;
-  padding: 2px;
-}
 
-.list tr:nth-child(even){background-color: #f2f2f2;}
-
-.list tr:hover {background-color: #ddd;}
-
-.list th {
-  text-align: left;
-  background-color: #b7472A;
-  color: white;
-}
-</style>
+		}
+		#content-left form{
+			border-radius: 20px;
+			background-color: #fff;
+			padding:20px;
+		}
+		#content-right{
+			width:50%;
+			margin:0 auto;
+			display: flex;
+    		flex-direction: column;
+		}
+		#prop{
+			width:100%;
+			margin:10px auto;
+			background:#F18949;
+			border:0;
+			height:60px;
+		}
+		label {
+		 color: gray;
+		}
+		.modal-dialog{
+		    position: fixed;
+   		 	top: 20%;
+    		left: 33%;
+		}
+		#propList {
+			display: flex;
+		    flex-direction: row;
+		    justify-content: space-between;
+		    border-bottom: 1px solid #FAB955;
+		    border-radius:20px;
+		    background:#fff;
+		    padding:15px;
+		    width: 90%;
+		    margin: 5px auto;
+		}
+		#propBtn{
+		    display: flex;
+    		flex-direction: column;
+    		flex-wrap: wrap;
+    		height: 120px;
+		}
+		#propBtn button{
+			margin-bottom:5px;
+		}
+		.list {
+		  font-family: Arial, Helvetica, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+		
+		.list td, .list th {
+		  border: 1px solid #ddd;
+		  padding: 2px;
+		}
+		
+		.list tr:nth-child(even){background-color: #f2f2f2;}
+		
+		.list tr:hover {background-color: #ddd;}
+		
+		.list th {
+		  text-align: left;
+		  background-color: #b7472A;
+		  color: white;
+		}
+		.modal-content {
+			box-shadow: 4px 5px 10px 0px rgb(0 0 0 / 50%);
+			background-color: rgb(255 255 255);
+		}
+		.modal-open{
+			padding:0 !important;
+		}
+		#prop{
+			font-size:18px;
+		}
+		.btn{
+			color: #000;
+    		background-color: #fff;
+    		font-weight:700;
+    	}
+    	.getProp{
+    		color: #000;
+    		background-color: #FAB955;
+    		border-color: #FAB955;
+    		font-weight:700;
+    	}
+    	#prop:hover{
+    		color:#fff;
+    	}
+    	.getProp:hover{
+    		color:#fff !important;
+    	}
+    	.btn:hover{
+    		color: #FAB955;
+    	}
+    	#propInfo{
+    		font-weight:700;
+    	}
+	</style>
 </head>
 <body>
-<div layout:fragment="content">
- <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
+	<div layout:fragment="content">
+	
+		<section class="module gallery-page-header" data-background="/assets/images/estiDe.jpg" style="margin-top:50px; height: 100%;">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Big Title</h2>
-                <div class="module-subtitle font-serif">Small Title</div>
               </div>
             </div>
           </div>
         </section>
-<div id=estfrm>
-<h3>견적요청서</h3>
-<hr>
-<!-- 선택폼 -->
-  <form>
-    <label for="title" id="title">어떤 행사를 계획중이신가요?</label>
-    <input type="text" id="eventType" name="eventType" th:value="${est.eventType}" readonly>
-        <label for="title" id="title" >행사 규모는 어느정도이신가요?</label>
-    <input type="text" id="pats" name="pats" th:value="${est.pats}" readonly>
-        <label for="title" id="title">행사 예정 장소는 어디인가요?</label>
-    <input type="text" id="expectedPl" name="expectedPl" th:value="${est.expectedPl}" readonly>
-        <label for="title" id="title">행사 날짜를 선택해주세요.</label>
-    <input type="text" id="eventDate" name="eventDt" th:value="${est.eventDt}" readonly>
-        <label for="title" id="title">행사 시작시간은 언제인가요?</label>
-    <input type="text" id="eventTime" name="eventTime" th:value="${est.eventTime}" readonly>
-        <label for="title" id="title">행사 예상 소요시간을 선택해주세요.</label>
-    <input type="text" id="eventDuration" name="expectedDuration" th:value="${est.expectedDuration}" readonly>
-        <label for="title" id="title">행사 예정지역을 선택해주세요.</label>
-    <input type="text" id="expectedLocal" name="expectedLcal" th:value="${est.expectedLcal}" readonly>
-        <label for="title" id="title">행사 관련 희망사항을 알려주세요.</label>
-    <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
-    <input type="hidden" id="thisEno" th:value="${est.eno}">
-    <input type="hidden" id="thisUserId" th:value="${est.userId}">
-  </form>
-</div>
-<!-- Button trigger modal -->
- 	<!-- 비회원 로그인창 띄우기-->		
-<th:block sec:authorize="!isAuthenticated()">			
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop" th:onclick="|location.href='@{/loginPage}'|">제안서 작성</button>
- 	</th:block>
- 	<!-- 로그인된 회원 버튼표시-->	
-<th:block sec:authorize="isAuthenticated()">			
- <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop">제안서 작성</button>
- 	</th:block>
- <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">제안서 작성</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-       <label for="companyInt" class="col-form-label">업체소개</label>
-       <input type="text" class="form-control" id="recipient-name">
-       <label for="companyInt" class="col-form-label">물품목록</label>
-   		
-		<table id="myGdList" class="list">
-		<thead>
-		<tr>
-	    <th><input type="checkbox" id="all_select"></th>	
-		<th>물품명</th>
-		<th>금액</th>
-		</tr>
-		</thead>
-		<tbody>
+	
+		<div class="main" style="background:#FAF2E9;">
+			<div id="content" style="display:flex;">
+				<div id="content-left">
+					<!-- 선택폼 -->
+					<form>
+					  <h3><b>[[${est.eventType}]] 견적요청서</b></h3>
+					  <h4><b>작성자 : [[${est.userId}]]</b></h4>
+					  <label for="title" id="title" >참가인원</label>
+					  <input type="text" id="pats" name="pats" th:value="${est.pats}" readonly>
+					  <label for="title" id="title">희망장소</label>
+					  <input type="text" id="expectedPl" name="expectedPl" th:value="${est.expectedPl}" readonly>
+					      <label for="title" id="title">행사일</label>
+					  <input type="text" id="eventDate" name="eventDt" th:value="${est.eventDt}" readonly>
+					      <label for="title" id="title">진행시간</label>
+					  <input type="text" id="eventDuration" name="expectedDuration" th:value="${est.expectedDuration}" readonly>
+					      <label for="title" id="title">지역</label>
+					  <input type="text" id="expectedLocal" name="expectedLcal" th:value="${est.expectedLcal}" readonly>
+					      <label for="title" id="title">행사 관련 희망사항</label>
+					  <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
+					  <input type="hidden" id="thisEno" th:value="${est.eno}">
+					  <input type="hidden" id="thisUserId" th:value="${est.userId}">
+					</form>
+					<th:block th:if="${session.member} and ${session.member.userId} == ${est.userId}">
+						<button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
+					</th:block>
+					<th:block sec:authorize="isAuthenticated()">			
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop"><b>견적제안등록</b></button>
+				 	</th:block>
+				</div>
+				<div id="content-right">
+					<!-- 로그인된 회원 버튼표시-->	
+					
+				 	<!-- 업체제안서 리스트 -->
+					<div id="propList" th:each="prop : ${propList}">
+						<div id="propInfo">
+							<p th:text="|업체아이디 : ${prop.userId}|"></p>
+							<p th:text="|한줄어필 : ${prop.companyInt}|"></p>
+							<p th:text="|제안금액 : ${prop.totalPrc}원|"></p>
+							<input type="hidden" name="pno" id="pno" >
+						</div>
+						<div id="propBtn">
+							<button type="button" class="btn getProp" id="chooesProp" th:value="${prop.pno}">채택</button>
+							<button type="button" class="btn chattingUp" th:id="${prop.userId}"> 채팅하기</button> 
+							<th:block th:if="${session.member} and ${session.member.userId} == ${prop.userId}">
+								<button type="button" class="btn" id="delProp">삭제</button>
+							</th:block>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		
-		</tbody>
-		</table>
-       <label for="companyInt" class="col-form-label">기타비용</label>
-       <table id="etcList" class="list">
-		<thead>
-		<tr>
-		<th>명목</th>
-		<th>금액</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-		<td>행사운영비</td>
-		<td><input id="price" style="border: 0"></td>
-		</tr>
-		</tbody>
-		</table>
-       <p id="total">총금액 :</p> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="insertBtn">등록</button>
-      </div>
-    </div>
-  </div>
-</div><!--  end of Modal -->
-
-  <button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
-  <hr>
-  
-<!-- 업체제안서 리스트 -->
- <div id="propList" th:each="prop : ${propList}">
-	<p th:text="|업체소개 : ${prop.companyInt}|"></p>
-	<p th:text="|업체아이디 : ${prop.userId}|"></p>
-	<p th:text="|총금액 : ${prop.totalPrc}원|"></p>
-  <input type="hidden" name="pno" id="pno" th:value="${prop.pno}">
-    <p th:text="|고용회수 : ${count.adoption}|"></p>	
-    <p th:text="|후기수 : ${count.review}|"></p> 
-     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary getProp" data-toggle="modal" data-target="#exampleModal2" id="getProp" th:value="${prop.userId}">제안서 보기</button>
-    <button type="button" class="btn btn-primary" id="delProp">제안서 삭제</button>
-     <button type="button" class="btn btn-primary chattingUp" th:id="${prop.userId}"> 채팅하기</button> 
- <!-- Modal -->
-<div class="modal fade" th:id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">제안서 보기</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <div id="companyInt">
-       <label for="companyInt" class="col-form-label">업체소개</label>
-
-       </div>
-       <label for="gdList" class="col-form-label">물품목록</label>
-   		
-		<table id="fixedGdList" class="list">
-		<thead>
-		<tr>	
-		<th>물품명</th>
-		<th>금액</th>
-		</tr>
-		</thead>
-		<tbody>
 		
-		</tbody>
-		</table>
-       <label for="etcList" class="col-form-label">기타비용</label>
-       <table id="fixedEtcList" class="list">
-		<thead>
-		<tr>
-		<th>명목</th>
-		<th>금액</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-		<td>행사운영비</td>
-		<td></td>
-		</tr>
-		</tbody>
-		</table>
-       <p id="total"></p> 
-      </div>
-      <div class="modal-footer">
-               <button type="button" class="btn btn-primary" id="chooesProp">채택</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div><!--  end of Modal -->
- </div>
-  <input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}"> 
-<script>
-//csrf 설정
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
+		<!-- 제안서 보기 Modal -->
+		<div class="modal fade" th:id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header" style="display: flex;flex-direction: row;align-items: center;">
+		      	<div>
+		        	<h4 class="modal-title" id="exampleModalLabel"><b>제안서</b></h4>
+		        </div>
+		        <div style="position: absolute;right: 23px;top: 20px;">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+		        </div>
+		      </div>
+		      <div class="modal-body">
+		      	<div id="companyInt">
+		       		<label for="companyInt" class="col-form-label">업체소개</label>
+		       	</div>
+		       	<label for="gdList" class="col-form-label">물품목록</label>
+				<table id="fixedGdList" class="list">
+					<thead>
+						<tr>	
+							<th>물품명</th>
+							<th>금액</th>
+						</tr>
+					</thead>
+					<tbody>
+				
+					</tbody>
+				</table>
+		       	<label for="etcList" class="col-form-label">기타비용</label>
+		       	<table id="fixedEtcList" class="list">
+					<thead>
+						<tr>
+							<th>명목</th>
+							<th>금액</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>행사운영비</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+		       	<p id="total"></p> 
+		      </div>
+		      <div class="modal-footer">
+		      	
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div><!--  end of Modal -->
+	
+		<!-- 제안서 작성 Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document" style="min-height: 480px;">
+		    <div class="modal-content">
+		      <div class="modal-header" style="display: flex;flex-direction: row;align-items: center;">
+		      	<div>
+		        	<h4 class="modal-title" id="exampleModalLabel"><b>제안서 작성</b></h4>
+		        </div>
+		        <div style="position: absolute;right: 23px;top: 20px;">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+		        </div>
+		      </div>
+		      <div class="modal-body">
+		       <label for="companyInt" class="col-form-label">한줄어필</label>
+		       <input type="text" name="companyInt" class="form-control" id="recipient-name">
+		       <label for="companyInt" class="col-form-label">물품목록</label>
+		   		
+				<table id="myGdList" class="list">
+				<thead>
+				<tr>
+			    <th><input type="checkbox" id="all_select"></th>	
+				<th>물품명</th>
+				<th>금액</th>
+				</tr>
+				</thead>
+				<tbody>
+				
+				</tbody>
+				</table>
+		       <label for="companyInt" class="col-form-label">기타비용</label>
+		       <table id="etcList" class="list">
+				<thead>
+				<tr>
+				<th>명목</th>
+				<th>금액</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+				<td>행사운영비</td>
+				<td><input id="price" style="border: 0" placeholder="필수입력"></td>
+				</tr>
+				</tbody>
+				</table>
+		       
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn getProp" id="insertBtn">등록</button>
+		      </div>
+		    </div>
+		  </div>
+		</div><!--  end of Modal -->
+		
+		<input type="hidden" name="sessionId" id="sessionId" th:value="${session.member.userId}"> 
+		<script>
+			//csrf 설정
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			//업체회원 아닐시 제안서 작성불가 알림
+			$('#prop').on('click', function(){
+				var userId = '[[${session.member != null ? session.member.userId :""}]]';
+				if(userId.indexOf('bu') == -1){
+					alert('업체회원만 작성할 수 있습니다.')
+					return false;
+				}
 
-//업체회원 아닐시 제안서 작성불가 알림
-$('#prop').on('click', function(){
-	var userId = '[[${session.member != null ? session.member.userId :''}]]';
-	if(userId.indexOf('bu') == -1){
-		alert('업체회원만 작성할 수 있습니다.')
-		return false;
-	}
-	console.log(userId.indexOf('bu'))
-})
-
-//해당업체의 등록된물품 조회
-  $(function() {
-var userId = $('input[name="sessionId"]').val();
-var data = {"userId" : userId};
- 	$.ajax({
-		url: "/myGoodsList",
-		method: "POST",
-		data: JSON.stringify(data),
-		contentType: 'application/json',
-		beforeSend : function(xhr)
-        {   
-			//데이터를 전송하기 전에 헤더에 csrf값을 설정한다
-        xhr.setRequestHeader(header, token);
-        },
-		success: function (data) {
-			$.each(data, function(idx, goods){
-				var tr = $("<tr />").append($("<input type=checkbox name=chk>"))
-				var goodsNm = $("<td />").append(goods.goodsNm);
-				var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
-				//var stock = $("<input name=stock/>").append(goods.stock);
-				tr.append(goodsNm, rentalPrc)
-				$('#myGdList>tbody').append(tr);
+				console.log(userId.indexOf('bu'))
 			})
-         },
-         error: function () {
-				alert("서버 요청 실패");
-			}	
-	});
-});
- //물품값 자동계산
- $('.modal-body').on("change", function(){
-		$('#total').html("");
-	    var goods = $('#myGdList tbody tr'); //물품의 행
-	    var etc = $('#etcList tbody tr');
-		var goodsSum = 0; //물품합
-		var etcSum = 0; //기타합
-		var total = 0; //전체합
-		for(let i = 0; i < goods.length; i++){
-		if($('#myGdList tbody tr').eq(i).find('input').is(":checked")) {
-		 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html());	  
-		 }
-		}
-		 var inputVal = parseInt($('#etcList input').val());
-		 console.log(inputVal)
-		if(!isNaN(inputVal)){
-			etcSum += inputVal;
-		}
-		total = goodsSum + etcSum;
-		 $('#total').append("총금액: "+total+"원");
- }); 
- 
- //제안서버튼 누를시 기존에 작성된 기타목록 제거
- $('#prop').on('click', function() {
-	 $('#etcList tbody tr').not(":first").remove(); //첫번쨰 tr빼고 제거
-	 $('#etcList tbody input').val("");
-	 $('#total').html("총금액: "); //총금액 초기화
-	 
- })
- //th체크박스 선택시 전체체크
- $('#all_select').on("click", function() {
-	 if($("#all_select").is(":checked")){
-		 $("input[name='chk']").prop("checked", true);		 
-	 } else {
-		 $("input[name='chk']").prop("checked", false);
-	 }
-	 $("input[name=chk]").click(function() {
-			var total = $("input[name=chk]").length;
-			var checked = $("input[name=chk]:checked").length;
 			
-			if(total != checked) {
-				$("#all_select").prop("checked", false);
-				}
-			else{
-				$("#all_select").prop("checked", true);
-				}
-		});
- });
- //견적서 삭제
- $('#deleteBtn').on("click", function(){
-	 var thisUserId = $('#thisUserId').val();
-     var thisEno = $('#thisEno').val();
-     var userId = $('#deleteBtn').val();
-     var data = {"eno": thisEno, "userId": userId};
-     
-     //해당견적서 작성자 아닐시 삭제불가
-	 if(userId != thisUserId) {
-		 alert('작성자만 삭제할 수 있습니다.')
-		 return false;
-	 }   
-	 if(!confirm('삭제하시겠습니까?')) {
-		 return false;
-	 }
-	 $.ajax({
-		 url:"/deleteEst",
-		 method:"POST",
-		 data: JSON.stringify(data),
-		 contentType: 'application/json',
-		 beforeSend : function(xhr)
-         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-				xhr.setRequestHeader(header, token);
-         },
-         success: function(data){
-        	 if(data == 1){
-        		 alert('삭제되었습니다.');
-        		 location.href="/estList";
-        	 }
-         },
-          error: function () {
- 				alert("서버 요청 실패");
- 			}
-	 });
- });
- //제안서 등록
-  $('#insertBtn').on("click", function(){
-	 //행사운영비 금액
-	 var inputVal = parseInt($('#etcList input').val());
-	 if(inputVal == 0){
-		 alert('행사운영비를 입력해주세요.')
-			$("#etcList input").focus();
-		 return false;
-	 }
-	 
-	 var eno = $('#thisEno').val();
-	 var userId = $('#sessionId').val();
-	 var companyInt = 'test';
-	 var eventExps = parseInt(inputVal);
-	 var totalPrc = parseInt($('#total').html().substr(5));
-	 var data = {
-			 "eno": eno,
-			 "userId": userId,
-			 "companyInt": companyInt,
-			 "totalPrc": totalPrc,
-			 "eventExps": eventExps
-	 };
-	 console.log(data)
-	  $.ajax({
-		 url: "/insertProp",
-		 method: "POST",
-		 contentType: 'application/json',
-		 data: JSON.stringify(data),
-		 beforeSend : function(xhr)
-         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
-				xhr.setRequestHeader(header, token);
-         },
-         success: function(data){
-			if(data == 1)
-				alert('등록이 완료되었습니다.')
-				location.reload(true)				
-         },
-          error: function () {
- 				alert("서버 요청 실패");
- 			}
-	 });  
- }); 
- //제안서 상세보기
- $('.getProp').on('click', function() {
-	 $('#total').text("");
-	 $('#companyInt').html("");
-	 $('#fixedGdList tbody tr').remove();
-	 var pno = $(this).parent().children('#pno').val();
-	 var data = {"pno": pno};
-	 $.ajax({
-		 url: "/getProp",
-		 method: "POST",
-		 contentType: 'application/json',
-		 data: JSON.stringify(data),
-		 beforeSend : function(xhr)
-         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
-				xhr.setRequestHeader(header, token);
-         },
-         success: function(res){ 
-        	 var companyInt = res.companyInt;
-        	 var eventExps = res.eventExps;
-        	 var totalPrc = res.totalPrc;
-        	$('#companyInt').append(companyInt);
-            $('#fixedEtcList tbody td').eq(1).text(eventExps);
-            $('#total').text("총금액: "+totalPrc+"원");
-        	//제안서 물품조회
-        	$.ajax({
-        		url: "/propGdList",
-        		method: "POST",
-        		data: JSON.stringify(data),
-        		contentType: 'application/json',
-        		beforeSend : function(xhr)
-                {   
-        			//데이터를 전송하기 전에 헤더에 csrf값을 설정한다
-                xhr.setRequestHeader(header, token);
-                },
-        		success: function (data) {
-        			$.each(data, function(idx, goods){
-        				var tr = $("<tr />")
-        				var goodsNm = $("<td />").append(goods.goodsNm);
-        				var unitPrc = $("<td class='prc'/>").append(goods.unitPrc);
-        				//var count = $("<td class='stock'/>").append(goods.count);
-        				tr.append(goodsNm, unitPrc)
-        				$('#fixedGdList tbody').append(tr);
-        			})
-                 },
-                 error: function () {
-        				alert("서버 요청 실패");
-        			}	
-        	});// end of ajax in ajax
-        		
-        		
-        		console.log(res.eventExps)  
-         },
-          error: function () {
- 				alert("서버 요청 실패");
- 			}
-	 });
- });
- 
- //제안서 삭제
- $('#delProp').on('click', function(){
-	 if(!confirm('정말 삭제하시겠습니까?')) {
-		 return false;
-	 }
-	 var pno = $('#pno').val();
-	 var data = {"pno": pno}
-	 $.ajax({
-		 url: "/delProp",
-		 method: "POST",
-		 data: JSON.stringify(data),
-		 contentType: 'application/json',
-		 beforeSend : function(xhr)
-         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
-				xhr.setRequestHeader(header, token);
-         },
-         success: function(data){
-        	if(data == 1) {
-        		alert('삭제완료되었습니다.')
-        		location.href="/estList"
-        	}	
-         },
-          error: function () {
- 				alert("서버 요청 실패");
- 			}
-	 });
- });
- 
- //제안서 채택
- $('#chooesProp').on('click', function(){
-	 if(!confirm('채택하시겠습니까?')) {
-		 return false;
-	 }
-	 var pno = $('#pno').val();
-	 var data = {"pno": pno};
-	 console.log(data);
-	 $.ajax({
-		 url: "/chooesProp",
-		 method: "POST",
-		 data: JSON.stringify(data),
-		 contentType: 'application/json',
-		 beforeSend : function(xhr)
-         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
-				xhr.setRequestHeader(header, token);
-         },
-         success: function(data){
-        	if(data == 1) {
-        		alert('채택되었습니다.');
-        		location.href="/estList"
-        	}	
-         },
-          error: function () {
- 				alert("서버 요청 실패");
- 			}
-	 });
- })
- //비회원 로그인창 띄우기
- function login(){
-					 $("#header_modal").show();
-				};
-			 	//채팅버튼을 눌렀을 때
-// 				$(".chattingUp").on("click", function () {
-// 					$(".chat").toggleClass("active");
-// 					let toId = $(this).attr('id');
-// 					let From = $('#sessionId').val();
-// 					//채팅방 구독 생성
-// 					function createChatRoom() {
-// 						console.log("1 채팅방 생성");
-// 						let chatroomDataList = new Array();
-// 						let chatroomData1 = {
-// 								toId : toId,
-// 								fromId : fromId
-// 						};
-// 						chatroomDataList.push(chatroomData1);
-// 						let chatroomData2 = {
-// 								toId : fromId,
-// 								fromId : toId
-// 						};
-// 						chatroomDataList.push(chatroomData2);
+			//해당업체의 등록된물품 조회
+			  $(function() {
+			var userId = $('input[name="sessionId"]').val();
+			var data = {"userId" : userId};
+			 	$.ajax({
+					url: "/myGoodsList",
+					method: "POST",
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					beforeSend : function(xhr)
+			        {   
+						//데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+			        xhr.setRequestHeader(header, token);
+			        },
+					success: function (data) {
+						$.each(data, function(idx, goods){
+							var tr = $("<tr />").append($("<input type=checkbox name=chk>"))
+							var goodsNm = $("<td />").append(goods.goodsNm);
+							var rentalPrc = $("<td class='prc'/>").append(goods.rentalPrc);
+							//var stock = $("<input name=stock/>").append(goods.stock);
+							tr.append(goodsNm, rentalPrc)
+							$('#myGdList>tbody').append(tr);
+						})
+			         },
+			         error: function () {
+							alert("서버 요청 실패");
+						}	
+				});
+			});
+			 //물품값 자동계산
+			 $('.modal-body').on("change", function(){
+					$('#total').html("");
+				    var goods = $('#myGdList tbody tr'); //물품의 행
+				    var etc = $('#etcList tbody tr');
+					var goodsSum = 0; //물품합
+					var etcSum = 0; //기타합
+					var total = 0; //전체합
+					for(let i = 0; i < goods.length; i++){
+					if($('#myGdList tbody tr').eq(i).find('input').is(":checked")) {
+					 	goodsSum += parseInt($('#myGdList tbody tr').eq(i).find('td').eq(1).html());	  
+					 }
+					}
+					 var inputVal = parseInt($('#etcList input').val());
+					 console.log(inputVal)
+					if(!isNaN(inputVal)){
+						etcSum += inputVal;
+					}
+					total = goodsSum + etcSum;
+					 $('#total').append("총금액: "+total+"원");
+			 }); 
+			 
+			 //제안서버튼 누를시 기존에 작성된 기타목록 제거
+			 $('#prop').on('click', function() {
+				 $('#etcList tbody tr').not(":first").remove(); //첫번쨰 tr빼고 제거
+				 $('#etcList tbody input').val("");
+				 $('#total').html("총금액: "); //총금액 초기화
+				 
+			 })
+			 //th체크박스 선택시 전체체크
+			 $('#all_select').on("click", function() {
+				 if($("#all_select").is(":checked")){
+					 $("input[name='chk']").prop("checked", true);		 
+				 } else {
+					 $("input[name='chk']").prop("checked", false);
+				 }
+				 $("input[name=chk]").click(function() {
+						var total = $("input[name=chk]").length;
+						var checked = $("input[name=chk]:checked").length;
 						
-// 						console.log(JSON.stringify(chatroomDataList));
+						if(total != checked) {
+							$("#all_select").prop("checked", false);
+							}
+						else{
+							$("#all_select").prop("checked", true);
+							}
+					});
+			 });
+			 //견적서 삭제
+			 $('#deleteBtn').on("click", function(){
+				 var thisUserId = $('#thisUserId').val();
+			     var thisEno = $('#thisEno').val();
+			     var userId = $('#deleteBtn').val();
+			     var data = {"eno": thisEno, "userId": userId};
+			     
+			     //해당견적서 작성자 아닐시 삭제불가
+				 if(userId != thisUserId) {
+					 alert('작성자만 삭제할 수 있습니다.')
+					 return false;
+				 }   
+				 if(!confirm('삭제하시겠습니까?')) {
+					 return false;
+				 }
+				 $.ajax({
+					 url:"/deleteEst",
+					 method:"POST",
+					 data: JSON.stringify(data),
+					 contentType: 'application/json',
+					 beforeSend : function(xhr)
+			         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+							xhr.setRequestHeader(header, token);
+			         },
+			         success: function(data){
+			        	 if(data == 1){
+			        		 alert('삭제되었습니다.');
+			        		 location.href="/estList";
+			        	 }
+			         },
+			          error: function () {
+			 				alert("서버 요청 실패");
+			 			}
+				 });
+			 });
+			 //제안서 등록
+			  $('#insertBtn').on("click", function(){
+				 //행사운영비 금액
+				 var inputVal = parseInt($('#etcList input').val());
+				 if(inputVal == 0){
+					 alert('행사운영비를 입력해주세요.')
+						$("#etcList input").focus();
+					 return false;
+				 }
+				 
+				 var eno = $('#thisEno').val();
+				 var userId = $('#sessionId').val();
+				 var companyInt = $('#recipient-name').val();
+				 var eventExps = parseInt(inputVal);
+				 var totalPrc = parseInt($('#total').html().substr(5));
+				 var data = {
+						 "eno": eno,
+						 "userId": userId,
+						 "companyInt": companyInt,
+						 "totalPrc": totalPrc,
+						 "eventExps": eventExps
+				 };
+				 if(companyInt){
+				  $.ajax({
+					 url: "/insertProp",
+					 method: "POST",
+					 contentType: 'application/json',
+					 data: JSON.stringify(data),
+					 beforeSend : function(xhr)
+			         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+							xhr.setRequestHeader(header, token);
+			         },
+			         success: function(data){
+						if(data == 1)
+							alert('등록이 완료되었습니다.')
+							location.reload(true)				
+			         },
+			          error: function () {
+			 				alert("서버 요청 실패");
+			 			}
+				 	});
+				 }else{
+					 alert("한줄어필을 작성해 주세요.")
+					 $('#recipient-name').focus();
+				 }
+			 }); 
+			 //제안서 상세보기
+			 $('#getProp').on('click', function() {
+				 $('#total').text("");
+				 $('#companyInt').html("");
+				 $('#fixedGdList tbody tr').remove();
+				 var pno = $(this).parent().children('#pno').val();
+				 var data = {"pno": pno};
+				 $.ajax({
+					 url: "/getProp",
+					 method: "POST",
+					 contentType: 'application/json',
+					 data: JSON.stringify(data),
+					 beforeSend : function(xhr)
+			         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+							xhr.setRequestHeader(header, token);
+			         },
+			         success: function(res){ 
+			        	 var companyInt = res.companyInt;
+			        	 var eventExps = res.eventExps;
+			        	 var totalPrc = res.totalPrc;
+			        	$('#companyInt').append(companyInt);
+			            $('#fixedEtcList tbody td').eq(1).text(eventExps);
+			            $('#total').text("총금액: "+totalPrc+"원");
+			        	//제안서 물품조회
+			        	$.ajax({
+			        		url: "/propGdList",
+			        		method: "POST",
+			        		data: JSON.stringify(data),
+			        		contentType: 'application/json',
+			        		beforeSend : function(xhr)
+			                {   
+			        			//데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+			                xhr.setRequestHeader(header, token);
+			                },
+			        		success: function (data) {
+			        			$.each(data, function(idx, goods){
+			        				var tr = $("<tr />")
+			        				var goodsNm = $("<td />").append(goods.goodsNm);
+			        				var unitPrc = $("<td class='prc'/>").append(goods.unitPrc);
+			        				//var count = $("<td class='stock'/>").append(goods.count);
+			        				tr.append(goodsNm, unitPrc)
+			        				$('#fixedGdList tbody').append(tr);
+			        			})
+			                 },
+			                 error: function () {
+			        				alert("서버 요청 실패");
+			        			}	
+			        	});// end of ajax in ajax
+			        		
+			         },
+			          error: function () {
+			 				alert("서버 요청 실패");
+			 			}
+				 });
+			 });
+			 
+			 //제안서 삭제
+			 $('#delProp').on('click', function(){
+				 if(!confirm('정말 삭제하시겠습니까?')) {
+					 return false;
+				 }
+				 var pno = $('#pno').val();
+				 var data = {"pno": pno}
+				 $.ajax({
+					 url: "/delProp",
+					 method: "POST",
+					 data: JSON.stringify(data),
+					 contentType: 'application/json',
+					 beforeSend : function(xhr)
+			         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+							xhr.setRequestHeader(header, token);
+			         },
+			         success: function(data){
+			        	if(data == 1) {
+			        		alert('삭제완료되었습니다.')
+			        		location.href="/estList"
+			        	}	
+			         },
+			          error: function () {
+			 				alert("서버 요청 실패");
+			 			}
+				 });
+			 });
+			 
+			 //제안서 채택
+			 $('#chooesProp').on('click', function(){
+				 if(!confirm('채택하시겠습니까?')) {
+					 return false;
+				 }
+				 var userId = '[[${session.member != null ? session.member.userId :""}]]';
+				 var pno = this.value;
+				 var data = {"pno": pno,
+						 "userId":userId};
+				 console.log(data);
+				 $.ajax({
+					 url: "/chooesProp",
+					 method: "POST",
+					 data: JSON.stringify(data),
+					 contentType: 'application/json',
+					 beforeSend : function(xhr)
+			         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정한다
+							xhr.setRequestHeader(header, token);
+			         },
+			         success: function(data){
+			        	if(data == 1) {
+			        		alert('채택되었습니다.');
+			        		location.href="/estList"
+			        	}	
+			         },
+			          error: function () {
+			 				alert("서버 요청 실패");
+			 			}
+				 });
+			 })
+			 //비회원 로그인창 띄우기
+			 function login(){
+								 $("#header_modal").show();
+							};
+						 	//채팅버튼을 눌렀을 때
+							$(".chattingUp").on("click", function () {
+								$(".chat").toggleClass("active");
+								let toId = $(this).attr('id');
+								let From = $('#sessionId').val();
+								//채팅방 구독 생성
+								function createChatRoom() {
+									console.log("1 채팅방 생성");
+									let chatroomDataList = new Array();
+									let chatroomData1 = {
+											toId : toId,
+											fromId : fromId
+									};
+									chatroomDataList.push(chatroomData1);
+									let chatroomData2 = {
+											toId : fromId,
+											fromId : toId
+									};
+									chatroomDataList.push(chatroomData2);
+									
+									console.log(JSON.stringify(chatroomDataList));
+									
+									$.ajax({
+							   			url : '/chatInsert',
+							   			method : 'post',
+							   			data : JSON.stringify(chatroomDataList),
+							   			contentType : "application/json; charset=UTF-8",
+							   			beforeSend : function(xhr)
+							            {  
+											xhr.setRequestHeader(header, token);
+							            }
+							   		}).then(res => {
+							   			console.log("2 채팅방 생성 번호: " + cId);
+							   			cId = res;
+							   			chattingList(cId)
+							   		})
+								}
+							   	
+							   	function chattingList(cId){
+							   		console.log('chattingList:', cId);
+							   		$.ajax({
+										url : '/chatSelect',
+										method : 'post',
+							   			data : JSON.stringify({toId:toId, fromId:fromId}),
+							   			contentType : "application/json; charset=UTF-8",
+							   			beforeSend : function(xhr)
+							            {   
+											xhr.setRequestHeader(header, token);
+							            }
+							   		}).then(res => {
+							   			$(".chat-list").empty();
+							   			for(r of res){
+							   				$(".chat-list").append(makeList(r));
+							   			}
+							   			message(cId);
+							   		})
+							   		
+							   		$(".chat-popup").show();
+							   	}
 						
-// 						$.ajax({
-// 				   			url : '/chatInsert',
-// 				   			method : 'post',
-// 				   			data : JSON.stringify(chatroomDataList),
-// 				   			contentType : "application/json; charset=UTF-8",
-// 				   			beforeSend : function(xhr)
-// 				            {  
-// 								xhr.setRequestHeader(header, token);
-// 				            }
-// 				   		}).then(res => {
-// 				   			console.log("2 채팅방 생성 번호: " + cId);
-// 				   			cId = res;
-// 				   			chattingList(cId)
-// 				   		})
-// 					}
-				   	
-// 				   	function chattingList(cId){
-// 				   		console.log('chattingList:', cId);
-// 				   		$.ajax({
-// 							url : '/chatSelect',
-// 							method : 'post',
-// 				   			data : JSON.stringify({toId:toId, fromId:fromId}),
-// 				   			contentType : "application/json; charset=UTF-8",
-// 				   			beforeSend : function(xhr)
-// 				            {   
-// 								xhr.setRequestHeader(header, token);
-// 				            }
-// 				   		}).then(res => {
-// 				   			$(".chat-list").empty();
-// 				   			for(r of res){
-// 				   				$(".chat-list").append(makeList(r));
-// 				   			}
-// 				   			message(cId);
-// 				   		})
-				   		
-// 				   		$(".chat-popup").show();
-// 				   	}
-			
-// 					function makeList(r){
-// 						let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
-// 										<div class="flex-grow-1 ms-3">
-// 											<h3>${r.toId}</h3>
-// 											<p>front end developer</p>
-// 										</div>
-// 									 </a>`;
-// 						return list;
-// 					}
+								function makeList(r){
+									let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+													<div class="flex-grow-1 ms-3">
+														<h3>${r.toId}</h3>
+														<p>front end developer</p>
+													</div>
+												 </a>`;
+									return list;
+								}
+									
+								//채팅화면이 나타난다.
+								if ($(".chat").hasClass("active")) {
+									$.ajax({
+										url : '/checkChat',
+										method : 'post',
+							   			data : JSON.stringify({toId:toId, fromId:fromId}),
+							   			contentType : "application/json; charset=UTF-8",
+							   			beforeSend : function(xhr)
+							            {   
+											xhr.setRequestHeader(header, token);
+							            }
+							   		}).then(res => {
+							   			if(res != ''){
+							   				console.log('res.cId:', res.cid);
+							   				chattingList(res.cid);
+							   			} else {
+							   				createChatRoom();
+							   			}
+							   		})
+									$(".chat-popup").show();
+									$(".chatbox").show();
+								}
 						
-// 					//채팅화면이 나타난다.
-// 					if ($(".chat").hasClass("active")) {
-// 						$.ajax({
-// 							url : '/checkChat',
-// 							method : 'post',
-// 				   			data : JSON.stringify({toId:toId, fromId:fromId}),
-// 				   			contentType : "application/json; charset=UTF-8",
-// 				   			beforeSend : function(xhr)
-// 				            {   
-// 								xhr.setRequestHeader(header, token);
-// 				            }
-// 				   		}).then(res => {
-// 				   			if(res != ''){
-// 				   				console.log('res.cId:', res.cid);
-// 				   				chattingList(res.cid);
-// 				   			} else {
-// 				   				createChatRoom();
-// 				   			}
-// 				   		})
-// 						$(".chat-popup").show();
-// 						$(".chatbox").show();
-// 					}
-			
-// 					//채팅화면이 사라진다.
-// 					if (!$(".chat").hasClass("active")) {
-// 						$(".chat-popup").hide();
-// 						$(".chatbox").hide();
-// 					}
-// 				}); 
-</script>
-</div><!-- End of layout:fragment -->
+								//채팅화면이 사라진다.
+								if (!$(".chat").hasClass("active")) {
+									$(".chat-popup").hide();
+									$(".chatbox").hide();
+								}
+							}); 
+		</script>
+	</div><!-- End of layout:fragment -->
 </body>
 </html>

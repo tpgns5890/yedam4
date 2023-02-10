@@ -227,7 +227,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public int sendToMoney(WinnerVO winnerVO) {
 		int i = 0;
-		List<MoneyVO> winners = adminMapper.winnerList(winnerVO);
+		List<MoneyVO> winners = adminMapper.winnerListM(winnerVO);
 		for (MoneyVO money : winners) {
 			adminMapper.insertMoney(money);
 			i++;
