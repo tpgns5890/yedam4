@@ -46,6 +46,7 @@ label {
      width: 430px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 #cotestHeader{
     padding: 30px 0px 20px;
@@ -62,7 +63,12 @@ label {
 #now{
 	 width: 180px;
 }
-
+.col-sm-3 {
+    width: 505px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 </style>
 </head>
 <body>
@@ -79,20 +85,9 @@ label {
           </div>
         </section>
 		
-		 <!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
-				<div class="col-sm-3 mb-sm-20"  style="position:relative; top: 18px; right: -1450px; width: 100px;  z-index: 1 ;">
-					<!-- 비회원 좋아요버튼-->
-					<th:block sec:authorize="!isAuthenticated()">
-							<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|"></div>
-					</th:block>
-					
-					<!-- 회원 좋아요버튼-->
-					<th:block sec:authorize="isAuthenticated()">
-							<div id="love" class="stage heart" onclick="likeClick(this)"></div>
-					</th:block>
-				</div>
+		 
           
-          	<div id="cotestHeader">
+          	<div id="cotestHeader" style="justify-content: space-between;">
 	              <!-- 공모전 정렬기준 -->
 	              <div class="col-sm-3 mb-sm-20" id="order_check">
 	                <select id="order" name="order" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px; cursor: pointer;">
@@ -131,6 +126,18 @@ label {
 					<!-- 마감된 공모전 조회 -->
 					<button type="button" id="history" class="w-btn w-btn-gra1 w-btn-gra-anim   status" >마감공모전 조회</button>
 					<button type="button" id="now" class="w-btn w-btn-gra1 w-btn-gra-anim   status" style="display:none;">진행공모전 조회</button>
+					<!-- 좋아요리스트 조회 및 공모전 작성 버튼 -->
+					<div class="mb-sm-20"  style="">
+					<!-- 비회원 좋아요버튼-->
+					<th:block sec:authorize="!isAuthenticated()">
+						<div id="love" class="stage heart" th:onclick="|location.href='@{/loginPage}'|" style="position: absolute;top: -7px;right: 38px;"></div>
+					</th:block>
+					
+					<!-- 회원 좋아요버튼-->
+					<th:block sec:authorize="isAuthenticated()">
+						<div id="love" class="stage heart" onclick="likeClick(this)" style="position: absolute;top: -7px;right: 38px;"></div>
+					</th:block>
+					</div>
 	              </div>
 	           </div>
 			</div>

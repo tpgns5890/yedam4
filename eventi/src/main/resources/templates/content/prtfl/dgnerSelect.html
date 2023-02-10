@@ -509,7 +509,7 @@
 		                        <div class="comment-content clearfix">
 		                          <div class="comment-author font-alt">
 		                          <!--별점처리-->
-		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:if="${re.laststar == 1}"><i class="fa fa-star-o star"></i></span>
+		                          		<span th:each="num: ${#numbers.sequence(1, re.fullstar)}"><i class="fa fa-star star"></i></span><span th:if="${re.halfstar > 0}"><i class="fa fa-star-half-full star"></i></span><span th:each="num: ${#numbers.sequence(1, re.laststar)}" th:if="${re.laststar >= 1}"><i class="fa fa-star-o star"></i></span>
 		                          </div>
 		                          <div class="comment-body">
 		                            <p th:text="${re.reviewCntn}"></p>
@@ -550,10 +550,10 @@
 							<label for="winYn" style="margin-top:5px; height: 20px; z-index: 3; font-size: 18px; margin-right: 20px;">우승작품</label>
 						
 							<select name="caregory" id="caregory">
-								<option value="D1" selected="selected">현수막</option>
+								<option value="D4" selected="selected">포스터</option>
+								<option value="D1" >현수막</option>
 								<option value="D2">배너</option>
 								<option value="D3">로고</option>
-								<option value="D4">포스터</option>
 								<option value="D5">기타</option>
 					        </select>
                     		</div>

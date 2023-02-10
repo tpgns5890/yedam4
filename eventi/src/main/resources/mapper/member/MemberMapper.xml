@@ -82,6 +82,7 @@
 				RPRT,
 				DEPOTR,
 				code_select(BANK) BANK,
+				BANK bankCode,
 				ACCNT,
 				USER_REGDATE,
 				LOCKED				

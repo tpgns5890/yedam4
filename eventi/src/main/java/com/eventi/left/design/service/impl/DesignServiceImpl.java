@@ -149,7 +149,7 @@ public class DesignServiceImpl implements DesignService {
 	public void uploadFiles(MultipartFile[] uploadfile, DesignVO vo) {
 		List<FileDto> list = new ArrayList<FileDto>();
 		try {
-			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");// 대상구분 디자인(잠시수정)
+			list = newUp.uploadFiles(uploadfile, vo.getDgnNo(), "T09");// 대상구분 디자인
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

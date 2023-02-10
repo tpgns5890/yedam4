@@ -218,7 +218,7 @@ public class ContestServiceImpl implements ContestService {
 		// 출금요청 insert
 		if (moneyMapper.oneMoneySelect(vo.getcNo()) != null) {
 			MoneyVO money = new MoneyVO();
-			money.setBankName(user.getBank()); // 은행정보
+			money.setBankName(user.getBankCode()); // 은행정보
 			money.setBankAccount(user.getAccnt()); // 계좌번호
 			money.setMoType("M2"); // 출금코드
 			money.setMoPrice(contest.getPay());
