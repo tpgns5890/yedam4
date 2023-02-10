@@ -205,15 +205,13 @@ public class ContestServiceImpl implements ContestService {
 		ContestVO contest = mapper.getContest(vo.getcNo());
 
 		// 응모한 디자인이 있으면 삭제불가.
-		DesignVO desing = new DesignVO();
-		desing.setcNo(vo.getcNo());
-		
-		if (dMapper.entryDesign(desing) > 0) {
+		if (dMapper.checkDesign(vo.getcNo()) > 0) {
 			return 0;
 		}
 		LikesVO like = new LikesVO();
 		like.setTargetNo(vo.getcNo());
-		likeMapper.likeDelete(like);// 공모전 좋아요 삭제
+		like.setCategory("T01"); 
+		likeMapper.likeDelete(like);// 공모전 좋아요 삭제  
 		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
 		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
 

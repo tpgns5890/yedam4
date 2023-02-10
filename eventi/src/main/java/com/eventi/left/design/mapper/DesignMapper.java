@@ -14,7 +14,9 @@ public interface DesignMapper {
 	
 	public int allCount(DesignVO vo); //디자인 전체 개수
 	
-	public int entryDesign(DesignVO vo); //공모전에 접수된 디자인개수
+	public int entryDesign(DesignVO vo); //공모전에 접수된 디자인개수(분류별)
+	
+	public int checkDesign(String cNo); //삭제 전 공모전에 접수된 디자인개수확인
 
 	public List<DesignVO> contestDesignList(DesignVO vo); //게시글 1건 디자인리스트.
 	

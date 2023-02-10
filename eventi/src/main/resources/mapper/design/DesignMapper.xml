@@ -11,7 +11,7 @@
 	<!-- 검색처리 -->
 	<sql id="category">
 		<if test="caregory == null">
-			and caregory = 'D1'
+			and caregory = 'D4'
 		</if>
 		<if test="caregory != null and caregory != ''">
 			and caregory = #{caregory} 
@@ -235,6 +235,13 @@
 		where c_no =#{cNo}
 		AND SAVE = 'N'
 		<include refid="category" /> 
+	</select>
+	
+	<select id="checkDesign" resultType="int">
+		select count(*)
+		  from design
+		where c_no =#{cNo}
+		AND SAVE = 'N'
 	</select>
 	
 	<select id="saveGetdesign" resultType="DesignVO">

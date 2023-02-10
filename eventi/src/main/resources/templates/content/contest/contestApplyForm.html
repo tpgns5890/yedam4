@@ -294,6 +294,10 @@
 			let userId = '[[${session.member.userId}]]';
 			let cNo = '[[${contest.cNo}]]';
 			
+			$("#dgnNo").val("");
+			$('input[name="name"]').val("");
+			oEditors.getById["cntn"].exec("PASTE_HTML", [""]);
+			
 			//게시글 불러오기
 			$.ajax({
 				url : "/design/dSave",
@@ -341,15 +345,11 @@
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
-						console.log($('#dgnNo'))
-						console.log(data);
+								oEditors.getById["cntn"].exec("SET_IR", [""]);
 								$("#dgnNo").val(data[0].dgnNo);
 								$('input[name="name"]').val(data[0].name);
 								oEditors.getById["cntn"].exec("PASTE_HTML", [data[0].cntn]);
 								
-								if(data[0].sevNm != null){
-							    	imgReader(data[0].sevNm);
-								}
 								//from 업데이트로 변경.
 								$("#contestfrm").attr("action", "/design/saveUpdate");
 					

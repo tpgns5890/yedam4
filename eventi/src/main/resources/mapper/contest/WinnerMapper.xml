@@ -61,6 +61,9 @@
 		select  (select ttl 
 				  from contest 
 				  where c_no = w.co_no)ttl,
+			    (select caregory 
+                    from design
+                    where dgn_no = w.d_No) category,
 				  w.*,
 				  d.dgn_no,
 				  d.user_id,

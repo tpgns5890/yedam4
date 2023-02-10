@@ -99,7 +99,7 @@
 					<ul id="contestPay">
 					</ul>
 					<div id="modelBtn">
-						<button id="Payment" class="modelBtn1" style="width:50px;"  type="button" >결제</button>
+						<button id="Payment" class="modelBtn1 btn btn-y btn-round" style="width:50px;"  type="button" >결제</button>
 					</div>
 				</div>
 				<div class="modal_layer"></div>
@@ -107,9 +107,9 @@
 			
 			<!-- 임시저장 모달 -->
 			<div id="saveContest" class="modal">
-				<div class="modal_content">
+				<div class="save_modal_content">
 					<span class="close">&times;</span>
-					<h2>임시저장 공모전 리스트</h2>
+					<h2 style="margin-bottom: 20px;">임시저장 공모전</h2>
 					<div id="button_box"> </div>
 				</div>
 				<div class="modal_layer"></div>
@@ -280,12 +280,12 @@
 					$('#contestPay').empty();
 					//li태그 생성후 모달창 붙여넣기
 					let li = ` <li> <span></span></li>
-								<li>제 목 : ${ttl} </li>
-								<li>등록일 : ${date} </li>
-								<li>상금액 : ${totalWpay} </li>
-								<li>등록비 : ${insertPay}</li>
+								<li><label>제 목</label> ${ttl} </li>
+								<li><label>등록일</label> ${date} </li>
+								<li><label>상금액</label> ${totalWpay} </li>
+								<li><label>등록비</label> ${insertPay}</li>
 								<hr>
-								<li>총합계 : ${payment}</li>
+								<li>총 합계 : ${payment} 원</li>
 							`
 					$('#contestPay').append(li);
 				
@@ -427,7 +427,7 @@
 		})
 		
 		function choiceCotest(contest) {
-	    	let span = `<span id="modal_choice_btn">[${contest.cNo}] ${contest.ttl}</span><button type="button" onclick=checkFile('${contest.cNo}')>선택</button><br>`;
+	    	let span = `<span id="modal_choice_btn">[${contest.cNo}] ${contest.ttl}</span><button class="btn btn-y" style="padding: 2px 3px" type="button" onclick=checkFile('${contest.cNo}')>선택</button><br>`;
 	    	return span;
 	    }
 		    
@@ -445,8 +445,8 @@
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
-						
-								$('input[name="cntn"]').text("");
+								$("#styleName").empty();
+								oEditors.getById["cntn"].exec("SET_IR", [""]);
 								$("#cNo").val(data.cNo);
 								$("#ttl").val(data.ttl);
 								$("input:radio[name='category']:radio[value='"+data.category+"']").attr('checked', true);
@@ -462,7 +462,6 @@
 								
 								//등록된 스타일이 있을경우
 								if(data.style != null){
-									
 							        //태그생성.
 							        let style = data.style;
 							        styletag = style.split(",");

@@ -23,11 +23,13 @@
 			<div class="box" style="background-color: #f1f0fe; height:auto">
 				<ul>
 					<li><label>가입일</label><input type="text" th:value="|${#dates.format(user.userRegDate, 'yyyy년 MM월 dd일')}|" disabled="disabled"></li>
+					
 					<!-- 회원등급 -->
-					<li th:if="${user.auth} == 'ROLE_ADMIN'" ><label>회원등급</label><input type="text" disabled="disabled" value="관리자"></li>
-					<li th:if="${user.auth} == 'ROLE_MEM'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원1"></li>
-					<li th:if="${user.auth} == 'ROLE_MEMBER'" ><label>회원등급</label><input type="text" disabled="disabled" value="회원2"></li>
-					<li th:if="${user.auth} == 'ROLE_BUSI'" ><label>회원등급</label><input type="text" disabled="disabled" value="업체"></li>
+					<li th:if="${user.auth} == 'ROLE_ADMIN'"><label>회원등급</label><input type="text" disabled="disabled" value="관리자"></li>
+					<li th:if="${user.auth} == 'ROLE_BUSI'"><label>회원등급</label><input type="text" disabled="disabled" value="업체"></li>
+					<li th:if="${user.auth} == 'ROLE_MEM'"><label>회원등급</label><input type="text" disabled="disabled" value="회원"></li>
+					<li th:if="${user.auth} == 'ROLE_MC'"><label>회원등급</label><input type="text" disabled="disabled" value="사회자"></li>
+					<li th:if="${user.auth} == 'ROLE_DES'"><label>회원등급</label><input type="text" disabled="disabled" value="디자이너"></li>
 					
 					<li><label>아이디</label><input type="text" readonly="readonly" th:value="${user.userId}"></li>
 					<li><label>이메일</label><input id="userEmail" name="userEmail" type="text" th:value="${user.userEmail}"></li>
