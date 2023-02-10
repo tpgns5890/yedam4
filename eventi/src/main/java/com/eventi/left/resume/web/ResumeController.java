@@ -108,7 +108,6 @@ public class ResumeController {
 	public String getJob(Model model, MemberVO memberVO, JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨
 		model.addAttribute("jobNo", jobBoardVO.getJobNo());
-		model.addAttribute("jobWriter", resumeService.getResumeDetail());
 		System.out.println(jobBoardVO);
 		return "content/resume/ApplyForm"; //content -html링크
 	}
