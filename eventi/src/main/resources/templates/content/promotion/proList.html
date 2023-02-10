@@ -302,7 +302,42 @@ table {
         </div>
     </main>
     
-  <!-- 인기게시물 -->
+		<!-- 전체게시물 -->      
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt" id="check">전체게시물</h2>
+                <div class="module-subtitle font-serif">원하는 유형의 글을 조회하고 참여해보세요.</div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" th:each="pro : ${proList}" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="team-item" id="check" > 
+                  <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|">
+                         <th:block th:if="${pro.img} == null">
+							<div class="post-thumbnail">
+								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+							</div>
+						</th:block>
+						<th:block th:if="${pro.img} != null">
+							<div class="post-thumbnail">
+								<a href="#"><img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+							</div>
+						</th:block>
+                    <div class="team-detail" > 										
+                      <h5 class="font-alt" th:text="|작성자: ${pro.userId}|">작성자</h5>
+                      <p class="font-serif" th:text=${pro.eType}></p>
+                    </div>
+                  </div>
+                  <div class="team-descr font-alt">
+                    <div class="team-role" th:text="|행사유형:${pro.eName}|">Art Director</div>
+                    <div class="team-name" th:text="|조회수:${pro.see}|">조회수</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+       <!-- 인기게시물 -->
 		<section class="module sliding-portfolio">
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
@@ -316,7 +351,19 @@ table {
                 <div class="owl-item" th:each="post : ${contents}">
                   <div class="col-sm-12">
                     <div class="work-item"><a href="#">
-                        <div class="work-image" th:onclick="|location.href='@{proDetail(proNo=${post.proNo})}'|"><a href="#" ><img th:src="|/fileView/${post.img}|" style="width: 250px; height: 250px; border-radius:30px" class="img-fluid" alt="Colorlib Template"></a></div>
+                        <div class="work-image" th:onclick="|location.href='@{proDetail(proNo=${post.proNo})}'|">
+                        <a href="#" >
+                               <th:block th:if="${post.img} == null">
+							<div class="post-thumbnail">
+								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+							</div>
+						</th:block>
+						<th:block th:if="${post.img} != null">
+							<div class="post-thumbnail">
+								<a href="#"><img th:src="|/fileView/${post.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+							</div>
+						</th:block>
+                        </a></div>
                         <div class="work-caption font-alt">
                           <h3 class="work-title" th:text="${post.eName}">Corporate Identity</h3>
                           <div class="work-descr" th:text="|조회수:${post.see}|">Illustration</div>
@@ -330,33 +377,7 @@ table {
             </div>
           </div>
         </section>
-
-      
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt" id="check">전체게시물</h2>
-                <div class="module-subtitle font-serif">원하는 유형의 글을 조회하고 참여해보세요.</div>
-              </div>
-            </div>
-            
-            <div class="row">
-              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" th:each="pro : ${proList}" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
-                <div class="team-item" id="check" > 
-                  <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|"><img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template">
-                    <div class="team-detail" > 										
-                      <h5 class="font-alt" th:text=${pro.proNo}>Hi all</h5>
-                      <p class="font-serif" th:text=${pro.eType}></p>
-                      <div class="team-social"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a></div>
-                    </div>
-                  </div>
-                  <div class="team-descr font-alt">
-                    <div class="team-role" th:text=${pro.eName}>Art Director</div>
-                    <div class="team-name" th:text=${pro.see}>조회수</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
+        
           <div class="row mt-5">
 		          <div class="col text-center">
 		            <div class="block-27">
@@ -371,6 +392,16 @@ table {
 				   	</div>
           
 <script>
+
+//데이터 없을시 이미지 띄우기 
+$(document).ready(function () {
+	  let result = '[[${result}]]';
+	if (result != '') {
+		$('#none').empty();
+		$('#none').after('<img src="/assets/images/no_data_found.jpg" style="height:30%; width:70%; margin:100px 0px 50px 250px;">')
+	}
+})
+
 //정렬
 function order(){
 let etype = $("#etype").val(); //공통으로 씀 
@@ -380,6 +411,7 @@ let etype = $("#etype").val(); //공통으로 씀
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
+
 
 link1 = 'proInsert'; //구인등록폼 이동
 function proInsert(){

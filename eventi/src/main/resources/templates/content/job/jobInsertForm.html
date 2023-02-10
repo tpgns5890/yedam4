@@ -130,7 +130,20 @@
 					<li><label>제 목</label><input type="text" class="form-control" name="title" id="title" placeholder="예시:OO분을 구합니다"><br /></li>
 					<li><label>내 용</label><textarea name="jobCntn" class="form-control" id="jobCntn" cols="30" rows="4" placeholder="할 일을 적어주세요"></textarea><br /></li>
 					<li><label>수당</label><input type="number" class="form-control" name="pay" id="pay" placeholder="숫자만 입력"><br /></li>
-					<li><label>위치</label><input name="loc" class="form-control" id="loc" placeholder="구체적 위치를 작성하세요(필수)"></input><br /></li>
+					<li><label>지역</label>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="label" for="mcAreaList">지역</label> 
+								<select id="mcAreaList" name="mcAreaList" onchange="mcAreaFun(this)">
+									<option value="">-- 지역 선택 --</option>
+									<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+								</select>
+								<input type="hidden" value="" name="mcArea" id="mcArea" />
+					             <ul class="hashtag" id="mcAreaL"></ul>
+							</div>
+						</div>
+					
 					
 					<li><label>행사유형</label> 
 						<select id="eType" name="eType" onchange="jobStyle(this)">
@@ -175,8 +188,6 @@
 				<h2>임시저장된 게시글입니다.</h2>
 				<p>불러올 게시글을 선택해 주세요.</p>
 				<div id="button_box">
-					<!-- <button type="button" id="modal_login_btn" th:onclick="|location.href='@{loginPage}'|">로그인</button>
-					<button type="button" id="modal_main_btn" th:onclick="|location.href='/'|">홈으로</button> -->
 				</div>
 			</div>
 			<div class="modal_layer"></div>
@@ -344,47 +355,7 @@ $(document).ready(function() {
 				}
 	    })
 	   }
-	    //스타일태그
-	    function jobStyle(e){
-	    	 let tagText = e.options[e.selectedIndex].text;
-	  		 let tagValue = e.options[e.selectedIndex].value;
-	     	 
-	      	// 값이 없으면 동작 안합니다.
-	           if (tagValue !== "") {
-
-	             // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
-	             var result = Object.values(eTag).filter(function (word) {
-	                 return word === tagValue;
-	               })
-
-	             // 태그 중복 검사
-	             if (result.length == 0) {
-	            	 $("#eTypeTag").empty(); 
-	               $("#eTypeTag")
-	                 .append("<li class='tag-item'>" + tagText + "<span class='style-del-btn' idx='" + eTypeCounter + "'>x</span></li>");
-	               eTypeAddTag(tagValue);
-	             } else {
-	               alert("태그값이 중복됩니다.");
-	             }
-	           }
-	    }
 	    
-	    //태그
-	    var eTag = {};
-	    var eTypeCounter = 0;
-	    
-	 	//입력한 값을 태그로 생성한다.
-        function eTypeAddTag (value) {
-        	eTypeTag[eTypeCounter] = value;
-        	eTypeCounter++;  // del-btn 의 고유 id 가 된다.
-        }
-	 	//서버로 보냄
-	 	function eTag () {
-            return Object.values(eTypeTag).filter(function (word) {
-                return word !== "";
-            });
-        }
-	 	
 	 	//삭제버튼
 	 	$(document).on("click", ".style-del-btn", function (e) {
             var index = $(this).attr("idx");

@@ -91,7 +91,8 @@ public class JobBoardController {
 		 //form으로 보냄
 		public String JobInsertForm(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 			jobService.jobInsert(jobBoardVO, filesVO, uploadFile); //값이 vo자동으로 저장
-			return "redirect:/jobList";
+			/* return "redirect:/jobList"; */
+			return "redirect:/jobDetail?jobNo=" + jobBoardVO.getJobNo();
 			//rttr.addFlashAttribute("result", "게시글 등록 완료!"); //데이터전달
 	}
 	

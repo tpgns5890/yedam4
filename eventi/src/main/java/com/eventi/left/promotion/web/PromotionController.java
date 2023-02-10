@@ -120,7 +120,7 @@ public class PromotionController {
 		@PostMapping("/proUpdate")
 		public String proUpdate(PromotionVO promotionVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 			proService.proUpdate(promotionVO, filesVO, uploadFile);
-			return "redirect:/proList";
+			return "redirect:/proDetail?proNo=" + promotionVO.getProNo();
 		}
 
 	//게시글 삭제

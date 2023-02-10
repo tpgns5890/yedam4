@@ -34,16 +34,16 @@
 					<div class="row">
 						<div class="col-md-12">
 
-							<div class="form-group">
+						<div class="form-group">
 								<label class="label" for="#">회원ID</label>
 								<input type="text" name="userId" id="userId" th:value="${session.member.userId}" readonly>
 							</div>
 						</div>
 						
+						<!-- 대상id 관리자로 고정 -->
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">대상자ID</label>
-								<input type="text" name="targetId" id="targetId" >
+								<input type="text" name="targetId" id="targetId" hidden="hidden" th:value="admin">
 							</div>
 						</div>
 						
@@ -61,28 +61,21 @@
 							</div>
 						</div>
 
-						
+<!--						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">비밀글유무</label>
 								<input type="checkbox" id="secretYn" name="secretYn" th:value="N" class="btn btn-primary">Y
 							</div>
-						</div>
+						</div>-->
 						
+						<!-- 카테고리 안보이게  --> 
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">카테고리</label>
-								<input type="text" name="category" id="category" th:value="T14">
+								<input type="text" name="category" id="category" th:value="T14" hidden="hidden">
 							</div>
 						</div>
 						
-<!--						<div class="col-md-12">
-							<div class="form-group">
-								<input type="file" name="uploadFile">
-							</div>
-						</div>
-						-->
-
 						<div class="col-md-12">
 							<div class="form-group">
 								<input type="submit" id="insert" value="등록"
