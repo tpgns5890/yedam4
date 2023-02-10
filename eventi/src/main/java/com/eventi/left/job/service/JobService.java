@@ -32,4 +32,7 @@ public interface JobService {
 	
 	//마이페이지 구직신청한 게시글 조회
 	public List<JobBoardVO> myApplyList(JobBoardVO jobBoardVO, PagingVO paging); 
+	
+	//좋아요한 게시글들
+	List<JobBoardVO> likeList(String userId);
 }

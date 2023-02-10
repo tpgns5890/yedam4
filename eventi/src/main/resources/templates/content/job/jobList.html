@@ -319,7 +319,8 @@ table {
 		                    
 		                    <!-- 좋아요 -->	
 							<div class="stage" style="margin-top: 5px;">
-								<div id="love" class="stage heart" onclick="likeClick(this)" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+								<div id="love" class="stage heart" onclick="likeClick()" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+								
 							</div>				
                 	</div>
             	</div>
@@ -399,7 +400,11 @@ table {
 	//csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
-	
+	//좋아요한것만 가져오기
+	function likeClick(){
+		let userId = var userId = '[[${session.member != null ? session.member.userId :""}]]';
+		location.href ="/likeList?userId=userId"
+	}
 	//데이터 없을시 이미지 띄우기 
 	$(document).ready(function () {
 		  let result = '[[${result}]]';

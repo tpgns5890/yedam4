@@ -124,6 +124,12 @@ public class JobServiceImpl implements JobService{
 		jobBoardVO.setLast(paging.getLast());
 		return jobmapper.myApplyList(jobBoardVO);
 	}
+
+	@Override
+	public List<JobBoardVO> likeList(String userId) {
+		// TODO Auto-generated method stub
+		return jobmapper.likeList(userId);
+	}
 	
 
 }
