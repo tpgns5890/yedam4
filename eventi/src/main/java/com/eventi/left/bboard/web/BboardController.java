@@ -110,7 +110,7 @@ public class BboardController {
 	public String bInsertForm(BboardVO bboardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		bboardService.bboardInsert(bboardVO, filesVO, uploadFile);
 		//내가 등록한 게시글 전체리스트 페이지로 이동
-		return "redirect:/bboard/bList?type=" + bboardVO.getType();
+		return "redirect:/bboard/bSelect?bBoardNo=" + bboardVO.getBBoardNo();
 	}
 	
 	//게시글 수정폼 이동

@@ -127,7 +127,7 @@
 		background-color: #fefefe;
 		margin : 70px auto;
 		border: 1px solid #888;
-		width: 80%;
+		width: 60%;
 		height: 90%;
 		text-align: left;
 		
@@ -184,6 +184,38 @@
 		height: 100%;
 		background: rgba(0, 0, 0, 0.5);
 		z-index: -1;
+	}
+	
+	/* Create three unequal columns that floats next to each other */
+	.column {
+	  float: left;
+	  padding: 10px;
+	}
+	
+	/* Left and right column */
+	.column.side {
+	  width: 30%;
+	  height: 100%;
+	  float: right;
+	  position: sticky;
+	  top: 0;
+	  background-color: lightGray;
+	  padding:20px;
+	  
+	}
+	
+	/* Middle column */
+	.column.middle {
+	  width: 70%;
+	  padding:0;
+	  
+	}
+	
+	/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+	@media screen and (max-width: 600px) {
+	  .column.side, .column.middle {
+	    width: 100%;
+	  }
 	}
 	
 	.box {
@@ -569,12 +601,18 @@
 	<!-- 디자인 상세보기 모달 -->
 	<div id="dseignModel" class="modal">
 		<div class="img_modal_content">
-			<span class="close">&times;</span>
+			
 			<div class="column middle">
-				<h3 id="category">분류</h3>
+				<h4 id="category">분류</h4>
 				<h2 id="ttl">제목</h2>
 				<div id="modelSelect"></div>
 			</div>
+			  
+			<div class="column side">
+			  	<span class="close">&times;</span>
+			   <div id="dgnerSelect"></div>
+			</div>
+			
 		</div>
 		<div class="modal_layer"></div>
 	</div>
@@ -794,9 +832,6 @@
 			let replyNo = $('#replyNo').val();
 			let updateBtn = `<button class='repUpdate'>수정</button>`;
 			
-			
-			
-			
 			$.ajax({
 				url : '/replyUpdate',
 				type : 'POST',
@@ -984,7 +1019,7 @@
 		}
 		
 		//디자이너 좋아요 처리
-		$(".detail #love").on("click", function() {
+		$("#detail #love").on("click", function() {
 			 console.log('클릭')
 			 $(this).toggleClass("active");
 			 let userId = '[[${session.member != null ? session.member.userId :""}]]';
@@ -1129,10 +1164,8 @@
 		   //채팅버튼을 눌렀을 때
 			$(".chattingUp").on("click", function () {
 				$(".chat").toggleClass("active");
-				
 				let toId = '[[${dgnerSelect.userId}]]';
-				console.log("로그인된 아이디== "+fromId)
-				console.log("메세지받을 아이디== "+toId)
+
 				//채팅방 구독 생성
 				function createChatRoom() {
 					console.log("1 채팅방 생성");
@@ -1160,7 +1193,6 @@
 							xhr.setRequestHeader(header, token);
 			            }
 			   		}).then(res => {
-			   			console.log("2 채팅방 생성 번호: " + cId);
 			   			cId = res;
 			   			chattingList(cId)
 			   		})
@@ -1191,8 +1223,7 @@
 				function makeList(r){
 					let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
 									<div class="flex-grow-1 ms-3">
-										<h3>${r.toId}</h3>
-										<p>front end developer</p>
+										<h3>🔔${r.toId}</h3>
 									</div>
 								 </a>`;
 					return list;
@@ -1246,11 +1277,29 @@
 					method: 'post',
 					data: {dgnNo:dNo},
 					beforeSend: function (xhr) {
-						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 						xhr.setRequestHeader(header, token);
 					},
 				}).then(res => {
+// 					let title = res.name;
+// 					let category = res.caregory;
+// 					$('#designModel').empty();
+// 					$('#dgnerSelect').empty();
+					
+// 					$('#ttl').text(title);
+// 					$('#category').text(res.caregory);
+					
+// 					$('#modelSelect').empty();
+// 					//모달내용을 지운뒤 붙여넣기.
+// 					for(file of res.files){
+// 						$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo, category));
+// 					}
+
+					$('#dgnerSelect').empty();
+					
+					let user = res.userId;
 					let title = res.name;
+					let cntn = '';
+					let contest='';
 					let category = res.caregory;
 					$('#designModel').empty();
 					$('#dgnerSelect').empty();
@@ -1258,10 +1307,34 @@
 					$('#ttl').text(title);
 					$('#category').text(res.caregory);
 					
+					
+					if(res.cNo != null){
+						contest = `<a href="/contest/select?cNo=${res.cNo}">
+							<button type="button">응시공모전 보기</button>
+							</a>`
+					}
+					
+					if(res.cntn != null){
+						cntn = `<p><small>${res.cntn}</small></p>
+									<hr>`
+					}
+					
+					
+					let content = ` 
+									<h5><small>DESING BY</small> ${user}</h5>
+									<h5><smll>우승횟수 ${res.cnt}회</small></h5>
+									
+									<hr>
+									${cntn}
+									${contest}
+								  `
+					
+					$('#dgnerSelect').append(content);
+					
 					$('#modelSelect').empty();
 					//모달내용을 지운뒤 붙여넣기.
 					for(file of res.files){
-						$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo, category));
+						$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo,category));
 					}
 				})
 			}) 
@@ -1326,6 +1399,49 @@
 				}
 			})
 	   })
+	   
+	   function newStarList(data){
+		   let star=``;
+		   for(let i=0; i<data.fullstar; i++){
+			  star += `<i class="fa fa-star star"></i>`;
+		   }
+		   
+		   if(data.halfstar > 0){
+			   for(let i=0; i<1; i++){
+					  star += `<i class="fa fa-star-half-full star"></i>`;
+				}
+		   }
+		   
+		   if(data.laststar >= 1){
+			   for(let i=0; i<data.laststar; i++){
+					  star += `<i class="fa fa-star-o star"></i>`;
+				}
+		    }
+		   
+		   
+		   let tag = `<div class="starList">
+               <div class="comments reviews">
+               <div class="comment clearfix">
+               <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                 <div class="comment-content clearfix">
+                   <div class="comment-author font-alt">
+                   <!--별점처리-->
+                   		<span>${star}</span>
+                   </div>
+                   <div class="comment-body">
+                     <p>${data.reviewCntn}</p>
+                   </div>
+                   <div class="comment-meta font-alt">
+                   	<span>${data.userId}</span> - <span>${data.writingDt}</span>
+                   		
+                   </div>
+                 </div>
+               </div>
+         	</div>
+         </div>`
+		  
+        return tag;
+	   }
    </script>
 </div>
 </html>

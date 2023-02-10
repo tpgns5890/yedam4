@@ -510,104 +510,104 @@ var data = {"userId" : userId};
 					 $("#header_modal").show();
 				};
 			 	//채팅버튼을 눌렀을 때
-				$(".chattingUp").on("click", function () {
-					$(".chat").toggleClass("active");
-					let toId = $(this).attr('id');
-					let From = $('#sessionId').val();
-					//채팅방 구독 생성
-					function createChatRoom() {
-						console.log("1 채팅방 생성");
-						let chatroomDataList = new Array();
-						let chatroomData1 = {
-								toId : toId,
-								fromId : fromId
-						};
-						chatroomDataList.push(chatroomData1);
-						let chatroomData2 = {
-								toId : fromId,
-								fromId : toId
-						};
-						chatroomDataList.push(chatroomData2);
+// 				$(".chattingUp").on("click", function () {
+// 					$(".chat").toggleClass("active");
+// 					let toId = $(this).attr('id');
+// 					let From = $('#sessionId').val();
+// 					//채팅방 구독 생성
+// 					function createChatRoom() {
+// 						console.log("1 채팅방 생성");
+// 						let chatroomDataList = new Array();
+// 						let chatroomData1 = {
+// 								toId : toId,
+// 								fromId : fromId
+// 						};
+// 						chatroomDataList.push(chatroomData1);
+// 						let chatroomData2 = {
+// 								toId : fromId,
+// 								fromId : toId
+// 						};
+// 						chatroomDataList.push(chatroomData2);
 						
-						console.log(JSON.stringify(chatroomDataList));
+// 						console.log(JSON.stringify(chatroomDataList));
 						
-						$.ajax({
-				   			url : '/chatInsert',
-				   			method : 'post',
-				   			data : JSON.stringify(chatroomDataList),
-				   			contentType : "application/json; charset=UTF-8",
-				   			beforeSend : function(xhr)
-				            {  
-								xhr.setRequestHeader(header, token);
-				            }
-				   		}).then(res => {
-				   			console.log("2 채팅방 생성 번호: " + cId);
-				   			cId = res;
-				   			chattingList(cId)
-				   		})
-					}
+// 						$.ajax({
+// 				   			url : '/chatInsert',
+// 				   			method : 'post',
+// 				   			data : JSON.stringify(chatroomDataList),
+// 				   			contentType : "application/json; charset=UTF-8",
+// 				   			beforeSend : function(xhr)
+// 				            {  
+// 								xhr.setRequestHeader(header, token);
+// 				            }
+// 				   		}).then(res => {
+// 				   			console.log("2 채팅방 생성 번호: " + cId);
+// 				   			cId = res;
+// 				   			chattingList(cId)
+// 				   		})
+// 					}
 				   	
-				   	function chattingList(cId){
-				   		console.log('chattingList:', cId);
-				   		$.ajax({
-							url : '/chatSelect',
-							method : 'post',
-				   			data : JSON.stringify({toId:toId, fromId:fromId}),
-				   			contentType : "application/json; charset=UTF-8",
-				   			beforeSend : function(xhr)
-				            {   
-								xhr.setRequestHeader(header, token);
-				            }
-				   		}).then(res => {
-				   			$(".chat-list").empty();
-				   			for(r of res){
-				   				$(".chat-list").append(makeList(r));
-				   			}
-				   			message(cId);
-				   		})
+// 				   	function chattingList(cId){
+// 				   		console.log('chattingList:', cId);
+// 				   		$.ajax({
+// 							url : '/chatSelect',
+// 							method : 'post',
+// 				   			data : JSON.stringify({toId:toId, fromId:fromId}),
+// 				   			contentType : "application/json; charset=UTF-8",
+// 				   			beforeSend : function(xhr)
+// 				            {   
+// 								xhr.setRequestHeader(header, token);
+// 				            }
+// 				   		}).then(res => {
+// 				   			$(".chat-list").empty();
+// 				   			for(r of res){
+// 				   				$(".chat-list").append(makeList(r));
+// 				   			}
+// 				   			message(cId);
+// 				   		})
 				   		
-				   		$(".chat-popup").show();
-				   	}
+// 				   		$(".chat-popup").show();
+// 				   	}
 			
-					function makeList(r){
-						let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
-										<div class="flex-grow-1 ms-3">
-											<h3>${r.toId}</h3>
-											<p>front end developer</p>
-										</div>
-									 </a>`;
-						return list;
-					}
+// 					function makeList(r){
+// 						let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
+// 										<div class="flex-grow-1 ms-3">
+// 											<h3>${r.toId}</h3>
+// 											<p>front end developer</p>
+// 										</div>
+// 									 </a>`;
+// 						return list;
+// 					}
 						
-					//채팅화면이 나타난다.
-					if ($(".chat").hasClass("active")) {
-						$.ajax({
-							url : '/checkChat',
-							method : 'post',
-				   			data : JSON.stringify({toId:toId, fromId:fromId}),
-				   			contentType : "application/json; charset=UTF-8",
-				   			beforeSend : function(xhr)
-				            {   
-								xhr.setRequestHeader(header, token);
-				            }
-				   		}).then(res => {
-				   			if(res != ''){
-				   				console.log('res.cId:', res.cid);
-				   				chattingList(res.cid);
-				   			} else {
-				   				createChatRoom();
-				   			}
-				   		})
-						$(".chat-popup").show();
-						$(".chatbox").show();
-					}
+// 					//채팅화면이 나타난다.
+// 					if ($(".chat").hasClass("active")) {
+// 						$.ajax({
+// 							url : '/checkChat',
+// 							method : 'post',
+// 				   			data : JSON.stringify({toId:toId, fromId:fromId}),
+// 				   			contentType : "application/json; charset=UTF-8",
+// 				   			beforeSend : function(xhr)
+// 				            {   
+// 								xhr.setRequestHeader(header, token);
+// 				            }
+// 				   		}).then(res => {
+// 				   			if(res != ''){
+// 				   				console.log('res.cId:', res.cid);
+// 				   				chattingList(res.cid);
+// 				   			} else {
+// 				   				createChatRoom();
+// 				   			}
+// 				   		})
+// 						$(".chat-popup").show();
+// 						$(".chatbox").show();
+// 					}
 			
-					//채팅화면이 사라진다.
-					if (!$(".chat").hasClass("active")) {
-						$(".chat-popup").hide();
-						$(".chatbox").hide();
-					}
-				}); 
+// 					//채팅화면이 사라진다.
+// 					if (!$(".chat").hasClass("active")) {
+// 						$(".chat-popup").hide();
+// 						$(".chatbox").hide();
+// 					}
+// 				}); 
 </script>
 </div><!-- End of layout:fragment -->
 </body>

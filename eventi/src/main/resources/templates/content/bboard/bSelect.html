@@ -90,7 +90,7 @@
    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
    <th:block th:if="${session.member.userId} == ${bSelect.writer}">
    <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
-   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bDelete(bBoardNo=${bSelect.bBoardNo}, type=${bSelect.type})}'|">글 삭제하기</button>
+   <button type="button" class="btn btn-primary delCheck">글 삭제하기</button>
    </th:block>
    
    <th:block th:if="${session.member.userId} != ${bSelect.writer}">
@@ -476,6 +476,14 @@
 				})
 	   })
 	 });
+   
+   $(".delCheck").on('click', function(){
+	   if(confirm('정말 취소하시겠습니까?')){
+		   let bBoardNo = '[[${bSelect.bBoardNo}]]';
+		   let type = '[[${bSelect.type}]]'
+		   location.href='/bboard/bDelete?bBoardNo=' + bBoardNo + '&type=' + type;
+	   }
+   })
    </script>
 </div>
 </html>

@@ -766,6 +766,7 @@
 		
 		//댓글 삭제
 		$(document).on('click', '.repDelete', function(e){
+			if(confirm('댓글을 삭제하시겠습니까?')){
 			let btn=$(this);
 			let replyNo = $(this).parent().parent().parent("div").attr('id');
 			$.ajax({
@@ -783,7 +784,8 @@
 					btn.closest(".comment").remove();
 				}
 			}
-		});		
+		});	
+			}
 	});
 		
 		//댓글 수정 폼으로 변경

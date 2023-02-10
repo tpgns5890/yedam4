@@ -367,7 +367,12 @@ input[type="checkbox"]:checked {
 		}else{
 			let caregory = $("#caregory option:selected").val();
 			let winYn = $("input[name=winYn]").val();
-			location.href='/design/designList?page=' + i + '&caregory='+ caregory + '&winYn=' + winYn; 
+			if(winYn == 'Y'){
+				location.href='/design/designList?page=' + i + '&caregory='+ caregory + '&winYn=' + winYn; 
+			} else {
+				location.href='/design/designList?page=' + i + '&caregory='+ caregory;
+			}
+			
 		}
 	 }
 	
