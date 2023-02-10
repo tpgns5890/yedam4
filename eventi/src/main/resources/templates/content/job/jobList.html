@@ -319,7 +319,7 @@ table {
 		                    
 		                    <!-- 좋아요 -->	
 							<div class="stage" style="margin-top: 5px;">
-								<div id="love" class="stage heart" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
+								<div id="love" class="stage heart" onclick="likeClick(this)" th:classappend="${param.userId} !=null ? active" sec:authorize="isAuthenticated()" ></div>
 							</div>				
                 	</div>
             	</div>
@@ -339,16 +339,18 @@ table {
             <div class="card-area">
                 <ul class="card-wrap">
                     <li class="card" th:each="job : ${jobList}" th:myName = "${job.jobNo}" th:onclick="jobDetail(this.getAttribute('myName'))">
+                    
+                    	<!-- 이미지출력 -->
                         <div class="card-image-wrap">
                         	<div th:id="${job.jobNo}" style="position: absolute; right: -9px; top: -9px; z-index: 3;" class="stage heart" th:classappend="${job.likes} =='1' ? active" sec:authorize="isAuthenticated()" ></div>
-                           <th:block th:if="${job.img} == null">
+                        <th:block th:if="${job.img} == null">
 							<div class="post-thumbnail">
-								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt=""></a>
 							</div>
 						</th:block>
 						<th:block th:if="${job.img} != null">
 							<div class="post-thumbnail">
-								<a href="#"><img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+								<a href="#"><img th:src="|/fileView/${job.img}|" style="width: 250px; height: 250px" class="img-fluid" alt=""></a>
 							</div>
 						</th:block>
                         </div>
@@ -445,27 +447,6 @@ table {
 	//검색 기능
 	$('#find').click(function() {
 		gopage(1);
-		//입력한 값 가져오기
-		/* let search = $("input[name=search]").val();
-		
-	$.ajax({
-		url : '/jobList',
-		method : 'post',
-		data : {title:search}, //title = search(title변수안에 data)
-		beforeSend : function(xhr)
-        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-		/* 	xhr.setRequestHeader(header, token);
-        }
-	}).then(res => {
-		//tbody밑에 있는 데이터 지우기
-		
-		$("#check").empty();
-		
-		//tbody에 들어갈 tr 생성
-		for(r of res){ //제목, 내용 검색 시
-			$("#check").append(makeTr(r));
-		} 
-	})*/
 		
 	$("input[name=title]").val(''); 
 	})
@@ -493,6 +474,7 @@ table {
 		
 	//좋아요를 추가했을 경우 
 	if($(this).hasClass("active")){
+
    	 $.ajax({
 		url : "/likes/lInsert",
 		method : 'post',

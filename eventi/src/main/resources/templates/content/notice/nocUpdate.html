@@ -22,10 +22,11 @@
             </div>
           </div>
         </section>
+<div class="container"> 
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">홍보게시글 수정</h3>
+				<h3 class="mb-4">공지사항 수정</h3>
 				<form action="/nocUpdate" method="POST" id="nocUpdate" name="nocUpdate"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
@@ -76,7 +77,7 @@
 			</div>
 		</div>
 	</div>
-
+</div>       
 <script>
 let oEditors = []
 

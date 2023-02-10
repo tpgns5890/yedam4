@@ -18,7 +18,6 @@
 		<if test="userId != null and userId != ''">
 		AND L.USER_ID = #{userId}			
 		</if>
-
 	</sql>
 	
 	<sql id="search">		
@@ -36,7 +35,7 @@
 				TITLE,
 				JOB_CNTN,
 				PAY,
-				LOC,
+				code_select(LOC) LOC,
 				code_select(E_TYPE) E_TYPE,
 				W_SDAY,
 				W_EDAY,
@@ -93,7 +92,7 @@
 				TITLE,
 				JOB_CNTN,
 				PAY,
-				LOC,
+				code_select(LOC) LOC,
 				E_TYPE,
 				code_select(E_TYPE) E_Type_Name,
 				W_SDAY,
@@ -149,8 +148,6 @@
 		WHERE JOB_NO=#{jobNo}
 	</update>
 	
-	
-	
 	<!-- 게시글 등록 -->
 	<insert id="jobInsert">
 		<selectKey keyProperty="jobNo" resultType="String" order="BEFORE">
@@ -158,9 +155,24 @@
 		</selectKey>
 	
 		INSERT INTO JOB_BOARD
-		(JOB_NO, TITLE, JOB_CNTN, PAY, LOC, E_TYPE, W_SDAY, W_EDAY, W_HOUR, QUALIFICATION, PREFERENCE, IMG, USER_ID, DT, CLOSE_DT, SAVE) <!-- DB -->
-		VALUES(#{jobNo}, #{title}, #{jobCntn}, 
-				#{pay}, #{loc}, #{eType}, #{wSday}, #{wEday}, #{wHour}, #{qualification}, #{preference}, #{img}, #{userId}, sysdate, #{closeDt}, #{save}) <!-- VO -->
+				(JOB_NO, 
+				TITLE, 
+				JOB_CNTN, 
+				PAY, 
+				LOC, 
+				E_TYPE, 
+				W_SDAY, 
+				W_EDAY, 
+				W_HOUR, 
+				QUALIFICATION, 
+				PREFERENCE, 
+				IMG, 
+				USER_ID, 
+				DT, 
+				CLOSE_DT, 
+				SAVE) <!-- DB -->
+		VALUES(#{jobNo},#{title},#{jobCntn},#{pay},#{loc},#{eType}, #{wSday},#{wEday}, #{wHour},
+				#{qualification},#{preference}, #{img}, #{userId}, sysdate, #{closeDt},#{save}) <!-- VO -->
 	</insert>
 	
 	<!-- 게시글 삭제 -->
@@ -182,7 +194,7 @@
 				TITLE,
 				JOB_CNTN,
 				PAY,
-				LOC,
+				code_select(LOC) LOC,
 				code_select(E_TYPE) E_TYPE,
 				W_SDAY,
 				W_EDAY,

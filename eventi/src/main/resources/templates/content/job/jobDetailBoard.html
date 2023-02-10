@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+   layout:decorate="~{layouts/default_layout}"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
    
 <head>
 	<link rel="stylesheet" href="/css/contest/button.css">
@@ -62,6 +63,7 @@
 	display:flex;
 	margin-top: 40px;
 	justify-content: flex-end;
+
 }
 
 .heart {
@@ -90,6 +92,7 @@
 .sub-title {
     font-size: 20px;
     margin-bottom: 24px;
+    font-weight:700;
 }
 .list > li {
     margin: 14px 0;
@@ -102,7 +105,9 @@
 
 /* 상단 영역 */
 .detail-header {
-    border: 1px solid var(--light-gray);
+    border: 3px solid #FFDE59;
+    border-radius: 20px;
+    box-shadow: 4px 10px 20px grey;
 }
 
 /* 제목 영역 */
@@ -207,6 +212,9 @@
 }
 .header-detail-layout > .right {
     width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /* 지원 버튼 영역 */
@@ -269,15 +277,18 @@
 
 /* 검색, 버튼 영역 */
 .search-area {
-    display: flex;
+	display: flex;
     gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: flex-end;
+    padding: 10px;
 }
 .button {
     display: inline-block;
     height: 40px;
-    padding: 12px;
     border-radius: 3px;
+    margin: 0;
 }
 .button {
     cursor: pointer;
@@ -349,6 +360,29 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+#iconSection{
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#iconView{
+	display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.btn-warning {
+    font-weight: 700;
+    font-size: 26px;
+    color: #000;
+    width: 80%;
+    height: 66%;
+    background-color: #FAB955;
+    border-color: #FAB955;
+}
+}
 /* 검색, 버튼 영역 끝 */
 </style>
 </head>
@@ -368,36 +402,21 @@ table {
 
 
 	<div class="content-wrap">
-	<!-- 로그인시 신청자조회, 수정, 삭제 버튼 나타남 -->
-        <th:block th:if="${session.member.userId} == ${job.userId}">
-    	<div class="option-area">
-                <div class="filtering-area">
-                    <!-- 검색, 버튼 영역 -->
-                    <div class="search-area">
-					
-                        <button type="button" style="margin-top:35px" class="button user-search-button" 
-						th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
-						<button type="button" style="margin-top:35px" class="button post-button" 
-								th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
-								 
-						<button type="button" style="margin-top:35px" class="button post-button" 
-								th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>
-					
-                    </div>
-                </div>              
-            </div>
-         </th:block>
+	
         <!-- 상단 영억 -->
         <div class="detail-header">
             <div class="section summary-area">
                 <!-- 제목 영역 -->
                 <div class="title-area">
                     <div class="title-wrap">
-	                   <h3 th:text="|작성자: ${job.userId}|">작성자</h3>
+	                   
 		                 <h1 th:text=${job.title}>이벤트 행사 단기 스텝 채용합니다</h1>
                     </div>
                     <div class="company-image-wrap">
-                    	<img src="@{/image/logo.jpeg}" alt="기업로고">
+                    	<!-- 버튼 영역 -->
+
+			            	<button type="button" class="btn btn-warning" th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
+
                     </div>
                 </div>
 
@@ -502,50 +521,66 @@ table {
     
                 <div class="right">
                     <div class="section manager-info-area">
-                        <h2 class="sub-title">구직신청</h2>
-                        <ul class="list">
-                            <li>
-                            	<!-- 조회수 -->
-                            	<span style='font-size: 30px;'>&#128065;</span>
-						 		<span id="inqNum" th:text="${job.see}"></span>
-                                <!-- 신고수 및 버튼 -->
-								<th:block sec:authorize="!isAuthenticated()">
-									<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
-									<span th:text=${job.rprt}></span>
-								</th:block>
-								
-								<th:block sec:authorize="isAuthenticated()">
-										<th:block th:if="|${session.member.getUserId()}| != ${job.userId} ">
-											<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+                        <h2 class="sub-title"th:text="|작성자: ${job.userId}|">작성자</h2>
+                        	<div id="iconSection">
+                        			<div id="iconView">
+		                            	<!-- 조회수 -->
+		                            	<span style='font-size: 30px;'>&#128065;</span>
+								 		<span id="inqNum" th:text="${job.see}"></span>
+							 		</div>
+							 		
+							 		<div id="iconBan">
+		                                <!-- 신고수 및 버튼 -->
+										<th:block sec:authorize="!isAuthenticated()">
+											<span th:onclick="|location.href='@{/loginPage}'|" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+											<span th:text=${job.rprt}></span>
 										</th:block>
-										<th:block th:if="|${session.member.getUserId()}| == ${job.userId} ">
-											<span style='font-size: 20px;'>&#128680;</span>
+										<th:block sec:authorize="isAuthenticated()">
+											<th:block th:if="|${session.member.getUserId()}| != ${job.userId} ">
+												<span id="modalUp" style='font-size: 20px; cursor: pointer;'>&#128680;</span>
+											</th:block>
+											<th:block th:if="|${session.member.getUserId()}| == ${job.userId} ">
+												<span style='font-size: 20px;'>&#128680;</span>
+											</th:block>
+											<span th:text=${job.rprt}></span>
 										</th:block>
-										<span th:text=${job.rprt}></span>
-								</th:block>
-								
-								<!-- 좋아요 -->
-								<th:block th:if ="${like == null}">		
+									</div>
 									
-									  	<div id="love" class="stage heart"></div>
-								</th:block>
-								<th:block th:if ="${like != null}">		
-									  	<div id="love" class="stage heart active"></div>
-								</th:block>	
-								
-								
-								<!-- 버튼 영역 -->
-			                    <div class="apply-button-wrap">
-			                    <button type="button" th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-			                    <!-- 신고하기 -->
-   								<!--<button type="button" class="btn btn-primary "id="modalUp">신고하기</button>-->
-			                    </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                </div>
-            </div>
+									<div id="iconLike">
+										<!-- 좋아요 -->
+										<th:block th:if ="${like == null}">		
+											  	<div id="love" class="stage heart" style="margin: -30px -5px;"></div>
+										</th:block>
+										<th:block th:if ="${like != null}">		
+											  	<div id="love" class="stage heart active" style="margin: -30px -5px;"></div>
+										</th:block>	
+									</div>
+								</div>
+                    		</div>
+							<!-- 로그인시 신청자조회, 수정, 삭제 버튼 나타남 -->
+					        <th:block th:if="${session.member.userId} == ${job.userId}">
+					                    <!-- 검색, 버튼 영역 -->
+					                    <div class="search-area" style="display:flex;">
+					                    	<div>
+						                        <button type="button"  class="button user-search-button" 
+												th:onclick="|location.href='@{resumeJob(jobNo=${job.jobNo})}'|">신청자조회</button>
+											</div>
+											<div>
+												<button type="button"  class="button post-button" 
+														th:onclick="|location.href='@{jobUpdate(jobNo=${job.jobNo})}'|">수정</button>
+											</div>
+											<div>
+												<button type="button"  class="button post-button" 
+														th:onclick="|location.href='@{jobDelete(jobNo=${job.jobNo})}'|">삭제</button>
+											</div>
+					                    </div>
+					         </th:block>
+                	</div>
+            	</div>
+            <div style="border-top:1px solid #ddd; padding:10px; text-align:center;">
+             <h2 class="sub-title">이미지</h2>
+				<img th:src="|/fileView/${job.img}|" style="width: 100%;margin:0 auto;" class="img-fluid" alt="Colorlib Template">
+			</div>
         </div>
 
         <!-- 탭 메뉴 -->

@@ -23,7 +23,7 @@
             </div>
           </div>
         </section>
-
+<div class="container">
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
@@ -43,7 +43,7 @@
 						<!-- 대상id 관리자로 고정 -->
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" name="targetId" id="targetId" hidden="hidden" th:value="admin">
+								<input type="text" name="targetId" id="targetId" hidden="hidden" th:value="admin" >
 							</div>
 						</div>
 						
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 	</div>
-
+</div>
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");

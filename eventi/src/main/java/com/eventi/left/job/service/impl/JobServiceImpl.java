@@ -60,13 +60,13 @@ public class JobServiceImpl implements JobService{
 	
 	//게시글수정
 	@Override
-	public int getJobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO,MultipartFile[] uploadFile) {
+	public int getJobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		//사진첨부 
+		int r = jobmapper.getJobUpdate(jobBoardVO);
 		if(uploadFile != null && uploadFile.length>0 && uploadFile[0].getOriginalFilename() !="") {
 			jobBoardVO.setImg(uploadFile[0].getOriginalFilename());
 			uploadFiles(uploadFile, jobBoardVO);
 		}
-		int r = jobmapper.getJobUpdate(jobBoardVO);
 		return r;
 	}
 	

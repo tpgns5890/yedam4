@@ -70,7 +70,11 @@
 	
 	<!-- 상세조회 -->
 	<select id="getResumeDetail" resultType="com.eventi.left.resume.service.ResumeBoardVO"> 
-		SELECT * 
+		SELECT RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, 
+			(SELECT SEV_NM 
+		          FROM FILES 
+		          WHERE TARGET_ID = RESUME_NO
+		         AND ROWNUM=1) AS "IMG", USER_NAME, USER_PHONE, HIRE, JOB_WRITER
 		FROM RESUME_BOARD
 		WHERE RESUME_NO = #{resumeNo}
 	</select>
@@ -104,7 +108,8 @@
 		</selectKey>
 	
 		INSERT INTO RESUME_BOARD
-		(RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, IMG, USER_NAME, USER_EMAIL, USER_PHONE, JOB_WRITER) <!-- DB -->
+		(RESUME_NO, SEEKER_ID, TITLE, JOB_NO, CNTN, 
+			IMG, USER_NAME, USER_EMAIL, USER_PHONE, JOB_WRITER) <!-- DB -->
 		VALUES(#{resumeNo}, #{seekerId}, #{title}, 
 				#{jobNo}, #{cntn}, #{img}, #{userName}, #{userEmail}, #{userPhone}, #{jobWriter}) <!-- VO -->
 	</insert>

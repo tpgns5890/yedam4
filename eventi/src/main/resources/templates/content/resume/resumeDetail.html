@@ -271,7 +271,7 @@ footer {
    <section id="check">
 	 <nav id="left">
 	  <div id="detail">
-		<!--<img class="profile" th:src="|/fileView/${file.sevNm}|">-->
+		<img class="profile" th:src="|/fileView/${detail.img}|" style="width: 250px; height: 250px">
   		
   		<label style="display:none;"class="label" id="seekerId" th:text="${detail.seekerId}"></label>
   		<h3 id="userName" th:text="|이름: ${detail.userName}|"></h3>
@@ -323,13 +323,8 @@ footer {
                     	<div class="border">
 							<p th:utext="${detail.cntn}"></p>
                     	</div>
-                    	
-                    	<h4>이미지</h4>
-                    	<div class="border">
-							<p th:utext="${detail.img}"></p>
-                    	</div>
 
-							 <!-- //페이징 경로 :: 문자 -->
+					<!-- //페이징 경로 :: 문자 -->
 							<div class="row mt-5" id="paging">
 								<div class="col text-center">
 									<div class="block-27" id="returnPaging">
@@ -355,6 +350,11 @@ footer {
   </article>
 </section>
 </div>
+	<!-- 이미지 나타내기 -->	
+	<div th:each="f : ${file}">
+		<a><img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+	</div>
+
 <script>
 	//csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");

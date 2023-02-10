@@ -6,7 +6,7 @@
 	<!-- 검색창 입력 시 -->
 	<where>
 		<if test="ttl !=null and ttl != ''">
-			AND ( TTL LIKE '%${ttl}%' OR NOTICE_CNTN LIKE '%${ttl}%' ) <!-- where or를 ()로 묶어야 밑으로 안감 and가 먼저  -->
+			AND ( TTL LIKE '%${ttl}%' OR NOTICE_CNTN LIKE '%${ttl}%' ) 
 		</if>
 	</where>
 </sql>	
@@ -16,6 +16,7 @@
 		FROM (SELECT ROWNUM RN, A.* 
 				FROM(SELECT * FROM NOTICE
 		<include refid="nSelect" />
+		ORDER BY NOTICE_NO
 			<![CDATA[
 			   ) A WHERE ROWNUM <= #{last}) 
 	    WHERE RN >= #{first}

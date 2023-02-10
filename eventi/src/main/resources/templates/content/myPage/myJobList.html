@@ -103,68 +103,64 @@
 			</div>
 		</div>
 		
-	
-
-
-		<script>
+<script>
+	//csrf 설정	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 		
-		//페이지이동 및 검색
-		//페이징개수 변환 myContest 동적쿼리
-		function gopage(i) {
-			//내용초기화
-			$('input[name="title"]').val('');
-			$('input[name="jobCntn"]').val('');
-			searchFrm.page.value = i;
-			searchFrm.submit();
-		 }
-		
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
+	//페이지이동 및 검색
+	//페이징개수 변환 myContest 동적쿼리
+	function gopage(i) {
+		//내용초기화
+		$('input[name="title"]').val('');
+		$('input[name="jobCntn"]').val('');
+		searchFrm.page.value = i;
+		searchFrm.submit();
+	}
 
-		// tr 전체체크시 모든항목 체크되도록 
-		let allDelete = document.querySelector("#allDelete")
-		let deleteCheck = document.querySelector(".delete")
-		allDelete.addEventListener('change', function () {
-			//forEach 반복문사용.
-			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
-					deleteCheck.checked = allDelete.checked;
-			})
+	// tr 전체체크시 모든항목 체크되도록 
+	let allDelete = document.querySelector("#allDelete")
+	let deleteCheck = document.querySelector(".delete")
+	allDelete.addEventListener('change', function () {
+		//forEach 반복문사용.
+		document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+			deleteCheck.checked = allDelete.checked;
 		})
+	})
 		
-
-		//게시글 삭제
-		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
+	//게시글 삭제
+	document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
 		
-		function deleteContest(deleteCheck) {
-			let trs = document.querySelectorAll('table>tbody>tr');
+	function deleteContest(deleteCheck) {
+		let trs = document.querySelectorAll('table>tbody>tr');
 
-			if (!confirm('게시글을 삭제하시겠습니까?')) {
-				return false;
-			} else {
-				for (let i = 0; i < trs.length; i++) {
-					if (trs[i].children[0].children[0].checked) {
+		if (!confirm('게시글을 삭제하시겠습니까?')) {
+			return false;
+		} else {
+			for (let i = 0; i < trs.length; i++) {
+				if (trs[i].children[0].children[0].checked) {
 						
-						let jobNo = trs[i].children[1].textContent; //체크된 공모번호
-
-						//삭제처리 ajax
-						$.ajax({
-							url: '/myJobDelete',
-							method: "get",
-							data: {jobNo}
-						}).then(res => {
-							if (res == 1) {
-								trs[i].remove(); // tr 화면동적 삭제
-								alert('삭제 완료');
-							} else {
-								alert('삭제 불가능합니다.');
-							}
-						})
+				let jobNo = trs[i].children[1].textContent; //체크된 공모번호
+				
+				//삭제처리 ajax
+				$.ajax({
+					url: '/myJobDelete',
+					method: "get",
+					data: {jobNo}
+				}).then(res => {
+					if (res == 1) {
+						trs[i].remove(); // tr 화면동적 삭제
+						alert('삭제 완료');
+					} else {
+						alert('삭제 불가능합니다.');
 					}
-				}
+				})
 			}
 		}
+	}
+}
 		
-	</script>
-	</div>
+</script>
+        </div>
 </body>
 </html>

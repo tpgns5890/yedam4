@@ -26,22 +26,20 @@
             
           
             <h2 class="mb-3 mt-5" th:text=${nocDetail.noticeNo}></h2>
-            <h2 class="mb-3" th:text=${nocDetail.ttl}></h2>
-				<p th:text=${nocDetail.noticeCntn}></p>
-				<p th:text=${nocDetail.dt}></p>
+            <h2 class="mb-3" th:text="|제목: ${nocDetail.ttl}|"></h2>
+				<p th:text="|내용: ${nocDetail.noticeCntn}|"></p>
+				<p th:text="|작성날짜: ${nocDetail.dt}|"></p>
 				<p th:text=${nocDetail.img}></p>
-				<p th:text=${nocDetail.userId}></p>
-				<p th:text=${nocDetail.see}></p>
+				<p th:text=${nocDetail.userId} hidden="hidden"></p>
+				<p th:text="|조회수: ${nocDetail.see}|"></p>
 			
 			<!-- 관리자일 경우에만 버튼 보이기 -->
-			 <th:block th:if="${session.member.userId} == ${job.userId}">
              <div class="tag-widget post-tag-container mb-5 mt-5">
               <div class="tagcloud">
-                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocUpdate(noticeNo=${nocDetail.noticeNo})}'|">수정</a>
-                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|">삭제</a>
+                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocUpdate(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">수정</a>
+                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">삭제</a>
               </div>
             </div> 
-             </th:block>
         </div>
       </div>
      </div>

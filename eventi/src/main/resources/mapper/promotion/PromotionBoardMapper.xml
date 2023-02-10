@@ -16,16 +16,27 @@
 </sql>	
 
 <sql id="search">
-		<if test="eName !=null and eName != ''">
-			AND E_NAME LIKE '%'||#{eName}||'%' 
-		</if>
-		<if test="intro!=null and intro!=null != ''">
-			AND INTRO LIKE '%'||#{intro}||'%'  
-		</if>
+			<if test="eName !=null and eName != ''">
+				AND E_NAME LIKE '%'||#{eName}||'%' 
+			</if>
+			<if test="intro!=null and intro!=null != ''">
+				AND INTRO LIKE '%'||#{intro}||'%'  
+			</if>
 </sql>		
+
+<sql id="countSearch">
+		<where>
+			<if test="eName !=null and eName != ''">
+				AND E_NAME LIKE '%'||#{eName}||'%' 
+			</if>
+			<if test="intro!=null and intro!=null != ''">
+				AND INTRO LIKE '%'||#{intro}||'%'  
+			</if>
+		</where>
+</sql>
 	<!-- 홍보게시판 메인 -->
 	<select id="proList" resultType="com.eventi.left.promotion.service.PromotionVO">
-		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO,
+		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, code_select(LOC) LOC, INTRO,
 		code_select(E_TYPE) E_TYPE, ENTRANCE, ACCOMMODATE, 
 		(SELECT SEV_NM 
                   FROM FILES 
@@ -45,7 +56,7 @@
 	
 	<!-- 인기게시물 조회 -->
 	<select id="popularList" resultType="com.eventi.left.promotion.service.PromotionVO">
-		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO,
+		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, code_select(LOC) LOC, INTRO,
 		code_select(E_TYPE) E_TYPE, ENTRANCE, ACCOMMODATE, 
 		(SELECT SEV_NM 
                   FROM FILES 
@@ -67,7 +78,7 @@
 	<select id="count" resultType="int">
 		SELECT COUNT(*)
 		FROM PROMOTION_BOARD
-		<include refid="pSelect" />
+		<include refid="countSearch" />
 	</select>
 	
 	<!-- 게시판 조회수 -->
@@ -79,7 +90,7 @@
 	
 	<!-- 게시글 상세조회 -->
 	<select id="proDetail" resultType="com.eventi.left.promotion.service.PromotionVO">
-		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO,
+		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, code_select(LOC) LOC, INTRO,
 		code_select(E_TYPE) E_TYPE, ENTRANCE, ACCOMMODATE, 
 		(SELECT SEV_NM 
                   FROM FILES 
@@ -140,7 +151,7 @@
 	
 	<!-- 마이페이지 홍보게시글 조회 -->
 	<select id="myPromotionList" resultType="com.eventi.left.promotion.service.PromotionVO">
-		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, LOC, INTRO,
+		SELECT PRO_NO, USER_ID, E_NAME, E_SDAY, E_EDAY, code_select(LOC) LOC, INTRO,
 				code_select(E_TYPE) E_TYPE, ENTRANCE, ACCOMMODATE, IMG, SEE, DT
 		FROM (SELECT ROWNUM RN, A.* 
 		       FROM(SELECT * FROM PROMOTION_BOARD

@@ -2,14 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
+   layout:decorate="~{layouts/default_layout}"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-	<style>
-		.label{
+<link rel="stylesheet" href="/css/contest/model.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
+<link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
+<style>
+	.label{
 			color: black;
-		}
-	</style>
+	}
+</style>
 </head>
 
 <div layout:fragment="content">
@@ -22,29 +26,36 @@
               </div>
             </div>
           </div>
-        </section>
-   
-		<div class="row no-gutters">
-		<div class="col-md-7">
+</section>
+<div class="contestContainer">
+	
+	<div class="row no-gutters">
+		<div class="col-md-7" style="width: 100%;">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">구인게시글 수정-----------------</h3>
-				<form method="POST" id="jobUpdate" name="jobUpdate"class="contactForm">
+				<h3 class="mb-4">[구인게시글 수정]</h3>
+				<form action="/jobUpdate" method="POST" id="jobUpdate" name="jobUpdate" class="contactForm" enctype="multipart/form-data">
 				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-					<div class="row">
+				<input type="hidden" name="userId" id="userId" th:value="${update.userId}" readonly>
+				<input type="text" name="jobNo" id="jobNo" th:value="${update.jobNo}" hidden="hiddden"> 	
+					
+					
+				<!-- 	<label>제 목</label><input type="text" class="form-control" name="title" id="title" th:value=${update.title} style="width: 80%;" >
+					<label>내 용</label><textarea name="jobCntn" class="form-control" id="jobCntn" cols="30" rows="4" th:utext=${update.jobCntn} style="width: 100%;" cols="30" rows="4"></textarea>	 -->
+					
+				<!-- 	<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="hidden" name="jobNo" id="jobNo" th:value="${update.jobNo}"> <label
-									class="label" for="ttl">제목</label> 
+								<label class="label" for="ttl">제목</label> 
 									<input type="text" class="form-control" name="title" id="title" th:value=${update.title}>
 							</div>
-						</div>
+						</div> -->
 
-						<div class="col-md-12">
+						<!-- <div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">내용</label>
 								<textarea name="jobCntn" class="form-control" id="jobCntn" cols="30" rows="4" th:utext=${update.jobCntn}></textarea>
 							</div>
-						</div>
+						</div> -->
 						
 						<div class="col-md-12">
 							<div class="form-group">
@@ -55,17 +66,21 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">위치</label>
-								<textarea name="loc" class="form-control" id="loc" cols="30" rows="4" th:utext=${update.loc}></textarea>
+								<label class="label" for="#">근무시간</label>
+								<input type="text" class="form-control" name="wHour" id="wHour" th:value=${update.wHour}>
 							</div>
 						</div>
 						
-		<!--				<div class="col-md-12">
+						<!-- 지역선택 -->
+						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">행사유형</label>
-								<textarea name="eType" class="form-control" id="eType" cols="30" rows="4" th:utext=${update.eType}></textarea>
+								<label class="label" for="#">지역</label>
+								<select id="loc" name="loc" >
+									<option value="">-- 지역 선택 --</option>
+									<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+								</select>
 							</div>
-						</div>-->
+						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
@@ -108,8 +123,8 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">근무시간</label>
-								<input type="text" class="form-control" name="wHour" id="wHour" th:value=${update.wHour}>
+								<label class="label" for="#">마감일</label>
+								<input type="date" class="form-control" name="closeDt" id="closeDt" th:value="${#dates.format(update.closeDt, 'yyyy-MM-dd')}">
 							</div>
 						</div>
 						
@@ -127,32 +142,17 @@
 							</div>
 						</div>
 						
+						 <!-- 이미지수정 -->
 						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">마감일</label>
-								<input type="date" class="form-control" name="closeDt" id="closeDt" th:value="${#dates.format(update.closeDt, 'yyyy-MM-dd')}">
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group" id="fileInsert">
-								<!-- 이미지가 있을 경우와 없을 경우 if문으로 처리 -->
-								<input type="file" class="form-control" id="imgInp" name="uploadFile" th:if="|${file == null}|"/>
-								<div th:each="f : ${file}">
-									<div th:if="|/fileView/${f.sevNm} != null}|">
-										<img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
-										<button type="button" id="cancel" class="btn btn-warning cancel">
-							              <span>Cancel</span>
-							          	</button>
+								<div class="form-group" id="fileInsert">
+									<input type="file" class="form-control" id="imgInp"  name="uploadFile" >
+									<div th:each="f : ${file}">
+											<img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
+											<button type="button" id="cancel" class="btn btn-warning cancel">
+								              <span>Cancel</span>
+								          	</button>
 									</div>
 								</div>
-							</div>
-						</div>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="hidden" name="userId" id="userId" th:value="${update.userId}" readonly>
-							</div>
 						</div>
 
 						<div class="col-md-12">
@@ -166,9 +166,8 @@
 				</form>
 			</div>
 		</div>
-	</div>
-
-
+</div>
+</div>
 <script>
 let oEditors = []
 
@@ -187,29 +186,8 @@ $(document).ready(function() {
 })
 
 $('#update').on('click', function update() {
-	oEditors.getById["jobCntn"].exec("UPDATE_CONTENTS_FIELD", [])
-	let jobCntn = document.getElementById("jobCntn").value;
-	let jobNo = document.getElementById("jobNo").value;
-
-	var data = $('form[name="jobUpdate"]').serializeArray();
-
-	//구직테이블 수정처리
-	$.ajax({
-		url : "/jobUpdate",
-		method : 'post',
-		contentType : 'application/x-www-form-urlencoded',
-		data : data,
-		success : function(data) {
-			if(data == 1){
-			alert('수정완료!');
-			location.href = '/jobList';
-			}else
-				alert('수정실패')
-		},
-		fail : function(result) {
-			alert('필수항목을 입력해주세요')
-		}
-	})
+	jobUpdate.submit();
+	
 })
 
 	//파일 업로드 이미지 미리보기
