@@ -59,15 +59,11 @@ public class JobBoardController {
 			files = filesService.fileList(img.getJobNo());
 			img.setFiles(files);
 			
-			//파일리스트 저장된 파일정보가 홍보번호와 같다면 이미지셋팅.
-			/*
-			 * for(FilesVO file : files) { if(file.getTargetId().equals(img.getJobNo())) {
-			 * img.setImg(file.getSevNm()); } }
-			 */
 		}
 		model.addAttribute("jobList", imgs);
-		//이미지
-		//model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
+		
+		//지역코드 가져오기
+		model.addAttribute("areas", codeService.getCountry());
 		return "content/job/jobList";
 	}
 	
@@ -82,7 +78,10 @@ public class JobBoardController {
 	//구인등록폼이동
 	@RequestMapping(value = "/jobInsert", method=RequestMethod.GET) 
 	public String jobUpload(Model model, JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		
 		model.addAttribute("types", codeService.getType());
+		//지역코드 가져오기
+		model.addAttribute("areas", codeService.getCountry());
 		return "content/job/jobInsertForm";
 	}
 	
@@ -91,7 +90,6 @@ public class JobBoardController {
 		 //form으로 보냄
 		public String JobInsertForm(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 			jobService.jobInsert(jobBoardVO, filesVO, uploadFile); //값이 vo자동으로 저장
-			/* return "redirect:/jobList"; */
 			return "redirect:/jobDetail?jobNo=" + jobBoardVO.getJobNo();
 			//rttr.addFlashAttribute("result", "게시글 등록 완료!"); //데이터전달
 	}
@@ -135,17 +133,19 @@ public class JobBoardController {
 		List<FilesVO> files = new ArrayList<>();
 		files = filesService.fileList(jobBoardVO.getJobNo());
 		model.addAttribute("files", files);
-		//이미지
-		//model.addAttribute("file", filesService.fileList(jobBoardVO.getJobNo()));
+		
+		//지역코드 가져오기
+		model.addAttribute("areas", codeService.getCountry());
 		return "content/job/jobUpdateForm";
 	}
 	
 	//게시글 수정
 	@PostMapping("/jobUpdate")
-	@ResponseBody //ajax방식
-	public int jobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
-		return jobService.getJobUpdate(jobBoardVO, filesVO, uploadFile);
+	public String jobUpdate(JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
+		 jobService.getJobUpdate(jobBoardVO, filesVO, uploadFile);
+		 
 			//rttr.addFlashAttribute("result", "게시글 수정 완료!");
+		 return "redirect:/jobList"; 
 	}
 	
 	//게시글 삭제

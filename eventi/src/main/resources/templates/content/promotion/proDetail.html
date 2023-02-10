@@ -64,6 +64,7 @@ h4 {
 			<!-- 이미지 출력 -->
 			 <img th:src="|/fileView/${proDetail.img}|" style="width: 500px; height: 570px" class="img-fluid" alt="Colorlib Template">		
 			</div>
+			
 		<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 			<div id="show"></div>
 				<h2 th:text=${proDetail.eName}></h2>
@@ -79,6 +80,9 @@ h4 {
 		
 		<div>
 			<p th:text="|행사유형: ${proDetail.eType}|"></p>
+		</div>
+		<div>
+			<p th:text="|위치: ${proDetail.loc}|"></p>
 		</div>
 		<div>
 			<p th:text="|작성날짜: ${#dates.format(proDetail.dt, 'yyyy-MM-dd')}|"></p>

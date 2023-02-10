@@ -27,6 +27,7 @@
           </div>
         </section>
 
+<div class="container">
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
@@ -38,13 +39,10 @@
 					 	<div class="col-md-12">
 							<div class="form-group">
 							<input type="hidden" name="proNo" id="proNo" th:value="${proUpdate.proNo}">
-							
-								<label class="label" for="#">회원ID</label>
-								<input type="text" name="userId" id="userId" th:value=${proUpdate.userId}>
+							<input type="text" name="userId" id="userId" th:value=${proUpdate.userId} hidden="hidden">
 							</div>
 						</div>
 						 
-						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="ttl">행사명</label> 
@@ -66,10 +64,13 @@
 							</div>
 						</div>
 						
+						<!-- 지역선택 -->
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">위치</label>
-								<input type="text" class="form-control" name="loc" id="loc" th:value=${proUpdate.loc}>
+								<select id="loc" name="loc" >
+									<option value="">-- 지역 선택 --</option>
+									<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+								</select>
 							</div>
 						</div>
 						
@@ -79,13 +80,6 @@
 								<textarea name="intro" class="form-control" id="intro" cols="30" rows="4" th:utext=${proUpdate.intro}></textarea>
 							</div>
 						</div>
-						
-						<!--<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="#">행사유형</label>
-								<input type="text" class="form-control" name="eType" id="eType" th:value=${proUpdate.eType}>
-							</div>
-						</div>-->
 						
 						<div class="col-md-12">
 							<div class="form-group">
@@ -154,7 +148,7 @@
 			</div>
 		</div>
 	</div>
-
+</div>
 <script>
 let oEditors = []
 

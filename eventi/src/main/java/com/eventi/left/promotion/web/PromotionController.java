@@ -57,7 +57,9 @@ public class PromotionController {
 			content.setFiles(files);
 		}
 		model.addAttribute("proList", contents);
-
+		
+		//지역코드 가져오기
+		model.addAttribute("areas", codeService.getCountry());
 		return "content/promotion/proList";
 	}
 	
@@ -93,6 +95,8 @@ public class PromotionController {
 			//option 코드 가져오기
 			model.addAttribute("nextNo", proService.getSeq());
 			model.addAttribute("types", codeService.getType()); 
+			//지역코드 가져오기
+			model.addAttribute("areas", codeService.getCountry());
 			return "content/promotion/proInsert";
 		}
 	
@@ -112,7 +116,8 @@ public class PromotionController {
 			List<FilesVO> files = new ArrayList<>();
 			files = filesService.fileList(promotionVO.getProNo());
 			model.addAttribute("files", files);
-			/* model.addAttribute("file", filesService.fileList(promotionVO.getProNo())); */
+			//지역코드 가져오기
+			model.addAttribute("areas", codeService.getCountry());
 			return "content/promotion/proUpdate";
 		}
 		

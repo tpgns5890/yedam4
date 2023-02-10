@@ -50,7 +50,7 @@
 							
 							<!-- 등록된 게시글로 이동 -->
 							<th:block >
-								<td th:text=${info.resumeNo} th:onclick="|location.href='@{seekerInfo(resumeNo=${info.resumeNo})}'|"></td>
+								<td th:text=${info.resumeNo} th:onclick="|location.href='@{resumeDetail(resumeNo=${info.resumeNo})}'|"></td>
 							</th:block>
 								
 							<td th:text=${info.title}></td>

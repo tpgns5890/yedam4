@@ -107,7 +107,9 @@ public class ResumeController {
 	@RequestMapping(value = "/ApplyForm", method=RequestMethod.GET) 
 	public String getJob(Model model, MemberVO memberVO, JobBoardVO jobBoardVO, FilesVO filesVO, MultipartFile[] uploadFile) {
 		model.addAttribute("apply", resumeService.getApplyForm(memberVO)); //값이 저장됨
-		model.addAttribute("jobNo", jobBoardVO.getJobNo());
+		//model.addAttribute("jobNo", jobBoardVO.getJobNo());
+		//작성자 가져오기
+		model.addAttribute("job", jobService.getJob(jobBoardVO));
 		System.out.println(jobBoardVO);
 		return "content/resume/ApplyForm"; //content -html링크
 	}

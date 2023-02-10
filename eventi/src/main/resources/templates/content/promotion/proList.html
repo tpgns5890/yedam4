@@ -11,8 +11,8 @@
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <style>
 .content-wrap {
-    width: 1400px;
-    margin: 60px auto 0;
+     width: 81%;
+     margin: 20px auto 0;
 }
 .option-area,
 .card-area {
@@ -233,6 +233,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+#mid-section{
+margin: 0 auto;
+    width: 81%;
+}
 </style>
 </head>
 <body>
@@ -302,6 +306,7 @@ table {
         </div>
     </main>
     
+    <div id="mid-section">
 		<!-- 전체게시물 -->      
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
@@ -390,7 +395,7 @@ table {
 					<div th:each="f : ${file}">
 				       <a><img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 				   	</div>
-          
+         </div>
 <script>
 
 //데이터 없을시 이미지 띄우기 

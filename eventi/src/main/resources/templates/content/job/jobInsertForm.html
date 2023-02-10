@@ -2,11 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <link rel="stylesheet" href="/css/contest/model.css">
 <link rel="stylesheet" href="/css/contest/cotestForm.css">
- <link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
+<link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
 <style>
 	.label{
 	color: black;
@@ -98,7 +99,26 @@
 	font-size: 18px;
 	text-align: center;
 	margin-top: 10px
-	}	
+	}
+	#saveFile{
+		position: absolute;
+	    font-size: 16px;
+	    font-weight: bold;
+	    right: -33px;
+}
+	
+	select, input[type=text], input[type=number], input[type=date] {
+	width: 30%;
+	padding: 12px;
+	margin: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: vertical;
+}
+#section-num{
+	display: flex;
+    align-items: center;
+}
 </style>
 </head>
 <body>
@@ -116,9 +136,10 @@
         </section>
         
 <div class="contestContainer">
-<input type="button" id="saveFile" value="불러오기" class="btn btn-primary">
+
 	<div class="row no-gutters">
-		<div class="col-md-7">
+		<div class="col-md-7" style="width: 100%;">
+			<input type="button" id="saveFile" value="불러오기" class="btn btn-primary">
 			<div class="contact-wrap w-100 p-md-5 p-4">
 				<h3 class="mb-4">[구인게시글 작성]</h3>
 				<form action="/jobInsert" method="POST" id="jobInsert" name="jobInsert" class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
@@ -126,42 +147,41 @@
 					<input type="hidden" class="form-control" name="userId" id="userId" th:value="${session.member.userId}" readonly>
 						<p id="ptext">*우대사항, 자격, 이미지 외에 모두 입력하세요.</p>
 						
-				<ul>
-					<li><label>제 목</label><input type="text" class="form-control" name="title" id="title" placeholder="예시:OO분을 구합니다"><br /></li>
-					<li><label>내 용</label><textarea name="jobCntn" class="form-control" id="jobCntn" cols="30" rows="4" placeholder="할 일을 적어주세요"></textarea><br /></li>
-					<li><label>수당</label><input type="number" class="form-control" name="pay" id="pay" placeholder="숫자만 입력"><br /></li>
-					<li><label>지역</label>
-						
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="label" for="mcAreaList">지역</label> 
-								<select id="mcAreaList" name="mcAreaList" onchange="mcAreaFun(this)">
-									<option value="">-- 지역 선택 --</option>
-									<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
-								</select>
-								<input type="hidden" value="" name="mcArea" id="mcArea" />
-					             <ul class="hashtag" id="mcAreaL"></ul>
-							</div>
+
+					<label>제 목</label><input type="text" class="form-control" name="title" style="width: 80%;" id="title" placeholder="예시:OO분을 구합니다"><br />
+					<label>내 용</label><textarea name="jobCntn" class="form-control" id="jobCntn" style="width: 100%;" cols="30" rows="4" placeholder="할 일을 적어주세요"></textarea><br />
+					<div>
+						<div id="section-num">
+							<label>수당</label><input type="number" class="form-control" name="pay" id="pay" placeholder="숫자만 입력">
+							<label>근무시간</label><input type="number" class="form-control" name="wHour" id="wHour">
 						</div>
-					
-					
-					<li><label>행사유형</label> 
-						<select id="eType" name="eType" onchange="jobStyle(this)">
+						<div style="display: flex;flex-direction: row;align-items: center;">
+							<!-- 지역선택 -->
+								<label>지역</label>
+									<select id="loc" name="loc" >
+										<option value="">-- 지역 선택 --</option>
+										<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
+									</select>
+								<label>행사유형</label> 
+								<select id="eType" name="eType" onchange="jobStyle(this)">
 									<option value="">행사유형을 선택해 주세요.</option>
 									<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 								</select>
-						<li id="eTypeTag"></li>		
-										
-					<li><label>근무시작일</label><input type="date" class="form-control" name="wSday" id="wSday"><br /></li>
-					<li><label>근무종료일</label><input type="date" class="form-control" name="wEday" id="wEday"><br /></li>
-					<li><label>근무시간</label><input type="number" class="form-control" name="wHour" id="wHour"><br /></li>
-					<li><label>자격</label><textarea name="qualification" class="form-control" id="qualification" cols="30" rows="4" placeholder="필요하다면 입력하세요"></textarea><br /></li>
-					<li><label>우대사항</label><textarea name="preference" class="form-control" id="preference" cols="30" rows="4" placeholder="필요하다면 입력하세요"></textarea></li>
-					<li><label>마감일</label><input type="date" class="form-control" name="closeDt" id="closeDt">
-				</ul>
-					
-					<input type="checkbox" id="save" name="save" th:value="N" class="btn btn-primary">임시저장
+						</div>
 						
+						<div style="display: flex;align-items: center;justify-content: space-between;">				
+							<label style="width:81px;">근무시작일</label><input type="date" style="width:160px;" class="form-control" name="wSday" id="wSday">
+							<label style="width:81px;">근무종료일</label><input type="date" style="width:160px;" class="form-control" name="wEday" id="wEday">
+							<label style="width:50px;">마감일</label><input type="date" style="width:160px;" class="form-control" name="closeDt" id="closeDt">
+						</div>
+						
+						<div>
+							<label>자격</label><textarea name="qualification" class="form-control" id="qualification" cols="30" rows="4" placeholder="필요하다면 입력하세요"></textarea><br />
+							<label>우대사항</label><textarea name="preference" class="form-control" id="preference" cols="30" rows="4" placeholder="필요하다면 입력하세요"></textarea>
+						</div>
+					</div>
+					
+						<!-- 이미지 첨부 -->
 						<div class="col-md-12">
 							<div class="form-group">
 								<input type="file" id="imgInp" name="uploadFile" multiple="multiple"/>
@@ -173,6 +193,7 @@
 								</div>
 							</div>
 						</div>
+					<input type="checkbox" id="save" name="save" th:value="N" class="btn btn-primary">임시저장
 						<!-- 등록버튼 --> 
 						<div class="contestBtn">
 								<input type="submit" id="insert" value="등록" class="btn btn-g btn-round">
@@ -182,7 +203,7 @@
 			</div>
 		</div>
 	</div>
-	
+	</div>
 	<div id="modal">
 			<div class="modal_content">
 				<h2>임시저장된 게시글입니다.</h2>

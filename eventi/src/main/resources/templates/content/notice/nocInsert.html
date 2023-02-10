@@ -21,7 +21,7 @@
             </div>
           </div>
         </section>
-
+<div class="container">
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
@@ -29,6 +29,8 @@
 				<form action="/nocInsert" method="POST" id="nocInsert" name="nocInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+					<input type="text" name="userId" id="userId" hidden="hidden" th:value="admin">
+					
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -52,12 +54,6 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" name="userId" id="userId" hidden="hidden" th:value="admin">
-							</div>
-						</div>
-
-						<div class="col-md-12">
-							<div class="form-group">
 								<input type="submit" id="insert" value="등록"
 									class="btn btn-primary">
 								<div class="submitting"></div>
@@ -68,7 +64,7 @@
 			</div>
 		</div>
 	</div>
-
+</div>
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");
