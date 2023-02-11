@@ -199,26 +199,27 @@ public class ContestServiceImpl implements ContestService {
 		int result = 0;
 		
 		//삭제 리스트.
-		List<String>cNoList= vo.getCNoList();
+		List<String>cNoList=  vo.getCNoList();
+		System.out.println("+++++++++++++++" + vo.getCNoList());
 		
 		for(String cNo : cNoList) {
 			// 작성자정보, 공모전 정보.
-			MemberVO user = memberMapper.getMember(cNo);
 			ContestVO contest = mapper.getContest(cNo);
+			MemberVO user = memberMapper.getMember(contest.getWriter());
 			
 			// 응모한 디자인이 있으면 삭제불가.
 			if (dMapper.checkDesign(cNo) > 0) {
 				return result;
 			}else {
 				LikesVO like = new LikesVO();
-				like.setTargetNo(vo.getcNo());
+				like.setTargetNo(cNo);
 				like.setCategory("T01"); 
 				likeMapper.likeDelete(like);// 공모전 좋아요 삭제  
-				fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
-				wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
+				fMapper.deleteFile(cNo); // 공모전 이미지 삭제
+				wMapper.deleteWinner(cNo); // 공모전 상금 삭제
 				
 				// 출금요청 insert
-				if (moneyMapper.oneMoneySelect(vo.getcNo()) != null) {
+				//if (moneyMapper.oneMoneySelect(vo.getcNo()) != null) {
 					MoneyVO money = new MoneyVO();
 					money.setBankName(user.getBankCode()); // 은행정보
 					money.setBankAccount(user.getAccnt()); // 계좌번호
@@ -230,7 +231,7 @@ public class ContestServiceImpl implements ContestService {
 					money.setTargetId(contest.getcNo());
 					money.setMoCat("T01");
 					moneyMapper.insertMoney(money);
-				}
+				//}
 				result += mapper.deleteContest(contest);
 			}
 		}

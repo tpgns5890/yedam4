@@ -37,7 +37,6 @@ public class MoneyServiceImpl implements MoneyService{
 	public int insertMoney(MoneyVO vo) {
 		if(vo.getMoType().equals("M2")) {
 			MemberVO member = memberMapper.getMember(vo.getTargetId());
-			System.out.println("+++++++++++++"+member.getBankCode());
 			vo.setBankName(member.getBankCode());
 			vo.setBankAccount(member.getAccnt());
 			vo.setUserName(member.getDepotr());
