@@ -9,6 +9,11 @@
 <link rel="stylesheet" href="/css/contest/cotestForm.css">
 <link rel="stylesheet" href="/css/contest/model.css">
 <link rel="stylesheet" href="/css/contest/button.css">
+<style>
+	#pwUpdateModel label {
+    width: 120px;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
@@ -109,7 +114,7 @@
 				<label>비밀번호확인</label><input type="text" id="passwordchk" name="passwordchk" required="required"><br>
 				<font id="pw_feedback" size="2"></font>
 				<div id="checkDiv">
-					<button id="check" class="btn btn-g btn-round modelBtn"  type="button">확인</button>
+					<button id="check" class="btn btn-y btn-round modelBtn" type="button">확인</button>
 				</div>
 			</div>
 			<div class="modal_layer"></div>
@@ -125,7 +130,7 @@
 				<label>비밀번호확인</label><input type="text"   id="pw2" name="passwordchk" ><br>
 				<font id="pw_feedback" size="2"></font>
 				<div id="checkDiv">
-					<button id="updatePW" class="btn btn-g btn-round modelBtn1" type="button">변경</button>
+					<button id="updatePW" class="btn btn-y btn-round modelBtn1" type="button">변경</button>
 				</div>
 			</div>
 			<div class="modal_layer"></div>
@@ -148,13 +153,16 @@
 
 			// When the user clicks on <span> (x), close the modal
 			span.onclick = function() {
-				modal.style.display = "none";
 				$('#password').val('');
 				$('#passwordchk').val('');
 				$("#pw_feedback").html('');
+				modal.style.display = "none";
 			}
 			
 			$('#pw_close').on("click", function(){
+				$('input[name="prevPassword"]').val('');
+				$('#pw1').val('');
+				$("#pw2").val('');
 				$('#pwUpdateModel').css('display', 'none');
 			})
 
@@ -183,11 +191,6 @@
 				let pwChekc = $('input[name="prevPassword"]').val();
 				let pw1 = $('#pw1').val();
 				let pw2 = $('#pw2').val();
-				
-				console.log(pwChekc)
-				console.log(pw1)
-				console.log(pw2)
-				
 				
 				if(pwChekc == '' || pw1 == '' || pw2 == '' ){
 					alert('정보를 입력해주세요.');

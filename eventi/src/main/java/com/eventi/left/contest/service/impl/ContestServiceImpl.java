@@ -90,25 +90,21 @@ public class ContestServiceImpl implements ContestService {
 	// 공모전 등록
 	@Override
 	public int insertContest(ContestVO vo, WinnerVO wvo, MultipartFile[] uploadFile) {
-
-		// 공모전 우승금액
-		// 1.index 기준으로 등수설정
-		// 2.from입력값이 있다면 insert 및 합계계산후 총상금 지정.
-
-		int hap = vo.getPay();
+		
+		int hap = vo.getPay();// 공모전 등록비
+		wvo.setCoNo(vo.getcNo());// 결제후 전달 된 매개변수값.
+		
+		// from입력값 등록
 		String[] array = wvo.getWinnerPay();
-		wvo.setCoNo(vo.getcNo()); // 공모전번호
-
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] != null && !array[i].equals("")) {
-				System.out.println(i + 1 + "등 : " + array[i] + "원");
 				wvo.setGrade(i + 1); // 등수
 				wvo.setwPay(Integer.parseInt(array[i])); // 상금금액
 				hap += Integer.parseInt(array[i]); // 합계계산
 				wMapper.insertWinner(wvo);
 			}
 		}
-		// 총 상금합계+등록비.(수정하기)
+		// 총 상금합계+등록비
 		vo.setPay(hap);
 
 		// 파일업로드,공모전등록
@@ -117,7 +113,7 @@ public class ContestServiceImpl implements ContestService {
 
 		// 임시저장이 아닌경우만 이메일발송.
 		if (vo.getSave().equals("N")) {
-			// 현재(메인쓰레드) 다른쓰레드로 맡기고 실행(동시에 실행됌)
+			// 수신동의 된 회원에게 이메일발송
 			Thread thread = new Thread(new MembersSendMail(vo, result, 0));
 			thread.start();
 		}
@@ -200,37 +196,45 @@ public class ContestServiceImpl implements ContestService {
 	@Override
 	public int deleteContest(ContestVO vo) {
 
-		// 작성자정보, 공모전 정보.
-		MemberVO user = memberMapper.getMember(vo.getWriter());
-		ContestVO contest = mapper.getContest(vo.getcNo());
-
-		// 응모한 디자인이 있으면 삭제불가.
-		if (dMapper.checkDesign(vo.getcNo()) > 0) {
-			return 0;
+		int result = 0;
+		
+		//삭제 리스트.
+		List<String>cNoList= vo.getCNoList();
+		
+		for(String cNo : cNoList) {
+			// 작성자정보, 공모전 정보.
+			MemberVO user = memberMapper.getMember(cNo);
+			ContestVO contest = mapper.getContest(cNo);
+			
+			// 응모한 디자인이 있으면 삭제불가.
+			if (dMapper.checkDesign(cNo) > 0) {
+				return result;
+			}else {
+				LikesVO like = new LikesVO();
+				like.setTargetNo(vo.getcNo());
+				like.setCategory("T01"); 
+				likeMapper.likeDelete(like);// 공모전 좋아요 삭제  
+				fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
+				wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
+				
+				// 출금요청 insert
+				if (moneyMapper.oneMoneySelect(vo.getcNo()) != null) {
+					MoneyVO money = new MoneyVO();
+					money.setBankName(user.getBankCode()); // 은행정보
+					money.setBankAccount(user.getAccnt()); // 계좌번호
+					money.setMoType("M2"); // 출금코드
+					money.setMoPrice(contest.getPay());
+					money.setUserId(contest.getWriter());
+					money.setUserName(user.getName());
+					money.setSettYN("N"); // 출금코드
+					money.setTargetId(contest.getcNo());
+					money.setMoCat("T01");
+					moneyMapper.insertMoney(money);
+				}
+				result += mapper.deleteContest(contest);
+			}
 		}
-		LikesVO like = new LikesVO();
-		like.setTargetNo(vo.getcNo());
-		like.setCategory("T01"); 
-		likeMapper.likeDelete(like);// 공모전 좋아요 삭제  
-		fMapper.deleteFile(vo.getcNo()); // 공모전 이미지 삭제
-		wMapper.deleteWinner(vo.getcNo()); // 공모전 상금 삭제
-
-		// 출금요청 insert
-		if (moneyMapper.oneMoneySelect(vo.getcNo()) != null) {
-			MoneyVO money = new MoneyVO();
-			money.setBankName(user.getBankCode()); // 은행정보
-			money.setBankAccount(user.getAccnt()); // 계좌번호
-			money.setMoType("M2"); // 출금코드
-			money.setMoPrice(contest.getPay());
-			money.setUserId(contest.getWriter());
-			money.setUserName(user.getName());
-			money.setSettYN("N"); // 출금코드
-			money.setTargetId(contest.getcNo());
-			money.setMoCat("T01");
-			moneyMapper.insertMoney(money);
-		}
-
-		return mapper.deleteContest(vo);
+		return result;
 	}
 
 	// 공모전 시퀀스정보
@@ -328,9 +332,6 @@ public class ContestServiceImpl implements ContestService {
 		public void run() {
 			// 수신동의한 멤버리스트.
 			List<MemberVO> emailList = memberMapper.memberEmail();
-			for (MemberVO email : emailList) {
-				System.out.println(email.getUserEmail());
-			}
 
 			// 처리된결과가 있으면
 			if (insert > 0) {

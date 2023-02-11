@@ -288,7 +288,8 @@ public class ContestController {
 
 		// 임시저장한 공모글을 불러오지 않았다면
 		if (vo.getTargetId() == null || vo.getTargetId() == "") {
-			vo.setTargetId(service.getSequence()); // 공모전 결제후 입금(맥시멈 시퀀스값 설정)
+			// 공모전 결제후 입금(맥시멈 시퀀스값 설정)
+			vo.setTargetId(service.getSequence()); 
 		}
 		moneyService.insertMoney(vo);
 		return vo;

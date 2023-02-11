@@ -26,8 +26,7 @@ public class UploadFileMethod {
 	String filePath;
 
 	// 첨부파일 테이블 사용시 쓰이는 메소드
-	public List<FileDto> uploadFiles(MultipartFile[] uploadfile, String targetId, String category)
-			throws IllegalStateException, IOException {
+	public List<FileDto> uploadFiles(MultipartFile[] uploadfile, String targetId, String category) throws IllegalStateException, IOException {
 
 		List<FileDto> list = new ArrayList<FileDto>();
 
@@ -38,14 +37,10 @@ public class UploadFileMethod {
 			// 파일 경로위치에 물리적으로 저장하기
 			for (MultipartFile file : uploadfile) {
 				if (file.getSize() > 0) {
-					FileDto dto = new FileDto(UUID.randomUUID().toString(), file.getOriginalFilename(),
-							file.getContentType());
+					FileDto dto = new FileDto(UUID.randomUUID().toString(), file.getOriginalFilename(), file.getContentType());
 					list.add(dto);
-
 					File newFileName = new File(dto.getUuid() + "_" + dto.getFileName());
-
 					file.transferTo(newFileName);
-					System.out.println(newFileName);
 				}
 			}
 

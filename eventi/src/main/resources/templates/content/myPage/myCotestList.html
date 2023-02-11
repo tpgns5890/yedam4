@@ -47,7 +47,7 @@
 						<th style="width: 30%;">진행기간</th>
 						<th>진행</th>
 						<th>지원수</th>
-						<th>조회/결과등록</th>
+						<th>디자인/결과등록</th>
 						<th>공모전/후기</th>
 						<th>문의내역</th>
 					</tr>
@@ -76,7 +76,7 @@
 						<!-- 임시저장 한경우 -->
 						<th:block th:if="${contest.ing} eq '임시저장'">
 							<td th:text="${contest.ing}"></td>
-							<td th:text="${contest.designCount}"></td>
+							<td th:text="|${contest.designCount}건|"></td>
 							<td></td>
 							<td><button class="btn btn-g btn-round" type="button"
 									id="selete"
@@ -88,26 +88,25 @@
 							<th:block
 								th:if="${contest.winnerCheck} == 0 and ${contest.designCount} == 0">
 								<td th:text="${contest.ing}"></td>
-								<td th:text="${contest.designCount}"></td>
+								<td th:text="|${contest.designCount}건|"></td>
 								<td></td>
 							</th:block>
 
 							<th:block
 								th:if="${contest.winnerCheck} == 0 and ${contest.designCount} > 0">
 								<td th:text="${contest.ing}"></td>
-								<td th:text="${contest.designCount}"></td>
-								<td><button class="btn btn-g btn-round" type="button"
-										id="selete"
-										th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">등록</button></td>
+								<td th:text="|${contest.designCount}건|"></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">결과등록</button></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">상세조회</button></td>
 							</th:block>
 
 							<th:block th:if="${contest.winnerCheck} > 0">
 							
 								<td th:text="종료"></td>
-								<td th:text="${contest.designCount}"></td>
+								<td th:text="|${contest.designCount}건|"></td>
 								
 								<th:block th:if=" ${contest.designCount} > 0 ">
-									<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
+									<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">상세조회</button></td>
 									<td><button class="btn btn-g btn-round" type="button" th:attr="onclick=|winnerList('${contest.cNo}')|">후기등록</button></td>
 								</th:block>
 								
@@ -122,16 +121,16 @@
 
 						<th:block th:if="${contest.ing} eq '진행'">
 							<td th:text="${contest.ing}"></td>
-							<td th:text="${contest.designCount}"></td>
+							<td th:text="|${contest.designCount}건|"></td>
 
 							<th:block th:if=" ${contest.designCount} > 0 ">
-							<td></td>
-								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button" id="selete" th:onclick="|location.href='@{/contest/designRead(cNo=${contest.cNo})}'|">상세조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">상세조회</button></td>
 							</th:block>
 							
 							<th:block th:if=" ${contest.designCount} == 0 ">
 								<td></td>
-								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">조회</button></td>
+								<td><button class="btn btn-g btn-round" type="button" th:onclick="|location.href='@{select(cNo=${contest.cNo})}'|">상세조회</button></td>
 							</th:block>
 						</th:block>
 
@@ -162,7 +161,6 @@
 				<span id="questionCancel" class="close">&times;</span>
 				<h3 id="coNo">공모전 문의내역</h3>
 				<div id="modelSelect"></div>
-				<div id="qBtn"></div>
 			</div>
 			<div class="modal_layer"></div>
 		</div>
@@ -265,13 +263,11 @@
 				},
 				success: function (result) {
 					$('#modelSelect').empty();
-					$('#qBtn').empty();
 	        		 for(data of result){
 	        			 if(data.ttl != null){
-	        				 $('#modelSelect').append(`<p>[${data.qNo}] ${data.ttl}</p>`);
+	        				 $('#modelSelect').append(`<div class="qDiv"><p>[${data.qNo}] ${data.ttl}</p><button class="btn btn-y btn-round qBtn" type="button" onclick="location.href='/contest/select?cNo=${cNo}'">답변등록</button><div>`);
 	        			 }
 	        	   	} 
-	        		 $('#qBtn').append(`<button class="btn btn-g btn-round yBtn" type="button" onclick="location.href='/contest/select?cNo=${cNo}'">답변등록폼 이동</button>`)
 	        		 $('#questionsModel').css('display', 'block');
 	        	   	
 		        },
@@ -318,35 +314,35 @@
 		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
 		
 		function deleteContest(deleteCheck) {
-			
 			let trs = document.querySelectorAll('table>tbody>tr');
+			let cNoList= [];
+			
 			if (!confirm('공모전을 삭제하시겠습니까?')) {
 				return false;
 			} else {
 				for (let i = 0; i < trs.length; i++) {
 					if (trs[i].children[0].children[0].checked) {
-						
 						let cNo = trs[i].children[1].textContent; //체크된 공모번호
-						
-						//삭제처리 ajax
-						$.ajax({
-							url: '/contest/delete',
-							method: "post",
-							data: {cNo},
-							beforeSend: function (xhr) {
-								/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-								xhr.setRequestHeader(header, token);
-							},
-						}).then(res => {
-							if (res == 1) {
-								trs[i].remove(); // tr 화면동적 삭제
-								alert('삭제완료');
-							} else {
-								alert('응모작품이 있어 삭제 불가능합니다.');
-							}
-						})
+						cNoList.push(cNo);
 					}
 				}
+				
+				$.ajax({
+					url: '/contest/delete',
+					method: "post",
+					data: {cNoList},
+					beforeSend: function (xhr) {
+						/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+						xhr.setRequestHeader(header, token);
+					},
+				}).then(res => {
+					if (res > 0) {
+						alert(res + "/" +cNoList.length + '건 삭제완료');
+						location.href = "/contest/mySelect";
+					} else {
+						alert('응모작품이 있어 삭제 불가능합니다.');
+					}
+				})
 				
 			}
 		}

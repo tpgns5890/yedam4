@@ -18,7 +18,7 @@ ul{
 	color: red;
 	font-size: 18px;
 	text-align: center;
-	margin-top: 10px
+	margin: 30px 0 0px;
 }
 </style>
 </head>
@@ -39,13 +39,6 @@ ul{
 			<form action="/contest/update" enctype="multipart/form-data" name="contestfrm" method="post" >
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<ul>
-<!-- 					<li><div th:text="|분류 : ${contest.category}|"></div></li> -->
-<!-- 					<li><div th:text="|작성자 :  ${contest.writer}"></div></li> -->
-<!-- 					<li><div th:text="|공모기간 ${#dates.format(contest.dtReg, 'yyyy-MM-dd')} ~ ${#dates.format(contest.dtCls, 'yyyy-MM-dd')}|"></div></li> -->
-<!-- 					  <th:block th:each="w : ${winnerList}"> -->
-<!-- 					  	<li><div th:text="|${w.grade}등 : ${#numbers.formatInteger(w.wPay, 0, 'COMMA') + '원'}|"></div></li> -->
-<!-- 					  </th:block> -->
-					
 					<li><input hidden="hidden" type="text" name="cNo" th:value="${contest.cNo}"><br /></li> <li>
 					<li> <label>제목</label><input type="text" name="ttl" th:value="${contest.ttl}"><br /></li> <li>
 					<textarea th:utext="${contest.cntn}" id="cntn" name="cntn" class="form-control"  cols="30" rows="4"></textarea>
@@ -60,15 +53,16 @@ ul{
                            <div th:if="|/fileView/${f.sevNm} != null}|">
                               <img id="blah" th:src="|/fileView/${f.sevNm}|" alt = "your image" width="250px" />
                               <button type="button" id="cancel" class="btn btn-warning cancel">
-                                   <span>Cancel</span>
+                                   <span>X</span>
                                   </button>
                            </div>
                         </div>
                      </div>
                   </div>
-
-					<button type="submit" id="updateBtn" class="btn btn-g btn-round">수정</button>
-					<button type="button" id="cancleBtn" class="btn btn-g btn-round" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
+					<div class="contestUpBtn">
+						<button type="submit" id="updateBtn" class="btn btn-y btn-round">수정</button>
+						<button type="button" id="cancleBtn" class="btn btn-g btn-round" th:onclick="|location.href='@{/contest/select(cNo=${contest.cNo})}'|">취소</button>
+					</div>
 			</form>
 		</div>
 	<script>

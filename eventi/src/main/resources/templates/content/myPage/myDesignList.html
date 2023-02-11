@@ -102,11 +102,22 @@
 							    
 							</div>
 						</div>
+			<!-- 페이징처리 -->
+			<div th:if="${!#lists.isEmpty(design)}">
+				<div class="row mt-5">
+					<div class="col text-center">
+						<div class="block-27">
+							<th:block
+								th:replace="fragments/paging :: component(${paging},'gopage')">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		
 		<!-- 디자인 상세보기 모달 -->
 		<div id="designModel" class="modal">
-			<div class="img_modal_content">
+			<div class="dImg_modal_content">
 				
 				<div class="column middle">
 					<h3 id="title"></h3>
@@ -122,17 +133,6 @@
 			<div class="modal_layer"></div>
 		</div>
 			
-			<!-- 페이징처리 -->
-			<div th:if="${!#lists.isEmpty(design)}">
-				<div class="row mt-5">
-					<div class="col text-center">
-						<div class="block-27">
-							<th:block
-								th:replace="fragments/paging :: component(${paging},'gopage')">
-						</div>
-					</div>
-				</div>
-			</div>
 			
 				 
 		
