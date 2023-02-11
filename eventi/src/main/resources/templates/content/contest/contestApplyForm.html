@@ -345,6 +345,7 @@
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
+								console.log(data);
 								oEditors.getById["cntn"].exec("SET_IR", [""]);
 								$("#dgnNo").val(data[0].dgnNo);
 								$('input[name="name"]').val(data[0].name);

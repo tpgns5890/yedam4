@@ -71,8 +71,9 @@ public class DesignServiceImpl implements DesignService {
 		vo.setCenterImg(uploadFile[0].getOriginalFilename());
 
 		// 파일업로드,디자인등록
+		int result = mapper.insert(vo);
 		uploadFiles(uploadFile, vo);
-		return mapper.insert(vo);
+		return result;
 	}
 
 	@Override

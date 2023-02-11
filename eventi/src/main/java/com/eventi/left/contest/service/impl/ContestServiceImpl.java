@@ -200,7 +200,6 @@ public class ContestServiceImpl implements ContestService {
 		
 		//삭제 리스트.
 		List<String>cNoList=  vo.getCNoList();
-		System.out.println("+++++++++++++++" + vo.getCNoList());
 		
 		for(String cNo : cNoList) {
 			// 작성자정보, 공모전 정보.
