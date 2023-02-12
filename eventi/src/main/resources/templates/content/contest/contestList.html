@@ -167,7 +167,7 @@ label {
 			
 			<!-- 우승자 상세보기 모달 -->
 			<div id="winnerModel" class="modal">
-				<div class="img_modal_content">
+				<div class="w_img_modal_content">
 					<span id="winnerCancel" class="close">&times;</span>
 					<h3 id="coNo" style="width: 50%; margin: 30px auto 10px; text-align: center;"></h3>
 					<div id="modelSelect"></div>
@@ -208,8 +208,6 @@ label {
 								xhr.setRequestHeader(header, token);
 							},
 							success: function (result) {
-				        	   	console.log(result);
-				        	   	
 								if(result == null || result==''){
 									alert('등록된 우승자가 없습니다.')
 									return false;
@@ -250,7 +248,7 @@ label {
 					let design;
 					//배너
 					if(data.CATEGORY =='D2'){
-						design = `	<div class="design" id="${data.DGN_NO}" style="width:60%; margin: 10px auto; margin-bottom:20px; ">
+						design = `	<div class="design " id="${data.DGN_NO}" style="width:60%; margin: 10px auto; margin-bottom:20px; ">
 						 				<div style="700px; margin: 10px auto 10px;display: flex; ">
 											<img src="/images/${img}.jpg" style="width: 100px; height: 100px; ">
 											<p style="margin: 50px 0 10px;">작품명 : ${data.NAME}</p>
@@ -272,7 +270,7 @@ label {
 						   		</div>  `
 					//그외
 					}else{
-						design = `<div class="design" id="${data.DGN_NO}"  style="width:100%; margin: 0 auto; margin-bottom:20px;">
+						design = `<div class="design" id="${data.DGN_NO}"  style="width:80%; margin: 0 auto; margin-bottom:20px;">
 					 				<div style="width: 500px; margin: 10px auto 10px;display: flex; ">
 										<img src="/images/${img}.jpg" style="width: 100px; height: 100px; ">
 										<p style="margin: 50px 0 10px;">작품명 : ${data.NAME}</p>

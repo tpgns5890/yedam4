@@ -72,6 +72,20 @@
 	border-radius: 3%;
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 }
+.w_img_modal_content {
+	background-color: #fefefe;
+	margin: 70px auto;
+	width: 55%;
+	/* 	width: 55%; */
+	height: 80%;
+	text-align: left;
+	/* 이미지 스크롤*/
+	max-height: calc(100vh - 210px);
+	overflow-y: auto;
+	/* 	둥글게,그림자 효과 */
+	border-radius: 3%;
+	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
+}
 /* 응모 디자인모달 */
 .dImg_modal_content {
 	background-color: #fefefe;
@@ -380,7 +394,7 @@
 	text-align: left;
 }
 /* 스크롤바 지우기 */
-.dImg_modal_content::-webkit-scrollbar ,.img_modal_content::-webkit-scrollbar, .qna_modal_content::-webkit-scrollbar
+.w_img_modal_content::-webkit-scrollbar ,.img_modal_content::-webkit-scrollbar, .dImg_modal_content::-webkit-scrollbar ,.img_modal_content::-webkit-scrollbar, .qna_modal_content::-webkit-scrollbar
 	{
 	display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
