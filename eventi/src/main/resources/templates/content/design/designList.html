@@ -33,10 +33,13 @@
 		width: 70%;
 		height: 90%;
 		text-align: left;
+		border-radius: 10px;
+		box-shadow: 5px 5px 5px #00000078;
 		
 		/* 이미지 스크롤*/
 		max-height: calc(100vh - 210px);
 	    overflow-y: auto;
+	    
 	}
 	
 	/* 스크롤바 지우기 */
@@ -173,6 +176,48 @@ input[type="checkbox"]{
 input[type="checkbox"]:checked {
    accent-color: #FFDE59;
 }
+
+.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 300px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+		font-size: 18px;
+	}
+	
+	.bageBtn{
+		background-color: #FAF8F1;
+		border: 1px solid #FAF8F1;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 300px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	
+	.bageBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FAEAB1;
+		font-size: 18px;
+	}
 </style>
 </head>   
 
@@ -335,8 +380,8 @@ input[type="checkbox"]:checked {
 		<div class="img_modal_content">
 			
 			<div class="column middle">
-				<h3 id="category">분류</h3>
-				<h2 id="ttl">제목</h2>
+				<p id="category" style="font-size: 18px; margin-left: 30px; margin-top:30px; font-weight:bold; color:blue;">분류</p>
+				<h2 id="ttl" style="margin-left: 28px; margin-top:10px; font-weight:bold;">제목</h2>
 				<div id="modelSelect"></div>
 			</div>
 			  
@@ -485,6 +530,8 @@ input[type="checkbox"]:checked {
 			let cntn = '';
 			let contest='';
 			let category = res.caregory;
+			let img = res.mainimg;
+			let imgTag = '';
 			$('#designModel').empty();
 			$('#dgnerSelect').empty();
 			
@@ -494,7 +541,7 @@ input[type="checkbox"]:checked {
 			
 			if(res.cNo != null){
 				contest = `<a href="/contest/select?cNo=${res.cNo}">
-					<button type="button">응시공모전 보기</button>
+					<button type="button" class="bageBtn">응시공모전 보기</button>
 					</a>`
 			}
 			
@@ -503,16 +550,22 @@ input[type="checkbox"]:checked {
 							<hr>`
 			}
 			
+			if(img == null){
+				imgTag = `<img class="radius_img" src="/images/replyImg.png" style="width: 50px; height: 50px">`;
+			} else {
+				imgTag = `<img class="radius_img" src="/fileView/${res.mainimg}" style="width: 50px; height: 50px">`
+			}
+			
 			
 			let content = ` <div class="radius">
-							<img class="radius_img" src="/fileView/${res.mainimg}" style="width: 50px; height: 50px">
+							${imgTag}
 							</div>
-							<h3><small>DESING BY</small> ${user}</h3>
+							<h3><small style="font-size: 18px; font-weight:bold; color:blue;">DESING BY</small> ${user}</h3>
 							<h3><small>우승횟수 ${res.cnt}회</small></h3>
 							
 							<hr>
 							${cntn}
-							<button type="button" onclick="checkPrtfl('${user}')">${user}님의 포트폴리오 이동</button>
+							<button type="button" class="blueBtn" onclick="checkPrtfl('${user}')">${user}님의 포트폴리오 이동</button>
 							${contest}
 						  `
 			

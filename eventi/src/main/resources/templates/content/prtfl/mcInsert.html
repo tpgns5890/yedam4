@@ -14,10 +14,11 @@
 		color : black;
 		font-size: 18px;
 		padding: 0;
+		margin: 3px;
 	}
 	
 	#check{
-		min-height : 3000px;
+		min-height : 1800px;
 	}
 	
 	.fileShow{
@@ -42,7 +43,7 @@
 	ul li.tag-item {
 	  padding: 4px 8px;
 	  border-radius : 10px;
-	  background-color: pink;
+	  background-color: #FFDE58;
 	  color: #000;
 	}
 	
@@ -60,14 +61,37 @@
 	
   select {
   	height: 30px;
-  	width: 200px;
-  	margin-top: 20px
+    width: 300px;
+    margin-top: 20px;
+    margin-left: 10px;
+    border-radius: 8px;
+  }
+  
+  .tagSelect{
+  	height: 30px;
+    width: 155px;
+    margin-top: 20px;
+    margin-left: 10px;
+    border-radius: 8px;
   }
   
   #insert{
   	width: 100px;
     margin: auto;
     display: block;
+  }
+  
+  .cntn{
+  	margin-top: 40px;
+    background-color: #e5f7ff91;
+    height: 1600px;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 5px 5px 13px 2px grey; 
+  }
+  
+  input{
+  	margin-top: 5px;
   }
 </style>
 </head>
@@ -84,10 +108,13 @@
      </div>
    </section>
    
-   <div class="container"> 
+   <div id="check">
+   <div class="container">
+
+	<div class="cntn">
    <form action="/prtfl/mcInsert" method="POST" id="mcForm" name="mcForm" class="contactForm" enctype="multipart/form-data">
    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-   <div id="check">
+    
    <div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="imgInp">대표이미지 <small>[프로필에 등록할 이미지 한개를 등록해주세요.]</small></label> 
@@ -95,7 +122,7 @@
 			<div class="fileShow">
 				<img id="blah" src="#" alt = "your image" width="250px" />
 				<button type="button" id="cancel" class="btn btn-warning cancel">
-	              <span>Cancel</span>
+	              <span>X</span>
 	          	</button>
 			</div>
 		</div>
@@ -106,7 +133,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="userName">이름</label> 
-			<input type="text" class="form-control" name="userName" id="userNmae" placeholder="사회자님 이름을 입력해주세요.">
+			<input type="text" class="form-control" name="userName" id="userNmae" placeholder="사회자님 이름을 입력해주세요." style="width: 50%;">
 		</div>
 	</div>
 	
@@ -142,7 +169,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="mcAreaList">사회지역</label> 
-			<select id="mcAreaList" name="mcAreaList" onchange="mcAreaFun(this)">
+			<select id="mcAreaList" name="mcAreaList" onchange="mcAreaFun(this)" class="tagSelect">
 				<option value="">-- 사회가능지역 선택 --</option>
 				<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
 			</select>
@@ -155,7 +182,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="mcTypeList">행사가능분야</label> 
-			<select id="mcTypeList" name="mcTypeList" onchange="mcTypeFun(this)">
+			<select id="mcTypeList" name="mcTypeList" onchange="mcTypeFun(this)" class="tagSelect">
 				<option value="">-- 행사가능분야 선택 --</option>
 				<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 			</select>
@@ -169,7 +196,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="progStyleList">진행스타일</label> 
-			<select id="progStyleList" name="progStyleList" onchange="progStyleFun(this)">
+			<select id="progStyleList" name="progStyleList" onchange="progStyleFun(this)" class="tagSelect">
 				<option value="">-- 진행스타일 선택 --</option>
 				<option th:each="style : ${mcStyles}" th:value="${style?.codeId}" th:text="${style?.codeName}"></option>
 			</select>
@@ -207,12 +234,12 @@
 
 	<div class="col-md-12">
 		<div class="form-group">
-			<input type="submit" id="insert" value="등록" class="find-trigger btn-15 btnSize">
+			<input type="submit" id="insert" value="등록" class="find-trigger btn-2">
 		</div>
-	</div>	
 	</div>
-		
 	</form>
+	</div>
+	</div>
 </div>
 	
 	<script>
@@ -374,7 +401,7 @@
            //e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
       }
 	
-		//해시태그테스트
+		//해시태그 객체
     	var areatag = {};
 		var typetag = {};
 		var styletag = {};
@@ -382,7 +409,7 @@
         var typeCounter = 0;
         var styletagCounter = 0;
 
-        // 입력한 값을 태그로 생성한다.
+        // 입력한 값을 배열에 저장
         function areaAddTag (value) {
         	areatag[areaCounter] = value;
         	areaCounter++;  // del-btn 의 고유 id 가 된다.

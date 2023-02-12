@@ -61,7 +61,7 @@
 			<include refid="category" />
 			<include refid="likeDesign" />
 			<include refid="winDesign" />
-			order by #{order} DESC
+			order by d.dt DESC
 	  	<![CDATA[
 			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
 		]]>

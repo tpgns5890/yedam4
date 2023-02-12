@@ -20,16 +20,32 @@
 	.modal {
 		display: none;
 		position: fixed;
-		top: 25em;
+		top: 15em;
 		left: 0;
 		width: 100%;
 		height: 100%;
 		z-index: 1;
 		width: 100%;
 	}
+	
+	.modal label{
+			font-size: 18px;
+			display: inline-block;
+	    	text-align: left;
+	    	width: 100px;
+		}
+		
+		.modal input{
+			height: 40px;
+			width: 200px;
+			margin: 5px 0;
+		}
 
 	.modal h2 {
 		margin: 0;
+		text-align: center;
+		color: #3a6351;
+		font-weight: bold;
 	}
 
 	.modal button {
@@ -76,6 +92,69 @@
 	.contentSize{
 		margin: 100px 20px;
 	}
+	
+	p{
+		font-size: 20px;
+		font-weight: bold;
+	}
+	
+	/*체크박스*/
+	input[type="checkbox"]{
+		z-index: 3;
+		width: 30px;
+		height: 30px;
+		margin-right: 3px;
+		margin-top: 5px;
+	}
+	
+	input[type="checkbox"]:checked {
+	   accent-color: #FFDE59;
+	}
+	
+	input[type=radio]{
+		width: 30px;
+	    height: 20px
+	}
+	
+		.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+}
+
+.bageBtn{
+		background-color: #FAF8F1;
+		border: 1px solid #FAF8F1;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	
+	.bageBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FAEAB1;
+		font-size: 18px;
+	}
 </style>
 </head>
 <body>
@@ -87,15 +166,16 @@
     
     <div class="fullSize">
     <div class="contentSize">
-    <button class="btn btn-primary btn-round" type="button" id="imgUp">이미지 등록</button>
-    <button class="btn btn-primary btn-round" type="button" id="deleteBtn">이미지 삭제</button> 
+        <div style="display: flex; align-items: center;">
+    <button class="blueBtn" type="button" id="imgUp">이미지 등록</button>
+    <button class="blueBtn" type="button" id="deleteBtn">이미지 삭제</button> 
 	<input type="checkBox" value="삭제" class="delete" id="allDelete">
-
+	</div>
+	
 	<div class="container">
-            <ul class="works-grid works-grid-gut works-grid-3 works-hover-w" id="works-grid" style="position: relative; height: 672.375px;">
-              
-            </ul>
-          </div>
+       <div class="row multi-columns-row post-columns" id ="insertImg" style="margin-top: 30px;">
+         </div>
+    </div>
 	 <!-- //페이징 경로 :: 문자 -->
 	<div class="row mt-5" id="paging">
 		<div class="col text-center">
@@ -115,27 +195,29 @@
 						<input type="hidden" id="userId" name="userId" th:value="${session.member != null ? session.member.userId :''}" readonly><br>
 						<label>행사이름</label>
 						<input type="text" id="eventTtl" name="eventTtl"><br>
-						<label class="label" for="eventCaregory">행사유형</label> 
+						<label for="eventCaregory">행사유형</label> 
 						<select id="eventCaregory" name="eventCaregory">
 							<option value="">-- 행사유형 선택 --</option>
 							<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
 						</select>
-						<label class="label" for="imgInp">물품이미지</label> 
+						<label for="imgInp">물품이미지</label> 
 						<input type="file" id="imgInp" name="uploadFile"/>
 						<div class="fileShow">
 							<img id="blah" src="#" alt = "your image" width="250px" />
 							<button type="button" id="cancel" class="btn btn-warning cancel">
-				              <span>Cancel</span>
+				              <span>X</span>
 				          	</button>
 				        </div>
-						<button type="button" id="cancel">취소</button>
-						<button type="submit" id="eventInsert">이미지등록</button>
+				        <div style="text-align: center;">
+						<button type="button" class="bageBtn" id="delete">취소</button>
+						<button type="submit" class="blueBtn" id="eventInsert">이미지등록</button>
+						</div>
 					</div>
 				</form>
 			</div>
-		<div class="modal_layer"></div>
-	</div>
-	</div>
+				<div class="modal_layer"></div>
+			</div>
+		</div>
 	</div>
 					     	
 	<script>
@@ -155,22 +237,23 @@
 			},
 		}).then(res => {
 			 for(img of res.imgs){
-				$('#works-grid').append(makeDesgin(img));
+				$('#insertImg').append(makeDesgin(img));
 			}
 			$('#returnPaging').append(makePageing(res.paging)); 
 		})
 		
 		function makeDesgin(img){
-			let tag = `<li class="work-item illustration webdesign" style="position: absolute; left: 0px; top: 0px;" if="${img.eventNo}">
-							<input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()">
-							<a href="portfolio_single_featured_image1.html">
-				                <div class="work-image"><img src="/fileView/${img.img}" alt="Portfolio Item"></div>
-				                <div class="work-caption font-alt">
-				                  <h3 class="work-title">Corporate Identity</h3>
-				                  <div class="work-descr">Illustration</div>
-				                </div>
-				             </a>
-				        </li>`;
+			console.log(img)
+			let tag = `<div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="post">
+                <input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()">
+				<input type="hidden" th:value="${img.eventNo}">
+                <div class="post-thumbnail"><img src="/fileView/${img.img}" width="400px" height="206px"></div>
+                <div class="post-header font-alt">
+                  <p class="post-title">${img.eventTtl}</p>
+                </div>
+              </div>
+            </div>`;
 	        
 		 	return tag;
 		}
@@ -235,9 +318,9 @@
 					xhr.setRequestHeader(header, token);
 				},
 			}).then(res => {
-				$('#works-grid').empty();
+				$('#insertImg').empty();
 				for(img of res.imgs){
-					$('#works-grid').append(makeDesgin(img));
+					$('#insertImg').append(makeDesgin(img));
 				}
 				
 				$('#returnPaging').empty();
@@ -252,7 +335,7 @@
 	   })
 	   
 	   //모달창에서 취소를 눌렀을 경우
-	   $("#cancel").on('click', function() {
+	   $("#delete").on('click', function() {
 			$("#imageFrm").hide();
 		});
 	   
@@ -285,6 +368,16 @@
 		    	//file영역에 있던 값 삭제
 		    	$("#imgInp").val('');
 		    })
+		    
+		    // 전체체크시 모든항목 체크 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
+		})
 	</script>
 	</div>
 </body>

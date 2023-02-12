@@ -33,14 +33,22 @@
   select {
   	height: 50px;
   	width: 150px;
-  	margin-top: 20px
+  	margin-top: 20px;
+  	font-size: 16px;
+  	font-weight: bold;
+  }
+  
+  option{
+  	font-size: 16px;
+  	font-weight: bold;
+  	height: 50px;
   }
   
 	.form_radio_btn input[type=radio] {
 		display: none;
 	}
 	.form_radio_btn label {
-			width:130px;
+		width:130px;
    		border-radius: 30px;
    		text-align: center;
    		height: 50px;

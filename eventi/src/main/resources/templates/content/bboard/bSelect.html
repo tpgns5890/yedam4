@@ -14,6 +14,7 @@
   cursor: pointer;
   transition: background-position 1s steps(28);
   transition-duration: 0s;
+  margin-left: -20px;
   }
   
   .active {
@@ -24,16 +25,32 @@
   #modal {
 			display: none;
 			position: fixed;
-			top: 25em;
+			top: 15em;
 			left: 0;
 			width: 100%;
 			height: 100%;
 			z-index: 1;
 			width: 100%;
 		}
+		
+		#modal label{
+			font-size: 18px;
+			display: inline-block;
+	    	text-align: left;
+	    	width: 80px;
+		}
+		
+		#modal input{
+			height: 40px;
+			width: 130px;
+			margin: 5px 0;
+		}
 
 		#modal h2 {
 			margin: 0;
+			text-align: center;
+			color: #3a6351;
+			font-weight: bold;
 		}
 
 		#modal button {
@@ -62,7 +79,88 @@
 			background: rgba(0, 0, 0, 0.5);
 			z-index: -1;
 		}
-
+		
+		.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+		font-size: 18px;
+	}
+	
+	.bageBtn{
+		background-color: #FAF8F1;
+		border: 1px solid #FAF8F1;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	
+	.bageBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FAEAB1;
+		font-size: 18px;
+	}
+	
+	#cntnSize{
+		display: flex;
+    	align-items: center;
+	}
+	
+	p{
+		margin-right: 5px; 
+	}
+	
+	h4{
+		font-weight: bold;
+		margin-top: 50px;
+	}
+	
+	#repInsertBtn, #logRepBtn{
+		background-color: transparent;
+		border: 1px solid rgba(2,126,251,1);
+		color: rgba(2,126,251,1);
+		float: right;
+		margin-top: 3px;
+		width: 60px;
+		height: 32px;
+		padding: 0;
+	}
+	
+	.replyBtn{
+		background-color: transparent;
+		border: 0;
+		color: rgba(2,126,251,1);
+	}
+	
+	#contStyle{
+		margin-top:50px; 
+		margin-bottom:50px; 
+		border:1px solid #c8c8c8; 
+		min-height: 1000px;
+		border-radius: 30px;
+		box-shadow: 5px 5px 5px #00000078;
+	}
 </style>
 
 <!-- csrf 설정 -->
@@ -87,97 +185,93 @@
           </div>
         </section>
    
+   <div class="container" id="contStyle">
+   
+   <input type="hidden" id="type" th:value=${bSelect.type}>
    <!-- 현재 로그인된 id와 작성자id가 동일할 경우 버튼 나타남 -->
-   <th:block th:if="${session.member.userId} == ${bSelect.writer}">
-   <button type="button" class="btn btn-primary" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
-   <button type="button" class="btn btn-primary delCheck">글 삭제하기</button>
-   </th:block>
-   
-   <th:block th:if="${session.member.userId} != ${bSelect.writer}">
-   <!-- 신고하기 -->
-   <button type="button" class="btn btn-primary" id="modalUp">신고하기</button>
-   </th:block>
-   
+   <div style="margin-top: 30px;">
+	   <th:block th:if="${session.member.userId} == ${bSelect.writer}">
+	   		<button type="button" class="blueBtn" th:onclick="|location.href='@{bUpdate(bBoardNo=${bSelect.bBoardNo})}'|">글 수정하기</button>
+	   		<button type="button" class="bageBtn delCheck">글 삭제하기</button>
+	   </th:block>
+	   
+	   <th:block th:if="${session.member.userId} != ${bSelect.writer}">
+	   <!-- 신고하기 -->
+	   <button type="button" class="blueBtn" id="modalUp">신고하기</button>
+	   </th:block>
+   </div>
+   <div id="cntnSize">
+   <h2 th:text="${bSelect.ttl}"></h2>
    <!-- 해당 게시글에 좋아요를 눌렀을 경우에는 채워진 하트가 나타남 -->
    <th:block th:if="${like == null}">
    	<div class="stage">
   		<div class="stage heart"></div>
-  		<span id="likeCount" th:text="${bSelect.cnt}"></span>
    	</div>
    </th:block>
    
    <th:block th:if="${like != null}">
    	<div class="stage">
   		<div class="stage heart active"></div>
-  		<span id="likeCount" th:text="${bSelect.cnt}"></span>
    	</div>
    </th:block>
+   </div>
    
-   <!-- 테이블 생성 -->
-   <table class="table mb-3">
-      <thead class="thead-dark">
-         <tr>
-            <th>게시판번호</th>   
-            <th>작성자</th>   
-            <th>제목</th>
-            <th>내용</th>
-            <th>조회수</th>
-            <th>작성일자</th>
-            <th>타입</th>   
-         </tr>
-      </thead>
-      <tbody>
-         <tr>
-            <td id="bBoardNo" th:text=${bSelect.bBoardNo}></td>
-            <td th:if="${bSelect.ano} == 'N'" th:text=${bSelect.writer}></td>
-	        <td th:if="${bSelect.ano} == 'Y'" th:text=${bSelect.checkano}></td>
-            <td th:text=${bSelect.ttl}></td>
-            <td th:utext=${bSelect.cntn}></td>
-            <td th:text=${bSelect.inq}></td>
-            <td th:text="${#dates.format(bSelect.dt, 'yyyy/MM/dd')}"></td>
-            <td id = "type" th:text=${bSelect.type}></td>
-         </tr>
-      </tbody>
-   </table>
-   	
-   	<!-- 이미지 나타내기 -->	
-	<div th:each="f : ${file}">
-       <a th:href="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
-       <img th:src="|/fileView/${f.sevNm}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-   	</div>
-
-   <!-- 댓글 폼 -->
+   <div style="display: flex; justify-content: flex-end;">
+   		<p th:if="${bSelect.ano} == 'N'" th:text="|작성자 ${bSelect.writer}| + ' | '"></p>
+   		<p th:if="${bSelect.ano} == 'Y'" th:text="|작성자 ${bSelect.checkano}| + ' | '"></p>
+   		<p th:text="|작성일자 ${#dates.format(bSelect.dt, 'yyyy/MM/dd')}| + ' | '"></p>
+   		<p th:text="|👓조회수 ${bSelect.inq}| + ' | '"></p> 
+   		<p id="likeCount" th:text="|😍좋아요수 ${bSelect.cnt}|"></p>
+   </div>
+   
+   <hr>
+   
    <div>
-    	<div class="pt-5 mt-5" >
-          <h3 class="mb-5">댓글</h3>
-          <ul class="comment-list" id=reply></ul>
-        </div>
-    </div>
+   		<div th:each="f : ${file}" style="margin-bottom: 50px;">
+	       	<a th:hrewf="|/fileView/${f.sevNm}|" class="image-popup prod-img-bg">
+	        <img th:src="|/fileView/${f.sevNm}|" class="img-fluid"></a>
+    	</div>
+   		<p th:utext=${bSelect.cntn}></p>	
+   </div>
+   
+   <!-- 댓글 폼 -->
+   <h4>댓글</h4>
+     <div class="border">
+       <!-- 댓글 작성 -->
+    	<form id="replyInsertFrm">
+    		<th:block sec:authorize="!isAuthenticated()">
+    			<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="로그인 후 등록 가능합니다." readonly="readonly"></textarea>
+    			<button type="button" id="logRepBtn">댓글추가</button>
+    		</th:block>
     
-    <!-- 댓글 작성 -->
-    <form id="replyInsertFrm">
-    	<textarea name="replyCntn" id="replyCntn" cols="30" rows="4" placeholder="댓글을 입력하세요."></textarea>
-    	<button type="button" id="repInsertBtn">댓글추가</button>
-    </form>
+    		<th:block sec:authorize="isAuthenticated()">
+    			<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
+    			<button type="button" id="repInsertBtn">댓글추가</button>
+    		</th:block>
+    	</form>
+    
+    <div id=reply style="margin-top: 30px;">
+			</div>
+             </div>
     
     <!-- 신고 등록 폼 -->
     <div id="modal">
 			<div class="modal_content">
 				<h2>신고</h2>
 				<div id="box">
-					<label>신고게시글</label>
-					<input type="text" id="targetId" name="targetId" th:value="${bSelect.bBoardNo}" readonly><br>
-					<label>신고자</label>
-					<input type="text" id="userId" name="userId" th:value="${session.member.userId}"><br>
+					<input type="hidden" id="targetId" name="targetId" th:value="${bSelect.bBoardNo}" readonly>
+					<input type="hidden" id="userId" name="userId" th:value="${session.member.userId}">
 					<label>신고사유</label>
-					<textarea rows="5" cols="30" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
-					<button type="button" id="cancel">취소</button>
-					<button type="button" id="punish">신고</button>
+					<textarea rows="5" cols="40" id="banCntn" name="banCntn" placeholder="신고사유에 대해 작성해주세요."></textarea>
+					<div style="text-align: center;">
+					<button type="button" class="bageBtn" id="cancel">취소</button>
+					<button type="button" class="blueBtn" id="punish">신고</button>
+					</div>
 				</div>
 			</div>
 		<div class="modal_layer"></div>
 	</div>
-   
+   </div>
    <script>
    $(function() {
 	    //csrf 설정
@@ -215,24 +309,35 @@
    		function make(reply){
 			let delBtn = '';
 			let upBtn = '';
+			let replyBtn ='';
 			let userId = '[[${session.member != null ? session.member.userId :''}]]';
+			let writer = '[[${bSelect.writer}]]';
+			
+			if(writer == userId){
+				replyBtn = `<button class="reply replyBtn">Reply</button>`;
+			}
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
 			if(reply.userId ==userId){
-				delBtn = `<button class='repDelete'>삭제</button>`;
-				upBtn = `<button class='repUpdate'>수정</button>`;
+				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
+				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
 			}
 			
    			let p = `
-                  <li class="comment">
-                    <div class="comment-body"  id="${reply.replyNo}">
-                      <h3>${reply.userId}</h3>
-                      <div class="meta">${reply.writingDt}</div>
-                      <p>${reply.replyCntn}</p>
-                      <button type="button" class="reply">Reply</button>
-                      ${delBtn} ${upBtn}
-                    </div>
-                   </li>
+   				<div class="comment clearfix">
+                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                <div id="${reply.replyNo}">
+                <div class="comment-content clearfix">
+                  <div class="comment-author font-alt">${reply.userId}</div>
+                  <div class="comment-body">
+                    <p style="font-size: 16px; font-weight: bold;">${reply.replyCntn}</p>
+                  </div>
+                  <div class="comment-meta font-alt">${reply.writingDt} ${replyBtn}${delBtn}${upBtn}
+                  </div>
+                </div>
+                </div>
+				</div>
+			</div>
                 `
    			return p;
    		}
@@ -245,23 +350,26 @@
 			
 			//댓글 작성자일 경우에만 삭제 버튼 생성
 			if(reply.userId ==userId){
-				delBtn = `<button class='repDelete'>삭제</button>`;
-				upBtn = `<button class='repUpdate'>수정</button>`;
+				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
+				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
 			}
    			
    			//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
-   			$("#" + reply.rerepTgt).children('button:eq(0)').remove();
+   			$("#" + reply.rerepTgt).children().children().children('button:eq(0)').remove();
    			
-   			let p = `<ul class="children">
-                <li class="comment">
-                <div class="comment-body" id="${reply.replyNo}">
-                  <h3>${reply.userId}</h3>
-                  <div class="meta">${reply.writingDt}</div>
-                  <p>${reply.replyCntn}</p>
-                  ${delBtn} ${upBtn}
+   			let p = `<div class="comment clearfix">
+                <div class="comment-avatar"><img src="/images/replyImg.png" alt="avatar"></div>
+                <div id="${reply.replyNo}">
+                <div class="comment-content clearfix">
+                  <div class="comment-author font-alt">${reply.userId}</div>
+                  <div class="comment-body">
+                    <p style="font-size: 16px; font-weight: bold;">${reply.replyCntn}</p>
+                  </div>
+                  <div class="comment-meta font-alt" id="${reply.replyNo}">${reply.writingDt} ${delBtn}${upBtn}
+                  </div>
                 </div>
-              </li>
-            </ul>`
+                </div>
+              </div>`
             
             return p;
    		}
@@ -291,7 +399,7 @@
 		$(document).on('click', '.reply', function(e){
 		    e.preventDefault();
 		    //대댓글을 작성할 replyNo 구하기
-		    let rerepTgt = $(this).parent("div").attr('id');
+		    let rerepTgt = $(this).parent().parent().parent("div").attr('id');
 		    //대댓글 입력할 수 있는 폼 생성
 		  	$(this).parent("div").append(makeFrm(rerepTgt));
 		  	
@@ -355,9 +463,9 @@
 		
 		//댓글 수정 폼으로 변경
 		$(document).on('click', '.repUpdate', function(e){
-			let replyNo = $(this).parent("div").attr('id');
-			let p = $(this).parent("div").children("p").text();			
-			$(this).parent().children('p').replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='replyCntn' name='replyCntn' value='" + p + "'></input>");
+			let replyNo = $(this).parent().parent().parent("div").attr('id');
+			let p = $(this).parent().parent("div").children("div:eq(1)").children("p").text()
+			$(this).parent().parent("div").children("div:eq(1)").children("p").replaceWith("<div><input type='hidden' id='replyNo' name='replyNo' value='" + replyNo +"'></input> <input type='text' id='upReplyCntn' name='upReplyCntn' value='" + p + "'></input>");
 			
 			$(this).toggleClass("updateBtn");
 		});
@@ -366,7 +474,7 @@
 		$(document).on('click', '.updateBtn', function(e){
 			$(this).toggleClass("updateBtn");
 			let btn = $(this);
-			let replyCntn = $('#replyCntn').val();
+			let replyCntn = $('#upReplyCntn').val();
 			let replyNo = $('#replyNo').val();
 			let updateBtn = `<button class='repUpdate'>수정</button>`;
 			
@@ -380,7 +488,7 @@
 					xhr.setRequestHeader(header, token); //403오류, type post일때 넣기
 				},
 				success : function(result){
-					btn.parent().children('div:eq(1)').replaceWith("<p>" + result.replyCntn + "</p>");
+					btn.parent().parent("div").children("div:eq(1)").replaceWith("<p style='font-size: 16px; font-weight: bold;'>" + result.replyCntn + "</p>");
 				}		
 			})
 		});

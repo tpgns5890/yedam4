@@ -8,14 +8,17 @@
 <!-- csrf 설정 -->
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
 	.label {
 		color : black;
+		font-size: 18px;
+		padding: 0;
+		margin: 3px;
 	}
 	
 	#check{
-		min-height : 3000px;
+		min-height : 1800px;
 	}
 	
 	.fileShow{
@@ -40,7 +43,7 @@
 	ul li.tag-item {
 	  padding: 4px 8px;
 	  border-radius : 10px;
-	  background-color: pink;
+	  background-color: #FFDE58;
 	  color: #000;
 	}
 	
@@ -55,6 +58,33 @@
 	  cursor: pointer;
 	  margin-left: 8px;
 	}
+	
+	select{
+  	height: 30px;
+    width: 160px;
+    margin-top: 20px;
+    margin-left: 10px;
+    border-radius: 8px;
+  }
+  
+  #insert{
+  	width: 100px;
+    margin: auto;
+    display: block;
+  }
+  
+  .cntn{
+  	margin-top: 40px;
+    background-color: #e1f1df91;;
+    height: 1100px;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 5px 5px 13px 2px grey; 
+  }
+  
+  input{
+  	margin-top: 5px;
+  }
 		
 </style>
 </head>
@@ -71,6 +101,10 @@
      </div>
    </section>
    
+   <div id="check">
+   <div class="container">
+
+	<div class="cntn">
    <form action="/prtfl/dgnerInsert" method="POST" id="dgnerForm" name="dgnerForm" class="contactForm" enctype="multipart/form-data">
    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
    <div id="check">
@@ -81,7 +115,7 @@
 			<div class="fileShow">
 				<img id="blah" src="#" alt = "your image" width="250px" />
 				<button type="button" id="cancel" class="btn btn-warning cancel">
-	              <span>Cancel</span>
+	              <span>X</span>
 	          	</button>
 			</div>
 		</div>
@@ -92,7 +126,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="userName">닉네임</label> 
-			<input type="text" class="form-control" name="userName" id="userNmae">
+			<input type="text" class="form-control" name="userName" id="userNmae" placeholder="디자이너님 닉네임을 입력해주세요." style="width: 50%;">
 		</div>
 	</div>
 
@@ -127,7 +161,7 @@
 	<!-- option 디자이너 스타일 -->
 	<div class="col-md-12">
 		<div class="form-group">
-			<label class="label" for="designStyleList">주요 디자인 스타일</label> 
+			<label class="label" for="designStyleList">디자인 스타일</label> 
 			<select id="designStyleList" name="designStyleList" onchange="designStyleFun(this)">
 				<option value="">-- 디자인 스타일 선택 --</option>
 				<option th:each="style : ${designStyle}" th:value="${style?.codeId}" th:text="${style?.codeName}"></option>
@@ -140,7 +174,7 @@
 	<div class="col-md-12">
 		<div class="form-group">
 			<label class="label" for="oneIntro">한줄소개</label> 
-			<input type="text" class="form-control" name="oneIntro" id="oneIntro" placeholder="나를 한줄로 표현해보세요.">
+			<input type="text" class="form-control" name="oneIntro" id="oneIntro" placeholder="디자이너님을 한줄로 표현한다면?">
 		</div>
 	</div>
 	
@@ -153,11 +187,14 @@
 	
 	<div class="col-md-12">
 		<div class="form-group">
-			<input type="submit" id="insert" value="등록" class="btn btn-primary">
+			<input type="submit" id="insert" value="등록" class="find-trigger btn-2">
 		</div>
 	</div>	
 	</div>
 	</form>
+	</div>
+	</div>
+	</div>
 	
 	<script>
 	//csrf 설정

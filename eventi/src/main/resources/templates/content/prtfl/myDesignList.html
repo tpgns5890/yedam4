@@ -17,7 +17,7 @@
 	  box-sizing: border-box;
 	}
 	
-	#check{
+	.content{
 		min-height : 2000px;
 	}
 
@@ -60,17 +60,8 @@
 	  transition: background-position 1s steps(28);
 	  transition-duration: 0s;
 	 }
-	 
-	 .active {
-	    transiion-duration: 1s;
-	    background-position: -2800px 0;
-	  }
 	  
-	  #love{
-	  	float: right;
-	  }
-	  
-   <!--공모전 디자인 미리보기 모달-->
+   <!--디자인 상세보기 모달-->
 	.modal {
 		display: none; /* Hidden by default */
 		position: fixed; /* Stay in place */
@@ -148,6 +139,38 @@
 		z-index: -1;
 	}
 	
+	/* Create three unequal columns that floats next to each other */
+	.column {
+	  float: left;
+	  padding: 10px;
+	}
+	
+	/* Left and right column */
+	.column.side {
+	  width: 30%;
+	  height: 100%;
+	  float: right;
+	  position: sticky;
+	  top: 0;
+	  background-color: lightGray;
+	  padding:20px;
+	  
+	}
+	
+	/* Middle column */
+	.column.middle {
+	  width: 70%;
+	  padding:0;
+	  
+	}
+	
+	/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+	@media screen and (max-width: 600px) {
+	  .column.side, .column.middle {
+	    width: 100%;
+	  }
+	}
+	
 	.box {
 	    width: 150px;
 	    height: 150px; 
@@ -167,50 +190,96 @@
 	.imgArray {
 	    margin: 5%;
 	}
+	
+	.fullSize{
+		margin-left: 250px;
+	}
+	
+	.contentSize{
+		margin: 100px 20px;
+	}
+	
+	.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+}
+
+	#designBox{
+		margin-top: 30px;
+	}
+	
+	select {
+		width: 150px;
+		height: 50px;
+	}
 </style>
 </head>
 <body>
 	<div layout:fragment="content" class="content">
+		<h2 hidden="hidden" class="module-title font-alt">행사사진리스트</h2>
 
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">행사사진리스트</h2>
-                <div class="module-subtitle font-serif">행사사진리스트</div>
-              </div>
-            </div>
-          </div>
-        </section>
     <!-- 현재페이지 myPageSide 적용 -->
 	<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
     
-    <div id="check">
-    <button class="btn btn-primary btn-round" type="button" th:onclick="|location.href='@{myDesignInsert}'|">디자인 등록</button>
     
-    <div class="border" id="designBox">
-                    		<div id="designborder">
-					        </div>
-					        
-				             <!-- //페이징 경로 :: 문자 -->
-							<div class="row mt-5" id="paging">
-								<div class="col text-center">
-									<div class="block-27" id="returnPaging">
-									</div>
-								</div>
-							</div>
-					     </div>
+    <div class="fullSize">
+    <div class="contentSize">
+    <div  style="margin-left: 65px;">
+    <button class="blueBtn" type="button" th:onclick="|location.href='@{myDesignInsert}'|">디자인 등록</button>
+    <select name="caregory" id="caregory">
+		<option value="D4" selected="selected">포스터</option>
+		<option value="D1" >현수막</option>
+		<option value="D2">배너</option>
+		<option value="D3">로고</option>
+		<option value="D5">기타</option>
+    </select>
+    </div>
+    
+    <div id="designBox">
+        <div class="container">
+        <div id="designborder">
+        </div>
+        </div>
+        
+            <!-- //페이징 경로 :: 문자 -->
+		<div class="row mt-5" id="paging">
+			<div class="col text-center">
+				<div class="block-27" id="returnPaging">
+				</div>
+			</div>
+		</div>
+     </div>
 	</div>
-	
+	</div>
 	<!-- 디자인 상세보기 모달 -->
 	<div id="dseignModel" class="modal">
 		<div class="img_modal_content">
-			<span class="close">&times;</span>
+			
 			<div class="column middle">
-				<h3 id="caregory">분류</h3>
+				<h4 id="category">분류</h4>
 				<h2 id="ttl">제목</h2>
 				<div id="modelSelect"></div>
 			</div>
+			  
+			<div class="column side">
+			  	<span class="close">&times;</span>
+			   <div id="dgnerSelect"></div>
+			</div>
+			
 		</div>
 		<div class="modal_layer"></div>
 	</div>
@@ -218,24 +287,36 @@
 	<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
+		desginList();
 		
+		//디자인 종류별
+		$('#caregory').change(function(){
+			desginList();
+		})
+		
+		//디자인 전체 리스트
+		function desginList() {
 		//물품리스트 불러오기
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
+		let caregory = $("#caregory option:selected").val();
 		$.ajax({
 			url: '/prtfl/desginList',
 			method: 'post',
 			data: {
-				userId:userId
+				userId:userId, caregory:caregory
 			},
 			beforeSend: function (xhr) {
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
+			$('#designborder').empty();
 			for(design of res.designs){
 				$('#designborder').append(makeDesgin(design));
 			}
+			$('#returnPaging').empty();
 			$('#returnPaging').append(makePageing(res.paging));
 		})
+		}
 		
 		//디자인 리스트
 		function makeDesgin(design){
@@ -245,21 +326,54 @@
 				active = 'active';
 			}
 			
-			let tag = `<div class="col-sm-6 col-md-4 col-lg-4">
-			            <div id="${design.dgnNo}" class="shop-item">
-			            <div class="shop-item-image"><img class="imgArray" src="/fileView/${design.centerImg}" style="width: 300px; height: 300px">
-			              
-			              <div class="shop-item-detail">
-			              <div class="stage">
-		  					<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
-		   					</div>
-			              	<a href="#" class="btn btn-round btn-b">
-			              	<span id="${design.dgnNo}" class="icon-magnifying-glass">상세조회</span></a>
-			              </div>
-			            </div>
-			            <p>${design.name}</p>
-			          </div>
-			        </div>`
+			let tag;
+			
+			if(design.caregory == '현수막'){
+				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 93%; margin-left: 10px; "> 
+					<div class="shop-item">
+					<div class="shop-item-image"> <img src="/fileView/${design.centerImg}" style="width: 1200px; height: 200px; padding: 0;"  class="img-fluid">
+					  <div class="shop-item-detail">
+					  <div class="stage">
+						<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
+	 					</div>
+		              	<a href="#" class="btn btn-round btn-b">
+		              	<span id="${design.dgnNo}" class="icon-magnifying-glass">상세조회</span></a>
+								</div>
+							</div>
+							<p>${design.name}</p>
+							</div>
+						</div>`;
+			} else if(design.caregory == '배너'){
+				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 32%; height: 650px; margin-right:5px;"> 
+					<div class="shop-item">
+					<div class="shop-item-image"> <img src="/fileView/${design.centerImg}" style="width: 100%; height: 550px;">
+					  <div class="shop-item-detail">
+					  <div class="stage">
+						<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
+	 					</div>
+		              	<a href="#" class="btn btn-round btn-b">
+		              	<span id="${design.dgnNo}" class="icon-magnifying-glass">상세조회</span></a>
+								</div>
+							</div>
+							<p>${design.name}</p>
+							</div>
+						</div>`;
+			}  else {
+				tag = `<div class="col-sm-6 col-md-4 col-lg-4" style="width: 33%; padding-left: 0;"> 
+					<div class="shop-item">
+					<div class="shop-item-image"> <img src="/fileView/${design.centerImg}" style="width: 250px; height: 250px; border-radius: 3%;" class="img-fluid">
+					  <div class="shop-item-detail">
+					  <div class="stage">
+						<div id="${design.dgnNo}" class="stage heart ${active} desgin"></div>
+	 					</div>
+		              	<a href="#" class="btn btn-round btn-b">
+		              	<span id="${design.dgnNo}" class="icon-magnifying-glass">상세조회</span></a>
+								</div>
+							</div>
+							<p>${design.name}</p>
+							</div>
+						</div>`;
+			}
 			        
 			 return tag;
 		}
@@ -341,48 +455,89 @@
 		$('.close').on("click", function(){
 			designModel.style.display = "none";
 		})
-	   
-	   //디자인상세조회
-	   $('#designBox').on("click", "span" ,function(e){
-		    let dNo = e.target.id
-			designModel.style.display = "block";
+
+//디자인상세조회
+		   $('#designBox').on("click", "span" ,function(e){
+			    let dNo = e.target.id
+			    console.log(dNo)
+				designModel.style.display = "block";
+				
+				$.ajax({
+					url: '/design/ajaxSelect',
+					method: 'post',
+					data: {dgnNo:dNo},
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+				}).then(res => {
+
+					$('#dgnerSelect').empty();
+					
+					let user = res.userId;
+					let title = res.name;
+					let cntn = '';
+					let contest='';
+					let category = res.caregory;
+					$('#designModel').empty();
+					$('#dgnerSelect').empty();
+					
+					$('#ttl').text(title);
+					$('#category').text(res.caregory);
+					
+					
+					if(res.cNo != null){
+						contest = `<a href="/contest/select?cNo=${res.cNo}">
+							<button type="button">응시공모전 보기</button>
+							</a>`
+					}
+					
+					if(res.cntn != null){
+						cntn = `<p><small>${res.cntn}</small></p>
+									<hr>`
+					}
+					
+					
+					let content = ` 
+									<h5><small>DESING BY</small> ${user}</h5>
+									
+									<hr>
+									${cntn}
+									${contest}
+								  `
+					
+					$('#dgnerSelect').append(content);
+					
+					$('#modelSelect').empty();
+					//모달내용을 지운뒤 붙여넣기.
+					for(file of res.files){
+						$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo,category));
+					}
+				})
+			}) 
 			
-			$.ajax({
-				url: '/design/ajaxSelect',
-				method: 'post',
-				data: {dgnNo:dNo},
-				beforeSend: function (xhr) {
-					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-					xhr.setRequestHeader(header, token);
-				},
-			}).then(res => {
-				let title = res.name;
-				$('#designModel').empty();
-				$('#dgnerSelect').empty();
-				
-				$('#ttl').text(title);
-				$('#caregory').text(res.caregory);
-				
-				//모달내용을 지운뒤 붙여넣기.
-				for(file of res.files){
-					$('#modelSelect').append(makeDesignModel(file.sevNm,title,dNo));
+			//모달창 :디자인 상세 이미지.
+			function makeDesignModel(fileName,title,dNo,category){
+				let design='';
+				if(category =='현수막'){
+					design = `<div class="design " id="${dNo}" style="width:100%; margin-bottom:20px;">
+						   <img src="/fileView/${fileName}" style="style=width: 100%; height: 200px;">
+					  </div>`
+				} else if(category =='배너'){
+					design = `<div class="design" id="${dNo}" style="width:60%; margin: 10px auto; margin-bottom:20px;">
+								<img src="/fileView/${fileName}" style="width: 100%; height: 60%;">
+						  	  </div>`
+				} else {
+					design = `<div class="design" id="${dNo}" style="float: left ">
+								<img src="/fileView/${fileName}" style="width: 1000px; height: 900px">
+							  </div>`
 				}
 				
-			})
-		})
-		
-		//모달창 :디자인 응모작품 생성.
-			function makeDesignModel(fileName,title,dNo){
-				let design = `  <div class="design" id="${dNo}" style="float: left ">
-										<img src="/fileView/${fileName}" style="width: 900px; height: 900px">
-							   </div>
-							  `;
 				return design;
 			}
-			//모달창 숨기기.
-			$("#designCancel").on('click', function() {
+			
+			$('.close').on("click", function(){
 				$("#designModel").hide();
-			});
+			})
 	</script>
 	</div>
 </body>

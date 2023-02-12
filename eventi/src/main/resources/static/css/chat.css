@@ -70,6 +70,8 @@
 	display:none;
 	background: #7F7FD5;
 	background-image: linear-gradient(134deg, #F9D976 0%, #F39F86 80%);
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #00000078;
 }
 
 /* *******************************

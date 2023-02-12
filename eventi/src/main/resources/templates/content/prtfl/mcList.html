@@ -28,7 +28,6 @@
    
    <!-- 정렬순 -->
    <select id="order" name="order">
-   		<option value="">==========</option>
 		<option value="dt" th:selected="${mcPrtflVO.order=='dt'}">작성일순</option>
 		<option value="inq" th:selected="${mcPrtflVO.order=='inq'}">조회순</option>
 		<option value="cnt" th:selected="${mcPrtflVO.order=='cnt'}">좋아요순</option>
@@ -51,7 +50,7 @@
    	</th:block>
    	</div>
    
-   <section class="module">
+   <section class="module" style="padding: 20px">
 	 <div class="container">
    		<div class="row multi-columns-row post-columns">
 	        <div class="col-sm-6 col-md-4 col-lg-4" th:each="mc : ${mcList}">

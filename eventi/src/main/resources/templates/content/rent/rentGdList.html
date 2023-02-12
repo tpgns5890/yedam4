@@ -39,12 +39,11 @@
 	.modal {
 		display: none;
 		position: fixed;
-		top: 25em;
+		top: 15em;
 		left: 0;
 		width: 100%;
 		height: 100%;
 		z-index: 1;
-		width: 100%;
 	}
 
 	.modal h2 {
@@ -63,7 +62,7 @@
 	    top: 20%;
 	    position: fixed;
 		width: 700px;
-		min-height: 700px;
+		height: 500px;
 		margin: 0 auto;
 		padding: 20px;
 		background: #fff;
@@ -116,6 +115,25 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+	
+	.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+}
 </style>
 </head>
 <body>
@@ -127,14 +145,15 @@
         
         <div class="fullSize">
         <div class="contentSize">
-        <button class="btn btn-round" type="button" th:onclick="|location.href='@{rentGdInsert}'|">물품 등록</button>
-        <button class="btn btn-round" type="button" th:onclick="|location.href='@{rentGdInsert}'|">물품 삭제</button>  
+        <button class="blueBtn" type="button" th:onclick="|location.href='@{rentGdInsert}'|">물품 등록</button>
+        <button class="blueBtn" type="button" th:onclick="|location.href='@{rentGdInsert}'|">물품 삭제</button>  
         
+        <div class="content" style="margin-top: 10px;">
         <!-- 게시글 리스트 -->
 		<table class="table mb-3">
 			<thead class="thead-dark">
 				<tr>
-				    <th style="width:3%;"><input type="checkBox"></th>
+				    <th style="width:3%;"><input type="checkBox" value="삭제" class="delete" id="allDelete"></th>
 					<th>카테고리</th>
 					<th>물품이미지</th>
 					<th>물품이름</th>
@@ -145,6 +164,7 @@
 			<tbody id="check">
 			</tbody>
 		</table>
+		</div>
 		
 		 <!-- //페이징 경로 :: 문자 -->
 		<div class="row mt-5" id="paging">
@@ -190,7 +210,7 @@
 		function makeDesgin(gd){
 			let i = gd.rpstImg;
 			let tag = `<tr id=${gd.goodsNo}>
-							<td><input type="checkBox"></td>
+							<td><input class="check delete" type="checkBox" value="delete" onkeyup="myFunction()"></td>
 							<td>${gd.caregory}</td>
 							<td onclick="showImg('${i}')"><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
 							<td>${gd.goodsNm}</td>
@@ -272,7 +292,7 @@
 		}
 		
 		function showImg(i){
-			let item = `<div style="text-align : center; margin-top: 100px;"><img src="/fileView/${i}" width="700px" height="700px"></div>`
+			let item = `<div style="text-align : center;"><img src="/fileView/${i}" width="450px" height="300px"></div>`
 			
 			$("#modelSelect").append(item);
 			$("#dseignModel").show();
@@ -281,6 +301,16 @@
 		$('.close').on("click", function(){
 			$("#modelSelect").empty();
 			$("#dseignModel").hide();
+		})
+		
+		// 전체체크시 모든항목 체크 
+		let allDelete = document.querySelector("#allDelete")
+		let deleteCheck = document.querySelector(".delete")
+		allDelete.addEventListener('change', function () {
+			//forEach 반복문사용.
+			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+					deleteCheck.checked = allDelete.checked;
+			})
 		})
 	</script>
 	</div>
