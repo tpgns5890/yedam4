@@ -35,7 +35,7 @@
 	<select id="contestList" resultType="ContestVO">
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
 	 			,REGEXP_REPLACE(REVERSE(
-                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
+                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay-30000)), '(\d{3})','\1,')
                                 ), '^,','') AS payComma
 	 			,code_select(category) category
 		        ,REPLACE(codeArr_select(style), ',', ' #') style

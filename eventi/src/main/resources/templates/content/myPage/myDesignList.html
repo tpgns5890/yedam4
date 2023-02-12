@@ -18,10 +18,10 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
+		<div >
 		<div class="designDiv" >
 			
 		<!-- 게시글 검색 -->
-						<h3 th:text="${caregory}"></h3>
 			<form id="search" name="designSearchFrm" style="margin:30px 0px 20px 330px;">
 					<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
 						<option value="D1" th:selected="${caregory eq 'D1'}">현수막</option>
@@ -114,6 +114,7 @@
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 		
 		<!-- 디자인 상세보기 모달 -->

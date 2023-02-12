@@ -106,10 +106,6 @@ ul li.tag-item {
 	font-size: 16px;
 	font-weight: bold;
 }
-.btn-warning {
-    top: -106px !important;
-    position: relative !important;
-}
 .tag-item:hover {
 	background-color: #262626;
 	color: #fff;

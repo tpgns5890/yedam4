@@ -61,9 +61,9 @@
 .img_modal_content {
 	background-color: #fefefe;
 	margin: 70px auto;
-	width: 45%;
+	width: 65%;
 	/* 	width: 55%; */
-	height: 70%;
+	height: 80%;
 	text-align: left;
 	/* 이미지 스크롤*/
 	max-height: calc(100vh - 210px);
@@ -205,7 +205,7 @@
 
 #modelSelect {
 	margin: 50px auto;
-	width: 70%;
+	width: 85%;
 	font-size: 18px;
 }
 /* 리뷰모달 */

@@ -21,7 +21,7 @@
 		      	,(select count(*) from likes where target_no = c_no) AS likes
 		      	,(select sev_nm from files where target_Id = c_no) AS img
 		      	,REGEXP_REPLACE(REVERSE(
-                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
+                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay-30000)), '(\d{3})','\1,')
                                 ), '^,','') AS PAYCOMMA
 	 FROM ( select ROWNUM RN, A.*
 			        FROM(

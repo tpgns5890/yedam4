@@ -159,7 +159,7 @@ label {
 				</div>
 		
 				<!-- 페이징/정렬처리 -->
-				<input type="hidden" name="orderSelect" value="dt_Reg">
+				<input type="hidden" name="orderSelect" value="dt_reg DESC">
 				<input type="hidden" name="categorySelect" value="">
 				<input type="hidden" name="page" value="1">
 				<input type="hidden" name="history" value="">
@@ -484,6 +484,7 @@ label {
 										   				<div>
 										   				  <h3 class="content-box-title font-serif">[${contest.category}] ${dDay}</h3>
 										   				  <h3 class="content-box-title font-serif">${contest.ttl}</h3>
+										   				  <h3 class="content-box-title font-serif">작성자 : ${contest.writer}</h3>
 										                  <h3 class="content-box-title font-serif">₩${contest.payComma}</h3>
 										                  <span>#${contest.style}</span>
 										                   <p>
@@ -576,6 +577,7 @@ label {
 					   				<div>
 					   				 <h3 class="content-box-title font-serif">[${contest.CATEGORY}] ${dDay}</h3>
 					   				  <h3 class="content-box-title font-serif">${contest.TTL}</h3>
+					   				  <h3 class="content-box-title font-serif">작성자 : ${contest.WRITER}</h3>
 					                  <h3 class="content-box-title font-serif">₩${contest.PAYCOMMA}</h3>
 									   <p>#${contest.STYLE}</p>
 					                  <p>

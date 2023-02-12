@@ -417,12 +417,12 @@
 		   let dgnNo;
 		    function review(data) {
 		    	
-		    	console.log(data);
 			   //모달창에 들어갈 내용 지정
 			   $('#reviewTgt').val(data)
 			   $('#userId').val(userId);
 			   $("#reviewFrm").show();
 			   $("#winnerModel").hide();
+			   $("#reviewCntn").val("");
 		   }
 		   
 		   
@@ -436,8 +436,8 @@
 		   //모달창에서 후기등록 버튼을 눌렀을 경우
 		   $("#review").on('click', function() {
 			   let reviewTgt = $("#reviewTgt").val();
-			   let category = 'T07';
 			   let reviewCntn = $("#reviewCntn").val();
+			   let category = 'T07';
 			   let star = stars;
 			   
 			   //후기 등록
