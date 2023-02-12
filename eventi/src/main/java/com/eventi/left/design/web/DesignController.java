@@ -106,8 +106,7 @@ public class DesignController {
 		// 등록된 카테고리를 담아서 마이페이지 이동.
 		if (caregory != null || caregory != "") {
 			vo.setCaregory(caregory); // 등록한 디자인카테고리 vo세팅
-		} 
-
+		}
 		// 로그인 회원정보
 		MemberVO user = (MemberVO) SessionUtil.getSession().getAttribute("member");
 		String sessionId = user.getUserId();
@@ -119,14 +118,12 @@ public class DesignController {
 			// 등록한 공모전 있는경우
 		} else {
 			model.addAttribute("design", design);
-			model.addAttribute("caregory", design.get(0).getCaregory());
 		}
+		model.addAttribute("caregory", vo.getCaregory());
 
 		model.addAttribute("paging", paging);
 		return "content/myPage/myDesignList";
 	}
-
-	// 디자인 수정처리X
 
 	// 디자인 삭제처리(링크처리는 get/ deleteMappging form)
 	@PostMapping("/delete")

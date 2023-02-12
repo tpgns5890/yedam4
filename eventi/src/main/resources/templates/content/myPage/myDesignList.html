@@ -21,12 +21,13 @@
 		<div class="designDiv" >
 			
 		<!-- 게시글 검색 -->
+						<h3 th:text="${caregory}"></h3>
 			<form id="search" name="designSearchFrm" style="margin:30px 0px 20px 330px;">
 					<select name="search" class="form-control" style="font-size: 18px; font-weight:bold; height: 40px">
 						<option value="D1" th:selected="${caregory eq 'D1'}">현수막</option>
 						<option value="D2" th:selected="${caregory eq 'D2'}">배너</option>
 						<option value="D3" th:selected="${caregory eq 'D3'}">로고</option>
-						<option value="D4" th:selected="${caregory eq 'D4'}">포스터</option>
+						<option value="D4" th:selected="${caregory eq 'D4' or  caregory == null}">포스터</option>
 						<option value="D5" th:selected="${caregory eq 'D5'}">기타</option>
                 	</select>
                 	
