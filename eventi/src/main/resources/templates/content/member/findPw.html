@@ -3,6 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
 <head>
+<link rel="stylesheet" href="/assets/css/btns.css">
 	<style>
 		#container {
 			width: 20%;
@@ -38,7 +39,8 @@
 			padding: 20px;
 			background: #fff;
 			border: 0.5px solid #666;
-			border-radius: 15px;
+			border-radius: 5px;
+			text-align:center;
 		}
 
 		#modal .modal_layer {
@@ -85,6 +87,10 @@
     		left: 50%;
     		transform: translate(-50%, -50%);
 		}
+		.loginBtn{
+			background-image: linear-gradient(45deg, #2fb380 50%, transparent 70%);
+			padding:1em;
+		}
 	</style>
 
 </head>
@@ -117,10 +123,10 @@
 		<div id="modal">
 			<div class="modal_content">
 				<button id="modal_close_btn" type="button">X</button>
-				<h3 class="font-alt" style="margin:0;"><b>전송완료!</b></h3>
+				<h3 class="font-alt" style="margin:0;margin-bottom:40px;"><b>전송완료!</b></h3>
 				<h4 class="font-alt"style="text-align:center;"><b>임시비밀번호를 이용하여 로그인 해주세요.</b></h4>
 				<div id="button_box">
-					<button type="button" id="modal_login_btn" class="btn btn-warning btn-round"
+					<button type="button" id="modal_login_btn" class="btns yellow loginBtn"
 						th:onclick="|location.href='@{loginPage}'|">로그인</button>
 				</div>
 			</div>

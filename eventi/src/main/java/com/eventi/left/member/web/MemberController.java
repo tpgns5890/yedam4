@@ -129,8 +129,8 @@ public class MemberController {
 	//로그인페이지 이동
 	@RequestMapping(value="/loginPage")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "exception", required = false) String exception,
-			Model model,HttpServletRequest request) throws Exception {
+							@RequestParam(value = "exception", required = false) String exception,
+							Model model,HttpServletRequest request) throws Exception {
 		String uri = request.getHeader("Referer");
 	    if (uri != null && !uri.contains("/loginPage")) {
 	        request.getSession().setAttribute("prevPage", uri);

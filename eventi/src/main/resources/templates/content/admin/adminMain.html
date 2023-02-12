@@ -191,7 +191,7 @@
 						<span><b>오늘의 할일</b></span>
 						<div id="toDoCountAll" th:text="${countCrtf}+${countCont}+${countBmem}+${countBbrd}+${countMon}"></div>
 					</div>
-					<div id="toDoDown">
+					<div id="toDoDown" style="font-size:18px;">
 						<ul>
 							<li class="toDoli" onclick="location.href='/admin/certList'">자격증승인<div class="toDoCount" th:text="${countCrtf}">90</div></li>
 							<li class="toDoli" onclick="location.href='/admin/adminContest'">공모전우승<div class="toDoCount" th:text="${countCont}">90</div></li>
@@ -206,7 +206,7 @@
 					<div id="mainCleft">
 						<div id="leftTop">
 							<div id="leftTopUp">
-								<span><b>방문자 현황</b></span>
+								<span style="font-size:18px;"><b>방문자 현황</b></span>
 							</div>
 							<div id="chartWrap">
 								<canvas id="line-chart"></canvas>
@@ -214,7 +214,7 @@
 						</div>
 						<div id="leftBot">
 							<div>
-								<span><b>문의사항</b></span>
+								<span style="font-size:18px;"><b>문의사항</b></span>
 							</div>
 							<table style="width:100%;text-align-last: center;margin-top:5px;">
 								<thead>
@@ -224,7 +224,7 @@
 										<th>작성일자</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody style="font-size:15px;">
 									<tr th:each="QnA : ${qnaList}" th:onclick="|location.href='@{/questions/queDetail(qNo=${QnA.Q_NO})}'|" style="cursor:pointer;">
 										<td th:text="${QnA.USER_ID}"></td>
 										<td th:text="${QnA.TTL}"></td>
@@ -237,7 +237,7 @@
 					</div>
 					<div id="mainCright">
 					<div>
-						<span><b>일자별 현황</b></span>
+						<span style="font-size:18px;"><b>일자별 현황</b></span>
 					</div>
 					<table style="width:100%;text-align-last: center;margin-top:5px;">
 								<thead>
@@ -249,7 +249,7 @@
 										<th>가입</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody style="font-size:15px;">
 									<tr th:each="daily : ${dailyInfo}">
 										<td>[[${daily.DAILYDT}]]</td>
 										<td style="text-align-last:right;">[[${daily.DAILYMOIN}]]원</td>

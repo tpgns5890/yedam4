@@ -82,8 +82,7 @@
 
 		#list-head {
 			display: flex;
-			justify-content: space-between;
-			align-items: center;
+    		justify-content: flex-end;
 		}
 
 		#selArea {
@@ -116,6 +115,7 @@
   		}
 		#table-div{
 			height:570px;
+			table-layout:fixed
 		}
 		
 		#member-table th,td{
@@ -191,9 +191,14 @@
     	}
     	
     	.cntnTd{
-    		cursor:pointer;
-    		color:blue;
-    		text-decoration:underline;
+    		overflow:hidden;
+    		white-space:nowrap;
+    		text-overflow:ellipsis;
+    		max-width: 600px;
+		    cursor: pointer;
+		    color: blue;
+		    text-decoration: underline;
+		    text-align-last: left;
     	}
     	#modalList{
     		max-height:250px;
@@ -217,7 +222,7 @@
 				<div id="list-area">
 					<div id="list-head">
 						<div id="list-head-right">
-							<div>
+							<div style="display: flex;">
 								<select th:name="targetCat" id="selArea">
 									<option value=""> ===선택=== </option>
 									<option th:each="Cat : ${targetCat}" th:value="${Cat.codeId}" th:text="${Cat.codeName}"></option>
@@ -231,14 +236,14 @@
 						<table id="member-table">
 							<thead>
 								<tr>
-									<th>글번호</th>
-									<th>작성자</th>
-									<th>제목</th>
-									<th>카테고리</th>
-									<th>신고자</th>
-									<th>신고일</th>
-									<th>신고사유</th>
-									<th></th>
+									<th width="5%">글번호</th>
+									<th width="5%">작성자</th>
+									<th width="15%">제목</th>
+									<th width="10%">카테고리</th>
+									<th width="10%">신고자</th>
+									<th width="10%">신고일</th>
+									<th width="35%">신고사유</th>
+									<th width="10%"></th>
 
 								</tr>
 							</thead>
