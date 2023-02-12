@@ -237,14 +237,17 @@ footer {
 	}
 	
 	#repInsertBtn{
-		background-color: transparent;
-		border: 1px solid rgba(2,126,251,1);
-		color: rgba(2,126,251,1);
-		float: right;
-		margin-top: 3px;
-		width: 60px;
-		height: 32px;
-		padding: 0;
+	float: right;
+	margin-top: 3px;
+	width: 60px;
+	height: 32px;
+	padding: 0;
+ 	 all: unset;
+     background-color: #FAB955;
+     color: white;
+     padding: 5px 25px;
+     border-radius: 10px;
+     cursor: pointer;
 	}
 	
 	#replyInsert{
@@ -254,6 +257,14 @@ footer {
 	#backImg{
 		width: 300vh;
 	}
+	button {
+      all: unset;
+      background-color: #FAB955;
+      color: white;
+      padding: 5px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+   }
 </style>
 </head>
 <div layout:fragment="content">
@@ -337,7 +348,7 @@ footer {
 					        <!-- 댓글 작성 -->
 						    <form id="replyInsert">
 						    	<textarea class="form-control" name="replyCntn" id="replyCntn" rows="3" placeholder="댓글을 입력하세요."></textarea>
-						    	<button type="button" id="repInsertBtn">댓글추가</button>
+						    	<button style="float: right;margin-top: 5px;" type="button" id="repInsertBtn">댓글추가</button>
 						    </form>
 						    
 						    <div id=reply>
@@ -398,15 +409,15 @@ footer {
 		}
 		
 		let p =`
-			<li class="comment">
+			<div class="comment">
 				<div class="comment-body" id="${reply.replyNo}">
-				<h3>${reply.userId}</h3>
+					<h3 style="display: flex;">${reply.userId}</h3>
 	            <div class="meta">${reply.writingDt}</div>
-	            <p>${reply.replyCntn}</p>
+	            <p tyle="height: 10px; margin: 5px;">${reply.replyCntn}</p>
 	            <button type="button" class="reply">Reply</button>
 	            ${delbtn} ${upBtn}
 				</div>
-			</li>`
+			</div>`
 		
 		return p;
 	}
@@ -424,15 +435,17 @@ footer {
 		//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
 		$("#" + reply.rerepTgt).children('button:eq(0)').remove();
 		
-		let p = `<ul class="children">
-	       <li class="comment">
-	       <div class="comment-body"  id="${reply.replyNo}">
+		let p = `
+		<div class="children">
+	       <div class="comment">
+	     	  <div class="comment-body"  id="${reply.replyNo}">
+	     	  <h3 style="display: flex; margin-top: 5px;">${reply.userId}</h3>
 	         <p>${reply.replyCntn}</p>
-	         <div class="meta">${reply.writingDt}</div>
+	      	 <div class="meta">${reply.writingDt}</div>
 	         ${delBtn} ${upBtn}
 	       </div>
-	     </li>
-   </ul>`
+	     </div>
+   </div>`
    
    return p; 
 	}

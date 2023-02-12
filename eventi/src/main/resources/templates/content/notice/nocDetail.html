@@ -2,8 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/default_layout}">
-   
+   layout:decorate="~{layouts/default_layout}"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+ <head>
+ <link rel="stylesheet" href="/css/prtfl/button.css">
+ <style>
+ .post-button {
+    background: var(--main-color);
+    border: none;
+    color: black;
+    background-color: #FFDE59;
+}
+#content{
+	width: 70%;
+	margin:0 auto;
+}
+ </style>
+ </head>  
    
 <div layout:fragment="content">
 <section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
@@ -16,36 +31,34 @@
             </div>
           </div>
         </section>
-	
-   <section class="ftco-section ftco-degree-bg">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 ftco-animate">
-          
-            <img src="images/image_1.jpg" alt="" class="img-fluid">  
+        
+      <div id="content">  
+            <h2 class="mb-3 mt-5" th:text=${nocDetail.noticeNo} hidden="hidden"></h2>
+            <h2 class="mb-3" th:text="|제목: ${nocDetail.ttl}|" style="display: flex; justify-content: space-around;"></h2>
+            <!-- 버튼 -->
+            <div style="display: flex; justify-content: flex-end;"> 
+              <a href="#" class="button post-button" style="margin-left: 10px; margin-right: 10px; padding: 10px; border-radius: 10px;"
+	                th:onclick="|location.href='@{nocUpdate(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">수정</a>
+	          <a href="#" class="button post-button" style="padding: 10px; border-radius: 10px;"
+	                th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">삭제</a>
+	        </div>
+            <!-- 작성날짜 -->
+            <p th:text="|작성날짜: ${#dates.format(nocDetail.dt, 'yyyy-MM-dd')}|"></p>
+			<div style="display: flex; justify-content: flex-end;">
+				<!-- 관리자일 경우에만 버튼 보이기 -->
+	          </div>
+	      	<hr>	  
             
-          
-            <h2 class="mb-3 mt-5" th:text=${nocDetail.noticeNo}></h2>
-            <h2 class="mb-3" th:text="|제목: ${nocDetail.ttl}|"></h2>
-				<p th:text="|내용: ${nocDetail.noticeCntn}|"></p>
-				<p th:text="|작성날짜: ${nocDetail.dt}|"></p>
-				<p th:text=${nocDetail.img}></p>
-				<p th:text=${nocDetail.userId} hidden="hidden"></p>
-				<p th:text="|조회수: ${nocDetail.see}|"></p>
-			
-			<!-- 관리자일 경우에만 버튼 보이기 -->
-             <div class="tag-widget post-tag-container mb-5 mt-5">
-              <div class="tagcloud">
-                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocUpdate(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">수정</a>
-                <a href="#" class="tag-cloud-link" th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">삭제</a>
-              </div>
-            </div> 
-        </div>
+		<p th:text="|내용: ${nocDetail.noticeCntn}|"></p>
+		<p th:text=${nocDetail.img}></p>
+		<p th:text=${nocDetail.userId} hidden="hidden"></p>
+		<p th:text="|조회수: ${nocDetail.see}|"></p>
       </div>
-     </div>
-    </section> <!-- .section -->
+      
 <script>
-
+	//csrf 설정
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 </script>
 </div>
 </html>

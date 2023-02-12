@@ -75,10 +75,11 @@
 	<!-- 문의사항 전체조회 -->
 	<select id="qnaList" resultType="QuestionsVO">
 		SELECT B.*,
-				CASE WHEN Q_NO IN (SELECT Q.Q_NO
-							FROM QUESTIONS Q, QUESTIONS A
-							WHERE Q.Q_NO = A.REREP_TGT)  THEN '답변완료'
-														 ELSE '미답변'
+				CASE WHEN Q_NO IN 
+					(SELECT Q.Q_NO
+					FROM QUESTIONS Q, QUESTIONS A
+					WHERE Q.Q_NO = A.REREP_TGT) THEN '답변완료'
+												ELSE '미답변'
 							END AS ANS
 		FROM (SELECT ROWNUM RN, A.* 	FROM ( 
 		            SELECT *

@@ -4,14 +4,70 @@
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
 <head>
-<link rel="stylesheet" href="index.css" />
-<link rel="stylesheet" href="detail.css" />
+<link rel="stylesheet" href="/css/prtfl/button.css">
+<!-- 구글 폰트 아이콘 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <style>
+.left{
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 0;
+  z-index: 1;
+  align-items: center;
+}
+#c-left-area{
+	float:left;
+}
+#c-right-area{
+	float: right;
+    display: flex;
+    align-items: center;
+}
+#c-right-area input{
+	margin-right :2px;
+}
+thead{
+	background-color: #FFDE59;
+}
+thead tr{
+	cursor: pointer;
+	font-size:17px;
+}
+.table>thead>tr>th {
+	vertical-align: center;
+}
+tbody tr{
+	cursor: pointer;
+	font-size:16px;
+}
+tbody tr:hover{
+	background:#FFF2CC;
+}
+.btn-2 {
+	margin-top:10px;
+}
+#find{
+	background-color: #FFDE59;
+    color: black;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 0;
+    padding: 4px;
+    width: 47px;
+}
+#content{
+	width: 70%;
+	margin:0 auto;
+}
 tbody>tr:hover {
 	background-color: #ddd;
 }
+thead>tr{
+	border-radius: 10px;
+}
 .main{
 	padding:40px; 
+	min-height:680px;
 }
 #content{
 	width: 70%;
@@ -22,32 +78,14 @@ tbody>tr:hover {
 	width:20%;
 	padding:15px;
 }
+#estiLeft h4{
+	cursor:pointer;
+}
+#estiLeft h4:hover{
+	background: #FeBe5e;
+}
 #estiRight{
 	width:75%;
-}
-
-/* 지원 버튼 영역 */
-.apply-button-wrap {
-    padding: 0 32px;
-    text-align: center;
-}
-.apply-button-wrap > button {
-    width: 100%;
-    height: 50px;
-    font-weight: bold;
-    font-size: 18px;
-    cursor: pointer;
-}
-.apply-button-wrap > button:first-of-type {
-    margin-bottom: 8px;
-    border: none;
-    background-color: var(--main-yellow);
-    color: #fff;
-}
-.apply-button-wrap > button:last-of-type {
-    border: 1px solid var(--main-yellow);
-    background-color: #fff;
-    color: var(--main-yellow);
 }
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
 
@@ -55,6 +93,53 @@ tbody>tr:hover {
 	--main-color: #FAB955;
 	--light-gray: #dbdbdb;
 }
+* 검색, 버튼 영역 */
+.search-area {
+    display: flex;
+    gap: 6px;
+}
+.searchbox,
+.button {
+    display: inline-block;
+    height: 40px;
+    padding: 12px;
+    border-radius: 3px;
+}
+.searchbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    border: 1px solid var(--light-gray);
+}
+.searchbox > input {
+    width: 100%;
+    margin-right: 12px;
+    border: none;
+    outline: none;
+}
+.searchbox > input::placeholder {
+    color: var(--light-gray);
+}
+.searchbox > i {
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.button {
+    cursor: pointer;
+}
+.user-search-button {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+}
+.post-button {
+    background: var(--main-color);
+    border: none;
+    color: #fff;
+}
+/* 검색, 버튼 영역 끝 */
+
 </style>
 </head>
 
@@ -69,53 +154,45 @@ tbody>tr:hover {
             </div>
           </div>
 </section>      
-
-	<div class="main">
-      	<div id="content">
-      		<h2><b>나의문의내역</b></h2>
-      		<hr>
-      		<div id="estiContent" style="display: flex;justify-content: space-between;">
-      			<div id="estiLeft">
-      			<div class="apply-button-wrap">
-      				<button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{queInsert}'|">문의등록</button>
-      			</div>
-	      			<h4 id="estiAll" style="border-bottom:1px solid grey;padding:10px;">전체</h4>
-	      		</div>
-	      		<div id="estiRight">
-					<table class="table mb-3">
-						<thead class="thead-dark">
-							<tr>
-								<th>문의사항번호</th>
-								<th>문의사항제목</th>
-								<th>작성일자</th>
-								<th>답변유무</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo})}'|">
-								<td th:text=${q.qNo}></td>
-								<td th:text=${q.ttl}></td>
-								<td th:text="${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
-								<td th:text=${q.ans}></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				
+	<div id="content" >
+		<h2 ><b>문의사항</b></h2>
+			<div style="display: flex; justify-content: flex-end;">
+				<button type="button" class="button post-button" style="margin-top: -25px;"
+				th:onclick="|location.href='@{queInsert}'|"><i class="fa fa-heart" ></i>문의등록</button>
 			</div>
-		</div>
-	</div>	
+      	<hr>
 	
-	
-	
-	<!-- 페이징 --> 
-	<div class="row mt-5">
-		          <div class="col text-center">
+	<div class="container" style="width: 1100px;">	
+		<table class="table mb-3" style="width:90%;">
+			<thead class="thead-dark">
+				<tr>
+					<th>문의사항번호</th>
+					<th>문의사항제목</th>
+					<th>작성일자</th>
+					<th>답변유무</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="q : ${qnaList}" th:onclick="|location.href='@{queDetail(qNo=${q.qNo})}'|">
+					<td th:text=${q.qNo}></td>
+					<td th:text=${q.ttl}></td>
+					<td th:text="${#dates.format(q.writingDt, 'yyyy-MM-dd')}"></td>
+					<td th:text=${q.ans}></td>
+				</tr>
+			</tbody>
+		</table>
+				
+		<!-- 페이징 --> 
+			<div class="row mt-5">
+		    	<div class="col text-center">
 		            <div class="block-27">
 		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
-		            </div>
-		          </div>
-		        </div>
+		       	 </div>
+		     	</div>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");

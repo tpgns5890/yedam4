@@ -11,7 +11,12 @@
 <link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
 <style>
 	.label{
-			color: black;
+		color: black;
+		display: inline-block;
+	    text-align: left;
+	    width: 70px;
+	    font-weight: bold;
+	    font-size: 18px;
 	}
 </style>
 </head>
@@ -39,23 +44,21 @@
 				<input type="text" name="jobNo" id="jobNo" th:value="${update.jobNo}" hidden="hiddden"> 	
 					
 					
-				<!-- 	<label>제 목</label><input type="text" class="form-control" name="title" id="title" th:value=${update.title} style="width: 80%;" >
-					<label>내 용</label><textarea name="jobCntn" class="form-control" id="jobCntn" cols="30" rows="4" th:utext=${update.jobCntn} style="width: 100%;" cols="30" rows="4"></textarea>	 -->
 					
-				<!-- 	<div class="row">
+					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="ttl">제목</label> 
+								<label class="label" for="ttl">제 목</label> 
 									<input type="text" class="form-control" name="title" id="title" th:value=${update.title}>
 							</div>
-						</div> -->
+						</div> 
 
-						<!-- <div class="col-md-12">
+					 <div class="col-md-12">
 							<div class="form-group">
-								<label class="label" for="#">내용</label>
+								<label class="label" for="#">내 용</label>
 								<textarea name="jobCntn" class="form-control" id="jobCntn" cols="30" rows="4" th:utext=${update.jobCntn}></textarea>
 							</div>
-						</div> -->
+						</div> 
 						
 						<div class="col-md-12">
 							<div class="form-group">
@@ -73,8 +76,8 @@
 						
 						<!-- 지역선택 -->
 						<div class="col-md-12">
+							<label class="label" for="#">지역</label>
 							<div class="form-group">
-								<label class="label" for="#">지역</label>
 								<select id="loc" name="loc" >
 									<option value="">-- 지역 선택 --</option>
 									<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>

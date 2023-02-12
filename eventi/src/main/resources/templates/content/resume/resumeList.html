@@ -140,17 +140,21 @@ table {
 
 <div class="container" id="none">
 	<section class="module" id="news">
-		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
-		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
-		<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
 		
-			<div class="row">
+			<div class="row" style="height: 100px;">
 				<div class="col-sm-6 col-sm-offset-3">
 					<h2 class="module-title font-alt">구직자 한눈에 보기</h2>
 					<div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을
 						누르세요.</div>
 				</div>
 			</div>
+			
+		<div style="display: flex; justify-content: flex-end;">
+			<input type="checkBox"  class="hire" id="allHire" value="선택채용" > 
+			<button class="btn btn-g btn-round allHire" type="button" style="margin-right: 10px;"><i class="fa fa-cog fa-spin"></i>선택채용</button>
+			<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
+		</div>
+		
 			<div class="row multi-columns-row post-columns" id="check">
 				<div class="col-sm-6 col-md-4 col-lg-4"
 					th:each="res : ${resumeList}">
@@ -245,13 +249,14 @@ allHire.addEventListener('change', function(){
 		hireCheck.checked = allHire.checked;
 	})
 })
+
 //구직자 선택채용
 $('.allHire').on('click', function (e){
 	console.log("클릭")
 	let checks = [];
  	
-	 $("[name='allHire']:checked").each(function(i, checkbox){
-		 let obj ={resumeNo:checkbox.valu+e};
+	$("[name='allHire']:checked").each(function(i, checkbox){
+		 let obj ={resumeNo:checkbox.value};
 		 checks.push(obj);
 	})
 	console.log(checks)
@@ -268,13 +273,12 @@ $('.allHire').on('click', function (e){
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			
-				alert(res+'/'+checks.length+'명 채용 완료');
-				location.href=`/resumeList`
-			
+			alert(res+'/'+checks.length+'명 채용 완료');
+			location.href=`/resumeList`
 		})  
 	} 
 });
+
 //구직자 채용
 $('.hireBtn').on('click', function (e){
 	console.log("클릭")
