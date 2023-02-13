@@ -33,7 +33,7 @@ public class ContestVO {
 	private int rprt; 	 //신고수
 	private String style; 	 //선호하는태그
 	private String settYN; //상금정산여부
-	
+	private int count;
 	
 	//삭제를 위한 리스트
 	private List<String> cNoList;

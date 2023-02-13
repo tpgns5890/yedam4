@@ -183,12 +183,13 @@ form div{
 		function select(){
 			let cNo ='[[${contest.cNo}]]';
 			let page = $('input[name="page"]').val(); //페이지처리를 위한 변수.
+			let count = 4;
 			
 			$.ajax({
 				url: '/contest/ajaxDesignRead',
 				method: 'post',
 				//조회번호,페이지번호 넘기기.
-				data: {cNo,page,category}, 
+				data: {cNo,page,category,count}, 
 				beforeSend: function (xhr) {
 					/*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
 					xhr.setRequestHeader(header, token);

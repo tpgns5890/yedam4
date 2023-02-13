@@ -55,9 +55,11 @@ public class DesignServiceImpl implements DesignService {
 			paging.setPageUnit(5);
 		} else if (vo.getCaregory() != null && vo.getCaregory().equals("D1")) {
 			paging.setPageUnit(3);
-		} else {
-			paging.setPageUnit(4);
+		} else if(vo.getCount() != 0) {
+			paging.setPageUnit(vo.getCount());
 		}
+		System.out.println(vo.getCount());
+		
 		paging.setTotalRecord(mapper.entryDesign(vo));
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());

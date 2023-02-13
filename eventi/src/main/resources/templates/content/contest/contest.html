@@ -780,10 +780,12 @@ h4 {
 		function contest(e){
 			let page = $('input[name="designPage"]').val();
 			let save="N";
+			let count = 6;
+			
 			$.ajax({
 	            url:'/contest/ajaxDesignRead',
 	            method:"post",
-	            data : {cNo,page,save,category},
+	            data : {cNo,page,save,category,count},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);

@@ -29,6 +29,7 @@ public class DesignVO {
 	private String writer; //공모전작성자
 	private String userLike; //회원 좋아요
 	private String likeDesign; //좋아요 누를 경우 회원id가 담김
+	private int count;
 	
 	private String sevNm;		//서버내파일명
 	
