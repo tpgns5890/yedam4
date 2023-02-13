@@ -701,7 +701,7 @@
 				replyBtn = `<button class="reply replyBtn">Reply</button>`;
 			}
 			
-			//댓글 작성자일 경우에만 삭제 버튼 생성
+			//댓글 작성자일 경우에만 수정, 삭제 버튼 생성
 			if(reply.userId == userId){
 				delBtn = `<button class='repDelete replyBtn'>삭제</button>`;
 				upBtn = `<button class='repUpdate replyBtn'>수정</button>`;
@@ -965,6 +965,11 @@
 			})
 		    
 	   })
+	   
+	   //모달창에서 취소를 눌렀을 경우
+	   $(".cancel").on('click', function() {
+		   $("#castingFrm").hide();
+	   });
 	   
 	   //채팅버튼을 눌렀을 때
 		$(".chattingUp").on("click", function () {
