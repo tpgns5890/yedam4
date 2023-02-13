@@ -366,7 +366,7 @@
 				PAY_NO,
 				SETT_YN,
 				TARGET_ID,
-				code_select(MO_CAT) mo_cat,
+				CODE_SELECT(MO_CAT) MO_CAT,
 				USER_NAME,
 				TO_CHAR(MO_DT, 'YYYY-mm-dd') MO_DT,
 				TO_CHAR(SETT_DT, 'YYYY-mm-dd') SETT_DT
@@ -565,6 +565,6 @@
 		SELECT NVL(COUNT(*),0)
 		FROM MONEY
 		WHERE MO_TYPE = 'M2'
-		AND SETT_YN='R'
+		AND SETT_YN='N'
 	</select>
 </mapper>

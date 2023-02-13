@@ -173,7 +173,7 @@
 					  <input type="hidden" id="thisUserId" th:value="${est.userId}">
 					</form>
 					<th:block sec:authorize="isAuthenticated()">			
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop"><b>견적제안등록</b></button>
+						<button type="button" class="btn btn-primary" sec:authorize="hasAnyRole('BUSI','ADMIN')" data-toggle="modal" data-target="#exampleModal" id="prop"><b>견적제안등록</b></button>
 				 	</th:block>
 					<th:block th:if="${session.member} and ${session.member.userId} == ${est.userId}">
 						<button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
@@ -191,8 +191,10 @@
 							<input type="hidden" name="pno" id="pno" >
 						</div>
 						<div id="propBtn">
-							<button type="button" class="btn getProp" id="chooesProp" th:value="${prop.pno}">채택</button>
-							<button type="button" class="btn chattingUp" th:id="${prop.userId}"> 채팅하기</button> 
+							<th:block th:if="${session.member} and ${session.member.userId} == ${est.userId}">
+								<button type="button" class="btn getProp" id="chooesProp" th:value="${prop.pno}">채택</button>
+								<button type="button" class="btn chattingUp" th:id="${prop.userId}"> 채팅하기</button>
+							</th:block>
 							<th:block th:if="${session.member} and ${session.member.userId} == ${prop.userId}">
 								<button type="button" class="btn" id="delProp">삭제</button>
 							</th:block>
@@ -319,17 +321,6 @@
 			//csrf 설정
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			
-			//업체회원 아닐시 제안서 작성불가 알림
-			$('#prop').on('click', function(){
-				var userId = '[[${session.member != null ? session.member.userId :""}]]';
-				if(userId.indexOf('bu') == -1){
-					alert('업체회원만 작성할 수 있습니다.')
-					return false;
-				}
-
-				console.log(userId.indexOf('bu'))
-			})
 			
 			//해당업체의 등록된물품 조회
 			  $(function() {
@@ -670,8 +661,7 @@
 								function makeList(r){
 									let list = `<a onclick="message('${r.cid}')" class="d-flex align-items-center">
 													<div class="flex-grow-1 ms-3">
-														<h3>${r.toId}</h3>
-														<p>front end developer</p>
+														<h3>🔔${r.toId}</h3>
 													</div>
 												 </a>`;
 									return list;
