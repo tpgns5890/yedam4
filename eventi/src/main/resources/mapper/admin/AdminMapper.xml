@@ -496,27 +496,27 @@
 		        FROM    (SELECT M1.DAILYDT DAILYDT, 
 		                        M1.DAILYMOIN DAILYMOIN,
 		                        M2.DAILYMOOUT DAILYMOOUT
-		                FROM    (SELECT	TO_CHAR(MO_DT,'YY/MM/DD') AS DAILYDT,
+		                FROM    (SELECT	trunc(MO_DT) AS DAILYDT,
 		                        NVL(SUM(MO_PRICE),0) DAILYMOIN
 		                        FROM MONEY
 		                        WHERE MO_TYPE='M1'
-		                        GROUP BY TO_CHAR(MO_DT,'YY/MM/DD')) M1,
-		                        (SELECT TO_CHAR(MO_DT,'YY/MM/DD') AS DAILYDT,
+		                        GROUP BY trunc(MO_DT)) M1,
+		                        (SELECT trunc(MO_DT) AS DAILYDT,
 		                                NVL(SUM(MO_PRICE),0) DAILYMOOUT
 		                        FROM MONEY
 		                        WHERE MO_TYPE='M2'
 		                        AND SETT_YN = 'Y'
-		                        GROUP BY TO_CHAR(MO_DT,'YY/MM/DD')) M2
+		                        GROUP BY trunc(MO_DT)) M2
 		                WHERE M1.DAILYDT = M2.DAILYDT(+)) M,
-		                (SELECT TO_CHAR(VISIT_DATE,'YY/MM/DD') DAILYDT,
+		                (SELECT trunc(VISIT_DATE) DAILYDT,
 		                        COUNT(*) VISITOR
 		                FROM VISITOR
-		                GROUP BY TO_CHAR(VISIT_DATE,'YY/MM/DD')) V
+		                GROUP BY trunc(VISIT_DATE)) V
 		        WHERE   V.DAILYDT = M.DAILYDT(+)) D,
-		        (SELECT TO_CHAR(USER_REGDATE,'YY/MM/DD') DAILYDT,
+		        (SELECT trunc(USER_REGDATE) DAILYDT,
 		                COUNT(*) REGISTER
 		        FROM MEMBERS
-		        GROUP BY TO_CHAR(USER_REGDATE, 'YY/MM/DD')) M
+		        GROUP BY trunc(USER_REGDATE)) M
 		WHERE D.DAILYDT = M.DAILYDT(+)
         AND D.DAILYDT BETWEEN TO_CHAR(SYSDATE - 9) AND SYSDATE
 		ORDER BY D.DAILYDT DESC

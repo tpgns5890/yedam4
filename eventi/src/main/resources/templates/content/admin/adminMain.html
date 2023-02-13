@@ -251,7 +251,7 @@
 								</thead>
 								<tbody style="font-size:15px;">
 									<tr th:each="daily : ${dailyInfo}">
-										<td>[[${daily.DAILYDT}]]</td>
+										<td>[[${#dates.format(daily.DAILYDT, 'yyyy/MM/dd')}]]</td>
 										<td style="text-align-last:right;">[[${daily.DAILYMOIN}]]원</td>
 										<td style="text-align-last:right;">[[${daily.DAILYMOOUT}]]원</td>
 										<td style="text-align-last:right;">[[${daily.VISITOR}]]명</td>
