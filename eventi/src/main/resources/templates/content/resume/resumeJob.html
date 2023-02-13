@@ -163,7 +163,7 @@ $('.hireBtn').on('click', function (e){
 	if(!confirm('채용하시겠습니까?')){
 		return false;
 	}else{
-		let resumeNo = $(e.target).data('resumeno'); //체크된 공모번호
+		let resumeNo = $(e.target).data('resumeno'); //체크된 게시글번호
 		console.log(resumeNo)
 		//업데이트처리 ajax
 		$.ajax({
@@ -192,7 +192,7 @@ $('.unHireBtn').on('click', function (e){
 	if(!confirm('채용을 취소하시겠습니까?')){
 		return false;
 	}else{
-		let resumeNo = $(e.target).data('resumeno'); //체크된 공모번호
+		let resumeNo = $(e.target).data('resumeno'); //체크된 게시글번호
 		//업데이트처리 ajax
 		$.ajax({
 			url: '/unHireUpdate',
@@ -210,15 +210,13 @@ $('.unHireBtn').on('click', function (e){
 				alert('채용취소가 불가능합니다.');
 			}
 		})   
-
-
 	}
 });
+
 //구직자 부분취소
 $('.unAllHire').on('click', function (e){
 	console.log("클릭")
 	let checks = [];
- 	
 	 $("[name='allHire']:checked").each(function(i, checkbox){
 		 let obj ={resumeNo:checkbox.value};
 		 checks.push(obj);
@@ -237,10 +235,8 @@ $('.unAllHire').on('click', function (e){
 				xhr.setRequestHeader(header, token);
 			},
 		}).then(res => {
-			
-				alert(res+'/'+checks.length+'명 채용 취소완료');
-				location.href=`/resumeList`
-			
+			alert(res+'/'+checks.length+'명 채용 취소완료');
+			location.href=`/resumeList`
 		})  
 	} 
 });
