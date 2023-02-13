@@ -33,7 +33,7 @@ public class PromotionServiceImpl implements PromotionService{
 	@Override
 	public List<PromotionVO> proList(PromotionVO promotionVO, PagingVO paging) {
 		paging.setTotalRecord(proMapper.count(promotionVO));
-		paging.setPageUnit(5);
+		paging.setPageUnit(8);
 		promotionVO.setFirst(paging.getFirst());
 		promotionVO.setLast(paging.getLast());
 		return proMapper.proList(promotionVO);
