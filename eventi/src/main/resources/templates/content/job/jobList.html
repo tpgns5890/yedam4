@@ -70,7 +70,7 @@
     border: none;
     outline: none;
     font-weight: bold;
-    color: var(--main-color);
+    color: black;
     cursor: pointer;
 }
 .select-item {
@@ -306,7 +306,7 @@ table {
 
                     <!-- 검색, 버튼 영역 -->
                     <div class="search-area">
-                        <div class="searchbox" style="margin-top:35px">
+                        <div class="searchbox" style="margin-top:35px;">
 	                        <input type="text" name="title" placeholder="검색어를 입력해주세요" th:value="${param.title}">
 						
 	                            <i class="material-symbols-outlined" id="find" onclick="gopage(1)">search</i>
@@ -327,7 +327,7 @@ table {
             	</div>
                 <!-- 정렬 영역 -->
                 <div class="sorting-area">
-				     <select class="sortingbox" id="see" name="orderCol" onchange="gopage(1)">
+				     <select class="sortingbox" id="see" name="orderCol" onchange="gopage(1)" >
 						<option value="" th:selected="${#strings.equals(param.orderCol, '')}">------</option>
 						<option value="dt" th:selected="${#strings.equals(param.orderCol, 'dt')}">작성순</option>
 						<option value="see" th:selected="${#strings.equals(param.orderCol, 'see')}">조회수</option>
