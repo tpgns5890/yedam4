@@ -23,7 +23,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">견적</a>
             <ul class="dropdown-menu">
-              <li class="dropdown"><a class="dropdown" href="/estForm">견적작성</a></li>
+              <li class="dropdown" sec:authorize="!hasRole('BUSI')"><a class="dropdown" href="/estForm">견적작성</a></li>
               <li class="dropdown"><a class="dropdown" href="/estList">견적게시판</a>
               </li>
             </ul>
