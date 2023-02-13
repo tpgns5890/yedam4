@@ -105,7 +105,8 @@
 
 /* 상단 영역 */
 .detail-header {
-    border: 3px solid #FFDE59;
+    border: 3px solid #FAB955
+;
     border-radius: 20px;
     box-shadow: 4px 10px 20px grey;
 }
@@ -300,7 +301,8 @@
 .post-button {
     background: var(--main-color);
     border: none;
-    color: #fff;
+    color: black;
+    background-color: #FFDE59;
 }
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
 
@@ -382,7 +384,7 @@ table {
     background-color: #FAB955;
     border-color: #FAB955;
 }
-}
+
 /* 검색, 버튼 영역 끝 */
 </style>
 </head>
@@ -414,9 +416,9 @@ table {
                     </div>
                     <div class="company-image-wrap">
                     	<!-- 버튼 영역 -->
-
-			            	<button type="button" class="btn btn-warning" th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|">구직신청</button>
-
+			            <button type="button" class="button post-button" style="padding-right: 100px; margin-top: 30px; border-radius:5px;
+			            box-shadow: 5px 5px 5px 5px gray;"
+			            th:onclick="|location.href='@{ApplyForm(jobNo=${job.jobNo})}'|" th:text="구직신청">구직신청</button>
                     </div>
                 </div>
 
@@ -469,19 +471,19 @@ table {
                         <h2 class="sub-title">모집조건</h2>
                         <ul class="list">
                             <li>
-                                <label>내용</label>
+                                <label>▪ 내용</label>
                                 <span th:utext=${job.jobCntn}>2023.02.07</span>
                             </li>
                             <li>
-                                <label>자격</label>
+                                <label>▪ 자격</label>
                                 <span th:text=${job.qualification}>무관</span>
                             </li>
                             <li>
-                                <label>우대사항</label>
+                                <label>▪ 우대사항</label>
                                 <span th:text=${job.preference}>무관</span>
                             </li>
                             <li>
-                                <label>행사유형</label>
+                                <label>▪ 행사유형</label>
                                 <span th:text=${job.eTypeName}>무관</span>
                             </li>
                         </ul>
@@ -492,27 +494,27 @@ table {
                         <h2 class="sub-title">근무조건</h2>
                         <ul class="list">
                             <li>
-                                <label>수당</label>
+                                <label>▪ 수당</label>
                                 <span th:text="|${#numbers.formatInteger(job.pay, 0, 'COMMA')}원|">120,000원</span>
                             </li>
                             <li>
-                                <label>근무시간</label>
+                                <label>▪ 근무시간</label>
                                 <span th:text=${job.wHour}>6개월 ~ 1년</span>
                             </li>
                             <li>
-                                <label>근무시작일</label>
+                                <label style="width:90px;">▪ 근무시작일</label>
                                 <span th:text="${#dates.format(job.wSday, 'yyyy-MM-dd')}">행사</span>
                             </li>
                             <li>
-                                <label>근무종료일</label>
+                                <label style="width:90px;">▪ 근무종료일</label>
                                 <span th:text="${#dates.format(job.wEday, 'yyyy-MM-dd')}">정규직</span>
                             </li>
                             <li>
-                                <label>위치</label>
+                                <label>▪ 위치</label>
                                 <span th:text=${job.loc}>대구</span>
                             </li>
                             <li>
-                                <label>복리후생</label>
+                                <label>▪ 복리후생</label>
                                 <span>중식제공, 석식제공</span>
                             </li>
                         </ul>
@@ -579,7 +581,7 @@ table {
             	</div>
             <div style="border-top:1px solid #ddd; padding:10px; text-align:center;">
              <h2 class="sub-title">이미지</h2>
-				<img th:src="|/fileView/${job.img}|" style="width: 100%;margin:0 auto;" class="img-fluid" alt="Colorlib Template">
+				<img th:src="|/fileView/${job.img}|" style="width: 100%;margin:0 auto;" class="img-fluid" alt="">
 			</div>
         </div>
 

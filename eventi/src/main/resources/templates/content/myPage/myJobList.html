@@ -22,12 +22,12 @@
 
 		<div class="contest">
 		<!-- 게시글 검색 -->
-			<form name="searchFrm">
-				제목<input type="text" name="title" value="">
-				내용<input type="text" name="jobCntn" value="">
+			<form name="searchFrm" style="display: flex;margin-left: 56px;">
+				<input type="text" name="title" value="" hidden="hidden">
+				<input type="text" name="cntn" value="" placeholder="검색어를 입력하세요">
 				<input type="hidden" name="page" value="1">
 				<button type="submit">검색</button>
-				<button type="button" id="deleteBtn" onclick="jobDelete(${job.jobNo})">게시글삭제</button>
+				<button type="button" id="deleteBtn" onclick="jobDelete(${job.jobNo})"><i class="fa fa-cut" ></i>게시글삭제</button>
 			</form>
 			
 			

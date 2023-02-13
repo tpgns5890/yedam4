@@ -2,13 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/default_layout}">
+	layout:decorate="~{layouts/default_layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<style>
-		.label{
-			color: black;
-		}
-	</style>
+<link rel="stylesheet" href="/css/contest/model.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
+<link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
+<style>
+	.label{
+	color: black;
+	display: inline-block;
+    text-align: left;
+    width: 70px;
+    font-weight: bold;
+    font-size: 18px;
+	}
+</style>
 </head>
 
 <div layout:fragment="content">
@@ -22,11 +31,12 @@
             </div>
           </div>
         </section>
+<div class="contestContainer">
 <div class="container"> 
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">공지사항 수정</h3>
+				<h3 class="mb-4" style="display: flex;">[공지사항 수정]</h3>
 				<form action="/nocUpdate" method="POST" id="nocUpdate" name="nocUpdate"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
@@ -48,14 +58,14 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">내용</label>
-								<textarea name="noticeCntn" class="form-control" id="noticeCntn" cols="30" rows="4" th:utext=${nocUpdate.noticeCntn}></textarea>
+								<textarea name="noticeCntn" class="form-control" id="noticeCntn" style="width: 550px;" cols="30" rows="4" th:utext=${nocUpdate.noticeCntn}></textarea>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">작성날짜</label>
-								<input type="date" class="form-control" name="dt" id="dt" th:value=${nocUpdate.dt}>
+								<input type="date" class="form-control" name="dt" id="dt" th:value=${nocUpdate.dt} hidden="hidden">
 							</div>
 						</div>
 						
@@ -77,52 +87,41 @@
 			</div>
 		</div>
 	</div>
-</div>       
+</div>   
+</div>    
 <script>
-let oEditors = []
 
-smartEditor = function() {
-	console.log("Naver SmartEditor")
-	nhn.husky.EZCreator.createInIFrame({
-		oAppRef : oEditors,
-		elPlaceHolder : "noticeCntn", 
-		sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
-		fCreator : "createSEditor2"
-	})
-}
+//csrf 설정
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
 
-$(document).ready(function() {
-	smartEditor()
-})
-		
-$('#update').on('click', function update() {
-	alert("클릭")
-	oEditors.getById["noticeCntn"].exec("UPDATE_CONTENTS_FIELD", [])
-	let noticeCntn = document.getElementById("noticeCntn").value;
-	alert(noticeCntn)
+	let oEditors = []
 	
-	let noticeNo = document.getElementById("noticeNo").value;
-
-	var data = $('form[name="nocUpdate"]').serializeArray();
-
-	//공지테이블 수정처리
-/* 	$.ajax({
-		url : "/nocUpdate",
-		method : 'post',
-		contentType : 'application/x-www-form-urlencoded',
-		data : data,
-		success : function(data) {
-			if(data == 1){
-			alert('수정완료!');
-			location.href = '/nocList';
-			}else
-				alert('수정실패')
-		},
-		fail : function(result) {
-			alert('필수항목을 입력해주세요')
-		}
-	}) */
-})
+	smartEditor = function() {
+		console.log("Naver SmartEditor")
+		nhn.husky.EZCreator.createInIFrame({
+			oAppRef : oEditors,
+			elPlaceHolder : "noticeCntn", 
+			sSkinURI : "/smarteditor2/SmartEditor2Skin.html",
+			fCreator : "createSEditor2"
+		})
+	}
+	
+	$(document).ready(function() {
+		smartEditor()
+	})
+		
+	$('#update').on('click', function update() {
+		alert("클릭")
+		oEditors.getById["noticeCntn"].exec("UPDATE_CONTENTS_FIELD", [])
+		let noticeCntn = document.getElementById("noticeCntn").value;
+		alert(noticeCntn)
+		
+		let noticeNo = document.getElementById("noticeNo").value;
+	
+		var data = $('form[name="nocUpdate"]').serializeArray();
+	
+	})
 	</script>
 </div>
 </html>

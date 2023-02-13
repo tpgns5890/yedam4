@@ -39,6 +39,14 @@ h4 {
 	padding: 5px 50px;
 	 height: 610px;
 }
+button {
+      all: unset;
+      background-color: #FAB955;
+      color: white;
+      padding: 5px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+   }
 /* 버튼 */
 
 </style>
@@ -67,17 +75,16 @@ h4 {
 			
 		<div id="showBox" class="col-lg-6 product-details pl-md-5 ftco-animate fadeInUp ftco-animated">
 			<div id="show"></div>
-				<h2 th:text=${proDetail.eName}></h2>
+				<!-- 제목 -->
+				<div style="height: 50px;">
+					<h2 th:text=${proDetail.eName} style="display: inline-block; margin-right: 5px;"></h2>
+					<!-- 조회수 -->
+						<span style='font-size: 30px;'>&#128065;</span>
+						<span id="see" th:text="${proDetail.see}"></span>
+				</div>
 				<h4 th:text="|글번호: ${proDetail.proNo}|" id="proNo"></h4>
 				<h4 th:text="|작성자: ${proDetail.userId}|"></h4>
 				<h4 th:utext="|정보: ${proDetail.intro}|"></h4>
-		<div style="height: 50px;">
-		
-		<!-- 조회수 -->
-			<span style='font-size: 30px;'>&#128065;</span>
-			<span id="see" th:text="${proDetail.see}"></span>
-		</div>
-		
 		<div>
 			<p th:text="|행사유형: ${proDetail.eType}|"></p>
 		</div>
@@ -98,8 +105,7 @@ h4 {
 			</th:block>	
 		</div>
 	</div>        
-    
-	<!-- 댓글작성란 -->					
+						
 	<div class="comments"  id=reply sec:authorize="isAuthenticated()">
 		<h4 class="comment-title font-alt">There are comments</h4>
          <div class="comment clearfix">
@@ -111,7 +117,7 @@ h4 {
 						<button class="button post-button "type="button" th:id="replyInsertBtn">작성</button>
 	              <!-- 	</form> -->
                 </div>
-              </div>
+           </div>
     </div> 
     
 		<div>
@@ -156,20 +162,20 @@ h4 {
 		let userId = '[[${session.member != null ? session.member.userId :''}]]';
 		
 		if(reply.userId ==userId){
-			delbtn = `<button class='repDelete' >삭제</button>`;
-			upBtn = `<button class='repUpdate'>수정</button>`;
+			delbtn = `<button class='repDelete' style="margin:-10px">삭제</button>`;
+			upBtn = `<button class='repUpdate' style="margin:8px">수정</button>`;
 		}
 		
 		let p =`
-			<li class="comment">
+			<div class="comment">
 				<div class="comment-body" id="${reply.replyNo}">
 				<h3>${reply.userId}</h3>
 	            <div class="meta">${reply.writingDt}</div>
-	            <p>${reply.replyCntn}</p>
-	            <button type="button" class="reply">Reply</button>
+	            <p style="height: 10px; margin: 5px;">${reply.replyCntn}</p>
+	            <button type="button" class="reply" style="margin:8px">Reply</button>
 	            ${delbtn} ${upBtn}
 				</div>
-			</li>`
+			</div>`
 		
 		return p;
 	}
@@ -187,16 +193,17 @@ h4 {
 		//한 댓글당 대댓글은 한개만 달수 있기 때문에 댓글에 있는 reply 버튼 삭제
 		$("#" + reply.rerepTgt).children('button:eq(0)').remove();
 		
-		let p = `<ul class="children">
-        <li class="comment">
-        <div class="comment-body"  id="${reply.replyNo}">
-          <h3>${reply.userId}</h3>
-          <div class="meta">${reply.writingDt}</div>
-          <p>${reply.replyCntn}</p>
-          ${delBtn} ${upBtn}
-        </div>
-      </li>
-    </ul>`
+	let p = `
+		<div class="children">
+	        <div class="comment">
+		        <div class="comment-body"  id="${reply.replyNo}">
+		          <h3>${reply.userId}</h3>
+		          <div class="meta">${reply.writingDt}</div>
+		          <p style="margin: 0px;">${reply.replyCntn}</p>
+		          ${delBtn} ${upBtn}
+		        </div>
+	      </div>
+	    </div>`
     
     return p; 
 	}

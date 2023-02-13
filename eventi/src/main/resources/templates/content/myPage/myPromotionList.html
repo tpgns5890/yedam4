@@ -6,8 +6,55 @@
 <head>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
+<!-- 구글 폰트 아이콘 -->
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <style>
+/* 검색, 버튼 영역 */
+.search-area {
+    display: flex;
+    gap: 6px;
+}
+.searchbox,
+.button {
+    display: inline-block;
+    height: 40px;
+    padding: 12px;
+    border-radius: 3px;
+}
+.searchbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    border: 1px solid var(--light-gray);
+}
+.searchbox > input {
+    width: 100%;
+    margin-right: 12px;
+    border: none;
+    outline: none;
+}
+.searchbox > input::placeholder {
+    color: var(--light-gray);
+}
+.searchbox > i {
+    color: var(--main-color);
+    cursor: pointer;
+}
 
+.button {
+    cursor: pointer;
+}
+.user-search-button {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+}
+.post-button {
+    background: var(--main-color);
+    border: none;
+    color: #fff;
+}
+/* 검색, 버튼 영역 끝 */
 </style>
 </head>
 <body>
@@ -22,14 +69,15 @@
 		
 		<div class="contest">
 		<!-- 게시글 검색 -->
+		<div class="search-area" style="display: flex; margin-left:56px;">  
 			<form name="searchFrm">
-				제목<input type="text" name="eName" value="">
-				내용<input type="text" name="intro" value="">
+				<input type="text" name="eName" value="" hidden="hidden">
+				<input type="text" name="intro" value="" placeholder="검색어를 입력하세요">
 				<input type="hidden" name="page" value="1">
 				<button type="submit">검색</button>
-				<button type="button" id="deleteBtn">게시글삭제</button>
+				<button type="button" id="deleteBtn" ><i class="fa fa-cut" ></i>게시글삭제</button>
 			</form>
-			
+		</div>
 			
 			<!-- 테이블 -->
 			<div>

@@ -21,14 +21,15 @@
 		
 		<div class="contest">
 		<!-- 게시글 검색 -->
+		<div class="search-area" style="display: flex; margin-left: 56px;">  
 			<form name="searchFrm">
-				제목<input type="text" name="title" value="">
-				내용<input type="text" name="cntn" value="">
+				<input type="text" name="title" value="" hidden="hidden">
+				<input type="text" name="cntn" value="" placeholder="검색어를 입력하세요">
 				<input type="hidden" name="page" value="1">
 				<button type="submit">검색</button>
-				<button type="button" id="deleteBtn">구직신청취소</button>
+				<button type="button" id="deleteBtn"><i class="fa fa-cut" ></i>구직신청취소</button>
 			</form>
-			
+		</div>	
 			
 			<!-- 테이블 -->
 			<div>
@@ -73,63 +74,63 @@
 				</div>
 			</div>
 		</div>
-		<script>
+<script>
+//csrf 설정	
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
 		
-		//페이지이동 및 검색
-		//페이징개수 변환 myContest 동적쿼리
-		function gopage(i) {
-			//내용초기화
-			$('input[name="title"]').val('');
-			$('input[name="cntn"]').val('');
-			searchFrm.page.value = i;
-			searchFrm.submit();
-		 }
-		
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-
-		// tr 전체체크시 모든항목 체크되도록 
-		let allDelete = document.querySelector("#allDelete")
-		let deleteCheck = document.querySelector(".delete")
-		allDelete.addEventListener('change', function () {
-			//forEach 반복문사용.
-			document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
-					deleteCheck.checked = allDelete.checked;
-			})
+	//페이지이동 및 검색
+	//페이징개수 변환 myContest 동적쿼리
+	function gopage(i) {
+		//내용초기화
+		$('input[name="title"]').val('');
+		$('input[name="cntn"]').val('');
+		searchFrm.page.value = i;
+		searchFrm.submit();
+	 }
+	
+	// tr 전체체크시 모든항목 체크되도록 
+	let allDelete = document.querySelector("#allDelete")
+	let deleteCheck = document.querySelector(".delete")
+	allDelete.addEventListener('change', function () {
+		//forEach 반복문사용.
+		document.querySelectorAll('input[value="delete"]').forEach( function (deleteCheck) {
+				deleteCheck.checked = allDelete.checked;
 		})
-		
+	})
+	
 
-		//구직 신청취소
-		document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
-		
-		function deleteContest(deleteCheck) {
-			let trs = document.querySelectorAll('table>tbody>tr');
+	//구직 신청취소
+	document.querySelector('#deleteBtn').addEventListener('click', deleteContest);
+	
+	function deleteContest(deleteCheck) {
+		let trs = document.querySelectorAll('table>tbody>tr');
 
-			if (!confirm('신청을 취소하시겠습니까?')) {
-				return false;
-			} else {
-				for (let i = 0; i < trs.length; i++) {
-					if (trs[i].children[0].children[0].checked) {
-						
-						let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
+		if (!confirm('신청을 취소하시겠습니까?')) {
+			return false;
+		} else {
+			for (let i = 0; i < trs.length; i++) {
+				if (trs[i].children[0].children[0].checked) {
+					
+					let resumeNo = trs[i].children[1].textContent; //체크된 공모번호
 
-						//삭제처리 ajax
-						$.ajax({
-							url: '/applyDelete',
-							method: "get",
-							data: {resumeNo}
-						}).then(res => {
-							if (res == 1) {
-								trs[i].remove(); // tr 화면동적 삭제
-								alert('삭제 완료');
-							} else {
-								alert('삭제 불가능합니다.');
-							}
-						})
-					}
+					//삭제처리 ajax
+					$.ajax({
+						url: '/applyDelete',
+						method: "get",
+						data: {resumeNo}
+					}).then(res => {
+						if (res == 1) {
+							trs[i].remove(); // tr 화면동적 삭제
+							alert('삭제 완료');
+						} else {
+							alert('삭제 불가능합니다.');
+						}
+					})
 				}
 			}
 		}
+	}
 		
 	</script>
 	</div>

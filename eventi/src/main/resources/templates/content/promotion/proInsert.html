@@ -6,6 +6,9 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+<link rel="stylesheet" href="/css/contest/model.css">
+<link rel="stylesheet" href="/css/contest/cotestForm.css">
+<link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css">
 <style>
 	.fileDown{
 		display : none;
@@ -13,6 +16,11 @@
 	
 	.label{
 		color: black;
+		display: inline-block;
+	    text-align: left;
+	    width: 70px;
+	    font-weight: bold;
+	    font-size: 18px;
 	}
 	
 	ul {
@@ -50,6 +58,7 @@
 	text-align: center;
 	margin-top: 10px
 	}
+
 </style>
 </head>
 <div layout:fragment="content">
@@ -64,18 +73,19 @@
           </div>
         </section>
 
+<div class="contestContainer">
 <div class="container">
 	<div class="row no-gutters">
 		<div class="col-md-7">
 			<div class="contact-wrap w-100 p-md-5 p-4">
-				<h3 class="mb-4">홍보게시글 작성</h3>
+				<h3 class="mb-4" style="text-align: left">[홍보게시글 작성]</h3>
 				<form action="/proInsert" method="POST" id="proInsert" name="proInsert"
 					class="contactForm" enctype="multipart/form-data"> <!-- 파일 -->
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 					<input type="hidden" id="proNo" name="proNo" th:value="${nextNo}">
 					<div class="row">
 						
-						<p id="ptext">*이미지 제외 모두 입력하세요.</p>
+						<p id="ptext" style="text-align: left">*이미지 제외 모두 입력하세요.</p>
 						<div class="col-md-12">
 								<div class="form-group" hidden="hidden">
 									<label class="label" for="userId">회원ID</label>
@@ -106,8 +116,8 @@
 						
 						<!-- 지역선택 -->
 						<div class="col-md-12">
-							<div class="form-group">
 							<label class="label" for="#">지역</label>
+							<div class="form-group">
 								<select id="loc" name="loc" >
 									<option value="">-- 지역 선택 --</option>
 									<option th:each="area : ${areas}" th:value="${area?.codeId}" th:text="${area?.codeName}"></option>
@@ -118,13 +128,13 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="label" for="#">소개글</label>
-								<textarea name="intro" class="form-control" id="intro" cols="30" rows="4" ></textarea>
+								<textarea name="intro" class="form-control" id="intro" style="width: 550px;" cols="30" rows="4" ></textarea>
 							</div>
 						</div>
 						
 						<div class="col-md-12">
+							<label class="label" for="#">행사유형</label> 
 							<div class="form-group">
-								<label class="label" for="#">행사유형</label> 
 								<select id="eType" name="eType" onchange="proStyle(this)">
 									<option value="">행사유형을 선택해 주세요.</option>
 									<option th:each="type : ${types}" th:value="${type?.codeId}" th:text="${type?.codeName}"></option>
@@ -174,6 +184,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 <script>
 	//csrf 설정

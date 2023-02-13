@@ -3,14 +3,147 @@
    xmlns:th="http://www.thymeleaf.org"
    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
    layout:decorate="~{layouts/default_layout}">
- 
-<div layout:fragment="content">
+<head>
+<link rel="stylesheet" href="/css/prtfl/button.css">
+<!-- 구글 폰트 아이콘 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <style>
-.ans{
-	visibility: hidden;
+.left{
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 0;
+  z-index: 1;
+  align-items: center;
+}
+#c-left-area{
+	float:left;
+}
+#c-right-area{
+	float: right;
+    display: flex;
+    align-items: center;
+}
+#c-right-area input{
+	margin-right :2px;
+}
+thead{
+	background-color: #FFDE59;
+}
+thead tr{
+	cursor: pointer;
+	font-size:17px;
+}
+.table>thead>tr>th {
+	vertical-align: center;
+}
+tbody tr{
+	cursor: pointer;
+	font-size:16px;
+}
+tbody tr:hover{
+	background:#FFF2CC;
+}
+.btn-2 {
+	margin-top:10px;
+}
+#find{
+	background-color: #FFDE59;
+    color: black;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 0;
+    padding: 4px;
+    width: 47px;
+}
+#content{
+	width: 70%;
+	margin:0 auto;
+}
+tbody>tr:hover {
+	background-color: #ddd;
+}
+thead>tr{
+	border-radius: 10px;
+}
+.main{
+	padding:40px; 
+	min-height:680px;
+}
+#content{
+	width: 70%;
+	margin:0 auto;
 }
 
-</style> 
+#estiLeft{
+	width:20%;
+	padding:15px;
+}
+#estiLeft h4{
+	cursor:pointer;
+}
+#estiLeft h4:hover{
+	background: #FeBe5e;
+}
+#estiRight{
+	width:75%;
+}
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+
+:root {
+	--main-color: #FAB955;
+	--light-gray: #dbdbdb;
+}
+* 검색, 버튼 영역 */
+.search-area {
+    display: flex;
+    gap: 6px;
+}
+.searchbox,
+.button {
+    display: inline-block;
+    height: 40px;
+    padding: 12px;
+    border-radius: 3px;
+}
+.searchbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    border: 1px solid var(--light-gray);
+}
+.searchbox > input {
+    width: 100%;
+    margin-right: 12px;
+    border: none;
+    outline: none;
+}
+.searchbox > input::placeholder {
+    color: var(--light-gray);
+}
+.searchbox > i {
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.button {
+    cursor: pointer;
+}
+.user-search-button {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+}
+.post-button {
+    background: var(--main-color);
+    border: none;
+    color: #fff;
+}
+/* 검색, 버튼 영역 끝 */
+
+</style>
+</head> 
+<div layout:fragment="content">
+
 <section id="picture "class="module bg-dark-60 gallery-page-header parallax-bg" 
 		data-background="/images/que.jpeg" style="background-image: url(&quot;assets/images/que.jpeg&quot;); background-size: 100%;">
           <div class="container">
@@ -21,49 +154,52 @@
             </div>
           </div>
 </section>
- 
-		<div class="container">
-            <div class="row mb-60">
-              <div class="col-sm-8 col-sm-offset-2">
-                
-                <form action="/faqList">
-                  <div class="search-box">
-                    <input class="form-control" type="text" name="faqTtl" placeholder="검색...">
-                    <button class="search-btn" type="submit" id="find" value="찾기"><i class="fa fa-search"></i></button>
+ 	<div id="content" >
+		<h2 ><b>FAQ</b></h2>
+		<div style="display: flex; justify-content: flex-end;">
+		 <form action="/faqList" style=" margin-right:15px;">
+			<!-- 게시글 검색 -->
+               <div class="search-box" style="display: flex;">
+                    <input class="form-control" type="text" name="faqTtl" placeholder="검색어를 입력해주세요">
+                    <button class="material-symbols-outlined" type="submit" id="find" value="찾기"><i class="fa fa-search"></i></button>
                   </div>
-                </form>
-                <th:block sec:authorize="hasAnyRole('ADMIN')">
-                <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{faqInsert}'|">글등록</button>
-                </th:block>
-              </div> 
-            </div>
+		</form>
+		 <div sec:authorize="hasAnyRole('ADMIN')" style="display: flex; justify-content: flex-end; ">
+	               <button type="button" class="button post-button"
+	               th:onclick="|location.href='@{faqInsert}'|"><i class="fa fa-heart" ></i>글등록</button>
+	     </div>
+	</div>
+		
+      	<hr>
+      <div style="display: flex;">
+		<div class="container">
             <div class="row" >
-            	
               <div class="col-sm-8 col-sm-offset-2" >
                 <div role="tabpanel" >
                   <ul class="nav nav-tabs font-alt" role="tablist">
-                    <li class="active"><a href="#support" data-toggle="tab"><span class="icon-tools-2"></span>support</a></li>
+                    <li class="active"><a href="#support" data-toggle="tab"><span class="icon-tools-2"></span>제목&답변</a></li>
                   </ul>
                   <div class="tab-content" >
                     <div class="tab-pane active" id="support">
                       <div class="panel-group" id="accordion">
                         <div class="panel panel-default" th:each="faq, number : ${faqList}">
-
                           <div class="panel-heading">
                             <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" th:href="|#support${number.count}|" aria-expanded="true" class=" icon-lightbulb" th:text=${faq.faqTtl}>Support Question 1</a></h4>
                           </div>
                           <div class="panel-collapse collapse " th:id="|support${number.count}|" aria-expanded="true" style="">
                             <div class="panel-body" th:text=${faq.faqAns} id="ans">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+       </div>
+      </div>
+    </div>
 <script>
 //csrf 설정
 var token = $("meta[name='_csrf']").attr("content");

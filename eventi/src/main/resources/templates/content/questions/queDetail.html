@@ -38,6 +38,10 @@
 	left: -15px;
 	top: 42px;
 	}
+	button{
+	float: right;
+    margin-top: -20px;
+	}
 </style>
 </head>   
    
@@ -57,26 +61,25 @@
 	</section>
 	
 	<section class="ftco-section ftco-degree-bg">
-		<div class="container">
+		<div class="container" style="margin-left: 340px;">
 		  <div class="row">
 			<div class="col-lg-8 ftco-animate">
-				<h2 class="mb-3 mt-5" th:text=${queDetail[0].qNo} id="qNo"></h2>
-				<h2 class="mb-3" th:text=${queDetail[0].userId}></h2>
-				<p th:text=${queDetail[0].targetId}></p>
-				<p th:text=${queDetail[0].ttl}></p>
-				<p th:utext=${queDetail[0].cntn}></p>
-				<p th:text="${#dates.format(queDetail[0].writingDt, 'yyyy-MM-dd')}"></p>
-				<p th:text=${queDetail[0].secretYn}></p>
+				<h2 class="mb-3 mt-5" th:text="|제목: ${queDetail[0].ttl}|"></h2>
+					<button class="btn btn-g btn-round queDelete" type="button" th:data-qno="${queDetail[0].qNo}"><i class="fa fa-cog fa-spin"></i>삭제</button>	
+					<p th:text="|작성일자: ${#dates.format(queDetail[0].writingDt, 'yyyy-MM-dd')}|"></p>
+				<hr>
+				<p class="mb-3 mt-5" th:text=${queDetail[0].qNo} id="qNo"></p>
+				<p th:text=${queDetail[0].targetId} hidden="hidden"></p>
+				<p class="mb-3" th:text="|작성자: ${queDetail[0].userId}|"><p>
+				<p th:utext="|내용: ${queDetail[0].cntn}|"></p>
 				<p th:text=${queDetail[0].category} hidden="hidden"></p>
 				<p th:text=${queDetail[0].rerepTgt}></p>
-
-				<button class="btn btn-g btn-round queDelete" type="button" th:data-qno="${queDetail[0].qNo}"><i class="fa fa-cog fa-spin"></i>삭제</button>	
 			</div>
 		</div>
 		
 	<!-- 답변보이는 곳 시작-->				
 	<div class="comments"  id=reply style="padding-bottom:20px">
-       <h4 class="comment-title font-alt">Leave a Comment</h4>
+       <h4 class="comment-title font-alt" style="width: 740px;">Leave a Comment</h4>
                  
 	<!-- 답변이 있는경우 -->	
  		<div  th:if="${#lists.size(queDetail)}>1"  class="replyInsert">
@@ -88,7 +91,8 @@
 
       	
  	<!-- 답변등록 -->   	              
-   <form action="/questions/insertQna" method="POST" id="questionsInsert" name="questionsInsert"  th:unless="${#lists.size(queDetail)}>1"  >
+   <form action="/questions/insertQna" method="POST" id="questionsInsert" 
+   		name="questionsInsert" th:unless="${#lists.size(queDetail)}>1" style="width: 740px;" >
 	   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
 	   <input type="hidden" id="qNo" name="rerepTgt" th:value="${queDetail[0].qNo}">
 	   <input type="hidden" name="category" th:value="T14">
@@ -103,8 +107,7 @@
 			
 		 <div class="col-md-12">
 			<div class="form-group">
-			<button class="btn btn-d btn-round" type="submit"  id="insert"><i class="fa fa-comments-o"></i> 답변등록</button>
-				<!-- <input type="submit" id="insert" value="등록" class="btn btn-primary"> -->
+			<button class="btn btn-d btn-round" type="submit"  id="insert" style="margin: 2px;"><i class="fa fa-comments-o"></i> 답변등록</button>
 				<div class="submitting"></div>
 			</div>
 		</div> 
