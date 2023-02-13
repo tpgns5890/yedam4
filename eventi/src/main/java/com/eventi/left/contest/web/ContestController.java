@@ -254,6 +254,7 @@ public class ContestController {
 		DesignVO dVo = new DesignVO();
 		dVo.setcNo(vo.getcNo());
 		dVo.setCaregory(vo.getCategory());
+		dVo.setCount(vo.getCount()); //입력별 페이지개수..
 		List<DesignVO> designs = dService.contestDesignList(dVo, paging);
 
 		// 리턴할 최종Map
