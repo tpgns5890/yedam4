@@ -104,8 +104,7 @@
 
 		#list-head {
 			display: flex;
-			justify-content: space-between;
-			align-items: center;
+    		justify-content: flex-end;
 		}
 
 		#selArea {
@@ -340,11 +339,12 @@
 					<tr>
 						<td>${money.userId}</td>
 						<td>${money.bankName}</td>
+						<td hidden>${money.bankCode}</td>
 						<td>${money.bankAccount}</td>
 						<td>${money.moCat}</td>
 						<td>${money.moPrice}</td>
 						<td>${money.moDt}</td>
-						<td><button type="button" onclick="sendMoney(this)" value="${money.moNum}">정산</button><td>
+						<td><button type="button" onclick="sendMoney(this)" value="${money.moNum}">정산</button></td>
 					</tr>`;
 				return p;
 			}
@@ -424,11 +424,11 @@
 			function sendMoney(element){
 				let moNum = element.value;
 				let userId = element.parentElement.parentElement.children.item(0).innerText;
-				let bankName = element.parentElement.parentElement.children.item(1).innerText
-				let bankAccount = element.parentElement.parentElement.children.item(2).innerText;
-				let moCat = element.parentElement.parentElement.children.item(3).innerText;
-				let moPrice = parseInt(element.parentElement.parentElement.children.item(4).innerText);
-				let moDt = element.parentElement.parentElement.children.item(5).innerText;
+				let bankName = element.parentElement.parentElement.children.item(2).innerText;
+				let bankAccount = element.parentElement.parentElement.children.item(3).innerText;
+				let moCat = element.parentElement.parentElement.children.item(4).innerText;
+				let moPrice = parseInt(element.parentElement.parentElement.children.item(5).innerText);
+				let moDt = element.parentElement.parentElement.children.item(6).innerText;
 				
 				$.ajax({
 					url:"/admin/sendMoney",

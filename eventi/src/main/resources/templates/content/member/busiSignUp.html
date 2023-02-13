@@ -5,6 +5,7 @@
 	layout:decorate="~{layouts/default_layout}">
 
 <head>
+<link rel="stylesheet" href="/assets/css/btns.css">
 <style>
 #container {
 	width: 70%;
@@ -37,37 +38,20 @@
 }
 
 #submitArea {
-	margin-top: 20px;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
+	position: relative;
+    bottom: -10%;
+    right: -50%;
+	display:flex;
 }
 
 #submitArea button {
 	margin-left: 10px;
 }
 
-.formLabel {
-	width: 100px;
-	margin-top: 40px;
-}
 
-.formInput {
-	width: 300px;
-}
-
-#inputEmailChk {
-	width: 140px;
-    margin-left: 263px;
-}
 
 .inputRadio {
 	width: 20px;
-}
-
-#inputEmailChk {
-	width: 140px;
-	margin-left: 263px;
 }
 
 .busiArea {
@@ -116,10 +100,8 @@
 }
 
 #modal button {
-	display: inline-block;
-	width: 100px;
-	border: 0.2px solid black;
-	border-radius: 5px;
+	height: 40px;
+	padding:10px;
 }
 
 #modal .modal_content {
@@ -129,7 +111,8 @@
 	padding: 20px;
 	background: #fff;
 	border: 0.5px solid #666;
-	border-radius: 15px;
+	border-radius: 5px;
+	text-align:center;
 }
 
 #modal .modal_layer {
@@ -142,14 +125,73 @@
 	z-index: -1;
 }
 
-#modal_login_btn {
-	background: #2fb380;
-}
 
 #button_box {
 	display: flex;
 	margin-top: 40px;
 	justify-content: flex-end;
+}
+#inputEmail {
+    width: 300px;
+    margin-right: 15px;
+}
+#inputBno{
+	width: 300px;
+    margin-right: 15px;
+}
+
+#inputEmailChk {
+	width: 140px;
+ 	grid-column-start: 2;
+ 	grid-row-start : 3;
+}
+
+.form-items{
+	display: grid;
+  	grid-template-columns: 130px 300px;
+  	grid-template-rows: 50px 20px;
+  	align-items:start;
+  	margin-bottom:10px;
+}
+
+.feedbacks{
+	grid-column-start:2;
+	top: -10px;
+	position: relative;
+	 		
+}
+.form-label{
+	font-size: 18px;
+  	width: 120px;
+  	margin-right: 10px;
+  	text-align: right;
+}
+.form-items-email{
+	display: grid;
+  	grid-template-columns: 130px 310px 115px;
+  	grid-template-rows: 50px 30px 50px 30px;
+}
+.form-items-Bno{
+	display: grid;
+  	grid-template-columns: 130px 310px 115px;
+  	grid-template-rows: 50px 30px;
+  	margin-bottom:30px;
+}
+#email_feedback{
+	grid-column-start: 2;
+	grid-row-start:4;
+	top: -10px;
+  	position: relative;
+}
+.mail_input_box_warn{
+	grid-column-start: 2;
+  	grid-row-start : 2;
+  	top: -10px;
+  	position: relative;
+}
+.loginBtn{
+	background-image: linear-gradient(45deg, #2fb380 50%, transparent 70%);
+	padding:1em;
 }
 </style>
 </head>
@@ -161,66 +203,79 @@
 			<div id="signInBox">
 				<form id="signIn" name="signIn">
 					<div id="signIn-left">
-						<h3 class="mb-4 billing-heading" align="center"><b>기본정보</b>(필수)</h3>
+						<h3 class="mb-4 billing-heading" align="center" style="margin: 0px 0 30px 0;"><b>기본정보</b>(필수)</h3>
 						
-						<label for="userId" class="formLabel">아이디</label>
-						<input type="text" class="formInput" name="userId" id="inputId" maxLength="12" placeholder="최대 12글자의 영문자,숫자 조합">
-						<div>
-							<font id="id_feedback" size="2" value="1"></font>
+						<div class="form-items">
+							<label for="inputId" class="form-label"><b>아이디</b></label>
+							<input type="text" name="userId" id="inputId" maxLength="12" placeholder="최대 12글자의 영문자,숫자 조합">
+							<font id="id_feedback" class="feedbacks" size="2" value="1"></font>
 						</div>
 						
-						<label for="userPassword" class="formLabel">비밀번호</label>
-						<input type="password" class="formInput" name="userPassword" id="pw1" maxLength="12" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
-						<div>
-							<font id="pwc_feedback" size="2" value="1"></font>
+						<div class="form-items">
+							<label for="pw1" class="form-label">비밀번호</label>
+							<input type="password" name="userPassword" id="pw1" maxLength="12" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
+							<font id="pwc_feedback" class="feedbacks" size="2" value="1"></font>
 						</div>
 						
-						<label for="passwordchk" class="formLabel">비밀번호확인</label>
-						<input type="password" class="formInput" name="passwordchk" id="pw2">
-						<div>
-							<font id="pw_feedback" size="2" value="1"></font>
+						<div class="form-items">
+							<label for="passwordchk" class="form-label">비밀번호확인</label>
+							<input type="password" name="passwordchk" id="pw2">
+							<font id="pw_feedback" class="feedbacks" size="2" value="1"></font>
 						</div>
 						
-						<label for="name" class="formLabel">성명</label>
-						<input type="text" class="formInput" name="name" id="inputName" placeholder="홍길동"><br>
+						<div class="form-items">
+							<label for="inputName" class="form-label">성명</label>
+							<input type="text" name="name" id="inputName" placeholder="홍길동"><br>
+						</div>
 						
-						<label for="userEmail" class="formLabel">이메일주소</label>
-						<input type="email" class="formInput" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
-						<button type='button' id="sendEmail" class="btn btn-default btn-round"><b>인증번호전송</b></button><br>
-						<span class="mail_input_box_warn"></span>
-						<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
-						<div>
+						<div class="form-items-email">
+							<label for="inputEmail" class="form-label">이메일주소</label>
+							<input type="email" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
+							<div>
+								<button type='button' id="sendEmail" class="btn btn-default btn-round"><b>인증번호전송</b></button>
+							</div>
+							<span class="mail_input_box_warn"></span>
+							<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
 							<font id="email_feedback" size="2" value="1"></font>
 						</div>
 						
-						<label for="inputPhone" class="formLabel">전화번호</label>
-						<input type="tel" name="userPhone" class="formInput" id="inputPhone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" maxlength="11" placeholder=" - 제외 11자리 (010XXXXXXXX)"><br>
-						<label for="bankCode" class="formLabel">은행사</label>
-						<select th:name="bank" id="bankCode" style="width:80px;height:48px;" required>
-							<option value=""> 은행사 </option>
-							<option th:each="bankCode : ${bankCode}" th:value="${bankCode.codeId}" th:text="${bankCode.codeName}"></option>
-						</select>
-						<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="accnt" id="inputAccnt" placeholder="- 제외 숫자만" style="width:213px;" ><br>
-						<div class="busiTypeR">
-							<label>메일 알림수신</label> 
-							<label class="labelRadio"><input type="radio" name="userMessaging" value="S1" checked>수신동의</label>
-							<label class="labelRadio"><input type="radio" name="userMessaging" value="S0">수신거부</label>
+						<div class="form-items">
+							<label for="inputPhone" class="form-label">전화번호</label>
+							<input type="tel" name="userPhone" id="inputPhone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" maxlength="11" placeholder=" - 제외 11자리 (010XXXXXXXX)"><br>
 						</div>
+						
+						<div class="form-items-bank">
+							<label for="bankCode" class="form-label">은행사</label>
+							<select th:name="bank" id="bankCode" style="width:80px;height:48px;" required>
+								<option value=""> 은행사 </option>
+								<option th:each="bankCode : ${bankCode}" th:value="${bankCode.codeId}" th:text="${bankCode.codeName}"></option>
+							</select>
+							<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="accnt" id="inputAccnt" placeholder="- 제외 숫자만" style="width:213px;" ><br>
+						</div>
+						
+						<label class="form-label">메일 알림수신</label>
+							<label><input type="radio" class="inputRadio" name="userMessaging" value="S1" checked>수신동의</label>
+							<label><input type="radio" class="inputRadio" name="userMessaging" value="S0">수신거부</label>
 					</div>
 
 					<div id="signIn-right">
-						<h3 class="mb-4 billing-heading" align="center"><b>사업자정보</b>(필수)</h3>
+						<h3 class="mb-4 billing-heading" align="center" style="margin: 0px 0 30px 0;"><b>사업자정보</b>(필수)</h3>
 						<input type="hidden" name="Type" id="busiType" value="U1">
-						<label for="b_nm" class="formLabel">상호명</label><input type="text"
+						
+						<div class="form-items">
+							<label for="b_nm" class="form-label">상호명</label><input type="text"
 							name="Title" class="formInput" id="busiTitle"><br>
-						<label for="BNo" class="formLabel">사업자등록번호</label><input
-							type="text" name="Num" class="formInput" id="inputBno" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxLength="10" placeholder=" - 제외 숫자 10자리(ex: 1011012345)">
-						<button type='button' id="busiChk" class="btn btn-default btn-round"><b>사업자인증</b></button>
-						<br>
-						<div>
-							<font id="busi_feedback" size="2" value="1"></font>
 						</div>
-						<br>
+						
+						<div class="form-items-Bno">
+							<label for="BNo" class="form-label">사업자등록번호</label>
+							<input type="text" name="Num" class="formInput" id="inputBno" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxLength="10" placeholder=" - 제외 숫자 10자리(ex: 1011012345)">
+							<button type='button' id="busiChk" class="btn btn-default btn-round"><b>사업자인증</b></button>
+							<br>
+							<div>
+								<font id="busi_feedback" size="2" value="1"></font>
+							</div>
+						</div>
 						<div id="chkArea">
 							<div>
 								<b>행사가능지역</b>
@@ -243,23 +298,23 @@
 								</div>
 							</div>
 						</div>
+						<div id="submitArea">
+							<button type='reset' class="btns grey"><b>초기화</b></button>
+							<button type='button' id="busiSignUp" class="btns yellow"><b>회원가입</b></button>
+						</div>
 					</div>
 				</form>
-			<div id="submitArea">
-				<button type='reset' class="btn btn-g btn-round btn-lg"><b>초기화</b></button>
-				<button type='button' id="busiSignUp" class="btn btn-warning btn-round btn-lg"><b>회원가입</b></button>
-			</div>
 			</div>
 		</div>
 		</div>
 		<div id="modal">
 			<div class="modal_content">
-				<h2>회원가입완료!</h2>
-				<p>업체회원으로 활동하실 수 있습니다.</p>
+				<h2 style="margin-bottom:40px;"><b>회원가입완료!</b></h2>
+				<p><b>업체회원으로 활동하실 수 있습니다.</b></p>
 				<div id="button_box">
-					<button type="button" id="modal_login_btn"
+					<button type="button" id="modal_login_btn" class="btns yellow loginBtn"
 						th:onclick="|location.href='@{loginPage}'|">로그인</button>
-					<button type="button" id="modal_main_btn"
+					<button type="button" id="modal_main_btn" class="btns grey mainBtn"
 						th:onclick="|location.href='/'|">홈으로</button>
 				</div>
 			</div>
@@ -488,44 +543,34 @@
 			}
 
 			//사업자인증
-			$('#busiChk')
-					.click(
-							function() {
-								var bno = $('#inputBno').val();
-								var busiResult = $("#busi_feedback");
-								var data = {
-									"b_no" : [ bno ]
-								}
-								$
-										.ajax({
-											url : "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D", // serviceKey 값을 xxxxxx에 입력
-											type : "POST",
-											data : JSON.stringify(data), // json 을 string으로 변환하여 전송
-											dataType : "JSON",
-											contentType : "application/json",
-											accept : "application/json",
-											success : function(result) {
-												if (result.match_cnt == 1) { // 진위확인 완료할 경우
-													busiResult
-															.html("사업자 인증완료!");
-													busiResult.attr('color',
-															'#2fb380');
-													busiResult.attr('value',
-															'0');
-												} else { // 실패
-													busiResult
-															.html("사업자 인증실패!");
-													busiResult.attr('color',
-															'#dc3545');
-													busiResult.attr('value',
-															'1');
-												}
-											},
-											error : function(result) {
-												alert(result.responseText);
-											}
-										})
-							})
+			$('#busiChk').click(function() {
+				var bno = $('#inputBno').val();
+				var busiResult = $("#busi_feedback");
+				var data = {
+							"b_no" : [ bno ]
+							}
+				$.ajax({
+					url : "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=ZP9liKICYhLgOIetbA%2FuHmbWd5%2B0eIbaXupCEqDK%2FkT8pXmtK71I7411M4zxmcpVZamTpeIrDBf1GE1BsfDxvg%3D%3D", // serviceKey 값을 xxxxxx에 입력
+					type : "POST",
+					data : JSON.stringify(data), // json 을 string으로 변환하여 전송
+					dataType : "JSON",
+					contentType : "application/json",
+					accept : "application/json",
+					success : function(result) {
+						if (result.match_cnt == 1) { // 진위확인 완료할 경우
+							busiResult.html("사업자 인증완료!");
+							busiResult.attr('color','#2fb380');
+							busiResult.attr('value','0');
+						} else { // 실패
+							busiResult.html("사업자 인증실패!");
+							busiResult.attr('color','#dc3545');
+							busiResult.attr('value','1');
+						}
+					},error : function(result) {
+						alert(result.responseText);
+					}
+				})
+			})
 		</script>
 	</div>
 </body>

@@ -1,8 +1,5 @@
 package com.eventi.left.common;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 

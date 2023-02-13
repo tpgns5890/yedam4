@@ -3,21 +3,24 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default_layout}">
 
 <head>
-	<style>
+	<link rel="stylesheet" href="/assets/css/btns.css">
+	<style> 
 		#container {
 			width: 70%;
 			margin: 0 auto;
 		}
-
+		
 		#signInBox {
 			padding: 20px;
-			min-height: 550px;
-			display: flex;
-			line-height: 3em;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: flex-end;
+    		min-height: 550px;
+    		display: flex;
+    		line-height: 3em;
+    		flex-direction: column;
 		}
+		#signIn{
+			display: flex;
+		}
+
 		#submitArea button {
 			margin-left: 10px;
 		}
@@ -47,37 +50,42 @@
 		}
 
 		#signIn-right {
+			display:flex;
+			flex-direction: column;
+    		justify-content: space-between;
 			padding: 20px;
 			width: 50%;
-			display: inline-block;
 		}
 
 		#submitArea {
-			margin-top: 20px;
-			margin-bottom: 20px;
-		}
-
-		label {
-			width: 100px;
-			margin-top: 40px;
+			position: relative;
+			display:flex;
+			justify-content: flex-end;
 		}
 
 		input {
 			width: 300px;
 			margin-right: 15px;
 		}
-
+		
+		#qListdiv{
+			max-height:300px;
+			overflow:auto;
+		}
+		
+		#qList li{
+			height: 35px;
+			font-size:17px;
+			font-weight: 700;
+			line-height:0;
+		}
 		.inputRadio {
 			width: 20px;
 		}
 
 		.labelRadio {
 			width: 80px;
-		}
-
-		#inputEmailChk {
-			width: 140px;
-    		margin-left: 263px;
+			font-size:18px;
 		}
 
 		#modal {
@@ -96,10 +104,8 @@
 		}
 
 		#modal button {
-			display: inline-block;
-			width: 100px;
-			border: 0.2px solid black;
-			border-radius: 5px;
+			height: 40px;
+			padding:10px;
 		}
 		
 		.btn-warning {
@@ -116,7 +122,8 @@
 			padding: 20px;
 			background: #fff;
 			border: 0.5px solid #666;
-			border-radius: 15px;
+			border-radius: 5px;
+			text-align:center;
 		}
 
 		#modal .modal_layer {
@@ -129,15 +136,65 @@
 			z-index: -1;
 		}
 
-		#modal_login_btn {
-			background: #2fb380;
-		}
-
 		#button_box {
 			display: flex;
 			margin-top: 40px;
 			justify-content: flex-end;
 		}
+		
+		#inputEmailChk {
+			width: 140px;
+    		grid-column-start: 2;
+    		grid-row-start : 3;
+		}
+		
+		.form-items{
+			display: grid;
+    		grid-template-columns: 130px 300px;
+    		grid-template-rows: 50px 20px;
+    		align-items:start;
+    		margin-bottom:10px;
+		}
+		
+		.feedbacks{
+			grid-column-start:2;
+			top: -10px;
+  	 		position: relative;
+  	 		
+		}
+		.form-label{
+			font-size: 18px;
+    		width: 120px;
+    		margin-right: 10px;
+    		text-align: right;
+		}
+		.form-items-email{
+			display: grid;
+    		grid-template-columns: 130px 310px 115px;
+    		grid-template-rows: 50px 30px 50px 30px;
+		}
+		.form-items-crtf{
+			display: grid;
+		    grid-template-columns: 130px 310px 115px;
+		    grid-template-rows: 50px 30px;
+		    margin-bottom: 30px;
+		}
+		#email_feedback{
+			grid-column-start: 2;
+			grid-row-start:4;
+			top: -10px;
+    		position: relative;
+		}
+		.mail_input_box_warn{
+			grid-column-start: 2;
+    		grid-row-start : 2;
+    		top: -10px;
+    		position: relative;
+		}
+		.loginBtn{
+			background-image: linear-gradient(45deg, #2fb380 50%, transparent 70%);
+		}
+
 	</style>
 </head>
 
@@ -146,86 +203,108 @@
 		<div style="background-image: url(&quot;/assets/images/signUpNorm.jpg&quot;);padding-top: 60px;">
 		<div id="container">
 			<div id="signInBox">
-				<div id="signIn-left">
-					<form id="signIn" name="signIn">
-						<h3 class="mb-4 billing-heading" align="center"><b>기본정보</b> (필수)</h3>
+				<form id="signIn" name="signIn" style="width: 100%;">
+					<div id="signIn-left">
+						<h3 class="mb-4 billing-heading" style="margin: 0px 0 30px 0;" align="center"><b>기본정보</b> (필수)</h3>
 						
-						<label for="inputId" class="font-alt mb-0">아이디</label>
-						<input type="text" name="userId" id="inputId" maxLength="12" placeholder="최대 12글자의 영문자,숫자 조합">
-						<div>
-							<font id="id_feedback" size="2" value="1"></font>
+						<div class="form-items">
+							<label for="inputId" class="form-label"><b>아이디</b></label>
+							<input type="text" name="userId" id="inputId" maxLength="12" placeholder="최대 12글자의 영문자,숫자 조합">
+							<font id="id_feedback" class="feedbacks" size="2" value="1"></font>
 						</div>
 
-						<label for="pw1">비밀번호</label>
-						<input type="password" name="userPassword" id="pw1" maxLength="12" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
-						<div>
-							<font id="pwc_feedback" size="2" value="1"></font>
+						<div class="form-items">
+							<label for="pw1" class="form-label">비밀번호</label>
+							<input type="password" name="userPassword" id="pw1" maxLength="12" placeholder="숫자와 문자 포함 형태의 6~12자리 이내">
+							<font id="pwc_feedback" class="feedbacks" size="2" value="1"></font>
 						</div>
 						
-						<label for="passwordchk">비밀번호확인</label>
-						<input type="password" name="passwordchk" id="pw2">
-						<div>
-							<font id="pw_feedback" size="2" value="1"></font>
+						<div class="form-items">
+							<label for="passwordchk" class="form-label">비밀번호확인</label>
+							<input type="password" name="passwordchk" id="pw2">
+							<font id="pw_feedback" class="feedbacks" size="2" value="1"></font>
 						</div>
 						
-						<label for="inputName">성명</label>
-						<input type="text" name="name" id="inputName" placeholder="홍길동"><br>
+						<div class="form-items">
+							<label for="inputName" class="form-label">성명</label>
+							<input type="text" name="name" id="inputName" placeholder="홍길동"><br>
+						</div>
 						
-						<label for="inputEmail">이메일주소</label>
-						<input type="email" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
-						<button type='button' id="sendEmail" class="btn btn-default btn-round"><b>인증번호전송</b></button>
-						<br> <span class="mail_input_box_warn"></span>
-						<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
-						<div>
+						<div class="form-items-email">
+							<label for="inputEmail" class="form-label">이메일주소</label>
+							<input type="email" name="userEmail" id="inputEmail" placeholder="eventi@eventi.com">
+							<div>
+								<button type='button' id="sendEmail" class="btn btn-default btn-round"><b>인증번호전송</b></button>
+							</div>
+							<span class="mail_input_box_warn"></span>
+							<input id="inputEmailChk" type="text" placeholder="숫자 6자리의 인증번호">
 							<font id="email_feedback" size="2" value="1"></font>
 						</div>
 						
-						<label for="inputPhone" class="font-alt mb-0">전화번호</label>
-						<input type="tel" name="userPhone" id="inputPhone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" maxlength="11" placeholder=" - 제외 11자리 (010XXXXXXXX)"><br>
+						<div class="form-items">
+							<label for="inputPhone" class="form-label">전화번호</label>
+							<input type="tel" name="userPhone" id="inputPhone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" maxlength="11" placeholder=" - 제외 11자리 (010XXXXXXXX)"><br>
+						</div>
 						
-						<label for="bankCode" class="font-alt mb-0">은행사</label>
-						<select th:name="bank" id="bankCode" style="width:80px;height:48px;" required>
-							<option value=""> 은행사 </option>
-							<option th:each="bankCode : ${bankCode}" th:value="${bankCode.codeId}" th:text="${bankCode.codeName}"></option>
-						</select>
-						<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="accnt" id="inputAccnt" placeholder="- 제외 숫자만" style="width:213px;" ><br>
+						<div class="form-items-bank">
+							<label for="bankCode" class="form-label">은행사</label>
+							<select th:name="bank" id="bankCode" style="width:80px;height:48px;" required>
+								<option value=""> 은행사 </option>
+								<option th:each="bankCode : ${bankCode}" th:value="${bankCode.codeId}" th:text="${bankCode.codeName}"></option>
+							</select>
+							<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="accnt" id="inputAccnt" placeholder="- 제외 숫자만" style="width:213px;" ><br>
+						</div>
 						
-						<label>메일 알림수신</label>
-						<label><input type="radio" class="inputRadio" name="userMessaging" value="S1" checked>수신동의</label>
-						<label><input type="radio" class="inputRadio" name="userMessaging" value="S0">수신거부</label>
-						</form>
-				</div>
-				<div id="signIn-right">
-				
-					<h3 class="mb-4 billing-heading" align="center"><b>사회자/디자이너회원 승급 신청</b> (선택)</h3>
-					<div align="center">
-					<input type="radio" class="inputRadio" name="certType" value="MC"><label
-						class="labelRadio">사회자</label>
-					<input type="radio" class="inputRadio" name="certType" value="DESIGNER"><label
-						class="labelRadio">디자이너</label>
+						<label class="form-label">메일 알림수신</label>
+							<label><input type="radio" class="inputRadio" name="userMessaging" value="S1" checked>수신동의</label>
+							<label><input type="radio" class="inputRadio" name="userMessaging" value="S0">수신거부</label>
 					</div>
-					<label for="inputQna">자격증명</label><input type="text" id="inputQna"><br>
-					<label for="inputQno">자격증발급번호</label><input type="text" id="inputQno">
-					<button type='button' class="btn btn-default btn-round" id="qPlus"><b>추가</b></button>
-					<br>
-					<br>
-					<ul id="qList">
-					</ul>
+					<div id="signIn-right">
+						<div>
+							<h3 class="mb-4 billing-heading" style="margin: 0px 0 30px 0;" align="center"><b>사회자/디자이너회원 승급 신청</b> (선택)</h3>
+							<div align="center">
+							
+							<input type="radio" class="inputRadio" name="certType" value="MC"><label
+								class="labelRadio">사회자</label>
+							<input type="radio" class="inputRadio" name="certType" value="DESIGNER"><label
+								class="labelRadio">디자이너</label>
+							</div>
+							<div class="form-items">
+								<label for="inputQna" class="form-label">자격증명</label>
+								<input type="text" id="inputQna">
+							</div>
+							
+							<div class="form-items-crtf">
+								<label for="inputQno" class="form-label">자격증발급번호</label><input type="text" id="inputQno">
+								<div>
+									<button type='button' class="btn btn-default btn-round" id="qPlus"><b>추가</b></button>
+								</div>
+							</div>
+							<div id="qListdiv">
+								<ul id="qList">
+								</ul>
+							</div>
+						</div>
+					<div>
+						<div id="submitArea">
+							<button type='reset' class="btns grey" ><b>초기화</b></button>
+							<button type='button' id="normalSignIn" class="btns yellow"><b>회원가입</b></button>
+						</div>
+					</div>
 				</div>
-				<div id="submitArea">
-					<button type='reset' class="btn btn-g btn-round btn-lg"><b>초기화</b></button>
-					<button type='button' id="normalSignIn" class="btn btn-warning btn-round btn-lg"><b>회원가입</b></button>
-				</div>
+				</form>
 			</div>
 		</div>
 		</div>
 		<div id="modal">
 			<div class="modal_content">
-				<h2>회원가입완료!</h2>
-				<p>일반회원으로 활동하실 수 있습니다.</p>
+				<h2 style="margin-bottom:40px;"><b>회원가입완료!</b></h2>
+				<p><b>일반회원으로 활동하실 수 있습니다.</b></p>
 				<div id="button_box">
-					<button type="button" id="modal_login_btn" th:onclick="|location.href='@{loginPage}'|">로그인</button>
-					<button type="button" id="modal_main_btn" th:onclick="|location.href='/'|">홈으로</button>
+					<button type="button" id="modal_login_btn" class="btns yellow loginBtn"
+						th:onclick="|location.href='@{loginPage}'|">로그인</button>
+					<button type="button" id="modal_main_btn" class="btns grey"
+						th:onclick="|location.href='/'|">홈으로</button>
 				</div>
 			</div>
 			<div class="modal_layer"></div>
@@ -386,8 +465,8 @@
 							/* li 만들고 append */
 							$("#qList").append($("<li/>").attr('class', 'qualLi').append(
 								$("<span/>").attr('data-value', '{\"crtfName\":\"' + qName + '\",\"crtfNum\":\"' +
-									qNo + '\",\"crtfType\":\"' + certType + '\"}').text("자격증 명: " + qName +
-									", 자격증발급번호: " + qNo),
+									qNo + '\",\"crtfType\":\"' + certType + '\"}').text("자격증: " + qName +
+									" | 자격증발급번호: " + qNo),
 								$("<button/>").attr({
 									type: "button",
 									class: "quDelBtn"

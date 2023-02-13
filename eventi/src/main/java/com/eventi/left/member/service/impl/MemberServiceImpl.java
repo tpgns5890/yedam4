@@ -99,19 +99,19 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		String url = "http://data.kca.kr/api/v1/cq/certificate/check"; // api url
 		String apiKey = "c2cbf7ef39edd94fd8d3ee127e1d8d4950f60a67446eed201154ec83a7689dcf"; // api 인증키
 
-		// get parameter 담아주기
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url) // url
-				.queryParam("apiKey", apiKey) // 인증키
-				//.queryParam("name", name) // 이름
-				.queryParam("no", qNo); // 자격증발급번호
-		RestTemplate restTpl = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders(); // 담아줄 header
-		HttpEntity<Object> entity = new HttpEntity<>(headers); // http entity에 header 담아줌
-		ResponseEntity<JsonNode> responseEntity = restTpl.exchange(builder.toUriString(), HttpMethod.GET, entity,
-				JsonNode.class);
-		JsonNode result = (JsonNode) responseEntity.getBody();
+		RestTemplate restTpl = new RestTemplate();      //RestTemplate 객체 생성
+		HttpHeaders headers = new HttpHeaders();    // HttpHeader 클래스를 생성
+		HttpEntity<Object> entity = new HttpEntity<>(headers);  //headers를 HttpEntity 객체에 담음
 
-		return ResponseEntity.ok(result);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)    //요청 URL 정의
+						                                   .queryParam("apiKey", apiKey)    //인증키
+						                                   .queryParam("no", qNo);  //자격증발급번호
+		ResponseEntity<JsonNode> responseEntity = restTpl.exchange(builder.toUriString(), 
+		                                                           HttpMethod.GET, entity,
+					                                               JsonNode.class); //exchang() 메소드로 api호출
+		JsonNode result = (JsonNode) responseEntity.getBody();
+		return ResponseEntity.ok(result);   //요청한 결과를 JsonNode로 변환하여 return
 	}
 	
 	// userdetails
@@ -158,7 +158,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		String content = setContent;
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+			MimeMessageHelper helper = 
+					new MimeMessageHelper(message, true, "utf-8");
 			helper.setFrom(setFrom);
 			helper.setTo(toMail);
 			helper.setSubject(title);

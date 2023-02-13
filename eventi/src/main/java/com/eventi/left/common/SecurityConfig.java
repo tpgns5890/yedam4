@@ -56,8 +56,6 @@ public class SecurityConfig {
 		
 		http.formLogin()
 				.loginPage("/loginPage")	// 사용자 정의 로그인 페이지
-				//.defaultSuccessUrl("/") 	// 로그인 성공 후 이동 페이지
-			    //.failureUrl("/loginPage")	    // 로그인 실패 후 이동 페이지
 				.usernameParameter("userid")	// 아이디 파라미터명 설정
 				.passwordParameter("password")	// 패스워드 파라미터명 설정
 				.loginProcessingUrl("/login")	// 로그인 Form Action Url

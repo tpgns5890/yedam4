@@ -32,10 +32,8 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         clearSession(request);
 
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
-
         /**
-         * prevPage가 존재하는 경우 = 사용자가 직접 /auth/login 경로로 로그인 요청
+         * prevPage가 존재하는 경우 = 사용자가 직접 /loginPage 경로로 로그인 요청
          * 기존 Session의 prevPage attribute 제거
          */
         String prevPage = (String) request.getSession().getAttribute("prevPage");
@@ -45,6 +43,8 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
         // 기본 URI
         String uri = "/";
+        
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         /**
          * savedRequest 존재하는 경우 = 인증 권한이 없는 페이지 접근

@@ -105,20 +105,18 @@
 
 		#list-head {
 			display: flex;
-			justify-content: space-between;
-			align-items: center;
+    		justify-content: flex-end;
 		}
 
 		#selArea {
 			display: flex;
-			flex-wrap: wrap;
-			flex-direction: row;
-			align-items: flex-start;
-			margin-right: 5px;
+   			flex-direction: row;
+    		margin-right: 5px;
+    		align-items: center;
 		}
 		
 		#selArea input{
-			margin-right:5px;
+			margin: 0px 5px 0px 3px;
 		}
 		#list-head-right {
 			display: flex;
@@ -180,9 +178,15 @@
 					<div id="list-head">
 						<div id="list-head-right">
 							<div id="selArea">
-								전체<input type="radio" name="crtfType" value="" checked>
-								MC<input type="radio" name="crtfType" value="MC">
-								DESIGNER<input type="radio" name="crtfType" value="DESIGNER">
+								<div>
+									전체<input type="radio" name="crtfType" value="" checked>
+								</div>
+								<div>
+									MC<input type="radio" name="crtfType" value="MC">
+								</div>
+								<div>
+									DESIGNER<input type="radio" name="crtfType" value="DESIGNER">
+								</div>
 								<input type="text" name="userId" placeholder="아이디 검색">
 							</div>
 						</div>

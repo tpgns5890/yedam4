@@ -168,16 +168,16 @@
 					      <label for="title" id="title">지역</label>
 					  <input type="text" id="expectedLocal" name="expectedLcal" th:value="${est.expectedLcal}" readonly>
 					      <label for="title" id="title">행사 관련 희망사항</label>
-					  <input type="text" id="wishes" name="wishes" th:value="${est.wishes}" readonly>
+					  <textarea id="wishes" name="wishes" style="width: 100%;font-size: 14px;font-weight: 700;padding: 17px;height: auto;border: 1px solid rgb(221, 221, 221);border-radius: 5px;"readonly>[[${est.wishes}]]</textarea>
 					  <input type="hidden" id="thisEno" th:value="${est.eno}">
 					  <input type="hidden" id="thisUserId" th:value="${est.userId}">
 					</form>
-					<th:block th:if="${session.member} and ${session.member.userId} == ${est.userId}">
-						<button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
-					</th:block>
 					<th:block sec:authorize="isAuthenticated()">			
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="prop"><b>견적제안등록</b></button>
 				 	</th:block>
+					<th:block th:if="${session.member} and ${session.member.userId} == ${est.userId}">
+						<button type="button" class="btn btn-primary" id="deleteBtn">견적서 삭제</button><br>
+					</th:block>
 				</div>
 				<div id="content-right">
 					<!-- 로그인된 회원 버튼표시-->	
@@ -187,7 +187,7 @@
 						<div id="propInfo">
 							<p th:text="|업체아이디 : ${prop.userId}|"></p>
 							<p th:text="|한줄어필 : ${prop.companyInt}|"></p>
-							<p th:text="|제안금액 : ${prop.totalPrc}원|"></p>
+							<p th:text="|제안금액 : ${#numbers.formatInteger(prop.totalPrc, 3, 'COMMA') + '원'}|"></p>
 							<input type="hidden" name="pno" id="pno" >
 						</div>
 						<div id="propBtn">
