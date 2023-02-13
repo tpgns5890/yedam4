@@ -4,7 +4,7 @@
 
 <mapper namespace="com.eventi.left.contest.mapper.ContestMapper">
 
-	<!-- 분류별 카테고리/정렬순서 -->
+	<!-- 분류별 카테고리 -->
 	<sql id="category">
 		<if test="category != null and category != ''">
 			and category = #{category}
@@ -14,7 +14,9 @@
 	<!-- 로그인했을경우, 좋아요 체크확인 -->
 	<sql id="loginLikeCheck">
 		<if test="userId != null and userId != ''">
-			,(select count(*) from likes where target_no = c_no and user_id= #{userId})AS userLike
+			,(select count(*) 
+			 from likes where target_no = c_no 
+			 and user_id= #{userId})AS userLike
 		</if>
 	</sql>
 	
