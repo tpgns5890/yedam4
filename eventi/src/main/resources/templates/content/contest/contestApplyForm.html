@@ -47,7 +47,7 @@
 				<input type="hidden" id="token" th:name="${_csrf.parameterName}"
 					th:value="${_csrf.token}" />
 				<ul>
-					<li><input type="hidden" id="dgnNo" name="dgnNo" th:value="${dNo}" readonly="readonly"><br /></li>
+					<li><input type="hidden" id="dgnNo" name="dgnNo" th:value="${dNo}" readonly="readonly"></li>
 					<li><input type="hidden" name="cNo" th:value="${contest.cNo}" readonly="readonly"></li>
 					<li><input type="hidden" name="caregory" th:value="${contest.categoryCode}"></li>
 					<li><label>카테고리</label><input type="text" th:value="${contest.category}" readonly="readonly"></li>
@@ -77,7 +77,7 @@
 				</div>
 				<div class="contestBtn">
 					<button type="reset"  class="btn btn-g btn-round">초기화</button>
-					<button type="submit" class="btn btn-g btn-round" id="insertForm">등록</button>
+					<button type="submit" class="btn btn-y btn-round" id="insertForm">등록</button>
 					<button type="button" class="btn btn-g btn-round" id="cancleBtn" onclick="location.href='/contest/List'">취소</button>
 				</div>
 			</form>
@@ -85,7 +85,7 @@
 		
 		<!-- 임시저장 모달 -->
 		<div id="saveDesign" class="modal">
-			<div class="modal_content">
+			<div class="save_modal_content">
 				<span class="close">&times;</span>
 				<h2>임시저장 디자인 리스트</h2>
 				<div id="button_box"> </div>
@@ -116,7 +116,7 @@
 					<input id="accnt_change" name="accnt_change" type="text" th:value="${user.accnt}"><br>
 				
 				<div id="checkDiv" class="modelBtn">
-					<button id="change" class="modelBtn1 btn btn-g btn-round" style="font-size:16px;" type="button">변경</button>
+					<button id="change" class="modelBtn1 btn btn-y btn-round" style="font-size:16px;" type="button">변경</button>
 					<button id="cancle" class="modelBtn1 btn btn-g btn-round " style="font-size:16px;" type="button">취소</button>
 				</div>
 			</div>
@@ -255,7 +255,6 @@
 				return true;
 			}
 			
-			console.log(($('input[name="save"]').is(":checked")));
 			
 			//파일 업로드 이미지 미리보기
 			//파일 INPUT창에 변화가 있을 경우 실행
@@ -296,7 +295,7 @@
 			
 			$("#dgnNo").val("");
 			$('input[name="name"]').val("");
-			oEditors.getById["cntn"].exec("PASTE_HTML", [""]);
+			oEditors.getById["cntn"].exec("SET_IR", [""]);
 			
 			//게시글 불러오기
 			$.ajax({
@@ -327,7 +326,8 @@
 		})
 		
 		function choiceDesign(design) {
-	    	let span = `<span id="modal_choice_btn">[${design.dgnNo}] ${design.name}</span><button type="button" onclick=checkFile('${design.dgnNo}')>선택</button><br>`;
+	    	let span = `<span id="modal_choice_btn">[${design.dgnNo}] ${design.name}</span>
+	    				<button class="btn btn-y" style="padding: 2px 3px" type="button" onclick=checkFile('${design.dgnNo}')>선택</button><br>`;
 	    	return span;
 	    }
 		    
@@ -345,6 +345,7 @@
 						xhr.setRequestHeader(header, token);
 		            },
 					success : function(data) {
+								console.log(data);
 								oEditors.getById["cntn"].exec("SET_IR", [""]);
 								$("#dgnNo").val(data[0].dgnNo);
 								$('input[name="name"]').val(data[0].name);

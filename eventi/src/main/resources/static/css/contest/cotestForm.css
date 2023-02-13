@@ -96,13 +96,16 @@ ul li.tag-item {
 	width: 260px;
 	margin: 0 auto 0px;
 }
-
-.contestBtn button {
+.contestUpBtn {
+	top: 150px;
+    width: 180px;
+	margin: 0 auto 0px;
+}
+.contestBtn button, .contestUpBtn button {
 	margin-right: 10px;
 	font-size: 16px;
 	font-weight: bold;
 }
-
 .tag-item:hover {
 	background-color: #262626;
 	color: #fff;

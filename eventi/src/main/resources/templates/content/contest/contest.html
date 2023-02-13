@@ -48,6 +48,10 @@ h4 {
     min-height: 300px;
     box-shadow: 2px 10px 9px 5px rgb(0 0 0 / 4%);
 }
+.icon-tools-2 {
+    font-size: 18px;
+    font-weight: bolder;
+}
 	
 </style>
 </head>
@@ -278,12 +282,7 @@ h4 {
 		let writer = '[[${contest.writer}]]';
 		let category = '[[${contest.categoryCode}]]';
 		
-		//로그인모달창.
-		function login(){
-			 $("#header_modal").show();
-		}
-		
-		//링크복사 -------------------------------------------------------
+		//링크복사
 		function clip(){
 			var url = '';
 			var textarea = document.createElement("textarea");
@@ -342,8 +341,6 @@ h4 {
 			
 			if(date <= dtCls){
 				alert(dtCls + '이전날짜는 불가능합니다.')
-				console.log(date);
-				console.log(dtCls);
 				return false;
 			}
 			
@@ -388,22 +385,24 @@ h4 {
 			if (!confirm('공모전을 삭제하시겠습니까?')) {
 				return false;
 			}
+			let cNoList= [];
+			cNoList.push(cNo);
 			
 			$.ajax({
 	            url:'/contest/delete',
 	            method:"post",
-	            data : {cNo},
+	            data : {cNoList},
 	            beforeSend : function(xhr)
                 {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
-				if(res == 1){
-					alert('삭제 완료');
+				if(res > 0){
+					alert('공모전 삭제되었습니다.');
 					location.href="/contest/List";
 				}else {
 					alert('응모작품이 있어 삭제 불가능합니다.');
-					location.href="../contest/select?cNo="+ cNo;
+					location.href="/contest/select?cNo="+ cNo;
 					
 				}
 				
@@ -484,7 +483,7 @@ h4 {
 			}
 			
 			 //회원아이디에 따라 다르게 표시됌.(수정,삭제,답변등록)
-			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.) 공고문103
+			 // 비공개인 경우(문의작성자와 공모전작성자만 확인가능.)
 			if(question.secretYn == 'Y' && question.userId != userId 
 										&& writer != userId 
 										&& userId != "admin" ){
@@ -625,9 +624,6 @@ h4 {
  			let Cntn = $(this).parent().children('textarea').val(); 
  			let targetId = cNo;
  			let category = 'T01';
- 			
- 			console.log(Cntn)
- 			console.log(Ttl)
  			
  			if(userId == ''){
  				location.href='/loginPage'//로그인.
@@ -793,8 +789,6 @@ h4 {
     				xhr.setRequestHeader(header, token);
                 },
 			}).then(res => {
-				console.log(res.design);
-				console.log(res.paging);
 				$("#cotestCntn").empty();
 				$("#cotestCntn").hide();
 				$("#designBox").empty();

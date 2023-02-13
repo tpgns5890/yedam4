@@ -34,6 +34,10 @@ public class ContestVO {
 	private String style; 	 //선호하는태그
 	private String settYN; //상금정산여부
 	
+	
+	//삭제를 위한 리스트
+	private List<String> cNoList;
+	
 	//정렬,검색
 	private String order = "dt_reg DESC"; //기본 정렬기준
 	private String search;

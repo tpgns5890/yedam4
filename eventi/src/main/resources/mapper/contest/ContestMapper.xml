@@ -11,6 +11,13 @@
 		</if>
 	</sql>
 	
+	<!-- 로그인했을경우, 좋아요 체크확인 -->
+	<sql id="loginLikeCheck">
+		<if test="userId != null and userId != ''">
+			,(select count(*) from likes where target_no = c_no and user_id= #{userId})AS userLike
+		</if>
+	</sql>
+	
 	<!-- 검색처리 -->
 	<sql id="search">
 		<if test="ttl != null and ttl != ''">
@@ -22,20 +29,13 @@
 		
 	</sql>
 	
-	<!-- 로그인했을경우, 좋아요 체크확인 -->
-	<sql id="loginLikeCheck">
-		<if test="userId != null and userId != ''">
-			,(select count(*) from likes where target_no = c_no and user_id= #{userId})AS userLike
-		</if>
-	</sql>
 	
 
 	<!-- 공모전 전체조회(임시저장/신고5회초과 제외,페이징) -->
 	<select id="contestList" resultType="ContestVO">
-
 	 SELECT RN,c_no,writer,ttl,cntn,dt_reg,dt_cls,dt_extns,pay,save,inq,rprt
 	 			,REGEXP_REPLACE(REVERSE(
-                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay)), '(\d{3})','\1,')
+                                    REGEXP_REPLACE(REVERSE(TO_CHAR(pay-30000)), '(\d{3})','\1,')
                                 ), '^,','') AS payComma
 	 			,code_select(category) category
 		        ,REPLACE(codeArr_select(style), ',', ' #') style

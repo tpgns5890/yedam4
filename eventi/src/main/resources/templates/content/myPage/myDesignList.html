@@ -18,6 +18,7 @@
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
+		<div >
 		<div class="designDiv" >
 			
 		<!-- 게시글 검색 -->
@@ -26,7 +27,7 @@
 						<option value="D1" th:selected="${caregory eq 'D1'}">현수막</option>
 						<option value="D2" th:selected="${caregory eq 'D2'}">배너</option>
 						<option value="D3" th:selected="${caregory eq 'D3'}">로고</option>
-						<option value="D4" th:selected="${caregory eq 'D4'}">포스터</option>
+						<option value="D4" th:selected="${caregory eq 'D4' or  caregory == null}">포스터</option>
 						<option value="D5" th:selected="${caregory eq 'D5'}">기타</option>
                 	</select>
                 	
@@ -102,11 +103,23 @@
 							    
 							</div>
 						</div>
+			<!-- 페이징처리 -->
+			<div th:if="${!#lists.isEmpty(design)}">
+				<div class="row mt-5">
+					<div class="col text-center">
+						<div class="block-27">
+							<th:block
+								th:replace="fragments/paging :: component(${paging},'gopage')">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		</div>
 		
 		<!-- 디자인 상세보기 모달 -->
 		<div id="designModel" class="modal">
-			<div class="img_modal_content">
+			<div class="dImg_modal_content">
 				
 				<div class="column middle">
 					<h3 id="title"></h3>
@@ -122,17 +135,6 @@
 			<div class="modal_layer"></div>
 		</div>
 			
-			<!-- 페이징처리 -->
-			<div th:if="${!#lists.isEmpty(design)}">
-				<div class="row mt-5">
-					<div class="col text-center">
-						<div class="block-27">
-							<th:block
-								th:replace="fragments/paging :: component(${paging},'gopage')">
-						</div>
-					</div>
-				</div>
-			</div>
 			
 				 
 		
