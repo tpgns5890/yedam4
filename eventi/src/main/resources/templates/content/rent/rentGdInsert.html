@@ -9,8 +9,12 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="/css/myPageSide.css">
 <style>
-	.label {
+	label {
 		color : black;
+		font-size: 18px;
+		display: inline-block;
+	    text-align: left;
+	    width: 100px;
 	}
 	
 	.fileShow{
@@ -24,6 +28,27 @@
 	
 	.contentSize{
 		margin: 100px 20px;
+	}
+	
+		.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+		font-size: 18px;
 	}
 </style>
 </head>
@@ -45,7 +70,7 @@
 			<!-- 카테고리 -->
 			<div class="col-md-12">
 				<div class="form-group">
-					<label class="label" for="designStyleList">물품카테고리</label> 
+					<label for="designStyleList">물품카테고리</label> 
 					<select id="caregory" name="caregory">
 						<option value="">-- 물품 카테고리 선택 --</option>
 						<option th:each="rent : ${rents}" th:value="${rent?.codeId}" th:text="${rent?.codeName}"></option>
@@ -55,33 +80,33 @@
 			
 			<div class="col-md-12">
 				<div class="form-group">
-					<label class="label" for="goodsNm">물품이름</label> 
+					<label for="goodsNm">물품이름</label> 
 					<input type="text" class="form-control" name="goodsNm" id="goodsNm">
 				</div>
 			</div>
 			
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<div class="form-group">
-					<label class="label" for="totalStock">보유수량</label> 
-					<input type="number" class="form-control" name="totalStock" id="totalStock">
+					<label  for="totalStock">보유수량</label> 
+					<input type="number" class="form-control" name="totalStock" id="totalStock" style="width: 200px;">
 				</div>
 			</div>
 			
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<div class="form-group">
-					<label class="label" for="rentalPrc">1일 대여금액</label> 
-					<input type="number" class="form-control" name="rentalPrc" id="rentalPrc">
+					<label for="rentalPrc">1일 대여금액</label> 
+					<input type="number" class="form-control" name="rentalPrc" id="rentalPrc" style="width: 200px;">
 				</div>
 			</div>
 			
 			<div class="col-md-12">
 				<div class="form-group" id="addDesign">
-					<label class="label" for="imgInp">물품이미지</label> 
+					<label for="imgInp">물품이미지</label> 
 					<input type="file" id="imgInp" name="uploadFile"/>
 					<div class="fileShow">
 						<img id="blah" src="#" alt = "your image" width="250px" />
 						<button type="button" id="cancel" class="btn btn-warning cancel">
-			              <span>Cancel</span>
+			              <span>X</span>
 			          	</button>
 			        </div> 	
 
@@ -90,7 +115,7 @@
 			
 			<div class="col-md-12">
 				<div class="form-group">
-					<input type="submit" id="insert" value="등록" class="btn btn-primary">
+					<input type="submit" id="insert" value="등록" class="blueBtn">
 				</div>
 			</div>
 		</form>

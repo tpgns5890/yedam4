@@ -3,30 +3,65 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default_layout}">
+
 <head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 <!-- 1.사이드바 css적용 -->
 <link rel="stylesheet" href="/css/myPageSide.css">
-<link rel="stylesheet" href="/css/contest/button.css"> 
+<link rel="stylesheet" href="/css/contest/button.css">
+
+<style>
+	.fullSize{
+		margin-left: 250px;
+		min-height: 600px;
+	}
+	
+	.contentSize{
+		margin: 100px 20px;
+	}
+	
+	.blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		margin-top: 3px;
+		margin-left: 5px;
+		width: 100px;
+		height: 50px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+}
+
+	select{
+		width: 100px;
+		height: 50px;
+	}
+</style>
+
 </head>
+
 <body>
 
 	<!-- 2.레이아웃 content적용 -->
 	<div layout:fragment="content" class="content">
-	
-		<section class="module bg-dark-60 gallery-page-header parallax-bg" data-background="/assets/images/gallery_bg.jpg" style="background-image: url(&quot;assets/images/gallery_bg.jpg&quot;);">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">마이페이지</h2>
-                <div class="module-subtitle font-serif" th:text="블라인드게시글관리"></div>
-              </div>
-            </div>
-          </div>
-        </section>
+    	<h2 hidden="hidden" class="module-title font-alt">마이페이지</h2>
+
 		
 		<!-- 3.현재페이지 myPageSide 적용 -->
 		<th:block th:replace="fragments/myPageSide :: myPageSide"></th:block>
 			
+			<div class="fullSize">
+        	<div class="contentSize">
+        	
+        	<div  style="margin-left: 70px;">
 			<!-- 타입별 정렬 -->
 			<select id="type" name="type">
 				<option value="">정렬</option>
@@ -45,7 +80,6 @@
 	
 			<!-- 조회순, 작성일순 정렬 -->
 			<select id="order" name="order">
-				<option value="">정렬</option>
 				<option value="dt" th:selected="${bboardVO.order=='dt'}">작성일순</option>
 				<option value="inq" th:selected="${bboardVO.order=='inq'}">조회순</option>
 			</select>
@@ -54,11 +88,12 @@
 			<input type="hidden" name="page" value="1">
 			
 			<!-- 게시글 검색 -->
-			<input type="text" name="search">
-			<input type="button" id="find" value="찾기">
+			<input type="text" name="search" style="height:50px; width:250px">
+			<input type="button" id="find" class="blueBtn" value="찾기">
 			
 			<!-- 게시글 삭제 -->
-			<button type="button" id="deleteBtn"  class="btn btn-d btn-round delBtn">삭제</button>
+			<button type="button" id="deleteBtn"  class="blueBtn">삭제</button>
+			</div>
 			
 			<!-- 테이블 -->
 			<div id="table">
@@ -90,10 +125,45 @@
 							<th:block th:if="${b.save} == 'Y'">
 								<td th:text=${b.bBoardNo}></td>
 							</th:block>
-								
-							<td th:text=${b.type}></td>
-							<td th:text=${b.lclsf}></td>
-							<td th:text=${b.mclsf}></td>
+							
+							<th:block th:if="${b.type} == '자유게시판'">
+								<td th:text="자유"></td>
+							</th:block>
+							<th:block th:if="${b.type} == '멘토링게시판'">
+								<td th:text="멘토링"></td>
+							</th:block>
+							
+							<th:block th:if="${b.lclsf} == 'genrl'">
+								<td th:text="일반"></td>
+							</th:block>
+							<th:block th:if="${b.lclsf} == 'reply'">
+								<td th:text="후기"></td>
+							</th:block>
+							<th:block th:if="${b.lclsf} == 'mc'">
+								<td th:text="사회자"></td>
+							</th:block>
+							<th:block th:if="${b.lclsf} == 'dgner'">
+								<td th:text="디자이너"></td>
+							</th:block>
+							
+							<th:block th:if="${b.mclsf} == null">
+								<td></td>
+							</th:block>
+							<th:block th:if="${b.mclsf} == 'contract'">
+								<td th:text="계약"></td>
+							</th:block>
+							<th:block th:if="${b.mclsf} == 'freelancer'">
+								<td th:text="프리랜서"></td>
+							</th:block>
+							<th:block th:if="${b.mclsf} == 'style'">
+								<td th:text="스타일"></td>
+							</th:block>
+							<th:block th:if="${b.mclsf} == 'advice'">
+								<td th:text="조언"></td>
+							</th:block>
+							<th:block th:if="${b.mclsf} == 'etc'">
+								<td th:text="기타"></td>
+							</th:block>
 							<td th:text="${b.ttl}"></td>
 							<td th:text="${b.inq}"></td>
 							<td th:text="${#dates.format(b.dt, 'yyyy/MM/dd')}"></td>
@@ -134,7 +204,8 @@
 					</div>
 				</div>
 			</div>
-			
+			</div>
+		</div>
 	<script>
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");

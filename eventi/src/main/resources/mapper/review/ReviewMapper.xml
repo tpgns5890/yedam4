@@ -25,11 +25,15 @@
 	
 	<!-- 타겟별 후기 조회 -->
 	<select id="getReview" resultType="ReviewVO">
-		SELECT R.REVIEW_NO, rpad(substr(R.USER_ID,'1','1'),LENGTH(R.USER_ID),'*') AS USER_ID, R.REVIEW_TGT, R.REVIEW_CNTN, R.WRITING_DT, TRUNC(STAR) FULLSTAR,  STAR - TRUNC(STAR) HALFSTAR, 5-ROUND(STAR) LASTSTAR 
-		FROM REVIEW R
-		WHERE REVIEW_TGT = #{reviewTgt}
-		AND CATEGORY = #{category}
-		<include refid="starSelect" />
+		SELECT R.REVIEW_NO, rpad(substr(R.USER_ID,'1','1'),LENGTH(R.USER_ID),'*') AS USER_ID, 
+		       R.REVIEW_TGT, R.REVIEW_CNTN, R.WRITING_DT, 
+		       TRUNC(STAR) FULLSTAR,  
+		       STAR - TRUNC(STAR) HALFSTAR, 
+		       5-ROUND(STAR) LASTSTAR 
+		  FROM REVIEW R
+		 WHERE REVIEW_TGT = #{reviewTgt}
+		   AND CATEGORY = #{category}
+		 <include refid="starSelect" />
 	</select>
 	
 	<!-- 별점 평균, 후기 개수 -->

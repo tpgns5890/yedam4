@@ -7,11 +7,18 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<link rel="stylesheet" href="/css/prtfl/button.css">
 <style>
 	.label {
 		color : black;
+		font-size: 18px;
+		padding: 0;
+		margin: 3px;
 	}
+	
+	.container{
+			margin-top: 30px;
+		}
 	
 	#check{
 		min-height : 3000px;
@@ -20,6 +27,50 @@
 	.fileShow{
 			display : none !important;
 	}
+	
+	.cntn{
+  	margin-top: 40px;
+    background-color: #e5f7ff91;
+    height: 1500px;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 5px 5px 13px 2px grey; 
+  }
+  
+  input{
+  	margin-top: 5px;
+  }
+  
+  .blueBtn{
+		background-color: #FFDE58;
+		border: 1px solid #FFDE58;
+		color: black;
+		width: 100px;
+		height: 30px;
+		padding: 0;
+		border-radius: 5px;
+		font-weight: bold;
+	}
+	
+	.blueBtn:hover {
+		background-color: white;
+		color: black;
+		border: 1px solid #FFDE58;
+	}
+	
+	#insert{
+	  	width: 100px;
+	    margin: auto;
+	    display: block;
+  	}
+  	
+  	select {
+		  	height: 30px;
+		    width: 150px;
+		    margin-top: 20px;
+		    margin-left: 10px;
+		    border-radius: 8px;
+		  }
 </style>
 </head>
 <body>
@@ -36,6 +87,10 @@
           </div>
         </section>		
 		
+		<div id="check">
+   <div class="container">
+
+	<div class="cntn">
 		<form action="/design/myDesignInsert" enctype="multipart/form-data" id="myDesignfrm" name="myDesignfrm" method="post">
 			<input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 			<div id="check">
@@ -52,7 +107,7 @@
 			<!-- 디자인 카테고리 -->
 			<div class="col-md-12">
 				<div class="form-group">
-					<label class="label" for="designStyleList">주요 디자인 스타일</label> 
+					<label class="label" for="designStyleList">디자인 스타일</label> 
 					<select id="caregory" name="caregory">
 						<option value="">-- 디자인 스타일 선택 --</option>
 						<option th:each="cat : ${designCat}" th:value="${cat?.codeId}" th:text="${cat?.codeName}"></option>
@@ -74,7 +129,7 @@
 					<div class="fileShow">
 						<img class="blah" src="#" alt = "your image" width="250px" />
 						<button type="button" id="cancel" class="btn btn-warning cancel">
-			              <span>Cancel</span>
+			              <span>X</span>
 			          	</button>
 			        </div> 	
 
@@ -83,18 +138,21 @@
 			
 			<div class="col-md-12">
 				<div class="form-group">
-					<input type="button" id="designAdd" value="이미지추가" class="btn btn-primary">
+					<input type="button" id="designAdd" value="이미지추가" class="blueBtn">
 				</div>
 			</div>
 			
 			<div class="col-md-12">
 				<div class="form-group">
-					<input type="submit" id="insert" value="등록" class="btn btn-primary">
+					<input type="submit" id="insert" value="등록" class="find-trigger btn-2">
 				</div>
 			</div>
 					
 			</div>
 		</form>
+		</div>
+		</div>
+		</div>
 		
 		<script>
 			//csrf설정
@@ -152,7 +210,7 @@
 								<div class="fileShow">
 								<img class="blah" src="#" alt = "your image" width="250px" />
 								<button type="button" id="cancel" class="btn btn-warning cancel">
-					              <span>Cancel</span>
+					              <span>X</span>
 					          	</button>
 					         </div>`
 		        $("#addDesign").append(tag);

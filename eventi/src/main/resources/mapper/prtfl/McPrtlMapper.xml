@@ -31,19 +31,19 @@
 	<!-- 사회자 전체조회 -->
 	<select id="mcAll" resultType="com.eventi.left.prtfl.service.McPrtflVO">
 		SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
-		SELECT DISTINCT m.user_id, m.one_intro, m.carr_year,
-       		   m.casting_price, codeArr_select(m.mc_area) mc_area, codeArr_select(m.mc_type) mc_type, 
-       		   codeArr_select(m.prog_style) prog_style, m.self_intro, m.career, m.inq, m.dt, 
-       		   m.user_name, (select count(*) from likes where target_no = m.user_id) AS cnt, f.sev_nm img
-		FROM MC_PRTFL m, LIKES l, FILES F
-		WHERE M.USER_ID = L.TARGET_NO(+)
-        AND M.USER_ID = F.TARGET_ID(+)
-		<include refid="likeSelect" />
-		<include refid="mcSelect" />
-		ORDER BY ${order} DESC
-		<![CDATA[
-			) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
-		]]>
+		SELECT DISTINCT M.USER_ID, M.ONE_INTRO, M.CARR_YEAR,
+       		   M.CASTING_PRICE, CODEARR_SELECT(M.MC_AREA) MC_AREA, CODEARR_SELECT(M.MC_TYPE) MC_TYPE, 
+       		   CODEARR_SELECT(M.PROG_STYLE) PROG_STYLE, M.SELF_INTRO, M.CAREER, M.INQ, M.DT, 
+       		   M.USER_NAME, (SELECT COUNT(*) FROM LIKES WHERE TARGET_NO = M.USER_ID) AS CNT, F.SEV_NM IMG
+		  FROM MC_PRTFL M, LIKES L, FILES F
+		 WHERE M.USER_ID = L.TARGET_NO(+)
+           AND M.USER_ID = F.TARGET_ID(+)
+		 <include refid="likeSelect" />
+		 <include refid="mcSelect" />
+	  ORDER BY ${order} DESC
+		 <![CDATA[
+		 	 ) A WHERE ROWNUM <= #{last}) WHERE RN >= #{first}
+		 ]]>
 	</select>
 	
 	<!-- 사회자포트폴리오 총 건수 -->

@@ -37,7 +37,7 @@
 		border: 2px solid #DEDADA;
 		border-radius: 10px;
 		z-index: 2;
-	    top: -35%;
+	    top: -10%;
 	    position: relative; 
 	}
 	
@@ -50,7 +50,7 @@
 		width: 250px;
 		margin:auto;
         display:block;
-        margin-bottom: 3px;
+        margin-bottom: 5px;
 	}
 	
 	h3{
@@ -222,6 +222,37 @@
 	.font-alt{
 		font-size: 13px;
 	}
+	
+	/*물품*/
+	table{
+		margin: 0 auto;
+    	width: 92%;
+	}
+	
+	thead{
+		background-color: #FFDE59;
+	}
+	
+	thead tr{
+			cursor: pointer;
+			font-size:17px;
+			
+	}
+	.table>thead>tr>th {
+			vertical-align: center;
+	}
+	tbody tr{
+		cursor: pointer;
+		font-size:16px;
+	}
+	tbody tr:hover{
+		background:#FFF2CC;
+	}
+	
+	td, th{
+		text-align: center;
+		border-bottom: 1px solid #cecece;
+	}
 </style>
 </head>
 
@@ -235,7 +266,7 @@
 		<img class="profile" th:src="|/fileView/${busiSelect.img}|">
 	  	
 	  	<label style="display:none;"class="label" id="userId" th:text="${busiSelect.userId}"></label>
-	  	<h3 id="userName" th:text="|${busiSelect.busiTitle}업체|"></h3>
+	  	<h3 id="userName" th:text="|${busiSelect.busiTitle}|"></h3>
   		
   		<th:block sec:authorize="isAuthenticated()">
 	  		<!-- 현재 로그인된 id와 작성자id가 다를 경우 버튼 나타남 -->
@@ -315,10 +346,10 @@
 					     </h4>
                     	<div class="border">
 
-				          <div class="container">
+				          
 				            <ul class="works-grid works-grid-gut works-grid-3 works-hover-w" id="works-grid" style="position: relative; height: 800px;">
 				            </ul>
-				          </div>
+				          
 
 						    <!-- 이미지 페이지처리를 위한 히든인풋. -->
 							<input type="hidden" name="imgPage" id="imgPage" value="1">
@@ -671,11 +702,8 @@
 		function makeImg(img){
 			console.log(img);
 			let tag = `<li class="work-item illustration webdesign">
-				                <div class="work-image"><img src="/fileView/${img.img}" style="width:360px; height:260px;"></div>
-				                <div class="work-caption font-alt">
-				                  <h3 class="work-title">${img.eventTtl}</h3>
-				                  <div class="work-descr">${img.eventCaregory}</div>
-				                </div>
+				                <div ><img src="/fileView/${img.img}" style="width:360px; height:260px;"></div>
+				                
 				        </li>`;
 	        
 		 	return tag;
@@ -708,12 +736,15 @@
 		
 		//물품정보리스트
 		function makeGd(gd){
+			let totalStock =  gd.totalStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			let rentalPrc = gd.rentalPrc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			
 			let tag = `<tr id=${gd.goodsNo}>
-							<td>${gd.caregory}</td>
+							<td width="25%">${gd.caregory}</td>
 							<td><img src="/fileView/${gd.rpstImg}" width="100px" height="100px"></td>
 							<td>${gd.goodsNm}</td>
-							<td>${gd.totalStock}</td>
-							<td>${gd.rentalPrc}</td>
+							<td>${totalStock}개</td>
+							<td width="13%">${rentalPrc}원</td>
 						</tr>`;
 	        
 		 	return tag;

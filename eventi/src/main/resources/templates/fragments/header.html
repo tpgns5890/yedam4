@@ -216,7 +216,6 @@
 		
 		//채팅방 구독 생성
 		function createChatRoom() {
-			console.log("1 채팅방 생성");
 			let chatroomDataList = new Array();
 			let chatroomData1 = {
 					toId : toId,
@@ -228,9 +227,7 @@
 					fromId : toId
 			};
 			chatroomDataList.push(chatroomData2);
-			
-			console.log(JSON.stringify(chatroomDataList));
-			
+						
 			$.ajax({
 	   			url : '/chatInsert',
 	   			method : 'post',
@@ -241,7 +238,6 @@
 					xhr.setRequestHeader(header, token);
 	            }
 	   		}).then(res => {
-	   			console.log("2 채팅방 생성 번호: " + cId);
 	   			cId = res;
 	   			chattingList()
 	   		})
@@ -327,23 +323,18 @@
 		}
 	});
 	
-	function connect(chaId) {
-		console.log("3 채팅방 연결: " + chaId);
-		
+	function connect(chaId) {		
 	   	//구독
 	   	var socket = new SockJS('/gs-guide-websocket');
 	    stompClient = Stomp.over(socket);
 	    stompClient.connect({}, function (frame) {
-	    console.log('Connected: ' + frame);
 	    //방번호 설정
 	    cId = chaId;	
 	    //방 구독하기
 	    stompClient.subscribe('/topic/chat/' + cId, function (chat) {  
 	    //채팅내용 화면출력
 	    var content = JSON.parse(chat.body);
-	    console.log("여기인가")
 	    let tag;
-	    console.log("컨트롤러 갔다온 아이")
 	    if(content.fromId == fromId){
 		    tag = `<li class="repaly">
 				          <p>${content.msgCntn}</p>
