@@ -14,9 +14,14 @@
     background-color: #FFDE59;
 }
 #content{
-	width: 70%;
-	margin:0 auto;
+	width: 52%;
+    margin: 50px auto;
+    min-height: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 30px;
 }
+
  </style>
  </head>  
    
@@ -32,9 +37,10 @@
           </div>
         </section>
         
-      <div id="content">  
+      <div id="content" style="display:flex;flex-direction: column;justify-content: space-between;">
+      <div>   
             <h2 class="mb-3 mt-5" th:text=${nocDetail.noticeNo} hidden="hidden"></h2>
-            <h2 class="mb-3" th:text="|제목: ${nocDetail.ttl}|" style="display: flex; justify-content: space-around;"></h2>
+            <h2 class="mb-3" th:text="|제목: ${nocDetail.ttl}|" style="font-weight:700;display: flex; justify-content: space-around;"></h2>
             <!-- 버튼 -->
             <div style="display: flex; justify-content: flex-end;"> 
               <a href="#" class="button post-button" style="margin-left: 10px; margin-right: 10px; padding: 10px; border-radius: 10px;"
@@ -43,19 +49,21 @@
 	                th:onclick="|location.href='@{nocDelete(noticeNo=${nocDetail.noticeNo})}'|" sec:authorize="hasAnyRole('ADMIN')">삭제</a>
 	        </div>
             <!-- 작성날짜 -->
-            <p th:text="|작성날짜: ${#dates.format(nocDetail.dt, 'yyyy-MM-dd')}|"></p>
+            <p th:text="|작성날짜: ${#dates.format(nocDetail.dt, 'yyyy-MM-dd')}|" style="margin: 10px;"></p>
 			<div style="display: flex; justify-content: flex-end;">
 				<!-- 관리자일 경우에만 버튼 보이기 -->
 	          </div>
-	      	<hr>	  
-            
-		<p th:text="|내용: ${nocDetail.noticeCntn}|"></p>
+	      	<hr>
+  
+           
+		<p th:text="|내용: ${nocDetail.noticeCntn}|" style="font-size:18px;"></p>
 		<p th:text=${nocDetail.img}></p>
 		<p th:text=${nocDetail.userId} hidden="hidden"></p>
-		<p th:text="|조회수: ${nocDetail.see}|"></p>
+		<p th:text="|조회수: ${nocDetail.see}|"></p></div>
+		<div style="display: flex;flex-direction: row-reverse;">
+		<button class="btn btn-d btn-circle btn-xs" type="button" onclick="location.href='/nocList'">목록</button></div>
       </div>
-      
-<script>
+     <script>
 	//csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");

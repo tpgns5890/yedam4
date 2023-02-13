@@ -316,17 +316,20 @@ margin: 0 auto;
             </div>
             
             <div class="row">
-              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" th:each="pro : ${proList}" onclick="wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+              <div class="mb-sm-20 wow fadeInUp col-sm-6 col-md-3" th:each="pro : ${proList}" onclick="wow fadeInUp" 
+              		style="visibility: visible; animation-name: fadeInUp;">
                 <div class="team-item" id="check" > 
                   <div class="team-image" th:onclick="|location.href='@{proDetail(proNo=${pro.proNo})}'|">
                          <th:block th:if="${pro.img} == null">
 							<div class="post-thumbnail">
-								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px; border-radius: 20px; 
+												filter: drop-shadow(5px 5px 5px #999); " class="img-fluid" alt="Colorlib Template"></a>
 							</div>
 						</th:block>
 						<th:block th:if="${pro.img} != null">
 							<div class="post-thumbnail">
-								<a href="#"><img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+								<a href="#"><img th:src="|/fileView/${pro.img}|" style="width: 250px; height: 250px; border-radius: 20px;
+    											filter: drop-shadow(5px 5px 5px #999);" class="img-fluid" alt="Colorlib Template"></a>
 							</div>
 						</th:block>
                     <div class="team-detail" > 										
@@ -360,12 +363,14 @@ margin: 0 auto;
                         <a href="#" >
                                <th:block th:if="${post.img} == null">
 							<div class="post-thumbnail">
-								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+								<a href="#"><img th:src="@{/images/hire.jpg}" style="width: 250px; height: 250px border-radius: 20px;
+    										filter: drop-shadow(5px 5px 5px #999);" class="img-fluid" alt="Colorlib Template"></a>
 							</div>
 						</th:block>
 						<th:block th:if="${post.img} != null">
 							<div class="post-thumbnail">
-								<a href="#"><img th:src="|/fileView/${post.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+								<a href="#"><img th:src="|/fileView/${post.img}|" style="width: 250px; height: 250px border-radius: 20px;
+    										filter: drop-shadow(5px 5px 5px #999);" class="img-fluid" alt="Colorlib Template"></a>
 							</div>
 						</th:block>
                         </a></div>

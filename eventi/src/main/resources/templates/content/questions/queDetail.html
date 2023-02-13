@@ -42,6 +42,14 @@
 	float: right;
     margin-top: -20px;
 	}
+	#content{
+	width: 52%;
+    margin: 50px auto;
+    min-height: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 30px;
+}
 </style>
 </head>   
    
@@ -59,37 +67,34 @@
 			</div>
 		</div>
 	</section>
-	
-	<section class="ftco-section ftco-degree-bg">
-		<div class="container" style="margin-left: 340px;">
-		  <div class="row">
-			<div class="col-lg-8 ftco-animate">
-				<h2 class="mb-3 mt-5" th:text="|제목: ${queDetail[0].ttl}|"></h2>
-					<button class="btn btn-g btn-round queDelete" type="button" th:data-qno="${queDetail[0].qNo}"><i class="fa fa-cog fa-spin"></i>삭제</button>	
-					<p th:text="|작성일자: ${#dates.format(queDetail[0].writingDt, 'yyyy-MM-dd')}|"></p>
-				<hr>
-				<p class="mb-3 mt-5" th:text=${queDetail[0].qNo} id="qNo"></p>
-				<p th:text=${queDetail[0].targetId} hidden="hidden"></p>
-				<p class="mb-3" th:text="|작성자: ${queDetail[0].userId}|"><p>
-				<p th:utext="|내용: ${queDetail[0].cntn}|"></p>
-				<p th:text=${queDetail[0].category} hidden="hidden"></p>
-				<p th:text=${queDetail[0].rerepTgt}></p>
-			</div>
+ <div id="content" style="display:flex;flex-direction: column;justify-content: space-between;">	
+	<div class="row">
+		<div class="col-lg-8 ftco-animate" style="width: 80%; margin-left: 87px;">
+			<h2 class="mb-3 mt-5" th:text="|제목: ${queDetail[0].ttl}|"></h2>
+				<button class="btn btn-g btn-round queDelete" type="button" th:data-qno="${queDetail[0].qNo}"><i class="fa fa-cog fa-spin"></i>삭제</button>	
+				<p th:text="|작성일자: ${#dates.format(queDetail[0].writingDt, 'yyyy-MM-dd')}|"></p>
+			<hr>
+			<p class="mb-3 mt-5" th:text="|▪번호: ${queDetail[0].qNo}|" id="qNo"></p>
+			<p th:text=${queDetail[0].targetId} hidden="hidden"></p>
+			<p class="mb-3" th:text="|▪작성자: ${queDetail[0].userId}|"><p>
+			<p th:utext="|▪내용: ${queDetail[0].cntn}|"></p>
+			<p th:text=${queDetail[0].category} hidden="hidden"></p>
+			<p th:text=${queDetail[0].rerepTgt} ></p>
 		</div>
+	</div>
 		
 	<!-- 답변보이는 곳 시작-->				
-	<div class="comments"  id=reply style="padding-bottom:20px">
-       <h4 class="comment-title font-alt" style="width: 740px;">Leave a Comment</h4>
+	<div class="comments"  id=reply style="padding-bottom:20px; margin-left: 87px;">
+    <h4 class="comment-title font-alt" style="width: 740px; ">Leave a Comment</h4>
                  
 	<!-- 답변이 있는경우 -->	
- 		<div  th:if="${#lists.size(queDetail)}>1"  class="replyInsert">
-	 		<div class="icon"><i class="fa-solid fa-user"></i></div>
-	 		<div class="bubble"> 
-				<p id="replyCntn"  th:utext="${queDetail[1].cntn}" ></p>
-			</div>			
-		</div>
+ 	<div  th:if="${#lists.size(queDetail)}>1"  class="replyInsert">
+ 		<div class="icon"><i class="fa-solid fa-user"></i></div>
+ 		<div class="bubble" style="width:600px; filter: drop-shadow(5px 5px 5px #999);"> 
+			<p id="replyCntn"  th:utext="${queDetail[1].cntn}" ></p>
+		</div>			
+	</div>
 
-      	
  	<!-- 답변등록 -->   	              
    <form action="/questions/insertQna" method="POST" id="questionsInsert" 
    		name="questionsInsert" th:unless="${#lists.size(queDetail)}>1" style="width: 740px;" >
@@ -112,11 +117,9 @@
 			</div>
 		</div> 
 	</form>					
-	</div>	
+</div>	
 	<!-- 답변보이는 곳 끝-->
-	
-		</div>
-	</section>
+</div>
 <script>
 //csrf 설정
 	var token = $("meta[name='_csrf']").attr("content");

@@ -31,7 +31,7 @@ public class JobServiceImpl implements JobService{
 	@Override
 	public List<JobBoardVO> getJobList(JobBoardVO jobBoardVO, PagingVO paging) {
 		paging.setTotalRecord(jobmapper.count(jobBoardVO));
-		paging.setPageUnit(3);
+		paging.setPageUnit(5);
 		jobBoardVO.setFirst(paging.getFirst());
 		jobBoardVO.setLast(paging.getLast());
 		return jobmapper.getJobList(jobBoardVO);

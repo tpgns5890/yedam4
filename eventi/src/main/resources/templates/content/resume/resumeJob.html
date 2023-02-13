@@ -18,68 +18,79 @@
         
 <div class="container" id="none">
 	<section class="module" id="news">
-		<input type="checkBox"  class="hire" id="allHire" value="선택채용">
-		<button class="btn btn-g btn-round allHire" type="button"><i class="fa fa-cog fa-spin"></i>선택채용</button>
-		<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
+	
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<h2 class="module-title font-alt">구직자 한눈에 보기</h2>
+				<div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을
+					누르세요.</div>
+			</div>
+		</div>
+	
+		<div style="display: flex; justify-content: flex-end;">
+			<input type="checkBox"  class="hire" id="allHire" value="선택채용" > 
+			<button class="btn btn-g btn-round allHire" type="button" style="margin-right: 10px;"><i class="fa fa-cog fa-spin"></i>선택채용</button>
+			<button class="btn btn-g btn-round unAllHire" type="button"><i class="fa fa-cog fa-spin"></i>채용취소</button>
+		</div>
 		
-			<div class="row">
-				<div class="col-sm-6 col-sm-offset-3">
-					<h2 class="module-title font-alt">구직자 한눈에 보기</h2>
-					<div class="module-subtitle font-serif">마음에 드는 구직자가 있다면 채용버튼을
-						누르세요.</div>
-				</div>
-			</div>
-			<div class="row multi-columns-row post-columns" id="check">
-				<div class="col-sm-6 col-md-4 col-lg-4"
-					th:each="res : ${resumeList}">
-					<th:block th:if="${res.hire} == 'Y'">
-						<td><input class="hire" type="checkBox" th:value="${res.resumeNo}" 
-							onkeyup="hire()" name="allHire" checked></td>
-					</th:block>
+		<div class="row multi-columns-row post-columns" id="check">
+		<div class="col-sm-6 col-md-4 col-lg-4"
+			th:each="res : ${resumeList}">
+			<th:block th:if="${res.hire} == 'Y'">
+				<td><input class="hire" type="checkBox" th:value="${res.resumeNo}" 
+					onkeyup="hire()" name="allHire" checked></td>
+			</th:block>
 
-					<th:block th:if="${res.hire} == 'N'">
-						<td><input class="hire" type="checkBox" value="N"
-							onkeyup="hire()" th:value="${res.resumeNo}" name="allHire" ></td>
-					</th:block>
+			<th:block th:if="${res.hire} == 'N'">
+				<td><input class="hire" type="checkBox" value="N"
+					onkeyup="hire()" th:value="${res.resumeNo}" name="allHire" ></td>
+			</th:block>
 
-					<div class="post mb-20">
-						<div class="post-thumbnail">
-							<a href="#"><img th:src="|/fileView/${res.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
-						</div>
-						<div class="post-header font-alt">
-							<h2 class="post-title">
-								<a href="#" th:text=${res.title}> </a>
-							</h2>
-							<div class="post-meta" th:text="|작성자: ${res.seekerId}|"><a href="#"></a></div>
-						</div>
-						<div class="post-more">
-							<a class="more-link" href="#" th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">Read more</a>
-						</div>
-						
-						<div th:if="${res.hire} == 'Y'">채용</div>
-						<div th:unless="${res.hire} == 'Y'">미채용</div>
-						
-						<button class="btn btn-border-d btn-round hireBtn " type="button"
-							id="hireBtn" th:data-resumeno='${res.resumeNo}' style="background-color:#FAB955" >
-							<i class="fa fa-child"></i>채용
-						</button>
-						<button class="btn btn-border-d btn-round unHireBtn" type="button"
-							id="unHireBtn" th:data-resumeno='${res.resumeNo}' style="background-color:#FFDE59">
-							<i class="fa fa-child"></i> 미채용
-						</button>
-
+			<div class="post mb-20">
+				<th:block th:if="${res.img} == null">
+					<div class="post-thumbnail">
+						<a href="#"><img th:src="@{/images/resume.jpg}" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
 					</div>
-					<div class="post-entry"></div>
+				</th:block>
+				<th:block th:if="${res.img} != null">
+					<div class="post-thumbnail">
+						<a href="#"><img th:src="|/fileView/${res.img}|" style="width: 250px; height: 250px" class="img-fluid" alt="Colorlib Template"></a>
+					</div>
+				</th:block>
+				<div class="post-header font-alt">
+					<h2 class="post-title">
+						<a href="#" th:text=${res.title}> </a>
+					</h2>
+					<div class="post-meta" th:text="|작성자: ${res.seekerId}|"><a href="#"></a></div>
 				</div>
+				<div class="post-more">
+					<a class="more-link" href="#" th:onclick="|location.href='@{resumeDetail(resumeNo=${res.resumeNo})}'|">Read more</a>
+				</div>
+				
+				<div th:if="${res.hire} == 'Y'">채용</div>
+				<div th:unless="${res.hire} == 'Y'">미채용</div>
+				
+				<button class="btn btn-border-d btn-round hireBtn " type="button"
+					id="hireBtn" th:data-resumeno='${res.resumeNo}' style="background-color:#FAB955" >
+					<i class="fa fa-child"></i>채용
+				</button>
+				<button class="btn btn-border-d btn-round unHireBtn" type="button"
+					id="unHireBtn" th:data-resumeno='${res.resumeNo}' style="background-color:#FFDE59">
+					<i class="fa fa-child"></i> 미채용
+				</button>
+
 			</div>
+			<div class="post-entry"></div>
+		</div>
+	</div>
 		
 		<div class="row mt-5">
-		          <div class="col text-center">
-		            <div class="block-27">
-		               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
-		            </div>
-		          </div>
-		        </div>
+          <div class="col text-center">
+            <div class="block-27">
+               <th:block th:replace="fragments/paging :: component(${paging},'gopage')">
+            </div>
+          </div>
+		</div>
 		        
 		<!-- 이미지 나타내기 -->	
 					<div th:each="f : ${file}">
